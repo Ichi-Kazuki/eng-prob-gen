@@ -1,0 +1,70 @@
+{
+  "items": [
+    {
+      "item_id": "gen-struct-001",
+      "section": "Structure",
+      "stem": "The marine biologist ____ has spent the past decade cataloguing coral species along the Pacific coast.",
+      "options": {
+        "A": "which discovered the new coral species",
+        "B": "who discover the new coral species",
+        "C": "who discovered the new coral species",
+        "D": "discovered the new coral species"
+      }
+    },
+    {
+      "item_id": "gen-struct-002",
+      "section": "Structure",
+      "stem": "During the early twentieth century, tariffs on imported steel ____ by the federal government in order to protect domestic manufacturers.",
+      "options": {
+        "A": "were raised significantly",
+        "B": "raised significantly",
+        "C": "was raised significantly",
+        "D": "are raised significantly"
+      }
+    },
+    {
+      "item_id": "gen-struct-003",
+      "section": "Structure",
+      "stem": "The newly discovered exoplanet not only orbits its star at a distance suitable for liquid water but also ____ a thin, nitrogen-rich atmosphere detectable through spectroscopic analysis.",
+      "options": {
+        "A": "possession of",
+        "B": "also possesses",
+        "C": "possesses also",
+        "D": "possesses"
+      }
+    },
+    {
+      "item_id": "gen-we-001",
+      "section": "Written Expression",
+      "sentence": "The geologist carefully examined the unusually rock formation before concluding that it had formed through volcanic activity.",
+      "marked_parts": {
+        "A": "carefully",
+        "B": "unusually",
+        "C": "had formed",
+        "D": "volcanic activity"
+      }
+    },
+    {
+      "item_id": "gen-we-002",
+      "section": "Written Expression",
+      "sentence": "The proposal for new bicycle lanes throughout downtown neighborhoods have generated considerable attention from residents and city planners who study traffic patterns.",
+      "marked_parts": {
+        "A": "have",
+        "B": "considerable",
+        "C": "attention from residents",
+        "D": "who"
+      }
+    },
+    {
+      "item_id": "gen-we-003",
+      "section": "Written Expression",
+      "sentence": "Meteorologists compared two competing radar systems and concluded that, of the two, the newer model was significantly the most reliable during periods of heavy precipitation.",
+      "marked_parts": {
+        "A": "compared",
+        "B": "the newer model",
+        "C": "significantly",
+        "D": "the most"
+      }
+    }
+  ]
+}

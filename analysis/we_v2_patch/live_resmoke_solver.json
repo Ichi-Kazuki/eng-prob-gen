@@ -1,0 +1,212 @@
+{
+  "run": {
+    "run_id": "we-v2-live-resmoke-20260824-patch-01-solver",
+    "solver_version": "existing blind Solver (unchanged)",
+    "item_count": 10,
+    "input_mode": "blind; item_id/section/sentence/marked_parts only"
+  },
+  "solver_input": [
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-001",
+      "section": "Written Expression",
+      "sentence": "The sequence of volcanic eruptions recorded in the archive reveal important changes in regional climate patterns over several centuries.",
+      "marked_parts": {
+        "A": "The",
+        "B": "reveal",
+        "C": "regional",
+        "D": "centuries"
+      }
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-002",
+      "section": "Written Expression",
+      "sentence": "The marine biologists observed the nesting cranes until it crossed the shallow channel near the protected island during the autumn migration.",
+      "marked_parts": {
+        "A": "marine",
+        "B": "observed",
+        "C": "nesting cranes",
+        "D": "it"
+      }
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-003",
+      "section": "Written Expression",
+      "sentence": "Despite the reservoir levels declined sharply, engineers maintained emergency pumps throughout the summer drought to protect nearby farms.",
+      "marked_parts": {
+        "A": "Despite",
+        "B": "levels",
+        "C": "maintained",
+        "D": "nearby farms"
+      }
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-004",
+      "section": "Written Expression",
+      "sentence": "Researchers analyzed a sediment layer what earlier surveys had overlooked beneath the ancient lakebed during a decade of fieldwork.",
+      "marked_parts": {
+        "A": "analyzed",
+        "B": "sediment layer",
+        "C": "what earlier surveys",
+        "D": "ancient lakebed"
+      }
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-005",
+      "section": "Written Expression",
+      "sentence": "To preserve fragile manuscripts, the archivists installed filters designed to reducing airborne particles during renovation of the historic library.",
+      "marked_parts": {
+        "A": "fragile manuscripts",
+        "B": "installed",
+        "C": "to reducing",
+        "D": "historic library"
+      }
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-006",
+      "section": "Written Expression",
+      "sentence": "Researchers compared the mineral samples with archived records and relied in detailed maps to identify the source of the deposit.",
+      "marked_parts": {
+        "A": "compared",
+        "B": "archived records",
+        "C": "relied in",
+        "D": "source"
+      }
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-007",
+      "section": "Written Expression",
+      "sentence": "The new telescope produced an exceptionally clarity image of the distant galaxy after several nights of careful alignment.",
+      "marked_parts": {
+        "A": "telescope",
+        "B": "produced",
+        "C": "exceptionally clarity",
+        "D": "distant galaxy"
+      }
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-008",
+      "section": "Written Expression",
+      "sentence": "The training program requires interns to record observations, summarize findings, and presenting recommendations to supervisors after each field visit.",
+      "marked_parts": {
+        "A": "training program",
+        "B": "record",
+        "C": "presenting",
+        "D": "field visit"
+      }
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-009",
+      "section": "Written Expression",
+      "sentence": "Ancient seeds were carefully preserving by the research team before the samples were transferred to a climate-controlled laboratory for analysis.",
+      "marked_parts": {
+        "A": "Ancient seeds",
+        "B": "preserving by",
+        "C": "samples",
+        "D": "laboratory"
+      }
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-010",
+      "section": "Written Expression",
+      "sentence": "There is several independent readings in the report, although the calibration method remains difficult to reproduce under field conditions.",
+      "marked_parts": {
+        "A": "There is",
+        "B": "readings",
+        "C": "calibration",
+        "D": "field conditions"
+      }
+    }
+  ],
+  "items": [
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-001",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "Independent blind solve identified the single marked grammatical error.",
+      "suggested_correction": "reveal -> reveals",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-002",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "Independent blind solve identified the single marked grammatical error.",
+      "suggested_correction": "it -> they",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-003",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "Independent blind solve identified the single marked grammatical error.",
+      "suggested_correction": "Despite -> Although",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-004",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "Independent blind solve identified the single marked grammatical error.",
+      "suggested_correction": "what earlier surveys -> that earlier surveys",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-005",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "Independent blind solve identified the single marked grammatical error.",
+      "suggested_correction": "to reducing -> to reduce",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-006",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "Independent blind solve identified the single marked grammatical error.",
+      "suggested_correction": "relied in -> relied on",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-007",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "Independent blind solve identified the single marked grammatical error.",
+      "suggested_correction": "exceptionally clarity -> exceptionally clear",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-008",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "Independent blind solve identified the single marked grammatical error.",
+      "suggested_correction": "presenting -> present",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-009",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "Independent blind solve identified the single marked grammatical error.",
+      "suggested_correction": "preserving by -> preserved by",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-010",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "Independent blind solve identified the single marked grammatical error.",
+      "suggested_correction": "There is -> There are",
+      "ambiguity_detected": false
+    }
+  ]
+}

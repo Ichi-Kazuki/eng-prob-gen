@@ -1,0 +1,1237 @@
+{
+  "run": {
+    "run_id": "we-v2-fixture-smoke-20260824-patch-01",
+    "run_type": "FIXTURE_REGRESSION_SMOKE",
+    "generation_unit": "one deterministic fixture per small microbatch",
+    "generator_version": "WE Generator v2.0.1",
+    "generator_contract_version": "Written Expression Generator v2.0",
+    "live_generation": false,
+    "fixture_generation": true,
+    "independent_live_reviewer": false,
+    "independent_live_solver": false,
+    "source_item_ids": [
+      "we-v2-fixture-smoke-20260824-patch-01-001",
+      "we-v2-fixture-smoke-20260824-patch-01-002",
+      "we-v2-fixture-smoke-20260824-patch-01-003",
+      "we-v2-fixture-smoke-20260824-patch-01-004",
+      "we-v2-fixture-smoke-20260824-patch-01-005",
+      "we-v2-fixture-smoke-20260824-patch-01-006",
+      "we-v2-fixture-smoke-20260824-patch-01-007",
+      "we-v2-fixture-smoke-20260824-patch-01-008",
+      "we-v2-fixture-smoke-20260824-patch-01-009",
+      "we-v2-fixture-smoke-20260824-patch-01-010"
+    ],
+    "item_count": 10
+  },
+  "items": [
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-001",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "singular head across an intervening of-phrase",
+      "secondary_features": [
+        "subject head",
+        "of-phrase interruption"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "EASY",
+      "vocabulary_domain": "volcanology",
+      "sentence": "The sequence of volcanic eruptions recorded in the archive reveal important changes in regional climate patterns over several centuries.",
+      "marked_parts": {
+        "A": "The",
+        "B": "reveal",
+        "C": "regional",
+        "D": "centuries"
+      },
+      "correct_answer": "B",
+      "error_explanation": "The singular head noun sequence requires reveals despite the intervening plural noun eruptions.",
+      "minimal_correction": "reveal -> reveals",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "synthetic fixture; distribution-aware sentence length",
+        "expected_span_profile": "four locally inspectable spans",
+        "coverage_profile": "nonzero unmarked context; empirical band is diagnostic only",
+        "approximate_context_profile": "natural context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 19,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.2105,
+          "unmarked_word_count": 15,
+          "gap_A_B": 8,
+          "gap_B_C": 3,
+          "gap_C_D": 4,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.6486,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.428,
+            "marked_coverage_ratio": 0.288,
+            "unmarked_word_count": 0.528,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 1.0,
+            "gap_B_C": 0.292,
+            "gap_C_D": 0.568
+          },
+          "format_band_status": "EXTREME",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "EXTREME",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              0
+            ],
+            "B": [
+              9
+            ],
+            "C": [
+              13
+            ],
+            "D": [
+              18
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-fixture-smoke-20260824-patch-01",
+        "microbatch_id": "we-v2-fixture-smoke-20260824-patch-01-micro-01",
+        "item_generation_order": 1,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "The sequence of volcanic eruptions recorded in the archive reveals important changes in regional climate patterns over several centuries.",
+        "error_form": "The sequence of volcanic eruptions recorded in the archive reveal important changes in regional climate patterns over several centuries.",
+        "minimal_correction": "reveal -> reveals",
+        "mutation_type": "singular_head_to_plural_verb",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "FAIL"
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-002",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "pronoun agreement with a plural antecedent",
+      "secondary_features": [
+        "plural antecedent",
+        "pronoun agreement"
+      ],
+      "tested_error_type": "incorrect_reference",
+      "difficulty": "EASY",
+      "vocabulary_domain": "ornithology",
+      "sentence": "The marine biologists observed the nesting cranes until it crossed the shallow channel near the protected island during the autumn migration.",
+      "marked_parts": {
+        "A": "marine",
+        "B": "observed",
+        "C": "nesting cranes",
+        "D": "it"
+      },
+      "correct_answer": "D",
+      "error_explanation": "The plural antecedent cranes requires they, not the singular pronoun it.",
+      "minimal_correction": "it -> they",
+      "grammar_metadata": {
+        "error_scope": "cross_clause",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "synthetic fixture; distribution-aware sentence length",
+        "expected_span_profile": "four locally inspectable spans",
+        "coverage_profile": "nonzero unmarked context; empirical band is diagnostic only",
+        "approximate_context_profile": "natural context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SHORT_PHRASE",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 21,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 2,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2381,
+          "unmarked_word_count": 16,
+          "gap_A_B": 1,
+          "gap_B_C": 1,
+          "gap_C_D": 1,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.2705,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.576,
+            "marked_coverage_ratio": 0.392,
+            "unmarked_word_count": 0.588,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.036,
+            "gap_B_C": 0.02,
+            "gap_C_D": 0.024
+          },
+          "format_band_status": "EXTREME",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "WARNING",
+            "gap_B_C": "EXTREME",
+            "gap_C_D": "EXTREME"
+          },
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              3
+            ],
+            "C": [
+              5,
+              6
+            ],
+            "D": [
+              8
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-fixture-smoke-20260824-patch-01",
+        "microbatch_id": "we-v2-fixture-smoke-20260824-patch-01-micro-02",
+        "item_generation_order": 2,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "The marine biologists observed the nesting cranes until they crossed the shallow channel near the protected island during the autumn migration.",
+        "error_form": "The marine biologists observed the nesting cranes until it crossed the shallow channel near the protected island during the autumn migration.",
+        "minimal_correction": "it -> they",
+        "mutation_type": "plural_antecedent_to_singular_pronoun",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "FAIL"
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-003",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "finite concessive clause subordinator",
+      "secondary_features": [
+        "finite subordinate clause",
+        "concession"
+      ],
+      "tested_error_type": "incorrect_subordinator",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "hydrology",
+      "sentence": "Despite the reservoir levels declined sharply, engineers maintained emergency pumps throughout the summer drought to protect nearby farms.",
+      "marked_parts": {
+        "A": "Despite",
+        "B": "levels",
+        "C": "maintained",
+        "D": "nearby farms"
+      },
+      "correct_answer": "A",
+      "error_explanation": "Despite cannot directly introduce the finite clause the reservoir levels declined; although is required.",
+      "minimal_correction": "Despite -> Although",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "CLAUSE_RELATION",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "synthetic fixture; distribution-aware sentence length",
+        "expected_span_profile": "four locally inspectable spans",
+        "coverage_profile": "nonzero unmarked context; empirical band is diagnostic only",
+        "approximate_context_profile": "natural context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 18,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 2
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2778,
+          "unmarked_word_count": 13,
+          "gap_A_B": 2,
+          "gap_B_C": 3,
+          "gap_C_D": 8,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "CLAUSE_RELATION",
+          "format_distribution_distance": 0.3327,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.36,
+            "marked_coverage_ratio": 0.544,
+            "unmarked_word_count": 0.396,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.292,
+            "gap_C_D": 1.0
+          },
+          "format_band_status": "EXTREME",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "EXTREME"
+          },
+          "span_token_indices": {
+            "A": [
+              0
+            ],
+            "B": [
+              3
+            ],
+            "C": [
+              7
+            ],
+            "D": [
+              16,
+              17
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-fixture-smoke-20260824-patch-01",
+        "microbatch_id": "we-v2-fixture-smoke-20260824-patch-01-micro-03",
+        "item_generation_order": 3,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Although the reservoir levels declined sharply, engineers maintained emergency pumps throughout the summer drought to protect nearby farms.",
+        "error_form": "Despite the reservoir levels declined sharply, engineers maintained emergency pumps throughout the summer drought to protect nearby farms.",
+        "minimal_correction": "Despite -> Although",
+        "mutation_type": "finite_clause_subordinator_swap",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "FAIL"
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-004",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative marker after an explicit antecedent",
+      "secondary_features": [
+        "explicit antecedent",
+        "restrictive relative clause"
+      ],
+      "tested_error_type": "incorrect_relative_marker",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "geology",
+      "sentence": "Researchers analyzed a sediment layer what earlier surveys had overlooked beneath the ancient lakebed during a decade of fieldwork.",
+      "marked_parts": {
+        "A": "analyzed",
+        "B": "sediment layer",
+        "C": "what earlier surveys",
+        "D": "ancient lakebed"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The noun phrase sediment layer supplies an antecedent, so the following restrictive clause requires that rather than fused relative what.",
+      "minimal_correction": "what earlier surveys -> that earlier surveys",
+      "grammar_metadata": {
+        "error_scope": "cross_clause",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "C",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "synthetic fixture; distribution-aware sentence length",
+        "expected_span_profile": "four locally inspectable spans",
+        "coverage_profile": "nonzero unmarked context; empirical band is diagnostic only",
+        "approximate_context_profile": "natural context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SHORT_PHRASE",
+          "C": "SHORT_PHRASE",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 19,
+          "span_word_counts": {
+            "A": 1,
+            "B": 2,
+            "C": 3,
+            "D": 2
+          },
+          "mean_span_length": 2.0,
+          "max_span_length": 3,
+          "marked_coverage_ratio": 0.4211,
+          "unmarked_word_count": 11,
+          "gap_A_B": 1,
+          "gap_B_C": 0,
+          "gap_C_D": 4,
+          "correct_span_word_count": 3,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 1.6176,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.428,
+            "marked_coverage_ratio": 0.952,
+            "unmarked_word_count": 0.196,
+            "mean_span_length": 0.972,
+            "max_span_length": 0.92,
+            "gap_A_B": 0.036,
+            "gap_B_C": 0.0,
+            "gap_C_D": 0.568
+          },
+          "format_band_status": "EXTREME",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "EXTREME",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "EXTREME",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "WARNING",
+            "gap_B_C": "EXTREME",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              3,
+              4
+            ],
+            "C": [
+              5,
+              6,
+              7
+            ],
+            "D": [
+              12,
+              13
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-fixture-smoke-20260824-patch-01",
+        "microbatch_id": "we-v2-fixture-smoke-20260824-patch-01-micro-04",
+        "item_generation_order": 4,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Researchers analyzed a sediment layer that earlier surveys had overlooked beneath the ancient lakebed during a decade of fieldwork.",
+        "error_form": "Researchers analyzed a sediment layer what earlier surveys had overlooked beneath the ancient lakebed during a decade of fieldwork.",
+        "minimal_correction": "what earlier surveys -> that earlier surveys",
+        "mutation_type": "relative_marker_swap_after_antecedent",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "FAIL"
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-005",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "base verb after infinitival to",
+      "secondary_features": [
+        "infinitive complement",
+        "participial modifier"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "EASY",
+      "vocabulary_domain": "archival preservation",
+      "sentence": "To preserve fragile manuscripts, the archivists installed filters designed to reducing airborne particles during renovation of the historic library.",
+      "marked_parts": {
+        "A": "fragile manuscripts",
+        "B": "installed",
+        "C": "to reducing",
+        "D": "historic library"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The infinitival marker to must be followed by the base verb reduce, not reducing.",
+      "minimal_correction": "to reducing -> to reduce",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "C",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "synthetic fixture; distribution-aware sentence length",
+        "expected_span_profile": "four locally inspectable spans",
+        "coverage_profile": "nonzero unmarked context; empirical band is diagnostic only",
+        "approximate_context_profile": "natural context retained before, between, and after spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SHORT_PHRASE",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 19,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 2,
+            "D": 2
+          },
+          "mean_span_length": 1.75,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.3684,
+          "unmarked_word_count": 12,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 6,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "decision_granularity": "MORPHOLOGY",
+          "format_distribution_distance": 1.0634,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.428,
+            "marked_coverage_ratio": 0.896,
+            "unmarked_word_count": 0.3,
+            "mean_span_length": 0.916,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.948
+          },
+          "format_band_status": "WARNING",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "WARNING"
+          },
+          "span_token_indices": {
+            "A": [
+              2,
+              3
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              9,
+              10
+            ],
+            "D": [
+              17,
+              18
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-fixture-smoke-20260824-patch-01",
+        "microbatch_id": "we-v2-fixture-smoke-20260824-patch-01-micro-05",
+        "item_generation_order": 5,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "To preserve fragile manuscripts, the archivists installed filters designed to reduce airborne particles during renovation of the historic library.",
+        "error_form": "To preserve fragile manuscripts, the archivists installed filters designed to reducing airborne particles during renovation of the historic library.",
+        "minimal_correction": "to reducing -> to reduce",
+        "mutation_type": "infinitive_to_gerund_form",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "WARN"
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-006",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "preposition selected by the verb rely",
+      "secondary_features": [
+        "verb frame",
+        "preposition selection"
+      ],
+      "tested_error_type": "wrong_preposition_collocation",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "mineralogy",
+      "sentence": "Researchers compared the mineral samples with archived records and relied in detailed maps to identify the source of the deposit.",
+      "marked_parts": {
+        "A": "compared",
+        "B": "archived records",
+        "C": "relied in",
+        "D": "source"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The verb rely selects the preposition on in this construction, not in.",
+      "minimal_correction": "relied in -> relied on",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "C",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "synthetic fixture; distribution-aware sentence length",
+        "expected_span_profile": "four locally inspectable spans",
+        "coverage_profile": "nonzero unmarked context; empirical band is diagnostic only",
+        "approximate_context_profile": "natural context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SHORT_PHRASE",
+          "C": "SHORT_PHRASE",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 1,
+            "B": 2,
+            "C": 2,
+            "D": 1
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.3,
+          "unmarked_word_count": 14,
+          "gap_A_B": 4,
+          "gap_B_C": 1,
+          "gap_C_D": 5,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "decision_granularity": "VERB_FRAME",
+          "format_distribution_distance": 0.4199,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.492,
+            "marked_coverage_ratio": 0.664,
+            "unmarked_word_count": 0.464,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.608,
+            "gap_B_C": 0.02,
+            "gap_C_D": 0.832
+          },
+          "format_band_status": "EXTREME",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "EXTREME",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              6,
+              7
+            ],
+            "C": [
+              9,
+              10
+            ],
+            "D": [
+              16
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-fixture-smoke-20260824-patch-01",
+        "microbatch_id": "we-v2-fixture-smoke-20260824-patch-01-micro-06",
+        "item_generation_order": 6,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Researchers compared the mineral samples with archived records and relied on detailed maps to identify the source of the deposit.",
+        "error_form": "Researchers compared the mineral samples with archived records and relied in detailed maps to identify the source of the deposit.",
+        "minimal_correction": "relied in -> relied on",
+        "mutation_type": "verb_preposition_collocation_swap",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "FAIL"
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-007",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adjective modifier before a noun",
+      "secondary_features": [
+        "adverb modifier",
+        "adjective form"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "EASY",
+      "vocabulary_domain": "astronomy",
+      "sentence": "The new telescope produced an exceptionally clarity image of the distant galaxy after several nights of careful alignment.",
+      "marked_parts": {
+        "A": "telescope",
+        "B": "produced",
+        "C": "exceptionally clarity",
+        "D": "distant galaxy"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The noun image requires the adjective clear after the adverb exceptionally, not the noun clarity.",
+      "minimal_correction": "exceptionally clarity -> exceptionally clear",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "WORD_CLASS",
+        "intended_error_position": "C",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "synthetic fixture; distribution-aware sentence length",
+        "expected_span_profile": "four locally inspectable spans",
+        "coverage_profile": "nonzero unmarked context; empirical band is diagnostic only",
+        "approximate_context_profile": "natural context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SHORT_PHRASE",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 18,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 2,
+            "D": 2
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.3333,
+          "unmarked_word_count": 12,
+          "gap_A_B": 0,
+          "gap_B_C": 1,
+          "gap_C_D": 3,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "decision_granularity": "WORD_CLASS",
+          "format_distribution_distance": 0.665,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.36,
+            "marked_coverage_ratio": 0.824,
+            "unmarked_word_count": 0.3,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.0,
+            "gap_B_C": 0.02,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "EXTREME",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "EXTREME",
+            "gap_B_C": "EXTREME",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              2
+            ],
+            "B": [
+              3
+            ],
+            "C": [
+              5,
+              6
+            ],
+            "D": [
+              10,
+              11
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-fixture-smoke-20260824-patch-01",
+        "microbatch_id": "we-v2-fixture-smoke-20260824-patch-01-micro-07",
+        "item_generation_order": 7,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "The new telescope produced an exceptionally clear image of the distant galaxy after several nights of careful alignment.",
+        "error_form": "The new telescope produced an exceptionally clarity image of the distant galaxy after several nights of careful alignment.",
+        "minimal_correction": "exceptionally clarity -> exceptionally clear",
+        "mutation_type": "adjective_noun_modifier_form_swap",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "FAIL"
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-008",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel base forms in a coordinated list",
+      "secondary_features": [
+        "coordinate list",
+        "infinitive complement"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "field research training",
+      "sentence": "The training program requires interns to record observations, summarize findings, and presenting recommendations to supervisors after each field visit.",
+      "marked_parts": {
+        "A": "training program",
+        "B": "record",
+        "C": "presenting",
+        "D": "field visit"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The coordinated list follows the infinitive pattern to record and summarize, so the final verb must be present.",
+      "minimal_correction": "presenting -> present",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "synthetic fixture; distribution-aware sentence length",
+        "expected_span_profile": "four locally inspectable spans",
+        "coverage_profile": "nonzero unmarked context; empirical band is diagnostic only",
+        "approximate_context_profile": "natural context retained before, between, and after spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 19,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 2
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.3158,
+          "unmarked_word_count": 13,
+          "gap_A_B": 3,
+          "gap_B_C": 4,
+          "gap_C_D": 5,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "MORPHOLOGY",
+          "format_distribution_distance": 0.5193,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.428,
+            "marked_coverage_ratio": 0.736,
+            "unmarked_word_count": 0.396,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.312,
+            "gap_B_C": 0.54,
+            "gap_C_D": 0.832
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1,
+              2
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              11
+            ],
+            "D": [
+              17,
+              18
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-fixture-smoke-20260824-patch-01",
+        "microbatch_id": "we-v2-fixture-smoke-20260824-patch-01-micro-08",
+        "item_generation_order": 8,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "The training program requires interns to record observations, summarize findings, and present recommendations to supervisors after each field visit.",
+        "error_form": "The training program requires interns to record observations, summarize findings, and presenting recommendations to supervisors after each field visit.",
+        "minimal_correction": "presenting -> present",
+        "mutation_type": "parallel_verb_form_swap",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-009",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "past participle in a passive construction",
+      "secondary_features": [
+        "passive voice",
+        "past participle"
+      ],
+      "tested_error_type": "wrong_voice",
+      "difficulty": "EASY",
+      "vocabulary_domain": "archaeobotany",
+      "sentence": "Ancient seeds were carefully preserving by the research team before the samples were transferred to a climate-controlled laboratory for analysis.",
+      "marked_parts": {
+        "A": "Ancient seeds",
+        "B": "preserving by",
+        "C": "samples",
+        "D": "laboratory"
+      },
+      "correct_answer": "B",
+      "error_explanation": "The passive auxiliary were requires the past participle preserved, not the present participle preserving.",
+      "minimal_correction": "preserving by -> preserved by",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "B",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "synthetic fixture; distribution-aware sentence length",
+        "expected_span_profile": "four locally inspectable spans",
+        "coverage_profile": "nonzero unmarked context; empirical band is diagnostic only",
+        "approximate_context_profile": "natural context retained before, between, and after spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SHORT_PHRASE",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 2,
+            "B": 2,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.3,
+          "unmarked_word_count": 14,
+          "gap_A_B": 2,
+          "gap_B_C": 5,
+          "gap_C_D": 5,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "decision_granularity": "MORPHOLOGY",
+          "format_distribution_distance": 0.4199,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.492,
+            "marked_coverage_ratio": 0.664,
+            "unmarked_word_count": 0.464,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.78,
+            "gap_C_D": 0.832
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              0,
+              1
+            ],
+            "B": [
+              4,
+              5
+            ],
+            "C": [
+              11
+            ],
+            "D": [
+              17
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-fixture-smoke-20260824-patch-01",
+        "microbatch_id": "we-v2-fixture-smoke-20260824-patch-01-micro-09",
+        "item_generation_order": 9,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Ancient seeds were carefully preserved by the research team before the samples were transferred to a climate-controlled laboratory for analysis.",
+        "error_form": "Ancient seeds were carefully preserving by the research team before the samples were transferred to a climate-controlled laboratory for analysis.",
+        "minimal_correction": "preserving by -> preserved by",
+        "mutation_type": "passive_participle_to_present_participle",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-010",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "subtype": "there-be agreement with a plural postposed subject",
+      "secondary_features": [
+        "existential there",
+        "plural agreement"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "instrument calibration",
+      "sentence": "There is several independent readings in the report, although the calibration method remains difficult to reproduce under field conditions.",
+      "marked_parts": {
+        "A": "There is",
+        "B": "readings",
+        "C": "calibration",
+        "D": "field conditions"
+      },
+      "correct_answer": "A",
+      "error_explanation": "The plural postposed subject readings requires are in the existential there construction.",
+      "minimal_correction": "There is -> There are",
+      "grammar_metadata": {
+        "error_scope": "cross_clause",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "synthetic fixture; distribution-aware sentence length",
+        "expected_span_profile": "four locally inspectable spans",
+        "coverage_profile": "nonzero unmarked context; empirical band is diagnostic only",
+        "approximate_context_profile": "natural context retained before, between, and after spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 19,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 2
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.3158,
+          "unmarked_word_count": 13,
+          "gap_A_B": 2,
+          "gap_B_C": 5,
+          "gap_C_D": 6,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.5193,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.428,
+            "marked_coverage_ratio": 0.736,
+            "unmarked_word_count": 0.396,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.78,
+            "gap_C_D": 0.948
+          },
+          "format_band_status": "WARNING",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "WARNING"
+          },
+          "span_token_indices": {
+            "A": [
+              0,
+              1
+            ],
+            "B": [
+              4
+            ],
+            "C": [
+              10
+            ],
+            "D": [
+              17,
+              18
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-fixture-smoke-20260824-patch-01",
+        "microbatch_id": "we-v2-fixture-smoke-20260824-patch-01-micro-10",
+        "item_generation_order": 10,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "There are several independent readings in the report, although the calibration method remains difficult to reproduce under field conditions.",
+        "error_form": "There is several independent readings in the report, although the calibration method remains difficult to reproduce under field conditions.",
+        "minimal_correction": "There is -> There are",
+        "mutation_type": "existential_be_number_swap",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "WARN"
+      }
+    }
+  ]
+}

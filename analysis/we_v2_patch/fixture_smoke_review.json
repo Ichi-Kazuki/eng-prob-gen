@@ -1,0 +1,1029 @@
+{
+  "run": {
+    "run_id": "we-v2-fixture-smoke-20260824-patch-01-review",
+    "agent_version": "Written Expression Reviewer v2.0",
+    "item_count": 10,
+    "review_mode": "deterministic fixture replay; not live independent review"
+  },
+  "items": [
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-001",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "B",
+      "generator_answer": "B",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "FAIL",
+      "detected_error_count": 1,
+      "detected_error_position": "B",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ERROR",
+        "C": "ACCEPTABLE",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "FAIL",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.0,
+        "max_span_length": 1,
+        "marked_coverage_ratio": 0.2105,
+        "unmarked_word_count": 15,
+        "gap_A_B": 8,
+        "gap_B_C": 3,
+        "gap_C_D": 4,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "format_distribution_distance": 0.6486,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.288,
+          "unmarked_word_count": 0.528,
+          "mean_span_length": 0.156,
+          "max_span_length": 0.156,
+          "gap_A_B": 1.0,
+          "gap_B_C": 0.292,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "EXTREME",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            0
+          ],
+          "B": [
+            9
+          ],
+          "C": [
+            13
+          ],
+          "D": [
+            18
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-fixture-smoke-20260824-patch-01-review",
+        "item_review_order": 1,
+        "invocation_id": null,
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-002",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "D",
+      "generator_answer": "D",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "FAIL",
+      "detected_error_count": 1,
+      "detected_error_position": "D",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ACCEPTABLE",
+        "C": "ACCEPTABLE",
+        "D": "ERROR"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "FAIL",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 21,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 2,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2381,
+        "unmarked_word_count": 16,
+        "gap_A_B": 1,
+        "gap_B_C": 1,
+        "gap_C_D": 1,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "format_distribution_distance": 0.2705,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.576,
+          "marked_coverage_ratio": 0.392,
+          "unmarked_word_count": 0.588,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.036,
+          "gap_B_C": 0.02,
+          "gap_C_D": 0.024
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "WARNING",
+          "gap_B_C": "EXTREME",
+          "gap_C_D": "EXTREME"
+        },
+        "span_token_indices": {
+          "A": [
+            1
+          ],
+          "B": [
+            3
+          ],
+          "C": [
+            5,
+            6
+          ],
+          "D": [
+            8
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-fixture-smoke-20260824-patch-01-review",
+        "item_review_order": 2,
+        "invocation_id": null,
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-003",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "A",
+      "generator_answer": "A",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "FAIL",
+      "detected_error_count": 1,
+      "detected_error_position": "A",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ERROR",
+        "B": "ACCEPTABLE",
+        "C": "ACCEPTABLE",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "FAIL",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 18,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2778,
+        "unmarked_word_count": 13,
+        "gap_A_B": 2,
+        "gap_B_C": 3,
+        "gap_C_D": 8,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "CLAUSE_RELATION",
+        "format_distribution_distance": 0.3327,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.36,
+          "marked_coverage_ratio": 0.544,
+          "unmarked_word_count": 0.396,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.292,
+          "gap_C_D": 1.0
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "EXTREME"
+        },
+        "span_token_indices": {
+          "A": [
+            0
+          ],
+          "B": [
+            3
+          ],
+          "C": [
+            7
+          ],
+          "D": [
+            16,
+            17
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-fixture-smoke-20260824-patch-01-review",
+        "item_review_order": 3,
+        "invocation_id": null,
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-004",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "FAIL",
+      "detected_error_count": 1,
+      "detected_error_position": "C",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ACCEPTABLE",
+        "C": "ERROR",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "FAIL",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 1,
+          "B": 2,
+          "C": 3,
+          "D": 2
+        },
+        "mean_span_length": 2.0,
+        "max_span_length": 3,
+        "marked_coverage_ratio": 0.4211,
+        "unmarked_word_count": 11,
+        "gap_A_B": 1,
+        "gap_B_C": 0,
+        "gap_C_D": 4,
+        "correct_span_word_count": 3,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "FUNCTION_WORD",
+        "format_distribution_distance": 1.6176,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.952,
+          "unmarked_word_count": 0.196,
+          "mean_span_length": 0.972,
+          "max_span_length": 0.92,
+          "gap_A_B": 0.036,
+          "gap_B_C": 0.0,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "EXTREME",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "EXTREME",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "WARNING",
+          "gap_B_C": "EXTREME",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            1
+          ],
+          "B": [
+            3,
+            4
+          ],
+          "C": [
+            5,
+            6,
+            7
+          ],
+          "D": [
+            12,
+            13
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-fixture-smoke-20260824-patch-01-review",
+        "item_review_order": 4,
+        "invocation_id": null,
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-005",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "WARN",
+      "detected_error_count": 1,
+      "detected_error_position": "C",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ACCEPTABLE",
+        "C": "ERROR",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "WARN",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 2,
+          "B": 1,
+          "C": 2,
+          "D": 2
+        },
+        "mean_span_length": 1.75,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3684,
+        "unmarked_word_count": 12,
+        "gap_A_B": 2,
+        "gap_B_C": 2,
+        "gap_C_D": 6,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "format_distribution_distance": 1.0634,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.896,
+          "unmarked_word_count": 0.3,
+          "mean_span_length": 0.916,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.088,
+          "gap_C_D": 0.948
+        },
+        "format_band_status": "WARNING",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "WARNING"
+        },
+        "span_token_indices": {
+          "A": [
+            2,
+            3
+          ],
+          "B": [
+            6
+          ],
+          "C": [
+            9,
+            10
+          ],
+          "D": [
+            17,
+            18
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-fixture-smoke-20260824-patch-01-review",
+        "item_review_order": 5,
+        "invocation_id": null,
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-006",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "FAIL",
+      "detected_error_count": 1,
+      "detected_error_position": "C",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ACCEPTABLE",
+        "C": "ERROR",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "FAIL",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 20,
+        "span_word_counts": {
+          "A": 1,
+          "B": 2,
+          "C": 2,
+          "D": 1
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3,
+        "unmarked_word_count": 14,
+        "gap_A_B": 4,
+        "gap_B_C": 1,
+        "gap_C_D": 5,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "VERB_FRAME",
+        "format_distribution_distance": 0.4199,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.492,
+          "marked_coverage_ratio": 0.664,
+          "unmarked_word_count": 0.464,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.608,
+          "gap_B_C": 0.02,
+          "gap_C_D": 0.832
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "EXTREME",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            1
+          ],
+          "B": [
+            6,
+            7
+          ],
+          "C": [
+            9,
+            10
+          ],
+          "D": [
+            16
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-fixture-smoke-20260824-patch-01-review",
+        "item_review_order": 6,
+        "invocation_id": null,
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-007",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "FAIL",
+      "detected_error_count": 1,
+      "detected_error_position": "C",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ACCEPTABLE",
+        "C": "ERROR",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "FAIL",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 18,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 2,
+          "D": 2
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3333,
+        "unmarked_word_count": 12,
+        "gap_A_B": 0,
+        "gap_B_C": 1,
+        "gap_C_D": 3,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "WORD_CLASS",
+        "format_distribution_distance": 0.665,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.36,
+          "marked_coverage_ratio": 0.824,
+          "unmarked_word_count": 0.3,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.0,
+          "gap_B_C": 0.02,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "EXTREME",
+          "gap_B_C": "EXTREME",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            2
+          ],
+          "B": [
+            3
+          ],
+          "C": [
+            5,
+            6
+          ],
+          "D": [
+            10,
+            11
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-fixture-smoke-20260824-patch-01-review",
+        "item_review_order": 7,
+        "invocation_id": null,
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-008",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "PASS",
+      "detected_error_count": 1,
+      "detected_error_position": "C",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ACCEPTABLE",
+        "C": "ERROR",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "PASS",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 2,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3158,
+        "unmarked_word_count": 13,
+        "gap_A_B": 3,
+        "gap_B_C": 4,
+        "gap_C_D": 5,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "MORPHOLOGY",
+        "format_distribution_distance": 0.5193,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.736,
+          "unmarked_word_count": 0.396,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.312,
+          "gap_B_C": 0.54,
+          "gap_C_D": 0.832
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            1,
+            2
+          ],
+          "B": [
+            6
+          ],
+          "C": [
+            11
+          ],
+          "D": [
+            17,
+            18
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-fixture-smoke-20260824-patch-01-review",
+        "item_review_order": 8,
+        "invocation_id": null,
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-009",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "B",
+      "generator_answer": "B",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "PASS",
+      "detected_error_count": 1,
+      "detected_error_position": "B",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ERROR",
+        "C": "ACCEPTABLE",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "PASS",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 20,
+        "span_word_counts": {
+          "A": 2,
+          "B": 2,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3,
+        "unmarked_word_count": 14,
+        "gap_A_B": 2,
+        "gap_B_C": 5,
+        "gap_C_D": 5,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "format_distribution_distance": 0.4199,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.492,
+          "marked_coverage_ratio": 0.664,
+          "unmarked_word_count": 0.464,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.78,
+          "gap_C_D": 0.832
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            0,
+            1
+          ],
+          "B": [
+            4,
+            5
+          ],
+          "C": [
+            11
+          ],
+          "D": [
+            17
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-fixture-smoke-20260824-patch-01-review",
+        "item_review_order": 9,
+        "invocation_id": null,
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-010",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "A",
+      "generator_answer": "A",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "WARN",
+      "detected_error_count": 1,
+      "detected_error_position": "A",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ERROR",
+        "B": "ACCEPTABLE",
+        "C": "ACCEPTABLE",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "WARN",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 2,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3158,
+        "unmarked_word_count": 13,
+        "gap_A_B": 2,
+        "gap_B_C": 5,
+        "gap_C_D": 6,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "format_distribution_distance": 0.5193,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.736,
+          "unmarked_word_count": 0.396,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.78,
+          "gap_C_D": 0.948
+        },
+        "format_band_status": "WARNING",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "WARNING"
+        },
+        "span_token_indices": {
+          "A": [
+            0,
+            1
+          ],
+          "B": [
+            4
+          ],
+          "C": [
+            10
+          ],
+          "D": [
+            17,
+            18
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-fixture-smoke-20260824-patch-01-review",
+        "item_review_order": 10,
+        "invocation_id": null,
+        "runtime_model": null
+      }
+    }
+  ]
+}

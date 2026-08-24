@@ -1,0 +1,83 @@
+{
+  "sample_id": "we-v2-pilot-human-targeted-20260824-patch",
+  "source": "25-item WE v2 Live Pilot",
+  "blind": true,
+  "display_fields": [
+    "sentence",
+    "marked_parts"
+  ],
+  "items": [
+    {
+      "sentence": "The analytical team not only measures the solution's acidity but also recording the color change and compares the results with a calibrated standard.",
+      "marked_parts": {
+        "A": "measures",
+        "B": "solution's acidity",
+        "C": "recording the color change",
+        "D": "compares"
+      }
+    },
+    {
+      "sentence": "Not only did Edith Wharton challenge the conventions of nineteenth-century fiction, but she also exposure the social anxieties that shaped its most celebrated narratives and influenced later American writers.",
+      "marked_parts": {
+        "A": "challenge",
+        "B": "but she also exposure",
+        "C": "shaped",
+        "D": "influenced"
+      }
+    },
+    {
+      "sentence": "During the load test, the reinforced beam responded rapid, absorbed vibration effectively, and remained structurally sound throughout the experiment.",
+      "marked_parts": {
+        "A": "rapid",
+        "B": "vibration",
+        "C": "remained",
+        "D": "sound"
+      }
+    },
+    {
+      "sentence": "The materials scientists measured the remained solvent after the porous membrane had undergone repeated heating and cooling cycles under controlled laboratory conditions.",
+      "marked_parts": {
+        "A": "The",
+        "B": "scientists",
+        "C": "remained",
+        "D": "porous"
+      }
+    },
+    {
+      "sentence": "The retreat of the continental ice sheets that once covered northern Europe have left behind thick deposits of gravel and clay.",
+      "marked_parts": {
+        "A": "that",
+        "B": "have",
+        "C": "thick",
+        "D": "gravel"
+      }
+    },
+    {
+      "sentence": "During the coldest months, humpback whales migrate toward the tropics in order to raise its calves in warm coastal water.",
+      "marked_parts": {
+        "A": "coldest months",
+        "B": "migrate",
+        "C": "tropics",
+        "D": "its"
+      }
+    },
+    {
+      "sentence": "Even after the British Parliament imposed duties on imported goods, the most of the colonial merchants continued to trade abroad.",
+      "marked_parts": {
+        "A": "after",
+        "B": "imposed duties",
+        "C": "the most",
+        "D": "merchants"
+      }
+    },
+    {
+      "sentence": "Modern observatories depend on this delicate instruments, which require frequent calibration to remain accurate during long exposures.",
+      "marked_parts": {
+        "A": "this",
+        "B": "which",
+        "C": "calibration",
+        "D": "accurate"
+      }
+    }
+  ]
+}

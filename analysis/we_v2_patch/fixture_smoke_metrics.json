@@ -1,0 +1,751 @@
+{
+  "report_version": "WE_V2_PATCH_METRICS_1.0",
+  "run_id": "we-v2-fixture-smoke-20260824-patch-01",
+  "scope": "10 deterministic WE v2 fixture contract-replay items; no live generation or 75-item validation",
+  "generator": {
+    "schema_pass": 10,
+    "item_count": 10,
+    "format_validator_pass": 10,
+    "diagnostics_completeness_pass": 10,
+    "diagnostics_consistency_pass": 10
+  },
+  "reviewer": {
+    "contract_pass": true,
+    "contract_pass_count": 10,
+    "grammar_pass": 10,
+    "item_count": 10
+  },
+  "solver": {
+    "contract_pass": true,
+    "contract_pass_count": 10,
+    "fixture_consensus_count": 10,
+    "consensus_count": 10,
+    "item_count": 10,
+    "blind_input_keys": [
+      "item_id",
+      "section",
+      "sentence",
+      "marked_parts"
+    ]
+  },
+  "orchestrator": {
+    "policy": "existing consensus policy unchanged",
+    "auto_accept_count": 10,
+    "manual_review_count": 0
+  },
+  "geometry": {
+    "coverage_100_percent_count": 0,
+    "unmarked_context_zero_count": 0,
+    "coverage_100_percent_required": 0,
+    "unmarked_context_zero_required": 0
+  },
+  "format_bands": {
+    "PREFERRED": 2,
+    "WARNING": 2,
+    "EXTREME": 6
+  },
+  "per_item": [
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-001",
+      "generator_schema_pass": true,
+      "generator_schema_errors": [],
+      "format_validator_pass": true,
+      "format_validator_errors": [],
+      "diagnostics_completeness": true,
+      "diagnostics_consistency": true,
+      "diagnostics": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.0,
+        "max_span_length": 1,
+        "marked_coverage_ratio": 0.2105,
+        "unmarked_word_count": 15,
+        "gap_A_B": 8,
+        "gap_B_C": 3,
+        "gap_C_D": 4,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "format_distribution_distance": 0.6486,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.288,
+          "unmarked_word_count": 0.528,
+          "mean_span_length": 0.156,
+          "max_span_length": 0.156,
+          "gap_A_B": 1.0,
+          "gap_B_C": 0.292,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "EXTREME",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            0
+          ],
+          "B": [
+            9
+          ],
+          "C": [
+            13
+          ],
+          "D": [
+            18
+          ]
+        }
+      },
+      "coverage_100_percent": false,
+      "unmarked_context_zero": false,
+      "format_band_status": "EXTREME"
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-002",
+      "generator_schema_pass": true,
+      "generator_schema_errors": [],
+      "format_validator_pass": true,
+      "format_validator_errors": [],
+      "diagnostics_completeness": true,
+      "diagnostics_consistency": true,
+      "diagnostics": {
+        "sentence_word_count": 21,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 2,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2381,
+        "unmarked_word_count": 16,
+        "gap_A_B": 1,
+        "gap_B_C": 1,
+        "gap_C_D": 1,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "format_distribution_distance": 0.2705,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.576,
+          "marked_coverage_ratio": 0.392,
+          "unmarked_word_count": 0.588,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.036,
+          "gap_B_C": 0.02,
+          "gap_C_D": 0.024
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "WARNING",
+          "gap_B_C": "EXTREME",
+          "gap_C_D": "EXTREME"
+        },
+        "span_token_indices": {
+          "A": [
+            1
+          ],
+          "B": [
+            3
+          ],
+          "C": [
+            5,
+            6
+          ],
+          "D": [
+            8
+          ]
+        }
+      },
+      "coverage_100_percent": false,
+      "unmarked_context_zero": false,
+      "format_band_status": "EXTREME"
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-003",
+      "generator_schema_pass": true,
+      "generator_schema_errors": [],
+      "format_validator_pass": true,
+      "format_validator_errors": [],
+      "diagnostics_completeness": true,
+      "diagnostics_consistency": true,
+      "diagnostics": {
+        "sentence_word_count": 18,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2778,
+        "unmarked_word_count": 13,
+        "gap_A_B": 2,
+        "gap_B_C": 3,
+        "gap_C_D": 8,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "CLAUSE_RELATION",
+        "format_distribution_distance": 0.3327,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.36,
+          "marked_coverage_ratio": 0.544,
+          "unmarked_word_count": 0.396,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.292,
+          "gap_C_D": 1.0
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "EXTREME"
+        },
+        "span_token_indices": {
+          "A": [
+            0
+          ],
+          "B": [
+            3
+          ],
+          "C": [
+            7
+          ],
+          "D": [
+            16,
+            17
+          ]
+        }
+      },
+      "coverage_100_percent": false,
+      "unmarked_context_zero": false,
+      "format_band_status": "EXTREME"
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-004",
+      "generator_schema_pass": true,
+      "generator_schema_errors": [],
+      "format_validator_pass": true,
+      "format_validator_errors": [],
+      "diagnostics_completeness": true,
+      "diagnostics_consistency": true,
+      "diagnostics": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 1,
+          "B": 2,
+          "C": 3,
+          "D": 2
+        },
+        "mean_span_length": 2.0,
+        "max_span_length": 3,
+        "marked_coverage_ratio": 0.4211,
+        "unmarked_word_count": 11,
+        "gap_A_B": 1,
+        "gap_B_C": 0,
+        "gap_C_D": 4,
+        "correct_span_word_count": 3,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "FUNCTION_WORD",
+        "format_distribution_distance": 1.6176,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.952,
+          "unmarked_word_count": 0.196,
+          "mean_span_length": 0.972,
+          "max_span_length": 0.92,
+          "gap_A_B": 0.036,
+          "gap_B_C": 0.0,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "EXTREME",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "EXTREME",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "WARNING",
+          "gap_B_C": "EXTREME",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            1
+          ],
+          "B": [
+            3,
+            4
+          ],
+          "C": [
+            5,
+            6,
+            7
+          ],
+          "D": [
+            12,
+            13
+          ]
+        }
+      },
+      "coverage_100_percent": false,
+      "unmarked_context_zero": false,
+      "format_band_status": "EXTREME"
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-005",
+      "generator_schema_pass": true,
+      "generator_schema_errors": [],
+      "format_validator_pass": true,
+      "format_validator_errors": [],
+      "diagnostics_completeness": true,
+      "diagnostics_consistency": true,
+      "diagnostics": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 2,
+          "B": 1,
+          "C": 2,
+          "D": 2
+        },
+        "mean_span_length": 1.75,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3684,
+        "unmarked_word_count": 12,
+        "gap_A_B": 2,
+        "gap_B_C": 2,
+        "gap_C_D": 6,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "format_distribution_distance": 1.0634,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.896,
+          "unmarked_word_count": 0.3,
+          "mean_span_length": 0.916,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.088,
+          "gap_C_D": 0.948
+        },
+        "format_band_status": "WARNING",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "WARNING"
+        },
+        "span_token_indices": {
+          "A": [
+            2,
+            3
+          ],
+          "B": [
+            6
+          ],
+          "C": [
+            9,
+            10
+          ],
+          "D": [
+            17,
+            18
+          ]
+        }
+      },
+      "coverage_100_percent": false,
+      "unmarked_context_zero": false,
+      "format_band_status": "WARNING"
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-006",
+      "generator_schema_pass": true,
+      "generator_schema_errors": [],
+      "format_validator_pass": true,
+      "format_validator_errors": [],
+      "diagnostics_completeness": true,
+      "diagnostics_consistency": true,
+      "diagnostics": {
+        "sentence_word_count": 20,
+        "span_word_counts": {
+          "A": 1,
+          "B": 2,
+          "C": 2,
+          "D": 1
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3,
+        "unmarked_word_count": 14,
+        "gap_A_B": 4,
+        "gap_B_C": 1,
+        "gap_C_D": 5,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "VERB_FRAME",
+        "format_distribution_distance": 0.4199,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.492,
+          "marked_coverage_ratio": 0.664,
+          "unmarked_word_count": 0.464,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.608,
+          "gap_B_C": 0.02,
+          "gap_C_D": 0.832
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "EXTREME",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            1
+          ],
+          "B": [
+            6,
+            7
+          ],
+          "C": [
+            9,
+            10
+          ],
+          "D": [
+            16
+          ]
+        }
+      },
+      "coverage_100_percent": false,
+      "unmarked_context_zero": false,
+      "format_band_status": "EXTREME"
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-007",
+      "generator_schema_pass": true,
+      "generator_schema_errors": [],
+      "format_validator_pass": true,
+      "format_validator_errors": [],
+      "diagnostics_completeness": true,
+      "diagnostics_consistency": true,
+      "diagnostics": {
+        "sentence_word_count": 18,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 2,
+          "D": 2
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3333,
+        "unmarked_word_count": 12,
+        "gap_A_B": 0,
+        "gap_B_C": 1,
+        "gap_C_D": 3,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "WORD_CLASS",
+        "format_distribution_distance": 0.665,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.36,
+          "marked_coverage_ratio": 0.824,
+          "unmarked_word_count": 0.3,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.0,
+          "gap_B_C": 0.02,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "EXTREME",
+          "gap_B_C": "EXTREME",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            2
+          ],
+          "B": [
+            3
+          ],
+          "C": [
+            5,
+            6
+          ],
+          "D": [
+            10,
+            11
+          ]
+        }
+      },
+      "coverage_100_percent": false,
+      "unmarked_context_zero": false,
+      "format_band_status": "EXTREME"
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-008",
+      "generator_schema_pass": true,
+      "generator_schema_errors": [],
+      "format_validator_pass": true,
+      "format_validator_errors": [],
+      "diagnostics_completeness": true,
+      "diagnostics_consistency": true,
+      "diagnostics": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 2,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3158,
+        "unmarked_word_count": 13,
+        "gap_A_B": 3,
+        "gap_B_C": 4,
+        "gap_C_D": 5,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "MORPHOLOGY",
+        "format_distribution_distance": 0.5193,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.736,
+          "unmarked_word_count": 0.396,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.312,
+          "gap_B_C": 0.54,
+          "gap_C_D": 0.832
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            1,
+            2
+          ],
+          "B": [
+            6
+          ],
+          "C": [
+            11
+          ],
+          "D": [
+            17,
+            18
+          ]
+        }
+      },
+      "coverage_100_percent": false,
+      "unmarked_context_zero": false,
+      "format_band_status": "PREFERRED"
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-009",
+      "generator_schema_pass": true,
+      "generator_schema_errors": [],
+      "format_validator_pass": true,
+      "format_validator_errors": [],
+      "diagnostics_completeness": true,
+      "diagnostics_consistency": true,
+      "diagnostics": {
+        "sentence_word_count": 20,
+        "span_word_counts": {
+          "A": 2,
+          "B": 2,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3,
+        "unmarked_word_count": 14,
+        "gap_A_B": 2,
+        "gap_B_C": 5,
+        "gap_C_D": 5,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "format_distribution_distance": 0.4199,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.492,
+          "marked_coverage_ratio": 0.664,
+          "unmarked_word_count": 0.464,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.78,
+          "gap_C_D": 0.832
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            0,
+            1
+          ],
+          "B": [
+            4,
+            5
+          ],
+          "C": [
+            11
+          ],
+          "D": [
+            17
+          ]
+        }
+      },
+      "coverage_100_percent": false,
+      "unmarked_context_zero": false,
+      "format_band_status": "PREFERRED"
+    },
+    {
+      "item_id": "we-v2-fixture-smoke-20260824-patch-01-010",
+      "generator_schema_pass": true,
+      "generator_schema_errors": [],
+      "format_validator_pass": true,
+      "format_validator_errors": [],
+      "diagnostics_completeness": true,
+      "diagnostics_consistency": true,
+      "diagnostics": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 2,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3158,
+        "unmarked_word_count": 13,
+        "gap_A_B": 2,
+        "gap_B_C": 5,
+        "gap_C_D": 6,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "format_distribution_distance": 0.5193,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.736,
+          "unmarked_word_count": 0.396,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.78,
+          "gap_C_D": 0.948
+        },
+        "format_band_status": "WARNING",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "WARNING"
+        },
+        "span_token_indices": {
+          "A": [
+            0,
+            1
+          ],
+          "B": [
+            4
+          ],
+          "C": [
+            10
+          ],
+          "D": [
+            17,
+            18
+          ]
+        }
+      },
+      "coverage_100_percent": false,
+      "unmarked_context_zero": false,
+      "format_band_status": "WARNING"
+    }
+  ],
+  "reviewer_pass_all": true,
+  "solver_consensus_all": true,
+  "fixture_smoke_gate": true
+}

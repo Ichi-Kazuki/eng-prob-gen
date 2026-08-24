@@ -1,0 +1,83 @@
+{
+  "sample_id": "we-v2-pilot-human-targeted-20260824-patch",
+  "access": "private key; not for blind display",
+  "strata": {
+    "EXTREME": 3,
+    "WARNING": 1,
+    "PREFERRED": 4
+  },
+  "items": [
+    {
+      "blind_index": 1,
+      "source_item_id": "we-v2-pilot-010",
+      "format_band": "EXTREME",
+      "generator_answer": "C",
+      "reviewer_answer": "C",
+      "solver_answer": "C",
+      "pipeline_state": "ACCEPTED"
+    },
+    {
+      "blind_index": 2,
+      "source_item_id": "we-v2-pilot-011",
+      "format_band": "EXTREME",
+      "generator_answer": "B",
+      "reviewer_answer": "B",
+      "solver_answer": "B",
+      "pipeline_state": "ACCEPTED"
+    },
+    {
+      "blind_index": 3,
+      "source_item_id": "we-v2-pilot-012",
+      "format_band": "EXTREME",
+      "generator_answer": "A",
+      "reviewer_answer": "A",
+      "solver_answer": "A",
+      "pipeline_state": "ACCEPTED"
+    },
+    {
+      "blind_index": 4,
+      "source_item_id": "we-v2-pilot-017",
+      "format_band": "WARNING",
+      "generator_answer": "C",
+      "reviewer_answer": "C",
+      "solver_answer": "C",
+      "pipeline_state": "ACCEPTED"
+    },
+    {
+      "blind_index": 5,
+      "source_item_id": "we-v2-pilot-001",
+      "format_band": "PREFERRED",
+      "generator_answer": "B",
+      "reviewer_answer": "B",
+      "solver_answer": "B",
+      "pipeline_state": "ACCEPTED"
+    },
+    {
+      "blind_index": 6,
+      "source_item_id": "we-v2-pilot-002",
+      "format_band": "PREFERRED",
+      "generator_answer": "D",
+      "reviewer_answer": "D",
+      "solver_answer": "D",
+      "pipeline_state": "ACCEPTED"
+    },
+    {
+      "blind_index": 7,
+      "source_item_id": "we-v2-pilot-003",
+      "format_band": "PREFERRED",
+      "generator_answer": "C",
+      "reviewer_answer": "C",
+      "solver_answer": "C",
+      "pipeline_state": "ACCEPTED"
+    },
+    {
+      "blind_index": 8,
+      "source_item_id": "we-v2-pilot-004",
+      "format_band": "PREFERRED",
+      "generator_answer": "A",
+      "reviewer_answer": "A",
+      "solver_answer": "A",
+      "pipeline_state": "ACCEPTED"
+    }
+  ]
+}

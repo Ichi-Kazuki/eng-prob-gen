@@ -34,6 +34,7 @@ FINAL_ITEMS_PATH = PILOT / "we_v2_pilot_final_items.json"
 
 sys.path.insert(0, str(ROOT / "agents" / "toefl_itp_we_generator_v2" / "scripts"))
 from validate_format import (  # noqa: E402
+    DiagnosticsEmissionError, inject_canonical_diagnostics,
     load_json, load_items, validate_item, CONFIG_PATH, GRAMMAR_SPEC_PATH, TAXONOMY_PATH,
 )
 
@@ -149,12 +150,39 @@ def median(values: list[float]) -> float:
     return statistics.median(values) if values else float("nan")
 
 
+def candidate_id(item: Any) -> str:
+    """Return a safe identifier for diagnostics about malformed candidates."""
+
+    if not isinstance(item, dict):
+        return "?"
+    value = item.get("item_id", "?")
+    return value if isinstance(value, str) else "?"
+
+
+def candidate_provenance(item: Any) -> dict[str, Any]:
+    if not isinstance(item, dict):
+        return {}
+    provenance = item.get("provenance")
+    return provenance if isinstance(provenance, dict) else {}
+
+
+def candidate_generation_order(item: Any) -> int:
+    value = candidate_provenance(item).get("item_generation_order")
+    return value if isinstance(value, int) and not isinstance(value, bool) else 0
+
+
+def candidate_microbatch_id(item: Any) -> str | None:
+    value = candidate_provenance(item).get("microbatch_id")
+    return value if isinstance(value, str) else None
+
+
 def stage_aggregate() -> int:
     plan = load_json(PILOT / "we_v2_pilot_plan.json")
     slots = {slot["item_id"]: slot for slot in plan["slots"]}
     item_schema = load_json(ITEM_SCHEMA_PATH)
+    config = load_json(CONFIG_PATH)
 
-    items: list[dict] = []
+    items: list[Any] = []
     phases: dict[str, dict] = {}
     microbatch_files: list[dict] = []
     problems: list[str] = []
@@ -166,8 +194,22 @@ def stage_aggregate() -> int:
             problems.append(f"missing live generator output: {gen_path.name}")
             continue
         payload = load_json(gen_path)
-        micro_items = payload["items"] if isinstance(payload, dict) else payload
-        items.extend(micro_items)
+        micro_items = payload.get("items") if isinstance(payload, dict) else payload
+        if not isinstance(micro_items, list):
+            problems.append(f"invalid generator payload in {gen_path.name}: items must be an array")
+            micro_items = []
+        for raw_item in micro_items:
+            try:
+                # Deterministic format code owns all mechanically derivable
+                # diagnostics. The schema gate runs only after this boundary.
+                items.append(inject_canonical_diagnostics(raw_item, config))
+            except DiagnosticsEmissionError as exc:
+                # Fail closed: retain the raw candidate for an explicit
+                # schema/format failure record, never inject placeholders.
+                items.append(raw_item)
+                problems.append(
+                    f"diagnostics emission failed for {candidate_id(raw_item)}: {exc}"
+                )
         microbatch_files.append({
             "microbatch_id": micro,
             "items_file": str(gen_path.relative_to(ROOT)).replace("\\", "/"),
@@ -177,25 +219,36 @@ def stage_aggregate() -> int:
         })
         if phase_path.exists():
             trace = load_json(phase_path)
-            for entry in (trace["items"] if isinstance(trace, dict) else trace):
-                phases[entry["item_id"]] = entry
+            trace_items = trace.get("items") if isinstance(trace, dict) else trace
+            if not isinstance(trace_items, list):
+                problems.append(f"invalid phase trace payload in {phase_path.name}: items must be an array")
+                trace_items = []
+            for entry in trace_items:
+                if isinstance(entry, dict) and isinstance(entry.get("item_id"), str):
+                    phases[entry["item_id"]] = entry
+                else:
+                    problems.append(f"malformed phase trace entry in {phase_path.name}")
         else:
             problems.append(f"missing phase trace: {phase_path.name}")
 
-    items.sort(key=lambda item: item["provenance"]["item_generation_order"])
+    items.sort(key=candidate_generation_order)
 
-    ids = [item["item_id"] for item in items]
+    ids = [candidate_id(item) for item in items]
     if len(items) != 25:
         problems.append(f"expected exactly 25 initial candidates, found {len(items)}")
     if len(set(ids)) != len(ids):
         problems.append("duplicate item_id in the live cohort")
     if set(ids) - set(slots):
         problems.append(f"item_ids outside the batch plan: {sorted(set(ids) - set(slots))}")
-    sentences = [item["sentence"].strip().lower() for item in items]
+    sentences = [
+        item["sentence"].strip().lower()
+        if isinstance(item, dict) and isinstance(item.get("sentence"), str)
+        else f"<invalid-sentence-{index}>"
+        for index, item in enumerate(items)
+    ]
     if len(set(sentences)) != len(sentences):
         problems.append("duplicate sentence text in the live cohort")
 
-    config = load_json(CONFIG_PATH)
     grammar = load_json(GRAMMAR_SPEC_PATH)
     taxonomy = load_json(TAXONOMY_PATH)
     targets = {x["id"] for x in taxonomy["primary_targets"]}
@@ -203,7 +256,8 @@ def stage_aggregate() -> int:
 
     records: list[dict] = []
     for item in items:
-        slot = slots.get(item["item_id"], {})
+        item_id = candidate_id(item)
+        slot = slots.get(item_id, {})
         schema_result = schema_errors(item, item_schema)
         format_result = validate_item(item, config, targets, error_types)
         plan_mismatches = []
@@ -212,21 +266,26 @@ def stage_aggregate() -> int:
             ("tested_error_type", "tested_error_type"), ("difficulty", "difficulty"),
             ("vocabulary_domain", "vocabulary_domain"),
         ]:
-            if slot and slot[plan_key] != item[item_key]:
-                plan_mismatches.append(f"{item_key}: plan={slot[plan_key]!r} item={item[item_key]!r}")
-        if slot and slot["planned_correct_position"] != item["correct_answer"]:
-            plan_mismatches.append(
-                f"correct_answer: plan={slot['planned_correct_position']} item={item['correct_answer']}"
-            )
-        for plan_key in ("correction_locality", "decision_granularity"):
-            if slot and slot[plan_key] != item["grammar_metadata"][plan_key]:
+            if slot and (not isinstance(item, dict) or slot[plan_key] != item.get(item_key)):
                 plan_mismatches.append(
-                    f"grammar_metadata.{plan_key}: plan={slot[plan_key]!r} item={item['grammar_metadata'][plan_key]!r}"
+                    f"{item_key}: plan={slot[plan_key]!r} item={item.get(item_key) if isinstance(item, dict) else None!r}"
+                )
+        if slot and (not isinstance(item, dict) or slot["planned_correct_position"] != item.get("correct_answer")):
+            plan_mismatches.append(
+                "correct_answer: "
+                f"plan={slot['planned_correct_position']} item={item.get('correct_answer') if isinstance(item, dict) else None}"
+            )
+        grammar_metadata = item.get("grammar_metadata") if isinstance(item, dict) else None
+        for plan_key in ("correction_locality", "decision_granularity"):
+            if slot and (not isinstance(grammar_metadata, dict) or slot[plan_key] != grammar_metadata.get(plan_key)):
+                plan_mismatches.append(
+                    "grammar_metadata."
+                    f"{plan_key}: plan={slot[plan_key]!r} item={grammar_metadata.get(plan_key) if isinstance(grammar_metadata, dict) else None!r}"
                 )
         records.append({
-            "item_id": item["item_id"],
-            "item_generation_order": item["provenance"]["item_generation_order"],
-            "microbatch_id": item["provenance"]["microbatch_id"],
+            "item_id": item_id,
+            "item_generation_order": candidate_generation_order(item),
+            "microbatch_id": candidate_microbatch_id(item),
             "generator_schema_pass": not schema_result,
             "generator_schema_errors": schema_result,
             "format_validator_pass": format_result["valid"],
@@ -235,6 +294,19 @@ def stage_aggregate() -> int:
             "plan_mismatches": plan_mismatches,
             "diagnostics": format_result["diagnostics"],
         })
+
+    for record in records:
+        if not (
+            record["generator_schema_pass"]
+            and record["format_validator_pass"]
+            and record["plan_conformance_pass"]
+        ):
+            problems.append(
+                f"candidate validation failed for {record['item_id']}: "
+                f"schema={record['generator_schema_errors']} "
+                f"format={record['format_validator_errors']} "
+                f"plan={record['plan_mismatches']}"
+            )
 
     run = {
         "run_id": BATCH_ID,
@@ -270,14 +342,15 @@ def stage_aggregate() -> int:
 
     provenance_items = []
     for item in items:
+        item_id = candidate_id(item)
         provenance_items.append({
-            "item_id": item["item_id"],
-            "plan_slot": slots.get(item["item_id"]),
-            "generator_provenance": item["provenance"],
-            "qa_metadata": item["qa_metadata"],
-            "sentence_first_phase_trace": phases.get(item["item_id"]),
+            "item_id": item_id,
+            "plan_slot": slots.get(item_id),
+            "generator_provenance": candidate_provenance(item),
+            "qa_metadata": item.get("qa_metadata") if isinstance(item, dict) else None,
+            "sentence_first_phase_trace": phases.get(item_id),
             "deterministic_format_validation": next(
-                r for r in records if r["item_id"] == item["item_id"]
+                r for r in records if r["item_id"] == item_id
             ),
         })
     (PILOT / "we_v2_pilot_provenance.json").write_text(

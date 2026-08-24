@@ -7,16 +7,23 @@ import hashlib
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
 PILOT = ROOT / "analysis" / "we_v2_pilot"
 RAW = PILOT / "raw"
 BATCH = "we-v2-live-pilot-20260824"
+GENERATOR_SCRIPTS = ROOT / "agents" / "toefl_itp_we_generator_v2" / "scripts"
+sys.path.insert(0, str(GENERATOR_SCRIPTS))
+from validate_format import (  # noqa: E402
+    CONFIG_PATH,
+    DiagnosticsEmissionError,
+    inject_canonical_diagnostics,
+)
 sys.path.insert(0, str(PILOT))
 from pilot_validation import build_validation_report, load_json  # noqa: E402
 
-CONFIG_PATH = ROOT / "agents" / "toefl_itp_we_generator_v2" / "config" / "we_v2_format_config.json"
 GRAMMAR_SPEC_PATH = ROOT / "specs" / "toefl_itp_grammar_spec.json"
 TAXONOMY_PATH = ROOT / "analysis" / "grammar_taxonomy.json"
 ITEM_SCHEMA_PATH = ROOT / "agents" / "toefl_itp_we_generator_v2" / "schema" / "written_expression_item_v2.schema.json"
@@ -36,10 +43,28 @@ REV_INVOCATIONS = {
 }
 
 
+def canonicalize_revision(
+    revised: dict[str, Any],
+    config: dict[str, Any],
+    source_errors: list[str],
+    item_id: str,
+) -> dict[str, Any]:
+    """Apply the same deterministic diagnostics boundary as initial output."""
+
+    try:
+        return inject_canonical_diagnostics(revised, config)
+    except DiagnosticsEmissionError as exc:
+        # Preserve the malformed revision for an explicit final validation
+        # failure. Never retain or invent a stale/placeholder diagnostics value.
+        source_errors.append(f"diagnostics emission failed for {item_id}: {exc}")
+        return revised
+
+
 def main() -> int:
     initial_path = PILOT / "we_v2_pilot_initial_items.json"
     initial = json.loads(initial_path.read_text(encoding="utf-8"))
     items = {item["item_id"]: item for item in initial["items"]}
+    config = load_json(CONFIG_PATH)
     gen_hash = "sha256:" + hashlib.sha256(GEN_PROMPT.read_bytes()).hexdigest()
     reviewer_hash = "sha256:" + hashlib.sha256(REV_PROMPT.read_bytes()).hexdigest()
     revision_records = []
@@ -60,6 +85,7 @@ def main() -> int:
             # Replace the slot with a deliberately invalid, keyed record so a
             # stale prior final cohort can never remain eligible downstream.
             revised = {"item_id": item_id}
+        revised = canonicalize_revision(revised, config, source_errors, item_id)
         # Preserve the revised record even when its contract is malformed;
         # the recorded validation result below will keep it out of Solver and
         # consensus instead of allowing the initial pass to survive.
@@ -83,7 +109,6 @@ def main() -> int:
 
     plan = load_json(PILOT / "we_v2_pilot_plan.json")
     item_schema = load_json(ITEM_SCHEMA_PATH)
-    config = load_json(CONFIG_PATH)
     grammar = load_json(GRAMMAR_SPEC_PATH)
     taxonomy = load_json(TAXONOMY_PATH)
     targets = {entry["id"] for entry in taxonomy["primary_targets"]}

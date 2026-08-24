@@ -101,6 +101,21 @@ GRAMMAR CHECKとFORMAT CHECKを別々に実行し、`grammar_check_status`と`fo
 
 ## Output
 
+### Output-contract patch v2.0.1
+
+`format_metadata.diagnostics` is not an LLM-authored field. The Generator
+must pass its completed sentence, marked parts, and grammar metadata through
+`agents/toefl_itp_we_generator_v2/scripts/validate_format.py` and use the
+returned canonical diagnostics object before schema validation. The emitter
+must preserve every required diagnostic key, including `span_word_counts.A-D`,
+the three gaps, `correct_span_word_count`, `correct_span_type`,
+`correction_locality`, `decision_granularity`, and the format band fields.
+
+If deterministic diagnostics cannot be computed, omit neither the field nor
+individual values and do not invent placeholders. Route the candidate to the
+existing `VALIDATION_FAILED` or `GENERATION_FAILED` path. A schema gate must
+remain strict and must run after canonical diagnostics injection.
+
 `agents/toefl_itp_we_generator_v2/schema/written_expression_item_v2.schema.json`に従い、次を含む。
 
 - sentence

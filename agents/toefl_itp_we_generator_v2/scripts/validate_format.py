@@ -32,6 +32,48 @@ SPAN_TYPES = {"SINGLE_WORD", "SHORT_PHRASE", "CLAUSE_OR_CLAUSE_LIKE"}
 ERROR_SCOPES = {"local", "clause_level", "sentence_level", "cross_clause"}
 CORRECTION_LOCALITIES = {"DEPENDENCY_BASED", "LOCAL_SHORT_SPAN", "SEMANTIC_OR_CONTEXT_DEPENDENT", "LOCAL_SINGLE_TOKEN", "CLAUSE_LEVEL"}
 DECISION_GRANULARITIES = {"FUNCTION_WORD", "WORD_ORDER", "CLAUSE_RELATION", "VERB_FRAME", "OTHER", "MORPHOLOGY", "WORD_CLASS", "AGREEMENT_DEPENDENCY", "LOCAL_PHRASE"}
+TYPE_MAP = {
+    "object": dict, "array": list, "string": str, "boolean": bool,
+    "number": (int, float), "integer": int, "null": type(None),
+}
+REQUIRED_DIAGNOSTIC_KEYS = (
+    "sentence_word_count", "span_word_counts", "mean_span_length", "max_span_length",
+    "marked_coverage_ratio", "unmarked_word_count", "gap_A_B", "gap_B_C", "gap_C_D",
+    "correct_span_word_count", "correct_span_type", "correction_locality",
+    "decision_granularity", "format_distribution_distance", "format_percentile_profile",
+    "format_band_status", "metric_band_status", "span_token_indices",
+)
+
+
+class DiagnosticsEmissionError(ValueError):
+    """Raised when canonical diagnostics cannot be computed safely."""
+
+
+def inject_canonical_diagnostics(item: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
+    """Return a copied item with validator-owned diagnostics injected.
+
+    Sentence/span geometry is measured by deterministic code. If it cannot be
+    measured, the caller must route the candidate to a failure state; this
+    function never fills values with an LLM guess or a placeholder.
+    """
+
+    if not isinstance(item, dict):
+        raise DiagnosticsEmissionError("candidate must be an object")
+    diagnostics, errors = format_diagnostics(item, config)
+    if errors:
+        raise DiagnosticsEmissionError("; ".join(errors))
+    if set(diagnostics) != set(REQUIRED_DIAGNOSTIC_KEYS):
+        missing = sorted(set(REQUIRED_DIAGNOSTIC_KEYS) - set(diagnostics))
+        extra = sorted(set(diagnostics) - set(REQUIRED_DIAGNOSTIC_KEYS))
+        raise DiagnosticsEmissionError(
+            f"canonical diagnostics key mismatch: missing={missing}, extra={extra}"
+        )
+    metadata = item.get("format_metadata")
+    if not isinstance(metadata, dict):
+        raise DiagnosticsEmissionError("format_metadata must be an object")
+    emitted = json.loads(json.dumps(item, ensure_ascii=False))
+    emitted["format_metadata"]["diagnostics"] = diagnostics
+    return emitted
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -49,6 +91,69 @@ def load_items(path: Path) -> list[dict[str, Any]]:
     raise ValueError("top-level JSON must be an item array or an object with items")
 
 
+def schema_errors(value: Any, schema: dict[str, Any], path: str = "") -> list[str]:
+    """Validate the small JSON Schema subset used by the Generator contract.
+
+    This deliberately stays dependency-free so the emission boundary can run
+    the strict contract gate before an item leaves the Generator process.
+    """
+
+    errors: list[str] = []
+    where = path or "<root>"
+
+    if "const" in schema and value != schema["const"]:
+        errors.append(f"{where}: must equal {schema['const']!r}")
+    if "enum" in schema and value not in schema["enum"]:
+        errors.append(f"{where}: {value!r} not in {schema['enum']}")
+
+    types = schema.get("type")
+    if types is not None:
+        allowed = types if isinstance(types, list) else [types]
+        ok = any(
+            isinstance(value, TYPE_MAP[name])
+            and not (name in {"integer", "number"} and isinstance(value, bool))
+            for name in allowed
+        )
+        if not ok:
+            errors.append(f"{where}: expected type {allowed}, got {type(value).__name__}")
+            return errors
+
+    if isinstance(value, str) and "minLength" in schema and len(value) < schema["minLength"]:
+        errors.append(f"{where}: shorter than minLength {schema['minLength']}")
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        if "minimum" in schema and value < schema["minimum"]:
+            errors.append(f"{where}: below minimum {schema['minimum']}")
+        if "maximum" in schema and value > schema["maximum"]:
+            errors.append(f"{where}: above maximum {schema['maximum']}")
+    if isinstance(value, list):
+        if "minItems" in schema and len(value) < schema["minItems"]:
+            errors.append(f"{where}: fewer than minItems {schema['minItems']}")
+        if "items" in schema:
+            for index, element in enumerate(value):
+                errors.extend(schema_errors(element, schema["items"], f"{where}[{index}]"))
+    if isinstance(value, dict):
+        for key in schema.get("required", []):
+            if key not in value:
+                errors.append(f"{where}: missing required property {key!r}")
+        properties = schema.get("properties", {})
+        extra = schema.get("additionalProperties", True)
+        unknown = sorted(set(value) - set(properties)) if properties or extra is False else []
+        if extra is False:
+            for key in unknown:
+                errors.append(f"{where}: additional property {key!r} is not allowed")
+        elif isinstance(extra, dict):
+            for key in unknown:
+                errors.extend(schema_errors(value[key], extra, f"{where}.{key}"))
+        for key, subschema in properties.items():
+            if key in value:
+                errors.extend(schema_errors(value[key], subschema, f"{where}.{key}"))
+        propnames = schema.get("propertyNames")
+        if isinstance(propnames, dict):
+            for key in value:
+                errors.extend(schema_errors(key, propnames, f"{where}:key({key})"))
+    return errors
+
+
 def tokens(text: str) -> list[dict[str, Any]]:
     return [
         {"text": m.group(0), "start": m.start(), "end": m.end(), "index": i}
@@ -57,6 +162,10 @@ def tokens(text: str) -> list[dict[str, Any]]:
 
 
 def span_token_indices(sentence: str, span: str) -> tuple[list[int], list[str]]:
+    if not isinstance(sentence, str):
+        return [], ["sentence must be a string"]
+    if not isinstance(span, str):
+        return [], ["span must be a string"]
     first = sentence.find(span)
     if first < 0:
         return [], ["span is not an exact substring of sentence"]
@@ -121,6 +230,9 @@ def official_item_samples() -> dict[str, list[float]]:
 def format_diagnostics(item: dict[str, Any], config: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
     errors: list[str] = []
     sentence = item.get("sentence", "")
+    if not isinstance(sentence, str):
+        errors.append("sentence must be a string")
+        sentence = ""
     sentence_tokens = tokens(sentence)
     parts = item.get("marked_parts")
     if not isinstance(parts, dict) or set(parts) != set(LABELS):
@@ -160,13 +272,23 @@ def format_diagnostics(item: dict[str, Any], config: dict[str, Any]) -> tuple[di
     mean_length = marked_count / 4 if marked_count else 0.0
     max_length = max(counts.values()) if counts else 0
     grammar = item.get("grammar_metadata", {})
+    if not isinstance(grammar, dict):
+        errors.append("grammar_metadata must be an object")
+        grammar = {}
     correct = item.get("correct_answer")
-    correct_count = counts.get(correct, 0)
-    declared_types = item.get("format_metadata", {}).get("span_types", {})
+    correct_count = counts.get(correct, 0) if isinstance(correct, str) else 0
+    format_metadata = item.get("format_metadata", {})
+    if not isinstance(format_metadata, dict):
+        errors.append("format_metadata must be an object")
+        format_metadata = {}
+    declared_types = format_metadata.get("span_types", {})
+    if not isinstance(declared_types, dict):
+        errors.append("format_metadata.span_types must be an object")
+        declared_types = {}
     for label in LABELS:
         declared = declared_types.get(label)
         count = counts[label]
-        if declared not in SPAN_TYPES:
+        if not isinstance(declared, str) or declared not in SPAN_TYPES:
             errors.append(f"span_types.{label} is missing or invalid")
         elif declared == "SINGLE_WORD" and count != 1:
             errors.append(f"span_types.{label}=SINGLE_WORD but word count is {count}")
@@ -241,7 +363,7 @@ def format_diagnostics(item: dict[str, Any], config: dict[str, Any]) -> tuple[di
 def validate_item(item: dict[str, Any], config: dict[str, Any], targets: set[str], error_types: set[str]) -> dict[str, Any]:
     errors: list[str] = []
     if not isinstance(item, dict):
-        return {"item_id": "?", "valid": False, "errors": ["item must be an object"]}
+        return {"item_id": "?", "valid": False, "errors": ["item must be an object"], "diagnostics": {}}
     item_id = item.get("item_id", "?")
     required = {
         "item_id", "section", "agent_version", "primary_target", "subtype", "secondary_features",
@@ -255,27 +377,28 @@ def validate_item(item: dict[str, Any], config: dict[str, Any], targets: set[str
         errors.append("section must be Written Expression")
     if item.get("agent_version") != "Written Expression Generator v2.0":
         errors.append("agent_version must be Written Expression Generator v2.0")
-    if item.get("primary_target") not in targets:
+    if not isinstance(item.get("primary_target"), str) or item.get("primary_target") not in targets:
         errors.append("primary_target is not in the grammar taxonomy")
-    if item.get("tested_error_type") not in error_types:
+    if not isinstance(item.get("tested_error_type"), str) or item.get("tested_error_type") not in error_types:
         errors.append("tested_error_type is not in the grammar taxonomy")
     if item.get("correct_answer") not in LABELS:
         errors.append("correct_answer must be A/B/C/D")
-    if item.get("qa_metadata", {}).get("clean_sentence_validated") is not True:
+    qa_metadata = item.get("qa_metadata", {})
+    if not isinstance(qa_metadata, dict) or qa_metadata.get("clean_sentence_validated") is not True:
         errors.append("qa_metadata.clean_sentence_validated must be true")
     grammar_metadata = item.get("grammar_metadata")
     if not isinstance(grammar_metadata, dict):
         errors.append("grammar_metadata must be an object")
     else:
-        if grammar_metadata.get("error_scope") not in ERROR_SCOPES:
+        if not isinstance(grammar_metadata.get("error_scope"), str) or grammar_metadata.get("error_scope") not in ERROR_SCOPES:
             errors.append("grammar_metadata.error_scope is invalid")
-        if grammar_metadata.get("correction_locality") not in CORRECTION_LOCALITIES:
+        if not isinstance(grammar_metadata.get("correction_locality"), str) or grammar_metadata.get("correction_locality") not in CORRECTION_LOCALITIES:
             errors.append("grammar_metadata.correction_locality is invalid")
-        if grammar_metadata.get("decision_granularity") not in DECISION_GRANULARITIES:
+        if not isinstance(grammar_metadata.get("decision_granularity"), str) or grammar_metadata.get("decision_granularity") not in DECISION_GRANULARITIES:
             errors.append("grammar_metadata.decision_granularity is invalid")
         if grammar_metadata.get("intended_error_position") != item.get("correct_answer"):
             errors.append("grammar_metadata.intended_error_position must equal correct_answer")
-        if grammar_metadata.get("correct_span_type") not in SPAN_TYPES:
+        if not isinstance(grammar_metadata.get("correct_span_type"), str) or grammar_metadata.get("correct_span_type") not in SPAN_TYPES:
             errors.append("grammar_metadata.correct_span_type is invalid")
     format_metadata = item.get("format_metadata")
     if not isinstance(format_metadata, dict):
@@ -298,15 +421,22 @@ def validate_item(item: dict[str, Any], config: dict[str, Any], targets: set[str
         for key in ("clean_form", "error_form", "minimal_correction", "mutation_type", "grammar_check_status", "format_check_status"):
             if not isinstance(qa.get(key), str) or not qa[key]:
                 errors.append(f"qa_metadata.{key} must be a nonempty string")
-        if qa.get("grammar_check_status") not in {"PASS", "FAIL", "AMBIGUOUS"}:
+        if not isinstance(qa.get("grammar_check_status"), str) or qa.get("grammar_check_status") not in {"PASS", "FAIL", "AMBIGUOUS"}:
             errors.append("qa_metadata.grammar_check_status is invalid")
-        if qa.get("format_check_status") not in {"PASS", "WARN", "FAIL"}:
+        if not isinstance(qa.get("format_check_status"), str) or qa.get("format_check_status") not in {"PASS", "WARN", "FAIL"}:
             errors.append("qa_metadata.format_check_status is invalid")
 
     diagnostics, diagnostic_errors = format_diagnostics(item, config)
     errors.extend(diagnostic_errors)
-    declared = item.get("format_metadata", {}).get("diagnostics", {})
-    if diagnostics and declared:
+    declared = format_metadata.get("diagnostics", {}) if isinstance(format_metadata, dict) else {}
+    if diagnostics and not isinstance(declared, dict):
+        errors.append("format_metadata.diagnostics must be an object")
+    elif diagnostics and isinstance(declared, dict):
+        missing_diagnostics = sorted(set(REQUIRED_DIAGNOSTIC_KEYS) - set(declared))
+        errors.extend(
+            f"format_metadata.diagnostics missing required field: {key}"
+            for key in missing_diagnostics
+        )
         for key in (
             "sentence_word_count", "span_word_counts", "mean_span_length", "max_span_length",
             "marked_coverage_ratio", "unmarked_word_count", "gap_A_B", "gap_B_C", "gap_C_D",

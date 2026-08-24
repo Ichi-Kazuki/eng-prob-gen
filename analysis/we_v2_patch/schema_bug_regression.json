@@ -1,0 +1,121 @@
+{
+  "suite": "WE v2 diagnostics emission contract regression",
+  "status": "PASS",
+  "root_cause_fixture_ids": [
+    "we-v2-pilot-013",
+    "we-v2-pilot-014",
+    "we-v2-pilot-015"
+  ],
+  "required_behavior": {
+    "missing_diagnostics_schema_pass_prohibited": true,
+    "canonical_diagnostics_schema_pass_allowed": true,
+    "emission_failure_fail_closed": true
+  },
+  "cases": [
+    {
+      "item_id": "we-v2-pilot-013",
+      "missing_diagnostics_input": true,
+      "schema_pass_before_injection": false,
+      "schema_errors_before_injection": [
+        "<root>.format_metadata.diagnostics: missing required property 'sentence_word_count'",
+        "<root>.format_metadata.diagnostics: missing required property 'span_word_counts'",
+        "<root>.format_metadata.diagnostics: missing required property 'mean_span_length'",
+        "<root>.format_metadata.diagnostics: missing required property 'max_span_length'",
+        "<root>.format_metadata.diagnostics: missing required property 'marked_coverage_ratio'",
+        "<root>.format_metadata.diagnostics: missing required property 'unmarked_word_count'",
+        "<root>.format_metadata.diagnostics: missing required property 'gap_A_B'",
+        "<root>.format_metadata.diagnostics: missing required property 'gap_B_C'",
+        "<root>.format_metadata.diagnostics: missing required property 'gap_C_D'",
+        "<root>.format_metadata.diagnostics: missing required property 'correct_span_word_count'",
+        "<root>.format_metadata.diagnostics: missing required property 'correct_span_type'",
+        "<root>.format_metadata.diagnostics: missing required property 'correction_locality'",
+        "<root>.format_metadata.diagnostics: missing required property 'decision_granularity'",
+        "<root>.format_metadata.diagnostics: missing required property 'format_distribution_distance'",
+        "<root>.format_metadata.diagnostics: missing required property 'format_percentile_profile'",
+        "<root>.format_metadata.diagnostics: missing required property 'format_band_status'",
+        "<root>.format_metadata.diagnostics: missing required property 'metric_band_status'",
+        "<root>.format_metadata.diagnostics: missing required property 'span_token_indices'"
+      ],
+      "format_validator_pass_before_injection": false,
+      "canonical_injection": "PASS",
+      "schema_pass_after_injection": true,
+      "format_validator_pass_after_injection": true,
+      "diagnostics_completeness_after_injection": true,
+      "pass": true
+    },
+    {
+      "item_id": "we-v2-pilot-014",
+      "missing_diagnostics_input": true,
+      "schema_pass_before_injection": false,
+      "schema_errors_before_injection": [
+        "<root>.format_metadata.diagnostics: missing required property 'sentence_word_count'",
+        "<root>.format_metadata.diagnostics: missing required property 'span_word_counts'",
+        "<root>.format_metadata.diagnostics: missing required property 'mean_span_length'",
+        "<root>.format_metadata.diagnostics: missing required property 'max_span_length'",
+        "<root>.format_metadata.diagnostics: missing required property 'marked_coverage_ratio'",
+        "<root>.format_metadata.diagnostics: missing required property 'unmarked_word_count'",
+        "<root>.format_metadata.diagnostics: missing required property 'gap_A_B'",
+        "<root>.format_metadata.diagnostics: missing required property 'gap_B_C'",
+        "<root>.format_metadata.diagnostics: missing required property 'gap_C_D'",
+        "<root>.format_metadata.diagnostics: missing required property 'correct_span_word_count'",
+        "<root>.format_metadata.diagnostics: missing required property 'correct_span_type'",
+        "<root>.format_metadata.diagnostics: missing required property 'correction_locality'",
+        "<root>.format_metadata.diagnostics: missing required property 'decision_granularity'",
+        "<root>.format_metadata.diagnostics: missing required property 'format_distribution_distance'",
+        "<root>.format_metadata.diagnostics: missing required property 'format_percentile_profile'",
+        "<root>.format_metadata.diagnostics: missing required property 'format_band_status'",
+        "<root>.format_metadata.diagnostics: missing required property 'metric_band_status'",
+        "<root>.format_metadata.diagnostics: missing required property 'span_token_indices'"
+      ],
+      "format_validator_pass_before_injection": false,
+      "canonical_injection": "PASS",
+      "schema_pass_after_injection": true,
+      "format_validator_pass_after_injection": true,
+      "diagnostics_completeness_after_injection": true,
+      "pass": true
+    },
+    {
+      "item_id": "we-v2-pilot-015",
+      "missing_diagnostics_input": true,
+      "schema_pass_before_injection": false,
+      "schema_errors_before_injection": [
+        "<root>.format_metadata.diagnostics: missing required property 'sentence_word_count'",
+        "<root>.format_metadata.diagnostics: missing required property 'span_word_counts'",
+        "<root>.format_metadata.diagnostics: missing required property 'mean_span_length'",
+        "<root>.format_metadata.diagnostics: missing required property 'max_span_length'",
+        "<root>.format_metadata.diagnostics: missing required property 'marked_coverage_ratio'",
+        "<root>.format_metadata.diagnostics: missing required property 'unmarked_word_count'",
+        "<root>.format_metadata.diagnostics: missing required property 'gap_A_B'",
+        "<root>.format_metadata.diagnostics: missing required property 'gap_B_C'",
+        "<root>.format_metadata.diagnostics: missing required property 'gap_C_D'",
+        "<root>.format_metadata.diagnostics: missing required property 'correct_span_word_count'",
+        "<root>.format_metadata.diagnostics: missing required property 'correct_span_type'",
+        "<root>.format_metadata.diagnostics: missing required property 'correction_locality'",
+        "<root>.format_metadata.diagnostics: missing required property 'decision_granularity'",
+        "<root>.format_metadata.diagnostics: missing required property 'format_distribution_distance'",
+        "<root>.format_metadata.diagnostics: missing required property 'format_percentile_profile'",
+        "<root>.format_metadata.diagnostics: missing required property 'format_band_status'",
+        "<root>.format_metadata.diagnostics: missing required property 'metric_band_status'",
+        "<root>.format_metadata.diagnostics: missing required property 'span_token_indices'"
+      ],
+      "format_validator_pass_before_injection": false,
+      "canonical_injection": "PASS",
+      "schema_pass_after_injection": true,
+      "format_validator_pass_after_injection": true,
+      "diagnostics_completeness_after_injection": true,
+      "pass": true
+    }
+  ],
+  "fail_closed_case": {
+    "pass": true,
+    "failures": [
+      {
+        "item_id": "we-v2-patch-fail-closed-001",
+        "state": "VALIDATION_FAILED",
+        "failure_kind": "content",
+        "stage": "generator_diagnostics_emission",
+        "error": "marked_parts must have exactly A/B/C/D"
+      }
+    ]
+  }
+}
