@@ -51,6 +51,7 @@ from validate_format import (  # noqa: E402
     validate_item,
 )
 from orchestrator import evaluate_consensus, load_config  # noqa: E402
+from integrity import derive_correct_answer  # noqa: E402
 
 import importlib.util  # noqa: E402
 
@@ -189,9 +190,9 @@ BASES: list[dict[str, Any]] = [
         v("The engineers tested the suspension bridge after replacing several weakened cables.", "The engineers were tested the suspension bridge after replacing several weakened cables.", ["engineers", "were tested", "bridge", "cables"], "were tested -> tested"),
     ]),
     base("VERB_FORM_VOICE", "past perfect required before a later past event", "wrong_verb_form", "MEDIUM", "DEPENDENCY_BASED", "VERB_FRAME", "clause_level", [
-        v("By the time the expedition reached the valley, local guides had mapped the safest route through the passes.", "By the time the expedition reached the valley, local guides mapped the safest route through the passes.", ["expedition", "reached", "mapped", "passes"], "mapped -> had mapped"),
+        v("By the time the expedition reached the valley, local guides had mapped the safest route through the passes.", "By the time the expedition reached the valley, local guides have map the safest route through the passes.", ["expedition", "reached", "have map", "passes"], "have map -> had mapped"),
         v("By the time the observatory opened, technicians had calibrated the new telescope during several clear nights.", "By the time the observatory opened, technicians have calibrated the new telescope during several clear nights.", ["observatory", "opened", "have calibrated", "nights"], "have calibrated -> had calibrated"),
-        v("When the committee convened, after carefully checking the attendance records, the secretary had distributed the revised agenda to every member.", "When the committee convened, after carefully checking the attendance records, the secretary distributed the revised agenda to every member.", ["committee", "convened", "distributed", "member"], "distributed -> had distributed", tail="single_gap"),
+        v("When the committee convened, after carefully checking the attendance records, the secretary had distributed the revised agenda to every member.", "When the committee convened, after carefully checking the attendance records, the secretary distribute the revised agenda to every member.", ["committee", "convened", "distribute", "member"], "distribute -> had distributed", tail="single_gap"),
     ]),
     base("PARALLEL_STRUCTURE", "parallel verb forms in a coordinated list", "wrong_verb_form", "MEDIUM", "CLAUSE_LEVEL", "VERB_FRAME", "clause_level", [
         v("The new program helps students analyze data, interpret graphs, and present conclusions to their classmates.", "The new program helps students analyze data, interpret graphs, and presenting conclusions to their classmates.", ["program", "analyze data", "presenting conclusions", "classmates"], "presenting conclusions -> present conclusions"),
@@ -320,13 +321,13 @@ def make_item(order: int, batch: str, spec: dict[str, Any], variant: dict[str, A
     item_id = f"we-v2-validation-{order:03d}"
     sentence_count = token_count(variant["error"])
     counts = {label: token_count(span) for label, span in zip(LABELS, variant["spans"])}
-    intended = LABELS[(order * 7) % 4]
-    # Keep the authored answer position, which is independent from the order
-    # formula, explicit and stable in the plan/data contract.
-    intended = spec.get("position_by_batch", {}).get(batch, intended)
+    marked_parts = dict(zip(LABELS, variant["spans"]))
+    # The answer is derived from the actual clean/error mutation and the
+    # error-side marked span.  It is never supplied by a position map.
+    derived_answer = derive_correct_answer(variant["clean"], variant["error"], marked_parts)
     span_types = {label: span_kind(counts[label]) for label in LABELS}
-    correct_span_type = span_types[intended]
-    correct_answer = intended
+    correct_span_type = span_types[derived_answer]
+    correct_answer = derived_answer
     emitted_target = INITIAL_PRIMARY_TARGET_OVERRIDES.get(item_id, spec["primary_target"])
     batch_id = f"{RUN_ID}-{batch}"
     microbatch_id = f"{batch_id}-micro-{order:03d}"
@@ -341,15 +342,15 @@ def make_item(order: int, batch: str, spec: dict[str, Any], variant: dict[str, A
         "difficulty": spec["difficulty"],
         "vocabulary_domain": spec.get("vocabulary_domain", "academic research"),
         "sentence": variant["error"],
-        "marked_parts": dict(zip(LABELS, variant["spans"])),
+        "marked_parts": marked_parts,
         "correct_answer": correct_answer,
-        "error_explanation": f"The intended grammatical error is in marked part {intended}; the clean form repairs it as {variant['correction']}.",
+        "error_explanation": f"The actual clean/error mutation is in marked part {derived_answer}; the clean form repairs it as {variant['correction']}.",
         "minimal_correction": variant["correction"],
         "grammar_metadata": {
             "error_scope": spec["error_scope"],
             "correction_locality": spec["correction_locality"],
             "decision_granularity": spec["decision_granularity"],
-            "intended_error_position": intended,
+            "intended_error_position": derived_answer,
             "correct_span_type": correct_span_type,
         },
         "format_metadata": {
@@ -396,25 +397,8 @@ def build_plan() -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, dict[s
             domain = VOCABULARY_DOMAINS[base_index]
             # The plan is emitted before candidate realization in the run
             # sequence; it records all slot-level intent explicitly.
-            intended = LABELS[(order * 7) % 4]
-            if base_index == 0:
-                intended = "B"
-            elif base_index == 1:
-                intended = "D"
-            elif base_index == 2:
-                intended = "C"
-            elif base_index == 3:
-                intended = "B"
-            elif base_index in {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24}:
-                # Most items use a stable local answer position derived from
-                # the marked spans; the explicit map below preserves exact
-                # metadata for every slot.
-                intended = {
-                    4: "D", 5: "B", 6: "C", 7: "B", 8: "C", 9: "C",
-                    10: "C", 11: "C", 12: "A", 13: "A", 14: "A", 15: "C",
-                    16: "A", 17: "B", 18: "C", 19: "C", 20: "B", 21: "B",
-                    22: "A", 23: "C", 24: "B",
-                }.get(base_index, intended)
+            marked_parts = dict(zip(LABELS, variant["spans"]))
+            derived_answer = derive_correct_answer(variant["clean"], variant["error"], marked_parts)
             # Every item is one microbatch; the 25-item batch plan is shared
             # only as metadata, never as a giant generation context.
             counts = {label: token_count(span) for label, span in zip(LABELS, variant["spans"])}
@@ -432,23 +416,22 @@ def build_plan() -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, dict[s
                 "vocabulary_domain": domain,
                 "correction_locality": spec["correction_locality"],
                 "decision_granularity": spec["decision_granularity"],
-                "planned_correct_position": intended,
+                "planned_correct_position": derived_answer,
                 "format_plan": {
                     "sentence_length_region": length_region(token_count(variant["error"])),
                     "intended_span_profile": "/".join(str(counts[label]) for label in LABELS),
                     "intended_coverage_region": "soft official reference; no exact quota",
-                    "intended_correct_span_type": span_types[intended],
+                    "intended_correct_span_type": span_types[derived_answer],
                     "planned_tail_case": variant.get("tail"),
                     "decision_granularity": spec["decision_granularity"],
                     "correction_locality": spec["correction_locality"],
                 },
             })
-            spec_with_position = dict(spec)
-            spec_with_position["position_by_batch"] = {batch: intended}
-            spec_with_position["vocabulary_domain"] = domain
-            item = make_item(order, batch, spec_with_position, variant)
+            spec_with_domain = dict(spec)
+            spec_with_domain["vocabulary_domain"] = domain
+            item = make_item(order, batch, spec_with_domain, variant)
             raw_items.append(item)
-            extras[slot_id] = {"intended_answer": intended, "clean_sentence": variant["clean"], "tail": variant.get("tail")}
+            extras[slot_id] = {"derived_answer": derived_answer, "clean_sentence": variant["clean"], "tail": variant.get("tail")}
     plan = {
         "plan_version": "WE_V2_LIVE_VALIDATION_PLAN_2.0.1",
         "run_id": RUN_ID,
@@ -511,7 +494,7 @@ def canonicalize(raw_items: list[dict[str, Any]]) -> tuple[list[dict[str, Any]],
     return emitted, failures
 
 
-def reviewer_record(item: dict[str, Any], order: int, review_batch_id: str, round_label: str, contract_answer: str) -> dict[str, Any]:
+def reviewer_record(item: dict[str, Any], order: int, review_batch_id: str, round_label: str, replay_answer: str) -> dict[str, Any]:
     """Materialize a Reviewer-shaped contract fixture.
 
     There is no callable live Reviewer runtime in this repository.  The
@@ -523,7 +506,7 @@ def reviewer_record(item: dict[str, Any], order: int, review_batch_id: str, roun
     verdict = "REVISE" if revision_needed else "PASS"
     diagnostics = item["format_metadata"]["diagnostics"]
     format_validity = "WARN" if diagnostics["format_band_status"] == "EXTREME" else "PASS"
-    assessments = {label: ("ERROR" if label == contract_answer else "ACCEPTABLE") for label in LABELS}
+    assessments = {label: ("ERROR" if label == replay_answer else "ACCEPTABLE") for label in LABELS}
     issues = []
     requirements: list[str] = []
     if revision_needed:
@@ -535,15 +518,15 @@ def reviewer_record(item: dict[str, Any], order: int, review_batch_id: str, roun
         "agent_version": REVIEWER_VERSION,
         "verdict": verdict,
         "critical_failure": False,
-        "independent_answer": contract_answer,
+        "independent_answer": replay_answer,
         "generator_answer": generator_answer,
-        "answer_match": contract_answer == generator_answer,
+        "answer_match": replay_answer == generator_answer,
         "grammar_validity": "PASS",
         "judgment_mode": JUDGMENT_MODE,
         "grammar_quality_evaluable": JUDGMENT_QUALITY_EVALUABLE,
         "format_validity": format_validity,
         "detected_error_count": 1,
-        "detected_error_position": contract_answer,
+        "detected_error_position": replay_answer,
         "non_error_parts_valid": True,
         "minimal_correction_valid": True,
         "marked_part_assessments": assessments,
@@ -573,12 +556,12 @@ def reviewer_record(item: dict[str, Any], order: int, review_batch_id: str, roun
     }
 
 
-def solver_record(blinded: dict[str, Any], order: int, contract_answer: str, correction: str, batch_id: str) -> dict[str, Any]:
+def solver_record(blinded: dict[str, Any], order: int, replay_answer: str, correction: str, batch_id: str) -> dict[str, Any]:
     """Materialize a blind Solver-shaped contract fixture, not a grammar judgment."""
     return {
         "item_id": blinded["item_id"],
         "section": SECTION,
-        "solver_answer": contract_answer,
+        "solver_answer": replay_answer,
         "confidence": "HIGH" if order % 11 else "MEDIUM",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": False,
@@ -620,6 +603,22 @@ def cohort_geometry(items: list[dict[str, Any]]) -> dict[str, Any]:
 def official_geometry() -> dict[str, Any]:
     data = load_json(ROOT / "analysis" / "we_format" / "written_expression_format_official.json")
     items = data["items"]
+    official_distance_fields = {
+        "sentence_word_count": "sentence_word_count",
+        "marked_coverage_ratio": "marked_coverage_ratio",
+        "unmarked_word_count": "unmarked_word_count",
+        "mean_span_length": "mean_marked_span_length",
+        "max_span_length": "max_marked_span_length",
+    }
+    distances = []
+    for item in items:
+        terms = []
+        for name in CONFIG["distance"]["metrics"]:
+            stats = CONFIG["distance"]["official_item_level_statistics"][name]
+            if stats["stdev"]:
+                value = item[official_distance_fields[name]]
+                terms.append(((value - stats["mean"]) / stats["stdev"]) ** 2)
+        distances.append(math.sqrt(sum(terms) / len(terms)) if terms else 0.0)
     return {
         "item_count": len(items),
         "sentence_median": median([x["sentence_word_count"] for x in items]),
@@ -627,7 +626,7 @@ def official_geometry() -> dict[str, Any]:
         "coverage_median": median([x["marked_coverage_ratio"] for x in items]),
         "unmarked_context_median": median([x["unmarked_word_count"] for x in items]),
         "gap_medians": {name: median([x[name] for x in items]) for name in ("gap_A_B", "gap_B_C", "gap_C_D")},
-        "distance_median": None,
+        "distance_median": round(float(median(distances)), 4),
     }
 
 
@@ -859,6 +858,9 @@ GEOMETRY_TOLERANCES = {
     "gap_A_B": 2.0,
     "gap_B_C": 2.0,
     "gap_C_D": 2.0,
+    # Holistic distance is checked against the same official item-level
+    # distance distribution used by the validator, not omitted from Gate I.
+    "format_distance_median": 0.75,
 }
 MAX_EXTREME_BAND_SHARE = 0.25
 
@@ -874,7 +876,10 @@ def geometry_gate_status(format_report: dict[str, Any]) -> dict[str, Any]:
     }
     axes: dict[str, bool] = {}
     for name, tolerance in GEOMETRY_TOLERANCES.items():
-        if name.startswith("gap_"):
+        if name == "format_distance_median":
+            actual = cohort["distance_median"]
+            reference = official["distance_median"]
+        elif name.startswith("gap_"):
             actual = cohort["gap_medians"][name]
             reference = official["gap_medians"][name]
         else:
@@ -900,12 +905,14 @@ def geometry_gate_status(format_report: dict[str, Any]) -> dict[str, Any]:
             **cohort["gap_medians"],
             "worst_band_classification": band_counts,
             "extreme_band_share": round(extreme_share, 4),
+            "format_distance_median": cohort["distance_median"],
         },
         "reference": {
             "sentence_word_count": official["sentence_median"],
             "marked_coverage_ratio": official["coverage_median"],
             "unmarked_word_count": official["unmarked_context_median"],
             **official["gap_medians"],
+            "format_distance_median": official["distance_median"],
             "max_extreme_band_share": MAX_EXTREME_BAND_SHARE,
         },
         "tolerances": GEOMETRY_TOLERANCES,
@@ -931,7 +938,7 @@ def batch_and_order_metrics(items: list[dict[str, Any]], round1: list[dict[str, 
         first_pass = sum(review_by_id[item_id]["verdict"] == "PASS" for item_id in ids)
         auto = sum(states[item_id]["final_state"] == "ACCEPTED" for item_id in ids)
         solver_anomalies = sum(
-            solver_by_id[item_id]["solver_answer"] != states[item_id]["intended_answer"]
+            solver_by_id[item_id]["solver_answer"] != states[item_id]["derived_answer"]
             or solver_by_id[item_id]["confidence"] == "LOW"
             or solver_by_id[item_id]["solver_answer"] in {"AMBIGUOUS", "NONE"}
             for item_id in ids
@@ -1281,7 +1288,7 @@ def main() -> int:
 
     by_id = {item["item_id"]: item for item in initial_items}
     slot_by_id = {slot["item_id"]: slot for slot in plan["slots"]}
-    round1 = [reviewer_record(item, item["provenance"]["item_generation_order"], f"{RUN_ID}-review-round1", "round1", extras[item["item_id"]]["intended_answer"]) for item in initial_items]
+    round1 = [reviewer_record(item, item["provenance"]["item_generation_order"], f"{RUN_ID}-review-round1", "round1", extras[item["item_id"]]["derived_answer"]) for item in initial_items]
     round1_errors = [error for item in round1 for error in REVIEWER_VALIDATOR.validate(item)]
     if round1_errors:
         raise RuntimeError(f"Reviewer round 1 contract errors: {round1_errors[:5]}")
@@ -1298,7 +1305,7 @@ def main() -> int:
     final_by_id = dict(by_id)
     final_by_id.update({item["item_id"]: item for item in revised_items})
     final_items = [final_by_id[item["item_id"]] for item in initial_items]
-    final_review = [reviewer_record(item, item["provenance"]["item_generation_order"], f"{RUN_ID}-review-round2", "round2", extras[item["item_id"]]["intended_answer"]) for item in final_items]
+    final_review = [reviewer_record(item, item["provenance"]["item_generation_order"], f"{RUN_ID}-review-round2", "round2", extras[item["item_id"]]["derived_answer"]) for item in final_items]
     final_review_errors = [error for item in final_review for error in REVIEWER_VALIDATOR.validate(item)]
     if final_review_errors:
         raise RuntimeError(f"Reviewer final contract errors: {final_review_errors[:5]}")
@@ -1314,7 +1321,7 @@ def main() -> int:
         solver_items.append(solver_record(
             {key: item[key] for key in ("item_id", "section", "sentence", "marked_parts")},
             item["provenance"]["item_generation_order"],
-            extras[item["item_id"]]["intended_answer"],
+            extras[item["item_id"]]["derived_answer"],
             item["minimal_correction"],
             item["provenance"]["generation_batch_id"],
         ))
@@ -1335,7 +1342,7 @@ def main() -> int:
     provenance_records = []
     for item in final_items:
         item_id = item["item_id"]
-        intended = extras[item_id]["intended_answer"]
+        derived_answer = extras[item_id]["derived_answer"]
         consensus = evaluate_consensus(item, review_by_id[item_id], solver_by_id[item_id], load_config())
         final_state = consensus.routing
         schema_pass = not validate_schema(item)
@@ -1348,7 +1355,7 @@ def main() -> int:
         diagnostics_consistent = not calc_errors and calculated == declared_diagnostics
         states[item_id] = {
             "item_id": item_id,
-            "intended_answer": intended,
+            "derived_answer": derived_answer,
             "schema_pass": schema_pass,
             "format_validator_pass": not calc_errors,
             "diagnostics_complete": diagnostics_complete,
@@ -1420,8 +1427,8 @@ def main() -> int:
         "reviewer_round1_format_FAIL": sum(item["format_validity"] == "FAIL" for item in round1),
         "reviewer_eventual_PASS": sum(item["verdict"] == "PASS" for item in final_review),
         "solver_reached": len(solver_items),
-        "solver_consensus": sum(solver_by_id[item["item_id"]]["solver_answer"] == extras[item["item_id"]]["intended_answer"] for item in final_items),
-        "solver_disagreement": sum(solver_by_id[item["item_id"]]["solver_answer"] not in {extras[item["item_id"]]["intended_answer"]} for item in final_items),
+        "solver_consensus": sum(solver_by_id[item["item_id"]]["solver_answer"] == extras[item["item_id"]]["derived_answer"] for item in final_items),
+        "solver_disagreement": sum(solver_by_id[item["item_id"]]["solver_answer"] not in {extras[item["item_id"]]["derived_answer"]} for item in final_items),
         "solver_ambiguous": sum(solver_by_id[item["item_id"]]["solver_answer"] == "AMBIGUOUS" for item in final_items),
         "solver_none": sum(solver_by_id[item["item_id"]]["solver_answer"] == "NONE" for item in final_items),
         "solver_low": sum(solver_by_id[item["item_id"]]["confidence"] == "LOW" for item in final_items),

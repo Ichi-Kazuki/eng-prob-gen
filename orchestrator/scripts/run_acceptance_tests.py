@@ -146,6 +146,12 @@ def main(output_dir: Path | None = None) -> int:
     if output_dir is not None:
         output_dir.mkdir(parents=True, exist_ok=True)
     config = load_config()
+    if output_dir is not None:
+        # Acceptance replay must be side-effect free for tracked fixtures. The
+        # synthetic manual-review entry belongs beside the other temporary
+        # replay artifacts, never in analysis/manual_review_queue.json.
+        config["paths"] = dict(config["paths"])
+        config["paths"]["manual_review_queue"] = str((output_dir / "manual_review_queue.json").resolve())
     versions = load_versions(config)
 
     # -- #12 schema validation PASS, plus drives #1/#2/#9/#10/#4/#13 -------

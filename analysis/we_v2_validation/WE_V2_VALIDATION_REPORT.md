@@ -1,5 +1,11 @@
 # TOEFL ITP Written Expression Generator v2.0.1 — 75-item LIVE Validation
 
+> **Status: SUPERSEDED / INVALIDATED for answer-key and grammar-quality conclusions.**
+> The retained report is superseded by `WE_V2_VALIDATION_INTEGRITY_REAUDIT.md`.
+> Its contract/format observations remain historical; the old zero wrong-key
+> conclusion and all contract-replay grammar-quality conclusions must not be
+> reused.
+
 - Run ID: `we-v2-validation-20260824`; scope: Written Expression only; exactly 75 initial candidates; replacement generation: false.
 - Generation architecture: sentence-first; 25 items × 3 batches; one item per microbatch; no monolithic 25-item generation context.
 - Runtime provenance caveat: this workspace has no callable live Agent runtime. `runtime_model` and `invocation_id` are therefore null in accordance with the no-inference rule.
