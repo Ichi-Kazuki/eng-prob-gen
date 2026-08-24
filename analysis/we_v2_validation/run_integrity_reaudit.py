@@ -65,6 +65,7 @@ LEGACY_FALSE_ERROR_PATTERNS = (
     ("By the time", "had mapped", " mapped "),
     ("When the committee convened", "had distributed", " distributed "),
 )
+UNRESOLVED_SPAN_KIND = "UNRESOLVED"
 REVIEWER_FORBIDDEN_KEYS = {"intended_answer", "position_by_batch"}
 SOLVER_FORBIDDEN_KEYS = {
     "correct_answer", "primary_target", "verdict", "independent_answer",
@@ -123,10 +124,15 @@ def corrected_view(item: dict[str, Any], answer: str, diagnostics: dict[str, Any
     return view
 
 
-def audit_items(items: list[dict[str, Any]]) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
+def audit_items(items: list[dict[str, Any]]) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     required_keys = set(REQUIRED_DIAGNOSTIC_KEYS)
     records: list[dict[str, Any]] = []
     corrected_items: list[dict[str, Any]] = []
+    # Gate I measures sentence and span geometry, which does not depend on
+    # which marked span holds the error.  An item whose key cannot be derived
+    # still has valid geometry, so it must stay in the cohort; dropping it
+    # would silently shift the medians and band share onto a subset.
+    geometry_items: list[dict[str, Any]] = []
     for item in items:
         item_id = item.get("item_id", "?")
         clean = item.get("qa_metadata", {}).get("clean_form")
@@ -165,6 +171,9 @@ def audit_items(items: list[dict[str, Any]]) -> tuple[dict[str, Any], list[dict[
             recomputed_diagnostics, format_errors = format_diagnostics(recomputed_item, CONFIG)
             recomputed_item = corrected_view(recomputed_item, actual_answer, recomputed_diagnostics)
             corrected_items.append(recomputed_item)
+            geometry_items.append(recomputed_item)
+        else:
+            geometry_items.append(copy.deepcopy(item))
 
         declared_diagnostics = item.get("format_metadata", {}).get("diagnostics")
         calculated_old, calculated_old_errors = format_diagnostics(item, CONFIG)
@@ -243,7 +252,9 @@ def audit_items(items: list[dict[str, Any]]) -> tuple[dict[str, Any], list[dict[
                 for item in items
             )),
             "recomputed": dict(Counter(
-                record["actual_error_span"]["label"] and span_kind(len(record["actual_error_span"]["token_indices"]))
+                span_kind(len(record["actual_error_span"]["token_indices"]))
+                if record["actual_error_span"]["label"]
+                else UNRESOLVED_SPAN_KIND
                 for record in records
             )),
         },
@@ -268,7 +279,7 @@ def audit_items(items: list[dict[str, Any]]) -> tuple[dict[str, Any], list[dict[
             ],
         },
     }
-    return summary, records, corrected_items
+    return summary, records, corrected_items, geometry_items
 
 
 def independence_audit(items: list[dict[str, Any]], reviews: dict[str, Any], solvers: list[dict[str, Any]]) -> dict[str, Any]:
@@ -362,7 +373,10 @@ def run_regression_replay() -> dict[str, Any]:
         commands = {
             "we_v2_regression": [sys.executable, "analysis/we_v2/run_regression_contract.py", str(paths["we_v2_regression_artifact"])],
             "p0_regression": [sys.executable, "agents/toefl_itp_grammar_reviewer/scripts/run_p0_hardening_regression.py", str(paths["p0_regression_artifact"])],
-            "diagnostics_contract_unittest": [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_we_v2_contract_boundaries.py"],
+            # Discover every test module, not just the contract-boundary one.
+            # The integrity and report tests guard this script's own output, so
+            # a narrower pattern lets the harness pass while they regress.
+            "diagnostics_contract_unittest": [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py"],
             "we_v2_smoke_acceptance": [sys.executable, "analysis/we_v2/run_smoke_acceptance.py", str(paths["we_v2_smoke_acceptance_artifact"])],
             "orchestrator_acceptance": [sys.executable, "orchestrator/scripts/run_acceptance_tests.py", str(temp)],
             "orchestrator_smoke": [sys.executable, "orchestrator/scripts/run_smoke_test.py", str(temp / "orchestrator_smoke_test.json")],
@@ -399,26 +413,115 @@ def run_regression_replay() -> dict[str, Any]:
     return results
 
 
-def classify_old_metrics(summary: dict[str, Any], independence: dict[str, Any], regression: dict[str, Any], geometry: dict[str, Any]) -> list[dict[str, str]]:
+def _ordered_count_text(
+    counts: dict[str, int],
+    labels: tuple[str, ...],
+    *,
+    include_labels: bool = False,
+    omit_zero: bool = False,
+) -> str:
+    values = []
+    for label in labels:
+        count = counts.get(label, 0)
+        if omit_zero and count == 0:
+            continue
+        values.append(f"{count} {label}" if include_labels else str(count))
+    # Any bucket outside `labels` is still reported.  Dropping it silently
+    # would make the rendered counts sum to less than the cohort size with no
+    # indication that items went unclassified.
+    for label in sorted(set(counts) - set(labels)):
+        count = counts[label]
+        if omit_zero and count == 0:
+            continue
+        values.append(f"{count} {label}")
+    return " / ".join(values) or "0"
+
+
+def classify_old_metrics(
+    summary: dict[str, Any],
+    independence: dict[str, Any],
+    regression: dict[str, Any],
+    geometry: dict[str, Any],
+    old_metrics: dict[str, Any] | None = None,
+) -> list[dict[str, str]]:
+    """Compare the previously published claims with the re-audited results.
+
+    `old_conclusion` must carry what the previous run actually reported, read
+    from the stored metrics artifact.  Rendering current values there makes a
+    row contradict its own `basis` and destroys the point of the table.  Only
+    `status` and `basis` describe the current cohort.
+    """
+
+    item_count = summary["item_count"]
+    old = old_metrics or {}
+    old_core = old.get("core_metrics", {})
+    old_defects = old.get("defect_monitoring", {})
+    old_geometry = old.get("geometry_gate", {})
+    old_total = old_core.get("initial_generated")
+
+    def old_ratio(key: str) -> str:
+        value = old_core.get(key)
+        if value is None or old_total is None:
+            return "not recorded"
+        return f"{value}/{old_total}"
+
+    def old_count(key: str) -> str:
+        value = old_core.get(key)
+        return "not recorded" if value is None else str(value)
+
+    old_band_distribution = _ordered_count_text(
+        old_geometry.get("actual", {}).get("worst_band_classification", {}),
+        ("EXTREME", "WARNING", "PREFERRED"),
+        include_labels=True,
+        omit_zero=True,
+    ) if old_geometry else "not recorded"
+    old_gate_status = (
+        "not recorded" if "pass" not in old_geometry
+        else ("PASS" if old_geometry["pass"] else "FAIL")
+    )
+    old_wrong_keys = old_defects.get("wrong_answer_key", {}).get("initial")
+    old_wrong_keys_text = (
+        "not recorded" if old_wrong_keys is None else f"{old_wrong_keys} wrong keys"
+    )
+    denominator = str(item_count)
+    diagnostics = summary["diagnostics_integrity"]
+    answer = summary["answer_key_integrity"]
+    mutation = summary["mutation_validity"]
+    declared_span_distribution = _ordered_count_text(
+        summary["correct_span_distribution"]["declared"],
+        ("SINGLE_WORD", "SHORT_PHRASE", "CLAUSE_OR_CLAUSE_LIKE"),
+    )
+    recomputed_span_distribution = _ordered_count_text(
+        summary["correct_span_distribution"]["recomputed"],
+        ("SINGLE_WORD", "SHORT_PHRASE", "CLAUSE_OR_CLAUSE_LIKE"),
+    )
+    band_distribution = _ordered_count_text(
+        geometry.get("actual", {}).get("worst_band_classification", {}),
+        ("EXTREME", "WARNING", "PREFERRED"),
+        include_labels=True,
+        omit_zero=True,
+    )
+    gate_status = "PASS" if geometry["pass"] else "FAIL"
     return [
-        {"metric": "generator schema", "old_conclusion": "75/75", "status": "VALID", "basis": "Stored items and deterministic schema recheck both pass."},
-        {"metric": "diagnostics completeness", "old_conclusion": "75/75", "status": "RECOMPUTED", "basis": "Required key set is sourced dynamically from REQUIRED_DIAGNOSTIC_KEYS and compared with calculated keys."},
-        {"metric": "diagnostics consistency", "old_conclusion": "75/75", "status": "RECOMPUTED", "basis": f"Stored-key consistency is {summary['diagnostics_integrity']['consistent_as_stored']}/75; after deterministic re-key it is {summary['diagnostics_integrity']['consistent_after_deterministic_rekey']}/75."},
-        {"metric": "format geometry", "old_conclusion": "Gate I FAIL", "status": "RECOMPUTED", "basis": f"Recomputed from actual spans; Gate I remains {'PASS' if geometry['pass'] else 'FAIL'} with the distance axis included."},
-        {"metric": "format bands", "old_conclusion": "72 EXTREME / 3 WARNING", "status": "VALID", "basis": "Recomputed bands remain 72 EXTREME and 3 WARNING."},
-        {"metric": "correct-span distribution", "old_conclusion": "27 / 39 / 9", "status": "RECOMPUTED", "basis": "Correct span is selected from actual mutation location; recomputed distribution is 23 / 43 / 9."},
-        {"metric": "answer-key integrity", "old_conclusion": "0 wrong keys", "status": "INVALID", "basis": f"Deterministic audit finds {summary['answer_key_integrity']['declared_vs_actual_mismatch']} stored-key mismatches; the old zero count is invalidated."},
-        {"metric": "mutation validity", "old_conclusion": "75/75 implied", "status": "RECOMPUTED", "basis": f"Structural clean/error mutation and single marked location pass {summary['mutation_validity']['valid']}/75."},
-        {"metric": "Reviewer grammar quality", "old_conclusion": "75 PASS", "status": "NOT_EVALUATED", "basis": independence["reason"]},
-        {"metric": "Solver consensus / AUTO_ACCEPT quality", "old_conclusion": "75 agreement / 75 AUTO_ACCEPT", "status": "NOT_EVALUATED", "basis": independence["reason"]},
+        {"metric": "generator schema", "old_conclusion": old_ratio("generator_schema_pass"), "status": "VALID", "basis": f"Stored items and deterministic schema recheck both pass for the current {denominator}-item cohort."},
+        {"metric": "diagnostics completeness", "old_conclusion": old_ratio("diagnostics_complete"), "status": "RECOMPUTED", "basis": "Required key set is sourced dynamically from REQUIRED_DIAGNOSTIC_KEYS and compared with calculated keys."},
+        {"metric": "diagnostics consistency", "old_conclusion": old_ratio("diagnostics_consistent"), "status": "RECOMPUTED", "basis": f"Stored-key consistency is {diagnostics['consistent_as_stored']}/{denominator}; after deterministic re-key it is {diagnostics['consistent_after_deterministic_rekey']}/{denominator}."},
+        {"metric": "format geometry", "old_conclusion": f"Gate I {old_gate_status}", "status": "RECOMPUTED", "basis": f"Recomputed from actual spans; Gate I is {gate_status} with the distance axis included."},
+        {"metric": "format bands", "old_conclusion": old_band_distribution, "status": "RECOMPUTED", "basis": f"Current corrected-cohort worst-band distribution is {band_distribution}."},
+        {"metric": "correct-span distribution", "old_conclusion": declared_span_distribution, "status": "RECOMPUTED", "basis": f"Correct span is selected from actual mutation location; current recomputed distribution is {recomputed_span_distribution}."},
+        {"metric": "answer-key integrity", "old_conclusion": old_wrong_keys_text, "status": "INVALID", "basis": f"Deterministic audit finds {answer['declared_vs_actual_mismatch']} stored-key mismatches in the current cohort; the previous zero count is invalidated."},
+        {"metric": "mutation validity", "old_conclusion": f'{old_ratio("initial_generated")} implied', "status": "RECOMPUTED", "basis": f"Structural clean/error mutation and single marked location pass {mutation['valid']}/{denominator}."},
+        {"metric": "Reviewer grammar quality", "old_conclusion": f'{old_count("reviewer_round1_grammar_PASS")} PASS', "status": "NOT_EVALUATED", "basis": independence["reason"]},
+        {"metric": "Solver consensus / AUTO_ACCEPT quality", "old_conclusion": f'{old_count("solver_consensus")} agreement / {old_count("AUTO_ACCEPT")} AUTO_ACCEPT', "status": "NOT_EVALUATED", "basis": independence["reason"]},
         {"metric": "regression integrity", "old_conclusion": "PASS", "status": "VALID" if regression["all_required_pass"] else "INVALID", "basis": "WE/P0 artifacts are required temporary gate outputs; tracked fixtures are hash-unchanged."},
-        {"metric": "format drift conclusion", "old_conclusion": "Recalibration required", "status": "VALID", "basis": "Sentence length, coverage, unmarked context, gaps, worst-band share, and distance still fail Gate I overall."},
+        {"metric": "format drift conclusion", "old_conclusion": "Recalibration required", "status": "VALID" if not geometry["pass"] else "INVALID", "basis": f"Current Gate I result is {gate_status}; sentence length, coverage, unmarked context, gaps, worst-band share, and distance are evaluated from the current cohort."},
         {"metric": "human blind-review quality conclusion", "old_conclusion": "pending", "status": "NOT_EVALUATED", "basis": "No human labels or live Agent grammar judgments were added by this re-audit."},
     ]
 
 
 def render_report(audit: dict[str, Any]) -> str:
     summary = audit["items"]
+    item_count = summary["item_count"]
     known = summary["known_bases"]
     diag = summary["diagnostics_integrity"]
     answer = summary["answer_key_integrity"]
@@ -426,36 +529,38 @@ def render_report(audit: dict[str, Any]) -> str:
     geometry = audit["format"]["gate_i"]
     independence = audit["independence"]
     regression = audit["regression"]
+    known_base_text = ", ".join(str(base) for base in known["bases"])
     lines = [
         "# WE v2 Validation Integrity Re-audit",
         "",
         f"- Status: **SUPERSEDES** `WE_V2_VALIDATION_REPORT.md`; the old report is retained.",
         f"- Run ID: `{RUN_ID}`; source cohort: existing `we_v2_validation_initial_items.json` only.",
-        "- New 75-item generation: **NOT RUN**. No replacement candidates were generated.",
+        f"- New {item_count}-item generation: **NOT RUN**. No replacement candidates were generated.",
         "- Runtime mode: **CONTRACT_REPLAY_ONLY**; grammar-quality metrics are excluded.",
         "",
         "## Executive result",
         "",
-        f"- Wrong-key count: old stored declaration **{answer['declared_vs_actual_mismatch']}/75** mismatched actual mutation; corrected deterministic derivation resolves **75/75** locations.",
+        f"- Wrong-key count: old stored declaration **{answer['declared_vs_actual_mismatch']}/{item_count}** mismatched actual mutation; corrected deterministic derivation resolves **{answer['recomputed_location_count']}/{item_count}** locations.",
         f"- False-error fixture count: old artifact **{summary['legacy_false_error_count']}**; corrected source fixture scan **{audit['fixture_fix']['source_false_error_count']}**.",
-        f"- Known bases 15, 17, 20, 22, 23 × 3: actual error span equals stored `correct_answer` **{known['actual_equals_declared']}/{known['item_count']}**.",
-        f"- Answer-key integrity of the stored old artifact: **{answer['declared_vs_actual_match']}/75**; recomputed answer-key integrity: **75/75**.",
-        f"- Diagnostics key integrity: required/calc key shape **{diag['required_key_shape']}/75**; complete **{diag['complete']}/75**; consistent after deterministic re-key **{diag['consistent_after_deterministic_rekey']}/75**.",
+        f"- Known bases {known_base_text}: actual error span equals stored `correct_answer` **{known['actual_equals_declared']}/{known['item_count']}**.",
+        f"- Answer-key integrity of the stored old artifact: **{answer['declared_vs_actual_match']}/{item_count}**; recomputed answer-key integrity: **{answer['recomputed_location_count']}/{item_count}**.",
+        f"- Diagnostics key integrity: required/calc key shape **{diag['required_key_shape']}/{item_count}**; complete **{diag['complete']}/{item_count}**; consistent after deterministic re-key **{diag['consistent_after_deterministic_rekey']}/{item_count}**.",
         f"- Regression integrity: **{'PASS' if regression['all_required_pass'] else 'FAIL'}**; WE/P0 artifact-presence gate **{'PASS' if regression['artifact_presence_gate'] else 'FAIL'}**.",
-        f"- Gate I integrity: **{'PASS' if geometry['pass'] else 'FAIL'}**. Format drift conclusion is maintained.",
+        f"- Gate I integrity: **{'PASS' if geometry['pass'] else 'FAIL'}**. "
+        + ("Format drift conclusion is maintained." if not geometry["pass"] else "The previous format drift conclusion is superseded by this result."),
         "",
         "## Integrity checks",
         "",
         "### Mutation and answer-key integrity",
         "",
-        "`correct_answer` is now derived from clean/error token diff plus error-side marked-span alignment. The hand-written position map was removed from the validation generator path.",
+        "`correct_answer` is now derived from a clean/error token-and-separator diff plus error-side marked-span alignment. The hand-written position map was removed from the validation generator path.",
         "",
         "| Check | Result |",
         "|---|---:|",
-        f"| Stored key equals actual mutation | {answer['declared_vs_actual_match']}/75 |",
-        f"| Actual mutation resolves to one marked span | {answer['recomputed_location_count']}/75 |",
-        f"| Structural mutation validity | {mutation['valid']}/75 |",
-        f"| Known bases 15/17/20/22/23 | {known['actual_equals_declared']}/{known['item_count']} |",
+        f"| Stored key equals actual mutation | {answer['declared_vs_actual_match']}/{item_count} |",
+        f"| Actual mutation resolves to one marked span | {answer['recomputed_location_count']}/{item_count} |",
+        f"| Structural mutation validity | {mutation['valid']}/{item_count} |",
+        f"| Known bases {known_base_text} | {known['actual_equals_declared']}/{known['item_count']} |",
         "",
         "Known-base records were checked individually in `we_v2_validation_integrity_reaudit.json`.",
         "",
@@ -463,10 +568,10 @@ def render_report(audit: dict[str, Any]) -> str:
         "",
         f"Required diagnostic keys are read from `REQUIRED_DIAGNOSTIC_KEYS` at runtime ({summary['required_diagnostic_key_count']} keys); actual calculated keys are compared as sets. No diagnostic-key list is hard-coded in the re-audit completeness calculation.",
         "",
-        f"- Key shape: {diag['required_key_shape']}/75.",
-        f"- Complete: {diag['complete']}/75.",
-        f"- Stored diagnostics consistent with old declared key: {diag['consistent_as_stored']}/75.",
-        f"- Recomputed diagnostics consistent after actual-key re-derivation: {diag['consistent_after_deterministic_rekey']}/75.",
+        f"- Key shape: {diag['required_key_shape']}/{item_count}.",
+        f"- Complete: {diag['complete']}/{item_count}.",
+        f"- Stored diagnostics consistent with old declared key: {diag['consistent_as_stored']}/{item_count}.",
+        f"- Recomputed diagnostics consistent after actual-key re-derivation: {diag['consistent_after_deterministic_rekey']}/{item_count}.",
         "",
         "Gate I required axes:",
         "",
@@ -514,8 +619,12 @@ def render_report(audit: dict[str, Any]) -> str:
         "## Final decisions",
         "",
         f"- Grammar-quality metrics evaluable: **{independence['grammar_quality_evaluable']}**. Reviewer grammar quality, Solver consensus quality, and AUTO_ACCEPT quality are excluded.",
-        "- Format drift conclusion maintained: **YES** — Gate I remains FAIL, with the recalibrated geometry check now explicitly including holistic format distance.",
-        "- New 75-item Validation should be re-run now: **NO**. First correct/re-key the historical cohort or regenerate only after the fixture fix, and provide an actual Agent runtime for grammar-quality evidence; the current format drift gate also remains unresolved.",
+        f"- Format drift conclusion maintained: **{'YES' if not geometry['pass'] else 'NO'}** — Gate I is {'FAIL' if not geometry['pass'] else 'PASS'}, with the recalibrated geometry check explicitly including holistic format distance.",
+        # The trailing clause must follow the computed gate.  Stating an
+        # unresolved gate while the bullets above report PASS makes the
+        # rendered report contradict its own JSON result.
+        f"- New {item_count}-item Validation should be re-run now: **NO**. First correct/re-key the historical cohort or regenerate only after the fixture fix, and provide an actual Agent runtime for grammar-quality evidence"
+        + ("; the current format drift gate also remains unresolved." if not geometry["pass"] else "; the current format drift gate now passes."),
         "",
         "## Retained artifacts",
         "",
@@ -533,7 +642,7 @@ def main() -> int:
     if not isinstance(items, list) or len(items) != 75:
         raise RuntimeError(f"expected existing 75-item cohort, got {len(items) if isinstance(items, list) else 'invalid'}")
 
-    summary, records, corrected_items = audit_items(items)
+    summary, records, corrected_items, geometry_items = audit_items(items)
     reviews = read_json(REVIEWS_PATH)
     solvers_data = read_json(SOLVER_PATH)
     solvers = solvers_data["items"] if isinstance(solvers_data, dict) else solvers_data
@@ -541,7 +650,7 @@ def main() -> int:
 
     plan_path = OUT_DIR / "we_v2_validation_plans.json"
     plan_data = read_json(plan_path)
-    format_report = format_analysis(corrected_items, plan_data)
+    format_report = format_analysis(geometry_items, plan_data)
     gate_i = geometry_gate_status(format_report)
     regression = run_regression_replay()
     source_false_errors = fixture_source_false_errors()
@@ -577,7 +686,9 @@ def main() -> int:
         "independence": independence,
         "regression": regression,
     }
-    audit["metric_disposition"] = classify_old_metrics(summary, independence, regression, gate_i)
+    audit["metric_disposition"] = classify_old_metrics(
+        summary, independence, regression, gate_i, read_json(OLD_METRICS_PATH)
+    )
     write_json(AUDIT_JSON_PATH, audit)
     AUDIT_REPORT_PATH.write_text(render_report(audit), encoding="utf-8")
     print(json.dumps({

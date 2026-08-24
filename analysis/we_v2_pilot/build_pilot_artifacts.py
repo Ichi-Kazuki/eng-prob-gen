@@ -128,7 +128,10 @@ def schema_errors(value: Any, schema: dict, path: str = "") -> list[str]:
             if key in value:
                 errors.extend(schema_errors(value[key], subschema, f"{where}.{key}"))
         extra = schema.get("additionalProperties", True)
-        unknown = sorted(set(value) - set(properties)) if properties or extra is False else []
+        # Always computed: when a node declares `additionalProperties` as a
+        # subschema but no `properties`, every key is an "unknown" key and the
+        # subschema is exactly what must validate it.
+        unknown = sorted(set(value) - set(properties))
         if extra is False:
             for key in unknown:
                 errors.append(f"{where}: additional property {key!r} is not allowed")

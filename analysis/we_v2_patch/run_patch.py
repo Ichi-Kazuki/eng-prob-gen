@@ -664,19 +664,26 @@ def main() -> int:
 
     # These are the requested existing regression suites. The 75-item
     # validation driver is intentionally not included here.
-    commands = {
-        "we_v2": [sys.executable, "analysis/we_v2/run_regression_contract.py"],
-        "p0": [sys.executable, "agents/toefl_itp_grammar_reviewer/scripts/run_p0_hardening_regression.py"],
-        "structure": [sys.executable, "agents/toefl_itp_grammar_generator/scripts/validate_output.py", "analysis/generator_smoke_test.json"],
-        "solver_blinding": [sys.executable, "agents/toefl_itp_grammar_solver/scripts/create_solver_input.py", "analysis/solver_smoke_test_input.json", str(OUT / "_solver_blinding_check.json")],
-        "orchestrator": [sys.executable, "orchestrator/scripts/run_acceptance_tests.py"],
-    }
+    # Every suite that writes an artifact is given an explicit destination
+    # under a temporary directory.  Without it these replays overwrite the
+    # tracked analysis/orchestrator_*_test.json fixtures and append to the
+    # tracked manual review queue, so merely verifying the patch dirties the
+    # working tree.
     regression_runs: dict[str, Any] = {}
-    for name, command in commands.items():
-        proc = subprocess.run(command, cwd=ROOT, capture_output=True, text=True)
-        regression_runs[name] = "PASS" if proc.returncode == 0 else "FAIL"
-        if proc.returncode != 0:
-            print(f"{name} regression failed:\n{proc.stdout}\n{proc.stderr}", file=sys.stderr)
+    with tempfile.TemporaryDirectory(prefix=".we-v2-patch-regression-", dir=OUT) as temp_name:
+        temp = Path(temp_name)
+        commands = {
+            "we_v2": [sys.executable, "analysis/we_v2/run_regression_contract.py", str(temp / "we_v2_regression.json")],
+            "p0": [sys.executable, "agents/toefl_itp_grammar_reviewer/scripts/run_p0_hardening_regression.py", str(temp / "p0_regression.json")],
+            "structure": [sys.executable, "agents/toefl_itp_grammar_generator/scripts/validate_output.py", "analysis/generator_smoke_test.json"],
+            "solver_blinding": [sys.executable, "agents/toefl_itp_grammar_solver/scripts/create_solver_input.py", "analysis/solver_smoke_test_input.json", str(temp / "_solver_blinding_check.json")],
+            "orchestrator": [sys.executable, "orchestrator/scripts/run_acceptance_tests.py", str(temp)],
+        }
+        for name, command in commands.items():
+            proc = subprocess.run(command, cwd=ROOT, capture_output=True, text=True)
+            regression_runs[name] = "PASS" if proc.returncode == 0 else "FAIL"
+            if proc.returncode != 0:
+                print(f"{name} regression failed:\n{proc.stdout}\n{proc.stderr}", file=sys.stderr)
 
     write_ascii_report(regression, fixture, sample, regression_runs)
     overall = regression["status"] == "PASS" and fixture["metrics"]["fixture_smoke_gate"] and all(value == "PASS" for value in regression_runs.values())

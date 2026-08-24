@@ -25,6 +25,65 @@ def token_texts(text: str) -> list[str]:
     return [match.group(0) for match in token_matches(text)]
 
 
+def _text_units(text: str) -> list[dict[str, Any]]:
+    """Split text into lexical tokens and the separators between them.
+
+    The separator units are intentionally retained.  A token-only diff can
+    report a valid marked-word replacement while silently ignoring a comma,
+    quote, or spacing change elsewhere in the sentence.
+    """
+
+    units: list[dict[str, Any]] = []
+    cursor = 0
+    token_index = 0
+    for match in token_matches(text):
+        if cursor < match.start():
+            units.append({
+                "kind": "non_token",
+                "text": text[cursor:match.start()],
+                "start": cursor,
+                "end": match.start(),
+            })
+        units.append({
+            "kind": "token",
+            "text": match.group(0),
+            "start": match.start(),
+            "end": match.end(),
+            "token_index": token_index,
+        })
+        token_index += 1
+        cursor = match.end()
+    if cursor < len(text):
+        units.append({
+            "kind": "non_token",
+            "text": text[cursor:],
+            "start": cursor,
+            "end": len(text),
+        })
+    return units
+
+
+def _is_benign_separator(unit: dict[str, Any]) -> bool:
+    """True for the ordinary single space that merely separates two tokens.
+
+    A diff opcode covering a marked replacement routinely pulls in the spaces
+    on either side of it, and those carry no mutation.  Any other whitespace
+    run -- doubled spaces, a tab, a newline -- is a real spacing change and
+    must be attributed to the marked span like punctuation, otherwise a
+    mutation outside the span rides along inside a valid-looking opcode.
+    """
+
+    return unit["kind"] == "non_token" and unit["text"] == " "
+
+
+def _unit_key(unit: dict[str, Any]) -> str:
+    return (
+        unit["text"].lower()
+        if unit["kind"] == "token"
+        else unit["text"]
+    )
+
+
 def marked_token_indices(sentence: str, marked_parts: dict[str, str]) -> dict[str, list[int]]:
     matches = token_matches(sentence)
     indices: dict[str, list[int]] = {}
@@ -65,20 +124,53 @@ def _label_for_error_boundary(
     marked_parts: dict[str, str],
     span_indices: dict[str, list[int]],
 ) -> str | None:
-    """Map a deleted clean token to the error-side insertion boundary.
+    """Map a deleted clean token to an error-side token boundary.
 
-    A missing word has no error-side token.  The boundary before the next
-    error token is therefore used, with half-open span membership so a missing
-    determiner immediately before a marked phrase maps to that phrase.
+    A deletion leaves no error-side token, so the boundary is attributed from
+    the tokens on either side of it.  Either neighbour alone is sufficient: a
+    missing determiner or auxiliary immediately before a marked phrase belongs
+    to that phrase, and a deletion from the end of a marked span belongs to the
+    span it was taken from.  Attribution is refused only when it would be
+    ambiguous, that is when the two neighbours are different marked spans and
+    neither has a stronger claim.  Sentence start and sentence end are just the
+    cases where one neighbour is absent; they need no special rule.
     """
 
     matches = token_matches(sentence)
-    boundary_char = matches[boundary_index].start() if boundary_index < len(matches) else len(sentence)
+
+    def label_at(index: int) -> str | None:
+        if index < 0 or index >= len(matches):
+            return None
+        return _label_for_error_token(index, sentence, marked_parts, span_indices)
+
+    previous_label = label_at(boundary_index - 1)
+    next_label = label_at(boundary_index)
+
+    if previous_label == next_label:
+        return previous_label
+    if previous_label is None:
+        return next_label
+    if next_label is None:
+        return previous_label
+    return None
+
+
+def _label_for_error_unit(
+    unit: dict[str, Any],
+    sentence: str,
+    marked_parts: dict[str, str],
+    span_indices: dict[str, list[int]],
+) -> str | None:
+    if unit["kind"] == "token":
+        return _label_for_error_token(
+            unit["token_index"], sentence, marked_parts, span_indices
+        )
+
     for label in LABELS:
         span = marked_parts[label]
         start = sentence.find(span)
         end = start + len(span)
-        if start <= boundary_char < end:
+        if start <= unit["start"] and unit["end"] <= end:
             return label
     return None
 
@@ -91,9 +183,10 @@ def mutation_location(
     """Return the deterministic error-side mutation location.
 
     A valid one-error Written Expression item must have every non-equal
-    opcode wholly attributable to the same marked span.  Multiple diff
-    opcodes are allowed when one local phrase was reordered, but unmarked
-    operations invalidate the location even if another operation has a label.
+    token-or-separator opcode wholly attributable to the same marked span.
+    Multiple diff opcodes are allowed when one local phrase was reordered, but
+    unmarked operations invalidate the location even if another operation has
+    a label.
     """
 
     if not isinstance(clean_sentence, str) or not isinstance(error_sentence, str):
@@ -102,11 +195,17 @@ def mutation_location(
         raise ValueError("clean and error sentences must differ")
 
     span_indices = marked_token_indices(error_sentence, marked_parts)
-    clean_tokens = token_texts(clean_sentence)
-    error_tokens = token_texts(error_sentence)
+    clean_units = _text_units(clean_sentence)
+    error_units = _text_units(error_sentence)
+    clean_tokens = [
+        unit["text"] for unit in clean_units if unit["kind"] == "token"
+    ]
+    error_tokens = [
+        unit["text"] for unit in error_units if unit["kind"] == "token"
+    ]
     matcher = difflib.SequenceMatcher(
-        a=[token.lower() for token in clean_tokens],
-        b=[token.lower() for token in error_tokens],
+        a=[_unit_key(unit) for unit in clean_units],
+        b=[_unit_key(unit) for unit in error_units],
         autojunk=False,
     )
 
@@ -116,34 +215,87 @@ def mutation_location(
     for tag, clean_start, clean_end, error_start, error_end in matcher.get_opcodes():
         if tag == "equal":
             continue
-        error_indices = list(range(error_start, error_end))
-        if error_indices:
-            error_labels = [
-                _label_for_error_token(index, error_sentence, marked_parts, span_indices)
-                for index in error_indices
-            ]
-            operation_labels = {
-                label for label in error_labels
-                if label is not None
-            }
+        changed_clean_units = clean_units[clean_start:clean_end]
+        changed_error_units = error_units[error_start:error_end]
+        error_token_indices = [
+            unit["token_index"]
+            for unit in changed_error_units
+            if unit["kind"] == "token"
+        ]
+        clean_token_indices = [
+            unit["token_index"]
+            for unit in changed_clean_units
+            if unit["kind"] == "token"
+        ]
+
+        error_labels = [
+            _label_for_error_unit(unit, error_sentence, marked_parts, span_indices)
+            for unit in changed_error_units
+        ]
+        operation_labels = {
+            label for label in error_labels
+            if label is not None
+        }
+        unlabeled_non_whitespace_error = any(
+            unit["kind"] == "non_token"
+            and not _is_benign_separator(unit)
+            and label is None
+            for unit, label in zip(changed_error_units, error_labels)
+        )
+        changed_clean_punctuation = any(
+            unit["kind"] == "non_token"
+            and not _is_benign_separator(unit)
+            for unit in changed_clean_units
+        )
+
+        if changed_error_units:
             operation_is_single_marked_location = (
-                len(operation_labels) == 1
-                and all(label in operation_labels for label in error_labels)
+                bool(operation_labels)
+                and not unlabeled_non_whitespace_error
+                and not changed_clean_punctuation
+                and len(operation_labels) == 1
+                and all(
+                    _is_benign_separator(unit) or label in operation_labels
+                    for unit, label in zip(changed_error_units, error_labels)
+                )
             )
         else:
-            boundary_label = _label_for_error_boundary(
-                error_start, error_sentence, marked_parts, span_indices
+            boundary_token_index = next(
+                (
+                    unit["token_index"]
+                    for unit in error_units[error_start:]
+                    if unit["kind"] == "token"
+                ),
+                len(error_tokens),
             )
+            boundary_label = _label_for_error_boundary(
+                boundary_token_index,
+                error_sentence,
+                marked_parts,
+                span_indices,
+            ) if clean_token_indices else None
             operation_labels = {boundary_label} if boundary_label else set()
-            operation_is_single_marked_location = bool(boundary_label)
+            operation_is_single_marked_location = bool(
+                boundary_label and not changed_clean_punctuation
+            )
         labels.update(operation_labels)
         operation_validity.append(operation_is_single_marked_location)
         operations.append({
             "tag": tag,
-            "clean_token_indices": list(range(clean_start, clean_end)),
-            "error_token_indices": error_indices,
-            "clean_tokens": clean_tokens[clean_start:clean_end],
-            "error_tokens": error_tokens[error_start:error_end],
+            "clean_token_indices": clean_token_indices,
+            "error_token_indices": error_token_indices,
+            "clean_tokens": [clean_tokens[index] for index in clean_token_indices],
+            "error_tokens": [error_tokens[index] for index in error_token_indices],
+            "clean_non_token_units": [
+                unit["text"]
+                for unit in changed_clean_units
+                if unit["kind"] == "non_token"
+            ],
+            "error_non_token_units": [
+                unit["text"]
+                for unit in changed_error_units
+                if unit["kind"] == "non_token"
+            ],
             "affected_labels": sorted(operation_labels),
         })
 

@@ -194,6 +194,8 @@
           "error_tokens": [
             "have"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -321,6 +323,8 @@
           "error_tokens": [
             "its"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "D"
           ]
@@ -444,6 +448,10 @@
           "clean_tokens": [],
           "error_tokens": [
             "The"
+          ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
           ],
           "affected_labels": [
             "A"
@@ -569,6 +577,10 @@
             "the"
           ],
           "error_tokens": [],
+          "clean_non_token_units": [
+            " "
+          ],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -696,6 +708,8 @@
           "error_tokens": [
             "touch"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "D"
           ]
@@ -824,6 +838,8 @@
           "error_tokens": [
             "in"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -947,6 +963,10 @@
           "clean_tokens": [],
           "error_tokens": [
             "to"
+          ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
           ],
           "affected_labels": [
             "C"
@@ -1072,6 +1092,10 @@
           "error_tokens": [
             "were"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
+          ],
           "affected_labels": [
             "B"
           ]
@@ -1195,6 +1219,10 @@
             "had"
           ],
           "error_tokens": [],
+          "clean_non_token_units": [
+            " "
+          ],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -1323,6 +1351,8 @@
           "error_tokens": [
             "presenting"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -1452,6 +1482,8 @@
           "error_tokens": [
             "predicting"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -1579,6 +1611,8 @@
           "error_tokens": [
             "accurate"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -1707,6 +1741,8 @@
           "error_tokens": [
             "detail"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -1835,6 +1871,8 @@
           "error_tokens": [
             "expand"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -1967,6 +2005,8 @@
           "error_tokens": [
             "discovering"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -2095,6 +2135,8 @@
           "error_tokens": [
             "monitoring"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -2226,6 +2268,8 @@
           "error_tokens": [
             "Despite"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -2353,6 +2397,8 @@
           "error_tokens": [
             "which"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -2480,6 +2526,8 @@
           "error_tokens": [
             "occurs"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -2603,6 +2651,10 @@
           "clean_tokens": [],
           "error_tokens": [
             "she"
+          ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
           ],
           "affected_labels": [
             "C"
@@ -2731,6 +2783,10 @@
           "error_tokens": [
             "developed"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
+          ],
           "affected_labels": [
             "B"
           ]
@@ -2745,6 +2801,10 @@
             "developed"
           ],
           "error_tokens": [],
+          "clean_non_token_units": [
+            " "
+          ],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -2873,6 +2933,8 @@
           "error_tokens": [
             "most"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -3001,6 +3063,8 @@
           "error_tokens": [
             "is"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -3130,6 +3194,10 @@
           "error_tokens": [
             "cautiously"
           ],
+          "clean_non_token_units": [
+            " "
+          ],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -3258,6 +3326,8 @@
           "error_tokens": [
             "many"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -3385,6 +3455,8 @@
           "error_tokens": [
             "vary"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -3512,6 +3584,8 @@
           "error_tokens": [
             "its"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "D"
           ]
@@ -3635,6 +3709,10 @@
           "clean_tokens": [],
           "error_tokens": [
             "the"
+          ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
           ],
           "affected_labels": [
             "C"
@@ -3760,6 +3838,10 @@
             "the"
           ],
           "error_tokens": [],
+          "clean_non_token_units": [
+            " "
+          ],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -3887,6 +3969,8 @@
           "error_tokens": [
             "record"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -4015,6 +4099,8 @@
           "error_tokens": [
             "on"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -4139,6 +4225,10 @@
           "error_tokens": [
             "to"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
+          ],
           "affected_labels": [
             "C"
           ]
@@ -4262,6 +4352,10 @@
           "clean_tokens": [],
           "error_tokens": [
             "were"
+          ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
           ],
           "affected_labels": [
             "B"
@@ -4391,6 +4485,8 @@
           "error_tokens": [
             "have"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -4519,6 +4615,8 @@
           "error_tokens": [
             "transmitting"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -4647,6 +4745,8 @@
           "error_tokens": [
             "encouraging"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -4774,6 +4874,8 @@
           "error_tokens": [
             "careful"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -4902,6 +5004,8 @@
           "error_tokens": [
             "remark"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -5030,6 +5134,8 @@
           "error_tokens": [
             "measure"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -5161,6 +5267,8 @@
           "error_tokens": [
             "recovering"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -5289,6 +5397,8 @@
           "error_tokens": [
             "detecting"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -5420,6 +5530,8 @@
           "error_tokens": [
             "Despite"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -5547,6 +5659,8 @@
           "error_tokens": [
             "which"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -5674,6 +5788,8 @@
           "error_tokens": [
             "was"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -5797,6 +5913,10 @@
           "clean_tokens": [],
           "error_tokens": [
             "he"
+          ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
           ],
           "affected_labels": [
             "C"
@@ -5925,6 +6045,10 @@
           "error_tokens": [
             "calibrated"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
+          ],
           "affected_labels": [
             "B"
           ]
@@ -5939,6 +6063,10 @@
             "calibrated"
           ],
           "error_tokens": [],
+          "clean_non_token_units": [
+            " "
+          ],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -6067,6 +6195,8 @@
           "error_tokens": [
             "least"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -6195,6 +6325,8 @@
           "error_tokens": [
             "is"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -6322,6 +6454,8 @@
           "error_tokens": [
             "skepticism"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -6450,6 +6584,8 @@
           "error_tokens": [
             "few"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -6577,6 +6713,8 @@
           "error_tokens": [
             "provide"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -6704,6 +6842,8 @@
           "error_tokens": [
             "its"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "D"
           ]
@@ -6827,6 +6967,10 @@
           "clean_tokens": [],
           "error_tokens": [
             "the"
+          ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
           ],
           "affected_labels": [
             "C"
@@ -6953,6 +7097,10 @@
             "an"
           ],
           "error_tokens": [],
+          "clean_non_token_units": [
+            " "
+          ],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -7080,6 +7228,8 @@
           "error_tokens": [
             "remove"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -7208,6 +7358,8 @@
           "error_tokens": [
             "for"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -7331,6 +7483,10 @@
           "clean_tokens": [],
           "error_tokens": [
             "to"
+          ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
           ],
           "affected_labels": [
             "C"
@@ -7456,6 +7612,10 @@
           "error_tokens": [
             "were"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
+          ],
           "affected_labels": [
             "B"
           ]
@@ -7579,6 +7739,10 @@
             "had"
           ],
           "error_tokens": [],
+          "clean_non_token_units": [
+            " "
+          ],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -7707,6 +7871,8 @@
           "error_tokens": [
             "preserving"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -7836,6 +8002,8 @@
           "error_tokens": [
             "comparing"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -7963,6 +8131,8 @@
           "error_tokens": [
             "clear"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "D"
           ]
@@ -8091,6 +8261,8 @@
           "error_tokens": [
             "comprehend"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -8219,6 +8391,8 @@
           "error_tokens": [
             "preserve"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -8350,6 +8524,8 @@
           "error_tokens": [
             "preserving"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -8478,6 +8654,8 @@
           "error_tokens": [
             "comparing"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -8609,6 +8787,8 @@
           "error_tokens": [
             "Despite"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -8736,6 +8916,8 @@
           "error_tokens": [
             "who"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -8863,6 +9045,8 @@
           "error_tokens": [
             "carries"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -8986,6 +9170,10 @@
           "clean_tokens": [],
           "error_tokens": [
             "she"
+          ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
           ],
           "affected_labels": [
             "C"
@@ -9114,6 +9302,10 @@
           "error_tokens": [
             "discovered"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [
+            " "
+          ],
           "affected_labels": [
             "B"
           ]
@@ -9128,6 +9320,10 @@
             "discovered"
           ],
           "error_tokens": [],
+          "clean_non_token_units": [
+            " "
+          ],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -9256,6 +9452,8 @@
           "error_tokens": [
             "most"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -9384,6 +9582,8 @@
           "error_tokens": [
             "is"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "A"
           ]
@@ -9511,6 +9711,8 @@
           "error_tokens": [
             "convincingly"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "C"
           ]
@@ -9639,6 +9841,8 @@
           "error_tokens": [
             "little"
           ],
+          "clean_non_token_units": [],
+          "error_non_token_units": [],
           "affected_labels": [
             "B"
           ]
@@ -9853,7 +10057,7 @@
       "command": [
         "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
         "analysis/we_v2/run_regression_contract.py",
-        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\we_v2_regression_results.json"
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\we_v2_regression_results.json"
       ],
       "returncode": 0,
       "status": "PASS",
@@ -9864,11 +10068,11 @@
       "command": [
         "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
         "agents/toefl_itp_grammar_reviewer/scripts/run_p0_hardening_regression.py",
-        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\pilot_p0_hardening_regression_results.json"
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\pilot_p0_hardening_regression_results.json"
       ],
       "returncode": 0,
       "status": "PASS",
-      "stdout": "P0 hardening regression: PASS (7 fixture contracts, 0 failures)\nWrote C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\pilot_p0_hardening_regression_results.json\n",
+      "stdout": "P0 hardening regression: PASS (7 fixture contracts, 0 failures)\nWrote C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\pilot_p0_hardening_regression_results.json\n",
       "stderr": ""
     },
     "diagnostics_contract_unittest": {
@@ -9880,18 +10084,18 @@
         "-s",
         "tests",
         "-p",
-        "test_we_v2_contract_boundaries.py"
+        "test_*.py"
       ],
       "returncode": 0,
       "status": "PASS",
       "stdout": "aggregated 2 live items from 1 microbatches\ngenerator_schema_pass  0/2\nformat_validator_pass  0/2\nplan_conformance_pass  1/2\n  [?] schema=[\"<root>: expected type ['object'], got NoneType\"] format=['item must be an object'] plan=[]\n  [we-v2-pilot-001] schema=[\"<root>: missing required property 'provenance'\", \"<root>.marked_parts: missing required property 'D'\"] format=['missing required field: provenance', 'provenance must be an object', 'marked_parts must have exactly A/B/C/D'] plan=[\"primary_target: plan='REFERENCE_AND_DETERMINERS' item='CLAUSE_STRUCTURE'\"]\n  PROBLEM: diagnostics emission failed for ?: candidate must be an object\n  PROBLEM: diagnostics emission failed for we-v2-pilot-001: marked_parts must have exactly A/B/C/D\n  PROBLEM: missing phase trace: phase_we-v2-live-pilot-20260824-micro-01.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-02.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-03.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-04.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-05.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-06.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-07.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-08.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-09.json\n  PROBLEM: expected exactly 25 initial candidates, found 2\n  PROBLEM: item_ids outside the batch plan: ['?']\n  PROBLEM: candidate validation failed for ?: schema=[\"<root>: expected type ['object'], got NoneType\"] format=['item must be an object'] plan=[]\n  PROBLEM: candidate validation failed for we-v2-pilot-001: schema=[\"<root>: missing required property 'provenance'\", \"<root>.marked_parts: missing required property 'D'\"] format=['missing required field: provenance', 'provenance must be an object', 'marked_parts must have exactly A/B/C/D'] plan=[\"primary_target: plan='REFERENCE_AND_DETERMINERS' item='CLAUSE_STRUCTURE'\"]\n",
-      "stderr": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.837s\n\nOK\n"
+      "stderr": "...................\n----------------------------------------------------------------------\nRan 19 tests in 4.090s\n\nOK\n"
     },
     "we_v2_smoke_acceptance": {
       "command": [
         "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
         "analysis/we_v2/run_smoke_acceptance.py",
-        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\we_v2_smoke_acceptance.json"
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\we_v2_smoke_acceptance.json"
       ],
       "returncode": 0,
       "status": "PASS",
@@ -9902,67 +10106,67 @@
       "command": [
         "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
         "orchestrator/scripts/run_acceptance_tests.py",
-        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-by3avpc8"
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4"
       ],
       "returncode": 0,
       "status": "PASS",
-      "stdout": "[PASS] #12 schema validation PASS for all valid fixtures (replay scripts exit 0) -- smoke_rc=0 adversarial_rc=0 reject_rc=0\n[PASS] #12b Orchestrator's own provenance output passes its shape validator (validate_provenance.py) -- returncodes=[0, 0, 0]\n[PASS] #1 Reviewer PASS-only items reach SOLVING\n[PASS] #2 REVISE item (gen-struct-003) never sent directly to Solver\n[PASS] #3 REJECT items never sent into the revision loop\n[PASS] #4 Solver input contains only the allowlisted fields (real create_solver_input.py, real leakage guard) -- blinded_keys=['item_id', 'options', 'section', 'stem'] problems=[]\n[PASS] #5 AUTO_ACCEPT only when generator/reviewer/solver all agree; a single mismatch blocks it -- good=ACCEPTED mismatched=MANUAL_REVIEW reasons=['solver_generator_mismatch', 'solver_reviewer_mismatch']\n[PASS] #6 Solver AMBIGUOUS is never AUTO_ACCEPTed -- routing=MANUAL_REVIEW\n[PASS] #7 Solver NONE is never AUTO_ACCEPTed -- routing=DISCARDED\n[PASS] #8 Solver confidence LOW is never AUTO_ACCEPTed even if the answer matches -- routing=MANUAL_REVIEW reasons=['solver_confidence_low']\n[PASS] #8b Reviewer source_similarity_risk=HIGH is never AUTO_ACCEPTed -- routing=MANUAL_REVIEW reasons=['source_similarity_high']\n[PASS] #9 gen-struct-003 is never AUTO_ACCEPTed (regression case, real Reviewer REVISE data) -- final_state=REVISE_REQUIRED\n[PASS] #10 Adversarial item ACCEPT rate is 0% -- accept_count=0/5\n[PASS] #11 retry limit (max_revision_cycles) is enforced: 3rd consecutive REVISE -> DISCARDED -- revision_count=3 state=DISCARDED max_revision_cycles=2\n[PASS] #5c Generator-revision feedback (real gen-struct-003 REVISE data) exposes only issues/revision_requirements, never independent_answer/verdict/checks -- feedback_keys=['issues', 'item_id', 'revision_requirements']\n[PASS] #13 provenance records carry full state_history and revision_count\n[PASS] #14 system failures (missing script, unparsable JSON) are classified separately from content/schema failures (missing required field) -- missing_script->SystemCallError=True bad_json->SystemCallError=True missing_field->schema_ok=False\n[PASS] #15 MANUAL_REVIEW items are queued to analysis/manual_review_queue.json with actionable fields -- queue_path=C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\manual_review_queue.json\n\nAcceptance tests: 18/18 passed\n",
+      "stdout": "[PASS] #12 schema validation PASS for all valid fixtures (replay scripts exit 0) -- smoke_rc=0 adversarial_rc=0 reject_rc=0\n[PASS] #12b Orchestrator's own provenance output passes its shape validator (validate_provenance.py) -- returncodes=[0, 0, 0]\n[PASS] #1 Reviewer PASS-only items reach SOLVING\n[PASS] #2 REVISE item (gen-struct-003) never sent directly to Solver\n[PASS] #3 REJECT items never sent into the revision loop\n[PASS] #4 Solver input contains only the allowlisted fields (real create_solver_input.py, real leakage guard) -- blinded_keys=['item_id', 'options', 'section', 'stem'] problems=[]\n[PASS] #5 AUTO_ACCEPT only when generator/reviewer/solver all agree; a single mismatch blocks it -- good=ACCEPTED mismatched=MANUAL_REVIEW reasons=['solver_generator_mismatch', 'solver_reviewer_mismatch']\n[PASS] #6 Solver AMBIGUOUS is never AUTO_ACCEPTed -- routing=MANUAL_REVIEW\n[PASS] #7 Solver NONE is never AUTO_ACCEPTed -- routing=DISCARDED\n[PASS] #8 Solver confidence LOW is never AUTO_ACCEPTed even if the answer matches -- routing=MANUAL_REVIEW reasons=['solver_confidence_low']\n[PASS] #8b Reviewer source_similarity_risk=HIGH is never AUTO_ACCEPTed -- routing=MANUAL_REVIEW reasons=['source_similarity_high']\n[PASS] #9 gen-struct-003 is never AUTO_ACCEPTed (regression case, real Reviewer REVISE data) -- final_state=REVISE_REQUIRED\n[PASS] #10 Adversarial item ACCEPT rate is 0% -- accept_count=0/5\n[PASS] #11 retry limit (max_revision_cycles) is enforced: 3rd consecutive REVISE -> DISCARDED -- revision_count=3 state=DISCARDED max_revision_cycles=2\n[PASS] #5c Generator-revision feedback (real gen-struct-003 REVISE data) exposes only issues/revision_requirements, never independent_answer/verdict/checks -- feedback_keys=['issues', 'item_id', 'revision_requirements']\n[PASS] #13 provenance records carry full state_history and revision_count\n[PASS] #14 system failures (missing script, unparsable JSON) are classified separately from content/schema failures (missing required field) -- missing_script->SystemCallError=True bad_json->SystemCallError=True missing_field->schema_ok=False\n[PASS] #15 MANUAL_REVIEW items are queued to analysis/manual_review_queue.json with actionable fields -- queue_path=C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\manual_review_queue.json\n\nAcceptance tests: 18/18 passed\n",
       "stderr": ""
     },
     "orchestrator_smoke": {
       "command": [
         "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
         "orchestrator/scripts/run_smoke_test.py",
-        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\orchestrator_smoke_test.json"
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\orchestrator_smoke_test.json"
       ],
       "returncode": 0,
       "status": "PASS",
-      "stdout": "Join key: item_id (dict lookup, not list position).\nGenerator items: ['gen-struct-001', 'gen-struct-002', 'gen-struct-003', 'gen-we-001', 'gen-we-002', 'gen-we-003']\nReviewer items:  ['gen-struct-001', 'gen-struct-002', 'gen-struct-003', 'gen-we-001', 'gen-we-002', 'gen-we-003']\nSolver items:    ['gen-struct-001', 'gen-struct-002', 'gen-struct-003', 'gen-we-001', 'gen-we-002', 'gen-we-003']\nReviewer verdicts (read from analysis/reviewer_smoke_test.json, not hardcoded):\n  gen-struct-001: verdict=PASS\n  gen-struct-002: verdict=PASS\n  gen-struct-003: verdict=REVISE\n  gen-we-001: verdict=PASS\n  gen-we-002: verdict=PASS\n  gen-we-003: verdict=PASS\n\nWrote 6 provenance record(s) to C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\orchestrator_smoke_test.json\n\nitem_id          reviewer_verdict   solver_answer   final_state      expected         match\ngen-struct-001   PASS               C               ACCEPTED         ACCEPT-eligible  OK\ngen-struct-002   PASS               A               ACCEPTED         ACCEPT-eligible  OK\ngen-struct-003   REVISE             n/a (Solver not called) REVISE_REQUIRED  ACCEPT-blocked   OK\ngen-we-001       PASS               B               ACCEPTED         ACCEPT-eligible  OK\ngen-we-002       PASS               A               ACCEPTED         ACCEPT-eligible  OK\ngen-we-003       PASS               D               ACCEPTED         ACCEPT-eligible  OK\n\nstate_history per item:\n  gen-struct-001: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n  gen-struct-002: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n  gen-struct-003: ['GENERATED', 'REVIEWING', 'REVISE_REQUIRED']\n  gen-we-001: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n  gen-we-002: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n  gen-we-003: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n\n[regression check] gen-struct-003: solver fixture data exists but was NOT sent to Solver (reviewer verdict != PASS; candidate state=REVISE_REQUIRED)\n\nAUTO_ACCEPT 9-condition check (per item that reached SOLVING):\n  gen-struct-001: ALL 9 SATISFIED -> ACCEPTED\n  gen-struct-002: ALL 9 SATISFIED -> ACCEPTED\n  gen-we-001: ALL 9 SATISFIED -> ACCEPTED\n  gen-we-002: ALL 9 SATISFIED -> ACCEPTED\n  gen-we-003: ALL 9 SATISFIED -> ACCEPTED\n\nFinal state tally: {'ACCEPTED': 5, 'REVISE_REQUIRED': 1}\n\ngen-struct-003 regression guard OK: final state = REVISE_REQUIRED, never entered SOLVING\n",
+      "stdout": "Join key: item_id (dict lookup, not list position).\nGenerator items: ['gen-struct-001', 'gen-struct-002', 'gen-struct-003', 'gen-we-001', 'gen-we-002', 'gen-we-003']\nReviewer items:  ['gen-struct-001', 'gen-struct-002', 'gen-struct-003', 'gen-we-001', 'gen-we-002', 'gen-we-003']\nSolver items:    ['gen-struct-001', 'gen-struct-002', 'gen-struct-003', 'gen-we-001', 'gen-we-002', 'gen-we-003']\nReviewer verdicts (read from analysis/reviewer_smoke_test.json, not hardcoded):\n  gen-struct-001: verdict=PASS\n  gen-struct-002: verdict=PASS\n  gen-struct-003: verdict=REVISE\n  gen-we-001: verdict=PASS\n  gen-we-002: verdict=PASS\n  gen-we-003: verdict=PASS\n\nWrote 6 provenance record(s) to C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\orchestrator_smoke_test.json\n\nitem_id          reviewer_verdict   solver_answer   final_state      expected         match\ngen-struct-001   PASS               C               ACCEPTED         ACCEPT-eligible  OK\ngen-struct-002   PASS               A               ACCEPTED         ACCEPT-eligible  OK\ngen-struct-003   REVISE             n/a (Solver not called) REVISE_REQUIRED  ACCEPT-blocked   OK\ngen-we-001       PASS               B               ACCEPTED         ACCEPT-eligible  OK\ngen-we-002       PASS               A               ACCEPTED         ACCEPT-eligible  OK\ngen-we-003       PASS               D               ACCEPTED         ACCEPT-eligible  OK\n\nstate_history per item:\n  gen-struct-001: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n  gen-struct-002: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n  gen-struct-003: ['GENERATED', 'REVIEWING', 'REVISE_REQUIRED']\n  gen-we-001: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n  gen-we-002: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n  gen-we-003: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n\n[regression check] gen-struct-003: solver fixture data exists but was NOT sent to Solver (reviewer verdict != PASS; candidate state=REVISE_REQUIRED)\n\nAUTO_ACCEPT 9-condition check (per item that reached SOLVING):\n  gen-struct-001: ALL 9 SATISFIED -> ACCEPTED\n  gen-struct-002: ALL 9 SATISFIED -> ACCEPTED\n  gen-we-001: ALL 9 SATISFIED -> ACCEPTED\n  gen-we-002: ALL 9 SATISFIED -> ACCEPTED\n  gen-we-003: ALL 9 SATISFIED -> ACCEPTED\n\nFinal state tally: {'ACCEPTED': 5, 'REVISE_REQUIRED': 1}\n\ngen-struct-003 regression guard OK: final state = REVISE_REQUIRED, never entered SOLVING\n",
       "stderr": ""
     },
     "orchestrator_adversarial": {
       "command": [
         "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
         "orchestrator/scripts/run_adversarial_test.py",
-        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\orchestrator_adversarial_test.json"
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\orchestrator_adversarial_test.json"
       ],
       "returncode": 0,
       "status": "PASS",
-      "stdout": "Wrote 5 provenance record(s) to C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\orchestrator_adversarial_test.json\n\nadv-struct-multi-001         final_state=REVISE_REQUIRED  entered_SOLVING=no\nadv-struct-zero-002          final_state=REVISE_REQUIRED  entered_SOLVING=no\nadv-we-double-003            final_state=REVISE_REQUIRED  entered_SOLVING=no\nadv-we-zero-004              final_state=REVISE_REQUIRED  entered_SOLVING=no\nadv-we-metamismatch-005      final_state=REVISE_REQUIRED  entered_SOLVING=no\n\n[regression check] adv-struct-multi-001: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n[regression check] adv-struct-zero-002: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n[regression check] adv-we-double-003: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n[regression check] adv-we-zero-004: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n[regression check] adv-we-metamismatch-005: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n\nACCEPT rate: 0/5\nAdversarial regression checks OK: 0% ACCEPT rate, 0 items reached Solver.\n",
+      "stdout": "Wrote 5 provenance record(s) to C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\orchestrator_adversarial_test.json\n\nadv-struct-multi-001         final_state=REVISE_REQUIRED  entered_SOLVING=no\nadv-struct-zero-002          final_state=REVISE_REQUIRED  entered_SOLVING=no\nadv-we-double-003            final_state=REVISE_REQUIRED  entered_SOLVING=no\nadv-we-zero-004              final_state=REVISE_REQUIRED  entered_SOLVING=no\nadv-we-metamismatch-005      final_state=REVISE_REQUIRED  entered_SOLVING=no\n\n[regression check] adv-struct-multi-001: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n[regression check] adv-struct-zero-002: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n[regression check] adv-we-double-003: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n[regression check] adv-we-zero-004: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n[regression check] adv-we-metamismatch-005: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n\nACCEPT rate: 0/5\nAdversarial regression checks OK: 0% ACCEPT rate, 0 items reached Solver.\n",
       "stderr": ""
     },
     "orchestrator_reject_path": {
       "command": [
         "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
         "orchestrator/scripts/run_reject_path_test.py",
-        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\orchestrator_reject_path_test.json"
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\orchestrator_reject_path_test.json"
       ],
       "returncode": 0,
       "status": "PASS",
-      "stdout": "Wrote 2 provenance record(s) to C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\orchestrator_reject_path_test.json\n\nreject-struct-001    state=REJECTED   rejected=True never_revised=True never_solved=True single_generation=True -> OK\n    state_history: ['GENERATED', 'REVIEWING', 'REJECTED']\nreject-we-002        state=REJECTED   rejected=True never_revised=True never_solved=True single_generation=True -> OK\n    state_history: ['GENERATED', 'REVIEWING', 'REJECTED']\n\nREJECT-path regression checks OK.\n",
+      "stdout": "Wrote 2 provenance record(s) to C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\orchestrator_reject_path_test.json\n\nreject-struct-001    state=REJECTED   rejected=True never_revised=True never_solved=True single_generation=True -> OK\n    state_history: ['GENERATED', 'REVIEWING', 'REJECTED']\nreject-we-002        state=REJECTED   rejected=True never_revised=True never_solved=True single_generation=True -> OK\n    state_history: ['GENERATED', 'REVIEWING', 'REJECTED']\n\nREJECT-path regression checks OK.\n",
       "stderr": ""
     },
     "we_v2_regression_artifact": {
-      "path": "analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\we_v2_regression_results.json",
+      "path": "analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\we_v2_regression_results.json",
       "temporary": true,
       "exists": true,
       "status": "PASS"
     },
     "p0_regression_artifact": {
-      "path": "analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\pilot_p0_hardening_regression_results.json",
+      "path": "analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\pilot_p0_hardening_regression_results.json",
       "temporary": true,
       "exists": true,
       "status": "PASS"
     },
     "we_v2_smoke_acceptance_artifact": {
-      "path": "analysis\\we_v2_validation\\.integrity-replay-by3avpc8\\we_v2_smoke_acceptance.json",
+      "path": "analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4\\we_v2_smoke_acceptance.json",
       "temporary": true,
       "exists": true,
       "status": "PASS"
     },
     "all_required_pass": true,
     "artifact_presence_gate": true,
-    "temporary_output_directory": "analysis\\we_v2_validation\\.integrity-replay-by3avpc8",
+    "temporary_output_directory": "analysis\\we_v2_validation\\.integrity-replay-mkfm6pq4",
     "tracked_fixture_unchanged": true,
     "tracked_fixture_hashes_before": {
       "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2\\we_v2_regression.json": "74148d25a97bb09d90c2b897ab7244ad2ede69f3a814883e9b0285f93aac86cc",
@@ -9984,7 +10188,7 @@
       "metric": "generator schema",
       "old_conclusion": "75/75",
       "status": "VALID",
-      "basis": "Stored items and deterministic schema recheck both pass."
+      "basis": "Stored items and deterministic schema recheck both pass for the current 75-item cohort."
     },
     {
       "metric": "diagnostics completeness",
@@ -10002,25 +10206,25 @@
       "metric": "format geometry",
       "old_conclusion": "Gate I FAIL",
       "status": "RECOMPUTED",
-      "basis": "Recomputed from actual spans; Gate I remains FAIL with the distance axis included."
+      "basis": "Recomputed from actual spans; Gate I is FAIL with the distance axis included."
     },
     {
       "metric": "format bands",
       "old_conclusion": "72 EXTREME / 3 WARNING",
-      "status": "VALID",
-      "basis": "Recomputed bands remain 72 EXTREME and 3 WARNING."
+      "status": "RECOMPUTED",
+      "basis": "Current corrected-cohort worst-band distribution is 72 EXTREME / 3 WARNING."
     },
     {
       "metric": "correct-span distribution",
       "old_conclusion": "27 / 39 / 9",
       "status": "RECOMPUTED",
-      "basis": "Correct span is selected from actual mutation location; recomputed distribution is 23 / 43 / 9."
+      "basis": "Correct span is selected from actual mutation location; current recomputed distribution is 23 / 43 / 9."
     },
     {
       "metric": "answer-key integrity",
       "old_conclusion": "0 wrong keys",
       "status": "INVALID",
-      "basis": "Deterministic audit finds 10 stored-key mismatches; the old zero count is invalidated."
+      "basis": "Deterministic audit finds 10 stored-key mismatches in the current cohort; the previous zero count is invalidated."
     },
     {
       "metric": "mutation validity",
@@ -10050,7 +10254,7 @@
       "metric": "format drift conclusion",
       "old_conclusion": "Recalibration required",
       "status": "VALID",
-      "basis": "Sentence length, coverage, unmarked context, gaps, worst-band share, and distance still fail Gate I overall."
+      "basis": "Current Gate I result is FAIL; sentence length, coverage, unmarked context, gaps, worst-band share, and distance are evaluated from the current cohort."
     },
     {
       "metric": "human blind-review quality conclusion",
