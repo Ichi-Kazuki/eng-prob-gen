@@ -1,0 +1,115 @@
+{
+  "suite": "WE v2 reviewer regression contract",
+  "mode": "static_contract_replay; no live model call",
+  "pass_prohibited_count": 6,
+  "cases": [
+    {
+      "item_id": "pilot-we-002",
+      "fixture_path": "analysis/pilot/pilot_provenance.json",
+      "fixture_item_count": 40,
+      "fixture_class": "no_valid_answer / pronoun semantic resolution",
+      "expected_v2_verdict": "REJECT",
+      "expected_independent_answer": "NONE",
+      "historical": {
+        "generator_answer": "B",
+        "reviewer_verdict": "PASS",
+        "reviewer_independent_answer": "B",
+        "solver_answer": "NONE",
+        "final_state": "DISCARDED"
+      },
+      "pass_prohibited": true,
+      "reason": "reference resolution does not yield a unique genuine grammar error."
+    },
+    {
+      "item_id": "pilot-we-009",
+      "fixture_path": "analysis/pilot/pilot_provenance.json",
+      "fixture_item_count": 40,
+      "fixture_class": "alternate parse / mixed nonfinite coordination",
+      "expected_v2_verdict": "REJECT",
+      "expected_independent_answer": "AMBIGUOUS",
+      "historical": {
+        "generator_answer": "A",
+        "reviewer_verdict": "PASS",
+        "reviewer_independent_answer": "A",
+        "solver_answer": "AMBIGUOUS",
+        "final_state": "MANUAL_REVIEW"
+      },
+      "pass_prohibited": true,
+      "reason": "coordination admits competing standard parses/repairs."
+    },
+    {
+      "item_id": "pilot-we-024",
+      "fixture_path": "analysis/pilot/pilot_provenance.json",
+      "fixture_item_count": 40,
+      "fixture_class": "semantic connector mistaken for grammar",
+      "expected_v2_verdict": "REJECT",
+      "expected_independent_answer": "NONE",
+      "historical": {
+        "generator_answer": "D",
+        "reviewer_verdict": "PASS",
+        "reviewer_independent_answer": "D",
+        "solver_answer": "NONE",
+        "final_state": "DISCARDED"
+      },
+      "pass_prohibited": true,
+      "reason": "connector choice is semantic/contextual rather than a forced grammar violation."
+    },
+    {
+      "item_id": "batch1-we-013",
+      "fixture_path": "analysis/validation/validation_provenance.json",
+      "fixture_item_count": 120,
+      "fixture_class": "reference ambiguity",
+      "expected_v2_verdict": "REJECT",
+      "expected_independent_answer": "AMBIGUOUS",
+      "historical": {
+        "generator_answer": "A",
+        "reviewer_verdict": "PASS",
+        "reviewer_independent_answer": "A",
+        "solver_answer": "NONE",
+        "final_state": "DISCARDED"
+      },
+      "pass_prohibited": true,
+      "reason": "isolated It has no stable antecedent; the item is not safely repairable as a unique WE error."
+    },
+    {
+      "item_id": "batch1-we-007",
+      "fixture_path": "analysis/validation/validation_provenance.json",
+      "fixture_item_count": 120,
+      "fixture_class": "answer/span mismatch",
+      "expected_v2_verdict": "REVISE",
+      "expected_independent_answer": "B",
+      "historical": {
+        "generator_answer": "C",
+        "reviewer_verdict": "PASS",
+        "reviewer_independent_answer": "C",
+        "solver_answer": "B",
+        "final_state": "MANUAL_REVIEW"
+      },
+      "pass_prohibited": true,
+      "reason": "which mapped is the error, but generator answer C points to a grammatical span."
+    },
+    {
+      "item_id": "batch1-we-024",
+      "fixture_path": "analysis/validation/validation_provenance.json",
+      "fixture_item_count": 120,
+      "fixture_class": "answer/span mismatch",
+      "expected_v2_verdict": "REVISE",
+      "expected_independent_answer": "B",
+      "historical": {
+        "generator_answer": "C",
+        "reviewer_verdict": "PASS",
+        "reviewer_independent_answer": "C",
+        "solver_answer": "B",
+        "final_state": "MANUAL_REVIEW"
+      },
+      "pass_prohibited": true,
+      "reason": "much is the error; marked answer C is responses and the metadata is inconsistent."
+    }
+  ],
+  "checks": {
+    "known_failure_cases_passed_as_PASS": 0,
+    "zero_error_blocker_retained": true,
+    "multiple_error_blocker_retained": true,
+    "alternate_parse_blocker_retained": true
+  }
+}

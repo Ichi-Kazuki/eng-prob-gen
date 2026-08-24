@@ -1,0 +1,1207 @@
+{
+  "run": {
+    "agent_version": "Written Expression Generator v2.0",
+    "batch_id": "we-v2-smoke-20260824",
+    "generation_unit": "one item per microbatch",
+    "item_count": 10
+  },
+  "items": [
+    {
+      "item_id": "we-v2-smoke-001",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "singular subject head across an of-phrase",
+      "secondary_features": [
+        "of-phrase subject",
+        "intervening noun"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "EASY",
+      "vocabulary_domain": "wetland ecology",
+      "sentence": "The stability of coastal wetlands support diverse bird populations, while seasonal flooding creates temporary habitats for migrating species across the region.",
+      "marked_parts": {
+        "A": "support",
+        "B": "populations",
+        "C": "temporary",
+        "D": "migrating"
+      },
+      "correct_answer": "A",
+      "error_explanation": "The singular head noun stability requires supports, even though wetlands appears inside the of-phrase.",
+      "minimal_correction": "support → supports",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "distribution-aware central region; not fixed to 20 words",
+        "expected_span_profile": "four locally inspectable spans sampled from official span geometry",
+        "coverage_profile": "central empirical coverage with no deliberate extreme-tail construction",
+        "approximate_context_profile": "natural unmarked context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 21,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.1905,
+          "unmarked_word_count": 17,
+          "gap_A_B": 2,
+          "gap_B_C": 4,
+          "gap_C_D": 2,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.7605,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.576,
+            "marked_coverage_ratio": 0.16,
+            "unmarked_word_count": 0.66,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.54,
+            "gap_C_D": 0.1
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              5
+            ],
+            "B": [
+              8
+            ],
+            "C": [
+              13
+            ],
+            "D": [
+              16
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-smoke-20260824",
+        "microbatch_id": "we-v2-smoke-20260824-micro-01",
+        "item_generation_order": 1,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "supports",
+        "error_form": "support",
+        "minimal_correction": "support → supports",
+        "mutation_type": "singular_subject_head_to_plural_verb",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-002",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adjective required before a head noun",
+      "secondary_features": [
+        "noun modifier",
+        "derivational form"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "EASY",
+      "vocabulary_domain": "mechanical engineering",
+      "sentence": "Researchers observed a rapidly decline in soil moisture after the irrigation network was redesigned for smaller farms.",
+      "marked_parts": {
+        "A": "Researchers",
+        "B": "rapidly",
+        "C": "moisture",
+        "D": "network"
+      },
+      "correct_answer": "B",
+      "error_explanation": "The noun decline requires the adjective rapid, not the adverb rapidly, before it.",
+      "minimal_correction": "rapidly → rapid",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "WORD_CLASS",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "distribution-aware central region; not fixed to 20 words",
+        "expected_span_profile": "four locally inspectable spans sampled from official span geometry",
+        "coverage_profile": "central empirical coverage with no deliberate extreme-tail construction",
+        "approximate_context_profile": "natural unmarked context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 17,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.2353,
+          "unmarked_word_count": 13,
+          "gap_A_B": 2,
+          "gap_B_C": 3,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "WORD_CLASS",
+          "format_distribution_distance": 0.7015,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.268,
+            "marked_coverage_ratio": 0.36,
+            "unmarked_word_count": 0.396,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.292,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              0
+            ],
+            "B": [
+              3
+            ],
+            "C": [
+              7
+            ],
+            "D": [
+              11
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-smoke-20260824",
+        "microbatch_id": "we-v2-smoke-20260824-micro-02",
+        "item_generation_order": 2,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "rapid",
+        "error_form": "rapidly",
+        "minimal_correction": "rapidly → rapid",
+        "mutation_type": "adjective_to_adverb_modifier",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-003",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "infinitive complement after a purpose construction",
+      "secondary_features": [
+        "purpose infinitive",
+        "coordinate clause"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "environmental monitoring",
+      "sentence": "Engineers developed a compact sensor designed to analyzing water quality, and the device now operates reliably in remote mountain laboratories during winter.",
+      "marked_parts": {
+        "A": "Engineers",
+        "B": "compact",
+        "C": "to analyzing",
+        "D": "operates"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The infinitive marker to must be followed by the base form analyze, not the -ing form analyzing.",
+      "minimal_correction": "to analyzing → to analyze",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "C",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "distribution-aware central region; not fixed to 20 words",
+        "expected_span_profile": "four locally inspectable spans sampled from official span geometry",
+        "coverage_profile": "central empirical coverage with no deliberate extreme-tail construction",
+        "approximate_context_profile": "natural unmarked context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SHORT_PHRASE",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 22,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 2,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2273,
+          "unmarked_word_count": 17,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 6,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "decision_granularity": "MORPHOLOGY",
+          "format_distribution_distance": 0.4297,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.664,
+            "marked_coverage_ratio": 0.336,
+            "unmarked_word_count": 0.66,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.948
+          },
+          "format_band_status": "WARNING",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "WARNING"
+          },
+          "span_token_indices": {
+            "A": [
+              0
+            ],
+            "B": [
+              3
+            ],
+            "C": [
+              6,
+              7
+            ],
+            "D": [
+              14
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-smoke-20260824",
+        "microbatch_id": "we-v2-smoke-20260824-micro-03",
+        "item_generation_order": 3,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "to analyze",
+        "error_form": "to analyzing",
+        "minimal_correction": "to analyzing → to analyze",
+        "mutation_type": "infinitive_to_gerund_form",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "WARN"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-004",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "finite concessive clause introduced by a subordinator",
+      "secondary_features": [
+        "concessive relation",
+        "finite subordinate clause"
+      ],
+      "tested_error_type": "incorrect_subordinator",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "archival history",
+      "sentence": "Despite the archive was incomplete, researchers reconstructed the trade route from fragmentary maps and port records preserved in several coastal museums.",
+      "marked_parts": {
+        "A": "Despite",
+        "B": "reconstructed",
+        "C": "maps",
+        "D": "coastal"
+      },
+      "correct_answer": "A",
+      "error_explanation": "Despite cannot directly introduce the finite clause the archive was incomplete; although is required in that construction.",
+      "minimal_correction": "Despite → Although",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "CLAUSE_RELATION",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "distribution-aware central region; not fixed to 20 words",
+        "expected_span_profile": "four locally inspectable spans sampled from official span geometry",
+        "coverage_profile": "central empirical coverage with no deliberate extreme-tail construction",
+        "approximate_context_profile": "natural unmarked context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 21,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.1905,
+          "unmarked_word_count": 17,
+          "gap_A_B": 5,
+          "gap_B_C": 5,
+          "gap_C_D": 6,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "CLAUSE_RELATION",
+          "format_distribution_distance": 0.7605,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.576,
+            "marked_coverage_ratio": 0.16,
+            "unmarked_word_count": 0.66,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.884,
+            "gap_B_C": 0.78,
+            "gap_C_D": 0.948
+          },
+          "format_band_status": "WARNING",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "WARNING"
+          },
+          "span_token_indices": {
+            "A": [
+              0
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              12
+            ],
+            "D": [
+              19
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-smoke-20260824",
+        "microbatch_id": "we-v2-smoke-20260824-micro-04",
+        "item_generation_order": 4,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Although",
+        "error_form": "Despite",
+        "minimal_correction": "Despite → Although",
+        "mutation_type": "finite_clause_subordinator_swap",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "WARN"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-005",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative marker after an explicit antecedent",
+      "secondary_features": [
+        "explicit antecedent",
+        "restrictive relative clause"
+      ],
+      "tested_error_type": "incorrect_relative_marker",
+      "difficulty": "HARD",
+      "vocabulary_domain": "astronomical observation",
+      "sentence": "The observatory recorded a signal from a distant pulsar what astronomers had not previously detected during the winter survey.",
+      "marked_parts": {
+        "A": "observatory",
+        "B": "signal",
+        "C": "what astronomers",
+        "D": "detected"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The noun signal already supplies the antecedent, so the relative clause requires that, not the fused relative what.",
+      "minimal_correction": "what astronomers → that astronomers",
+      "grammar_metadata": {
+        "error_scope": "cross_clause",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "C",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "distribution-aware central region; not fixed to 20 words",
+        "expected_span_profile": "four locally inspectable spans sampled from official span geometry",
+        "coverage_profile": "central empirical coverage with no deliberate extreme-tail construction",
+        "approximate_context_profile": "natural unmarked context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SHORT_PHRASE",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 19,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 2,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2632,
+          "unmarked_word_count": 14,
+          "gap_A_B": 2,
+          "gap_B_C": 4,
+          "gap_C_D": 3,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.1815,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.428,
+            "marked_coverage_ratio": 0.496,
+            "unmarked_word_count": 0.464,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.54,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              4
+            ],
+            "C": [
+              9,
+              10
+            ],
+            "D": [
+              14
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-smoke-20260824",
+        "microbatch_id": "we-v2-smoke-20260824-micro-05",
+        "item_generation_order": 5,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "that astronomers",
+        "error_form": "what astronomers",
+        "minimal_correction": "what astronomers → that astronomers",
+        "mutation_type": "relative_marker_swap_after_antecedent",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-006",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "INVERSION",
+      "subtype": "subject-auxiliary inversion after a fronted negative adverbial",
+      "secondary_features": [
+        "fronted negative adverbial",
+        "do-support"
+      ],
+      "tested_error_type": "missing_required_element",
+      "difficulty": "HARD",
+      "vocabulary_domain": "instrument calibration",
+      "sentence": "Not until the final calibration the team identified the source of the recurring measurement error in the laboratory during overnight maintenance.",
+      "marked_parts": {
+        "A": "until",
+        "B": "the team identified",
+        "C": "measurement",
+        "D": "maintenance"
+      },
+      "correct_answer": "B",
+      "error_explanation": "Not until at the front requires inversion: did the team identify, not the uninverted finite sequence.",
+      "minimal_correction": "the team identified → did the team identify",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "WORD_ORDER",
+        "intended_error_position": "B",
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "distribution-aware central region; not fixed to 20 words",
+        "expected_span_profile": "four locally inspectable spans sampled from official span geometry",
+        "coverage_profile": "central empirical coverage with no deliberate extreme-tail construction",
+        "approximate_context_profile": "natural unmarked context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "CLAUSE_OR_CLAUSE_LIKE",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 21,
+          "span_word_counts": {
+            "A": 1,
+            "B": 3,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 3,
+          "marked_coverage_ratio": 0.2857,
+          "unmarked_word_count": 15,
+          "gap_A_B": 3,
+          "gap_B_C": 5,
+          "gap_C_D": 6,
+          "correct_span_word_count": 3,
+          "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "WORD_ORDER",
+          "format_distribution_distance": 0.3948,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.576,
+            "marked_coverage_ratio": 0.592,
+            "unmarked_word_count": 0.528,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.92,
+            "gap_A_B": 0.312,
+            "gap_B_C": 0.78,
+            "gap_C_D": 0.948
+          },
+          "format_band_status": "WARNING",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "WARNING"
+          },
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              5,
+              6,
+              7
+            ],
+            "C": [
+              13
+            ],
+            "D": [
+              20
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-smoke-20260824",
+        "microbatch_id": "we-v2-smoke-20260824-micro-06",
+        "item_generation_order": 6,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "did the team identify",
+        "error_form": "the team identified",
+        "minimal_correction": "the team identified → did the team identify",
+        "mutation_type": "fronted_negative_inversion_auxiliary_removal",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "WARN"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-007",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "count quantifier before a plural count noun",
+      "secondary_features": [
+        "plural count noun",
+        "quantifier agreement"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "EASY",
+      "vocabulary_domain": "questionnaire design",
+      "sentence": "The research committee carefully examined reports before comparing much of the survey responses, then approved the revised questionnaire for nationwide distribution among participating universities.",
+      "marked_parts": {
+        "A": "The",
+        "B": "examined",
+        "C": "much",
+        "D": "then approved"
+      },
+      "correct_answer": "C",
+      "error_explanation": "Responses is a plural count noun, so it requires many rather than much in the phrase many of the survey responses.",
+      "minimal_correction": "much → many",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "distribution-aware central region; not fixed to 20 words",
+        "expected_span_profile": "four locally inspectable spans sampled from official span geometry",
+        "coverage_profile": "central empirical coverage with no deliberate extreme-tail construction",
+        "approximate_context_profile": "natural unmarked context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 24,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 2
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2083,
+          "unmarked_word_count": 19,
+          "gap_A_B": 3,
+          "gap_B_C": 3,
+          "gap_C_D": 4,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.7617,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.824,
+            "marked_coverage_ratio": 0.272,
+            "unmarked_word_count": 0.824,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.312,
+            "gap_B_C": 0.292,
+            "gap_C_D": 0.568
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              0
+            ],
+            "B": [
+              4
+            ],
+            "C": [
+              8
+            ],
+            "D": [
+              13,
+              14
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-smoke-20260824",
+        "microbatch_id": "we-v2-smoke-20260824-micro-07",
+        "item_generation_order": 7,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "many",
+        "error_form": "much",
+        "minimal_correction": "much → many",
+        "mutation_type": "count_quantifier_swap",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-008",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel verb forms in an infinitival list",
+      "secondary_features": [
+        "coordinate list",
+        "infinitive complement"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "public policy education",
+      "sentence": "The workshop teaches students to evaluate evidence, organize arguments, and presenting conclusions with precision in public policy debates.",
+      "marked_parts": {
+        "A": "workshop",
+        "B": "evaluate",
+        "C": "presenting",
+        "D": "policy"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The coordinated list follows to evaluate and organize, so its final verb must be the base form present.",
+      "minimal_correction": "presenting → present",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "distribution-aware central region; not fixed to 20 words",
+        "expected_span_profile": "four locally inspectable spans sampled from official span geometry",
+        "coverage_profile": "central empirical coverage with no deliberate extreme-tail construction",
+        "approximate_context_profile": "natural unmarked context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 18,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.2222,
+          "unmarked_word_count": 14,
+          "gap_A_B": 3,
+          "gap_B_C": 4,
+          "gap_C_D": 5,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "MORPHOLOGY",
+          "format_distribution_distance": 0.6532,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.36,
+            "marked_coverage_ratio": 0.336,
+            "unmarked_word_count": 0.464,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.312,
+            "gap_B_C": 0.54,
+            "gap_C_D": 0.832
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              5
+            ],
+            "C": [
+              10
+            ],
+            "D": [
+              16
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-smoke-20260824",
+        "microbatch_id": "we-v2-smoke-20260824-micro-08",
+        "item_generation_order": 8,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "present",
+        "error_form": "presenting",
+        "minimal_correction": "presenting → present",
+        "mutation_type": "parallel_verb_form_swap",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-009",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "past participle required in a passive construction",
+      "secondary_features": [
+        "passive voice",
+        "purpose infinitive"
+      ],
+      "tested_error_type": "wrong_voice",
+      "difficulty": "EASY",
+      "vocabulary_domain": "materials science",
+      "sentence": "Because the new polymer strongly resists heat, it is use to protect delicate components during extended testing in the laboratory under high electrical loads.",
+      "marked_parts": {
+        "A": "new",
+        "B": "resists",
+        "C": "is use",
+        "D": "components"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The passive auxiliary is must be followed by the past participle used.",
+      "minimal_correction": "is use → is used",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "C",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "distribution-aware central region; not fixed to 20 words",
+        "expected_span_profile": "four locally inspectable spans sampled from official span geometry",
+        "coverage_profile": "central empirical coverage with no deliberate extreme-tail construction",
+        "approximate_context_profile": "natural unmarked context retained before, between, and after spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SHORT_PHRASE",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 24,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 2,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2083,
+          "unmarked_word_count": 19,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 3,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "decision_granularity": "MORPHOLOGY",
+          "format_distribution_distance": 0.7617,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.824,
+            "marked_coverage_ratio": 0.272,
+            "unmarked_word_count": 0.824,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              2
+            ],
+            "B": [
+              5
+            ],
+            "C": [
+              8,
+              9
+            ],
+            "D": [
+              13
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-smoke-20260824",
+        "microbatch_id": "we-v2-smoke-20260824-micro-09",
+        "item_generation_order": 9,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "is used",
+        "error_form": "is use",
+        "minimal_correction": "is use → is used",
+        "mutation_type": "passive_participle_drop",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-010",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "subtype": "there-be agreement with a plural postposed subject",
+      "secondary_features": [
+        "existential there",
+        "plural postposed subject"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "statistical modeling",
+      "sentence": "There is several independent variables in the model, although the underlying mechanism remains difficult to measure precisely across different populations.",
+      "marked_parts": {
+        "A": "There is",
+        "B": "variables",
+        "C": "underlying",
+        "D": "measure"
+      },
+      "correct_answer": "A",
+      "error_explanation": "The plural postposed subject variables requires are in the existential there construction.",
+      "minimal_correction": "There is → There are",
+      "grammar_metadata": {
+        "error_scope": "cross_clause",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "distribution-aware central region; not fixed to 20 words",
+        "expected_span_profile": "four locally inspectable spans sampled from official span geometry",
+        "coverage_profile": "central empirical coverage with no deliberate extreme-tail construction",
+        "approximate_context_profile": "natural unmarked context retained before, between, and after spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.25,
+          "unmarked_word_count": 15,
+          "gap_A_B": 2,
+          "gap_B_C": 5,
+          "gap_C_D": 4,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.1472,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.492,
+            "marked_coverage_ratio": 0.456,
+            "unmarked_word_count": 0.528,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.78,
+            "gap_C_D": 0.568
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              0,
+              1
+            ],
+            "B": [
+              4
+            ],
+            "C": [
+              10
+            ],
+            "D": [
+              15
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-smoke-20260824",
+        "microbatch_id": "we-v2-smoke-20260824-micro-10",
+        "item_generation_order": 10,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "There are",
+        "error_form": "There is",
+        "minimal_correction": "There is → There are",
+        "mutation_type": "existential_be_number_swap",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    }
+  ]
+}

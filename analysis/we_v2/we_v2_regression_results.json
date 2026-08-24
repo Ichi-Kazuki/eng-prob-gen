@@ -1,0 +1,119 @@
+{
+  "suite": "WE v2 reviewer regression contract",
+  "mode": "static_contract_replay; no live model call",
+  "case_count": 6,
+  "pass_prohibited_count": 6,
+  "known_failure_pass_count": 0,
+  "status": "PASS",
+  "checks": {
+    "registered_case_set": true,
+    "historical_fixtures_loaded": true,
+    "v2_reviewer_contracts_valid": true,
+    "v2_reviewer_prompt_controls_present": true
+  },
+  "failures": [],
+  "results": [
+    {
+      "item_id": "pilot-we-002",
+      "fixture_path": "analysis/pilot/pilot_provenance.json",
+      "fixture_class": "no_valid_answer / pronoun semantic resolution",
+      "historical": {
+        "generator_answer": "B",
+        "reviewer_verdict": "PASS",
+        "reviewer_independent_answer": "B",
+        "solver_answer": "NONE",
+        "final_state": "DISCARDED"
+      },
+      "v2_reviewer": {
+        "verdict": "REJECT",
+        "independent_answer": "NONE",
+        "contract_valid": true
+      }
+    },
+    {
+      "item_id": "pilot-we-009",
+      "fixture_path": "analysis/pilot/pilot_provenance.json",
+      "fixture_class": "alternate parse / mixed nonfinite coordination",
+      "historical": {
+        "generator_answer": "A",
+        "reviewer_verdict": "PASS",
+        "reviewer_independent_answer": "A",
+        "solver_answer": "AMBIGUOUS",
+        "final_state": "MANUAL_REVIEW"
+      },
+      "v2_reviewer": {
+        "verdict": "REJECT",
+        "independent_answer": "AMBIGUOUS",
+        "contract_valid": true
+      }
+    },
+    {
+      "item_id": "pilot-we-024",
+      "fixture_path": "analysis/pilot/pilot_provenance.json",
+      "fixture_class": "semantic connector mistaken for grammar",
+      "historical": {
+        "generator_answer": "D",
+        "reviewer_verdict": "PASS",
+        "reviewer_independent_answer": "D",
+        "solver_answer": "NONE",
+        "final_state": "DISCARDED"
+      },
+      "v2_reviewer": {
+        "verdict": "REJECT",
+        "independent_answer": "NONE",
+        "contract_valid": true
+      }
+    },
+    {
+      "item_id": "batch1-we-013",
+      "fixture_path": "analysis/validation/validation_provenance.json",
+      "fixture_class": "reference ambiguity",
+      "historical": {
+        "generator_answer": "A",
+        "reviewer_verdict": "PASS",
+        "reviewer_independent_answer": "A",
+        "solver_answer": "NONE",
+        "final_state": "DISCARDED"
+      },
+      "v2_reviewer": {
+        "verdict": "REJECT",
+        "independent_answer": "AMBIGUOUS",
+        "contract_valid": true
+      }
+    },
+    {
+      "item_id": "batch1-we-007",
+      "fixture_path": "analysis/validation/validation_provenance.json",
+      "fixture_class": "answer/span mismatch",
+      "historical": {
+        "generator_answer": "C",
+        "reviewer_verdict": "PASS",
+        "reviewer_independent_answer": "C",
+        "solver_answer": "B",
+        "final_state": "MANUAL_REVIEW"
+      },
+      "v2_reviewer": {
+        "verdict": "REVISE",
+        "independent_answer": "B",
+        "contract_valid": true
+      }
+    },
+    {
+      "item_id": "batch1-we-024",
+      "fixture_path": "analysis/validation/validation_provenance.json",
+      "fixture_class": "answer/span mismatch",
+      "historical": {
+        "generator_answer": "C",
+        "reviewer_verdict": "PASS",
+        "reviewer_independent_answer": "C",
+        "solver_answer": "B",
+        "final_state": "MANUAL_REVIEW"
+      },
+      "v2_reviewer": {
+        "verdict": "REVISE",
+        "independent_answer": "B",
+        "contract_valid": true
+      }
+    }
+  ]
+}

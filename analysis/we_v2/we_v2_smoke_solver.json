@@ -1,0 +1,98 @@
+{
+  "run": {
+    "solver": "existing blind Solver contract",
+    "item_count": 10
+  },
+  "items": [
+    {
+      "item_id": "we-v2-smoke-001",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The singular head stability controls the verb despite the intervening plural noun wetlands.",
+      "ambiguity_detected": false,
+      "suggested_correction": "support -> supports"
+    },
+    {
+      "item_id": "we-v2-smoke-002",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The noun decline needs the adjective rapid, not the adverb rapidly.",
+      "ambiguity_detected": false,
+      "suggested_correction": "rapidly -> rapid"
+    },
+    {
+      "item_id": "we-v2-smoke-003",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The infinitive marker to requires the base verb analyze.",
+      "ambiguity_detected": false,
+      "suggested_correction": "to analyzing -> to analyze"
+    },
+    {
+      "item_id": "we-v2-smoke-004",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "A finite clause requires although here; despite cannot introduce the finite clause directly.",
+      "ambiguity_detected": false,
+      "suggested_correction": "Despite -> Although"
+    },
+    {
+      "item_id": "we-v2-smoke-005",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The explicit antecedent signal takes the relative marker that, not fused relative what.",
+      "ambiguity_detected": false,
+      "suggested_correction": "what astronomers -> that astronomers"
+    },
+    {
+      "item_id": "we-v2-smoke-006",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The fronted negative adverbial requires auxiliary inversion: did the team identify.",
+      "ambiguity_detected": false,
+      "suggested_correction": "the team identified -> did the team identify"
+    },
+    {
+      "item_id": "we-v2-smoke-007",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "Responses is a plural count noun and takes many rather than much.",
+      "ambiguity_detected": false,
+      "suggested_correction": "much -> many"
+    },
+    {
+      "item_id": "we-v2-smoke-008",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The coordinated infinitival list requires the base form present.",
+      "ambiguity_detected": false,
+      "suggested_correction": "presenting -> present"
+    },
+    {
+      "item_id": "we-v2-smoke-009",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The passive auxiliary is requires the participle used.",
+      "ambiguity_detected": false,
+      "suggested_correction": "is use -> is used"
+    },
+    {
+      "item_id": "we-v2-smoke-010",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The plural postposed subject variables requires are in the existential construction.",
+      "ambiguity_detected": false,
+      "suggested_correction": "There is -> There are"
+    }
+  ]
+}

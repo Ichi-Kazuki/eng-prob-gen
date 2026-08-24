@@ -1,0 +1,55 @@
+{
+  "suite": "WE v2 smoke acceptance A-H",
+  "item_count": 10,
+  "passed": true,
+  "checks": [
+    {
+      "id": "A",
+      "description": "schema/contract and deterministic geometry valid",
+      "passed": true,
+      "detail": "10/10"
+    },
+    {
+      "id": "B",
+      "description": "exactly four aligned spans",
+      "passed": true,
+      "detail": "all items have A/B/C/D and no EXTREME band"
+    },
+    {
+      "id": "C",
+      "description": "exactly one genuine error recorded by independent review",
+      "passed": true,
+      "detail": "10/10; complete IDs and reviewer contract required"
+    },
+    {
+      "id": "D",
+      "description": "Reviewer independent answer matches Generator",
+      "passed": true,
+      "detail": "10/10; exact reviewer ID set and contract required"
+    },
+    {
+      "id": "E",
+      "description": "existing blind Solver consensus",
+      "passed": true,
+      "detail": "10/10; exact solver ID set and contract required"
+    },
+    {
+      "id": "F",
+      "description": "geometry remains within official observed item-level ranges",
+      "passed": true,
+      "detail": "no EXTREME band; sentence and coverage medians within official min/max"
+    },
+    {
+      "id": "G",
+      "description": "100% marked coverage is absent",
+      "passed": true,
+      "detail": "count=0"
+    },
+    {
+      "id": "H",
+      "description": "zero unmarked context is absent",
+      "passed": true,
+      "detail": "count=0"
+    }
+  ]
+}

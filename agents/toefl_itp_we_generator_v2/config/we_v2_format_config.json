@@ -1,0 +1,68 @@
+{
+  "config_id": "TOEFL_ITP_WE_V2_FORMAT_CONFIG",
+  "config_version": "2.0.0",
+  "source_of_truth": {
+    "format_analysis": "analysis/we_format/written_expression_format_official.json",
+    "format_spec": "specs/toefl_itp_we_format_spec_addendum.json",
+    "grammar_spec": "specs/toefl_itp_grammar_spec.json",
+    "taxonomy": "analysis/grammar_taxonomy.json"
+  },
+  "tokenization": {
+    "description": "Unicode-aware lexical tokens; internal apostrophes and hyphens remain inside a token; punctuation-only tokens are excluded.",
+    "regex": "[\\w]+(?:['-][\\w]+)*"
+  },
+  "empirical_band_method": {
+    "name": "nearest_rank_empirical_quantile",
+    "quantiles": {
+      "preferred_lower": 0.10,
+      "preferred_upper": 0.90,
+      "warning_lower": 0.05,
+      "warning_upper": 0.95
+    },
+    "definition": "PREFERRED is q10..q90 inclusive; WARNING is outside PREFERRED but within q05..q95; EXTREME is below q05 or above q95.",
+    "small_batch_policy": "Bands are diagnostics, not quotas. Official frequencies are sampled as soft guidance and are not copied mechanically into a ten-item smoke batch."
+  },
+  "item_level_thresholds": {
+    "sentence_word_count": {"q05": 13, "q10": 15, "q90": 25, "q95": 27},
+    "marked_coverage_ratio": {"q05": 0.16, "q10": 0.1739, "q90": 0.381, "q95": 0.4167},
+    "unmarked_word_count": {"q05": 9, "q10": 10, "q90": 20, "q95": 22},
+    "mean_span_length": {"q05": 1, "q10": 1, "q90": 1.75, "q95": 1.75},
+    "max_span_length": {"q05": 1, "q10": 1, "q90": 3, "q95": 3},
+    "gap_A_B": {"q05": 1, "q10": 2, "q90": 5, "q95": 5},
+    "gap_B_C": {"q05": 2, "q10": 2, "q90": 5, "q95": 6},
+    "gap_C_D": {"q05": 2, "q10": 2, "q90": 5, "q95": 6}
+  },
+  "distance": {
+    "method": "root_mean_square_standardized_distance",
+    "metrics": [
+      "sentence_word_count",
+      "marked_coverage_ratio",
+      "unmarked_word_count",
+      "mean_span_length",
+      "max_span_length"
+    ],
+    "official_item_level_statistics": {
+      "sentence_word_count": {"mean": 20.048, "stdev": 4.2727},
+      "marked_coverage_ratio": {"mean": 0.2705, "stdev": 0.0829},
+      "unmarked_word_count": {"mean": 14.872, "stdev": 4.4049},
+      "mean_span_length": {"mean": 1.294, "stdev": 0.2805},
+      "max_span_length": {"mean": 1.0, "stdev": 0.0}
+    },
+    "zero_stdev_policy": "The max-span metric is retained in the percentile profile but omitted from the numeric RMS distance when the official item-level standard deviation is zero."
+  },
+  "official_sampling_guidance": {
+    "sentence_length_bins": {"<=10": 0.008, "11-15": 0.12, "16-20": 0.392, "21-25": 0.384, "26-30": 0.08, "31+": 0.016},
+    "span_word_counts": {"1": 0.75, "2": 0.212, "3": 0.032, "4": 0.006},
+    "span_types": {"SINGLE_WORD": 0.75, "SHORT_PHRASE": 0.11, "CLAUSE_OR_CLAUSE_LIKE": 0.14},
+    "correct_span_types": {"SINGLE_WORD": 0.784, "SHORT_PHRASE": 0.096, "CLAUSE_OR_CLAUSE_LIKE": 0.12},
+    "correction_locality": {"DEPENDENCY_BASED": 0.152, "LOCAL_SHORT_SPAN": 0.104, "SEMANTIC_OR_CONTEXT_DEPENDENT": 0.088, "LOCAL_SINGLE_TOKEN": 0.224, "CLAUSE_LEVEL": 0.432},
+    "decision_granularity": {"FUNCTION_WORD": 0.208, "WORD_ORDER": 0.048, "CLAUSE_RELATION": 0.064, "VERB_FRAME": 0.352, "OTHER": 0.056, "MORPHOLOGY": 0.12, "WORD_CLASS": 0.032, "AGREEMENT_DEPENDENCY": 0.112, "LOCAL_PHRASE": 0.008},
+    "use": "Reference distribution for sampling and batch diagnostics only; never a hard quota for a small batch."
+  },
+  "normal_generation_safety": {
+    "coverage_100_percent": "forbidden_as_normal_pattern",
+    "unmarked_context_zero": "forbidden_as_normal_pattern",
+    "coverage_ge_0_60": "extreme_tail_diagnostic_only",
+    "absolute_grammar_rejection_threshold": null
+  }
+}

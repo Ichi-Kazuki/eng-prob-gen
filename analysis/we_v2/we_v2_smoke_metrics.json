@@ -1,0 +1,65 @@
+{
+  "report_version": "WE_V2_SMOKE_METRICS_1.0",
+  "official": {
+    "source": "analysis/we_format/written_expression_format_official.json",
+    "item_count": 125,
+    "sentence_median": 20,
+    "marked_span_word_count_median": 1,
+    "coverage_median": 0.2632,
+    "unmarked_context_median": 15,
+    "gap_medians": {
+      "gap_A_B": 4,
+      "gap_B_C": 4,
+      "gap_C_D": 4
+    }
+  },
+  "v1_1_validation": {
+    "source": "analysis/validation/VALIDATION_FAILURE_AUDIT.md and validation batch artifacts",
+    "item_count": 75,
+    "sentence_median": 10,
+    "marked_span_word_count_median": 2,
+    "coverage_median": 1.0,
+    "unmarked_context_median": 0,
+    "gap_medians": {
+      "gap_A_B": 0,
+      "gap_B_C": 0,
+      "gap_C_D": 0
+    }
+  },
+  "v2_smoke": {
+    "item_count": 10,
+    "sentence_median": 21.0,
+    "marked_span_word_count_median": 1.0,
+    "coverage_median": 0.22475,
+    "unmarked_context_median": 16.0,
+    "gap_medians": {
+      "gap_A_B": 2.0,
+      "gap_B_C": 4.0,
+      "gap_C_D": 4.0
+    },
+    "grammar_pass_count": 10,
+    "reviewer_independent_answer_match_count": 10,
+    "format_pass_count": 7,
+    "format_warning_count": 3,
+    "coverage_100_percent_count": 0,
+    "unmarked_context_zero_count": 0,
+    "format_band_counts": {
+      "PREFERRED": 7,
+      "WARNING": 3,
+      "EXTREME": 0
+    },
+    "distance_median": 0.67735
+  },
+  "solver": {
+    "solver_consensus_count": 10,
+    "solver_item_count": 10,
+    "ambiguous_count": 0,
+    "none_count": 0
+  },
+  "comparison_interpretation": {
+    "sentence_length": "v2 is distribution-aware and no longer has v1.1's 10-word median bias.",
+    "span_length": "v2 returns the official 1-word median while retaining multiword/clause-like spans where grammar scope requires them.",
+    "coverage_context": "v2 moves away from v1.1's 100% coverage / zero-context normal pattern.",
+    "gaps": "v2 retains nonzero local gaps and approaches the official approximate gap geometry without treating gap medians as quotas."
+  }
+}

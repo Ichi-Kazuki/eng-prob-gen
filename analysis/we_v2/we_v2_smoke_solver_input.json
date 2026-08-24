@@ -1,0 +1,124 @@
+{
+  "run": {
+    "solver": "existing blind Solver contract",
+    "metadata_excluded": [
+      "correct_answer",
+      "grammar_metadata",
+      "format_metadata",
+      "qa_metadata",
+      "provenance"
+    ]
+  },
+  "items": [
+    {
+      "item_id": "we-v2-smoke-001",
+      "section": "Written Expression",
+      "sentence": "The stability of coastal wetlands support diverse bird populations, while seasonal flooding creates temporary habitats for migrating species across the region.",
+      "marked_parts": {
+        "A": "support",
+        "B": "populations",
+        "C": "temporary",
+        "D": "migrating"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-002",
+      "section": "Written Expression",
+      "sentence": "Researchers observed a rapidly decline in soil moisture after the irrigation network was redesigned for smaller farms.",
+      "marked_parts": {
+        "A": "Researchers",
+        "B": "rapidly",
+        "C": "moisture",
+        "D": "network"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-003",
+      "section": "Written Expression",
+      "sentence": "Engineers developed a compact sensor designed to analyzing water quality, and the device now operates reliably in remote mountain laboratories during winter.",
+      "marked_parts": {
+        "A": "Engineers",
+        "B": "compact",
+        "C": "to analyzing",
+        "D": "operates"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-004",
+      "section": "Written Expression",
+      "sentence": "Despite the archive was incomplete, researchers reconstructed the trade route from fragmentary maps and port records preserved in several coastal museums.",
+      "marked_parts": {
+        "A": "Despite",
+        "B": "reconstructed",
+        "C": "maps",
+        "D": "coastal"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-005",
+      "section": "Written Expression",
+      "sentence": "The observatory recorded a signal from a distant pulsar what astronomers had not previously detected during the winter survey.",
+      "marked_parts": {
+        "A": "observatory",
+        "B": "signal",
+        "C": "what astronomers",
+        "D": "detected"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-006",
+      "section": "Written Expression",
+      "sentence": "Not until the final calibration the team identified the source of the recurring measurement error in the laboratory during overnight maintenance.",
+      "marked_parts": {
+        "A": "until",
+        "B": "the team identified",
+        "C": "measurement",
+        "D": "maintenance"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-007",
+      "section": "Written Expression",
+      "sentence": "The research committee carefully examined reports before comparing much of the survey responses, then approved the revised questionnaire for nationwide distribution among participating universities.",
+      "marked_parts": {
+        "A": "The",
+        "B": "examined",
+        "C": "much",
+        "D": "then approved"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-008",
+      "section": "Written Expression",
+      "sentence": "The workshop teaches students to evaluate evidence, organize arguments, and presenting conclusions with precision in public policy debates.",
+      "marked_parts": {
+        "A": "workshop",
+        "B": "evaluate",
+        "C": "presenting",
+        "D": "policy"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-009",
+      "section": "Written Expression",
+      "sentence": "Because the new polymer strongly resists heat, it is use to protect delicate components during extended testing in the laboratory under high electrical loads.",
+      "marked_parts": {
+        "A": "new",
+        "B": "resists",
+        "C": "is use",
+        "D": "components"
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-010",
+      "section": "Written Expression",
+      "sentence": "There is several independent variables in the model, although the underlying mechanism remains difficult to measure precisely across different populations.",
+      "marked_parts": {
+        "A": "There is",
+        "B": "variables",
+        "C": "underlying",
+        "D": "measure"
+      }
+    }
+  ]
+}

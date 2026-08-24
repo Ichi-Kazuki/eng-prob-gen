@@ -1,0 +1,626 @@
+{
+  "validator": "TOEFL ITP WE deterministic format validator v2.0",
+  "config": "TOEFL_ITP_WE_V2_FORMAT_CONFIG",
+  "item_count": 10,
+  "valid_count": 10,
+  "invalid_count": 0,
+  "items": [
+    {
+      "item_id": "we-v2-smoke-001",
+      "valid": true,
+      "errors": [],
+      "diagnostics": {
+        "sentence_word_count": 21,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.0,
+        "max_span_length": 1,
+        "marked_coverage_ratio": 0.1905,
+        "unmarked_word_count": 17,
+        "gap_A_B": 2,
+        "gap_B_C": 4,
+        "gap_C_D": 2,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "format_distribution_distance": 0.7605,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.576,
+          "marked_coverage_ratio": 0.16,
+          "unmarked_word_count": 0.66,
+          "mean_span_length": 0.156,
+          "max_span_length": 0.156,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.54,
+          "gap_C_D": 0.1
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            5
+          ],
+          "B": [
+            8
+          ],
+          "C": [
+            13
+          ],
+          "D": [
+            16
+          ]
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-002",
+      "valid": true,
+      "errors": [],
+      "diagnostics": {
+        "sentence_word_count": 17,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.0,
+        "max_span_length": 1,
+        "marked_coverage_ratio": 0.2353,
+        "unmarked_word_count": 13,
+        "gap_A_B": 2,
+        "gap_B_C": 3,
+        "gap_C_D": 3,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "WORD_CLASS",
+        "format_distribution_distance": 0.7015,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.268,
+          "marked_coverage_ratio": 0.36,
+          "unmarked_word_count": 0.396,
+          "mean_span_length": 0.156,
+          "max_span_length": 0.156,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.292,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            0
+          ],
+          "B": [
+            3
+          ],
+          "C": [
+            7
+          ],
+          "D": [
+            11
+          ]
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-003",
+      "valid": true,
+      "errors": [],
+      "diagnostics": {
+        "sentence_word_count": 22,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 2,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2273,
+        "unmarked_word_count": 17,
+        "gap_A_B": 2,
+        "gap_B_C": 2,
+        "gap_C_D": 6,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "format_distribution_distance": 0.4297,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.664,
+          "marked_coverage_ratio": 0.336,
+          "unmarked_word_count": 0.66,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.088,
+          "gap_C_D": 0.948
+        },
+        "format_band_status": "WARNING",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "WARNING"
+        },
+        "span_token_indices": {
+          "A": [
+            0
+          ],
+          "B": [
+            3
+          ],
+          "C": [
+            6,
+            7
+          ],
+          "D": [
+            14
+          ]
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-004",
+      "valid": true,
+      "errors": [],
+      "diagnostics": {
+        "sentence_word_count": 21,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.0,
+        "max_span_length": 1,
+        "marked_coverage_ratio": 0.1905,
+        "unmarked_word_count": 17,
+        "gap_A_B": 5,
+        "gap_B_C": 5,
+        "gap_C_D": 6,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "CLAUSE_RELATION",
+        "format_distribution_distance": 0.7605,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.576,
+          "marked_coverage_ratio": 0.16,
+          "unmarked_word_count": 0.66,
+          "mean_span_length": 0.156,
+          "max_span_length": 0.156,
+          "gap_A_B": 0.884,
+          "gap_B_C": 0.78,
+          "gap_C_D": 0.948
+        },
+        "format_band_status": "WARNING",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "WARNING"
+        },
+        "span_token_indices": {
+          "A": [
+            0
+          ],
+          "B": [
+            6
+          ],
+          "C": [
+            12
+          ],
+          "D": [
+            19
+          ]
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-005",
+      "valid": true,
+      "errors": [],
+      "diagnostics": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 2,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2632,
+        "unmarked_word_count": 14,
+        "gap_A_B": 2,
+        "gap_B_C": 4,
+        "gap_C_D": 3,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "FUNCTION_WORD",
+        "format_distribution_distance": 0.1815,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.496,
+          "unmarked_word_count": 0.464,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.54,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            1
+          ],
+          "B": [
+            4
+          ],
+          "C": [
+            9,
+            10
+          ],
+          "D": [
+            14
+          ]
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-006",
+      "valid": true,
+      "errors": [],
+      "diagnostics": {
+        "sentence_word_count": 21,
+        "span_word_counts": {
+          "A": 1,
+          "B": 3,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 3,
+        "marked_coverage_ratio": 0.2857,
+        "unmarked_word_count": 15,
+        "gap_A_B": 3,
+        "gap_B_C": 5,
+        "gap_C_D": 6,
+        "correct_span_word_count": 3,
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "WORD_ORDER",
+        "format_distribution_distance": 0.3948,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.576,
+          "marked_coverage_ratio": 0.592,
+          "unmarked_word_count": 0.528,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.92,
+          "gap_A_B": 0.312,
+          "gap_B_C": 0.78,
+          "gap_C_D": 0.948
+        },
+        "format_band_status": "WARNING",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "WARNING"
+        },
+        "span_token_indices": {
+          "A": [
+            1
+          ],
+          "B": [
+            5,
+            6,
+            7
+          ],
+          "C": [
+            13
+          ],
+          "D": [
+            20
+          ]
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-007",
+      "valid": true,
+      "errors": [],
+      "diagnostics": {
+        "sentence_word_count": 24,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2083,
+        "unmarked_word_count": 19,
+        "gap_A_B": 3,
+        "gap_B_C": 3,
+        "gap_C_D": 4,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "format_distribution_distance": 0.7617,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.824,
+          "marked_coverage_ratio": 0.272,
+          "unmarked_word_count": 0.824,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.312,
+          "gap_B_C": 0.292,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            0
+          ],
+          "B": [
+            4
+          ],
+          "C": [
+            8
+          ],
+          "D": [
+            13,
+            14
+          ]
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-008",
+      "valid": true,
+      "errors": [],
+      "diagnostics": {
+        "sentence_word_count": 18,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.0,
+        "max_span_length": 1,
+        "marked_coverage_ratio": 0.2222,
+        "unmarked_word_count": 14,
+        "gap_A_B": 3,
+        "gap_B_C": 4,
+        "gap_C_D": 5,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "MORPHOLOGY",
+        "format_distribution_distance": 0.6532,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.36,
+          "marked_coverage_ratio": 0.336,
+          "unmarked_word_count": 0.464,
+          "mean_span_length": 0.156,
+          "max_span_length": 0.156,
+          "gap_A_B": 0.312,
+          "gap_B_C": 0.54,
+          "gap_C_D": 0.832
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            1
+          ],
+          "B": [
+            5
+          ],
+          "C": [
+            10
+          ],
+          "D": [
+            16
+          ]
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-009",
+      "valid": true,
+      "errors": [],
+      "diagnostics": {
+        "sentence_word_count": 24,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 2,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2083,
+        "unmarked_word_count": 19,
+        "gap_A_B": 2,
+        "gap_B_C": 2,
+        "gap_C_D": 3,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "format_distribution_distance": 0.7617,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.824,
+          "marked_coverage_ratio": 0.272,
+          "unmarked_word_count": 0.824,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.088,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            2
+          ],
+          "B": [
+            5
+          ],
+          "C": [
+            8,
+            9
+          ],
+          "D": [
+            13
+          ]
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-smoke-010",
+      "valid": true,
+      "errors": [],
+      "diagnostics": {
+        "sentence_word_count": 20,
+        "span_word_counts": {
+          "A": 2,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.25,
+        "unmarked_word_count": 15,
+        "gap_A_B": 2,
+        "gap_B_C": 5,
+        "gap_C_D": 4,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "format_distribution_distance": 0.1472,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.492,
+          "marked_coverage_ratio": 0.456,
+          "unmarked_word_count": 0.528,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.78,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            0,
+            1
+          ],
+          "B": [
+            4
+          ],
+          "C": [
+            10
+          ],
+          "D": [
+            15
+          ]
+        }
+      }
+    }
+  ]
+}
