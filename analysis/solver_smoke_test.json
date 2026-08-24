@@ -1,0 +1,55 @@
+{
+  "items": [
+    {
+      "item_id": "gen-struct-001",
+      "section": "Structure",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "Only 'who discovered the new coral species' works: the gap is the subject of the relative clause and the antecedent is a person, so it needs the subject relative pronoun 'who' plus a verb agreeing with it. A uses 'which', wrong for a human antecedent. B uses 'discover', which does not agree with the implied third-person singular subject. D omits the relative pronoun, which is only possible when the gap is an object, not a subject; without it the sentence has two finite verbs ('discovered'...'has spent') with no connector.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "gen-struct-002",
+      "section": "Structure",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "'were raised significantly' is the only option that is both passive (matching the 'by the federal government' agent phrase) and correctly agrees with the plural subject 'tariffs' in past tense. B lacks the passive auxiliary. C uses the singular auxiliary 'was' against a plural subject. D is present tense, inconsistent with 'During the early twentieth century'.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "gen-struct-003",
+      "section": "Structure",
+      "solver_answer": "AMBIGUOUS",
+      "confidence": "MEDIUM",
+      "reason": "D ('possesses') is the clean, standard finite verb parallel to 'orbits', completing the 'not only...but also' construction. A ('possession of') leaves the second conjunct without a finite verb. B ('also possesses') duplicates 'also', which is clearly wrong. However, C ('possesses also') cannot be confidently ruled out: postposing 'also' between the verb and its object is unusual in contemporary standard written English, but it is attested in more formal/literary registers and is not unambiguously ungrammatical the way A and B are. Because exactly one option (D) is cleanly valid but a second option (C) is only marginally questionable rather than clearly invalid, answer uniqueness is not fully secure.",
+      "ambiguity_detected": true
+    },
+    {
+      "item_id": "gen-we-001",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "'unusually' is an adverb, but it modifies the noun 'rock formation', which requires the adjective 'unusual'. 'carefully' correctly modifies 'examined', 'had formed' is an appropriate past-perfect form for an action prior to the conclusion, and 'volcanic activity' is a well-formed noun phrase.",
+      "suggested_correction": "unusual",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "gen-we-002",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The subject of the clause is the singular noun 'proposal'; the intervening plural phrase 'bicycle lanes throughout downtown neighborhoods' does not change its number, so the verb must be 'has', not 'have'. 'considerable' correctly modifies 'attention', 'attention from residents' is a well-formed noun phrase, and 'who' correctly introduces a relative clause for the plural human antecedent 'city planners'.",
+      "suggested_correction": "has",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "gen-we-003",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "MEDIUM",
+      "reason": "'of the two' earlier in the sentence establishes that only two radar systems are being compared, so the comparative 'more reliable' is required; the superlative 'the most' is reserved for comparisons among three or more items. 'compared', 'the newer model', and 'significantly' are all standard as written.",
+      "suggested_correction": "more",
+      "ambiguity_detected": false
+    }
+  ]
+}

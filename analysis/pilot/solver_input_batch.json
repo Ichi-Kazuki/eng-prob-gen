@@ -1,0 +1,444 @@
+{
+  "items": [
+    {
+      "item_id": "pilot-struct-001",
+      "section": "Structure",
+      "stem": "___ nutrients from the soil through networks of fine root hairs.",
+      "options": {
+        "A": "Young seedlings absorb",
+        "B": "Absorbing",
+        "C": "Absorb",
+        "D": "Seedlings young absorb"
+      }
+    },
+    {
+      "item_id": "pilot-struct-002",
+      "section": "Structure",
+      "stem": "The arctic tern, a seabird ___ for a decade, completes one of the longest migrations of any bird.",
+      "options": {
+        "A": "who scientists have tracked",
+        "B": "that scientists have tracked",
+        "C": "that scientists they have tracked",
+        "D": "that scientists have track"
+      }
+    },
+    {
+      "item_id": "pilot-struct-003",
+      "section": "Structure",
+      "stem": "Pottery fragments ___ along the banks of an ancient river have provided evidence that early trade networks once linked distant communities.",
+      "options": {
+        "A": "unearthing by archaeologists",
+        "B": "unearthed archaeologists",
+        "C": "unearthed by archaeologists",
+        "D": "by archaeologists unearthed"
+      }
+    },
+    {
+      "item_id": "pilot-struct-004",
+      "section": "Structure",
+      "stem": "Rembrandt, ___, painted dozens of self-portraits throughout his career.",
+      "options": {
+        "A": "master a Dutch of light and shadow",
+        "B": "a a Dutch master of light and shadow",
+        "C": "who a Dutch master of light and shadow",
+        "D": "a Dutch master of light and shadow"
+      }
+    },
+    {
+      "item_id": "pilot-struct-005",
+      "section": "Structure",
+      "stem": "Inflation ___ the sustained rise in the general price level of goods and services within an economy.",
+      "options": {
+        "A": "is a measure of",
+        "B": "is measurably",
+        "C": "is measure of",
+        "D": "is measured to"
+      }
+    },
+    {
+      "item_id": "pilot-struct-006",
+      "section": "Structure",
+      "stem": "Linguists have long debated ___ shapes the cognitive categories that speakers use to perceive the world around them.",
+      "options": {
+        "A": "whether does the structure of a language actually",
+        "B": "whether the structure of a language actually",
+        "C": "the structure of a language actually",
+        "D": "whether of a language actually"
+      }
+    },
+    {
+      "item_id": "pilot-struct-007",
+      "section": "Structure",
+      "stem": "Basalt, ___ much of the ocean floor, forms when molten lava cools rapidly at the surface and hardens into solid rock.",
+      "options": {
+        "A": "who originates deep within the mantle and covers",
+        "B": "which originates deep within the mantle and it covers",
+        "C": "which originates deep within the mantle and covers",
+        "D": "which originates deep within the mantle and covering"
+      }
+    },
+    {
+      "item_id": "pilot-struct-008",
+      "section": "Structure",
+      "stem": "___ forecasters had predicted clear skies for the entire weekend, a sudden storm system moved through the region without warning.",
+      "options": {
+        "A": "Because",
+        "B": "Even although",
+        "C": "Though even",
+        "D": "Although"
+      }
+    },
+    {
+      "item_id": "pilot-struct-009",
+      "section": "Structure",
+      "stem": "The depth of the ocean's deepest trenches ___ nearly eleven kilometers at its most extreme point.",
+      "options": {
+        "A": "reaches",
+        "B": "reach",
+        "C": "nearly to",
+        "D": "reaching"
+      }
+    },
+    {
+      "item_id": "pilot-struct-010",
+      "section": "Structure",
+      "stem": "The team of anthropologists was the first ___ evidence of organized long-distance trade among hunter-gatherer communities that once inhabited the region.",
+      "options": {
+        "A": "uncovering",
+        "B": "to uncover",
+        "C": "uncover",
+        "D": "uncover to"
+      }
+    },
+    {
+      "item_id": "pilot-struct-011",
+      "section": "Structure",
+      "stem": "The orchestra performed a ___ symphony that had not been heard by a live audience in over a century.",
+      "options": {
+        "A": "eighteenth-century rare",
+        "B": "rare and eighteenth-century",
+        "C": "rare eighteenth-century",
+        "D": "rarely eighteenth-century"
+      }
+    },
+    {
+      "item_id": "pilot-struct-012",
+      "section": "Structure",
+      "stem": "City planners hope that wider sidewalks and dedicated bike lanes will make the downtown corridor ___.",
+      "options": {
+        "A": "more accessibility for pedestrians and cyclists alike",
+        "B": "for pedestrians and cyclists alike accessible more",
+        "C": "accessible pedestrians and cyclists alike",
+        "D": "more accessible for pedestrians and cyclists alike"
+      }
+    },
+    {
+      "item_id": "pilot-struct-013",
+      "section": "Structure",
+      "stem": "The greenhouse behind the botanical garden was ___ tropical orchids to bloom even in winter.",
+      "options": {
+        "A": "so warm for",
+        "B": "warm enough for",
+        "C": "warm enough",
+        "D": "enough warm for"
+      }
+    },
+    {
+      "item_id": "pilot-struct-014",
+      "section": "Structure",
+      "stem": "Not until the early twentieth century ___ the full extent of the ancient city's trade network with civilizations that lay far beyond its immediate borders.",
+      "options": {
+        "A": "did archaeologists fully understand",
+        "B": "archaeologists did fully understand",
+        "C": "archaeologists fully understand",
+        "D": "did archaeologists they fully understand"
+      }
+    },
+    {
+      "item_id": "pilot-struct-015",
+      "section": "Structure",
+      "stem": "Astronomers must analyze faint light signals, calculate vast distances, and ___ that reveal each galaxy's velocity.",
+      "options": {
+        "A": "interpret shifts subtle in color",
+        "B": "interpretation of subtle shifts in color",
+        "C": "interpret subtle shifts in color",
+        "D": "and interpret subtle shifts in color"
+      }
+    },
+    {
+      "item_id": "pilot-we-001",
+      "section": "Written Expression",
+      "sentence": "According to the museum curator, many of the evidence displayed here was examined carefully by outside experts.",
+      "marked_parts": {
+        "A": "many of the evidence",
+        "B": "displayed here",
+        "C": "was examined carefully",
+        "D": "by outside experts"
+      }
+    },
+    {
+      "item_id": "pilot-we-002",
+      "section": "Written Expression",
+      "sentence": "The observatory recently installed a sophisticated new spectrograph beside its aging telescope, and it will soon rival several professional facilities elsewhere.",
+      "marked_parts": {
+        "A": "recently installed a sophisticated new spectrograph",
+        "B": "it",
+        "C": "will soon rival",
+        "D": "several professional facilities elsewhere"
+      }
+    },
+    {
+      "item_id": "pilot-we-003",
+      "section": "Written Expression",
+      "sentence": "Field geologists exploring a remote canyon recently discovered a unusual mineral formation attracting worldwide attention.",
+      "marked_parts": {
+        "A": "Field geologists exploring a remote canyon",
+        "B": "recently discovered",
+        "C": "a unusual mineral formation",
+        "D": "attracting worldwide attention"
+      }
+    },
+    {
+      "item_id": "pilot-we-004",
+      "section": "Written Expression",
+      "sentence": "Marine biologists attached tracking devices to several dolphins living near the reef so that scientists could monitor its movements throughout migration season.",
+      "marked_parts": {
+        "A": "attached tracking devices",
+        "B": "to several dolphins living near the reef",
+        "C": "so that scientists could monitor",
+        "D": "its movements throughout migration season"
+      }
+    },
+    {
+      "item_id": "pilot-we-005",
+      "section": "Written Expression",
+      "sentence": "Much of the fossilized bones recovered from the quarry belonged to a previously unknown species of dinosaur.",
+      "marked_parts": {
+        "A": "Much of the fossilized bones",
+        "B": "recovered from the quarry",
+        "C": "belonged to",
+        "D": "a previously unknown species of dinosaur"
+      }
+    },
+    {
+      "item_id": "pilot-we-006",
+      "section": "Written Expression",
+      "sentence": "Sociologists have found that prolonged unemployment often causes individuals to become isolation from their communities and support networks.",
+      "marked_parts": {
+        "A": "Sociologists have found that prolonged unemployment",
+        "B": "often causes individuals to become isolation",
+        "C": "from their communities",
+        "D": "and support networks"
+      }
+    },
+    {
+      "item_id": "pilot-we-007",
+      "section": "Written Expression",
+      "sentence": "The new legislation made the approval process considerably more efficiently, allowing agencies to issue permits within weeks.",
+      "marked_parts": {
+        "A": "The new legislation",
+        "B": "made the approval process",
+        "C": "considerably more efficiently",
+        "D": "allowing agencies to issue permits within weeks"
+      }
+    },
+    {
+      "item_id": "pilot-we-008",
+      "section": "Written Expression",
+      "sentence": "Many contemporary philosophers who study ethics remain skeptical of arguments that rely heavily of intuition rather than rigorous analysis.",
+      "marked_parts": {
+        "A": "Many contemporary philosophers who study ethics",
+        "B": "remain skeptical of arguments",
+        "C": "that rely heavily",
+        "D": "of intuition rather than rigorous analysis"
+      }
+    },
+    {
+      "item_id": "pilot-we-009",
+      "section": "Written Expression",
+      "sentence": "Measuring reaction rates precisely, to control temperature fluctuations, and to record every observation carefully are essential skills for any laboratory chemist.",
+      "marked_parts": {
+        "A": "Measuring reaction rates precisely",
+        "B": "to control temperature fluctuations",
+        "C": "and to record every observation carefully",
+        "D": "are essential skills for any laboratory chemist"
+      }
+    },
+    {
+      "item_id": "pilot-we-010",
+      "section": "Written Expression",
+      "sentence": "The experiment not only confirmed the researchers' initial hypothesis but also were revealing unexpected patterns in the particle collisions that occurred at extremely high energies.",
+      "marked_parts": {
+        "A": "The experiment not only confirmed the researchers' initial hypothesis",
+        "B": "but also were revealing unexpected patterns",
+        "C": "in the particle collisions",
+        "D": "that occurred at extremely high energies"
+      }
+    },
+    {
+      "item_id": "pilot-we-011",
+      "section": "Written Expression",
+      "sentence": "Botanists typically classify climbing plants according to their leaf shape, root structure, and stem flexible when studying adaptation to their environment.",
+      "marked_parts": {
+        "A": "Botanists typically classify climbing plants",
+        "B": "according to their leaf shape, root structure,",
+        "C": "and stem flexible",
+        "D": "when studying adaptation to their environment"
+      }
+    },
+    {
+      "item_id": "pilot-we-012",
+      "section": "Written Expression",
+      "sentence": "After spotting several rare shorebirds nesting near the shoreline, the research team decided avoiding the nesting site entirely for the remainder of the season.",
+      "marked_parts": {
+        "A": "After spotting several rare shorebirds nesting near the shoreline",
+        "B": "the research team",
+        "C": "decided",
+        "D": "avoiding the nesting site entirely for the remainder of the season"
+      }
+    },
+    {
+      "item_id": "pilot-we-013",
+      "section": "Written Expression",
+      "sentence": "Causes extensive soil erosion throughout the region, the prolonged drought forced many farmers to abandon their fields entirely last year.",
+      "marked_parts": {
+        "A": "Causes extensive soil erosion throughout the region",
+        "B": "the prolonged drought",
+        "C": "forced many farmers",
+        "D": "to abandon their fields entirely last year"
+      }
+    },
+    {
+      "item_id": "pilot-we-014",
+      "section": "Written Expression",
+      "sentence": "The young volcanologist was the first researcher ever identifying the mountain's seismic pattern for eruption forecasting.",
+      "marked_parts": {
+        "A": "The young volcanologist",
+        "B": "was the first researcher ever identifying the mountain's seismic pattern",
+        "C": "for eruption",
+        "D": "forecasting"
+      }
+    },
+    {
+      "item_id": "pilot-we-015",
+      "section": "Written Expression",
+      "sentence": "Early cartographers relying on approximately measurements and careful celestial observations still managed to draw coastlines with reasonable accuracy.",
+      "marked_parts": {
+        "A": "Early cartographers",
+        "B": "relying on",
+        "C": "approximately measurements and careful celestial observations",
+        "D": "still managed to draw coastlines with reasonable accuracy"
+      }
+    },
+    {
+      "item_id": "pilot-we-016",
+      "section": "Written Expression",
+      "sentence": "During the outbreak, public health officials tracked new infections carefully and updated their containment strategies quick.",
+      "marked_parts": {
+        "A": "During the outbreak, public health officials",
+        "B": "tracked new infections carefully",
+        "C": "and updated their containment strategies",
+        "D": "quick"
+      }
+    },
+    {
+      "item_id": "pilot-we-017",
+      "section": "Written Expression",
+      "sentence": "Nutritious, according to many dietitians, plays a central role in preventing chronic disease and supporting long-term health.",
+      "marked_parts": {
+        "A": "Nutritious, according to many dietitians,",
+        "B": "plays a central role",
+        "C": "in preventing chronic disease",
+        "D": "and supporting long-term health"
+      }
+    },
+    {
+      "item_id": "pilot-we-018",
+      "section": "Written Expression",
+      "sentence": "The old-growth forest has protected for over a century by strict conservation laws that limit logging and development.",
+      "marked_parts": {
+        "A": "The old-growth forest",
+        "B": "has protected for over a century",
+        "C": "by strict conservation laws",
+        "D": "that limit logging and development"
+      }
+    },
+    {
+      "item_id": "pilot-we-019",
+      "section": "Written Expression",
+      "sentence": "By the time researchers finally identified the rare fungal species growing beneath the forest canopy, it already spread across nearly half of the reserve, threatening several native plant populations.",
+      "marked_parts": {
+        "A": "By the time researchers finally identified",
+        "B": "the rare fungal species growing beneath the forest canopy,",
+        "C": "it already spread across nearly half of the reserve,",
+        "D": "threatening several native plant populations"
+      }
+    },
+    {
+      "item_id": "pilot-we-020",
+      "section": "Written Expression",
+      "sentence": "Entomologists studying colony organization note that the behavior of social insects such as ants and termites remain remarkably complex.",
+      "marked_parts": {
+        "A": "Entomologists studying colony organization note",
+        "B": "that the behavior",
+        "C": "of social insects such as ants and termites",
+        "D": "remain remarkably complex"
+      }
+    },
+    {
+      "item_id": "pilot-we-021",
+      "section": "Written Expression",
+      "sentence": "Not only ethnomusicologists study traditional instruments but also examine the cultural contexts in which they are played.",
+      "marked_parts": {
+        "A": "Not only ethnomusicologists study traditional instruments",
+        "B": "but also examine",
+        "C": "the cultural contexts",
+        "D": "in which they are played"
+      }
+    },
+    {
+      "item_id": "pilot-we-022",
+      "section": "Written Expression",
+      "sentence": "The weaver who historians credit with reviving an ancient dyeing technique trained dozens of apprentices throughout her long career in the textile guild.",
+      "marked_parts": {
+        "A": "The weaver",
+        "B": "who historians credit with reviving an ancient dyeing technique",
+        "C": "trained dozens of apprentices",
+        "D": "throughout her long career in the textile guild"
+      }
+    },
+    {
+      "item_id": "pilot-we-023",
+      "section": "Written Expression",
+      "sentence": "Modern cryptographers rely on algorithms that processes enormous quantities of data within fractions of a second.",
+      "marked_parts": {
+        "A": "Modern cryptographers",
+        "B": "rely on algorithms",
+        "C": "that processes enormous quantities of data",
+        "D": "within fractions of a second"
+      }
+    },
+    {
+      "item_id": "pilot-we-024",
+      "section": "Written Expression",
+      "sentence": "The orchids still failed to bloom on schedule, because the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season.",
+      "marked_parts": {
+        "A": "The orchids",
+        "B": "still failed",
+        "C": "to bloom on schedule,",
+        "D": "because the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season"
+      }
+    },
+    {
+      "item_id": "pilot-we-025",
+      "section": "Written Expression",
+      "sentence": "Prone regions to frequent earthquakes require strict building codes designed to minimize structural damage during sudden ground shaking.",
+      "marked_parts": {
+        "A": "Prone regions to frequent earthquakes",
+        "B": "require strict building codes",
+        "C": "designed to minimize structural damage",
+        "D": "during sudden ground shaking"
+      }
+    }
+  ]
+}

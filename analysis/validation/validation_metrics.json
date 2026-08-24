@@ -1,0 +1,1244 @@
+{
+  "run": {
+    "initial_candidate_count": 120,
+    "replacement_candidates_included": 0,
+    "version_lock": {
+      "spec_version": "1.0.0",
+      "taxonomy_version": "1.1",
+      "generator_version": "sha256:3567f2b6e246",
+      "reviewer_version": "sha256:e4142013a3cb",
+      "solver_version": "sha256:df1200bed2b1"
+    },
+    "specification": "current TOEFL_ITP_GRAMMAR_SPEC",
+    "taxonomy": "current version",
+    "consensus_policy": "current Orchestrator config; max_revision_cycles=2"
+  },
+  "overall": {
+    "initial_generated": 120,
+    "generator_schema_pass": 120,
+    "reviewer_round1_PASS": 80,
+    "reviewer_round1_REVISE": 10,
+    "reviewer_round1_REJECT": 30,
+    "reviewer_eventual_PASS": 89,
+    "reviewer_all_rounds": {
+      "PASS": 89,
+      "REVISE": 12,
+      "REJECT": 30
+    },
+    "reviewer_submission_count": 131,
+    "solver_reached": 89,
+    "solver_consensus": 83,
+    "solver_disagreement": 2,
+    "solver_AMBIGUOUS": 3,
+    "solver_NONE": 1,
+    "solver_LOW_confidence": 1,
+    "AUTO_ACCEPTED": 83,
+    "MANUAL_REVIEW": 5,
+    "DISCARDED": 2,
+    "REJECTED": 30
+  },
+  "rates": {
+    "generator_schema_pass": {
+      "n": 120,
+      "d": 120,
+      "percent": 100.0
+    },
+    "reviewer_round1_PASS": {
+      "n": 80,
+      "d": 120,
+      "percent": 66.67
+    },
+    "reviewer_round1_REVISE": {
+      "n": 10,
+      "d": 120,
+      "percent": 8.33
+    },
+    "reviewer_round1_REJECT": {
+      "n": 30,
+      "d": 120,
+      "percent": 25.0
+    },
+    "reviewer_eventual_PASS": {
+      "n": 89,
+      "d": 120,
+      "percent": 74.17
+    },
+    "solver_consensus": {
+      "n": 83,
+      "d": 89,
+      "percent": 93.26
+    },
+    "solver_special_absolute": {
+      "n": 4,
+      "d": 120,
+      "percent": 3.33
+    },
+    "final_AUTO_ACCEPT": {
+      "n": 83,
+      "d": 120,
+      "percent": 69.17
+    },
+    "reviewer_false_negative_overall": {
+      "n": 4,
+      "d": 120,
+      "percent": 3.33
+    },
+    "reviewer_false_negative_solver_reached": {
+      "n": 4,
+      "d": 89,
+      "percent": 4.49
+    },
+    "reviewer_false_negative_WE": {
+      "n": 1,
+      "d": 75,
+      "percent": 1.33
+    }
+  },
+  "section": {
+    "Structure": {
+      "generated": 45,
+      "reviewer_first_pass": 39,
+      "reviewer_first_pass_rate": {
+        "n": 39,
+        "d": 45,
+        "percent": 86.67
+      },
+      "reviewer_eventual_pass": 41,
+      "reviewer_eventual_pass_rate": {
+        "n": 41,
+        "d": 45,
+        "percent": 91.11
+      },
+      "solver_reached": 41,
+      "solver_consensus": 38,
+      "solver_ambiguous": 3,
+      "solver_none": 0,
+      "final_auto_accept": 38,
+      "final_auto_accept_rate": {
+        "n": 38,
+        "d": 45,
+        "percent": 84.44
+      },
+      "manual_review": 3,
+      "discard": 0
+    },
+    "Written Expression": {
+      "generated": 75,
+      "reviewer_first_pass": 41,
+      "reviewer_first_pass_rate": {
+        "n": 41,
+        "d": 75,
+        "percent": 54.67
+      },
+      "reviewer_eventual_pass": 48,
+      "reviewer_eventual_pass_rate": {
+        "n": 48,
+        "d": 75,
+        "percent": 64.0
+      },
+      "solver_reached": 48,
+      "solver_consensus": 45,
+      "solver_ambiguous": 0,
+      "solver_none": 1,
+      "final_auto_accept": 45,
+      "final_auto_accept_rate": {
+        "n": 45,
+        "d": 75,
+        "percent": 60.0
+      },
+      "manual_review": 2,
+      "discard": 2
+    }
+  },
+  "batch_stability": {
+    "batch1": {
+      "generated": 40,
+      "reviewer_first_pass": 38,
+      "reviewer_first_pass_rate": {
+        "n": 38,
+        "d": 40,
+        "percent": 95.0
+      },
+      "reviewer_round1_revise": 2,
+      "revision_rate": {
+        "n": 2,
+        "d": 40,
+        "percent": 5.0
+      },
+      "solver_reached": 40,
+      "solver_none": 1,
+      "solver_ambiguous": 0,
+      "solver_special_rate_initial_denominator": {
+        "n": 1,
+        "d": 40,
+        "percent": 2.5
+      },
+      "final_auto_accept": 37,
+      "final_auto_accept_rate": {
+        "n": 37,
+        "d": 40,
+        "percent": 92.5
+      },
+      "final_manual_review": 2,
+      "final_discarded": 1,
+      "final_rejected": 0
+    },
+    "batch2": {
+      "generated": 40,
+      "reviewer_first_pass": 11,
+      "reviewer_first_pass_rate": {
+        "n": 11,
+        "d": 40,
+        "percent": 27.5
+      },
+      "reviewer_round1_revise": 2,
+      "revision_rate": {
+        "n": 2,
+        "d": 40,
+        "percent": 5.0
+      },
+      "solver_reached": 13,
+      "solver_none": 0,
+      "solver_ambiguous": 3,
+      "solver_special_rate_initial_denominator": {
+        "n": 3,
+        "d": 40,
+        "percent": 7.5
+      },
+      "final_auto_accept": 10,
+      "final_auto_accept_rate": {
+        "n": 10,
+        "d": 40,
+        "percent": 25.0
+      },
+      "final_manual_review": 3,
+      "final_discarded": 0,
+      "final_rejected": 27
+    },
+    "batch3": {
+      "generated": 40,
+      "reviewer_first_pass": 31,
+      "reviewer_first_pass_rate": {
+        "n": 31,
+        "d": 40,
+        "percent": 77.5
+      },
+      "reviewer_round1_revise": 6,
+      "revision_rate": {
+        "n": 6,
+        "d": 40,
+        "percent": 15.0
+      },
+      "solver_reached": 36,
+      "solver_none": 0,
+      "solver_ambiguous": 0,
+      "solver_special_rate_initial_denominator": {
+        "n": 0,
+        "d": 40,
+        "percent": 0.0
+      },
+      "final_auto_accept": 36,
+      "final_auto_accept_rate": {
+        "n": 36,
+        "d": 40,
+        "percent": 90.0
+      },
+      "final_manual_review": 0,
+      "final_discarded": 1,
+      "final_rejected": 3
+    }
+  },
+  "difficulty": {
+    "EASY": {
+      "generated": 60,
+      "reviewer_first_pass": 40,
+      "reviewer_eventual_pass": 45,
+      "solver_consensus": 42,
+      "final_accepted": 42
+    },
+    "MEDIUM": {
+      "generated": 44,
+      "reviewer_first_pass": 33,
+      "reviewer_eventual_pass": 34,
+      "solver_consensus": 31,
+      "final_accepted": 31
+    },
+    "HARD": {
+      "generated": 16,
+      "reviewer_first_pass": 7,
+      "reviewer_eventual_pass": 10,
+      "solver_consensus": 10,
+      "final_accepted": 10
+    }
+  },
+  "grammar_target": {
+    "Structure": {
+      "ADVERBIAL_CLAUSES": {
+        "generated": 3,
+        "reviewer_first_pass": 3,
+        "reviewer_eventual_pass": 3,
+        "final_accepted": 2,
+        "failure_count": 1,
+        "acceptance_rate": {
+          "n": 2,
+          "d": 3,
+          "percent": 66.67
+        }
+      },
+      "CLAUSE_STRUCTURE": {
+        "generated": 3,
+        "reviewer_first_pass": 2,
+        "reviewer_eventual_pass": 3,
+        "final_accepted": 3,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 3,
+          "d": 3,
+          "percent": 100.0
+        }
+      },
+      "COMPARATIVES_DEGREE": {
+        "generated": 3,
+        "reviewer_first_pass": 1,
+        "reviewer_eventual_pass": 2,
+        "final_accepted": 2,
+        "failure_count": 1,
+        "acceptance_rate": {
+          "n": 2,
+          "d": 3,
+          "percent": 66.67
+        }
+      },
+      "CONNECTORS_CONJUNCTIONS": {
+        "generated": 3,
+        "reviewer_first_pass": 3,
+        "reviewer_eventual_pass": 3,
+        "final_accepted": 3,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 3,
+          "d": 3,
+          "percent": 100.0
+        }
+      },
+      "EXISTENTIAL_EXPLETIVE": {
+        "generated": 3,
+        "reviewer_first_pass": 3,
+        "reviewer_eventual_pass": 3,
+        "final_accepted": 3,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 3,
+          "d": 3,
+          "percent": 100.0
+        }
+      },
+      "INVERSION": {
+        "generated": 3,
+        "reviewer_first_pass": 2,
+        "reviewer_eventual_pass": 2,
+        "final_accepted": 2,
+        "failure_count": 1,
+        "acceptance_rate": {
+          "n": 2,
+          "d": 3,
+          "percent": 66.67
+        }
+      },
+      "NONFINITE_VERB_PHRASES": {
+        "generated": 3,
+        "reviewer_first_pass": 2,
+        "reviewer_eventual_pass": 2,
+        "final_accepted": 2,
+        "failure_count": 1,
+        "acceptance_rate": {
+          "n": 2,
+          "d": 3,
+          "percent": 66.67
+        }
+      },
+      "NOUN_CLAUSES": {
+        "generated": 3,
+        "reviewer_first_pass": 3,
+        "reviewer_eventual_pass": 3,
+        "final_accepted": 3,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 3,
+          "d": 3,
+          "percent": 100.0
+        }
+      },
+      "PARALLEL_STRUCTURE": {
+        "generated": 3,
+        "reviewer_first_pass": 3,
+        "reviewer_eventual_pass": 3,
+        "final_accepted": 3,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 3,
+          "d": 3,
+          "percent": 100.0
+        }
+      },
+      "REFERENCE_AND_DETERMINERS": {
+        "generated": 3,
+        "reviewer_first_pass": 3,
+        "reviewer_eventual_pass": 3,
+        "final_accepted": 3,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 3,
+          "d": 3,
+          "percent": 100.0
+        }
+      },
+      "RELATIVE_CLAUSES": {
+        "generated": 3,
+        "reviewer_first_pass": 3,
+        "reviewer_eventual_pass": 3,
+        "final_accepted": 2,
+        "failure_count": 1,
+        "acceptance_rate": {
+          "n": 2,
+          "d": 3,
+          "percent": 66.67
+        }
+      },
+      "VERB_COMPLEMENTATION": {
+        "generated": 3,
+        "reviewer_first_pass": 3,
+        "reviewer_eventual_pass": 3,
+        "final_accepted": 3,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 3,
+          "d": 3,
+          "percent": 100.0
+        }
+      },
+      "VERB_FORM_VOICE": {
+        "generated": 3,
+        "reviewer_first_pass": 3,
+        "reviewer_eventual_pass": 3,
+        "final_accepted": 2,
+        "failure_count": 1,
+        "acceptance_rate": {
+          "n": 2,
+          "d": 3,
+          "percent": 66.67
+        }
+      },
+      "WORD_CLASS_FORM": {
+        "generated": 3,
+        "reviewer_first_pass": 3,
+        "reviewer_eventual_pass": 3,
+        "final_accepted": 3,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 3,
+          "d": 3,
+          "percent": 100.0
+        }
+      },
+      "WORD_ORDER_MODIFICATION": {
+        "generated": 3,
+        "reviewer_first_pass": 2,
+        "reviewer_eventual_pass": 2,
+        "final_accepted": 2,
+        "failure_count": 1,
+        "acceptance_rate": {
+          "n": 2,
+          "d": 3,
+          "percent": 66.67
+        }
+      }
+    },
+    "Written Expression": {
+      "ADVERBIAL_CLAUSES": {
+        "generated": 1,
+        "reviewer_first_pass": 1,
+        "reviewer_eventual_pass": 1,
+        "final_accepted": 1,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 1,
+          "d": 1,
+          "percent": 100.0
+        }
+      },
+      "CLAUSE_STRUCTURE": {
+        "generated": 2,
+        "reviewer_first_pass": 2,
+        "reviewer_eventual_pass": 2,
+        "final_accepted": 2,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 2,
+          "d": 2,
+          "percent": 100.0
+        }
+      },
+      "COMPARATIVES_DEGREE": {
+        "generated": 3,
+        "reviewer_first_pass": 2,
+        "reviewer_eventual_pass": 2,
+        "final_accepted": 2,
+        "failure_count": 1,
+        "acceptance_rate": {
+          "n": 2,
+          "d": 3,
+          "percent": 66.67
+        }
+      },
+      "CONNECTORS_CONJUNCTIONS": {
+        "generated": 6,
+        "reviewer_first_pass": 4,
+        "reviewer_eventual_pass": 4,
+        "final_accepted": 4,
+        "failure_count": 2,
+        "acceptance_rate": {
+          "n": 4,
+          "d": 6,
+          "percent": 66.67
+        }
+      },
+      "EXISTENTIAL_EXPLETIVE": {
+        "generated": 1,
+        "reviewer_first_pass": 1,
+        "reviewer_eventual_pass": 1,
+        "final_accepted": 1,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 1,
+          "d": 1,
+          "percent": 100.0
+        }
+      },
+      "NONFINITE_VERB_PHRASES": {
+        "generated": 8,
+        "reviewer_first_pass": 4,
+        "reviewer_eventual_pass": 5,
+        "final_accepted": 5,
+        "failure_count": 3,
+        "acceptance_rate": {
+          "n": 5,
+          "d": 8,
+          "percent": 62.5
+        }
+      },
+      "NOUN_CLAUSES": {
+        "generated": 1,
+        "reviewer_first_pass": 1,
+        "reviewer_eventual_pass": 1,
+        "final_accepted": 1,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 1,
+          "d": 1,
+          "percent": 100.0
+        }
+      },
+      "PARALLEL_STRUCTURE": {
+        "generated": 8,
+        "reviewer_first_pass": 4,
+        "reviewer_eventual_pass": 5,
+        "final_accepted": 5,
+        "failure_count": 3,
+        "acceptance_rate": {
+          "n": 5,
+          "d": 8,
+          "percent": 62.5
+        }
+      },
+      "REFERENCE_AND_DETERMINERS": {
+        "generated": 12,
+        "reviewer_first_pass": 6,
+        "reviewer_eventual_pass": 7,
+        "final_accepted": 5,
+        "failure_count": 7,
+        "acceptance_rate": {
+          "n": 5,
+          "d": 12,
+          "percent": 41.67
+        }
+      },
+      "RELATIVE_CLAUSES": {
+        "generated": 4,
+        "reviewer_first_pass": 2,
+        "reviewer_eventual_pass": 2,
+        "final_accepted": 1,
+        "failure_count": 3,
+        "acceptance_rate": {
+          "n": 1,
+          "d": 4,
+          "percent": 25.0
+        }
+      },
+      "VERB_COMPLEMENTATION": {
+        "generated": 6,
+        "reviewer_first_pass": 3,
+        "reviewer_eventual_pass": 4,
+        "final_accepted": 4,
+        "failure_count": 2,
+        "acceptance_rate": {
+          "n": 4,
+          "d": 6,
+          "percent": 66.67
+        }
+      },
+      "VERB_FORM_VOICE": {
+        "generated": 9,
+        "reviewer_first_pass": 3,
+        "reviewer_eventual_pass": 5,
+        "final_accepted": 5,
+        "failure_count": 4,
+        "acceptance_rate": {
+          "n": 5,
+          "d": 9,
+          "percent": 55.56
+        }
+      },
+      "WORD_CLASS_FORM": {
+        "generated": 10,
+        "reviewer_first_pass": 7,
+        "reviewer_eventual_pass": 7,
+        "final_accepted": 7,
+        "failure_count": 3,
+        "acceptance_rate": {
+          "n": 7,
+          "d": 10,
+          "percent": 70.0
+        }
+      },
+      "WORD_ORDER_MODIFICATION": {
+        "generated": 4,
+        "reviewer_first_pass": 1,
+        "reviewer_eventual_pass": 2,
+        "final_accepted": 2,
+        "failure_count": 2,
+        "acceptance_rate": {
+          "n": 2,
+          "d": 4,
+          "percent": 50.0
+        }
+      }
+    }
+  },
+  "written_expression": {
+    "tested_error_type": {
+      "agreement_error": {
+        "generated": 10,
+        "reviewer_first_pass": 7,
+        "solver_consensus": 6,
+        "final_accepted": 6,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "extraneous_element": {
+        "generated": 1,
+        "reviewer_first_pass": 1,
+        "solver_consensus": 1,
+        "final_accepted": 1,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "incorrect_part_of_speech": {
+        "generated": 15,
+        "reviewer_first_pass": 8,
+        "solver_consensus": 8,
+        "final_accepted": 8,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "incorrect_reference": {
+        "generated": 2,
+        "reviewer_first_pass": 1,
+        "solver_consensus": 1,
+        "final_accepted": 1,
+        "NONE": 1,
+        "AMBIGUOUS": 0
+      },
+      "incorrect_relative_marker": {
+        "generated": 4,
+        "reviewer_first_pass": 2,
+        "solver_consensus": 1,
+        "final_accepted": 1,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "incorrect_subordinator": {
+        "generated": 3,
+        "reviewer_first_pass": 2,
+        "solver_consensus": 2,
+        "final_accepted": 2,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "missing_required_element": {
+        "generated": 3,
+        "reviewer_first_pass": 1,
+        "solver_consensus": 1,
+        "final_accepted": 1,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "wrong_degree_form": {
+        "generated": 3,
+        "reviewer_first_pass": 2,
+        "solver_consensus": 2,
+        "final_accepted": 2,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "wrong_preposition_collocation": {
+        "generated": 8,
+        "reviewer_first_pass": 5,
+        "solver_consensus": 6,
+        "final_accepted": 6,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "wrong_verb_form": {
+        "generated": 16,
+        "reviewer_first_pass": 7,
+        "solver_consensus": 10,
+        "final_accepted": 10,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "wrong_voice": {
+        "generated": 4,
+        "reviewer_first_pass": 3,
+        "solver_consensus": 3,
+        "final_accepted": 3,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "wrong_word_order": {
+        "generated": 6,
+        "reviewer_first_pass": 2,
+        "solver_consensus": 4,
+        "final_accepted": 4,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      }
+    },
+    "error_scope": {
+      "clause_level": {
+        "generated": 27,
+        "reviewer_first_pass": 16,
+        "solver_consensus": 18,
+        "final_accepted": 18,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "cross_clause": {
+        "generated": 6,
+        "reviewer_first_pass": 1,
+        "solver_consensus": 2,
+        "final_accepted": 2,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "local": {
+        "generated": 39,
+        "reviewer_first_pass": 23,
+        "solver_consensus": 24,
+        "final_accepted": 24,
+        "NONE": 0,
+        "AMBIGUOUS": 0
+      },
+      "sentence_level": {
+        "generated": 3,
+        "reviewer_first_pass": 1,
+        "solver_consensus": 1,
+        "final_accepted": 1,
+        "NONE": 1,
+        "AMBIGUOUS": 0
+      }
+    }
+  },
+  "answer_position": {
+    "Structure": {
+      "planned": {
+        "A": 11,
+        "B": 12,
+        "C": 12,
+        "D": 10
+      },
+      "initial_generated": {
+        "A": 11,
+        "B": 13,
+        "C": 12,
+        "D": 9
+      },
+      "accepted": {
+        "C": 12,
+        "B": 10,
+        "A": 11,
+        "D": 5
+      }
+    },
+    "Written Expression": {
+      "planned": {
+        "A": 21,
+        "B": 20,
+        "C": 18,
+        "D": 16
+      },
+      "initial_generated": {
+        "A": 18,
+        "B": 21,
+        "C": 24,
+        "D": 12
+      },
+      "accepted": {
+        "D": 6,
+        "B": 16,
+        "A": 10,
+        "C": 13
+      }
+    }
+  },
+  "reviewer_false_negatives": [
+    {
+      "item_id": "batch1-we-013",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "incorrect_reference",
+      "reviewer_reasoning": {
+        "verdict": "PASS",
+        "independent_answer": "A",
+        "checks": {
+          "grammar_validity": "PASS",
+          "answer_uniqueness": "PASS",
+          "target_alignment": "PASS",
+          "naturalness": "PASS",
+          "toefl_style": "PASS",
+          "distractor_quality": "PASS",
+          "metadata_consistency": "PASS"
+        },
+        "issues": [],
+        "note": "Reviewer schema has no free-form reasoning field; checks/issues are preserved verbatim."
+      },
+      "solver_reasoning": {
+        "solver_answer": "NONE",
+        "confidence": "MEDIUM",
+        "reason": "All marked parts form a grammatical passive sentence; no marked-part error is identifiable without an antecedent context, which must not be inferred."
+      },
+      "root_cause": "semantic/context-dependent reference resolution presented as a grammatical error"
+    },
+    {
+      "item_id": "batch2-struct-003",
+      "section": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "tested_error_type": "N/A for Structure",
+      "reviewer_reasoning": {
+        "verdict": "PASS",
+        "independent_answer": "A",
+        "checks": {
+          "grammar_validity": "PASS",
+          "answer_uniqueness": "PASS",
+          "target_alignment": "PASS",
+          "naturalness": "PASS",
+          "toefl_style": "PASS",
+          "distractor_quality": "PASS",
+          "metadata_consistency": "PASS"
+        },
+        "issues": [],
+        "note": "Reviewer schema has no free-form reasoning field; checks/issues are preserved verbatim."
+      },
+      "solver_reasoning": {
+        "solver_answer": "AMBIGUOUS",
+        "confidence": "MEDIUM",
+        "reason": "Both 'that' and 'which they' can grammatically introduce the object relative clause: 'the wetlands that the university restored' and 'the wetlands which they restored.'"
+      },
+      "root_cause": "alternate relative-clause parse makes a second option grammatical"
+    },
+    {
+      "item_id": "batch2-struct-004",
+      "section": "Structure",
+      "primary_target": "ADVERBIAL_CLAUSES",
+      "tested_error_type": "N/A for Structure",
+      "reviewer_reasoning": {
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "checks": {
+          "grammar_validity": "PASS",
+          "answer_uniqueness": "PASS",
+          "target_alignment": "PASS",
+          "naturalness": "PASS",
+          "toefl_style": "PASS",
+          "distractor_quality": "PASS",
+          "metadata_consistency": "PASS"
+        },
+        "issues": [],
+        "note": "Reviewer schema has no free-form reasoning field; checks/issues are preserved verbatim."
+      },
+      "solver_reasoning": {
+        "solver_answer": "AMBIGUOUS",
+        "confidence": "LOW",
+        "reason": "Because, although, unless, and if can each form a grammatical subordinate clause with 'the storm weakens'; the sentence supplies no uniquely determining context for the intended relation."
+      },
+      "root_cause": "multiple syntactically licensed connectors; semantic relation is underspecified"
+    },
+    {
+      "item_id": "batch2-struct-006",
+      "section": "Structure",
+      "primary_target": "VERB_FORM_VOICE",
+      "tested_error_type": "N/A for Structure",
+      "reviewer_reasoning": {
+        "verdict": "PASS",
+        "independent_answer": "B",
+        "checks": {
+          "grammar_validity": "PASS",
+          "answer_uniqueness": "PASS",
+          "target_alignment": "PASS",
+          "naturalness": "PASS",
+          "toefl_style": "PASS",
+          "distractor_quality": "PASS",
+          "metadata_consistency": "PASS"
+        },
+        "issues": [],
+        "note": "Reviewer schema has no free-form reasoning field; checks/issues are preserved verbatim."
+      },
+      "solver_reasoning": {
+        "solver_answer": "AMBIGUOUS",
+        "confidence": "MEDIUM",
+        "reason": "Both 'tested' and 'had been tested' are grammatical passive completions; the time phrase 'before publication' does not require past perfect over simple past."
+      },
+      "root_cause": "temporal context does not force the intended verb form"
+    }
+  ],
+  "solver_disagreement": {
+    "answer_mismatch_count": 2,
+    "answer_mismatches": [
+      {
+        "item_id": "batch1-we-007",
+        "section": "Written Expression",
+        "generator_answer": "C",
+        "reviewer_answer": "C",
+        "solver_answer": "B",
+        "solver_confidence": "HIGH",
+        "reason": "A person as the antecedent of the relative clause takes who, not which."
+      },
+      {
+        "item_id": "batch1-we-024",
+        "section": "Written Expression",
+        "generator_answer": "C",
+        "reviewer_answer": "C",
+        "solver_answer": "B",
+        "solver_confidence": "HIGH",
+        "reason": "Responses is countable plural, so it takes many rather than much."
+      }
+    ],
+    "ambiguous_ids": [
+      "batch2-struct-003",
+      "batch2-struct-004",
+      "batch2-struct-006"
+    ],
+    "none_ids": [
+      "batch1-we-013"
+    ]
+  },
+  "p0_failure_recurrence": {
+    "A_semantic_reference_resolution_mistaken_for_grammar": {
+      "recurrence_count": 1,
+      "item_ids": [
+        "batch1-we-013"
+      ],
+      "detected_by_generator_self_prevention": "not instrumented",
+      "detected_by_reviewer": 0,
+      "detected_only_by_solver": 1,
+      "final_auto_accepted": 0,
+      "evidence_note": "Generator self-prevention was not emitted as a machine-readable field, so no positive self-detection claim is made."
+    },
+    "B_parallel_coordination_alternate_parse": {
+      "recurrence_count": 0,
+      "item_ids": [],
+      "detected_by_generator_self_prevention": "not applicable",
+      "detected_by_reviewer": 0,
+      "detected_only_by_solver": 0,
+      "final_auto_accepted": 0,
+      "evidence_note": "No same-type validation recurrence identified."
+    },
+    "C_semantic_connector_oddity_mistaken_for_grammar": {
+      "recurrence_count": 0,
+      "item_ids": [],
+      "detected_by_generator_self_prevention": "not applicable",
+      "detected_by_reviewer": 0,
+      "detected_only_by_solver": 0,
+      "final_auto_accepted": 0,
+      "evidence_note": "No same-type validation recurrence identified."
+    }
+  },
+  "revision_effectiveness": {
+    "initial_revise_count": 10,
+    "revision_success_count": 9,
+    "revision_failure_count": 1,
+    "revision_success_rate": {
+      "n": 9,
+      "d": 10,
+      "percent": 90.0
+    },
+    "items": {
+      "batch1-we-003": {
+        "revision_count_final": 1,
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_success": true,
+        "final_state": "ACCEPTED",
+        "final_verdict": "PASS"
+      },
+      "batch1-we-023": {
+        "revision_count_final": 1,
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_success": true,
+        "final_state": "ACCEPTED",
+        "final_verdict": "PASS"
+      },
+      "batch2-struct-001": {
+        "revision_count_final": 1,
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_success": true,
+        "final_state": "ACCEPTED",
+        "final_verdict": "PASS"
+      },
+      "batch2-struct-009": {
+        "revision_count_final": 1,
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_success": true,
+        "final_state": "ACCEPTED",
+        "final_verdict": "PASS"
+      },
+      "batch3-we-005": {
+        "revision_count_final": 1,
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_success": true,
+        "final_state": "ACCEPTED",
+        "final_verdict": "PASS"
+      },
+      "batch3-we-006": {
+        "revision_count_final": 1,
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_success": true,
+        "final_state": "ACCEPTED",
+        "final_verdict": "PASS"
+      },
+      "batch3-we-013": {
+        "revision_count_final": 1,
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_success": true,
+        "final_state": "ACCEPTED",
+        "final_verdict": "PASS"
+      },
+      "batch3-we-017": {
+        "revision_count_final": 1,
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_success": true,
+        "final_state": "ACCEPTED",
+        "final_verdict": "PASS"
+      },
+      "batch3-we-024": {
+        "revision_count_final": 3,
+        "later_review_verdicts": [
+          "REVISE",
+          "REVISE"
+        ],
+        "revision_success": false,
+        "final_state": "DISCARDED",
+        "final_verdict": "REVISE"
+      },
+      "batch3-we-025": {
+        "revision_count_final": 1,
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_success": true,
+        "final_state": "ACCEPTED",
+        "final_verdict": "PASS"
+      }
+    }
+  },
+  "final_failure_taxonomy": {
+    "primary_counts": {
+      "solver_disagreement": 2,
+      "no_valid_answer": 1,
+      "solver_ambiguous": 3,
+      "reviewer_reject": 30,
+      "revision_limit_exceeded": 1
+    },
+    "items": {
+      "batch1-we-007": "solver_disagreement",
+      "batch1-we-013": "no_valid_answer",
+      "batch1-we-024": "solver_disagreement",
+      "batch2-struct-003": "solver_ambiguous",
+      "batch2-struct-004": "solver_ambiguous",
+      "batch2-struct-006": "solver_ambiguous",
+      "batch2-struct-008": "reviewer_reject",
+      "batch2-struct-012": "reviewer_reject",
+      "batch2-we-001": "reviewer_reject",
+      "batch2-we-002": "reviewer_reject",
+      "batch2-we-003": "reviewer_reject",
+      "batch2-we-004": "reviewer_reject",
+      "batch2-we-005": "reviewer_reject",
+      "batch2-we-006": "reviewer_reject",
+      "batch2-we-007": "reviewer_reject",
+      "batch2-we-008": "reviewer_reject",
+      "batch2-we-009": "reviewer_reject",
+      "batch2-we-010": "reviewer_reject",
+      "batch2-we-011": "reviewer_reject",
+      "batch2-we-012": "reviewer_reject",
+      "batch2-we-013": "reviewer_reject",
+      "batch2-we-014": "reviewer_reject",
+      "batch2-we-015": "reviewer_reject",
+      "batch2-we-016": "reviewer_reject",
+      "batch2-we-017": "reviewer_reject",
+      "batch2-we-018": "reviewer_reject",
+      "batch2-we-019": "reviewer_reject",
+      "batch2-we-020": "reviewer_reject",
+      "batch2-we-021": "reviewer_reject",
+      "batch2-we-022": "reviewer_reject",
+      "batch2-we-023": "reviewer_reject",
+      "batch2-we-024": "reviewer_reject",
+      "batch2-we-025": "reviewer_reject",
+      "batch3-struct-009": "reviewer_reject",
+      "batch3-struct-011": "reviewer_reject",
+      "batch3-we-016": "reviewer_reject",
+      "batch3-we-024": "revision_limit_exceeded"
+    }
+  },
+  "pilot_comparison": {
+    "pilot_overall_AUTO_ACCEPT": {
+      "n": 37,
+      "d": 40,
+      "percent": 92.5
+    },
+    "pilot_structure_AUTO_ACCEPT": {
+      "n": 15,
+      "d": 15,
+      "percent": 100.0
+    },
+    "pilot_WE_AUTO_ACCEPT": {
+      "n": 22,
+      "d": 25,
+      "percent": 88.0
+    },
+    "pilot_reviewer_false_negative": {
+      "n": 3,
+      "d": 40,
+      "percent": 7.5
+    },
+    "pilot_solver_AMBIGUOUS_or_NONE": {
+      "n": 3,
+      "d": 40,
+      "percent": 7.5
+    },
+    "validation_overall_AUTO_ACCEPT": {
+      "n": 83,
+      "d": 120,
+      "percent": 69.17
+    },
+    "validation_structure_AUTO_ACCEPT": {
+      "n": 38,
+      "d": 45,
+      "percent": 84.44
+    },
+    "validation_WE_AUTO_ACCEPT": {
+      "n": 45,
+      "d": 75,
+      "percent": 60.0
+    }
+  },
+  "quality_gates": {
+    "Gate A critical defect AUTO_ACCEPTED == 0": {
+      "status": "PASS",
+      "value": 0,
+      "requirement": 0
+    },
+    "Gate B regression suite 100% PASS": {
+      "status": "PASS",
+      "value": "9/9",
+      "requirement": "all tests PASS"
+    },
+    "Gate C overall AUTO_ACCEPT >= 90%": {
+      "status": "FAIL",
+      "value": {
+        "n": 83,
+        "d": 120,
+        "percent": 69.17
+      },
+      "requirement": 90
+    },
+    "Gate D WE AUTO_ACCEPT >= 90%": {
+      "status": "FAIL",
+      "value": {
+        "n": 45,
+        "d": 75,
+        "percent": 60.0
+      },
+      "requirement": 90
+    },
+    "Gate E Reviewer false negative lower than Pilot": {
+      "status": "PASS",
+      "value": {
+        "overall": {
+          "n": 4,
+          "d": 120,
+          "percent": 3.33
+        },
+        "WE": {
+          "n": 1,
+          "d": 75,
+          "percent": 1.33
+        }
+      },
+      "pilot": {
+        "overall": {
+          "n": 3,
+          "d": 40,
+          "percent": 7.5
+        },
+        "WE_assuming_P0_all_WE": {
+          "n": 3,
+          "d": 25,
+          "percent": 12.0
+        }
+      }
+    },
+    "Gate F Solver NONE/AMBIGUOUS absolute rate lower than Pilot": {
+      "status": "PASS",
+      "value": {
+        "n": 4,
+        "d": 120,
+        "percent": 3.33
+      },
+      "pilot": {
+        "n": 3,
+        "d": 40,
+        "percent": 7.5
+      }
+    },
+    "Gate G P0 same-type AUTO_ACCEPT == 0": {
+      "status": "PASS",
+      "value": 0,
+      "requirement": 0
+    }
+  }
+}

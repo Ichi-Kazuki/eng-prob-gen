@@ -1,0 +1,1294 @@
+[
+  {
+    "source_id": "Practice Test F",
+    "question_number": 16,
+    "section_type": "Written Expression",
+    "primary_target": "PARALLEL_STRUCTURE",
+    "subtype": "parallel gerunds in a three-item coordinate list (breeding, feeding, and ___)",
+    "secondary_features": [
+      "gerund list as object of preposition",
+      "present perfect tense"
+    ],
+    "sentence_word_count": 17,
+    "clause_count": 1,
+    "correct_answer": "D",
+    "error_span": {
+      "position": "D",
+      "span_type": "gerund_phrase",
+      "tested_error_type": "wrong_verb_form",
+      "error_explanation": "The word is the third item in a coordinate list of gerunds ('breeding, feeding, and ___') that are all objects of 'of'; the bare verb form breaks the required parallel gerund pattern.",
+      "minimal_correction": "change 'manage' to 'managing'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "main_verb",
+        "why_plausible_as_test_target": "present perfect verb; a test-taker might check tense/agreement with 'farmers', but it is correctly formed."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "adverb",
+        "why_plausible_as_test_target": "modifies the main verb; correctly formed and placed adverb of degree."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "adjective",
+        "why_plausible_as_test_target": "past-participle adjective modifying 'methods'; correctly formed, though its -ed form might invite scrutiny."
+      },
+      "D": {
+        "is_error": true,
+        "grammatical_role": "verb_phrase",
+        "why_plausible_as_test_target": "looks like an ordinary bare verb naming the activity, masking that the two preceding parallel items are gerunds."
+      }
+    },
+    "error_location": "sentence_final",
+    "error_scope": "clause_level",
+    "vocabulary_domain": "agriculture",
+    "syntactic_complexity": 2,
+    "error_detectability": 3,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 3,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 17,
+    "section_type": "Written Expression",
+    "primary_target": "WORD_CLASS_FORM",
+    "subtype": "adverb wrongly used to modify a noun where an attributive adjective is required ('rapid drop')",
+    "secondary_features": [
+      "relative clause introduced by 'in which'"
+    ],
+    "sentence_word_count": 23,
+    "clause_count": 2,
+    "correct_answer": "B",
+    "error_span": {
+      "position": "B",
+      "span_type": "adverb",
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_explanation": "The word directly modifies the noun 'drop' inside the relative clause, so an adjective is required, but the -ly adverb form is used instead.",
+      "minimal_correction": "change 'rapidly' to 'rapid'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "predicate nominative after 'is'; correctly formed."
+      },
+      "B": {
+        "is_error": true,
+        "grammatical_role": "adjective",
+        "why_plausible_as_test_target": "the -ly ending looks like a normal adverb modifying a nearby verb, obscuring that it actually sits directly before the noun it modifies."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "main_verb",
+        "why_plausible_as_test_target": "verb of the relative clause; correctly agrees with singular 'drop'."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "article",
+        "why_plausible_as_test_target": "article before a vowel-initial noun; correctly formed as 'an'."
+      }
+    },
+    "error_location": "early",
+    "error_scope": "local",
+    "vocabulary_domain": "medicine/physiology",
+    "syntactic_complexity": 3,
+    "error_detectability": 2,
+    "distractor_plausibility": 2,
+    "estimated_difficulty_ai": 2,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 18,
+    "section_type": "Written Expression",
+    "primary_target": "REFERENCE_AND_DETERMINERS",
+    "subtype": "possessive pronoun-antecedent number agreement (her vs their, referring to plural 'infants')",
+    "secondary_features": [
+      "compound predicate joined by 'and'"
+    ],
+    "sentence_word_count": 24,
+    "clause_count": 1,
+    "correct_answer": "C",
+    "error_span": {
+      "position": "C",
+      "span_type": "pronoun",
+      "tested_error_type": "incorrect_reference",
+      "error_explanation": "The possessive pronoun refers back to the plural subject 'infants', so 'their' is required rather than the singular 'her'.",
+      "minimal_correction": "change 'her' to 'their'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "main_verb",
+        "why_plausible_as_test_target": "main verb of the sentence; correctly agrees with plural 'infants'."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "adjective",
+        "why_plausible_as_test_target": "part of a comparison ('over other sounds'); correctly used."
+      },
+      "C": {
+        "is_error": true,
+        "grammatical_role": "pronoun",
+        "why_plausible_as_test_target": "reads naturally as an ordinary possessive right before 'own mothers'', masking the mismatch with the plural subject 'infants'."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of the preposition 'to'; correctly formed plural noun."
+      }
+    },
+    "error_location": "late",
+    "error_scope": "clause_level",
+    "vocabulary_domain": "psychology/child development",
+    "syntactic_complexity": 3,
+    "error_detectability": 2,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 2,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 19,
+    "section_type": "Written Expression",
+    "primary_target": "WORD_CLASS_FORM",
+    "subtype": "adjective wrongly used as the head noun of a compound noun phrase ('River region', not 'River regional')",
+    "secondary_features": [
+      "present perfect tense",
+      "compound proper-noun modifier chain"
+    ],
+    "sentence_word_count": 21,
+    "clause_count": 1,
+    "correct_answer": "B",
+    "error_span": {
+      "position": "B",
+      "span_type": "adjective",
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_explanation": "The word must function as the head noun of the prepositional object phrase begun by 'of the Upper Mississippi River', but the adjective form is used instead of the noun.",
+      "minimal_correction": "change 'regional' to 'region'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "preposition",
+        "why_plausible_as_test_target": "introduces the long noun-phrase object; correctly used."
+      },
+      "B": {
+        "is_error": true,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "looks like a plausible descriptive adjective at the end of a place-name chain, concealing that a noun is required as the head of the phrase."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of 'produce'; correctly formed plural noun."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of the duration phrase 'for almost 150'; correctly formed plural noun."
+      }
+    },
+    "error_location": "middle",
+    "error_scope": "local",
+    "vocabulary_domain": "anthropology/Native American history",
+    "syntactic_complexity": 2,
+    "error_detectability": 3,
+    "distractor_plausibility": 2,
+    "estimated_difficulty_ai": 2,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 20,
+    "section_type": "Written Expression",
+    "primary_target": "REFERENCE_AND_DETERMINERS",
+    "subtype": "indefinite article 'a' requires a singular noun (a...ship, not a...ships)",
+    "secondary_features": [
+      "neither...nor correlative appositive",
+      "relative clause 'that floats'"
+    ],
+    "sentence_word_count": 19,
+    "clause_count": 2,
+    "correct_answer": "C",
+    "error_span": {
+      "position": "C",
+      "span_type": "noun_phrase",
+      "tested_error_type": "agreement_error",
+      "error_explanation": "The singular article 'a' before the hyphenated modifier '50,000-ton' requires a singular head noun, but the plural form is used.",
+      "minimal_correction": "change 'ships' to 'ship'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "adverb",
+        "why_plausible_as_test_target": "intensifying adverb modifying 'nothing'; correctly used."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "main_verb",
+        "why_plausible_as_test_target": "verb of the relative clause 'that floats'; correctly agrees with singular 'that'."
+      },
+      "C": {
+        "is_error": true,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "the plural form looks natural describing a large object, but conflicts with the preceding singular article 'a'."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of 'escape'; correctly formed."
+      }
+    },
+    "error_location": "late",
+    "error_scope": "local",
+    "vocabulary_domain": "physics/oceanography",
+    "syntactic_complexity": 3,
+    "error_detectability": 2,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 2,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 21,
+    "section_type": "Written Expression",
+    "primary_target": "VERB_COMPLEMENTATION",
+    "subtype": "predicate nominative number agreement with a plural subject (owner vs owners after 'Wright Brothers were')",
+    "secondary_features": [
+      "compound sentence joined by 'and'",
+      "infinitive phrase of purpose 'to make'"
+    ],
+    "sentence_word_count": 23,
+    "clause_count": 2,
+    "correct_answer": "A",
+    "error_span": {
+      "position": "A",
+      "span_type": "noun_phrase",
+      "tested_error_type": "agreement_error",
+      "error_explanation": "The predicate nominative following the plural subject 'The Wright Brothers were' must be plural, but the singular noun is used.",
+      "minimal_correction": "change 'owner' to 'owners'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": true,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "reads naturally as a role description, masking that it fails to match the number of the plural subject."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "quantifier",
+        "why_plausible_as_test_target": "quantifying phrase before 'bicycle parts'; correctly formed."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "adjective",
+        "why_plausible_as_test_target": "determiner-adjective phrase modifying 'airplane'; correctly formed."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "adjective",
+        "why_plausible_as_test_target": "participial adjective modifying 'airplane', parallel with 'original'; correctly formed."
+      }
+    },
+    "error_location": "early",
+    "error_scope": "clause_level",
+    "vocabulary_domain": "history of technology/aviation",
+    "syntactic_complexity": 2,
+    "error_detectability": 2,
+    "distractor_plausibility": 2,
+    "estimated_difficulty_ai": 2,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 22,
+    "section_type": "Written Expression",
+    "primary_target": "PARALLEL_STRUCTURE",
+    "subtype": "parallel adjectives in a coordinate list modifying a noun (bright, ___, opaque or transparent minerals)",
+    "secondary_features": [
+      "reduced passive relative clause 'found in...'"
+    ],
+    "sentence_word_count": 16,
+    "clause_count": 1,
+    "correct_answer": "B",
+    "error_span": {
+      "position": "B",
+      "span_type": "noun_phrase",
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_explanation": "The word sits in a coordinate list of adjectives modifying 'minerals' ('bright, ___, opaque or transparent'); a noun cannot fill this adjective slot.",
+      "minimal_correction": "change 'color' to 'colorful' (or 'colored')"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "adverb",
+        "why_plausible_as_test_target": "modifies 'bright'; correctly formed and placed."
+      },
+      "B": {
+        "is_error": true,
+        "grammatical_role": "adjective",
+        "why_plausible_as_test_target": "names the relevant property directly, which looks acceptable in isolation, but the surrounding list requires an adjective form, not a noun."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "verb_phrase",
+        "why_plausible_as_test_target": "reduced participial phrase modifying 'minerals'; correctly formed."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of 'in'; correctly formed."
+      }
+    },
+    "error_location": "early",
+    "error_scope": "clause_level",
+    "vocabulary_domain": "geology/mineralogy",
+    "syntactic_complexity": 2,
+    "error_detectability": 3,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 3,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 23,
+    "section_type": "Written Expression",
+    "primary_target": "PARALLEL_STRUCTURE",
+    "subtype": "parallel gerunds joined by 'and' after a preposition (discovering and interpreting)",
+    "secondary_features": [
+      "non-restrictive relative clause 'in which...'",
+      "passive perfect infinitive 'is considered to have originated'"
+    ],
+    "sentence_word_count": 33,
+    "clause_count": 2,
+    "correct_answer": "C",
+    "error_span": {
+      "position": "C",
+      "span_type": "gerund_phrase",
+      "tested_error_type": "wrong_verb_form",
+      "error_explanation": "The word is the second element coordinated with 'discovering' after the preposition 'by'; the parallel gerund pattern requires a matching -ing form, but a noun is used instead.",
+      "minimal_correction": "change 'interpretation' to 'interpreting'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "relative_pronoun",
+        "why_plausible_as_test_target": "introduces the relative clause with a preceding preposition; correctly used for the thing antecedent 'story'."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "verb_phrase",
+        "why_plausible_as_test_target": "main verb of the relative clause; correctly agrees with 'detective'."
+      },
+      "C": {
+        "is_error": true,
+        "grammatical_role": "verb_phrase",
+        "why_plausible_as_test_target": "a plausible-looking noun naming the action, but it breaks the parallel gerund pattern set by 'discovering'."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "verb_phrase",
+        "why_plausible_as_test_target": "perfect infinitive complement after 'considered'; correctly formed passive-like structure."
+      }
+    },
+    "error_location": "middle",
+    "error_scope": "clause_level",
+    "vocabulary_domain": "literature/history",
+    "syntactic_complexity": 3,
+    "error_detectability": 3,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 3,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 24,
+    "section_type": "Written Expression",
+    "primary_target": "REFERENCE_AND_DETERMINERS",
+    "subtype": "bare plural noun required in a compound noun phrase (women nurses, not women nurse)",
+    "secondary_features": [
+      "prepositional phrase of time 'during the Civil War'"
+    ],
+    "sentence_word_count": 16,
+    "clause_count": 1,
+    "correct_answer": "B",
+    "error_span": {
+      "position": "B",
+      "span_type": "noun_phrase",
+      "tested_error_type": "agreement_error",
+      "error_explanation": "The phrase describes a corps consisting of many nurses, so the head noun must be plural, but the singular form is used after 'women'.",
+      "minimal_correction": "change 'nurse' to 'nurses'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "subject",
+        "why_plausible_as_test_target": "head of the subject noun phrase; correctly formed singular ('the superintendent')."
+      },
+      "B": {
+        "is_error": true,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "reads acceptably as a compound noun in isolation, but the referent is a group of many nurses, requiring the plural."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "preposition",
+        "why_plausible_as_test_target": "introduces the time phrase; correctly used."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "main_verb",
+        "why_plausible_as_test_target": "linking verb; correctly agrees with the singular subject 'superintendent'."
+      }
+    },
+    "error_location": "early",
+    "error_scope": "local",
+    "vocabulary_domain": "history (Civil War)",
+    "syntactic_complexity": 1,
+    "error_detectability": 2,
+    "distractor_plausibility": 2,
+    "estimated_difficulty_ai": 1,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 25,
+    "section_type": "Written Expression",
+    "primary_target": "PARALLEL_STRUCTURE",
+    "subtype": "parallel nouns/gerunds in a three-item list (rising unemployment, less ___, and meager business investments)",
+    "secondary_features": [
+      "introductory participial phrase 'linked with...'",
+      "infinitive complement 'to declare'"
+    ],
+    "sentence_word_count": 23,
+    "clause_count": 1,
+    "correct_answer": "B",
+    "error_span": {
+      "position": "B",
+      "span_type": "gerund_phrase",
+      "tested_error_type": "wrong_verb_form",
+      "error_explanation": "The word is the second item in a three-part list of nouns ('unemployment', '___', 'investments'); the bare verb form breaks the required parallel noun/gerund pattern.",
+      "minimal_correction": "change 'spend' to 'spending'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "adjective",
+        "why_plausible_as_test_target": "modifies 'growth'; correctly formed."
+      },
+      "B": {
+        "is_error": true,
+        "grammatical_role": "verb_phrase",
+        "why_plausible_as_test_target": "looks like an ordinary bare verb, masking that the surrounding list items are nouns/gerunds."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "third item in the parallel list; correctly formed as a noun phrase."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "infinitive_marker",
+        "why_plausible_as_test_target": "infinitive complement after 'led many experts'; correctly formed."
+      }
+    },
+    "error_location": "middle",
+    "error_scope": "clause_level",
+    "vocabulary_domain": "economics/history",
+    "syntactic_complexity": 3,
+    "error_detectability": 3,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 3,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 26,
+    "section_type": "Written Expression",
+    "primary_target": "REFERENCE_AND_DETERMINERS",
+    "subtype": "article selection before a vowel sound (an understanding, not a understanding)",
+    "secondary_features": [
+      "gerund phrase as subject",
+      "parallel noun phrase 'range and characteristics'"
+    ],
+    "sentence_word_count": 14,
+    "clause_count": 1,
+    "correct_answer": "B",
+    "error_span": {
+      "position": "B",
+      "span_type": "determiner",
+      "tested_error_type": "agreement_error",
+      "error_explanation": "The following noun begins with a vowel sound, so the article must be 'an', but the consonant-form article is used.",
+      "minimal_correction": "change 'a' to 'an'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "gerund",
+        "why_plausible_as_test_target": "gerund phrase functioning as the sentence subject; correctly formed."
+      },
+      "B": {
+        "is_error": true,
+        "grammatical_role": "article",
+        "why_plausible_as_test_target": "looks like the ordinary indefinite article, but the following vowel-initial noun requires the 'an' form."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "second item in a parallel noun pair with 'range'; correctly formed."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "quantifier",
+        "why_plausible_as_test_target": "distributive quantifier before singular 'instrument'; correctly used."
+      }
+    },
+    "error_location": "early",
+    "error_scope": "local",
+    "vocabulary_domain": "music",
+    "syntactic_complexity": 1,
+    "error_detectability": 1,
+    "distractor_plausibility": 1,
+    "estimated_difficulty_ai": 1,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 27,
+    "section_type": "Written Expression",
+    "primary_target": "VERB_COMPLEMENTATION",
+    "subtype": "adjective + preposition collocation ('rich in', not 'rich of')",
+    "secondary_features": [
+      "compound sentence with 'and'",
+      "subordinate clause with 'because'"
+    ],
+    "sentence_word_count": 27,
+    "clause_count": 3,
+    "correct_answer": "A",
+    "error_span": {
+      "position": "A",
+      "span_type": "prepositional_phrase",
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_explanation": "The adjective 'rich' idiomatically takes the preposition 'in' to introduce the substance a place is abundant in, not 'of'.",
+      "minimal_correction": "change 'of' to 'in'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": true,
+        "grammatical_role": "preposition",
+        "why_plausible_as_test_target": "a plausible-sounding preposition of possession/composition, but it does not collocate with the adjective 'rich' in this sense."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "verb_phrase",
+        "why_plausible_as_test_target": "passive verb of the subordinate clause; correctly agrees with '50 percent of the land'."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "adjective",
+        "why_plausible_as_test_target": "determiner-adjective phrase modifying 'industry'; correctly formed."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "predicate nominative after 'is'; correctly formed."
+      }
+    },
+    "error_location": "early",
+    "error_scope": "local",
+    "vocabulary_domain": "geography/natural resources",
+    "syntactic_complexity": 2,
+    "error_detectability": 2,
+    "distractor_plausibility": 2,
+    "estimated_difficulty_ai": 2,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 28,
+    "section_type": "Written Expression",
+    "primary_target": "REFERENCE_AND_DETERMINERS",
+    "subtype": "distributive quantifier 'each' requires a singular noun (each major style, not styles)",
+    "secondary_features": [
+      "subordinate clause with 'because'",
+      "infinitive complement 'to resolve'"
+    ],
+    "sentence_word_count": 20,
+    "clause_count": 2,
+    "correct_answer": "A",
+    "error_span": {
+      "position": "A",
+      "span_type": "noun_phrase",
+      "tested_error_type": "agreement_error",
+      "error_explanation": "The distributive quantifier 'each' always combines with a singular noun, but the plural form is used.",
+      "minimal_correction": "change 'styles' to 'style'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": true,
+        "grammatical_role": "subject",
+        "why_plausible_as_test_target": "reads naturally as a plural subject describing multiple styles, obscuring that 'each' forces a singular noun."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "main_verb",
+        "why_plausible_as_test_target": "past-tense verb; agreement is not marked for number here, so it looks unremarkable."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "prepositional_phrase",
+        "why_plausible_as_test_target": "part of the infinitive phrase 'appeared for architects to resolve'; correctly formed."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "infinitive_marker",
+        "why_plausible_as_test_target": "introduces the infinitive complement; correctly formed."
+      }
+    },
+    "error_location": "sentence_initial",
+    "error_scope": "local",
+    "vocabulary_domain": "architecture",
+    "syntactic_complexity": 2,
+    "error_detectability": 2,
+    "distractor_plausibility": 2,
+    "estimated_difficulty_ai": 2,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 29,
+    "section_type": "Written Expression",
+    "primary_target": "VERB_COMPLEMENTATION",
+    "subtype": "past-participle + preposition collocation ('related to', not 'related for')",
+    "secondary_features": [
+      "quantifier 'Much of' with uncountable noun"
+    ],
+    "sentence_word_count": 17,
+    "clause_count": 1,
+    "correct_answer": "B",
+    "error_span": {
+      "position": "B",
+      "span_type": "prepositional_phrase",
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_explanation": "The past participle 'related' idiomatically collocates with the preposition 'to', not 'for', when linking a topic to research.",
+      "minimal_correction": "change 'for' to 'to'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "quantifier",
+        "why_plausible_as_test_target": "quantifier before the uncountable noun 'research'; correctly used."
+      },
+      "B": {
+        "is_error": true,
+        "grammatical_role": "preposition",
+        "why_plausible_as_test_target": "a plausible general-purpose preposition of reason, but it does not collocate with 'related' in this sense."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "main_verb",
+        "why_plausible_as_test_target": "main verb of the sentence; correctly agrees with singular 'research'."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of 'of'; correctly formed."
+      }
+    },
+    "error_location": "early",
+    "error_scope": "local",
+    "vocabulary_domain": "mathematics",
+    "syntactic_complexity": 2,
+    "error_detectability": 3,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 2,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 30,
+    "section_type": "Written Expression",
+    "primary_target": "NONFINITE_VERB_PHRASES",
+    "subtype": "extraneous adverb interrupting a participial phrase and its object (starring together Humphrey Bogart)",
+    "secondary_features": [
+      "relative clause 'who later became...'"
+    ],
+    "sentence_word_count": 21,
+    "clause_count": 2,
+    "correct_answer": "C",
+    "error_span": {
+      "position": "C",
+      "span_type": "adverb",
+      "tested_error_type": "extraneous_element",
+      "error_explanation": "The participle 'starring' already conveys joint billing and takes its object directly; inserting the adverb between the participle and its object is unnecessary and ungrammatical.",
+      "minimal_correction": "delete 'together'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "main_verb",
+        "why_plausible_as_test_target": "past-tense main verb; correctly agrees with 'Lauren Bacall'."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of the main verb; correctly formed."
+      },
+      "C": {
+        "is_error": true,
+        "grammatical_role": "adverb",
+        "why_plausible_as_test_target": "seems to reinforce the idea of co-starring, so it looks like a natural addition, but it cannot grammatically sit between the participle and its direct object."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "adverb",
+        "why_plausible_as_test_target": "modifies 'became' within the relative clause; correctly placed."
+      }
+    },
+    "error_location": "late",
+    "error_scope": "local",
+    "vocabulary_domain": "film history/biography",
+    "syntactic_complexity": 2,
+    "error_detectability": 4,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 3,
+    "taxonomy_issue": true,
+    "taxonomy_issue_reason": "The error is an extraneous adverb wedged between a participle and its direct object within a participial phrase; NONFINITE_VERB_PHRASES (participle form selection) is used as the closest fit, though the phenomenon is really an extraneous-element/word-order issue rather than a form-selection one."
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 31,
+    "section_type": "Written Expression",
+    "primary_target": "COMPARATIVES_DEGREE",
+    "subtype": "degree word + result clause: 'so...that' required instead of 'very...that'",
+    "secondary_features": [
+      "adjective + infinitive complement 'difficult to see'"
+    ],
+    "sentence_word_count": 13,
+    "clause_count": 2,
+    "correct_answer": "A",
+    "error_span": {
+      "position": "A",
+      "span_type": "comparative_marker",
+      "tested_error_type": "wrong_degree_form",
+      "error_explanation": "A result clause introduced by 'that' must be paired with the degree word 'so', not the plain intensifier 'very', which cannot license a following 'that'-clause of result.",
+      "minimal_correction": "change 'very' to 'so'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": true,
+        "grammatical_role": "adverb",
+        "why_plausible_as_test_target": "a common, ordinary-sounding intensifier before an adjective, concealing that it fails to license the following result clause."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "predicate_adjective",
+        "why_plausible_as_test_target": "predicate adjective in the result clause; correctly agrees with plural 'spots'."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "infinitive_marker",
+        "why_plausible_as_test_target": "introduces the infinitive complement of 'difficult'; correctly used."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "verb_phrase",
+        "why_plausible_as_test_target": "infinitive verb completing 'difficult to see'; correctly formed."
+      }
+    },
+    "error_location": "early",
+    "error_scope": "cross_clause",
+    "vocabulary_domain": "zoology",
+    "syntactic_complexity": 2,
+    "error_detectability": 3,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 3,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 32,
+    "section_type": "Written Expression",
+    "primary_target": "CONNECTORS_CONJUNCTIONS",
+    "subtype": "subordinating conjunction 'if' used where a preposition is required before a bare noun phrase (during heavy rains)",
+    "secondary_features": [
+      "relative clause 'that might otherwise be washed away'",
+      "passive voice"
+    ],
+    "sentence_word_count": 17,
+    "clause_count": 2,
+    "correct_answer": "D",
+    "error_span": {
+      "position": "D",
+      "span_type": "conjunction",
+      "tested_error_type": "incorrect_subordinator",
+      "error_explanation": "'If' is a subordinating conjunction that requires a following subject and verb, but only a bare noun phrase follows; a preposition such as 'during' is needed instead.",
+      "minimal_correction": "change 'if' to 'during'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "adverb",
+        "why_plausible_as_test_target": "introductory prepositional phrase of place; correctly formed."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of 'bind to'; correctly formed."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "adverb",
+        "why_plausible_as_test_target": "modifies the passive verb phrase 'be washed away'; correctly placed."
+      },
+      "D": {
+        "is_error": true,
+        "grammatical_role": "conjunction",
+        "why_plausible_as_test_target": "commonly introduces conditional clauses, so it looks acceptable, but no verb follows to complete a clause."
+      }
+    },
+    "error_location": "sentence_final",
+    "error_scope": "local",
+    "vocabulary_domain": "environmental science/forestry",
+    "syntactic_complexity": 3,
+    "error_detectability": 3,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 3,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 33,
+    "section_type": "Written Expression",
+    "primary_target": "RELATIVE_CLAUSES",
+    "subtype": "relative pronoun choice after a preposition (for which, not for what), referring to a previously named noun",
+    "secondary_features": [
+      "subordinate time clause 'when she published...'",
+      "appositive book title"
+    ],
+    "sentence_word_count": 23,
+    "clause_count": 3,
+    "correct_answer": "C",
+    "error_span": {
+      "position": "C",
+      "span_type": "relative_marker",
+      "tested_error_type": "incorrect_relative_marker",
+      "error_explanation": "The clause refers back to the previously named novel, so a relative pronoun with an antecedent ('which') is required, but 'what', which has no antecedent, is used instead.",
+      "minimal_correction": "change 'what' to 'which'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "predicate_adjective",
+        "why_plausible_as_test_target": "age complement after 'was'; correctly formed."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "main_verb",
+        "why_plausible_as_test_target": "verb of the subordinate time clause; correctly agrees with 'she'."
+      },
+      "C": {
+        "is_error": true,
+        "grammatical_role": "relative_pronoun",
+        "why_plausible_as_test_target": "'for what' can sound like a fixed phrase, but the clause has a clear antecedent (the novel), which 'what' cannot take."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "quantifier",
+        "why_plausible_as_test_target": "quantifier before the uncountable noun 'acclaim'; correctly used."
+      }
+    },
+    "error_location": "late",
+    "error_scope": "sentence_level",
+    "vocabulary_domain": "literature",
+    "syntactic_complexity": 3,
+    "error_detectability": 2,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 2,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 34,
+    "section_type": "Written Expression",
+    "primary_target": "REFERENCE_AND_DETERMINERS",
+    "subtype": "missing possessive determiner before 'own' (their own species)",
+    "secondary_features": [
+      "introductory prepositional phrase 'Through the process of imprinting'",
+      "coordinate infinitive complement 'learn to recognize and follow'"
+    ],
+    "sentence_word_count": 21,
+    "clause_count": 1,
+    "correct_answer": "D",
+    "error_span": {
+      "position": "D",
+      "span_type": "determiner",
+      "tested_error_type": "missing_required_element",
+      "error_explanation": "'Own' must be preceded by a possessive determiner agreeing with the subject; the possessive 'their' is missing before it.",
+      "minimal_correction": "change 'of own species' to 'of their own species'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "preposition",
+        "why_plausible_as_test_target": "introduces the introductory phrase; correctly used."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "subject",
+        "why_plausible_as_test_target": "generic nominalized subject referring to young animals; correctly formed."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of 'follow'; correctly formed."
+      },
+      "D": {
+        "is_error": true,
+        "grammatical_role": "determiner",
+        "why_plausible_as_test_target": "'own' often appears right after a possessive and can be misread as complete on its own, but the possessive determiner it depends on is missing."
+      }
+    },
+    "error_location": "sentence_final",
+    "error_scope": "local",
+    "vocabulary_domain": "biology/animal behavior",
+    "syntactic_complexity": 2,
+    "error_detectability": 2,
+    "distractor_plausibility": 2,
+    "estimated_difficulty_ai": 2,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 35,
+    "section_type": "Written Expression",
+    "primary_target": "CLAUSE_STRUCTURE",
+    "subtype": "extraneous anticipatory pronoun 'it' duplicating a following noun-phrase object (make it possible NP)",
+    "secondary_features": [
+      "gerund subject 'The invention of...'",
+      "infinitive complement 'continues to make'"
+    ],
+    "sentence_word_count": 16,
+    "clause_count": 1,
+    "correct_answer": "B",
+    "error_span": {
+      "position": "B",
+      "span_type": "verb_phrase",
+      "tested_error_type": "extraneous_element",
+      "error_explanation": "A full noun phrase ('the vivid expression of emotions') follows as the true object, so the placeholder pronoun 'it' is redundant and must be dropped.",
+      "minimal_correction": "delete 'it' (change 'make it possible' to 'make possible')"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "adjective",
+        "why_plausible_as_test_target": "modifies 'metaphors'; correctly formed."
+      },
+      "B": {
+        "is_error": true,
+        "grammatical_role": "verb_phrase",
+        "why_plausible_as_test_target": "resembles the common pattern 'make it possible for X to Y', making it look acceptable, but here a noun phrase object directly follows, so the placeholder 'it' is redundant."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "head of the true object noun phrase; correctly formed."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "prepositional_phrase",
+        "why_plausible_as_test_target": "modifies 'expression'; correctly formed."
+      }
+    },
+    "error_location": "middle",
+    "error_scope": "clause_level",
+    "vocabulary_domain": "linguistics/literature",
+    "syntactic_complexity": 3,
+    "error_detectability": 3,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 3,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 36,
+    "section_type": "Written Expression",
+    "primary_target": "WORD_ORDER_MODIFICATION",
+    "subtype": "adverb + past-participle premodifier word order (irregularly folded, not folded irregularly)",
+    "secondary_features": [
+      "non-restrictive relative clause 'the links of which are amino acids'",
+      "phrasal-verb passive 'made up of'"
+    ],
+    "sentence_word_count": 16,
+    "clause_count": 2,
+    "correct_answer": "B",
+    "error_span": {
+      "position": "B",
+      "span_type": "participial_phrase",
+      "tested_error_type": "wrong_word_order",
+      "error_explanation": "When an adverb premodifies a participle that itself modifies a noun, the adverb must precede the participle ('irregularly folded'), not follow it.",
+      "minimal_correction": "change 'folded irregularly' to 'irregularly folded'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "verb_phrase",
+        "why_plausible_as_test_target": "passive phrasal-verb main verb; correctly agrees with plural 'Proteins'."
+      },
+      "B": {
+        "is_error": true,
+        "grammatical_role": "noun_modifier",
+        "why_plausible_as_test_target": "each word is grammatical on its own, so only the reversed adverb-participle order reveals the problem when read closely."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "subject of the non-restrictive relative clause; correctly formed."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "relative_pronoun",
+        "why_plausible_as_test_target": "refers back to 'chains'; correctly used."
+      }
+    },
+    "error_location": "middle",
+    "error_scope": "local",
+    "vocabulary_domain": "biochemistry",
+    "syntactic_complexity": 3,
+    "error_detectability": 3,
+    "distractor_plausibility": 3,
+    "estimated_difficulty_ai": 3,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 37,
+    "section_type": "Written Expression",
+    "primary_target": "CLAUSE_STRUCTURE",
+    "subtype": "subject-verb-pronoun agreement (a plural subject noun conflicts with a singular verb and pronoun elsewhere in the clause)",
+    "secondary_features": [
+      "subordinate clause with 'Although'",
+      "reduced passive participial phrase 'provided by bird-watchers'"
+    ],
+    "sentence_word_count": 25,
+    "clause_count": 2,
+    "correct_answer": "B",
+    "error_span": {
+      "position": "B",
+      "span_type": "noun_phrase",
+      "tested_error_type": "agreement_error",
+      "error_explanation": "The verb 'appears' and the pronoun 'its' later in the clause are both singular, so the subject noun must also be singular (a single edit fixes agreement with both), but the plural form is used.",
+      "minimal_correction": "change 'cardinals' to 'cardinal'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "preposition",
+        "why_plausible_as_test_target": "introduces the reduced participial phrase in the subordinate clause; correctly used."
+      },
+      "B": {
+        "is_error": true,
+        "grammatical_role": "subject",
+        "why_plausible_as_test_target": "looks like a natural plural subject describing the species generally, but it conflicts with the singular verb and pronoun that follow in the same clause."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "main_verb",
+        "why_plausible_as_test_target": "singular verb form; correct once the subject is read as the intended singular generic reference."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "conjunction",
+        "why_plausible_as_test_target": "links the two alternatives 'alone' and 'with its mate'; correctly used."
+      }
+    },
+    "error_location": "late",
+    "error_scope": "clause_level",
+    "vocabulary_domain": "ornithology",
+    "syntactic_complexity": 3,
+    "error_detectability": 4,
+    "distractor_plausibility": 4,
+    "estimated_difficulty_ai": 4,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 38,
+    "section_type": "Written Expression",
+    "primary_target": "REFERENCE_AND_DETERMINERS",
+    "subtype": "extraneous definite article before a generic academic-discipline noun (Astronomy, not The astronomy)",
+    "secondary_features": [
+      "coordinated independent clauses joined by 'but'",
+      "infinitive complement 'continues to be'"
+    ],
+    "sentence_word_count": 17,
+    "clause_count": 2,
+    "correct_answer": "A",
+    "error_span": {
+      "position": "A",
+      "span_type": "determiner",
+      "tested_error_type": "extraneous_element",
+      "error_explanation": "Names of academic disciplines used generically do not take a definite article, so 'the' before 'astronomy' is unnecessary.",
+      "minimal_correction": "delete 'The' (change 'The astronomy' to 'Astronomy')"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": true,
+        "grammatical_role": "article",
+        "why_plausible_as_test_target": "looks like a routine definite article before a subject noun, masking that generic discipline names take no article."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "predicate nominative after 'is'; correctly formed."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of 'at'; correctly formed."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of 'of'; correctly formed."
+      }
+    },
+    "error_location": "sentence_initial",
+    "error_scope": "local",
+    "vocabulary_domain": "history of science/astronomy",
+    "syntactic_complexity": 1,
+    "error_detectability": 2,
+    "distractor_plausibility": 2,
+    "estimated_difficulty_ai": 1,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 39,
+    "section_type": "Written Expression",
+    "primary_target": "REFERENCE_AND_DETERMINERS",
+    "subtype": "extraneous definite article before an abstract uncountable noun used generically (nature, not the nature)",
+    "secondary_features": [
+      "relative clause 'who is remembered for...'"
+    ],
+    "sentence_word_count": 20,
+    "clause_count": 2,
+    "correct_answer": "D",
+    "error_span": {
+      "position": "D",
+      "span_type": "noun_phrase",
+      "tested_error_type": "extraneous_element",
+      "error_explanation": "'Nature' used in this general, abstract sense does not take a definite article, so 'the' before it is unnecessary.",
+      "minimal_correction": "delete 'the' (change 'the nature' to 'nature')"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": false,
+        "grammatical_role": "verb_phrase",
+        "why_plausible_as_test_target": "passive relative-clause verb; correctly agrees with 'who'."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of 'for'; correctly formed."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of 'in'; correctly formed."
+      },
+      "D": {
+        "is_error": true,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "the article looks like ordinary noun-phrase formation, obscuring that this generic abstract sense of the noun takes no article."
+      }
+    },
+    "error_location": "sentence_final",
+    "error_scope": "local",
+    "vocabulary_domain": "literature/philosophy",
+    "syntactic_complexity": 2,
+    "error_detectability": 2,
+    "distractor_plausibility": 2,
+    "estimated_difficulty_ai": 1,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  },
+  {
+    "source_id": "Practice Test F",
+    "question_number": 40,
+    "section_type": "Written Expression",
+    "primary_target": "CLAUSE_STRUCTURE",
+    "subtype": "subject-verb agreement with a singular uncountable-noun subject joined by 'or' (bullion...serves)",
+    "secondary_features": [
+      "compound subject with 'or'",
+      "prepositional phrase 'as mediums of exchange'"
+    ],
+    "sentence_word_count": 15,
+    "clause_count": 1,
+    "correct_answer": "A",
+    "error_span": {
+      "position": "A",
+      "span_type": "verb_phrase",
+      "tested_error_type": "agreement_error",
+      "error_explanation": "The subject 'Gold or silver bullion' takes the singular uncountable noun 'bullion' as its head, so the verb must be singular, but the plural form is used.",
+      "minimal_correction": "change 'serve' to 'serves'"
+    },
+    "underlined_parts": {
+      "A": {
+        "is_error": true,
+        "grammatical_role": "main_verb",
+        "why_plausible_as_test_target": "looks like a normal plural verb given the 'X or Y' subject, obscuring that the head noun 'bullion' is singular."
+      },
+      "B": {
+        "is_error": false,
+        "grammatical_role": "preposition",
+        "why_plausible_as_test_target": "introduces the following noun phrase; not the marked error in this item."
+      },
+      "C": {
+        "is_error": false,
+        "grammatical_role": "adverb",
+        "why_plausible_as_test_target": "idiomatic phrase modifying location; correctly used."
+      },
+      "D": {
+        "is_error": false,
+        "grammatical_role": "noun_phrase",
+        "why_plausible_as_test_target": "object of 'over'; correctly formed."
+      }
+    },
+    "error_location": "early",
+    "error_scope": "local",
+    "vocabulary_domain": "economics/history",
+    "syntactic_complexity": 2,
+    "error_detectability": 2,
+    "distractor_plausibility": 2,
+    "estimated_difficulty_ai": 2,
+    "taxonomy_issue": false,
+    "taxonomy_issue_reason": null
+  }
+]

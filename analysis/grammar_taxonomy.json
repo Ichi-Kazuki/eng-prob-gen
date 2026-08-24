@@ -1,0 +1,195 @@
+{
+  "version": "1.1",
+  "description": "Stable 3-tier grammar taxonomy for classifying TOEFL ITP Structure (Part A) and Written Expression (Part B) items: primary_target (closed set, do not expand casually) -> subtype (free-form, specific construction) -> secondary_features (free-form tags for co-occurring but non-primary grammar phenomena). Also documents the shared tested_error_type / distractor error_type closed vocabulary used by both sections.",
+  "changelog_ref": "analysis/GRAMMAR_TAXONOMY_CHANGELOG.md",
+  "tiers": {
+    "primary_target": "Closed set of 10-15 stable syntactic categories (currently 15, at the practical ceiling). New categories should only be added if a phenomenon recurs across 3+ items across multiple Practice Tests, does not fit as a subtype of an existing category, and forcing it into an existing category would meaningfully distort that category's definition.",
+    "subtype": "Free-form string describing the exact tested construction within a primary_target. May grow without limit.",
+    "secondary_features": "Array of free-form short tags describing co-occurring grammar phenomena that are not the primary test point of the item.",
+    "tested_error_type": "Closed set of 15 values shared by Structure's distractors.*.error_type and Written Expression's error_span.tested_error_type. Describes the structural mechanism of an error/distractor, orthogonal to primary_target (which describes the grammar topic being tested). See tested_error_types below."
+  },
+  "primary_targets": [
+    {
+      "id": "CLAUSE_STRUCTURE",
+      "label_ja": "節構造・文断片",
+      "description": "Whether an independent clause (subject + finite verb) is correctly formed; distinguishing fragments/run-ons; basic subject-verb agreement.",
+      "example_subtypes": [
+        "main clause (subject + finite verb) identification",
+        "sentence fragment vs. independent clause",
+        "subject-verb agreement across intervening phrase"
+      ]
+    },
+    {
+      "id": "NOUN_CLAUSES",
+      "label_ja": "名詞節",
+      "description": "that-clauses and embedded/indirect questions functioning as subject, object, or complement; typically tests word order (no inversion) inside the clause.",
+      "example_subtypes": [
+        "embedded question (wh-word) word order",
+        "that-clause as subject",
+        "that-clause as object complement"
+      ]
+    },
+    {
+      "id": "RELATIVE_CLAUSES",
+      "label_ja": "関係詞節",
+      "description": "Restrictive and non-restrictive relative clauses: relative pronoun choice/case, clause-internal parallelism, correct verb after the relative pronoun.",
+      "example_subtypes": [
+        "non-restrictive relative clause with parallel coordinate predicate",
+        "restrictive relative clause with correct relative pronoun",
+        "relative pronoun case (who/whom/whose) selection"
+      ]
+    },
+    {
+      "id": "ADVERBIAL_CLAUSES",
+      "label_ja": "副詞節の構造",
+      "description": "Internal structure of time/cause/concession/condition/purpose subordinate clauses (full clause vs. phrase vs. inverted form). Use CONNECTORS_CONJUNCTIONS when the focus is choosing among connector words instead.",
+      "example_subtypes": [
+        "time clause introduced by 'when'",
+        "concessive clause structure",
+        "conditional clause structure"
+      ]
+    },
+    {
+      "id": "CONNECTORS_CONJUNCTIONS",
+      "label_ja": "接続語彙の選択",
+      "description": "Choosing the correct linking word/phrase among conjunction/preposition/adverb options expressing cause, contrast, comparison, etc. (e.g. due to / because / in spite of / regardless of).",
+      "example_subtypes": [
+        "preposition vs. subordinating conjunction (cause)",
+        "elliptical comparative connector 'as' vs. subordinator/adverb",
+        "contrast connector selection (although vs. despite vs. however)"
+      ]
+    },
+    {
+      "id": "VERB_FORM_VOICE",
+      "label_ja": "定形動詞の時制・態",
+      "description": "Tense, aspect, and active/passive voice selection for the finite main verb of a clause. Use NONFINITE_VERB_PHRASES for participle/infinitive/gerund form selection.",
+      "example_subtypes": [
+        "past perfect vs. simple past selection",
+        "active vs. passive voice in main clause",
+        "tense agreement across clauses"
+      ]
+    },
+    {
+      "id": "VERB_COMPLEMENTATION",
+      "label_ja": "動詞の補語構造",
+      "description": "What correctly follows a linking verb (predicate nominative/adjective) or a causative/perception verb (object complement).",
+      "example_subtypes": [
+        "predicate nominative after linking verb (be + NP)",
+        "object complement after causative verb (make + O + Adj)",
+        "predicate adjective after linking verb"
+      ]
+    },
+    {
+      "id": "NONFINITE_VERB_PHRASES",
+      "label_ja": "非定形動詞句",
+      "description": "Form selection for participles (reduced relative clauses, result participles), infinitives (purpose, modifying ordinal/superlative nouns), and gerunds.",
+      "example_subtypes": [
+        "reduced passive relative clause (past participle modifying noun)",
+        "participial phrase of result ('thereby' + -ing)",
+        "infinitive modifying ordinal/superlative noun ('the first...to')",
+        "gerund vs. infinitive complement selection"
+      ]
+    },
+    {
+      "id": "COMPARATIVES_DEGREE",
+      "label_ja": "比較・程度構文",
+      "description": "Comparative/superlative structures and degree constructions (enough, so, too, as...as).",
+      "example_subtypes": [
+        "adjective + enough + to-infinitive result construction",
+        "so + adjective + that-clause",
+        "as...as comparative"
+      ]
+    },
+    {
+      "id": "PARALLEL_STRUCTURE",
+      "label_ja": "並列構造",
+      "description": "Syntactic parallelism among elements joined by coordinating or correlative conjunctions (and, or, both...and, not only...but also) or in a list.",
+      "example_subtypes": [
+        "parallel verb forms in a list",
+        "correlative conjunction parallelism (not only...but also)",
+        "parallel noun phrases in enumeration"
+      ]
+    },
+    {
+      "id": "WORD_ORDER_MODIFICATION",
+      "label_ja": "語順・修飾語配置",
+      "description": "Internal word order of noun-modifying elements: adjective phrases, appositives, participial modifiers, noun phrase structure itself.",
+      "example_subtypes": [
+        "appositive noun phrase placement and internal word order",
+        "noun + postpositive adjective phrase word order",
+        "adjective order within a noun phrase"
+      ]
+    },
+    {
+      "id": "INVERSION",
+      "label_ja": "倒置構文",
+      "description": "Subject-auxiliary inversion triggered by fronted negative adverbials, place adverbials, or elliptical conditionals.",
+      "example_subtypes": [
+        "subject-auxiliary inversion after fronted negative adverbial ('Not until...')",
+        "inversion after fronted place adverbial",
+        "conditional inversion (Had..., Were..., Should...)"
+      ]
+    },
+    {
+      "id": "EXISTENTIAL_EXPLETIVE",
+      "label_ja": "存在構文",
+      "description": "Expletive 'there + be' and 'it + be' constructions and the errors that arise from substituting a referring pronoun or bare determiner.",
+      "example_subtypes": [
+        "expletive 'there + be' construction vs. pronoun/determiner",
+        "expletive 'it + be' construction"
+      ]
+    },
+    {
+      "id": "REFERENCE_AND_DETERMINERS",
+      "label_ja": "照応・限定詞",
+      "description": "Pronoun-antecedent reference/agreement, articles, quantifiers (much/many, few/little, every/each), and countable/uncountable noun choice.",
+      "example_subtypes": [
+        "pronoun with no clear antecedent",
+        "quantifier agreement with countable/uncountable noun",
+        "article selection"
+      ]
+    },
+    {
+      "id": "WORD_CLASS_FORM",
+      "label_ja": "品詞選択・派生形",
+      "description": "Which derivational/part-of-speech form of a word (adjective/adverb/noun/verb) a given syntactic slot requires - whether the slot is a noun-phrase-internal modifier, the head noun of a phrase, a verb-modifying adverbial, or a clause subject - when the error is not about element ordering (WORD_ORDER_MODIFICATION), required verb complementation (VERB_COMPLEMENTATION), or clause well-formedness (CLAUSE_STRUCTURE) as such. Added 2026-08-23; see GRAMMAR_TAXONOMY_CHANGELOG.md.",
+      "example_subtypes": [
+        "adjective required, adverb used to modify a following noun",
+        "adverb required, adjective/noun used to modify a verb",
+        "noun required, adjective used as clause subject",
+        "derivational noun-for-verb confusion as head of a prepositional-object phrase",
+        "ordinal number form required, cardinal used to modify a noun"
+      ]
+    }
+  ],
+  "tested_error_types": [
+    { "id": "wrong_verb_form", "description": "Incorrect tense/aspect/form (base/-ing/-ed etc.) of a verb." },
+    { "id": "wrong_voice", "description": "Active vs. passive voice error." },
+    { "id": "missing_required_element", "description": "A required element (subject, verb, connector, etc.) for the sentence/clause/phrase to be complete is missing." },
+    { "id": "extraneous_element", "description": "An unnecessary or duplicated element is added." },
+    { "id": "wrong_word_order", "description": "All required elements are present but their order is wrong." },
+    { "id": "incorrect_subordinator", "description": "Wrong subordinating conjunction for the intended semantic/syntactic relation." },
+    { "id": "incorrect_relative_marker", "description": "Wrong relative pronoun/marker choice or case (who/whom/which/that/whose)." },
+    { "id": "fragment", "description": "Does not form a complete clause (missing finite verb or subject)." },
+    { "id": "double_subject", "description": "Subject is redundantly duplicated (e.g. relative pronoun plus a resumptive pronoun)." },
+    { "id": "agreement_error", "description": "Subject-verb number agreement, or noun-quantifier agreement, error." },
+    { "id": "wrong_complementation", "description": "The complement structure (part of speech / phrase type) required by a linking or causative/perception verb is wrong. Does not cover fixed preposition collocations - see wrong_preposition_collocation." },
+    { "id": "incorrect_part_of_speech", "description": "The word's part of speech itself is wrong. Does not cover comparative/superlative confusion - see wrong_degree_form." },
+    { "id": "incorrect_reference", "description": "Pronoun has no clear or appropriate antecedent." },
+    { "id": "wrong_preposition_collocation", "description": "A fixed lexical preposition collocation governed by a verb/participle/adjective/noun is violated, or a standalone (non-governed) preposition/connector pairing is wrong (e.g. 'benefit from' vs 'benefit of', 'beside' vs 'between'). Not a part-of-speech error and not a clause-structural complementation mismatch - a lexical collocation slip. Added 2026-08-23; see GRAMMAR_TAXONOMY_CHANGELOG.md." },
+    { "id": "wrong_degree_form", "description": "Comparative/superlative/positive degree confusion (e.g. superlative used where a comparative is required), or wrong degree/intensity marker for a construction that requires one (e.g. 'very' used where 'so' is required to license a following result clause). Added 2026-08-23; see GRAMMAR_TAXONOMY_CHANGELOG.md." }
+  ],
+  "secondary_feature_tag_examples": [
+    "ellipsis",
+    "reduced from relative clause",
+    "parallel structure with coordinate verb",
+    "passive voice",
+    "active voice",
+    "resumptive pronoun error",
+    "appositive phrase",
+    "infinitive of purpose",
+    "past perfect tense",
+    "article usage",
+    "intransitive verb complementation"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "provenance.schema.json",
+  "title": "TOEFL ITP Orchestrator - per-item provenance record",
+  "description": "The record orchestrator.build_provenance_record() emits for one candidate, combining a short human-readable summary (spec section 11 example) with the full accepted_item / qa_audit split (spec section 12). This is the shape written into analysis/orchestrator_smoke_test.json, analysis/orchestrator_adversarial_test.json, and analysis/orchestrator_reject_path_test.json. Descriptive documentation; not enforced by a JSON Schema library at runtime (see accepted_item.schema.json note).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_id", "concept_id", "section", "state", "state_history",
+    "generation_attempt", "revision_count", "generator", "reviewer", "solver",
+    "consensus", "batch_slot", "versions", "accepted_item", "qa_audit"
+  ],
+  "properties": {
+    "item_id": { "type": "string" },
+    "concept_id": { "type": "string" },
+    "section": { "enum": ["Structure", "Written Expression"] },
+    "state": { "type": "string" },
+    "state_history": { "type": "array", "items": { "type": "string" } },
+    "generation_attempt": { "type": "integer", "minimum": 1 },
+    "revision_count": { "type": "integer", "minimum": 0 },
+    "generator": {
+      "type": ["object", "null"],
+      "properties": { "answer": { "enum": ["A", "B", "C", "D"] } }
+    },
+    "reviewer": {
+      "type": ["object", "null"],
+      "properties": {
+        "verdict": { "enum": ["PASS", "REVISE", "REJECT"] },
+        "independent_answer": { "type": "string" },
+        "difficulty": { "enum": ["EASY", "MEDIUM", "HARD"] }
+      }
+    },
+    "solver": {
+      "type": ["object", "null"],
+      "properties": {
+        "answer": { "type": "string" },
+        "confidence": { "enum": ["HIGH", "MEDIUM", "LOW"] }
+      }
+    },
+    "consensus": {
+      "type": "boolean",
+      "description": "True iff state == ACCEPTED. For the full failed_conditions/disagreement_reasons detail, see qa_audit.consensus."
+    },
+    "batch_slot": {
+      "type": ["object", "null"],
+      "description": "Slot requirements (primary_target/difficulty/correct_answer_position/vocabulary_domain[/tested_error_type/error_scope]) to hand to a fresh Generator call if this candidate is discarded or rejected (spec section 14)."
+    },
+    "versions": {
+      "type": "object",
+      "properties": {
+        "spec_version": { "type": "string" },
+        "taxonomy_version": { "type": "string" },
+        "generator_version": { "type": "string" },
+        "reviewer_version": { "type": "string" },
+        "solver_version": { "type": "string" }
+      }
+    },
+    "accepted_item": {
+      "description": "See accepted_item.schema.json. Null unless state == ACCEPTED.",
+      "type": ["object", "null"]
+    },
+    "qa_audit": {
+      "description": "See qa_audit.schema.json. Always present.",
+      "type": "object"
+    }
+  }
+}

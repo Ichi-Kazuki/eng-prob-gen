@@ -1,0 +1,401 @@
+{
+  "items": [
+    {
+      "item_id": "pilot-struct-001",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "A",
+      "generator_answer": "A",
+      "answer_match": true,
+      "reviewer_difficulty": "EASY",
+      "generator_difficulty": "EASY",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [
+        {
+          "severity": "MINOR",
+          "category": "metadata_label_accuracy",
+          "description": "secondary_features includes 'intervening prepositional phrases', but in the correct sentence ('Young seedlings absorb nutrients...') the prepositional phrases follow the verb rather than intervening between subject and verb; the tag does not accurately describe this item's structure.",
+          "related_check": "metadata_consistency"
+        }
+      ],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-002",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "B",
+      "generator_answer": "B",
+      "answer_match": true,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-003",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-004",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "D",
+      "generator_answer": "D",
+      "answer_match": true,
+      "reviewer_difficulty": "EASY",
+      "generator_difficulty": "EASY",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-005",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "A",
+      "generator_answer": "A",
+      "answer_match": true,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-006",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "B",
+      "generator_answer": "B",
+      "answer_match": true,
+      "reviewer_difficulty": "HARD",
+      "generator_difficulty": "HARD",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-007",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "reviewer_difficulty": "HARD",
+      "generator_difficulty": "HARD",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [
+        {
+          "severity": "MINOR",
+          "category": "sentence_length",
+          "description": "The correct sentence is 28 words, one word over spec §5.3's observed Structure maximum of 27 (mean 19.97, max 27). Not a hard-rule violation, but worth trimming toward the observed range for batch calibration.",
+          "related_check": "naturalness"
+        }
+      ],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-008",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "D",
+      "generator_answer": "D",
+      "answer_match": true,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-009",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "A",
+      "generator_answer": "A",
+      "answer_match": true,
+      "reviewer_difficulty": "EASY",
+      "generator_difficulty": "EASY",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-010",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "B",
+      "generator_answer": "B",
+      "answer_match": true,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-011",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [
+        {
+          "severity": "MINOR",
+          "category": "distractor_incidental_flaw",
+          "description": "Distractor A ('eighteenth-century rare') begins with a vowel-sound word, so combined with the stem's fixed article 'a' it produces an incidental 'a/an' mismatch ('a eighteenth-century') in addition to the intended wrong-word-order flaw. This does not affect answer uniqueness (A is already invalid for word order) but was not accounted for in the distractor_rationale.",
+          "related_check": "distractor_quality"
+        }
+      ],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-012",
+      "section": "Structure",
+      "verdict": "REVISE",
+      "critical_failure": false,
+      "independent_answer": "D",
+      "generator_answer": "D",
+      "answer_match": true,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "REVISE",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "REVISE",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [
+        {
+          "severity": "MAJOR",
+          "category": "distractor_ambiguity",
+          "description": "Distractor B ('for pedestrians and cyclists alike more accessible') is grammatically parseable as correct under an alternate bracketing: 'the downtown corridor for pedestrians and cyclists alike' can be read as a single complex object noun phrase (postnominal PP modifying 'corridor', similar to 'the room for guests'), with 'more accessible' as the causative object complement — i.e. 'will make [the downtown corridor for pedestrians and cyclists alike] [more accessible]'. Under that (marked but grammatical) reading the sentence is fully coherent, making B MARGINAL rather than cleanly INVALID. This is in tension with Hard Rule §7.2.3 ('no distractor may be correct under any plausible reading'). D remains the clearly intended and more natural answer, and most test-takers would reject B on first reading, so this falls short of a full two-valid-answers critical failure, but it is a real design weakness.",
+          "related_check": "answer_uniqueness"
+        }
+      ],
+      "revision_requirements": [
+        "Rework distractor B so 'for pedestrians and cyclists alike' cannot be reanalyzed as a postnominal modifier of 'the downtown corridor' forming an alternative valid object NP (e.g., restructure the word-order distractor so every constituent bracketing remains ungrammatical, or choose a different tested_error_type mechanism for this distractor slot)."
+      ],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-013",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "B",
+      "generator_answer": "B",
+      "answer_match": true,
+      "reviewer_difficulty": "EASY",
+      "generator_difficulty": "EASY",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-014",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "A",
+      "generator_answer": "A",
+      "answer_match": true,
+      "reviewer_difficulty": "HARD",
+      "generator_difficulty": "HARD",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [
+        {
+          "severity": "MINOR",
+          "category": "sentence_length",
+          "description": "The correct sentence is 28 words, one word over spec §5.3's observed Structure maximum of 27. Not a hard-rule violation; noted for batch-level length calibration.",
+          "related_check": "naturalness"
+        }
+      ],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "pilot-struct-015",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    }
+  ]
+}

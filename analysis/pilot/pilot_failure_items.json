@@ -1,0 +1,1099 @@
+{
+  "items": [
+    {
+      "item_id": "pilot-we-002",
+      "concept_id": "pilot-we-002",
+      "section": "Written Expression",
+      "state": "DISCARDED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "DISCARDED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "generator": {
+        "answer": "B"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "B",
+        "difficulty": "MEDIUM"
+      },
+      "solver": {
+        "answer": "NONE",
+        "confidence": "HIGH"
+      },
+      "consensus": false,
+      "batch_slot": {
+        "section": "Written Expression",
+        "primary_target": "REFERENCE_AND_DETERMINERS",
+        "difficulty": "EASY",
+        "correct_answer_position": "B",
+        "vocabulary_domain": "astronomy",
+        "tested_error_type": "incorrect_reference",
+        "error_scope": "clause_level"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:ce09d72ff092",
+        "reviewer_version": "sha256:15235bfbb07f",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": null,
+      "qa_audit": {
+        "item_id": "pilot-we-002",
+        "concept_id": "pilot-we-002",
+        "state": "DISCARDED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "DISCARDED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "reviewer": {
+          "item_id": "pilot-we-002",
+          "section": "Written Expression",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "B",
+          "generator_answer": "B",
+          "answer_match": true,
+          "reviewer_difficulty": "MEDIUM",
+          "generator_difficulty": "EASY",
+          "difficulty_mismatch": true,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [
+            {
+              "severity": "MINOR",
+              "category": "ambiguity_strength",
+              "description": "\"it\" is syntactically capable of pointing to \"the observatory,\" \"the spectrograph,\" or \"the telescope,\" but only the observatory reading is semantically sensible for \"will soon rival several professional facilities\" (an instrument rivaling a facility is a category mismatch). A careful reader can therefore resolve the reference by sense even without the fix, which makes the intended ambiguity slightly weaker than a fully airtight case, though it still matches a legitimate incorrect_reference pattern.",
+              "related_check": "naturalness"
+            },
+            {
+              "severity": "MINOR",
+              "category": "difficulty_calibration",
+              "description": "Resolving/rejecting three candidate singular antecedents across a coordinated clause is more cognitively demanding than a typical EASY item; reviewer estimates MEDIUM.",
+              "related_check": "difficulty"
+            }
+          ],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "B",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "solver": {
+          "item_id": "pilot-we-002",
+          "section": "Written Expression",
+          "solver_answer": "NONE",
+          "confidence": "HIGH",
+          "reason": "All marked parts form a grammatical sentence, and it can naturally refer to the observatory as the subject that will rival other facilities.",
+          "suggested_correction": "No correction needed.",
+          "ambiguity_detected": true
+        },
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "marked_parts",
+            "section",
+            "sentence"
+          ]
+        },
+        "consensus": {
+          "auto_accept": false,
+          "routing": "DISCARDED",
+          "failed_conditions": [
+            "solver.solver_answer not in [A,B,C,D]",
+            "solver.solver_answer != generator.correct_answer",
+            "solver.solver_answer != reviewer.independent_answer",
+            "solver.ambiguity_detected != false"
+          ],
+          "disagreement_reasons": [
+            "solver_none"
+          ]
+        },
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: ['solver_none']"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:ce09d72ff092",
+          "reviewer_version": "sha256:15235bfbb07f",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T10:37:55.133904+00:00",
+          "updated": "2026-08-23T13:25:32.338980+00:00"
+        }
+      },
+      "failure_classification": {
+        "primary_failure_reason": "no_valid_answer",
+        "secondary_reasons": []
+      },
+      "candidate_provenance": {
+        "original_item": {
+          "item_id": "pilot-we-002",
+          "section": "Written Expression",
+          "primary_target": "REFERENCE_AND_DETERMINERS",
+          "subtype": "pronoun with no clear antecedent",
+          "secondary_features": [
+            "coordinate clause",
+            "compound subject nouns"
+          ],
+          "tested_error_type": "incorrect_reference",
+          "error_scope": "clause_level",
+          "difficulty": "EASY",
+          "vocabulary_domain": "astronomy",
+          "sentence": "The observatory recently installed a sophisticated new spectrograph beside its aging telescope, and it will soon rival several professional facilities elsewhere.",
+          "marked_parts": {
+            "A": "recently installed a sophisticated new spectrograph",
+            "B": "it",
+            "C": "will soon rival",
+            "D": "several professional facilities elsewhere"
+          },
+          "correct_answer": "B",
+          "minimal_correction": "the new instrument",
+          "answer_explanation": "The pronoun \"it\" could refer to \"the observatory,\" \"the spectrograph,\" or \"the telescope,\" leaving its antecedent unclear; a specific noun phrase is needed to remove the ambiguity."
+        },
+        "revisions": [],
+        "generator_outputs": [
+          {
+            "round": 1,
+            "file": "round1_generator",
+            "item": {
+              "item_id": "pilot-we-002",
+              "section": "Written Expression",
+              "primary_target": "REFERENCE_AND_DETERMINERS",
+              "subtype": "pronoun with no clear antecedent",
+              "secondary_features": [
+                "coordinate clause",
+                "compound subject nouns"
+              ],
+              "tested_error_type": "incorrect_reference",
+              "error_scope": "clause_level",
+              "difficulty": "EASY",
+              "vocabulary_domain": "astronomy",
+              "sentence": "The observatory recently installed a sophisticated new spectrograph beside its aging telescope, and it will soon rival several professional facilities elsewhere.",
+              "marked_parts": {
+                "A": "recently installed a sophisticated new spectrograph",
+                "B": "it",
+                "C": "will soon rival",
+                "D": "several professional facilities elsewhere"
+              },
+              "correct_answer": "B",
+              "minimal_correction": "the new instrument",
+              "answer_explanation": "The pronoun \"it\" could refer to \"the observatory,\" \"the spectrograph,\" or \"the telescope,\" leaving its antecedent unclear; a specific noun phrase is needed to remove the ambiguity."
+            }
+          }
+        ],
+        "reviewer_outputs": [
+          {
+            "round": 1,
+            "file": "round1_reviewer_we.json",
+            "output": {
+              "item_id": "pilot-we-002",
+              "section": "Written Expression",
+              "verdict": "PASS",
+              "critical_failure": false,
+              "independent_answer": "B",
+              "generator_answer": "B",
+              "answer_match": true,
+              "reviewer_difficulty": "MEDIUM",
+              "generator_difficulty": "EASY",
+              "difficulty_mismatch": true,
+              "checks": {
+                "grammar_validity": "PASS",
+                "answer_uniqueness": "PASS",
+                "target_alignment": "PASS",
+                "naturalness": "PASS",
+                "toefl_style": "PASS",
+                "distractor_quality": "PASS",
+                "metadata_consistency": "PASS"
+              },
+              "issues": [
+                {
+                  "severity": "MINOR",
+                  "category": "ambiguity_strength",
+                  "description": "\"it\" is syntactically capable of pointing to \"the observatory,\" \"the spectrograph,\" or \"the telescope,\" but only the observatory reading is semantically sensible for \"will soon rival several professional facilities\" (an instrument rivaling a facility is a category mismatch). A careful reader can therefore resolve the reference by sense even without the fix, which makes the intended ambiguity slightly weaker than a fully airtight case, though it still matches a legitimate incorrect_reference pattern.",
+                  "related_check": "naturalness"
+                },
+                {
+                  "severity": "MINOR",
+                  "category": "difficulty_calibration",
+                  "description": "Resolving/rejecting three candidate singular antecedents across a coordinated clause is more cognitively demanding than a typical EASY item; reviewer estimates MEDIUM.",
+                  "related_check": "difficulty"
+                }
+              ],
+              "revision_requirements": [],
+              "source_similarity_risk": "LOW",
+              "detected_error_count": 1,
+              "detected_error_position": "B",
+              "non_error_parts_valid": true,
+              "minimal_correction_valid": true
+            }
+          }
+        ],
+        "solver_outputs": [
+          {
+            "file": "solver_output_round1.json",
+            "output": {
+              "item_id": "pilot-we-002",
+              "section": "Written Expression",
+              "solver_answer": "NONE",
+              "confidence": "HIGH",
+              "reason": "All marked parts form a grammatical sentence, and it can naturally refer to the observatory as the subject that will rival other facilities.",
+              "suggested_correction": "No correction needed.",
+              "ambiguity_detected": true
+            }
+          }
+        ],
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "DISCARDED"
+        ],
+        "final_state": "DISCARDED",
+        "final_generator_item": {
+          "item_id": "pilot-we-002",
+          "section": "Written Expression",
+          "primary_target": "REFERENCE_AND_DETERMINERS",
+          "subtype": "pronoun with no clear antecedent",
+          "secondary_features": [
+            "coordinate clause",
+            "compound subject nouns"
+          ],
+          "tested_error_type": "incorrect_reference",
+          "error_scope": "clause_level",
+          "difficulty": "EASY",
+          "vocabulary_domain": "astronomy",
+          "sentence": "The observatory recently installed a sophisticated new spectrograph beside its aging telescope, and it will soon rival several professional facilities elsewhere.",
+          "marked_parts": {
+            "A": "recently installed a sophisticated new spectrograph",
+            "B": "it",
+            "C": "will soon rival",
+            "D": "several professional facilities elsewhere"
+          },
+          "correct_answer": "B",
+          "minimal_correction": "the new instrument",
+          "answer_explanation": "The pronoun \"it\" could refer to \"the observatory,\" \"the spectrograph,\" or \"the telescope,\" leaving its antecedent unclear; a specific noun phrase is needed to remove the ambiguity."
+        },
+        "final_reviewer_item": {
+          "item_id": "pilot-we-002",
+          "section": "Written Expression",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "B",
+          "generator_answer": "B",
+          "answer_match": true,
+          "reviewer_difficulty": "MEDIUM",
+          "generator_difficulty": "EASY",
+          "difficulty_mismatch": true,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [
+            {
+              "severity": "MINOR",
+              "category": "ambiguity_strength",
+              "description": "\"it\" is syntactically capable of pointing to \"the observatory,\" \"the spectrograph,\" or \"the telescope,\" but only the observatory reading is semantically sensible for \"will soon rival several professional facilities\" (an instrument rivaling a facility is a category mismatch). A careful reader can therefore resolve the reference by sense even without the fix, which makes the intended ambiguity slightly weaker than a fully airtight case, though it still matches a legitimate incorrect_reference pattern.",
+              "related_check": "naturalness"
+            },
+            {
+              "severity": "MINOR",
+              "category": "difficulty_calibration",
+              "description": "Resolving/rejecting three candidate singular antecedents across a coordinated clause is more cognitively demanding than a typical EASY item; reviewer estimates MEDIUM.",
+              "related_check": "difficulty"
+            }
+          ],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "B",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "final_solver_item": {
+          "item_id": "pilot-we-002",
+          "section": "Written Expression",
+          "solver_answer": "NONE",
+          "confidence": "HIGH",
+          "reason": "All marked parts form a grammatical sentence, and it can naturally refer to the observatory as the subject that will rival other facilities.",
+          "suggested_correction": "No correction needed.",
+          "ambiguity_detected": true
+        },
+        "batch_slot": {
+          "slot_id": "WE02",
+          "item_id": "pilot-we-002",
+          "primary_target": "REFERENCE_AND_DETERMINERS",
+          "subtype": "pronoun with no clear antecedent",
+          "tested_error_type": "incorrect_reference",
+          "error_span_type": "pronoun",
+          "error_scope": "clause_level",
+          "error_location": "late",
+          "difficulty": "EASY",
+          "correct_answer_position": "B",
+          "vocabulary_domain": "astronomy",
+          "sentence_length_target_words": 21,
+          "clause_count_target": 2,
+          "section": "Written Expression",
+          "basis": {
+            "primary_target": "DERIVED",
+            "subtype": "HEURISTIC",
+            "tested_error_type": "DERIVED",
+            "error_span_type": "HEURISTIC",
+            "error_scope": "HEURISTIC",
+            "error_location": "HEURISTIC",
+            "difficulty": "HEURISTIC",
+            "correct_answer_position": "HEURISTIC",
+            "vocabulary_domain": "HEURISTIC"
+          }
+        }
+      }
+    },
+    {
+      "item_id": "pilot-we-009",
+      "concept_id": "pilot-we-009",
+      "section": "Written Expression",
+      "state": "MANUAL_REVIEW",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "MANUAL_REVIEW"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "generator": {
+        "answer": "A"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "A",
+        "difficulty": "MEDIUM"
+      },
+      "solver": {
+        "answer": "AMBIGUOUS",
+        "confidence": "MEDIUM"
+      },
+      "consensus": false,
+      "batch_slot": {
+        "section": "Written Expression",
+        "primary_target": "PARALLEL_STRUCTURE",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "A",
+        "vocabulary_domain": "chemistry",
+        "tested_error_type": "wrong_verb_form",
+        "error_scope": "sentence_level"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:ce09d72ff092",
+        "reviewer_version": "sha256:15235bfbb07f",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": null,
+      "qa_audit": {
+        "item_id": "pilot-we-009",
+        "concept_id": "pilot-we-009",
+        "state": "MANUAL_REVIEW",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "MANUAL_REVIEW"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "reviewer": {
+          "item_id": "pilot-we-009",
+          "section": "Written Expression",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "A",
+          "generator_answer": "A",
+          "answer_match": true,
+          "reviewer_difficulty": "MEDIUM",
+          "generator_difficulty": "MEDIUM",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [
+            {
+              "severity": "MINOR",
+              "category": "subtype_wording_precision",
+              "description": "Subtype text reads \"gerund vs. base form\" but the actual contrast in the sentence is gerund vs. to-infinitive (B and C are infinitive phrases \"to control\"/\"to record\"), not bare base form. Wording only; does not affect the correctness of the item.",
+              "related_check": "metadata_consistency"
+            }
+          ],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "A",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "solver": {
+          "item_id": "pilot-we-009",
+          "section": "Written Expression",
+          "solver_answer": "AMBIGUOUS",
+          "confidence": "MEDIUM",
+          "reason": "The coordinated list mixes the gerund Measuring with the infinitives in B and C. Both B and C participate in the parallelism defect, so one marked error cannot be isolated uniquely.",
+          "suggested_correction": "Measuring reaction rates precisely, controlling temperature fluctuations, and recording every observation carefully",
+          "ambiguity_detected": true
+        },
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "marked_parts",
+            "section",
+            "sentence"
+          ]
+        },
+        "consensus": {
+          "auto_accept": false,
+          "routing": "MANUAL_REVIEW",
+          "failed_conditions": [
+            "solver.solver_answer not in [A,B,C,D]",
+            "solver.solver_answer != generator.correct_answer",
+            "solver.solver_answer != reviewer.independent_answer",
+            "solver.ambiguity_detected != false"
+          ],
+          "disagreement_reasons": [
+            "solver_ambiguous"
+          ]
+        },
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: ['solver_ambiguous']"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:ce09d72ff092",
+          "reviewer_version": "sha256:15235bfbb07f",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T10:37:56.488684+00:00",
+          "updated": "2026-08-23T13:25:34.061843+00:00"
+        }
+      },
+      "failure_classification": {
+        "primary_failure_reason": "solver_ambiguous",
+        "secondary_reasons": []
+      },
+      "candidate_provenance": {
+        "original_item": {
+          "item_id": "pilot-we-009",
+          "section": "Written Expression",
+          "primary_target": "PARALLEL_STRUCTURE",
+          "subtype": "parallel verb forms in a list (gerund vs. base form)",
+          "secondary_features": [
+            "compound subject",
+            "infinitive phrase list"
+          ],
+          "tested_error_type": "wrong_verb_form",
+          "error_scope": "sentence_level",
+          "difficulty": "MEDIUM",
+          "vocabulary_domain": "chemistry",
+          "sentence": "Measuring reaction rates precisely, to control temperature fluctuations, and to record every observation carefully are essential skills for any laboratory chemist.",
+          "marked_parts": {
+            "A": "Measuring reaction rates precisely",
+            "B": "to control temperature fluctuations",
+            "C": "and to record every observation carefully",
+            "D": "are essential skills for any laboratory chemist"
+          },
+          "correct_answer": "A",
+          "minimal_correction": "To measure reaction rates precisely",
+          "answer_explanation": "The compound subject lists parallel infinitive phrases (\"to control,\" \"to record\"), so the first item must also be an infinitive (\"To measure\") rather than the gerund \"Measuring.\""
+        },
+        "revisions": [],
+        "generator_outputs": [
+          {
+            "round": 1,
+            "file": "round1_generator",
+            "item": {
+              "item_id": "pilot-we-009",
+              "section": "Written Expression",
+              "primary_target": "PARALLEL_STRUCTURE",
+              "subtype": "parallel verb forms in a list (gerund vs. base form)",
+              "secondary_features": [
+                "compound subject",
+                "infinitive phrase list"
+              ],
+              "tested_error_type": "wrong_verb_form",
+              "error_scope": "sentence_level",
+              "difficulty": "MEDIUM",
+              "vocabulary_domain": "chemistry",
+              "sentence": "Measuring reaction rates precisely, to control temperature fluctuations, and to record every observation carefully are essential skills for any laboratory chemist.",
+              "marked_parts": {
+                "A": "Measuring reaction rates precisely",
+                "B": "to control temperature fluctuations",
+                "C": "and to record every observation carefully",
+                "D": "are essential skills for any laboratory chemist"
+              },
+              "correct_answer": "A",
+              "minimal_correction": "To measure reaction rates precisely",
+              "answer_explanation": "The compound subject lists parallel infinitive phrases (\"to control,\" \"to record\"), so the first item must also be an infinitive (\"To measure\") rather than the gerund \"Measuring.\""
+            }
+          }
+        ],
+        "reviewer_outputs": [
+          {
+            "round": 1,
+            "file": "round1_reviewer_we.json",
+            "output": {
+              "item_id": "pilot-we-009",
+              "section": "Written Expression",
+              "verdict": "PASS",
+              "critical_failure": false,
+              "independent_answer": "A",
+              "generator_answer": "A",
+              "answer_match": true,
+              "reviewer_difficulty": "MEDIUM",
+              "generator_difficulty": "MEDIUM",
+              "difficulty_mismatch": false,
+              "checks": {
+                "grammar_validity": "PASS",
+                "answer_uniqueness": "PASS",
+                "target_alignment": "PASS",
+                "naturalness": "PASS",
+                "toefl_style": "PASS",
+                "distractor_quality": "PASS",
+                "metadata_consistency": "PASS"
+              },
+              "issues": [
+                {
+                  "severity": "MINOR",
+                  "category": "subtype_wording_precision",
+                  "description": "Subtype text reads \"gerund vs. base form\" but the actual contrast in the sentence is gerund vs. to-infinitive (B and C are infinitive phrases \"to control\"/\"to record\"), not bare base form. Wording only; does not affect the correctness of the item.",
+                  "related_check": "metadata_consistency"
+                }
+              ],
+              "revision_requirements": [],
+              "source_similarity_risk": "LOW",
+              "detected_error_count": 1,
+              "detected_error_position": "A",
+              "non_error_parts_valid": true,
+              "minimal_correction_valid": true
+            }
+          }
+        ],
+        "solver_outputs": [
+          {
+            "file": "solver_output_round1.json",
+            "output": {
+              "item_id": "pilot-we-009",
+              "section": "Written Expression",
+              "solver_answer": "AMBIGUOUS",
+              "confidence": "MEDIUM",
+              "reason": "The coordinated list mixes the gerund Measuring with the infinitives in B and C. Both B and C participate in the parallelism defect, so one marked error cannot be isolated uniquely.",
+              "suggested_correction": "Measuring reaction rates precisely, controlling temperature fluctuations, and recording every observation carefully",
+              "ambiguity_detected": true
+            }
+          }
+        ],
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "MANUAL_REVIEW"
+        ],
+        "final_state": "MANUAL_REVIEW",
+        "final_generator_item": {
+          "item_id": "pilot-we-009",
+          "section": "Written Expression",
+          "primary_target": "PARALLEL_STRUCTURE",
+          "subtype": "parallel verb forms in a list (gerund vs. base form)",
+          "secondary_features": [
+            "compound subject",
+            "infinitive phrase list"
+          ],
+          "tested_error_type": "wrong_verb_form",
+          "error_scope": "sentence_level",
+          "difficulty": "MEDIUM",
+          "vocabulary_domain": "chemistry",
+          "sentence": "Measuring reaction rates precisely, to control temperature fluctuations, and to record every observation carefully are essential skills for any laboratory chemist.",
+          "marked_parts": {
+            "A": "Measuring reaction rates precisely",
+            "B": "to control temperature fluctuations",
+            "C": "and to record every observation carefully",
+            "D": "are essential skills for any laboratory chemist"
+          },
+          "correct_answer": "A",
+          "minimal_correction": "To measure reaction rates precisely",
+          "answer_explanation": "The compound subject lists parallel infinitive phrases (\"to control,\" \"to record\"), so the first item must also be an infinitive (\"To measure\") rather than the gerund \"Measuring.\""
+        },
+        "final_reviewer_item": {
+          "item_id": "pilot-we-009",
+          "section": "Written Expression",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "A",
+          "generator_answer": "A",
+          "answer_match": true,
+          "reviewer_difficulty": "MEDIUM",
+          "generator_difficulty": "MEDIUM",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [
+            {
+              "severity": "MINOR",
+              "category": "subtype_wording_precision",
+              "description": "Subtype text reads \"gerund vs. base form\" but the actual contrast in the sentence is gerund vs. to-infinitive (B and C are infinitive phrases \"to control\"/\"to record\"), not bare base form. Wording only; does not affect the correctness of the item.",
+              "related_check": "metadata_consistency"
+            }
+          ],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "A",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "final_solver_item": {
+          "item_id": "pilot-we-009",
+          "section": "Written Expression",
+          "solver_answer": "AMBIGUOUS",
+          "confidence": "MEDIUM",
+          "reason": "The coordinated list mixes the gerund Measuring with the infinitives in B and C. Both B and C participate in the parallelism defect, so one marked error cannot be isolated uniquely.",
+          "suggested_correction": "Measuring reaction rates precisely, controlling temperature fluctuations, and recording every observation carefully",
+          "ambiguity_detected": true
+        },
+        "batch_slot": {
+          "slot_id": "WE09",
+          "item_id": "pilot-we-009",
+          "primary_target": "PARALLEL_STRUCTURE",
+          "subtype": "parallel verb forms in a list (gerund vs. base form)",
+          "tested_error_type": "wrong_verb_form",
+          "error_span_type": "gerund_phrase",
+          "error_scope": "sentence_level",
+          "error_location": "late",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "A",
+          "vocabulary_domain": "chemistry",
+          "sentence_length_target_words": 24,
+          "clause_count_target": 2,
+          "section": "Written Expression",
+          "basis": {
+            "primary_target": "DERIVED",
+            "subtype": "HEURISTIC",
+            "tested_error_type": "DERIVED",
+            "error_span_type": "HEURISTIC",
+            "error_scope": "HEURISTIC",
+            "error_location": "HEURISTIC",
+            "difficulty": "HEURISTIC",
+            "correct_answer_position": "HEURISTIC",
+            "vocabulary_domain": "HEURISTIC"
+          }
+        }
+      }
+    },
+    {
+      "item_id": "pilot-we-024",
+      "concept_id": "pilot-we-024",
+      "section": "Written Expression",
+      "state": "DISCARDED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "DISCARDED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "generator": {
+        "answer": "D"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "difficulty": "EASY"
+      },
+      "solver": {
+        "answer": "NONE",
+        "confidence": "MEDIUM"
+      },
+      "consensus": false,
+      "batch_slot": {
+        "section": "Written Expression",
+        "primary_target": "CONNECTORS_CONJUNCTIONS",
+        "difficulty": "EASY",
+        "correct_answer_position": "D",
+        "vocabulary_domain": "horticulture",
+        "tested_error_type": "incorrect_subordinator",
+        "error_scope": "sentence_level"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:ce09d72ff092",
+        "reviewer_version": "sha256:15235bfbb07f",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": null,
+      "qa_audit": {
+        "item_id": "pilot-we-024",
+        "concept_id": "pilot-we-024",
+        "state": "DISCARDED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "DISCARDED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "reviewer": {
+          "item_id": "pilot-we-024",
+          "section": "Written Expression",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "D",
+          "generator_answer": "D",
+          "answer_match": true,
+          "reviewer_difficulty": "EASY",
+          "generator_difficulty": "EASY",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [
+            {
+              "severity": "MINOR",
+              "category": "distractor_span_triviality",
+              "description": "Marked spans A (\"The orchids\") and B (\"still failed\") are both very short (two words each) with little internal grammar to scrutinize, making them somewhat weaker/less plausible test candidates than C and D. Not disqualifying, but a less deliberate distractor placement than the rest of the batch.",
+              "related_check": "distractor_quality"
+            }
+          ],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "D",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "solver": {
+          "item_id": "pilot-we-024",
+          "section": "Written Expression",
+          "solver_answer": "NONE",
+          "confidence": "MEDIUM",
+          "reason": "No marked part contains a clear grammatical error; the because-clause is syntactically well formed, although its causal claim is context-dependent and somewhat questionable.",
+          "suggested_correction": "No correction needed.",
+          "ambiguity_detected": true
+        },
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "marked_parts",
+            "section",
+            "sentence"
+          ]
+        },
+        "consensus": {
+          "auto_accept": false,
+          "routing": "DISCARDED",
+          "failed_conditions": [
+            "solver.solver_answer not in [A,B,C,D]",
+            "solver.solver_answer != generator.correct_answer",
+            "solver.solver_answer != reviewer.independent_answer",
+            "solver.ambiguity_detected != false"
+          ],
+          "disagreement_reasons": [
+            "solver_none"
+          ]
+        },
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: ['solver_none']"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:ce09d72ff092",
+          "reviewer_version": "sha256:15235bfbb07f",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T10:38:00.187401+00:00",
+          "updated": "2026-08-23T13:25:37.897147+00:00"
+        }
+      },
+      "failure_classification": {
+        "primary_failure_reason": "no_valid_answer",
+        "secondary_reasons": []
+      },
+      "candidate_provenance": {
+        "original_item": {
+          "item_id": "pilot-we-024",
+          "section": "Written Expression",
+          "primary_target": "CONNECTORS_CONJUNCTIONS",
+          "subtype": "wrong subordinating conjunction for concessive relation",
+          "secondary_features": [
+            "causal vs. concessive contrast",
+            "reversed clause order"
+          ],
+          "tested_error_type": "incorrect_subordinator",
+          "error_scope": "sentence_level",
+          "difficulty": "EASY",
+          "vocabulary_domain": "horticulture",
+          "sentence": "The orchids still failed to bloom on schedule, because the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season.",
+          "marked_parts": {
+            "A": "The orchids",
+            "B": "still failed",
+            "C": "to bloom on schedule,",
+            "D": "because the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season"
+          },
+          "correct_answer": "D",
+          "minimal_correction": "although the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season",
+          "answer_explanation": "The clause describes a contrast (good conditions but failed blooming), so the concessive subordinator \"although\" is required instead of the causal \"because,\" which incorrectly implies the good conditions caused the failure."
+        },
+        "revisions": [],
+        "generator_outputs": [
+          {
+            "round": 1,
+            "file": "round1_generator",
+            "item": {
+              "item_id": "pilot-we-024",
+              "section": "Written Expression",
+              "primary_target": "CONNECTORS_CONJUNCTIONS",
+              "subtype": "wrong subordinating conjunction for concessive relation",
+              "secondary_features": [
+                "causal vs. concessive contrast",
+                "reversed clause order"
+              ],
+              "tested_error_type": "incorrect_subordinator",
+              "error_scope": "sentence_level",
+              "difficulty": "EASY",
+              "vocabulary_domain": "horticulture",
+              "sentence": "The orchids still failed to bloom on schedule, because the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season.",
+              "marked_parts": {
+                "A": "The orchids",
+                "B": "still failed",
+                "C": "to bloom on schedule,",
+                "D": "because the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season"
+              },
+              "correct_answer": "D",
+              "minimal_correction": "although the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season",
+              "answer_explanation": "The clause describes a contrast (good conditions but failed blooming), so the concessive subordinator \"although\" is required instead of the causal \"because,\" which incorrectly implies the good conditions caused the failure."
+            }
+          }
+        ],
+        "reviewer_outputs": [
+          {
+            "round": 1,
+            "file": "round1_reviewer_we.json",
+            "output": {
+              "item_id": "pilot-we-024",
+              "section": "Written Expression",
+              "verdict": "PASS",
+              "critical_failure": false,
+              "independent_answer": "D",
+              "generator_answer": "D",
+              "answer_match": true,
+              "reviewer_difficulty": "EASY",
+              "generator_difficulty": "EASY",
+              "difficulty_mismatch": false,
+              "checks": {
+                "grammar_validity": "PASS",
+                "answer_uniqueness": "PASS",
+                "target_alignment": "PASS",
+                "naturalness": "PASS",
+                "toefl_style": "PASS",
+                "distractor_quality": "PASS",
+                "metadata_consistency": "PASS"
+              },
+              "issues": [
+                {
+                  "severity": "MINOR",
+                  "category": "distractor_span_triviality",
+                  "description": "Marked spans A (\"The orchids\") and B (\"still failed\") are both very short (two words each) with little internal grammar to scrutinize, making them somewhat weaker/less plausible test candidates than C and D. Not disqualifying, but a less deliberate distractor placement than the rest of the batch.",
+                  "related_check": "distractor_quality"
+                }
+              ],
+              "revision_requirements": [],
+              "source_similarity_risk": "LOW",
+              "detected_error_count": 1,
+              "detected_error_position": "D",
+              "non_error_parts_valid": true,
+              "minimal_correction_valid": true
+            }
+          }
+        ],
+        "solver_outputs": [
+          {
+            "file": "solver_output_round1.json",
+            "output": {
+              "item_id": "pilot-we-024",
+              "section": "Written Expression",
+              "solver_answer": "NONE",
+              "confidence": "MEDIUM",
+              "reason": "No marked part contains a clear grammatical error; the because-clause is syntactically well formed, although its causal claim is context-dependent and somewhat questionable.",
+              "suggested_correction": "No correction needed.",
+              "ambiguity_detected": true
+            }
+          }
+        ],
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "DISCARDED"
+        ],
+        "final_state": "DISCARDED",
+        "final_generator_item": {
+          "item_id": "pilot-we-024",
+          "section": "Written Expression",
+          "primary_target": "CONNECTORS_CONJUNCTIONS",
+          "subtype": "wrong subordinating conjunction for concessive relation",
+          "secondary_features": [
+            "causal vs. concessive contrast",
+            "reversed clause order"
+          ],
+          "tested_error_type": "incorrect_subordinator",
+          "error_scope": "sentence_level",
+          "difficulty": "EASY",
+          "vocabulary_domain": "horticulture",
+          "sentence": "The orchids still failed to bloom on schedule, because the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season.",
+          "marked_parts": {
+            "A": "The orchids",
+            "B": "still failed",
+            "C": "to bloom on schedule,",
+            "D": "because the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season"
+          },
+          "correct_answer": "D",
+          "minimal_correction": "although the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season",
+          "answer_explanation": "The clause describes a contrast (good conditions but failed blooming), so the concessive subordinator \"although\" is required instead of the causal \"because,\" which incorrectly implies the good conditions caused the failure."
+        },
+        "final_reviewer_item": {
+          "item_id": "pilot-we-024",
+          "section": "Written Expression",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "D",
+          "generator_answer": "D",
+          "answer_match": true,
+          "reviewer_difficulty": "EASY",
+          "generator_difficulty": "EASY",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [
+            {
+              "severity": "MINOR",
+              "category": "distractor_span_triviality",
+              "description": "Marked spans A (\"The orchids\") and B (\"still failed\") are both very short (two words each) with little internal grammar to scrutinize, making them somewhat weaker/less plausible test candidates than C and D. Not disqualifying, but a less deliberate distractor placement than the rest of the batch.",
+              "related_check": "distractor_quality"
+            }
+          ],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "D",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "final_solver_item": {
+          "item_id": "pilot-we-024",
+          "section": "Written Expression",
+          "solver_answer": "NONE",
+          "confidence": "MEDIUM",
+          "reason": "No marked part contains a clear grammatical error; the because-clause is syntactically well formed, although its causal claim is context-dependent and somewhat questionable.",
+          "suggested_correction": "No correction needed.",
+          "ambiguity_detected": true
+        },
+        "batch_slot": {
+          "slot_id": "WE24",
+          "item_id": "pilot-we-024",
+          "primary_target": "CONNECTORS_CONJUNCTIONS",
+          "subtype": "wrong subordinating conjunction for concessive relation",
+          "tested_error_type": "incorrect_subordinator",
+          "error_span_type": "conjunction",
+          "error_scope": "sentence_level",
+          "error_location": "sentence_initial",
+          "difficulty": "EASY",
+          "correct_answer_position": "D",
+          "vocabulary_domain": "horticulture",
+          "sentence_length_target_words": 20,
+          "clause_count_target": 2,
+          "section": "Written Expression",
+          "basis": {
+            "primary_target": "DERIVED",
+            "subtype": "HEURISTIC",
+            "tested_error_type": "DERIVED",
+            "error_span_type": "HEURISTIC",
+            "error_scope": "HEURISTIC",
+            "error_location": "HEURISTIC",
+            "difficulty": "HEURISTIC",
+            "correct_answer_position": "HEURISTIC",
+            "vocabulary_domain": "HEURISTIC"
+          }
+        }
+      }
+    }
+  ]
+}

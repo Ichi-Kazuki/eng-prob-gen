@@ -1,0 +1,60 @@
+{
+  "items": [
+    {
+      "item_id": "batch1-we-003",
+      "issues": [
+        {
+          "severity": "MAJOR",
+          "category": "alternate_repair",
+          "description": "The intended correction is not uniquely forced by the sentence context.",
+          "related_check": "answer_uniqueness"
+        }
+      ],
+      "revision_requirements": [
+        "Rewrite the item so exactly one minimal correction is valid."
+      ]
+    },
+    {
+      "item_id": "batch1-we-023",
+      "issues": [
+        {
+          "severity": "MAJOR",
+          "category": "alternate_repair",
+          "description": "The intended correction is not uniquely forced by the sentence context.",
+          "related_check": "answer_uniqueness"
+        }
+      ],
+      "revision_requirements": [
+        "Rewrite the item so exactly one minimal correction is valid."
+      ]
+    },
+    {
+      "item_id": "batch2-struct-001",
+      "issues": [
+        {
+          "severity": "MAJOR",
+          "category": "answer_uniqueness",
+          "description": "The stem does not establish a past-time context, so present plural wilt and past wilted are both defensible.",
+          "related_check": "answer_uniqueness"
+        }
+      ],
+      "revision_requirements": [
+        "Revise the stem/options to make the intended answer unique."
+      ]
+    },
+    {
+      "item_id": "batch2-struct-009",
+      "issues": [
+        {
+          "severity": "MAJOR",
+          "category": "answer_uniqueness",
+          "description": "So quiet that is standard, while such quiet that is also syntactically possible in formal English; the options do not ensure uniqueness.",
+          "related_check": "answer_uniqueness"
+        }
+      ],
+      "revision_requirements": [
+        "Revise the stem/options to make the intended answer unique."
+      ]
+    }
+  ]
+}

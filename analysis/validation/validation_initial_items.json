@@ -1,0 +1,2884 @@
+{
+  "items": [
+    {
+      "item_id": "batch1-struct-001",
+      "section": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject-verb agreement across an intervening prepositional phrase",
+      "secondary_features": [],
+      "difficulty": "EASY",
+      "vocabulary_domain": "meteorology",
+      "stem": "According to the latest forecast, the pattern of pressure changes near the coast ____ before dawn.",
+      "options": {
+        "A": "is expected to change",
+        "B": "are expected to change",
+        "C": "expecting to change",
+        "D": "the pattern expected changing"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "The singular head noun pattern takes the singular verb is; the intervening of-phrase does not change the subject.",
+      "distractor_rationales": {
+        "A": "Correct: is agrees with the singular subject pattern.",
+        "B": "The plural verb are incorrectly agrees with pressure or changes instead of pattern.",
+        "C": "This is a nonfinite fragment and does not provide a finite main verb.",
+        "D": "This repeats the subject and omits the required finite verb construction after the blank."
+      }
+    },
+    {
+      "item_id": "batch1-struct-002",
+      "section": "Structure",
+      "primary_target": "NOUN_CLAUSES",
+      "subtype": "embedded question with statement word order",
+      "secondary_features": [],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "cartography",
+      "stem": "The map archivist explained ____ during the survey.",
+      "options": {
+        "A": "where had the old boundary markers been moved",
+        "B": "where the old boundary markers had been moved",
+        "C": "where the old boundary markers",
+        "D": "where did the old boundary markers move"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "An embedded question uses statement order: subject before the auxiliary, as in where the markers had been moved.",
+      "distractor_rationales": {
+        "A": "The auxiliary is inverted as in a direct question, so the embedded clause has the wrong word order.",
+        "B": "Correct: the embedded question has the subject before the auxiliary.",
+        "C": "The embedded clause is incomplete because it lacks a finite verb.",
+        "D": "This uses direct-question inversion inside an embedded question."
+      }
+    },
+    {
+      "item_id": "batch1-struct-003",
+      "section": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "non-restrictive relative clause with passive predicate",
+      "secondary_features": [
+        "passive voice"
+      ],
+      "difficulty": "HARD",
+      "vocabulary_domain": "archaeological conservation",
+      "stem": "The sandstone tablet, ____ during the excavation, is now displayed in the conservation laboratory.",
+      "options": {
+        "A": "what was uncovered",
+        "B": "which uncovering",
+        "C": "which was uncovered",
+        "D": "which it was uncovered"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "The non-restrictive relative clause needs which as its marker and the passive verb phrase was uncovered.",
+      "distractor_rationales": {
+        "A": "What cannot introduce this non-restrictive relative clause.",
+        "B": "Uncovering is the wrong verb form for the required passive predicate.",
+        "C": "Correct: which introduces the clause and was uncovered is passive and finite.",
+        "D": "The relative marker and a redundant subject pronoun duplicate the subject."
+      }
+    },
+    {
+      "item_id": "batch1-struct-004",
+      "section": "Structure",
+      "primary_target": "ADVERBIAL_CLAUSES",
+      "subtype": "time clause introduced by when",
+      "secondary_features": [],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "observatory operations",
+      "stem": "The telescope records extra images ____ the sky becomes clear after sunset.",
+      "options": {
+        "A": "during",
+        "B": "when the sky becoming clear",
+        "C": "when clear the sky",
+        "D": "when the sky becomes clear"
+      },
+      "correct_answer": "D",
+      "answer_explanation": "The time clause requires when followed by a subject and a finite verb: the sky becomes clear.",
+      "distractor_rationales": {
+        "A": "During is a preposition and cannot introduce the following finite clause.",
+        "B": "The clause uses a nonfinite form instead of the required finite verb.",
+        "C": "The subject and predicate are incorrectly ordered and the clause is not well formed.",
+        "D": "Correct: when introduces a complete time clause with subject and finite verb."
+      }
+    },
+    {
+      "item_id": "batch1-struct-005",
+      "section": "Structure",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "contrast connector before a noun phrase",
+      "secondary_features": [],
+      "difficulty": "EASY",
+      "vocabulary_domain": "materials engineering",
+      "stem": "The alloy remains flexible ____ repeated cooling and heating.",
+      "options": {
+        "A": "despite",
+        "B": "although",
+        "C": "in spite",
+        "D": "despite of"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "Despite correctly introduces the noun phrase repeated cooling and heating to express contrast.",
+      "distractor_rationales": {
+        "A": "Correct: despite is followed directly by a noun phrase.",
+        "B": "Although must introduce a finite clause, not the noun phrase that follows.",
+        "C": "In spite requires the preposition of before this noun phrase.",
+        "D": "Despite does not take of; the extra preposition is unnecessary."
+      }
+    },
+    {
+      "item_id": "batch1-struct-006",
+      "section": "Structure",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "past perfect passive before a later past event",
+      "secondary_features": [
+        "past perfect tense",
+        "passive voice"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "mineral surveying",
+      "stem": "By the time the survey team arrived, the mineral samples ____ in sealed containers.",
+      "options": {
+        "A": "were being label",
+        "B": "had been labeled",
+        "C": "had labeled",
+        "D": "had been"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "The earlier completed event requires past perfect, and the samples receive the action, so the form is had been labeled.",
+      "distractor_rationales": {
+        "A": "The participle is malformed; label must be in its past-participial form.",
+        "B": "Correct: had been labeled is past perfect passive.",
+        "C": "The active form incorrectly makes the samples perform the labeling.",
+        "D": "The passive auxiliary is missing its required past participle."
+      }
+    },
+    {
+      "item_id": "batch1-struct-007",
+      "section": "Structure",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "causative verb with object plus predicate adjective",
+      "secondary_features": [],
+      "difficulty": "EASY",
+      "vocabulary_domain": "environmental monitoring",
+      "stem": "The monitoring station's new filter made the river water ____ after heavy rainfall.",
+      "options": {
+        "A": "clearer",
+        "B": "clearly",
+        "C": "to clear",
+        "D": "clearing"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "Make takes an object followed by a bare predicate adjective: made the water clearer.",
+      "distractor_rationales": {
+        "A": "Correct: clearer is the adjective complement after the object river water.",
+        "B": "Clearly is an adverb, not the required predicate adjective.",
+        "C": "Make does not take to plus the infinitive in this object-complement pattern.",
+        "D": "The -ing form does not function as the required adjective complement here."
+      }
+    },
+    {
+      "item_id": "batch1-struct-008",
+      "section": "Structure",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "reduced passive participial modifier",
+      "secondary_features": [
+        "reduced from relative clause",
+        "passive voice"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "seed ecology",
+      "stem": "____ in shaded soil, the seeds germinated slowly after the spring rain.",
+      "options": {
+        "A": "Having planting",
+        "B": "Planting",
+        "C": "Planted",
+        "D": "Were planted"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "The seeds receive the action, so a reduced passive modifier uses the past participle planted.",
+      "distractor_rationales": {
+        "A": "Having planting is not a valid perfect participial form.",
+        "B": "The active participle incorrectly presents the seeds as doing the planting.",
+        "C": "Correct: planted is a reduced passive modifier of the seeds.",
+        "D": "Were planted is a finite clause fragment and cannot modify the subject in this position."
+      }
+    },
+    {
+      "item_id": "batch1-struct-009",
+      "section": "Structure",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "adjective plus enough plus to-infinitive result construction",
+      "secondary_features": [],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "astronomical instrumentation",
+      "stem": "The detector was ____ to register faint signals from the distant star.",
+      "options": {
+        "A": "enough sensitive",
+        "B": "sensitive enough",
+        "C": "so sensitive",
+        "D": "sensitive enough registering"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "Enough follows the adjective in the adjective + enough + to-infinitive construction.",
+      "distractor_rationales": {
+        "A": "Enough is placed before the adjective instead of after it.",
+        "B": "Correct: sensitive enough licenses the following to-infinitive.",
+        "C": "So normally requires a that-clause for this result construction.",
+        "D": "The following form is not the required to-infinitive construction."
+      }
+    },
+    {
+      "item_id": "batch1-struct-010",
+      "section": "Structure",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel bare infinitives in a three-part list",
+      "secondary_features": [
+        "parallel structure with coordinate verb"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "geological fieldwork",
+      "stem": "During fieldwork, the geologists had to ____ the slope, record the rock layers, and label the samples.",
+      "options": {
+        "A": "measuring",
+        "B": "measurement",
+        "C": "measure",
+        "D": "to measure"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "Had to is followed by a bare infinitive, and measure is parallel with record and label.",
+      "distractor_rationales": {
+        "A": "The -ing form is not the bare infinitive required after had to.",
+        "B": "A noun cannot be coordinated with the two verb forms in the list.",
+        "C": "Correct: measure is the bare infinitive parallel to record and label.",
+        "D": "The added to creates to to measure after had to."
+      }
+    },
+    {
+      "item_id": "batch1-struct-011",
+      "section": "Structure",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "adjective order inside a complex noun phrase",
+      "secondary_features": [],
+      "difficulty": "HARD",
+      "vocabulary_domain": "museum studies",
+      "stem": "The museum displayed ____ from the coastal excavation.",
+      "options": {
+        "A": "a small bronze worked bowl",
+        "B": "a finely work small bronze bowl",
+        "C": "a finely worked old small bronze bowl",
+        "D": "a finely worked small bronze bowl"
+      },
+      "correct_answer": "D",
+      "answer_explanation": "The participial modifier finely worked precedes the size adjective small, which precedes the material adjective bronze and the noun bowl.",
+      "distractor_rationales": {
+        "A": "The modifiers are ordered incorrectly around the participial adjective and material adjective.",
+        "B": "Work is the wrong part-of-speech form; the participial modifier is worked.",
+        "C": "The unnecessary adjective old adds an extraneous element to the planned noun phrase.",
+        "D": "Correct: the modifier order is finely worked, small, bronze, bowl."
+      }
+    },
+    {
+      "item_id": "batch1-struct-012",
+      "section": "Structure",
+      "primary_target": "INVERSION",
+      "subtype": "subject-auxiliary inversion after only after",
+      "secondary_features": [],
+      "difficulty": "HARD",
+      "vocabulary_domain": "glaciology",
+      "stem": "Only after the glacier retreated ____ the researchers discover the buried lake.",
+      "options": {
+        "A": "did discover",
+        "B": "did the researchers discover",
+        "C": "the researchers did discover",
+        "D": "discovering the researchers did"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "Fronted only after triggers subject-auxiliary inversion: did the researchers discover.",
+      "distractor_rationales": {
+        "A": "The inverted auxiliary lacks the required subject.",
+        "B": "Correct: the auxiliary precedes the subject after fronted only after.",
+        "C": "The subject remains before the auxiliary, so inversion is absent.",
+        "D": "This is a nonfinite and incorrectly ordered fragment."
+      }
+    },
+    {
+      "item_id": "batch1-struct-013",
+      "section": "Structure",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "subtype": "there plus be with a plural postposed noun phrase",
+      "secondary_features": [],
+      "difficulty": "EASY",
+      "vocabulary_domain": "wind erosion",
+      "stem": "Near the wind-eroded ridge, ____ several narrow channels after the storm.",
+      "options": {
+        "A": "there were",
+        "B": "it was",
+        "C": "there was",
+        "D": "were"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "The existential construction uses there, and the plural postposed noun channels requires were.",
+      "distractor_rationales": {
+        "A": "Correct: there were agrees with the plural noun channels.",
+        "B": "It is a referring pronoun and does not form the required existential construction.",
+        "C": "The singular verb was does not agree with plural channels.",
+        "D": "The expletive there is missing."
+      }
+    },
+    {
+      "item_id": "batch1-struct-014",
+      "section": "Structure",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "plural pronoun reference for a coordinated human subject",
+      "secondary_features": [],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "apprenticeship training",
+      "stem": "The mentor and the apprentice recorded their measurements before ____ submitted the report.",
+      "options": {
+        "A": "he",
+        "B": "them",
+        "C": "they",
+        "D": "their"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "The coordinated subjects are plural, so the following subject pronoun is they.",
+      "distractor_rationales": {
+        "A": "He is singular and cannot refer to both the mentor and the apprentice.",
+        "B": "Them is an object pronoun, not the subject of submitted.",
+        "C": "Correct: they is the plural subject pronoun for the two people.",
+        "D": "Their is possessive and cannot function as the subject here."
+      }
+    },
+    {
+      "item_id": "batch1-struct-015",
+      "section": "Structure",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "noun required as the object of a preposition",
+      "secondary_features": [],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "experimental measurement",
+      "stem": "The accuracy of the experiment depends on ____ of the instrument before each trial.",
+      "options": {
+        "A": "carefully calibrate the instrument",
+        "B": "calibration the careful",
+        "C": "the careful",
+        "D": "the careful calibration"
+      },
+      "correct_answer": "D",
+      "answer_explanation": "The preposition on requires a noun phrase, and the noun calibration is the head of the phrase.",
+      "distractor_rationales": {
+        "A": "A verb phrase cannot serve as the required noun object of on in this construction.",
+        "B": "The noun and adjective are in the wrong order.",
+        "C": "The noun head calibration is missing.",
+        "D": "Correct: the careful calibration is a complete noun phrase after on."
+      }
+    },
+    {
+      "item_id": "batch1-we-001",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "singular head noun in an of-phrase subject",
+      "secondary_features": [],
+      "tested_error_type": "agreement_error",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "instrument calibration",
+      "sentence": "The calibration of the instruments record stable readings during each trial.",
+      "marked_parts": {
+        "A": "The calibration of the instruments record",
+        "B": "stable readings",
+        "C": "during each",
+        "D": "trial."
+      },
+      "correct_answer": "A",
+      "minimal_correction": "record → records",
+      "answer_explanation": "Calibration is the singular head of the subject noun phrase, so the main verb must be records."
+    },
+    {
+      "item_id": "batch1-we-002",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adjective required before a plural head noun",
+      "secondary_features": [],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "mechanical engineering",
+      "sentence": "The engineer selected several durability bearings for the test rig.",
+      "marked_parts": {
+        "A": "The engineer selected",
+        "B": "several durability bearings",
+        "C": "for the test",
+        "D": "rig."
+      },
+      "correct_answer": "B",
+      "minimal_correction": "durability → durable",
+      "answer_explanation": "The noun bearings needs an adjective modifier, so durable, not the noun durability, is required."
+    },
+    {
+      "item_id": "batch1-we-003",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "simple past main verb after a past perfect subordinate clause",
+      "secondary_features": [
+        "past perfect tense"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "lighthouse preservation",
+      "sentence": "After the lighthouse crew had repaired the lamp, the keeper records the inspection details.",
+      "marked_parts": {
+        "A": "After the lighthouse crew had repaired the lamp,",
+        "B": "the keeper",
+        "C": "records",
+        "D": "the inspection details."
+      },
+      "correct_answer": "C",
+      "minimal_correction": "records → recorded",
+      "answer_explanation": "The past perfect clause establishes a past time frame, so the main verb should be simple past recorded."
+    },
+    {
+      "item_id": "batch1-we-004",
+      "section": "Written Expression",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "adjective-governed preposition in an interested-in phrase",
+      "secondary_features": [],
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "archival science",
+      "sentence": "The archivist was deeply interested on maps from the coastal archive.",
+      "marked_parts": {
+        "A": "The archivist was",
+        "B": "deeply",
+        "C": "interested",
+        "D": "on maps from the coastal archive."
+      },
+      "correct_answer": "D",
+      "minimal_correction": "on → in",
+      "answer_explanation": "The established adjective-preposition collocation is interested in, not interested on."
+    },
+    {
+      "item_id": "batch1-we-005",
+      "section": "Written Expression",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "gerund complements coordinated after a training preposition",
+      "secondary_features": [
+        "parallel structure with coordinate verb"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "craft education",
+      "sentence": "The workshop focuses on carve wood and shaping clay for architectural models.",
+      "marked_parts": {
+        "A": "The workshop focuses on carve",
+        "B": "wood and shaping",
+        "C": "clay for",
+        "D": "architectural models."
+      },
+      "correct_answer": "A",
+      "minimal_correction": "carve → carving",
+      "answer_explanation": "The preposition on takes gerund complements, and carving must be parallel with shaping."
+    },
+    {
+      "item_id": "batch1-we-006",
+      "section": "Written Expression",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "adjective complement after responsible for",
+      "secondary_features": [],
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "mountain architecture",
+      "sentence": "The engineer is responsible to the mountain station's ventilation system.",
+      "marked_parts": {
+        "A": "The engineer is",
+        "B": "responsible to",
+        "C": "the mountain station's",
+        "D": "ventilation system."
+      },
+      "correct_answer": "B",
+      "minimal_correction": "to → for",
+      "answer_explanation": "When responsible means having duty for something, it is followed by the preposition for."
+    },
+    {
+      "item_id": "batch1-we-007",
+      "section": "Written Expression",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "subject relative pronoun for a human antecedent",
+      "secondary_features": [],
+      "tested_error_type": "incorrect_relative_marker",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "community surveying",
+      "sentence": "The surveyor which mapped the village explained the boundary changes.",
+      "marked_parts": {
+        "A": "The surveyor",
+        "B": "which mapped",
+        "C": "the village explained",
+        "D": "the boundary changes."
+      },
+      "correct_answer": "C",
+      "minimal_correction": "which → who",
+      "answer_explanation": "The antecedent surveyor is a person and is the subject of mapped, so the relative marker should be who."
+    },
+    {
+      "item_id": "batch1-we-008",
+      "section": "Written Expression",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "participial adjective before a material adjective in a noun phrase",
+      "secondary_features": [],
+      "tested_error_type": "wrong_word_order",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "museum curation",
+      "sentence": "The museum restored a bronze finely decorated vessel from the collection.",
+      "marked_parts": {
+        "A": "The museum restored",
+        "B": "a",
+        "C": "vessel from",
+        "D": "bronze finely decorated vessel."
+      },
+      "correct_answer": "D",
+      "minimal_correction": "bronze finely decorated vessel → finely decorated bronze vessel",
+      "answer_explanation": "The participial modifier finely decorated precedes the material adjective bronze in the noun phrase."
+    },
+    {
+      "item_id": "batch1-we-009",
+      "section": "Written Expression",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "singular head noun with an of-phrase interrupter",
+      "secondary_features": [],
+      "tested_error_type": "agreement_error",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "oral history",
+      "sentence": "The collection of oral histories contain vivid accounts of migration from the valley.",
+      "marked_parts": {
+        "A": "The collection of oral histories contain",
+        "B": "vivid accounts",
+        "C": "of migration",
+        "D": "from the valley."
+      },
+      "correct_answer": "A",
+      "minimal_correction": "contain → contains",
+      "answer_explanation": "The singular head noun collection controls agreement; the plural noun histories is inside an of-phrase."
+    },
+    {
+      "item_id": "batch1-we-010",
+      "section": "Written Expression",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "removal of a redundant coordinator after an although clause",
+      "secondary_features": [],
+      "tested_error_type": "extraneous_element",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "transportation geography",
+      "sentence": "Although the route was steep, but the hikers reached the summit before noon.",
+      "marked_parts": {
+        "A": "Although the route",
+        "B": "was steep, but",
+        "C": "the hikers reached",
+        "D": "the summit before noon."
+      },
+      "correct_answer": "B",
+      "minimal_correction": "remove but",
+      "answer_explanation": "Although already introduces the subordinate contrast clause, so the additional coordinator but is unnecessary."
+    },
+    {
+      "item_id": "batch1-we-011",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "passive transitive verb requiring a by-agent phrase",
+      "secondary_features": [
+        "passive voice"
+      ],
+      "tested_error_type": "wrong_voice",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "manuscript librarianship",
+      "sentence": "The manuscript was carefully restored the librarian last year.",
+      "marked_parts": {
+        "A": "The manuscript was",
+        "B": "carefully",
+        "C": "restored the librarian",
+        "D": "last year."
+      },
+      "correct_answer": "C",
+      "minimal_correction": "restored the librarian → restored by the librarian",
+      "answer_explanation": "In the passive construction, the agent must be introduced by by: restored by the librarian."
+    },
+    {
+      "item_id": "batch1-we-012",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "past participle after a perfect auxiliary",
+      "secondary_features": [],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "laboratory procedure",
+      "sentence": "The team has carefully prepared the samples that they have record.",
+      "marked_parts": {
+        "A": "The team has",
+        "B": "carefully prepared",
+        "C": "the samples that they have",
+        "D": "record."
+      },
+      "correct_answer": "D",
+      "minimal_correction": "record → recorded",
+      "answer_explanation": "The auxiliary have requires the past participle recorded."
+    },
+    {
+      "item_id": "batch1-we-013",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "pronoun without an explicit antecedent",
+      "secondary_features": [],
+      "tested_error_type": "incorrect_reference",
+      "error_scope": "sentence_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "research equipment",
+      "sentence": "It was placed beside the research equipment after the technician finished.",
+      "marked_parts": {
+        "A": "It",
+        "B": "was placed beside",
+        "C": "the research equipment",
+        "D": "after the technician finished."
+      },
+      "correct_answer": "A",
+      "minimal_correction": "It → The sensor",
+      "answer_explanation": "The sentence supplies no antecedent for It; an explicit noun such as The sensor is needed."
+    },
+    {
+      "item_id": "batch1-we-014",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adjective required as a noun modifier after an article",
+      "secondary_features": [],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "public lectures",
+      "sentence": "The lecturer presented a scientifically overview of public water systems.",
+      "marked_parts": {
+        "A": "The lecturer presented",
+        "B": "a scientifically overview",
+        "C": "of public",
+        "D": "water systems."
+      },
+      "correct_answer": "B",
+      "minimal_correction": "scientifically → scientific",
+      "answer_explanation": "The noun overview requires the adjective scientific as its modifier, not the adverb scientifically."
+    },
+    {
+      "item_id": "batch1-we-015",
+      "section": "Written Expression",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "comparative adjective without a redundant more marker",
+      "secondary_features": [],
+      "tested_error_type": "wrong_degree_form",
+      "error_scope": "local",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "regional transportation",
+      "sentence": "The northern route is considerably more shorter than the southern route during winter.",
+      "marked_parts": {
+        "A": "The northern route is",
+        "B": "considerably",
+        "C": "more shorter than the southern route",
+        "D": "during winter."
+      },
+      "correct_answer": "C",
+      "minimal_correction": "more shorter → shorter",
+      "answer_explanation": "Shorter is already a comparative form, so the redundant more must be removed."
+    },
+    {
+      "item_id": "batch1-we-016",
+      "section": "Written Expression",
+      "primary_target": "ADVERBIAL_CLAUSES",
+      "subtype": "because clause rather than because-of before a finite clause",
+      "secondary_features": [],
+      "tested_error_type": "incorrect_subordinator",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "greenhouse cultivation",
+      "sentence": "The plants grew slowly during the trial because of the soil remained unusually cold.",
+      "marked_parts": {
+        "A": "The plants grew slowly",
+        "B": "during the trial",
+        "C": "because",
+        "D": "of the soil remained unusually cold."
+      },
+      "correct_answer": "D",
+      "minimal_correction": "because of the soil remained unusually cold → because the soil remained unusually cold",
+      "answer_explanation": "A finite clause follows because, whereas because of must be followed by a noun phrase."
+    },
+    {
+      "item_id": "batch1-we-017",
+      "section": "Written Expression",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "subtype": "there-be agreement with a plural postposed noun phrase",
+      "secondary_features": [],
+      "tested_error_type": "agreement_error",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "theater architecture",
+      "sentence": "There is several balconies along the theater's upper gallery.",
+      "marked_parts": {
+        "A": "There is",
+        "B": "several balconies",
+        "C": "along the theater's",
+        "D": "upper gallery."
+      },
+      "correct_answer": "A",
+      "minimal_correction": "is → are",
+      "answer_explanation": "The plural postposed noun balconies requires the plural form are in the existential construction."
+    },
+    {
+      "item_id": "batch1-we-018",
+      "section": "Written Expression",
+      "primary_target": "NOUN_CLAUSES",
+      "subtype": "embedded why-question with statement word order",
+      "secondary_features": [],
+      "tested_error_type": "wrong_word_order",
+      "error_scope": "cross_clause",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "data analysis",
+      "sentence": "The analyst could not determine why did the values change after calibration.",
+      "marked_parts": {
+        "A": "The analyst could not determine",
+        "B": "why did the values change",
+        "C": "after",
+        "D": "calibration."
+      },
+      "correct_answer": "B",
+      "minimal_correction": "why did the values change → why the values changed",
+      "answer_explanation": "The clause after determine is an embedded question and therefore uses statement order."
+    },
+    {
+      "item_id": "batch1-we-019",
+      "section": "Written Expression",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "adjective-governed dependent-on preposition",
+      "secondary_features": [],
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_scope": "local",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "thermal materials",
+      "sentence": "The strength of the coating is dependent of temperature and humidity.",
+      "marked_parts": {
+        "A": "The strength of the coating",
+        "B": "is",
+        "C": "dependent of temperature",
+        "D": "and humidity."
+      },
+      "correct_answer": "C",
+      "minimal_correction": "dependent of → dependent on",
+      "answer_explanation": "The established collocation is dependent on, so of is the wrong preposition."
+    },
+    {
+      "item_id": "batch1-we-020",
+      "section": "Written Expression",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "gerund coordination after recommends",
+      "secondary_features": [
+        "parallel structure with coordinate verb"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "municipal planning",
+      "sentence": "The committee recommends mapping the district and to revise its zoning plan.",
+      "marked_parts": {
+        "A": "The committee recommends",
+        "B": "mapping the district",
+        "C": "and",
+        "D": "to revise its zoning plan."
+      },
+      "correct_answer": "D",
+      "minimal_correction": "to revise → revising",
+      "answer_explanation": "The complements coordinated after recommends should be parallel gerund phrases: mapping and revising."
+    },
+    {
+      "item_id": "batch1-we-021",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adverb required to modify a verb",
+      "secondary_features": [],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "plant physiology",
+      "sentence": "The seedlings grew rapid under the controlled lamps.",
+      "marked_parts": {
+        "A": "The seedlings grew rapid",
+        "B": "under",
+        "C": "the controlled",
+        "D": "lamps."
+      },
+      "correct_answer": "A",
+      "minimal_correction": "rapid → rapidly",
+      "answer_explanation": "The verb grew requires the adverb rapidly to describe how the seedlings grew."
+    },
+    {
+      "item_id": "batch1-we-022",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "reduced passive modifier before a finite passive predicate",
+      "secondary_features": [
+        "reduced from relative clause",
+        "passive voice"
+      ],
+      "tested_error_type": "wrong_voice",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "wetland ecology",
+      "sentence": "The panels, having built from recycled glass, were tested for strength.",
+      "marked_parts": {
+        "A": "The panels,",
+        "B": "having built from recycled glass,",
+        "C": "were tested",
+        "D": "for strength."
+      },
+      "correct_answer": "B",
+      "minimal_correction": "having built from recycled glass → built from recycled glass",
+      "answer_explanation": "The panels receive the action, so the reduced modifier must be passive: built from recycled glass."
+    },
+    {
+      "item_id": "batch1-we-023",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "simple past main verb after a past perfect passive clause",
+      "secondary_features": [
+        "past perfect tense",
+        "passive voice"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "cross_clause",
+      "difficulty": "HARD",
+      "vocabulary_domain": "bridge engineering",
+      "sentence": "After the bridge had been inspected, engineers approves the repair plan.",
+      "marked_parts": {
+        "A": "After the bridge had been inspected,",
+        "B": "engineers approves",
+        "C": "the repair",
+        "D": "plan."
+      },
+      "correct_answer": "B",
+      "minimal_correction": "approves → approved",
+      "answer_explanation": "The completed inspection places the following event in the past, so the main verb should be approved."
+    },
+    {
+      "item_id": "batch1-we-024",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "countable quantifier before a plural count noun",
+      "secondary_features": [],
+      "tested_error_type": "agreement_error",
+      "error_scope": "local",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "questionnaire design",
+      "sentence": "The questionnaire included much responses from first-year students.",
+      "marked_parts": {
+        "A": "The questionnaire included",
+        "B": "much",
+        "C": "responses",
+        "D": "from first-year students."
+      },
+      "correct_answer": "C",
+      "minimal_correction": "much responses → many responses",
+      "answer_explanation": "Responses is a plural count noun, so it requires the quantifier many rather than much."
+    },
+    {
+      "item_id": "batch1-we-025",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adverb required to modify an adverb",
+      "secondary_features": [],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "HARD",
+      "vocabulary_domain": "horticultural experiments",
+      "sentence": "The seedlings grew surprising quickly in the greenhouse.",
+      "marked_parts": {
+        "A": "The seedlings grew surprising",
+        "B": "quickly",
+        "C": "in the",
+        "D": "greenhouse."
+      },
+      "correct_answer": "A",
+      "minimal_correction": "surprising → surprisingly",
+      "answer_explanation": "The word modifies the adverb quickly, so it must be the adverb surprisingly."
+    },
+    {
+      "item_id": "batch2-struct-001",
+      "section": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject-verb agreement across an intervening prepositional phrase",
+      "secondary_features": [
+        "agreement"
+      ],
+      "difficulty": "EASY",
+      "vocabulary_domain": "botany",
+      "stem": "The leaves of the desert plant ___ during the dry season.",
+      "options": {
+        "A": "wilt",
+        "B": "wilted",
+        "C": "wilts",
+        "D": "wilting"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "The past-tense verb agrees with the plural subject leaves and the completed-time context.",
+      "distractor_rationales": {
+        "A": "The present form does not match the completed-time context.",
+        "B": "Correct: wilted agrees with leaves in the past-tense clause.",
+        "C": "The singular present form does not agree with leaves.",
+        "D": "The participle cannot serve as the finite verb here."
+      }
+    },
+    {
+      "item_id": "batch2-struct-002",
+      "section": "Structure",
+      "primary_target": "NOUN_CLAUSES",
+      "subtype": "embedded question with statement word order",
+      "secondary_features": [
+        "embedded question"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "archaeology",
+      "stem": "Researchers have not determined ___ the ancient temple was built.",
+      "options": {
+        "A": "when was",
+        "B": "when did",
+        "C": "when",
+        "D": "when that"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "An embedded question uses statement order: when the temple was built.",
+      "distractor_rationales": {
+        "A": "Inversion is not used in an embedded question.",
+        "B": "Do-inversion is not used after determined.",
+        "C": "Correct: when introduces the embedded clause with statement order.",
+        "D": "That cannot introduce this embedded question meaningfully."
+      }
+    },
+    {
+      "item_id": "batch2-struct-003",
+      "section": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "restrictive relative clause with object relative marker",
+      "secondary_features": [
+        "restrictive clause"
+      ],
+      "difficulty": "EASY",
+      "vocabulary_domain": "environmental science",
+      "stem": "The wetlands ___ the university restored now attract many birds.",
+      "options": {
+        "A": "that",
+        "B": "that they",
+        "C": "which they",
+        "D": "restoring"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "That is the object relative marker in the restrictive clause.",
+      "distractor_rationales": {
+        "A": "Correct: that replaces the object of restored.",
+        "B": "The extra subject creates a double-object structure.",
+        "C": "The extra they makes the relative clause ungrammatical.",
+        "D": "The participle does not form the intended finite relative clause."
+      }
+    },
+    {
+      "item_id": "batch2-struct-004",
+      "section": "Structure",
+      "primary_target": "ADVERBIAL_CLAUSES",
+      "subtype": "conditional clause with a finite subordinate clause",
+      "secondary_features": [
+        "conditional"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "meteorology",
+      "stem": "___ the storm weakens, coastal residents will remain indoors.",
+      "options": {
+        "A": "Because",
+        "B": "Although",
+        "C": "Unless",
+        "D": "If"
+      },
+      "correct_answer": "D",
+      "answer_explanation": "If introduces the condition for the result clause.",
+      "distractor_rationales": {
+        "A": "Because expresses cause, not the stated condition.",
+        "B": "Although expresses contrast rather than a condition.",
+        "C": "Unless reverses the intended condition.",
+        "D": "Correct: if introduces the conditional subordinate clause."
+      }
+    },
+    {
+      "item_id": "batch2-struct-005",
+      "section": "Structure",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "contrast connector followed by a finite clause",
+      "secondary_features": [
+        "contrast"
+      ],
+      "difficulty": "EASY",
+      "vocabulary_domain": "public policy",
+      "stem": "The proposal was expensive, ___ the council approved it.",
+      "options": {
+        "A": "but",
+        "B": "because",
+        "C": "unless",
+        "D": "so that"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "But correctly coordinates two contrasting independent clauses.",
+      "distractor_rationales": {
+        "A": "Correct: but signals the contrast.",
+        "B": "Because gives a cause and cannot coordinate these ideas as intended.",
+        "C": "Unless introduces a condition.",
+        "D": "So that introduces purpose or result."
+      }
+    },
+    {
+      "item_id": "batch2-struct-006",
+      "section": "Structure",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "passive voice in a completed research process",
+      "secondary_features": [
+        "passive voice",
+        "past perfect"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "materials science",
+      "stem": "Before publication, the alloy samples ___ by three independent laboratories.",
+      "options": {
+        "A": "tested",
+        "B": "had been tested",
+        "C": "have tested",
+        "D": "were testing"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "Had been tested expresses a completed passive process before publication.",
+      "distractor_rationales": {
+        "A": "The simple past omits the earlier-completion relationship.",
+        "B": "Correct: had been tested is past perfect passive.",
+        "C": "The active present perfect has the wrong voice and time.",
+        "D": "The progressive active form has the wrong voice."
+      }
+    },
+    {
+      "item_id": "batch2-struct-007",
+      "section": "Structure",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "causative verb followed by object and predicate adjective",
+      "secondary_features": [
+        "causative construction"
+      ],
+      "difficulty": "EASY",
+      "vocabulary_domain": "urban planning",
+      "stem": "The new trees will make the avenue ___.",
+      "options": {
+        "A": "shade",
+        "B": "shading",
+        "C": "shady",
+        "D": "shadedly"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "Make takes an object followed by a predicate adjective describing it.",
+      "distractor_rationales": {
+        "A": "The bare noun/verb form is not the required predicate adjective.",
+        "B": "The participle does not fit the selected complement frame.",
+        "C": "Correct: shady is the predicate adjective after make the avenue.",
+        "D": "This adverb cannot function as the predicate complement."
+      }
+    },
+    {
+      "item_id": "batch2-struct-008",
+      "section": "Structure",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "reduced passive relative clause with a past participle",
+      "secondary_features": [
+        "reduced relative"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "meteorite studies",
+      "stem": "The fragments ___ in the crater were preserved for analysis.",
+      "options": {
+        "A": "discovering",
+        "B": "discovered",
+        "C": "were discovered",
+        "D": "to discover"
+      },
+      "correct_answer": "D",
+      "answer_explanation": "To discover is the infinitive form required by the intended reduced construction.",
+      "distractor_rationales": {
+        "A": "The active participle gives the fragments an implausible agent role.",
+        "B": "The past participle creates a different reduced passive reading.",
+        "C": "A finite clause cannot fill this reduced phrase position.",
+        "D": "Correct for the planned infinitive construction."
+      }
+    },
+    {
+      "item_id": "batch2-struct-009",
+      "section": "Structure",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "so plus adjective licensing a result that-clause",
+      "secondary_features": [
+        "result clause"
+      ],
+      "difficulty": "HARD",
+      "vocabulary_domain": "acoustics",
+      "stem": "The chamber was ___ that even a whisper could be recorded clearly.",
+      "options": {
+        "A": "so quiet",
+        "B": "such quiet",
+        "C": "very quietly",
+        "D": "as quiet"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "Such quiet is the planned degree expression licensing the following that result clause.",
+      "distractor_rationales": {
+        "A": "So normally requires an adjective phrase, not the planned noun phrase construction.",
+        "B": "Correct for the selected such-plus-noun result construction.",
+        "C": "An adverb cannot serve as the complement of was here.",
+        "D": "As quiet requires a comparison complement."
+      }
+    },
+    {
+      "item_id": "batch2-struct-010",
+      "section": "Structure",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "not only plus coordinated parallel verb phrases",
+      "secondary_features": [
+        "coordination"
+      ],
+      "difficulty": "EASY",
+      "vocabulary_domain": "museum studies",
+      "stem": "The exhibit not only informs visitors but also ___.",
+      "options": {
+        "A": "entertains them",
+        "B": "entertaining them",
+        "C": "entertainment",
+        "D": "to entertain them"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "The two coordinated complements are parallel finite verb phrases.",
+      "distractor_rationales": {
+        "A": "Correct: entertains them parallels informs visitors.",
+        "B": "The participle is not parallel to the finite verb.",
+        "C": "A noun is not parallel to the verb phrase.",
+        "D": "The infinitive is not parallel to the finite verb."
+      }
+    },
+    {
+      "item_id": "batch2-struct-011",
+      "section": "Structure",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "appositive noun phrase after a proper noun",
+      "secondary_features": [
+        "appositive"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "linguistics",
+      "stem": "Maya Chen, ___, presented the findings at the conference.",
+      "options": {
+        "A": "a sociolinguist respected",
+        "B": "respected a sociolinguist",
+        "C": "a respected sociolinguist",
+        "D": "sociolinguist a respected"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "The appositive noun phrase follows the proper name and identifies Maya Chen.",
+      "distractor_rationales": {
+        "A": "The adjective is misplaced after the noun in this phrase.",
+        "B": "The word order does not form an appositive noun phrase.",
+        "C": "Correct: a respected sociolinguist is a well-formed appositive.",
+        "D": "The determiner and noun order is incorrect."
+      }
+    },
+    {
+      "item_id": "batch2-struct-012",
+      "section": "Structure",
+      "primary_target": "INVERSION",
+      "subtype": "subject-auxiliary inversion after a fronted negative adverbial",
+      "secondary_features": [
+        "negative adverbial"
+      ],
+      "difficulty": "HARD",
+      "vocabulary_domain": "constitutional history",
+      "stem": "Never before ___ such a significant amendment been proposed.",
+      "options": {
+        "A": "has",
+        "B": "such has",
+        "C": "has it",
+        "D": "it has"
+      },
+      "correct_answer": "D",
+      "answer_explanation": "The fronted negative adverbial requires inversion of the auxiliary and subject.",
+      "distractor_rationales": {
+        "A": "The auxiliary lacks its subject.",
+        "B": "The inserted phrase disrupts the required inversion.",
+        "C": "It adds a subject that is not part of the intended clause.",
+        "D": "Correct: it has follows the fronted negative adverbial in the planned order."
+      }
+    },
+    {
+      "item_id": "batch2-struct-013",
+      "section": "Structure",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "subtype": "there plus be with a postposed plural noun phrase",
+      "secondary_features": [
+        "existential there"
+      ],
+      "difficulty": "EASY",
+      "vocabulary_domain": "hydrology",
+      "stem": "There ___ several underground streams beneath the valley.",
+      "options": {
+        "A": "is",
+        "B": "are",
+        "C": "be",
+        "D": "being"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "The plural postposed noun phrase streams requires are.",
+      "distractor_rationales": {
+        "A": "Is does not agree with the plural noun phrase.",
+        "B": "Correct: are agrees with several streams.",
+        "C": "The bare form cannot be the finite verb here.",
+        "D": "The participle cannot serve as the finite verb."
+      }
+    },
+    {
+      "item_id": "batch2-struct-014",
+      "section": "Structure",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "quantifier selected for an uncountable academic noun",
+      "secondary_features": [
+        "quantifier"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "economics",
+      "stem": "The report provides ___ information about regional employment trends.",
+      "options": {
+        "A": "much",
+        "B": "many",
+        "C": "few",
+        "D": "several"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "Information is uncountable, so much is the appropriate quantifier.",
+      "distractor_rationales": {
+        "A": "Correct: much modifies the uncountable noun information.",
+        "B": "Many modifies plural count nouns.",
+        "C": "Few modifies plural count nouns.",
+        "D": "Several modifies plural count nouns."
+      }
+    },
+    {
+      "item_id": "batch2-struct-015",
+      "section": "Structure",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adverb required to modify a following finite verb",
+      "secondary_features": [
+        "adverb modification"
+      ],
+      "difficulty": "HARD",
+      "vocabulary_domain": "signal processing",
+      "stem": "The filter operates ___ when the input signal contains background noise.",
+      "options": {
+        "A": "efficient",
+        "B": "efficiency",
+        "C": "efficiently",
+        "D": "more efficient"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "An adverb is required to modify the finite verb operates.",
+      "distractor_rationales": {
+        "A": "The adjective cannot directly modify operates.",
+        "B": "The noun cannot modify the verb.",
+        "C": "Correct: efficiently is the adverb modifying operates.",
+        "D": "The comparative adjective lacks a comparison and the required adverbial function."
+      }
+    },
+    {
+      "item_id": "batch2-we-001",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "article before a singular count noun",
+      "secondary_features": [
+        "article"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "ecology",
+      "sentence": "An ecosystem supports many forms of life.",
+      "marked_parts": {
+        "A": "An",
+        "B": "ecosystem",
+        "C": "supports",
+        "D": "many forms"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "A: An → An (no correction needed)",
+      "answer_explanation": "The article an correctly precedes the singular count noun ecosystem."
+    },
+    {
+      "item_id": "batch2-we-002",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "simple past in a dated historical sequence",
+      "secondary_features": [
+        "past tense"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "transportation history",
+      "sentence": "The railway opened the mountain route in 1898.",
+      "marked_parts": {
+        "A": "The railway",
+        "B": "opened",
+        "C": "the mountain route",
+        "D": "in 1898"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "B: opened → opened (no correction needed)",
+      "answer_explanation": "The dated event correctly uses the simple past."
+    },
+    {
+      "item_id": "batch2-we-003",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adjective modifying a research noun",
+      "secondary_features": [
+        "adjective"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "psychology",
+      "sentence": "The study reports significant changes in memory.",
+      "marked_parts": {
+        "A": "The study",
+        "B": "reports",
+        "C": "significant",
+        "D": "changes in memory"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "C: significant → significant (no correction needed)",
+      "answer_explanation": "The adjective significant correctly modifies the noun changes."
+    },
+    {
+      "item_id": "batch2-we-004",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "quantifier with a plural count noun",
+      "secondary_features": [
+        "quantifier agreement"
+      ],
+      "tested_error_type": "agreement_error",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "agriculture",
+      "sentence": "Several methods improve the harvest yield.",
+      "marked_parts": {
+        "A": "Several",
+        "B": "methods",
+        "C": "improve",
+        "D": "the harvest yield"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "D: the harvest yield → the harvest yields",
+      "answer_explanation": "The planned correction makes the quantified count noun plural."
+    },
+    {
+      "item_id": "batch2-we-005",
+      "section": "Written Expression",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel gerund phrases after a coordinator",
+      "secondary_features": [
+        "coordination"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "education",
+      "sentence": "The course emphasizes reading critically and writing clearly.",
+      "marked_parts": {
+        "A": "The course",
+        "B": "emphasizes",
+        "C": "reading critically",
+        "D": "and writing clearly"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "A: The course → The course",
+      "answer_explanation": "The two gerund phrases are parallel after emphasizes."
+    },
+    {
+      "item_id": "batch2-we-006",
+      "section": "Written Expression",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "adjective complement after a linking verb",
+      "secondary_features": [
+        "linking verb"
+      ],
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "geography",
+      "sentence": "The plateau appears stable during the dry season.",
+      "marked_parts": {
+        "A": "The plateau",
+        "B": "appears",
+        "C": "stable",
+        "D": "during the dry season"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "B: appears → appears",
+      "answer_explanation": "Appears correctly takes the predicate adjective stable."
+    },
+    {
+      "item_id": "batch2-we-007",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "gerund as the object of a preposition",
+      "secondary_features": [
+        "gerund"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "marine conservation",
+      "sentence": "Scientists are committed to protecting the coral reef.",
+      "marked_parts": {
+        "A": "Scientists",
+        "B": "are committed",
+        "C": "to protecting",
+        "D": "the coral reef"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "C: to protecting → to protecting",
+      "answer_explanation": "The preposition to is correctly followed by the gerund protecting."
+    },
+    {
+      "item_id": "batch2-we-008",
+      "section": "Written Expression",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative pronoun as the subject of a restrictive clause",
+      "secondary_features": [
+        "restrictive relative"
+      ],
+      "tested_error_type": "incorrect_relative_marker",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "architecture",
+      "sentence": "The arch that supports the roof was recently repaired.",
+      "marked_parts": {
+        "A": "The arch",
+        "B": "that supports",
+        "C": "the roof",
+        "D": "was recently repaired"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "D: was recently repaired → was recently repaired",
+      "answer_explanation": "That correctly serves as the subject of the restrictive relative clause."
+    },
+    {
+      "item_id": "batch2-we-009",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adverb modifying a participle",
+      "secondary_features": [
+        "adverb"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "meteorology",
+      "sentence": "The rapidly moving clouds covered the horizon.",
+      "marked_parts": {
+        "A": "The rapidly",
+        "B": "moving clouds",
+        "C": "covered",
+        "D": "the horizon"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "A: The rapidly → The rapidly",
+      "answer_explanation": "Rapidly is the adverb modifying moving."
+    },
+    {
+      "item_id": "batch2-we-010",
+      "section": "Written Expression",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "preposition selected for a noun phrase",
+      "secondary_features": [
+        "preposition"
+      ],
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "finance",
+      "sentence": "Investors are concerned about the sudden change.",
+      "marked_parts": {
+        "A": "Investors",
+        "B": "are concerned",
+        "C": "about",
+        "D": "the sudden change"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "B: are concerned → are concerned",
+      "answer_explanation": "Concerned correctly combines with the preposition about."
+    },
+    {
+      "item_id": "batch2-we-011",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "pronoun agreement with a singular antecedent",
+      "secondary_features": [
+        "pronoun agreement"
+      ],
+      "tested_error_type": "agreement_error",
+      "error_scope": "cross_clause",
+      "difficulty": "HARD",
+      "vocabulary_domain": "sociology",
+      "sentence": "Each participant submitted their questionnaire before leaving.",
+      "marked_parts": {
+        "A": "Each participant",
+        "B": "submitted",
+        "C": "their questionnaire",
+        "D": "before leaving"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "C: their questionnaire → his or her questionnaire",
+      "answer_explanation": "The singular antecedent each participant requires a singular pronoun in the locked construction."
+    },
+    {
+      "item_id": "batch2-we-012",
+      "section": "Written Expression",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel noun phrases after both and",
+      "secondary_features": [
+        "both-and coordination"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "political science",
+      "sentence": "The survey measured both public trust and policy awareness.",
+      "marked_parts": {
+        "A": "The survey",
+        "B": "measured",
+        "C": "both public trust",
+        "D": "and policy awareness"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "D: and policy awareness → and policy awareness",
+      "answer_explanation": "Both coordinates the parallel noun phrases public trust and policy awareness."
+    },
+    {
+      "item_id": "batch2-we-013",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "passive voice with an object receiving an action",
+      "secondary_features": [
+        "passive voice"
+      ],
+      "tested_error_type": "wrong_voice",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "public health",
+      "sentence": "The vaccine was tested on volunteers before approval.",
+      "marked_parts": {
+        "A": "The vaccine",
+        "B": "was tested",
+        "C": "on volunteers",
+        "D": "before approval"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "A: The vaccine → The vaccine",
+      "answer_explanation": "The vaccine correctly receives the action in the passive construction."
+    },
+    {
+      "item_id": "batch2-we-014",
+      "section": "Written Expression",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "adjective phrase in postmodifier position",
+      "secondary_features": [
+        "modifier order"
+      ],
+      "tested_error_type": "wrong_word_order",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "literary studies",
+      "sentence": "The poems written during exile reveal a new style.",
+      "marked_parts": {
+        "A": "The poems",
+        "B": "written during exile",
+        "C": "reveal",
+        "D": "a new style"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "B: written during exile → written during exile",
+      "answer_explanation": "The participial adjective phrase correctly follows and modifies poems."
+    },
+    {
+      "item_id": "batch2-we-015",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "present participle in a reduced active clause",
+      "secondary_features": [
+        "participial phrase"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "robotics",
+      "sentence": "Using infrared sensors, the robot avoids obstacles.",
+      "marked_parts": {
+        "A": "Using infrared sensors",
+        "B": "the robot",
+        "C": "avoids",
+        "D": "obstacles"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "C: avoids → avoids",
+      "answer_explanation": "Using correctly introduces a reduced active clause whose understood subject is the robot."
+    },
+    {
+      "item_id": "batch2-we-016",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "definite article for a uniquely identified institution",
+      "secondary_features": [
+        "definite article"
+      ],
+      "tested_error_type": "missing_required_element",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "law",
+      "sentence": "The court published its decision on Monday.",
+      "marked_parts": {
+        "A": "The court",
+        "B": "published",
+        "C": "its decision",
+        "D": "on Monday"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "D: on Monday → on the Monday",
+      "answer_explanation": "The planned correction supplies the definite article in the marked institutional time phrase."
+    },
+    {
+      "item_id": "batch2-we-017",
+      "section": "Written Expression",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "comparative adjective with than",
+      "secondary_features": [
+        "comparative"
+      ],
+      "tested_error_type": "wrong_degree_form",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "statistics",
+      "sentence": "The second estimate is more precise than the first.",
+      "marked_parts": {
+        "A": "The second estimate",
+        "B": "is more precise",
+        "C": "than",
+        "D": "the first"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "A: The second estimate → The second estimate",
+      "answer_explanation": "More precise correctly forms the comparative with than."
+    },
+    {
+      "item_id": "batch2-we-018",
+      "section": "Written Expression",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "verb governed by an infinitive complement",
+      "secondary_features": [
+        "infinitive complement"
+      ],
+      "tested_error_type": "missing_required_element",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "engineering",
+      "sentence": "The device allows operators to adjust the pressure.",
+      "marked_parts": {
+        "A": "The device",
+        "B": "allows operators",
+        "C": "to adjust",
+        "D": "the pressure"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "B: allows operators → allows operators",
+      "answer_explanation": "Allow correctly takes an object followed by an infinitive complement."
+    },
+    {
+      "item_id": "batch2-we-019",
+      "section": "Written Expression",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel finite verbs coordinated by and",
+      "secondary_features": [
+        "finite coordination"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "music",
+      "sentence": "The conductor raised the baton and began the performance.",
+      "marked_parts": {
+        "A": "The conductor",
+        "B": "raised",
+        "C": "the baton and began",
+        "D": "the performance"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "C: raised the baton and began → raised the baton and began",
+      "answer_explanation": "Raised and began are parallel finite verbs coordinated by and."
+    },
+    {
+      "item_id": "batch2-we-020",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "noun required as the object of a preposition",
+      "secondary_features": [
+        "noun complement"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "anthropology",
+      "sentence": "The artifact provides evidence of early settlement.",
+      "marked_parts": {
+        "A": "The artifact",
+        "B": "provides",
+        "C": "evidence of",
+        "D": "early settlement"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "D: early settlement → early settlement",
+      "answer_explanation": "Settlement is the noun required after the preposition of."
+    },
+    {
+      "item_id": "batch2-we-021",
+      "section": "Written Expression",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "whose for a possessive relative relationship",
+      "secondary_features": [
+        "possessive relative"
+      ],
+      "tested_error_type": "incorrect_relative_marker",
+      "error_scope": "cross_clause",
+      "difficulty": "HARD",
+      "vocabulary_domain": "astronomy",
+      "sentence": "The star whose spectrum changed was observed again.",
+      "marked_parts": {
+        "A": "The star",
+        "B": "whose spectrum",
+        "C": "changed",
+        "D": "was observed again"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "A: The star → The star",
+      "answer_explanation": "Whose correctly marks the possessive relationship between star and spectrum."
+    },
+    {
+      "item_id": "batch2-we-022",
+      "section": "Written Expression",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "although introducing a finite concessive clause",
+      "secondary_features": [
+        "concessive clause"
+      ],
+      "tested_error_type": "incorrect_subordinator",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "climate policy",
+      "sentence": "Although costs increased, the program continued to expand.",
+      "marked_parts": {
+        "A": "Although costs increased",
+        "B": "the program",
+        "C": "continued",
+        "D": "to expand"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "B: the program → the program",
+      "answer_explanation": "Although correctly introduces the finite concessive clause."
+    },
+    {
+      "item_id": "batch2-we-023",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "past perfect before a later past event",
+      "secondary_features": [
+        "past perfect"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "cross_clause",
+      "difficulty": "HARD",
+      "vocabulary_domain": "medical history",
+      "sentence": "The patient had recovered before the physician arrived.",
+      "marked_parts": {
+        "A": "The patient",
+        "B": "had recovered",
+        "C": "before",
+        "D": "the physician arrived"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "C: before → before",
+      "answer_explanation": "Had recovered correctly marks the earlier of the two past events."
+    },
+    {
+      "item_id": "batch2-we-024",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "few with a plural count noun",
+      "secondary_features": [
+        "quantifier"
+      ],
+      "tested_error_type": "agreement_error",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "demography",
+      "sentence": "Few residents opposed the construction plan.",
+      "marked_parts": {
+        "A": "Few",
+        "B": "residents",
+        "C": "opposed",
+        "D": "the construction plan"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "D: the construction plan → the construction plans",
+      "answer_explanation": "The planned correction makes the quantified count noun plural."
+    },
+    {
+      "item_id": "batch2-we-025",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "infinitive of purpose before a main clause",
+      "secondary_features": [
+        "purpose infinitive"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "sentence_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "renewable energy",
+      "sentence": "To reduce emissions, the city expanded its solar program.",
+      "marked_parts": {
+        "A": "To reduce emissions",
+        "B": "the city",
+        "C": "expanded",
+        "D": "its solar program"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "A: To reduce emissions → To reduce emissions",
+      "answer_explanation": "The infinitive phrase correctly expresses the purpose of the main clause."
+    },
+    {
+      "item_id": "batch3-struct-001",
+      "section": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject-verb agreement across an intervening prepositional phrase",
+      "secondary_features": [
+        "singular subject",
+        "prepositional modifier"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "astronomy",
+      "stem": "The orbit of several newly discovered planets ___ unusually stable.",
+      "options": {
+        "A": "remain",
+        "B": "remains",
+        "C": "remaining",
+        "D": "has remain"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "The singular head noun orbit requires the singular verb remains.",
+      "distractor_rationales": {
+        "A": "Remain agrees with the nearby plural noun planets, not the subject head.",
+        "B": "Correct: orbit is singular.",
+        "C": "The participle cannot serve as the finite predicate.",
+        "D": "Has remain uses an incorrect participle form."
+      }
+    },
+    {
+      "item_id": "batch3-struct-002",
+      "section": "Structure",
+      "primary_target": "NOUN_CLAUSES",
+      "subtype": "embedded question with noninverted word order",
+      "secondary_features": [
+        "embedded question",
+        "whether clause"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "archaeology",
+      "stem": "Researchers are uncertain whether the pottery fragments ___ from the coastal settlement.",
+      "options": {
+        "A": "did originate",
+        "B": "originated did",
+        "C": "originated",
+        "D": "from originating"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "An embedded whether-question uses statement word order: subject followed by the finite verb.",
+      "distractor_rationales": {
+        "A": "Inversion with did is not used in this embedded question.",
+        "B": "The auxiliary is misplaced and the clause is ungrammatical.",
+        "C": "Correct: the fragments originated there.",
+        "D": "This is not a complete finite clause."
+      }
+    },
+    {
+      "item_id": "batch3-struct-003",
+      "section": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "restrictive relative pronoun as object",
+      "secondary_features": [
+        "restrictive clause",
+        "object relative"
+      ],
+      "difficulty": "EASY",
+      "vocabulary_domain": "botany",
+      "stem": "The researcher cataloged the fern species ___ the expedition had collected.",
+      "options": {
+        "A": "that",
+        "B": "what",
+        "C": "they",
+        "D": "which them"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "That correctly introduces a restrictive relative clause and functions as its object.",
+      "distractor_rationales": {
+        "A": "Correct: that is the object of had collected.",
+        "B": "What cannot follow an antecedent noun in this construction.",
+        "C": "They creates an extra subject and leaves the object missing.",
+        "D": "Which them contains a redundant object."
+      }
+    },
+    {
+      "item_id": "batch3-struct-004",
+      "section": "Structure",
+      "primary_target": "ADVERBIAL_CLAUSES",
+      "subtype": "second conditional clause with full subordinate-clause structure",
+      "secondary_features": [
+        "second conditional",
+        "if clause"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "public policy",
+      "stem": "If the city ___ the subsidy, more households would install efficient heating systems.",
+      "options": {
+        "A": "increases",
+        "B": "increased",
+        "C": "will increase",
+        "D": "were increasing"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "The second conditional uses a simple past form in the if-clause and would plus base verb in the result.",
+      "distractor_rationales": {
+        "A": "The present tense does not form the intended second conditional.",
+        "B": "Correct: increased pairs with would install.",
+        "C": "Will is not normally used in this if-clause.",
+        "D": "The progressive form is not required and changes the construction."
+      }
+    },
+    {
+      "item_id": "batch3-struct-005",
+      "section": "Structure",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "concessive relation requiring a prepositional connector before a noun phrase",
+      "secondary_features": [
+        "concession",
+        "noun phrase complement"
+      ],
+      "difficulty": "EASY",
+      "vocabulary_domain": "materials science",
+      "stem": "___ its low density, the alloy withstands considerable pressure.",
+      "options": {
+        "A": "Although",
+        "B": "Despite",
+        "C": "Despite of",
+        "D": "Because"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "Despite is followed directly by a noun phrase and expresses concession.",
+      "distractor_rationales": {
+        "A": "Although requires a finite clause, not this noun phrase.",
+        "B": "Correct: despite its low density.",
+        "C": "Despite of is not the standard prepositional form.",
+        "D": "Because expresses cause rather than concession."
+      }
+    },
+    {
+      "item_id": "batch3-struct-006",
+      "section": "Structure",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "passive voice in a finite main clause",
+      "secondary_features": [
+        "passive voice",
+        "past participle"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "meteorology",
+      "stem": "The storm system ___ by satellite instruments before it reached the coast.",
+      "options": {
+        "A": "was tracking",
+        "B": "tracked",
+        "C": "was tracked",
+        "D": "tracking"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "The system receives the action, so the finite passive was tracked is required.",
+      "distractor_rationales": {
+        "A": "Was tracking gives the subject an agentive meaning.",
+        "B": "Tracked is active and lacks an expressed agent.",
+        "C": "Correct: the system was tracked.",
+        "D": "Tracking is a nonfinite fragment here."
+      }
+    },
+    {
+      "item_id": "batch3-struct-007",
+      "section": "Structure",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "causative make followed by object and adjective complement",
+      "secondary_features": [
+        "causative verb",
+        "object complement"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "urban planning",
+      "stem": "The new park design made the narrow corridor ___ and safer for pedestrians.",
+      "options": {
+        "A": "to widen",
+        "B": "widening",
+        "C": "widened",
+        "D": "wider"
+      },
+      "correct_answer": "D",
+      "answer_explanation": "Make takes an object followed by a bare adjective complement; wider is coordinated with safer.",
+      "distractor_rationales": {
+        "A": "Make does not take a to-infinitive complement in this frame.",
+        "B": "The participle is not parallel with safer.",
+        "C": "Widened suggests a passive result and is not coordinated with safer.",
+        "D": "Correct: made the corridor wider and safer."
+      }
+    },
+    {
+      "item_id": "batch3-struct-008",
+      "section": "Structure",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "reduced passive relative clause with a past participle",
+      "secondary_features": [
+        "reduced relative",
+        "passive participle"
+      ],
+      "difficulty": "HARD",
+      "vocabulary_domain": "textile technology",
+      "stem": "The fibers ___ with a protective coating retain their strength after repeated washing and drying.",
+      "options": {
+        "A": "treated",
+        "B": "treating",
+        "C": "were treated",
+        "D": "having treat"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "Treated is a reduced passive relative clause modifying fibers: fibers that were treated.",
+      "distractor_rationales": {
+        "A": "Correct: treated means that were treated.",
+        "B": "Treating gives the fibers an incorrect active role.",
+        "C": "Were treated creates a second finite verb in the noun phrase.",
+        "D": "Having treat has an incorrect participle form."
+      }
+    },
+    {
+      "item_id": "batch3-struct-009",
+      "section": "Structure",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "so plus adjective licensing a result that-clause",
+      "secondary_features": [
+        "so...that",
+        "result clause"
+      ],
+      "difficulty": "HARD",
+      "vocabulary_domain": "cognitive science",
+      "stem": "The memory task was so demanding that several participants, after practicing for weeks, ___ unable to finish it.",
+      "options": {
+        "A": "were more unable",
+        "B": "were",
+        "C": "being",
+        "D": "had been to"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "So demanding that introduces a result clause whose finite predicate is were unable.",
+      "distractor_rationales": {
+        "A": "More unable is an unnecessary and awkward degree form.",
+        "B": "Correct: participants were unable to finish.",
+        "C": "Being is nonfinite and cannot complete the clause.",
+        "D": "Had been to does not provide the required predicate."
+      }
+    },
+    {
+      "item_id": "batch3-struct-010",
+      "section": "Structure",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "not only but also with coordinated finite verbs",
+      "secondary_features": [
+        "correlative conjunction",
+        "finite verb parallelism"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "music technology",
+      "stem": "The software not only records performances but also ___ background noise automatically.",
+      "options": {
+        "A": "filtering",
+        "B": "to filter",
+        "C": "filters",
+        "D": "filtered"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "Not only records but also filters coordinates two finite verbs with the same subject.",
+      "distractor_rationales": {
+        "A": "Filtering is not parallel with the finite verb records.",
+        "B": "The to-infinitive is not parallel with records.",
+        "C": "Correct: records and filters are coordinated finite verbs.",
+        "D": "The past tense breaks the intended present-tense coordination."
+      }
+    },
+    {
+      "item_id": "batch3-struct-011",
+      "section": "Structure",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "appositive noun phrase in post-subject position",
+      "secondary_features": [
+        "appositive",
+        "comma placement"
+      ],
+      "difficulty": "EASY",
+      "vocabulary_domain": "biography",
+      "stem": "Marie Curie, a pioneer in radioactivity research, ___ two Nobel Prizes.",
+      "options": {
+        "A": "awarding",
+        "B": "was award",
+        "C": "her award",
+        "D": "received"
+      },
+      "correct_answer": "D",
+      "answer_explanation": "The appositive is parenthetical, so the sentence needs the finite verb received.",
+      "distractor_rationales": {
+        "A": "Awarding is nonfinite and lacks a main verb.",
+        "B": "Was award has an incorrect passive form.",
+        "C": "Her award is a noun phrase, not a predicate.",
+        "D": "Correct: Curie received two prizes."
+      }
+    },
+    {
+      "item_id": "batch3-struct-012",
+      "section": "Structure",
+      "primary_target": "INVERSION",
+      "subtype": "elliptical conditional inversion with had",
+      "secondary_features": [
+        "conditional inversion",
+        "past perfect"
+      ],
+      "difficulty": "HARD",
+      "vocabulary_domain": "marine conservation",
+      "stem": "Had the reef restoration project ___ earlier, the damaged habitat might have recovered before winter.",
+      "options": {
+        "A": "begun",
+        "B": "beginning",
+        "C": "it begun",
+        "D": "been begin"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "Had plus the past participle forms an inverted past-perfect conditional: had begun.",
+      "distractor_rationales": {
+        "A": "Correct: had begun is the inverted form of if the project had begun.",
+        "B": "Beginning cannot follow had.",
+        "C": "The inverted clause does not take an extra subject it.",
+        "D": "Been begin uses an incorrect participle."
+      }
+    },
+    {
+      "item_id": "batch3-struct-013",
+      "section": "Structure",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "subtype": "there plus be with a plural postverbal noun phrase",
+      "secondary_features": [
+        "existential there",
+        "plural agreement"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "cartography",
+      "stem": "There ___ several blank areas on the early map of the northern coast.",
+      "options": {
+        "A": "is",
+        "B": "are",
+        "C": "being",
+        "D": "has"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "The plural postverbal noun phrase areas requires are in this existential construction.",
+      "distractor_rationales": {
+        "A": "Is is singular and does not agree with areas.",
+        "B": "Correct: there are several blank areas.",
+        "C": "Being is nonfinite.",
+        "D": "Has does not form the existential construction here."
+      }
+    },
+    {
+      "item_id": "batch3-struct-014",
+      "section": "Structure",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "quantifier compatible with an uncountable noun",
+      "secondary_features": [
+        "quantifier",
+        "mass noun"
+      ],
+      "difficulty": "EASY",
+      "vocabulary_domain": "nutrition",
+      "stem": "The recipe requires ___ additional information about the nutritional content of the grain.",
+      "options": {
+        "A": "many",
+        "B": "few",
+        "C": "some",
+        "D": "several"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "Information is uncountable, so some is the compatible quantifier.",
+      "distractor_rationales": {
+        "A": "Many modifies countable plural nouns.",
+        "B": "Few also modifies countable plural nouns.",
+        "C": "Correct: some information.",
+        "D": "Several requires a countable plural noun."
+      }
+    },
+    {
+      "item_id": "batch3-struct-015",
+      "section": "Structure",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adverb required to modify a finite verb",
+      "secondary_features": [
+        "adverb modifier",
+        "embedded clause"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "archival science",
+      "stem": "The archivist explained that the fragile documents must be handled ___ during the transfer.",
+      "options": {
+        "A": "careful",
+        "B": "carefulness",
+        "C": "care",
+        "D": "carefully"
+      },
+      "correct_answer": "D",
+      "answer_explanation": "Carefully is the adverb modifying handled.",
+      "distractor_rationales": {
+        "A": "Careful is an adjective, not the required adverb.",
+        "B": "Carefulness is a noun.",
+        "C": "Care is a noun or verb and cannot modify handled here.",
+        "D": "Correct: handled carefully."
+      }
+    },
+    {
+      "item_id": "batch3-we-001",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "indefinite article before a consonant-initial noun",
+      "secondary_features": [
+        "article choice",
+        "noun phrase"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "architecture",
+      "sentence": "A architect measured the vaulted entrance before the renovation began.",
+      "marked_parts": {
+        "A": "A architect",
+        "B": "measured",
+        "C": "the vaulted entrance",
+        "D": "before the renovation began"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "An architect",
+      "answer_explanation": "The consonant letter a is pronounced with an initial vowel sound, so the article must be an."
+    },
+    {
+      "item_id": "batch3-we-002",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adjective required before a head noun",
+      "secondary_features": [
+        "adjective form",
+        "noun modifier"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "climatology",
+      "sentence": "The region experienced a dramatically temperature shift during the afternoon.",
+      "marked_parts": {
+        "A": "The region",
+        "B": "dramatically",
+        "C": "temperature shift",
+        "D": "during the afternoon"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "dramatic",
+      "answer_explanation": "Dramatic is the adjective required to modify temperature; dramatically is an adverb."
+    },
+    {
+      "item_id": "batch3-we-003",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "simple past finite verb in a completed historical sequence",
+      "secondary_features": [
+        "simple past",
+        "historical sequence"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "public health",
+      "sentence": "The clinic introduced the screening program after it identify the main risk factors.",
+      "marked_parts": {
+        "A": "The clinic introduced",
+        "B": "the screening program",
+        "C": "after it identify",
+        "D": "the main risk factors"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "after it identified",
+      "answer_explanation": "The completed past event requires the simple past identified."
+    },
+    {
+      "item_id": "batch3-we-004",
+      "section": "Written Expression",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel gerund complements in a coordinated list",
+      "secondary_features": [
+        "gerund coordination",
+        "parallelism"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "education",
+      "sentence": "The course emphasizes reading technical articles, analyzing evidence, and to present findings clearly.",
+      "marked_parts": {
+        "A": "The course emphasizes",
+        "B": "reading technical articles",
+        "C": "analyzing evidence",
+        "D": "and to present findings clearly"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "and presenting findings clearly",
+      "answer_explanation": "The three complements after emphasizes must use parallel gerund forms."
+    },
+    {
+      "item_id": "batch3-we-005",
+      "section": "Written Expression",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "adjective object complement after find",
+      "secondary_features": [
+        "find frame",
+        "object complement"
+      ],
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "law",
+      "sentence": "The court found the new evidence convincing for the jury.",
+      "marked_parts": {
+        "A": "The court found",
+        "B": "the new evidence",
+        "C": "convincing for",
+        "D": "the jury"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "convincing to",
+      "answer_explanation": "In this frame, the adjective convincing takes to before the recipient of the persuasion."
+    },
+    {
+      "item_id": "batch3-we-006",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "present participle in a reduced active clause",
+      "secondary_features": [
+        "reduced active clause",
+        "present participle"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "transportation",
+      "sentence": "The buses traveling along the old route, carrying commuters into the city each morning.",
+      "marked_parts": {
+        "A": "The buses traveling",
+        "B": "along the old route",
+        "C": "carrying commuters",
+        "D": "into the city each morning"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "The buses travel along the old route, carrying commuters into the city each morning.",
+      "answer_explanation": "The sentence needs a finite main verb; traveling alone leaves the subject without a predicate."
+    },
+    {
+      "item_id": "batch3-we-007",
+      "section": "Written Expression",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "although introducing a finite concessive clause",
+      "secondary_features": [
+        "subordinator",
+        "finite clause"
+      ],
+      "tested_error_type": "incorrect_subordinator",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "economics",
+      "sentence": "Despite the market was unstable, investors continued to purchase municipal bonds.",
+      "marked_parts": {
+        "A": "Despite the market was unstable",
+        "B": "investors continued",
+        "C": "to purchase",
+        "D": "municipal bonds"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "Although the market was unstable",
+      "answer_explanation": "A finite clause requires although, whereas despite must be followed by a noun phrase or gerund."
+    },
+    {
+      "item_id": "batch3-we-008",
+      "section": "Written Expression",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative pronoun as the object of a preposition",
+      "secondary_features": [
+        "relative marker",
+        "preposition"
+      ],
+      "tested_error_type": "incorrect_relative_marker",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "botany",
+      "sentence": "The plant is one of the species with whom the botanist has worked for years.",
+      "marked_parts": {
+        "A": "The plant is one",
+        "B": "of the species",
+        "C": "with whom",
+        "D": "the botanist has worked for years"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "with which",
+      "answer_explanation": "Which refers to the plant species; whom is used for people."
+    },
+    {
+      "item_id": "batch3-we-009",
+      "section": "Written Expression",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject-verb agreement across an intervening modifier",
+      "secondary_features": [
+        "agreement",
+        "intervening phrase"
+      ],
+      "tested_error_type": "agreement_error",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "meteorology",
+      "sentence": "The pattern of clouds over the mountain indicate an approaching storm.",
+      "marked_parts": {
+        "A": "The pattern",
+        "B": "of clouds over the mountain",
+        "C": "indicate",
+        "D": "an approaching storm"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "indicates",
+      "answer_explanation": "The singular head noun pattern requires indicates."
+    },
+    {
+      "item_id": "batch3-we-010",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "quantifier compatible with a countable plural noun",
+      "secondary_features": [
+        "quantifier",
+        "plural noun"
+      ],
+      "tested_error_type": "agreement_error",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "nutrition",
+      "sentence": "Only much of the dietary samples contained enough iron for the analysis.",
+      "marked_parts": {
+        "A": "Only much",
+        "B": "of the dietary samples",
+        "C": "contained enough iron",
+        "D": "for the analysis"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "Only many",
+      "answer_explanation": "Samples is a countable plural noun, so many, not much, is required."
+    },
+    {
+      "item_id": "batch3-we-011",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "noun required as the head of a prepositional object",
+      "secondary_features": [
+        "noun form",
+        "prepositional object"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "linguistics",
+      "sentence": "The lecturer discussed the historical develop of the regional dialect.",
+      "marked_parts": {
+        "A": "The lecturer discussed",
+        "B": "the historical develop",
+        "C": "of the regional dialect",
+        "D": "the regional dialect"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "the historical development",
+      "answer_explanation": "The premodifier historical requires the noun development as the head of the phrase."
+    },
+    {
+      "item_id": "batch3-we-012",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "passive participle after a finite form of be",
+      "secondary_features": [
+        "passive voice",
+        "past participle"
+      ],
+      "tested_error_type": "wrong_voice",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "manufacturing",
+      "sentence": "The components were assembling in a sealed chamber to prevent contamination.",
+      "marked_parts": {
+        "A": "The components",
+        "B": "were assembling",
+        "C": "in a sealed chamber",
+        "D": "to prevent contamination"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "were assembled",
+      "answer_explanation": "The components receive the action, so be must be followed by the passive participle assembled."
+    },
+    {
+      "item_id": "batch3-we-013",
+      "section": "Written Expression",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel noun phrases after not only but also",
+      "secondary_features": [
+        "correlative conjunction",
+        "noun phrase parallelism"
+      ],
+      "tested_error_type": "wrong_word_order",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "civic planning",
+      "sentence": "The proposal addresses not only traffic congestion but also should improve pedestrian safety.",
+      "marked_parts": {
+        "A": "The proposal addresses",
+        "B": "not only traffic congestion",
+        "C": "but also should improve",
+        "D": "pedestrian safety"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "but also pedestrian safety",
+      "answer_explanation": "The two objects of addresses must be parallel noun phrases: traffic congestion and pedestrian safety."
+    },
+    {
+      "item_id": "batch3-we-014",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "gerund as the complement of a preposition",
+      "secondary_features": [
+        "preposition complement",
+        "gerund"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "local",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "finance",
+      "sentence": "The analyst succeeded in predict the quarterly trend despite limited data.",
+      "marked_parts": {
+        "A": "The analyst succeeded",
+        "B": "in predict",
+        "C": "the quarterly trend",
+        "D": "despite limited data"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "in predicting",
+      "answer_explanation": "The preposition in takes a gerund complement, predicting."
+    },
+    {
+      "item_id": "batch3-we-015",
+      "section": "Written Expression",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "comparative adjective required by than",
+      "secondary_features": [
+        "comparative",
+        "than clause"
+      ],
+      "tested_error_type": "wrong_degree_form",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "geography",
+      "sentence": "The eastern plateau is high than the valley during the dry season.",
+      "marked_parts": {
+        "A": "The eastern plateau",
+        "B": "is high than",
+        "C": "the valley",
+        "D": "during the dry season"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "is higher than",
+      "answer_explanation": "Than requires the comparative form higher."
+    },
+    {
+      "item_id": "batch3-we-016",
+      "section": "Written Expression",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "adjective order inside a noun phrase",
+      "secondary_features": [
+        "adjective order",
+        "noun phrase"
+      ],
+      "tested_error_type": "wrong_word_order",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "ceramics",
+      "sentence": "The museum displayed a clay ancient vessel from the excavation.",
+      "marked_parts": {
+        "A": "The museum displayed",
+        "B": "a clay ancient vessel",
+        "C": "from the excavation",
+        "D": "the excavation"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "an ancient clay vessel from the excavation",
+      "answer_explanation": "The age adjective precedes the material adjective: an ancient clay vessel."
+    },
+    {
+      "item_id": "batch3-we-017",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "singular pronoun agreement with an indefinite antecedent",
+      "secondary_features": [
+        "pronoun reference",
+        "indefinite antecedent"
+      ],
+      "tested_error_type": "incorrect_reference",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "folklore",
+      "sentence": "Each storyteller adapted their account to suit the audience.",
+      "marked_parts": {
+        "A": "Each storyteller",
+        "B": "adapted",
+        "C": "their account",
+        "D": "to suit the audience"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "his or her account",
+      "answer_explanation": "In the locked traditional agreement pattern, singular each requires a singular pronoun."
+    },
+    {
+      "item_id": "batch3-we-018",
+      "section": "Written Expression",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "predicate adjective after a linking verb",
+      "secondary_features": [
+        "linking verb",
+        "predicate adjective"
+      ],
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "constitutional law",
+      "sentence": "The amendment appears in constitutional after the court's review.",
+      "marked_parts": {
+        "A": "The amendment",
+        "B": "appears in constitutional",
+        "C": "after the court's review",
+        "D": "the court's review"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "appears constitutional",
+      "answer_explanation": "Appear takes the predicate adjective directly; the inserted preposition in is not part of the linking-verb frame."
+    },
+    {
+      "item_id": "batch3-we-019",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adverb required to modify a research verb",
+      "secondary_features": [
+        "adverb form",
+        "verb modifier"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "library science",
+      "sentence": "The librarian organized the archived manuscripts methodical.",
+      "marked_parts": {
+        "A": "The librarian organized",
+        "B": "the archived manuscripts",
+        "C": "methodical",
+        "D": "the archived manuscripts methodical"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "methodically",
+      "answer_explanation": "The verb organized is modified by the adverb methodically, not the adjective methodical."
+    },
+    {
+      "item_id": "batch3-we-020",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "infinitive of purpose after a finite verb",
+      "secondary_features": [
+        "purpose infinitive",
+        "base verb"
+      ],
+      "tested_error_type": "missing_required_element",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "ecology",
+      "sentence": "The volunteers collected water samples monitor pollution levels in the wetland.",
+      "marked_parts": {
+        "A": "The volunteers collected",
+        "B": "water samples",
+        "C": "monitor pollution levels",
+        "D": "in the wetland"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "to monitor pollution levels",
+      "answer_explanation": "The infinitive marker to is required before the purpose verb monitor."
+    },
+    {
+      "item_id": "batch3-we-021",
+      "section": "Written Expression",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "fixed preposition collocation after benefit",
+      "secondary_features": [
+        "collocation",
+        "prepositional complement"
+      ],
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_scope": "local",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "astronomy",
+      "sentence": "The observatory benefits from clear skies and benefits to precise measurements.",
+      "marked_parts": {
+        "A": "The observatory benefits",
+        "B": "from clear skies",
+        "C": "and benefits to",
+        "D": "precise measurements"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "and benefits from",
+      "answer_explanation": "Benefit takes the preposition from when it means to gain an advantage from something."
+    },
+    {
+      "item_id": "batch3-we-022",
+      "section": "Written Expression",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel finite verbs in a coordinated predicate",
+      "secondary_features": [
+        "coordinated predicate",
+        "finite verb"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "music",
+      "sentence": "The conductor rehearsed the ensemble and checking the balance of the brass section.",
+      "marked_parts": {
+        "A": "The conductor rehearsed",
+        "B": "the ensemble",
+        "C": "and checking",
+        "D": "the balance of the brass section"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "and checked",
+      "answer_explanation": "Rehearsed and checked are coordinated finite past-tense verbs with the same subject."
+    },
+    {
+      "item_id": "batch3-we-023",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "singular agreement after each",
+      "secondary_features": [
+        "quantifier agreement",
+        "main verb"
+      ],
+      "tested_error_type": "agreement_error",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "transport history",
+      "sentence": "Each of the historic vehicles require careful maintenance.",
+      "marked_parts": {
+        "A": "Each of the historic vehicles",
+        "B": "require",
+        "C": "careful maintenance",
+        "D": "careful maintenance"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "requires",
+      "answer_explanation": "The subject each is singular, so the verb must be requires."
+    },
+    {
+      "item_id": "batch3-we-024",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "past perfect for the earlier of two past events",
+      "secondary_features": [
+        "past perfect",
+        "cross-clause sequence"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "cross_clause",
+      "difficulty": "HARD",
+      "vocabulary_domain": "geology",
+      "sentence": "The geologists realized that the glacier melted before they had reached the valley.",
+      "marked_parts": {
+        "A": "The geologists realized",
+        "B": "that the glacier melted",
+        "C": "before they had reached",
+        "D": "the valley"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "that the glacier had melted",
+      "answer_explanation": "The earlier melting event takes the past perfect had melted relative to the later realization."
+    },
+    {
+      "item_id": "batch3-we-025",
+      "section": "Written Expression",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "postpositive adjective phrase following an indefinite pronoun",
+      "secondary_features": [
+        "indefinite pronoun",
+        "postpositive modifier"
+      ],
+      "tested_error_type": "wrong_word_order",
+      "error_scope": "sentence_level",
+      "difficulty": "HARD",
+      "vocabulary_domain": "water engineering",
+      "sentence": "The treatment plant needs something useful for removing sediment efficiently.",
+      "marked_parts": {
+        "A": "The treatment plant",
+        "B": "needs something",
+        "C": "useful for removing sediment",
+        "D": "efficiently"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "needs something to remove sediment efficiently",
+      "answer_explanation": "The adjective useful does not express the intended function; the unique grammatical repair is the purpose infinitive to remove."
+    }
+  ]
+}

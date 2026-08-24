@@ -1,0 +1,108 @@
+{
+  "items": [
+    {
+      "item_id": "batch2-struct-001",
+      "section": "Structure",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The past-time marker 'of 2019' requires the past-tense verb 'wilted'; the subject 'leaves' is plural, so 'wilts' is also excluded.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "batch2-struct-002",
+      "section": "Structure",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The blank introduces an embedded question, which requires statement word order: 'when the ancient temple was built.'",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "batch2-struct-003",
+      "section": "Structure",
+      "solver_answer": "AMBIGUOUS",
+      "confidence": "MEDIUM",
+      "reason": "Both 'that' and 'which they' can grammatically introduce the object relative clause: 'the wetlands that the university restored' and 'the wetlands which they restored.'",
+      "ambiguity_detected": true
+    },
+    {
+      "item_id": "batch2-struct-004",
+      "section": "Structure",
+      "solver_answer": "AMBIGUOUS",
+      "confidence": "LOW",
+      "reason": "Because, although, unless, and if can each form a grammatical subordinate clause with 'the storm weakens'; the sentence supplies no uniquely determining context for the intended relation.",
+      "ambiguity_detected": true
+    },
+    {
+      "item_id": "batch2-struct-005",
+      "section": "Structure",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "'But' correctly coordinates the contrast between the proposal being expensive and the council approving it.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "batch2-struct-006",
+      "section": "Structure",
+      "solver_answer": "AMBIGUOUS",
+      "confidence": "MEDIUM",
+      "reason": "Both 'tested' and 'had been tested' are grammatical passive completions; the time phrase 'before publication' does not require past perfect over simple past.",
+      "ambiguity_detected": true
+    },
+    {
+      "item_id": "batch2-struct-007",
+      "section": "Structure",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The causative pattern 'make + object + adjective' requires 'shady' to describe the avenue.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "batch2-struct-009",
+      "section": "Structure",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The construction is 'such a + adjective + singular count noun + that-clause': 'such a loud echo that ...'.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "batch2-struct-010",
+      "section": "Structure",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "'Not only ... but also ...' requires parallel verb forms; 'informs' pairs with 'entertains'.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "batch2-struct-011",
+      "section": "Structure",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The appositive noun phrase is correctly ordered as article + adjective + noun: 'a respected sociolinguist'.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "batch2-struct-013",
+      "section": "Structure",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "In the existential construction, 'several underground streams' is plural, requiring 'are'.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "batch2-struct-014",
+      "section": "Structure",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "'Information' is an uncountable noun, so 'much information' is the grammatical quantifier phrase.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "batch2-struct-015",
+      "section": "Structure",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The verb 'operates' is modified by the adverb 'efficiently'.",
+      "ambiguity_detected": false
+    }
+  ]
+}

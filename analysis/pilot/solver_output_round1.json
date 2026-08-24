@@ -1,0 +1,349 @@
+{
+  "items": [
+    {
+      "item_id": "pilot-struct-001",
+      "section": "Structure",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "Young seedlings absorb is the only complete subject-verb construction; the other options are missing a finite subject-verb structure or use incorrect word order.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-002",
+      "section": "Structure",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "That scientists have tracked correctly forms a relative clause modifying the nonhuman noun seabird; A uses the inappropriate relative pronoun for this formal context, while C and D are malformed.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-003",
+      "section": "Structure",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "Unearthed by archaeologists is the correct past-participial phrase modifying pottery fragments; the alternatives have incorrect participle or word order structures.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-004",
+      "section": "Structure",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "A Dutch master of light and shadow is a correctly formed nonrestrictive appositive for Rembrandt.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-005",
+      "section": "Structure",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "Is a measure of supplies the required linking verb, noun phrase, and preposition; the other choices are missing an article or use the wrong form.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-006",
+      "section": "Structure",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "Debated whether the structure of a language actually shapes the categories is a correctly ordered embedded question; A has question inversion and C lacks the needed clause structure.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-007",
+      "section": "Structure",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "Which originates ... and covers correctly coordinates two finite verbs in the relative clause; the other options contain a redundant subject or a nonparallel participle.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-008",
+      "section": "Structure",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "Although correctly introduces the concessive subordinate clause contrasting the forecast with the sudden storm; the other conjunctions are malformed or express the wrong relation.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-009",
+      "section": "Structure",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The singular subject depth requires reaches; reach, reaching, and nearly to do not complete the sentence correctly.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-010",
+      "section": "Structure",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The superlative construction was the first to uncover requires the to-infinitive; the other forms are incompatible with first.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-011",
+      "section": "Structure",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "Rare eighteenth-century is the correct adjective order before symphony; A reverses the order and B awkwardly coordinates a classifying adjective, while D uses an adverb.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-012",
+      "section": "Structure",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "Make the corridor more accessible for pedestrians and cyclists is the correct make-plus-adjective complement; the other options use the wrong word form or order.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-013",
+      "section": "Structure",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "Warm enough for tropical orchids to bloom correctly expresses sufficient degree followed by the for-infinitive; the other choices are incomplete or misordered.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-014",
+      "section": "Structure",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The fronted Not until phrase requires subject-auxiliary inversion: did archaeologists fully understand.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-struct-015",
+      "section": "Structure",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "Interpret subtle shifts in color correctly parallels analyze and calculate; D would create a doubled and.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-001",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "Evidence is an uncountable noun here, so many of the evidence is incorrect; the phrase should use much with evidence.",
+      "suggested_correction": "much of the evidence",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-002",
+      "section": "Written Expression",
+      "solver_answer": "NONE",
+      "confidence": "HIGH",
+      "reason": "All marked parts form a grammatical sentence, and it can naturally refer to the observatory as the subject that will rival other facilities.",
+      "suggested_correction": "No correction needed.",
+      "ambiguity_detected": true
+    },
+    {
+      "item_id": "pilot-we-003",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The indefinite article before the vowel sound in unusual must be an, not a.",
+      "suggested_correction": "an unusual mineral formation",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-004",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The tracked dolphins are plural, so the possessive pronoun must agree with them; its movements should be their movements.",
+      "suggested_correction": "their movements throughout migration season",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-005",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "Bones is a plural count noun, so it requires many rather than much.",
+      "suggested_correction": "Many of the fossilized bones",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-006",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "Become requires an adjective complement in this meaning; individuals become isolated, not become isolation.",
+      "suggested_correction": "often causes individuals to become isolated",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-007",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "Make the approval process requires an adjective complement, so efficient is needed instead of the adverb efficiently.",
+      "suggested_correction": "considerably more efficient",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-008",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The idiom is rely heavily on, not rely heavily of.",
+      "suggested_correction": "on intuition rather than rigorous analysis",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-009",
+      "section": "Written Expression",
+      "solver_answer": "AMBIGUOUS",
+      "confidence": "MEDIUM",
+      "reason": "The coordinated list mixes the gerund Measuring with the infinitives in B and C. Both B and C participate in the parallelism defect, so one marked error cannot be isolated uniquely.",
+      "suggested_correction": "Measuring reaction rates precisely, controlling temperature fluctuations, and recording every observation carefully",
+      "ambiguity_detected": true
+    },
+    {
+      "item_id": "pilot-we-010",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The not only ... but also construction requires a parallel past-tense verb coordinated with confirmed; were revealing is not parallel or correctly agreed.",
+      "suggested_correction": "but also revealed unexpected patterns",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-011",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The list requires parallel nouns: leaf shape, root structure, and stem flexibility, not stem flexible.",
+      "suggested_correction": "and stem flexibility",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-012",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "Decide takes a to-infinitive in this construction, so decided avoiding is incorrect.",
+      "suggested_correction": "decided to avoid the nesting site entirely for the remainder of the season",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-013",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The introductory participial phrase must modify the drought and therefore needs the present participle Causing, not the finite form Causes.",
+      "suggested_correction": "Causing extensive soil erosion throughout the region",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-014",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "After the first researcher, the standard complement is the to-infinitive to identify, not the participle identifying.",
+      "suggested_correction": "was the first researcher ever to identify the mountain's seismic pattern",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-015",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The noun measurements requires the adjective approximate, not the adverb approximately.",
+      "suggested_correction": "approximate measurements and careful celestial observations",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-016",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "Quick modifies the verb updated and must be the adverb quickly.",
+      "suggested_correction": "updated their containment strategies quickly",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-017",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "Nutritious is an adjective and cannot serve as the noun subject of plays; the sentence needs Nutrition or a noun phrase such as a nutritious diet.",
+      "suggested_correction": "Nutrition, according to many dietitians,",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-018",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The passive perfect construction requires has been protected; has protected lacks the passive auxiliary been.",
+      "suggested_correction": "has been protected for over a century",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-019",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The clause introduced by By the time requires an earlier past perfect event, so it should say had already spread.",
+      "suggested_correction": "it had already spread across nearly half of the reserve,",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-020",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The subject of remain is the singular noun behavior, so the verb must be remains.",
+      "suggested_correction": "remains remarkably complex",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-021",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "When Not only begins the sentence, subject-auxiliary inversion is required: Not only do ethnomusicologists study.",
+      "suggested_correction": "Not only do ethnomusicologists study traditional instruments",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-022",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "MEDIUM",
+      "reason": "In formal standard usage, historians is the subject of credit and the relative pronoun is its object, so whom is required rather than who.",
+      "suggested_correction": "whom historians credit with reviving an ancient dyeing technique",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-023",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The plural antecedent algorithms requires the relative-clause verb process, not processes.",
+      "suggested_correction": "that process enormous quantities of data",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "pilot-we-024",
+      "section": "Written Expression",
+      "solver_answer": "NONE",
+      "confidence": "MEDIUM",
+      "reason": "No marked part contains a clear grammatical error; the because-clause is syntactically well formed, although its causal claim is context-dependent and somewhat questionable.",
+      "suggested_correction": "No correction needed.",
+      "ambiguity_detected": true
+    },
+    {
+      "item_id": "pilot-we-025",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The adjective phrase must follow the noun: regions prone to frequent earthquakes, not prone regions to frequent earthquakes.",
+      "suggested_correction": "Regions prone to frequent earthquakes",
+      "ambiguity_detected": false
+    }
+  ]
+}

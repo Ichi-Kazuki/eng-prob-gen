@@ -1,0 +1,1426 @@
+{
+  "spec_version": "1.0.0",
+  "generated_date": "2026-08-23",
+  "taxonomy_version": "1.1",
+  "purpose": "Reference specification for AI-driven generation of new TOEFL ITP Level 1 practice items (Structure Part A, Written Expression Part B), derived from abstracted analysis of 200 official ETS TOEFL ITP items (Practice Tests B-F). Not intended to reproduce ETS source items.",
+  "source_data": {
+    "structure": {
+      "n": 75,
+      "practice_tests": [
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "items_per_test": 15
+    },
+    "written_expression": {
+      "n": 125,
+      "practice_tests": [
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "items_per_test": 25
+    },
+    "total_n": 200,
+    "note_practice_test_a": "Practice Test A was not present in source materials and is not part of this analysis."
+  },
+  "value_precedence": "Where JSON/CSV source data (structure_items_all.json/.csv, written_expression_items_all.json/.csv) and Markdown analysis reports disagree, JSON/CSV is authoritative. All values in this file were computed directly from structure_items_all.json and written_expression_items_all.json.",
+  "primary_targets": [
+    {
+      "id": "CLAUSE_STRUCTURE",
+      "label_ja": "節構造・文断片",
+      "definition": "Whether an independent clause (subject + finite verb) is correctly formed; distinguishing fragments/run-ons; basic subject-verb agreement.",
+      "representative_subtypes": [
+        "main clause (subject + finite verb) identification",
+        "sentence fragment vs. independent clause",
+        "subject-verb agreement across intervening phrase"
+      ],
+      "structure_observed": {
+        "count": 12,
+        "pct_of_75": 16.0
+      },
+      "written_expression_observed": {
+        "count": 7,
+        "pct_of_125": 5.6
+      },
+      "total_observed": {
+        "count": 19,
+        "pct_of_200": 9.5
+      },
+      "confidence": "HIGH"
+    },
+    {
+      "id": "NOUN_CLAUSES",
+      "label_ja": "名詞節",
+      "definition": "that-clauses and embedded/indirect questions functioning as subject, object, or complement; typically tests word order (no inversion) inside the clause.",
+      "representative_subtypes": [
+        "embedded question (wh-word) word order",
+        "that-clause as subject",
+        "that-clause as object complement"
+      ],
+      "structure_observed": {
+        "count": 6,
+        "pct_of_75": 8.0
+      },
+      "written_expression_observed": {
+        "count": 0,
+        "pct_of_125": 0.0
+      },
+      "total_observed": {
+        "count": 6,
+        "pct_of_200": 3.0
+      },
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "RELATIVE_CLAUSES",
+      "label_ja": "関係詞節",
+      "definition": "Restrictive and non-restrictive relative clauses: relative pronoun choice/case, clause-internal parallelism, correct verb after the relative pronoun.",
+      "representative_subtypes": [
+        "non-restrictive relative clause with parallel coordinate predicate",
+        "restrictive relative clause with correct relative pronoun",
+        "relative pronoun case (who/whom/whose) selection"
+      ],
+      "structure_observed": {
+        "count": 9,
+        "pct_of_75": 12.0
+      },
+      "written_expression_observed": {
+        "count": 7,
+        "pct_of_125": 5.6
+      },
+      "total_observed": {
+        "count": 16,
+        "pct_of_200": 8.0
+      },
+      "confidence": "HIGH"
+    },
+    {
+      "id": "ADVERBIAL_CLAUSES",
+      "label_ja": "副詞節の構造",
+      "definition": "Internal structure of time/cause/concession/condition/purpose subordinate clauses (full clause vs. phrase vs. inverted form). Use CONNECTORS_CONJUNCTIONS when the focus is choosing among connector words instead.",
+      "representative_subtypes": [
+        "time clause introduced by 'when'",
+        "concessive clause structure",
+        "conditional clause structure"
+      ],
+      "structure_observed": {
+        "count": 3,
+        "pct_of_75": 4.0
+      },
+      "written_expression_observed": {
+        "count": 0,
+        "pct_of_125": 0.0
+      },
+      "total_observed": {
+        "count": 3,
+        "pct_of_200": 1.5
+      },
+      "confidence": "LOW"
+    },
+    {
+      "id": "CONNECTORS_CONJUNCTIONS",
+      "label_ja": "接続語彙の選択",
+      "definition": "Choosing the correct linking word/phrase among conjunction/preposition/adverb options expressing cause, contrast, comparison, etc. (e.g. due to / because / in spite of / regardless of).",
+      "representative_subtypes": [
+        "preposition vs. subordinating conjunction (cause)",
+        "elliptical comparative connector 'as' vs. subordinator/adverb",
+        "contrast connector selection (although vs. despite vs. however)"
+      ],
+      "structure_observed": {
+        "count": 5,
+        "pct_of_75": 6.7
+      },
+      "written_expression_observed": {
+        "count": 7,
+        "pct_of_125": 5.6
+      },
+      "total_observed": {
+        "count": 12,
+        "pct_of_200": 6.0
+      },
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "VERB_FORM_VOICE",
+      "label_ja": "定形動詞の時制・態",
+      "definition": "Tense, aspect, and active/passive voice selection for the finite main verb of a clause. Use NONFINITE_VERB_PHRASES for participle/infinitive/gerund form selection.",
+      "representative_subtypes": [
+        "past perfect vs. simple past selection",
+        "active vs. passive voice in main clause",
+        "tense agreement across clauses"
+      ],
+      "structure_observed": {
+        "count": 1,
+        "pct_of_75": 1.3
+      },
+      "written_expression_observed": {
+        "count": 10,
+        "pct_of_125": 8.0
+      },
+      "total_observed": {
+        "count": 11,
+        "pct_of_200": 5.5
+      },
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "VERB_COMPLEMENTATION",
+      "label_ja": "動詞の補語構造",
+      "definition": "What correctly follows a linking verb (predicate nominative/adjective) or a causative/perception verb (object complement).",
+      "representative_subtypes": [
+        "predicate nominative after linking verb (be + NP)",
+        "object complement after causative verb (make + O + Adj)",
+        "predicate adjective after linking verb"
+      ],
+      "structure_observed": {
+        "count": 7,
+        "pct_of_75": 9.3
+      },
+      "written_expression_observed": {
+        "count": 16,
+        "pct_of_125": 12.8
+      },
+      "total_observed": {
+        "count": 23,
+        "pct_of_200": 11.5
+      },
+      "confidence": "HIGH"
+    },
+    {
+      "id": "NONFINITE_VERB_PHRASES",
+      "label_ja": "非定形動詞句",
+      "definition": "Form selection for participles (reduced relative clauses, result participles), infinitives (purpose, modifying ordinal/superlative nouns), and gerunds.",
+      "representative_subtypes": [
+        "reduced passive relative clause (past participle modifying noun)",
+        "participial phrase of result ('thereby' + -ing)",
+        "infinitive modifying ordinal/superlative noun ('the first...to')",
+        "gerund vs. infinitive complement selection"
+      ],
+      "structure_observed": {
+        "count": 9,
+        "pct_of_75": 12.0
+      },
+      "written_expression_observed": {
+        "count": 13,
+        "pct_of_125": 10.4
+      },
+      "total_observed": {
+        "count": 22,
+        "pct_of_200": 11.0
+      },
+      "confidence": "HIGH"
+    },
+    {
+      "id": "COMPARATIVES_DEGREE",
+      "label_ja": "比較・程度構文",
+      "definition": "Comparative/superlative structures and degree constructions (enough, so, too, as...as).",
+      "representative_subtypes": [
+        "adjective + enough + to-infinitive result construction",
+        "so + adjective + that-clause",
+        "as...as comparative"
+      ],
+      "structure_observed": {
+        "count": 5,
+        "pct_of_75": 6.7
+      },
+      "written_expression_observed": {
+        "count": 3,
+        "pct_of_125": 2.4
+      },
+      "total_observed": {
+        "count": 8,
+        "pct_of_200": 4.0
+      },
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "PARALLEL_STRUCTURE",
+      "label_ja": "並列構造",
+      "definition": "Syntactic parallelism among elements joined by coordinating or correlative conjunctions (and, or, both...and, not only...but also) or in a list.",
+      "representative_subtypes": [
+        "parallel verb forms in a list",
+        "correlative conjunction parallelism (not only...but also)",
+        "parallel noun phrases in enumeration"
+      ],
+      "structure_observed": {
+        "count": 1,
+        "pct_of_75": 1.3
+      },
+      "written_expression_observed": {
+        "count": 15,
+        "pct_of_125": 12.0
+      },
+      "total_observed": {
+        "count": 16,
+        "pct_of_200": 8.0
+      },
+      "confidence": "HIGH"
+    },
+    {
+      "id": "WORD_ORDER_MODIFICATION",
+      "label_ja": "語順・修飾語配置",
+      "definition": "Internal word order of noun-modifying elements: adjective phrases, appositives, participial modifiers, noun phrase structure itself.",
+      "representative_subtypes": [
+        "appositive noun phrase placement and internal word order",
+        "noun + postpositive adjective phrase word order",
+        "adjective order within a noun phrase"
+      ],
+      "structure_observed": {
+        "count": 8,
+        "pct_of_75": 10.7
+      },
+      "written_expression_observed": {
+        "count": 5,
+        "pct_of_125": 4.0
+      },
+      "total_observed": {
+        "count": 13,
+        "pct_of_200": 6.5
+      },
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "INVERSION",
+      "label_ja": "倒置構文",
+      "definition": "Subject-auxiliary inversion triggered by fronted negative adverbials, place adverbials, or elliptical conditionals.",
+      "representative_subtypes": [
+        "subject-auxiliary inversion after fronted negative adverbial ('Not until...')",
+        "inversion after fronted place adverbial",
+        "conditional inversion (Had..., Were..., Should...)"
+      ],
+      "structure_observed": {
+        "count": 4,
+        "pct_of_75": 5.3
+      },
+      "written_expression_observed": {
+        "count": 0,
+        "pct_of_125": 0.0
+      },
+      "total_observed": {
+        "count": 4,
+        "pct_of_200": 2.0
+      },
+      "confidence": "LOW"
+    },
+    {
+      "id": "EXISTENTIAL_EXPLETIVE",
+      "label_ja": "存在構文",
+      "definition": "Expletive 'there + be' and 'it + be' constructions and the errors that arise from substituting a referring pronoun or bare determiner.",
+      "representative_subtypes": [
+        "expletive 'there + be' construction vs. pronoun/determiner",
+        "expletive 'it + be' construction"
+      ],
+      "structure_observed": {
+        "count": 3,
+        "pct_of_75": 4.0
+      },
+      "written_expression_observed": {
+        "count": 0,
+        "pct_of_125": 0.0
+      },
+      "total_observed": {
+        "count": 3,
+        "pct_of_200": 1.5
+      },
+      "confidence": "LOW"
+    },
+    {
+      "id": "REFERENCE_AND_DETERMINERS",
+      "label_ja": "照応・限定詞",
+      "definition": "Pronoun-antecedent reference/agreement, articles, quantifiers (much/many, few/little, every/each), and countable/uncountable noun choice.",
+      "representative_subtypes": [
+        "pronoun with no clear antecedent",
+        "quantifier agreement with countable/uncountable noun",
+        "article selection"
+      ],
+      "structure_observed": {
+        "count": 2,
+        "pct_of_75": 2.7
+      },
+      "written_expression_observed": {
+        "count": 28,
+        "pct_of_125": 22.4
+      },
+      "total_observed": {
+        "count": 30,
+        "pct_of_200": 15.0
+      },
+      "confidence": "HIGH"
+    },
+    {
+      "id": "WORD_CLASS_FORM",
+      "label_ja": "品詞選択・派生形",
+      "definition": "Which derivational/part-of-speech form of a word (adjective/adverb/noun/verb) a given syntactic slot requires - whether the slot is a noun-phrase-internal modifier, the head noun of a phrase, a verb-modifying adverbial, or a clause subject - when the error is not about element ordering (WORD_ORDER_MODIFICATION), required verb complementation (VERB_COMPLEMENTATION), or clause well-formedness (CLAUSE_STRUCTURE) as such. Added 2026-08-23; see GRAMMAR_TAXONOMY_CHANGELOG.md.",
+      "representative_subtypes": [
+        "adjective required, adverb used to modify a following noun",
+        "adverb required, adjective/noun used to modify a verb",
+        "noun required, adjective used as clause subject",
+        "derivational noun-for-verb confusion as head of a prepositional-object phrase",
+        "ordinal number form required, cardinal used to modify a noun"
+      ],
+      "structure_observed": {
+        "count": 0,
+        "pct_of_75": 0.0
+      },
+      "written_expression_observed": {
+        "count": 14,
+        "pct_of_125": 11.2
+      },
+      "total_observed": {
+        "count": 14,
+        "pct_of_200": 7.0
+      },
+      "confidence": "MEDIUM"
+    }
+  ],
+  "tested_error_types": [
+    {
+      "id": "wrong_verb_form",
+      "description": "Incorrect tense/aspect/form (base/-ing/-ed etc.) of a verb.",
+      "structure_distractor_observed": {
+        "count": 9,
+        "pct_of_225_distractor_slots": 4.0
+      },
+      "written_expression_observed": {
+        "count": 21,
+        "pct_of_125_items": 16.8
+      }
+    },
+    {
+      "id": "wrong_voice",
+      "description": "Active vs. passive voice error.",
+      "structure_distractor_observed": {
+        "count": 6,
+        "pct_of_225_distractor_slots": 2.7
+      },
+      "written_expression_observed": {
+        "count": 4,
+        "pct_of_125_items": 3.2
+      }
+    },
+    {
+      "id": "missing_required_element",
+      "description": "A required element (subject, verb, connector, etc.) for the sentence/clause/phrase to be complete is missing.",
+      "structure_distractor_observed": {
+        "count": 42,
+        "pct_of_225_distractor_slots": 18.7
+      },
+      "written_expression_observed": {
+        "count": 6,
+        "pct_of_125_items": 4.8
+      }
+    },
+    {
+      "id": "extraneous_element",
+      "description": "An unnecessary or duplicated element is added.",
+      "structure_distractor_observed": {
+        "count": 34,
+        "pct_of_225_distractor_slots": 15.1
+      },
+      "written_expression_observed": {
+        "count": 6,
+        "pct_of_125_items": 4.8
+      }
+    },
+    {
+      "id": "wrong_word_order",
+      "description": "All required elements are present but their order is wrong.",
+      "structure_distractor_observed": {
+        "count": 34,
+        "pct_of_225_distractor_slots": 15.1
+      },
+      "written_expression_observed": {
+        "count": 5,
+        "pct_of_125_items": 4.0
+      }
+    },
+    {
+      "id": "incorrect_subordinator",
+      "description": "Wrong subordinating conjunction for the intended semantic/syntactic relation.",
+      "structure_distractor_observed": {
+        "count": 16,
+        "pct_of_225_distractor_slots": 7.1
+      },
+      "written_expression_observed": {
+        "count": 3,
+        "pct_of_125_items": 2.4
+      }
+    },
+    {
+      "id": "incorrect_relative_marker",
+      "description": "Wrong relative pronoun/marker choice or case (who/whom/which/that/whose).",
+      "structure_distractor_observed": {
+        "count": 9,
+        "pct_of_225_distractor_slots": 4.0
+      },
+      "written_expression_observed": {
+        "count": 6,
+        "pct_of_125_items": 4.8
+      }
+    },
+    {
+      "id": "fragment",
+      "description": "Does not form a complete clause (missing finite verb or subject).",
+      "structure_distractor_observed": {
+        "count": 34,
+        "pct_of_225_distractor_slots": 15.1
+      },
+      "written_expression_observed": {
+        "count": 0,
+        "pct_of_125_items": 0.0
+      }
+    },
+    {
+      "id": "double_subject",
+      "description": "Subject is redundantly duplicated (e.g. relative pronoun plus a resumptive pronoun).",
+      "structure_distractor_observed": {
+        "count": 9,
+        "pct_of_225_distractor_slots": 4.0
+      },
+      "written_expression_observed": {
+        "count": 1,
+        "pct_of_125_items": 0.8
+      }
+    },
+    {
+      "id": "agreement_error",
+      "description": "Subject-verb number agreement, or noun-quantifier agreement, error.",
+      "structure_distractor_observed": {
+        "count": 2,
+        "pct_of_225_distractor_slots": 0.9
+      },
+      "written_expression_observed": {
+        "count": 21,
+        "pct_of_125_items": 16.8
+      }
+    },
+    {
+      "id": "wrong_complementation",
+      "description": "The complement structure (part of speech / phrase type) required by a linking or causative/perception verb is wrong. Does not cover fixed preposition collocations - see wrong_preposition_collocation.",
+      "structure_distractor_observed": {
+        "count": 17,
+        "pct_of_225_distractor_slots": 7.6
+      },
+      "written_expression_observed": {
+        "count": 0,
+        "pct_of_125_items": 0.0
+      }
+    },
+    {
+      "id": "incorrect_part_of_speech",
+      "description": "The word's part of speech itself is wrong. Does not cover comparative/superlative confusion - see wrong_degree_form.",
+      "structure_distractor_observed": {
+        "count": 10,
+        "pct_of_225_distractor_slots": 4.4
+      },
+      "written_expression_observed": {
+        "count": 35,
+        "pct_of_125_items": 28.0
+      }
+    },
+    {
+      "id": "incorrect_reference",
+      "description": "Pronoun has no clear or appropriate antecedent.",
+      "structure_distractor_observed": {
+        "count": 2,
+        "pct_of_225_distractor_slots": 0.9
+      },
+      "written_expression_observed": {
+        "count": 3,
+        "pct_of_125_items": 2.4
+      }
+    },
+    {
+      "id": "wrong_preposition_collocation",
+      "description": "A fixed lexical preposition collocation governed by a verb/participle/adjective/noun is violated, or a standalone (non-governed) preposition/connector pairing is wrong (e.g. 'benefit from' vs 'benefit of', 'beside' vs 'between'). Not a part-of-speech error and not a clause-structural complementation mismatch - a lexical collocation slip. Added 2026-08-23; see GRAMMAR_TAXONOMY_CHANGELOG.md.",
+      "structure_distractor_observed": {
+        "count": 0,
+        "pct_of_225_distractor_slots": 0.0
+      },
+      "written_expression_observed": {
+        "count": 12,
+        "pct_of_125_items": 9.6
+      }
+    },
+    {
+      "id": "wrong_degree_form",
+      "description": "Comparative/superlative/positive degree confusion (e.g. superlative used where a comparative is required), or wrong degree/intensity marker for a construction that requires one (e.g. 'very' used where 'so' is required to license a following result clause). Added 2026-08-23; see GRAMMAR_TAXONOMY_CHANGELOG.md.",
+      "structure_distractor_observed": {
+        "count": 1,
+        "pct_of_225_distractor_slots": 0.4
+      },
+      "written_expression_observed": {
+        "count": 2,
+        "pct_of_125_items": 1.6
+      }
+    }
+  ],
+  "structure_generation_guidance_ranges_pct": {
+    "CLAUSE_STRUCTURE": [
+      10,
+      22
+    ],
+    "NOUN_CLAUSES": [
+      5,
+      11
+    ],
+    "RELATIVE_CLAUSES": [
+      8,
+      17
+    ],
+    "ADVERBIAL_CLAUSES": [
+      3,
+      6
+    ],
+    "CONNECTORS_CONJUNCTIONS": [
+      4,
+      9
+    ],
+    "VERB_FORM_VOICE": [
+      1,
+      3
+    ],
+    "VERB_COMPLEMENTATION": [
+      6,
+      13
+    ],
+    "NONFINITE_VERB_PHRASES": [
+      8,
+      17
+    ],
+    "COMPARATIVES_DEGREE": [
+      4,
+      9
+    ],
+    "PARALLEL_STRUCTURE": [
+      1,
+      3
+    ],
+    "WORD_ORDER_MODIFICATION": [
+      7,
+      15
+    ],
+    "INVERSION": [
+      3,
+      7
+    ],
+    "EXISTENTIAL_EXPLETIVE": [
+      3,
+      6
+    ],
+    "REFERENCE_AND_DETERMINERS": [
+      2,
+      4
+    ],
+    "WORD_CLASS_FORM": [
+      0,
+      4
+    ]
+  },
+  "written_expression_generation_guidance_ranges_pct": {
+    "CLAUSE_STRUCTURE": [
+      4,
+      8
+    ],
+    "NOUN_CLAUSES": [
+      0,
+      4
+    ],
+    "RELATIVE_CLAUSES": [
+      4,
+      8
+    ],
+    "ADVERBIAL_CLAUSES": [
+      0,
+      4
+    ],
+    "CONNECTORS_CONJUNCTIONS": [
+      4,
+      8
+    ],
+    "VERB_FORM_VOICE": [
+      5,
+      11
+    ],
+    "VERB_COMPLEMENTATION": [
+      8,
+      18
+    ],
+    "NONFINITE_VERB_PHRASES": [
+      7,
+      15
+    ],
+    "COMPARATIVES_DEGREE": [
+      2,
+      4
+    ],
+    "PARALLEL_STRUCTURE": [
+      8,
+      17
+    ],
+    "WORD_ORDER_MODIFICATION": [
+      3,
+      6
+    ],
+    "INVERSION": [
+      0,
+      4
+    ],
+    "EXISTENTIAL_EXPLETIVE": [
+      0,
+      4
+    ],
+    "REFERENCE_AND_DETERMINERS": [
+      15,
+      31
+    ],
+    "WORD_CLASS_FORM": [
+      7,
+      16
+    ]
+  },
+  "taxonomy_holdouts": {
+    "count": 3,
+    "source_ids": [
+      "Practice Test D Q34",
+      "Practice Test E Q20",
+      "Practice Test F Q30"
+    ],
+    "note": "Single-instance unresolved taxonomy holdouts (taxonomy_issue: true in source JSON). Do not create new generation categories based on these 3 items.",
+    "reminder": "These 3 items are not to be used as the basis for any new generation category. They remain single-instance, unresolved taxonomy edge cases (taxonomy_issue: true) and are noted here for completeness only."
+  },
+  "structure_spec": {
+    "item_format": {
+      "observed": [
+        "Incomplete sentence with one blank.",
+        "Exactly four answer choices (A-D).",
+        "Exactly one choice restores a grammatically complete, standard-written-English sentence.",
+        "The other three choices are plausible grammatical confusions, not random word salad."
+      ],
+      "derived_rules": [
+        "Generated items MUST have exactly 4 options and exactly 1 correct option.",
+        "The correct option must produce a complete, well-formed sentence with no residual grammar errors.",
+        "Distractors must be constructed from the observed error_type vocabulary (see distractor_design), not invented ad hoc."
+      ]
+    },
+    "sentence_length": {
+      "confidence": "HIGH",
+      "observed": {
+        "mean": 19.97,
+        "median": 20,
+        "min": 10,
+        "max": 27,
+        "stdev": 4.34,
+        "distribution_bins": {
+          "10-14": 11,
+          "15-19": 22,
+          "20-24": 27,
+          "25-27": 15
+        }
+      },
+      "derived_rule": "Generated Structure items should normally fall within the observed 10-27 word range, concentrated around 15-24 words.",
+      "heuristic": "For a batch: target a mean near 20 words with occasional short items (~10-14 words) and occasional long items (~25-27 words); do not make every item the same length."
+    },
+    "clause_count": {
+      "confidence": "HIGH",
+      "observed": {
+        "mean": 1.8,
+        "median": 2,
+        "distribution": {
+          "1": 27,
+          "2": 37,
+          "3": 10,
+          "4": 1
+        },
+        "distribution_pct": {
+          "1": 36.0,
+          "2": 49.3,
+          "3": 13.3,
+          "4": 1.3
+        }
+      },
+      "derived_rule": "A generated batch's clause_count distribution should not deviate sharply from: roughly 1/3 single-clause, roughly half two-clause, a minority (10-15%) three-or-more-clause.",
+      "heuristic": "For a 15-item batch: approximately 5 items at 1 clause, 7-8 at 2 clauses, 2-3 at 3+ clauses."
+    },
+    "primary_target_distribution": {
+      "confidence": "HIGH",
+      "note": "See top-level primary_targets[].structure_observed for authoritative counts/pct. generation_guidance_ranges below are HEURISTIC, not exact quotas.",
+      "generation_guidance_ranges_pct": {
+        "CLAUSE_STRUCTURE": [
+          10,
+          22
+        ],
+        "NOUN_CLAUSES": [
+          5,
+          11
+        ],
+        "RELATIVE_CLAUSES": [
+          8,
+          17
+        ],
+        "ADVERBIAL_CLAUSES": [
+          3,
+          6
+        ],
+        "CONNECTORS_CONJUNCTIONS": [
+          4,
+          9
+        ],
+        "VERB_FORM_VOICE": [
+          1,
+          3
+        ],
+        "VERB_COMPLEMENTATION": [
+          6,
+          13
+        ],
+        "NONFINITE_VERB_PHRASES": [
+          8,
+          17
+        ],
+        "COMPARATIVES_DEGREE": [
+          4,
+          9
+        ],
+        "PARALLEL_STRUCTURE": [
+          1,
+          3
+        ],
+        "WORD_ORDER_MODIFICATION": [
+          7,
+          15
+        ],
+        "INVERSION": [
+          3,
+          7
+        ],
+        "EXISTENTIAL_EXPLETIVE": [
+          3,
+          6
+        ],
+        "REFERENCE_AND_DETERMINERS": [
+          2,
+          4
+        ],
+        "WORD_CLASS_FORM": [
+          0,
+          4
+        ]
+      },
+      "important": "Do not treat observed percentage as a strict quota. A 0% observed category (WORD_CLASS_FORM) is not observed in this 75-item Structure sample but is not forbidden; Structure's item format may simply surface it rarely. Use sparingly (0-4% guidance) if used at all."
+    },
+    "distractor_design": {
+      "confidence": "HIGH",
+      "observed_error_type_distribution": {
+        "n_distractor_slots": 225,
+        "counts": {
+          "missing_required_element": 42,
+          "extraneous_element": 34,
+          "wrong_word_order": 34,
+          "fragment": 34,
+          "wrong_complementation": 17,
+          "incorrect_subordinator": 16,
+          "incorrect_part_of_speech": 10,
+          "incorrect_relative_marker": 9,
+          "wrong_verb_form": 9,
+          "double_subject": 9,
+          "wrong_voice": 6,
+          "incorrect_reference": 2,
+          "agreement_error": 2,
+          "wrong_degree_form": 1,
+          "wrong_preposition_collocation": 0
+        },
+        "note": "wrong_preposition_collocation observed 0 times as a Structure distractor error_type in this sample; Written Expression surfaces it instead (see written_expression_spec). Not forbidden for Structure, just rare/unobserved."
+      },
+      "derived_rule": "Each distractor must be built using one of the 15 tested_error_type mechanisms from the shared taxonomy (grammar_taxonomy.json), favoring the four dominant mechanisms (missing_required_element, extraneous_element, wrong_word_order, fragment - together 64% of observed distractors) but not exclusively.",
+      "hard_requirements_per_distractor": [
+        "Superficially plausible to a learner (uses real English words, not gibberish).",
+        "The grammatical difference from the correct answer must be explicitly describable in one sentence.",
+        "Not an obvious nonsense string.",
+        "Must not create a second defensible correct answer.",
+        "Must not be eliminable by vocabulary knowledge alone (i.e., the flaw is grammatical/structural, not lexical rarity)."
+      ]
+    },
+    "correct_answer_position": {
+      "confidence": "HIGH",
+      "observed": {
+        "A": {
+          "count": 18,
+          "pct": 24.0
+        },
+        "B": {
+          "count": 21,
+          "pct": 28.0
+        },
+        "C": {
+          "count": 20,
+          "pct": 26.7
+        },
+        "D": {
+          "count": 16,
+          "pct": 21.3
+        }
+      },
+      "derived_rule": "Over a large generated corpus, correct-answer position should trend toward roughly even across A-D.",
+      "heuristic": "Do not force exactly 25% per option in every small batch; natural variance (as observed: 21.3%-28.0% range across 75 items) is acceptable and expected."
+    },
+    "vocabulary_domain": {
+      "confidence": "MEDIUM",
+      "observed": {
+        "unique_domains": 73,
+        "n": 75,
+        "max_repeat_domain_count": 2,
+        "repeated_domains": {
+          "botany": 2,
+          "zoology/marine biology": 2
+        }
+      },
+      "derived_rule": "Generated items should draw from a wide range of academic/general-interest domains (natural science, social science, history, art, humanities, geography, biography, technology, etc.), avoiding heavy repetition of any single domain within a batch.",
+      "heuristic": "No specific domain list is mandated - reproduce the observed diversity, not the observed domains themselves. Background/world knowledge must never be required to select the correct answer; all necessary information must be inferable from the sentence's own grammar."
+    },
+    "difficulty_characteristics": {
+      "confidence": "MEDIUM",
+      "observed": {
+        "syntactic_complexity_1to5": {
+          "mean": 2.77,
+          "distribution": {
+            "2": 30,
+            "3": 32,
+            "4": 13
+          },
+          "note": "1 and 5 not observed"
+        },
+        "distractor_similarity_1to5": {
+          "mean": 3.27,
+          "distribution": {
+            "2": 2,
+            "3": 52,
+            "4": 20,
+            "5": 1
+          },
+          "note": "1 not observed"
+        },
+        "estimated_difficulty_ai_1to5": {
+          "mean": 2.96,
+          "distribution": {
+            "2": 18,
+            "3": 42,
+            "4": 15
+          },
+          "note": "1 and 5 not observed; this is an AI structural estimate, NOT an ETS official difficulty rating"
+        }
+      },
+      "derived_rule": "estimated_difficulty_ai must never be presented to end users or downstream systems as an official ETS difficulty score.",
+      "heuristic": "Control generation difficulty via syntax complexity, clause nesting depth, distractor similarity, rarity of the tested construction, and distance between grammatically related elements - not via inserting harder vocabulary."
+    }
+  },
+  "written_expression_spec": {
+    "item_format": {
+      "observed": [
+        "Complete sentence with four marked/underlined portions (A-D).",
+        "Exactly one portion contains a grammatical error.",
+        "The other three portions are standard, acceptable written English.",
+        "Learner selects the erroneous portion."
+      ],
+      "derived_rules": [
+        "Generated items MUST have exactly 4 marked portions and exactly 1 erroneous portion.",
+        "The 3 non-erroneous portions must be genuinely correct standard written English - not merely 'less wrong'.",
+        "Exactly one genuine grammatical error may exist in the sentence; no incidental second error is permitted anywhere in the sentence, marked or unmarked."
+      ]
+    },
+    "primary_target_distribution": {
+      "confidence": "HIGH",
+      "note": "See top-level primary_targets[].written_expression_observed for authoritative counts/pct.",
+      "generation_guidance_ranges_pct": {
+        "CLAUSE_STRUCTURE": [
+          4,
+          8
+        ],
+        "NOUN_CLAUSES": [
+          0,
+          4
+        ],
+        "RELATIVE_CLAUSES": [
+          4,
+          8
+        ],
+        "ADVERBIAL_CLAUSES": [
+          0,
+          4
+        ],
+        "CONNECTORS_CONJUNCTIONS": [
+          4,
+          8
+        ],
+        "VERB_FORM_VOICE": [
+          5,
+          11
+        ],
+        "VERB_COMPLEMENTATION": [
+          8,
+          18
+        ],
+        "NONFINITE_VERB_PHRASES": [
+          7,
+          15
+        ],
+        "COMPARATIVES_DEGREE": [
+          2,
+          4
+        ],
+        "PARALLEL_STRUCTURE": [
+          8,
+          17
+        ],
+        "WORD_ORDER_MODIFICATION": [
+          3,
+          6
+        ],
+        "INVERSION": [
+          0,
+          4
+        ],
+        "EXISTENTIAL_EXPLETIVE": [
+          0,
+          4
+        ],
+        "REFERENCE_AND_DETERMINERS": [
+          15,
+          31
+        ],
+        "WORD_CLASS_FORM": [
+          7,
+          16
+        ]
+      },
+      "important": "4 of 15 categories (NOUN_CLAUSES, ADVERBIAL_CLAUSES, INVERSION, EXISTENTIAL_EXPLETIVE) were not observed in this 125-item Written Expression sample. This reflects the item format (whole-clause/connector choices are Structure's domain; Written Expression tests word-level/local errors) more than a prohibition. Use sparingly (0-4% guidance) if used at all."
+    },
+    "tested_error_type_distribution": {
+      "confidence": "HIGH",
+      "n_items": 125,
+      "counts": {
+        "incorrect_part_of_speech": 35,
+        "wrong_verb_form": 21,
+        "agreement_error": 21,
+        "wrong_preposition_collocation": 12,
+        "incorrect_relative_marker": 6,
+        "extraneous_element": 6,
+        "missing_required_element": 6,
+        "wrong_word_order": 5,
+        "wrong_voice": 4,
+        "incorrect_reference": 3,
+        "incorrect_subordinator": 3,
+        "wrong_degree_form": 2,
+        "double_subject": 1,
+        "fragment": 0,
+        "wrong_complementation": 0
+      },
+      "note_fragment": "fragment is observed 0 times in Written Expression because sentences are always presented complete by format definition - this is a structural impossibility for this section, not a sampling gap.",
+      "note_new_types": "wrong_preposition_collocation and wrong_degree_form were added to the taxonomy (v1.0 to v1.1) specifically because Written Expression items exposed real gaps; both are legitimate, well-evidenced generation targets, not edge cases.",
+      "representative_abstract_patterns": {
+        "incorrect_part_of_speech": "A word occupies a syntactic slot (modifier, head noun, subject, predicate complement) requiring one part of speech, but a different derivational form (adjective/adverb/noun/verb) is used.",
+        "wrong_verb_form": "Incorrect tense/aspect/base-form of a verb given the sentence's time-frame or surrounding auxiliary.",
+        "agreement_error": "Subject-verb number mismatch, or noun-quantifier mismatch (countable/uncountable).",
+        "wrong_preposition_collocation": "A fixed lexical preposition governed by a verb/adjective/participle/noun (or a standalone paired-preposition idiom) is swapped for a plausible but incorrect preposition.",
+        "incorrect_relative_marker": "Wrong relative pronoun choice or case (who/whom/which/that/whose) for the antecedent and clause role.",
+        "extraneous_element": "An unnecessary or duplicated word/phrase is inserted.",
+        "missing_required_element": "A required element for the phrase/clause to be complete is omitted.",
+        "wrong_word_order": "Required elements are present but incorrectly ordered.",
+        "wrong_voice": "Active/passive voice mismatch given the sentence's logical subject/object relationship.",
+        "incorrect_reference": "A pronoun's antecedent is missing, ambiguous, or mismatched in number/gender.",
+        "incorrect_subordinator": "Wrong subordinating conjunction for the intended semantic/syntactic relation.",
+        "wrong_degree_form": "Comparative/superlative/positive degree confusion, or wrong degree/intensity marker (e.g. very where so...that is required).",
+        "double_subject": "Subject redundantly duplicated (e.g. relative pronoun plus resumptive pronoun)."
+      }
+    },
+    "error_span_type_distribution": {
+      "confidence": "MEDIUM",
+      "n_items": 125,
+      "counts": {
+        "noun_phrase": 24,
+        "verb_phrase": 22,
+        "adjective": 16,
+        "prepositional_phrase": 15,
+        "pronoun": 9,
+        "relative_marker": 7,
+        "gerund_phrase": 6,
+        "adverb": 5,
+        "determiner": 5,
+        "conjunction": 4,
+        "participial_phrase": 4,
+        "infinitive_phrase": 3,
+        "comparative_marker": 3,
+        "quantifier": 2
+      },
+      "derived_rule": "Generated batches should not concentrate error spans in one or two span_types; the observed top-4 (noun_phrase/verb_phrase/adjective/prepositional_phrase = 61.6%) is a reasonable center of mass but the long tail of 10 other span_types should also appear across a large batch."
+    },
+    "underlined_part_design": {
+      "confidence": "MEDIUM",
+      "observed_grammatical_role_of_error_span": {
+        "n_items": 125,
+        "counts": {
+          "noun_phrase": 24,
+          "verb_phrase": 22,
+          "preposition": 12,
+          "adjective": 12,
+          "main_verb": 10,
+          "pronoun": 9,
+          "relative_pronoun": 7,
+          "adverb": 7,
+          "conjunction": 4,
+          "subject": 4,
+          "predicate_adjective": 4,
+          "determiner": 3,
+          "quantifier": 2,
+          "noun_modifier": 2,
+          "article": 2,
+          "gerund": 1
+        }
+      },
+      "observed_grammatical_role_of_dummy_spans": {
+        "n_dummy_spans": 375,
+        "counts": {
+          "noun_phrase": 93,
+          "main_verb": 59,
+          "verb_phrase": 47,
+          "adjective": 41,
+          "preposition": 25,
+          "subject": 16,
+          "adverb": 16,
+          "noun_modifier": 15,
+          "conjunction": 13,
+          "quantifier": 11,
+          "relative_pronoun": 9,
+          "predicate_adjective": 7,
+          "gerund": 6,
+          "auxiliary": 5,
+          "infinitive_marker": 4,
+          "determiner": 2,
+          "object": 2,
+          "prepositional_phrase": 2,
+          "pronoun": 1,
+          "article": 1
+        },
+        "note": "main_verb appears as a dummy span roughly 2x as often (15.7%) as it appears as the actual error span (8.0%) - correct main verbs are frequently used as plausible-looking non-errors."
+      },
+      "derived_rules": [
+        "All 4 marked portions must be natural candidates for grammatical scrutiny - a test-taker should be able to imagine each one being the error before reading closely.",
+        "The correct (erroneous) span should not be conspicuously longer or shorter than the 3 dummy spans.",
+        "The correct (erroneous) span should not be obviously strange in isolation - it must require reading in context to detect.",
+        "The 3 dummy spans should be positioned where a careful reader would plausibly want to double-check them (not filler words in trivial positions)."
+      ]
+    },
+    "error_location_distribution": {
+      "confidence": "MEDIUM",
+      "n_items": 125,
+      "counts": {
+        "sentence_initial": 13,
+        "early": 22,
+        "middle": 28,
+        "late": 31,
+        "sentence_final": 31
+      },
+      "counts_pct": {
+        "sentence_initial": 10.4,
+        "early": 17.6,
+        "middle": 22.4,
+        "late": 24.8,
+        "sentence_final": 24.8
+      },
+      "derived_rule": "Randomize error location per item, but across a batch keep the overall shape similar to observed (slight skew toward late/sentence_final, sentence_initial least common) rather than clustering all errors in one position."
+    },
+    "error_scope_distribution": {
+      "confidence": "MEDIUM",
+      "n_items": 125,
+      "counts": {
+        "local": 68,
+        "clause_level": 42,
+        "sentence_level": 9,
+        "cross_clause": 6
+      },
+      "counts_pct": {
+        "local": 54.4,
+        "clause_level": 33.6,
+        "sentence_level": 7.2,
+        "cross_clause": 4.8
+      },
+      "difficulty_use": "local errors are, in this dataset, associated with lower error_detectability values (easier to find) and cross_clause errors with higher values (harder), but this is a directional tendency observed in the data, not a strict, mechanically enforced rule - do not assume every cross_clause error is automatically hard or every local error automatically easy."
+    },
+    "correct_answer_position": {
+      "confidence": "HIGH",
+      "observed": {
+        "A": {
+          "count": 24,
+          "pct": 19.2
+        },
+        "B": {
+          "count": 37,
+          "pct": 29.6
+        },
+        "C": {
+          "count": 31,
+          "pct": 24.8
+        },
+        "D": {
+          "count": 33,
+          "pct": 26.4
+        }
+      },
+      "derived_rule": "Over a large generated corpus, error position should trend toward even across A-D.",
+      "heuristic": "The observed sample skews slightly light on A (19.2%) and heavy on B (29.6%); when generating large batches, lean slightly toward including more A-position errors than the raw observed ratio to avoid compounding this skew, without forcing exact 25% quotas on small batches."
+    },
+    "sentence_and_clause_characteristics": {
+      "confidence": "HIGH",
+      "sentence_word_count": {
+        "mean": 20.05,
+        "median": 20,
+        "min": 10,
+        "max": 33,
+        "stdev": 4.27,
+        "distribution_bins": {
+          "10-14": 11,
+          "15-19": 47,
+          "20-24": 50,
+          "25-29": 15,
+          "30-34": 2
+        }
+      },
+      "clause_count": {
+        "mean": 1.59,
+        "median": 2,
+        "distribution": {
+          "1": 59,
+          "2": 58,
+          "3": 8
+        },
+        "distribution_pct": {
+          "1": 47.2,
+          "2": 46.4,
+          "3": 6.4
+        }
+      },
+      "derived_rule": "Treat as a distribution independent from Structure's (Written Expression skews toward slightly simpler clause structure - single-clause and two-clause sentences are nearly tied, three+ clause sentences are rarer than in Structure).",
+      "heuristic": "For a 25-item batch: roughly 11-12 single-clause, 11-12 two-clause, 1-2 three-clause sentences; mean sentence length near 20 words with occasional items up to ~30+ words."
+    },
+    "difficulty_characteristics": {
+      "confidence": "MEDIUM",
+      "observed": {
+        "syntactic_complexity_1to5": {
+          "mean": 2.3,
+          "distribution": {
+            "1": 15,
+            "2": 61,
+            "3": 46,
+            "4": 3
+          }
+        },
+        "error_detectability_1to5": {
+          "mean": 2.49,
+          "distribution": {
+            "1": 7,
+            "2": 60,
+            "3": 48,
+            "4": 10
+          },
+          "note": "1=easy to find, 5=hard to find. No 5s observed in this sample."
+        },
+        "distractor_plausibility_1to5": {
+          "mean": 2.48,
+          "distribution": {
+            "1": 6,
+            "2": 57,
+            "3": 58,
+            "4": 4
+          }
+        },
+        "estimated_difficulty_ai_1to5": {
+          "mean": 2.3,
+          "distribution": {
+            "1": 18,
+            "2": 61,
+            "3": 37,
+            "4": 9
+          },
+          "note": "AI structural estimate, NOT an ETS official difficulty rating."
+        }
+      },
+      "derived_rule": "estimated_difficulty_ai must never be presented as an official ETS difficulty score.",
+      "heuristic": "Control difficulty via error_scope (local vs cross_clause), error_detectability-relevant surface cues, and distractor_plausibility of the 3 non-erroneous spans - not via obscure vocabulary."
+    },
+    "vocabulary_domain": {
+      "confidence": "MEDIUM",
+      "observed": {
+        "unique_domains": 112,
+        "n": 125,
+        "max_repeat_domain_count": 5,
+        "repeated_domains": {
+          "art history": 5,
+          "astronomy": 3,
+          "anthropology": 2,
+          "geology/earth science": 2,
+          "literature/poetry": 2,
+          "music": 2,
+          "geology/mineralogy": 2,
+          "literature/history": 2,
+          "economics/history": 2
+        }
+      },
+      "derived_rule": "Generated Written Expression items should draw from a wide range of academic/general-interest domains, reproducing this observed diversity (a higher raw unique-domain count than Structure's, consistent with the larger 125-item batch size), not any specific observed domain list.",
+      "heuristic": "No specific domain list is mandated - reproduce the observed diversity, not the observed domains themselves. No single domain should be heavily overrepresented in a generated batch (the observed sample's most-repeated domain, art history, is still only 4.0% of items). Background/world knowledge must never be required to correct the erroneous portion; the flaw must be locatable using only the sentence's own grammar."
+    }
+  },
+  "difficulty_framework": {
+    "tiers": [
+      "EASY",
+      "MEDIUM",
+      "HARD"
+    ],
+    "status": "HEURISTIC - shared across Structure and Written Expression, informed by but not a fixed conversion of estimated_difficulty_ai (1-5)",
+    "factors": [
+      "syntax complexity",
+      "clause count / nesting depth",
+      "structural dependency distance (how far apart the grammatically related elements are)",
+      "distractor similarity (Structure) / distractor plausibility (Written Expression)",
+      "error_scope (Written Expression: local vs clause_level vs sentence_level vs cross_clause)",
+      "error_detectability (Written Expression)",
+      "rarity/unfamiliarity of the tested construction"
+    ],
+    "explicit_non_factor": "Vocabulary specialization/rarity alone must NOT be used to raise difficulty; difficulty must come from grammar/syntax, not lexis.",
+    "note_on_ai_estimate_mapping": "estimated_difficulty_ai (1-5) is not converted to EASY/MEDIUM/HARD by a fixed formula. As an approximate reference only: Structure's observed estimated_difficulty_ai distribution (2=24%, 3=56%, 4=20%; no 1s or 5s observed) and Written Expression's (1=14.4%, 2=48.8%, 3=29.6%, 4=7.2%; no 5s observed) suggest that most official items cluster in the low-to-mid range of the 1-5 scale, and 'HARD' generated items should still usually resemble the observed 4-tier ceiling rather than inventing more extreme difficulty than ETS itself produced in this sample."
+  },
+  "hard_rules": {
+    "shared": [
+      "Exactly four options / four marked portions per item.",
+      "Exactly one intended correct answer / one intended erroneous portion.",
+      "The answer must be defensible by standard written English grammar rules, unambiguously.",
+      "No specialized factual/world knowledge may be required to answer correctly.",
+      "Avoid semantic ambiguity that could create multiple acceptable answers.",
+      "Difficulty must primarily come from grammar/syntax, not vocabulary difficulty.",
+      "Do not reproduce or lightly paraphrase any ETS source item from the 200-item analyzed set.",
+      "Do not reuse distinctive proper nouns, numerical facts, or unusual wording found in source items.",
+      "Do not make the correct answer systematically the longest or most elaborately worded option.",
+      "Do not introduce unintended secondary grammatical errors anywhere in the item."
+    ],
+    "structure_specific": [
+      "The blank, once filled with the correct option, must produce one complete, grammatically well-formed sentence with no other errors.",
+      "All three distractors must be constructible back to one of the 15 tested_error_type mechanisms in grammar_taxonomy.json.",
+      "Do not use a distractor that is correct in one plausible reading of the sentence (no accidental double-correct answers).",
+      "Sentence must stand alone (no external context/passage required)."
+    ],
+    "written_expression_specific": [
+      "The sentence, once the erroneous portion is corrected, must be entirely free of grammatical errors.",
+      "Exactly one of the four marked portions may be grammatically wrong; the other three must be independently, unambiguously correct.",
+      "The erroneous portion's flaw must be locatable and correctable using only information inside the sentence.",
+      "Do not mark a portion as an error if fixing it would leave the sentence still containing a different genuine error elsewhere."
+    ]
+  },
+  "anti_patterns": [
+    "Obviously broken / nonsensical distractors that no test-taker would plausibly select.",
+    "Two options that are both independently defensible as correct.",
+    "Testing obscure vocabulary knowledge rather than grammar knowledge.",
+    "Conversational or informal sentence register (TOEFL ITP style is formal/academic).",
+    "Unnatural, gibberish-sounding academic prose assembled just to hit a word count.",
+    "Every item in a batch having near-identical sentence length.",
+    "Every HARD item using the same construction (e.g. always inversion).",
+    "Correct answers concentrated in only B/C across a batch, systematically avoiding A/D.",
+    "A Written Expression sentence containing two genuine grammatical errors (only one may be intended).",
+    "An underlined/marked error identifiable without reading the rest of the sentence (i.e., detectable in isolation).",
+    "Distractors that differ from the correct answer only by random word-order scrambling with no coherent pedagogical rationale (i.e., not tied to a real error_type mechanism).",
+    "Reusing a source item's distinctive subject matter, named entity, date, or statistic even when the wording is changed."
+  ],
+  "batch_generation_blueprint": {
+    "status": "HEURISTIC",
+    "example_batch_sizes": {
+      "structure_items": 15,
+      "written_expression_items": 25
+    },
+    "batch_level_diversity_controls": [
+      "primary_target diversity - spread across multiple categories per batch, informed by the generation_guidance_ranges_pct, not a single repeated category.",
+      "answer-position balance - avoid systematic skew toward any one of A-D across the batch.",
+      "sentence-length diversity - mix of short/medium/long items per the observed distribution shape.",
+      "clause-count diversity - mix of 1/2/3+ clause items per the observed distribution shape.",
+      "topic/vocabulary-domain diversity - avoid repeating the same domain more than 1-2 times in a batch.",
+      "difficulty diversity - a mix of EASY/MEDIUM/HARD per the difficulty_framework, not all-same-difficulty.",
+      "error-type diversity (tested_error_type / distractor error_type) - spread across multiple mechanisms, favoring but not limited to the dominant observed ones."
+    ],
+    "explicit_non_goal": "Do not attempt to exactly reproduce the observed 75-item / 125-item distributions in every batch. Reasonable variance from batch to batch is expected and desirable; the observed distributions are a center of gravity, not a checklist to tick off per batch.",
+    "example_difficulty_split_structure_15_items": {
+      "easy": 4,
+      "medium": 8,
+      "hard": 3,
+      "derivation": "HEURISTIC, proportional to observed estimated_difficulty_ai tiers (2=24%, 3=56%, 4=20%) applied to a 15-item batch."
+    },
+    "example_difficulty_split_written_expression_25_items": {
+      "easy": 16,
+      "medium": 7,
+      "hard": 2,
+      "derivation": "HEURISTIC, proportional to observed estimated_difficulty_ai tiers (1+2=63.2% -> EASY, 3=29.6% -> MEDIUM, 4=7.2% -> HARD) applied to a 25-item batch."
+    }
+  },
+  "copyright_and_source_separation": {
+    "principle": "This specification describes abstract item-design features distilled from ETS TOEFL ITP items. It does not itself contain, quote, or closely paraphrase ETS item text.",
+    "generator_constraints": [
+      "Do not copy sentences or sentence fragments from any of the 200 analyzed source items.",
+      "Do not lightly paraphrase (synonym-swap) a source item while preserving its structure/content.",
+      "Do not reuse distinctive phrases, named entities, dates, or statistics from source items.",
+      "Do not reproduce the same combination of person + fact + number found in a source item, even with different wording.",
+      "Every generated item must be an independently authored sentence built from this specification's abstracted design features, not derived from any specific source item."
+    ]
+  },
+  "machine_readable_constraints_summary": {
+    "note": "This is a compressed cross-reference only. Authoritative detail lives in structure_spec / written_expression_spec / hard_rules / difficulty_framework above - do not treat this summary as a replacement for those sections.",
+    "STRUCTURE": {
+      "options": 4,
+      "correct_answers": 1,
+      "taxonomy_version": "1.1",
+      "primary_target_categories": 15,
+      "tested_error_type_values": 15,
+      "sentence_word_count_range_observed": [
+        10,
+        27
+      ],
+      "sentence_word_count_mean_observed": 19.97,
+      "clause_count_range_observed": [
+        1,
+        4
+      ],
+      "clause_count_mode": 2,
+      "correct_answer_position_observed_pct": {
+        "A": 24.0,
+        "B": 28.0,
+        "C": 26.7,
+        "D": 21.3
+      }
+    },
+    "WRITTEN_EXPRESSION": {
+      "marked_parts": 4,
+      "erroneous_parts": 1,
+      "taxonomy_version": "1.1",
+      "primary_target_categories": 15,
+      "tested_error_type_values": 15,
+      "sentence_word_count_range_observed": [
+        10,
+        33
+      ],
+      "sentence_word_count_mean_observed": 20.05,
+      "clause_count_range_observed": [
+        1,
+        3
+      ],
+      "clause_count_mode": 2,
+      "correct_answer_position_observed_pct": {
+        "A": 19.2,
+        "B": 29.6,
+        "C": 24.8,
+        "D": 26.4
+      },
+      "fragment_error_type_possible": false
+    }
+  }
+}

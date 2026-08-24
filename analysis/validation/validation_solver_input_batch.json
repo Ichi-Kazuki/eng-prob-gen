@@ -1,0 +1,983 @@
+{
+  "items": [
+    {
+      "item_id": "batch1-struct-001",
+      "section": "Structure",
+      "stem": "According to the latest forecast, the pattern of pressure changes near the coast ____ before dawn.",
+      "options": {
+        "A": "is expected to change",
+        "B": "are expected to change",
+        "C": "expecting to change",
+        "D": "the pattern expected changing"
+      }
+    },
+    {
+      "item_id": "batch1-struct-002",
+      "section": "Structure",
+      "stem": "The map archivist explained ____ during the survey.",
+      "options": {
+        "A": "where had the old boundary markers been moved",
+        "B": "where the old boundary markers had been moved",
+        "C": "where the old boundary markers",
+        "D": "where did the old boundary markers move"
+      }
+    },
+    {
+      "item_id": "batch1-struct-003",
+      "section": "Structure",
+      "stem": "The sandstone tablet, ____ during the excavation, is now displayed in the conservation laboratory.",
+      "options": {
+        "A": "what was uncovered",
+        "B": "which uncovering",
+        "C": "which was uncovered",
+        "D": "which it was uncovered"
+      }
+    },
+    {
+      "item_id": "batch1-struct-004",
+      "section": "Structure",
+      "stem": "The telescope records extra images ____ the sky becomes clear after sunset.",
+      "options": {
+        "A": "during",
+        "B": "when the sky becoming clear",
+        "C": "when clear the sky",
+        "D": "when the sky becomes clear"
+      }
+    },
+    {
+      "item_id": "batch1-struct-005",
+      "section": "Structure",
+      "stem": "The alloy remains flexible ____ repeated cooling and heating.",
+      "options": {
+        "A": "despite",
+        "B": "although",
+        "C": "in spite",
+        "D": "despite of"
+      }
+    },
+    {
+      "item_id": "batch1-struct-006",
+      "section": "Structure",
+      "stem": "By the time the survey team arrived, the mineral samples ____ in sealed containers.",
+      "options": {
+        "A": "were being label",
+        "B": "had been labeled",
+        "C": "had labeled",
+        "D": "had been"
+      }
+    },
+    {
+      "item_id": "batch1-struct-007",
+      "section": "Structure",
+      "stem": "The monitoring station's new filter made the river water ____ after heavy rainfall.",
+      "options": {
+        "A": "clearer",
+        "B": "clearly",
+        "C": "to clear",
+        "D": "clearing"
+      }
+    },
+    {
+      "item_id": "batch1-struct-008",
+      "section": "Structure",
+      "stem": "____ in shaded soil, the seeds germinated slowly after the spring rain.",
+      "options": {
+        "A": "Having planting",
+        "B": "Planting",
+        "C": "Planted",
+        "D": "Were planted"
+      }
+    },
+    {
+      "item_id": "batch1-struct-009",
+      "section": "Structure",
+      "stem": "The detector was ____ to register faint signals from the distant star.",
+      "options": {
+        "A": "enough sensitive",
+        "B": "sensitive enough",
+        "C": "so sensitive",
+        "D": "sensitive enough registering"
+      }
+    },
+    {
+      "item_id": "batch1-struct-010",
+      "section": "Structure",
+      "stem": "During fieldwork, the geologists had to ____ the slope, record the rock layers, and label the samples.",
+      "options": {
+        "A": "measuring",
+        "B": "measurement",
+        "C": "measure",
+        "D": "to measure"
+      }
+    },
+    {
+      "item_id": "batch1-struct-011",
+      "section": "Structure",
+      "stem": "The museum displayed ____ from the coastal excavation.",
+      "options": {
+        "A": "a small bronze worked bowl",
+        "B": "a finely work small bronze bowl",
+        "C": "a finely worked old small bronze bowl",
+        "D": "a finely worked small bronze bowl"
+      }
+    },
+    {
+      "item_id": "batch1-struct-012",
+      "section": "Structure",
+      "stem": "Only after the glacier retreated ____ the researchers discover the buried lake.",
+      "options": {
+        "A": "did discover",
+        "B": "did the researchers discover",
+        "C": "the researchers did discover",
+        "D": "discovering the researchers did"
+      }
+    },
+    {
+      "item_id": "batch1-struct-013",
+      "section": "Structure",
+      "stem": "Near the wind-eroded ridge, ____ several narrow channels after the storm.",
+      "options": {
+        "A": "there were",
+        "B": "it was",
+        "C": "there was",
+        "D": "were"
+      }
+    },
+    {
+      "item_id": "batch1-struct-014",
+      "section": "Structure",
+      "stem": "The mentor and the apprentice recorded their measurements before ____ submitted the report.",
+      "options": {
+        "A": "he",
+        "B": "them",
+        "C": "they",
+        "D": "their"
+      }
+    },
+    {
+      "item_id": "batch1-struct-015",
+      "section": "Structure",
+      "stem": "The accuracy of the experiment depends on ____ of the instrument before each trial.",
+      "options": {
+        "A": "carefully calibrate the instrument",
+        "B": "calibration the careful",
+        "C": "the careful",
+        "D": "the careful calibration"
+      }
+    },
+    {
+      "item_id": "batch1-we-001",
+      "section": "Written Expression",
+      "sentence": "The calibration of the instruments record stable readings during each trial.",
+      "marked_parts": {
+        "A": "The calibration of the instruments record",
+        "B": "stable readings",
+        "C": "during each",
+        "D": "trial."
+      }
+    },
+    {
+      "item_id": "batch1-we-002",
+      "section": "Written Expression",
+      "sentence": "The engineer selected several durability bearings for the test rig.",
+      "marked_parts": {
+        "A": "The engineer selected",
+        "B": "several durability bearings",
+        "C": "for the test",
+        "D": "rig."
+      }
+    },
+    {
+      "item_id": "batch1-we-003",
+      "section": "Written Expression",
+      "sentence": "Yesterday, after the lighthouse crew had repaired the lamp, the keeper records the inspection details.",
+      "marked_parts": {
+        "A": "Yesterday, after the lighthouse crew had repaired the lamp,",
+        "B": "the keeper",
+        "C": "records",
+        "D": "the inspection details."
+      }
+    },
+    {
+      "item_id": "batch1-we-004",
+      "section": "Written Expression",
+      "sentence": "The archivist was deeply interested on maps from the coastal archive.",
+      "marked_parts": {
+        "A": "The archivist was",
+        "B": "deeply",
+        "C": "interested",
+        "D": "on maps from the coastal archive."
+      }
+    },
+    {
+      "item_id": "batch1-we-005",
+      "section": "Written Expression",
+      "sentence": "The workshop focuses on carve wood and shaping clay for architectural models.",
+      "marked_parts": {
+        "A": "The workshop focuses on carve",
+        "B": "wood and shaping",
+        "C": "clay for",
+        "D": "architectural models."
+      }
+    },
+    {
+      "item_id": "batch1-we-006",
+      "section": "Written Expression",
+      "sentence": "The engineer is responsible to the mountain station's ventilation system.",
+      "marked_parts": {
+        "A": "The engineer is",
+        "B": "responsible to",
+        "C": "the mountain station's",
+        "D": "ventilation system."
+      }
+    },
+    {
+      "item_id": "batch1-we-007",
+      "section": "Written Expression",
+      "sentence": "The surveyor which mapped the village explained the boundary changes.",
+      "marked_parts": {
+        "A": "The surveyor",
+        "B": "which mapped",
+        "C": "the village explained",
+        "D": "the boundary changes."
+      }
+    },
+    {
+      "item_id": "batch1-we-008",
+      "section": "Written Expression",
+      "sentence": "The museum restored a bronze finely decorated vessel from the collection.",
+      "marked_parts": {
+        "A": "The museum restored",
+        "B": "a",
+        "C": "vessel from",
+        "D": "bronze finely decorated vessel."
+      }
+    },
+    {
+      "item_id": "batch1-we-009",
+      "section": "Written Expression",
+      "sentence": "The collection of oral histories contain vivid accounts of migration from the valley.",
+      "marked_parts": {
+        "A": "The collection of oral histories contain",
+        "B": "vivid accounts",
+        "C": "of migration",
+        "D": "from the valley."
+      }
+    },
+    {
+      "item_id": "batch1-we-010",
+      "section": "Written Expression",
+      "sentence": "Although the route was steep, but the hikers reached the summit before noon.",
+      "marked_parts": {
+        "A": "Although the route",
+        "B": "was steep, but",
+        "C": "the hikers reached",
+        "D": "the summit before noon."
+      }
+    },
+    {
+      "item_id": "batch1-we-011",
+      "section": "Written Expression",
+      "sentence": "The manuscript was carefully restored the librarian last year.",
+      "marked_parts": {
+        "A": "The manuscript was",
+        "B": "carefully",
+        "C": "restored the librarian",
+        "D": "last year."
+      }
+    },
+    {
+      "item_id": "batch1-we-012",
+      "section": "Written Expression",
+      "sentence": "The team has carefully prepared the samples that they have record.",
+      "marked_parts": {
+        "A": "The team has",
+        "B": "carefully prepared",
+        "C": "the samples that they have",
+        "D": "record."
+      }
+    },
+    {
+      "item_id": "batch1-we-013",
+      "section": "Written Expression",
+      "sentence": "It was placed beside the research equipment after the technician finished.",
+      "marked_parts": {
+        "A": "It",
+        "B": "was placed beside",
+        "C": "the research equipment",
+        "D": "after the technician finished."
+      }
+    },
+    {
+      "item_id": "batch1-we-014",
+      "section": "Written Expression",
+      "sentence": "The lecturer presented a scientifically overview of public water systems.",
+      "marked_parts": {
+        "A": "The lecturer presented",
+        "B": "a scientifically overview",
+        "C": "of public",
+        "D": "water systems."
+      }
+    },
+    {
+      "item_id": "batch1-we-015",
+      "section": "Written Expression",
+      "sentence": "The northern route is considerably more shorter than the southern route during winter.",
+      "marked_parts": {
+        "A": "The northern route is",
+        "B": "considerably",
+        "C": "more shorter than the southern route",
+        "D": "during winter."
+      }
+    },
+    {
+      "item_id": "batch1-we-016",
+      "section": "Written Expression",
+      "sentence": "The plants grew slowly during the trial because of the soil remained unusually cold.",
+      "marked_parts": {
+        "A": "The plants grew slowly",
+        "B": "during the trial",
+        "C": "because",
+        "D": "of the soil remained unusually cold."
+      }
+    },
+    {
+      "item_id": "batch1-we-017",
+      "section": "Written Expression",
+      "sentence": "There is several balconies along the theater's upper gallery.",
+      "marked_parts": {
+        "A": "There is",
+        "B": "several balconies",
+        "C": "along the theater's",
+        "D": "upper gallery."
+      }
+    },
+    {
+      "item_id": "batch1-we-018",
+      "section": "Written Expression",
+      "sentence": "The analyst could not determine why did the values change after calibration.",
+      "marked_parts": {
+        "A": "The analyst could not determine",
+        "B": "why did the values change",
+        "C": "after",
+        "D": "calibration."
+      }
+    },
+    {
+      "item_id": "batch1-we-019",
+      "section": "Written Expression",
+      "sentence": "The strength of the coating is dependent of temperature and humidity.",
+      "marked_parts": {
+        "A": "The strength of the coating",
+        "B": "is",
+        "C": "dependent of temperature",
+        "D": "and humidity."
+      }
+    },
+    {
+      "item_id": "batch1-we-020",
+      "section": "Written Expression",
+      "sentence": "The committee recommends mapping the district and to revise its zoning plan.",
+      "marked_parts": {
+        "A": "The committee recommends",
+        "B": "mapping the district",
+        "C": "and",
+        "D": "to revise its zoning plan."
+      }
+    },
+    {
+      "item_id": "batch1-we-021",
+      "section": "Written Expression",
+      "sentence": "The seedlings grew rapid under the controlled lamps.",
+      "marked_parts": {
+        "A": "The seedlings grew rapid",
+        "B": "under",
+        "C": "the controlled",
+        "D": "lamps."
+      }
+    },
+    {
+      "item_id": "batch1-we-022",
+      "section": "Written Expression",
+      "sentence": "The panels, having built from recycled glass, were tested for strength.",
+      "marked_parts": {
+        "A": "The panels,",
+        "B": "having built from recycled glass,",
+        "C": "were tested",
+        "D": "for strength."
+      }
+    },
+    {
+      "item_id": "batch1-we-023",
+      "section": "Written Expression",
+      "sentence": "Last year, after the bridge had been inspected, engineers approves the repair plan.",
+      "marked_parts": {
+        "A": "Last year, after the bridge had been inspected,",
+        "B": "engineers approves",
+        "C": "the repair",
+        "D": "plan."
+      }
+    },
+    {
+      "item_id": "batch1-we-024",
+      "section": "Written Expression",
+      "sentence": "The questionnaire included much responses from first-year students.",
+      "marked_parts": {
+        "A": "The questionnaire included",
+        "B": "much",
+        "C": "responses",
+        "D": "from first-year students."
+      }
+    },
+    {
+      "item_id": "batch1-we-025",
+      "section": "Written Expression",
+      "sentence": "The seedlings grew surprising quickly in the greenhouse.",
+      "marked_parts": {
+        "A": "The seedlings grew surprising",
+        "B": "quickly",
+        "C": "in the",
+        "D": "greenhouse."
+      }
+    },
+    {
+      "item_id": "batch2-struct-001",
+      "section": "Structure",
+      "stem": "During the severe drought of 2019, the leaves of the desert plant ___.",
+      "options": {
+        "A": "wilt",
+        "B": "wilted",
+        "C": "wilts",
+        "D": "wilting"
+      }
+    },
+    {
+      "item_id": "batch2-struct-002",
+      "section": "Structure",
+      "stem": "Researchers have not determined ___ the ancient temple was built.",
+      "options": {
+        "A": "when was",
+        "B": "when did",
+        "C": "when",
+        "D": "when that"
+      }
+    },
+    {
+      "item_id": "batch2-struct-003",
+      "section": "Structure",
+      "stem": "The wetlands ___ the university restored now attract many birds.",
+      "options": {
+        "A": "that",
+        "B": "that they",
+        "C": "which they",
+        "D": "restoring"
+      }
+    },
+    {
+      "item_id": "batch2-struct-004",
+      "section": "Structure",
+      "stem": "___ the storm weakens, coastal residents will remain indoors.",
+      "options": {
+        "A": "Because",
+        "B": "Although",
+        "C": "Unless",
+        "D": "If"
+      }
+    },
+    {
+      "item_id": "batch2-struct-005",
+      "section": "Structure",
+      "stem": "The proposal was expensive, ___ the council approved it.",
+      "options": {
+        "A": "but",
+        "B": "because",
+        "C": "unless",
+        "D": "so that"
+      }
+    },
+    {
+      "item_id": "batch2-struct-006",
+      "section": "Structure",
+      "stem": "Before publication, the alloy samples ___ by three independent laboratories.",
+      "options": {
+        "A": "tested",
+        "B": "had been tested",
+        "C": "have tested",
+        "D": "were testing"
+      }
+    },
+    {
+      "item_id": "batch2-struct-007",
+      "section": "Structure",
+      "stem": "The new trees will make the avenue ___.",
+      "options": {
+        "A": "shade",
+        "B": "shading",
+        "C": "shady",
+        "D": "shadedly"
+      }
+    },
+    {
+      "item_id": "batch2-struct-009",
+      "section": "Structure",
+      "stem": "The chamber produced ___ loud echo that the recording equipment had to be recalibrated.",
+      "options": {
+        "A": "such a",
+        "B": "so a",
+        "C": "very a",
+        "D": "as a"
+      }
+    },
+    {
+      "item_id": "batch2-struct-010",
+      "section": "Structure",
+      "stem": "The exhibit not only informs visitors but also ___.",
+      "options": {
+        "A": "entertains them",
+        "B": "entertaining them",
+        "C": "entertainment",
+        "D": "to entertain them"
+      }
+    },
+    {
+      "item_id": "batch2-struct-011",
+      "section": "Structure",
+      "stem": "Maya Chen, ___, presented the findings at the conference.",
+      "options": {
+        "A": "a sociolinguist respected",
+        "B": "respected a sociolinguist",
+        "C": "a respected sociolinguist",
+        "D": "sociolinguist a respected"
+      }
+    },
+    {
+      "item_id": "batch2-struct-013",
+      "section": "Structure",
+      "stem": "There ___ several underground streams beneath the valley.",
+      "options": {
+        "A": "is",
+        "B": "are",
+        "C": "be",
+        "D": "being"
+      }
+    },
+    {
+      "item_id": "batch2-struct-014",
+      "section": "Structure",
+      "stem": "The report provides ___ information about regional employment trends.",
+      "options": {
+        "A": "much",
+        "B": "many",
+        "C": "few",
+        "D": "several"
+      }
+    },
+    {
+      "item_id": "batch2-struct-015",
+      "section": "Structure",
+      "stem": "The filter operates ___ when the input signal contains background noise.",
+      "options": {
+        "A": "efficient",
+        "B": "efficiency",
+        "C": "efficiently",
+        "D": "more efficient"
+      }
+    },
+    {
+      "item_id": "batch3-struct-001",
+      "section": "Structure",
+      "stem": "The orbit of several newly discovered planets ___ unusually stable.",
+      "options": {
+        "A": "remain",
+        "B": "remains",
+        "C": "remaining",
+        "D": "has remain"
+      }
+    },
+    {
+      "item_id": "batch3-struct-002",
+      "section": "Structure",
+      "stem": "Researchers are uncertain whether the pottery fragments ___ from the coastal settlement.",
+      "options": {
+        "A": "did originate",
+        "B": "originated did",
+        "C": "originated",
+        "D": "from originating"
+      }
+    },
+    {
+      "item_id": "batch3-struct-003",
+      "section": "Structure",
+      "stem": "The researcher cataloged the fern species ___ the expedition had collected.",
+      "options": {
+        "A": "that",
+        "B": "what",
+        "C": "they",
+        "D": "which them"
+      }
+    },
+    {
+      "item_id": "batch3-struct-004",
+      "section": "Structure",
+      "stem": "If the city ___ the subsidy, more households would install efficient heating systems.",
+      "options": {
+        "A": "increases",
+        "B": "increased",
+        "C": "will increase",
+        "D": "were increasing"
+      }
+    },
+    {
+      "item_id": "batch3-struct-005",
+      "section": "Structure",
+      "stem": "___ its low density, the alloy withstands considerable pressure.",
+      "options": {
+        "A": "Although",
+        "B": "Despite",
+        "C": "Despite of",
+        "D": "Because"
+      }
+    },
+    {
+      "item_id": "batch3-struct-006",
+      "section": "Structure",
+      "stem": "The storm system ___ by satellite instruments before it reached the coast.",
+      "options": {
+        "A": "was tracking",
+        "B": "tracked",
+        "C": "was tracked",
+        "D": "tracking"
+      }
+    },
+    {
+      "item_id": "batch3-struct-007",
+      "section": "Structure",
+      "stem": "The new park design made the narrow corridor ___ and safer for pedestrians.",
+      "options": {
+        "A": "to widen",
+        "B": "widening",
+        "C": "widened",
+        "D": "wider"
+      }
+    },
+    {
+      "item_id": "batch3-struct-008",
+      "section": "Structure",
+      "stem": "The fibers ___ with a protective coating retain their strength after repeated washing and drying.",
+      "options": {
+        "A": "treated",
+        "B": "treating",
+        "C": "were treated",
+        "D": "having treat"
+      }
+    },
+    {
+      "item_id": "batch3-struct-010",
+      "section": "Structure",
+      "stem": "The software not only records performances but also ___ background noise automatically.",
+      "options": {
+        "A": "filtering",
+        "B": "to filter",
+        "C": "filters",
+        "D": "filtered"
+      }
+    },
+    {
+      "item_id": "batch3-struct-012",
+      "section": "Structure",
+      "stem": "Had the reef restoration project ___ earlier, the damaged habitat might have recovered before winter.",
+      "options": {
+        "A": "begun",
+        "B": "beginning",
+        "C": "it begun",
+        "D": "been begin"
+      }
+    },
+    {
+      "item_id": "batch3-struct-013",
+      "section": "Structure",
+      "stem": "There ___ several blank areas on the early map of the northern coast.",
+      "options": {
+        "A": "is",
+        "B": "are",
+        "C": "being",
+        "D": "has"
+      }
+    },
+    {
+      "item_id": "batch3-struct-014",
+      "section": "Structure",
+      "stem": "The recipe requires ___ additional information about the nutritional content of the grain.",
+      "options": {
+        "A": "many",
+        "B": "few",
+        "C": "some",
+        "D": "several"
+      }
+    },
+    {
+      "item_id": "batch3-struct-015",
+      "section": "Structure",
+      "stem": "The archivist explained that the fragile documents must be handled ___ during the transfer.",
+      "options": {
+        "A": "careful",
+        "B": "carefulness",
+        "C": "care",
+        "D": "carefully"
+      }
+    },
+    {
+      "item_id": "batch3-we-001",
+      "section": "Written Expression",
+      "sentence": "A architect measured the vaulted entrance before the renovation began.",
+      "marked_parts": {
+        "A": "A architect",
+        "B": "measured",
+        "C": "the vaulted entrance",
+        "D": "before the renovation began"
+      }
+    },
+    {
+      "item_id": "batch3-we-002",
+      "section": "Written Expression",
+      "sentence": "The region experienced a dramatically temperature shift during the afternoon.",
+      "marked_parts": {
+        "A": "The region",
+        "B": "dramatically",
+        "C": "temperature shift",
+        "D": "during the afternoon"
+      }
+    },
+    {
+      "item_id": "batch3-we-003",
+      "section": "Written Expression",
+      "sentence": "The clinic introduced the screening program after it identify the main risk factors.",
+      "marked_parts": {
+        "A": "The clinic introduced",
+        "B": "the screening program",
+        "C": "after it identify",
+        "D": "the main risk factors"
+      }
+    },
+    {
+      "item_id": "batch3-we-004",
+      "section": "Written Expression",
+      "sentence": "The course emphasizes reading technical articles, analyzing evidence, and to present findings clearly.",
+      "marked_parts": {
+        "A": "The course emphasizes",
+        "B": "reading technical articles",
+        "C": "analyzing evidence",
+        "D": "and to present findings clearly"
+      }
+    },
+    {
+      "item_id": "batch3-we-005",
+      "section": "Written Expression",
+      "sentence": "The agency is responsible of monitoring water quality near the reservoir.",
+      "marked_parts": {
+        "A": "The agency is",
+        "B": "responsible of",
+        "C": "monitoring water quality",
+        "D": "near the reservoir"
+      }
+    },
+    {
+      "item_id": "batch3-we-006",
+      "section": "Written Expression",
+      "sentence": "The buses that travels along the old route carry commuters into the city each morning.",
+      "marked_parts": {
+        "A": "The buses that travels",
+        "B": "along the old route",
+        "C": "carry commuters",
+        "D": "into the city each morning"
+      }
+    },
+    {
+      "item_id": "batch3-we-007",
+      "section": "Written Expression",
+      "sentence": "Despite the market was unstable, investors continued to purchase municipal bonds.",
+      "marked_parts": {
+        "A": "Despite the market was unstable",
+        "B": "investors continued",
+        "C": "to purchase",
+        "D": "municipal bonds"
+      }
+    },
+    {
+      "item_id": "batch3-we-008",
+      "section": "Written Expression",
+      "sentence": "The plant is one of the species with whom the botanist has worked for years.",
+      "marked_parts": {
+        "A": "The plant is one",
+        "B": "of the species",
+        "C": "with whom",
+        "D": "the botanist has worked for years"
+      }
+    },
+    {
+      "item_id": "batch3-we-009",
+      "section": "Written Expression",
+      "sentence": "The pattern of clouds over the mountain indicate an approaching storm.",
+      "marked_parts": {
+        "A": "The pattern",
+        "B": "of clouds over the mountain",
+        "C": "indicate",
+        "D": "an approaching storm"
+      }
+    },
+    {
+      "item_id": "batch3-we-010",
+      "section": "Written Expression",
+      "sentence": "Only much of the dietary samples contained enough iron for the analysis.",
+      "marked_parts": {
+        "A": "Only much",
+        "B": "of the dietary samples",
+        "C": "contained enough iron",
+        "D": "for the analysis"
+      }
+    },
+    {
+      "item_id": "batch3-we-011",
+      "section": "Written Expression",
+      "sentence": "The lecturer discussed the historical develop of the regional dialect.",
+      "marked_parts": {
+        "A": "The lecturer discussed",
+        "B": "the historical develop",
+        "C": "of the regional dialect",
+        "D": "the regional dialect"
+      }
+    },
+    {
+      "item_id": "batch3-we-012",
+      "section": "Written Expression",
+      "sentence": "The components were assembling in a sealed chamber to prevent contamination.",
+      "marked_parts": {
+        "A": "The components",
+        "B": "were assembling",
+        "C": "in a sealed chamber",
+        "D": "to prevent contamination"
+      }
+    },
+    {
+      "item_id": "batch3-we-013",
+      "section": "Written Expression",
+      "sentence": "The committee reviewed the proposal and approving the revised budget after the public hearing.",
+      "marked_parts": {
+        "A": "The committee reviewed",
+        "B": "the proposal",
+        "C": "and approving",
+        "D": "the revised budget after the public hearing"
+      }
+    },
+    {
+      "item_id": "batch3-we-014",
+      "section": "Written Expression",
+      "sentence": "The analyst succeeded in predict the quarterly trend despite limited data.",
+      "marked_parts": {
+        "A": "The analyst succeeded",
+        "B": "in predict",
+        "C": "the quarterly trend",
+        "D": "despite limited data"
+      }
+    },
+    {
+      "item_id": "batch3-we-015",
+      "section": "Written Expression",
+      "sentence": "The eastern plateau is high than the valley during the dry season.",
+      "marked_parts": {
+        "A": "The eastern plateau",
+        "B": "is high than",
+        "C": "the valley",
+        "D": "during the dry season"
+      }
+    },
+    {
+      "item_id": "batch3-we-017",
+      "section": "Written Expression",
+      "sentence": "The archivist cataloged several traditional tale from the mountain region.",
+      "marked_parts": {
+        "A": "The archivist cataloged",
+        "B": "several traditional",
+        "C": "tale",
+        "D": "from the mountain region"
+      }
+    },
+    {
+      "item_id": "batch3-we-018",
+      "section": "Written Expression",
+      "sentence": "The amendment appears in constitutional after the court's review.",
+      "marked_parts": {
+        "A": "The amendment",
+        "B": "appears in constitutional",
+        "C": "after the court's review",
+        "D": "the court's review"
+      }
+    },
+    {
+      "item_id": "batch3-we-019",
+      "section": "Written Expression",
+      "sentence": "The librarian organized the archived manuscripts methodical.",
+      "marked_parts": {
+        "A": "The librarian organized",
+        "B": "the archived manuscripts",
+        "C": "methodical",
+        "D": "the archived manuscripts methodical"
+      }
+    },
+    {
+      "item_id": "batch3-we-020",
+      "section": "Written Expression",
+      "sentence": "The volunteers collected water samples monitor pollution levels in the wetland.",
+      "marked_parts": {
+        "A": "The volunteers collected",
+        "B": "water samples",
+        "C": "monitor pollution levels",
+        "D": "in the wetland"
+      }
+    },
+    {
+      "item_id": "batch3-we-021",
+      "section": "Written Expression",
+      "sentence": "The observatory benefits from clear skies and benefits to precise measurements.",
+      "marked_parts": {
+        "A": "The observatory benefits",
+        "B": "from clear skies",
+        "C": "and benefits to",
+        "D": "precise measurements"
+      }
+    },
+    {
+      "item_id": "batch3-we-022",
+      "section": "Written Expression",
+      "sentence": "The conductor rehearsed the ensemble and checking the balance of the brass section.",
+      "marked_parts": {
+        "A": "The conductor rehearsed",
+        "B": "the ensemble",
+        "C": "and checking",
+        "D": "the balance of the brass section"
+      }
+    },
+    {
+      "item_id": "batch3-we-023",
+      "section": "Written Expression",
+      "sentence": "Each of the historic vehicles require careful maintenance.",
+      "marked_parts": {
+        "A": "Each of the historic vehicles",
+        "B": "require",
+        "C": "careful maintenance",
+        "D": "careful maintenance"
+      }
+    },
+    {
+      "item_id": "batch3-we-025",
+      "section": "Written Expression",
+      "sentence": "The treatment plant replaced a concrete ancient pipe beneath the filtration basin.",
+      "marked_parts": {
+        "A": "The treatment plant replaced",
+        "B": "a concrete ancient pipe",
+        "C": "beneath the filtration basin",
+        "D": "the filtration basin"
+      }
+    }
+  ]
+}

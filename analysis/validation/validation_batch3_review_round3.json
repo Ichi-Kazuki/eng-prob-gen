@@ -1,0 +1,41 @@
+{
+  "items": [
+    {
+      "item_id": "batch3-we-024",
+      "section": "Written Expression",
+      "verdict": "REVISE",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "HARD",
+      "difficulty_mismatch": true,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "REVISE"
+      },
+      "detected_error_count": 1,
+      "detected_error_position": "C",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "issues": [
+        {
+          "severity": "MINOR",
+          "category": "difficulty_mismatch",
+          "description": "The item tests a straightforward past-perfect past-participle form in a local error span; MEDIUM is a better reviewer estimate than the declared HARD difficulty.",
+          "related_check": "metadata_consistency"
+        }
+      ],
+      "revision_requirements": [
+        "Either relabel difficulty as MEDIUM or increase the grammatical complexity and distractor challenge enough to justify HARD without introducing additional errors."
+      ],
+      "source_similarity_risk": "LOW"
+    }
+  ]
+}

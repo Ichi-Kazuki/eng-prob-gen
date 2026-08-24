@@ -1,0 +1,242 @@
+{
+  "items": [
+    {
+      "item_id": "batch1-we-007",
+      "section": "Written Expression",
+      "item": {
+        "item_id": "batch1-we-007",
+        "section": "Written Expression",
+        "primary_target": "RELATIVE_CLAUSES",
+        "subtype": "subject relative pronoun for a human antecedent",
+        "secondary_features": [],
+        "tested_error_type": "incorrect_relative_marker",
+        "error_scope": "clause_level",
+        "difficulty": "EASY",
+        "vocabulary_domain": "community surveying",
+        "sentence": "The surveyor which mapped the village explained the boundary changes.",
+        "marked_parts": {
+          "A": "The surveyor",
+          "B": "which mapped",
+          "C": "the village explained",
+          "D": "the boundary changes."
+        },
+        "correct_answer": "C",
+        "minimal_correction": "which → who",
+        "answer_explanation": "The antecedent surveyor is a person and is the subject of mapped, so the relative marker should be who."
+      },
+      "disagreement_reasons": [
+        "solver_generator_mismatch",
+        "solver_reviewer_mismatch"
+      ],
+      "generator_answer": "C",
+      "reviewer_answer": "C",
+      "solver_answer": "B",
+      "solver_confidence": "HIGH",
+      "issues": [],
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "MANUAL_REVIEW"
+      ],
+      "possible_actions": [
+        "ACCEPT",
+        "REGENERATE",
+        "DISCARD"
+      ]
+    },
+    {
+      "item_id": "batch1-we-024",
+      "section": "Written Expression",
+      "item": {
+        "item_id": "batch1-we-024",
+        "section": "Written Expression",
+        "primary_target": "REFERENCE_AND_DETERMINERS",
+        "subtype": "countable quantifier before a plural count noun",
+        "secondary_features": [],
+        "tested_error_type": "agreement_error",
+        "error_scope": "local",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "questionnaire design",
+        "sentence": "The questionnaire included much responses from first-year students.",
+        "marked_parts": {
+          "A": "The questionnaire included",
+          "B": "much",
+          "C": "responses",
+          "D": "from first-year students."
+        },
+        "correct_answer": "C",
+        "minimal_correction": "much responses → many responses",
+        "answer_explanation": "Responses is a plural count noun, so it requires the quantifier many rather than much."
+      },
+      "disagreement_reasons": [
+        "solver_generator_mismatch",
+        "solver_reviewer_mismatch"
+      ],
+      "generator_answer": "C",
+      "reviewer_answer": "C",
+      "solver_answer": "B",
+      "solver_confidence": "HIGH",
+      "issues": [],
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "MANUAL_REVIEW"
+      ],
+      "possible_actions": [
+        "ACCEPT",
+        "REGENERATE",
+        "DISCARD"
+      ]
+    },
+    {
+      "item_id": "batch2-struct-003",
+      "section": "Structure",
+      "item": {
+        "item_id": "batch2-struct-003",
+        "section": "Structure",
+        "primary_target": "RELATIVE_CLAUSES",
+        "subtype": "restrictive relative clause with object relative marker",
+        "secondary_features": [
+          "restrictive clause"
+        ],
+        "difficulty": "EASY",
+        "vocabulary_domain": "environmental science",
+        "stem": "The wetlands ___ the university restored now attract many birds.",
+        "options": {
+          "A": "that",
+          "B": "that they",
+          "C": "which they",
+          "D": "restoring"
+        },
+        "correct_answer": "A",
+        "answer_explanation": "That is the object relative marker in the restrictive clause.",
+        "distractor_rationales": {
+          "A": "Correct: that replaces the object of restored.",
+          "B": "The extra subject creates a double-object structure.",
+          "C": "The extra they makes the relative clause ungrammatical.",
+          "D": "The participle does not form the intended finite relative clause."
+        }
+      },
+      "disagreement_reasons": [
+        "solver_ambiguous"
+      ],
+      "generator_answer": "A",
+      "reviewer_answer": "A",
+      "solver_answer": "AMBIGUOUS",
+      "solver_confidence": "MEDIUM",
+      "issues": [],
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "MANUAL_REVIEW"
+      ],
+      "possible_actions": [
+        "ACCEPT",
+        "REGENERATE",
+        "DISCARD"
+      ]
+    },
+    {
+      "item_id": "batch2-struct-004",
+      "section": "Structure",
+      "item": {
+        "item_id": "batch2-struct-004",
+        "section": "Structure",
+        "primary_target": "ADVERBIAL_CLAUSES",
+        "subtype": "conditional clause with a finite subordinate clause",
+        "secondary_features": [
+          "conditional"
+        ],
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "meteorology",
+        "stem": "___ the storm weakens, coastal residents will remain indoors.",
+        "options": {
+          "A": "Because",
+          "B": "Although",
+          "C": "Unless",
+          "D": "If"
+        },
+        "correct_answer": "D",
+        "answer_explanation": "If introduces the condition for the result clause.",
+        "distractor_rationales": {
+          "A": "Because expresses cause, not the stated condition.",
+          "B": "Although expresses contrast rather than a condition.",
+          "C": "Unless reverses the intended condition.",
+          "D": "Correct: if introduces the conditional subordinate clause."
+        }
+      },
+      "disagreement_reasons": [
+        "solver_ambiguous"
+      ],
+      "generator_answer": "D",
+      "reviewer_answer": "D",
+      "solver_answer": "AMBIGUOUS",
+      "solver_confidence": "LOW",
+      "issues": [],
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "MANUAL_REVIEW"
+      ],
+      "possible_actions": [
+        "ACCEPT",
+        "REGENERATE",
+        "DISCARD"
+      ]
+    },
+    {
+      "item_id": "batch2-struct-006",
+      "section": "Structure",
+      "item": {
+        "item_id": "batch2-struct-006",
+        "section": "Structure",
+        "primary_target": "VERB_FORM_VOICE",
+        "subtype": "passive voice in a completed research process",
+        "secondary_features": [
+          "passive voice",
+          "past perfect"
+        ],
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "materials science",
+        "stem": "Before publication, the alloy samples ___ by three independent laboratories.",
+        "options": {
+          "A": "tested",
+          "B": "had been tested",
+          "C": "have tested",
+          "D": "were testing"
+        },
+        "correct_answer": "B",
+        "answer_explanation": "Had been tested expresses a completed passive process before publication.",
+        "distractor_rationales": {
+          "A": "The simple past omits the earlier-completion relationship.",
+          "B": "Correct: had been tested is past perfect passive.",
+          "C": "The active present perfect has the wrong voice and time.",
+          "D": "The progressive active form has the wrong voice."
+        }
+      },
+      "disagreement_reasons": [
+        "solver_ambiguous"
+      ],
+      "generator_answer": "B",
+      "reviewer_answer": "B",
+      "solver_answer": "AMBIGUOUS",
+      "solver_confidence": "MEDIUM",
+      "issues": [],
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "MANUAL_REVIEW"
+      ],
+      "possible_actions": [
+        "ACCEPT",
+        "REGENERATE",
+        "DISCARD"
+      ]
+    }
+  ]
+}

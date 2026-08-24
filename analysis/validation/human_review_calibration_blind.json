@@ -1,0 +1,687 @@
+{
+  "title": "Human Review Calibration Set — Blind Review Payload",
+  "purpose": "Present this payload to human reviewers without pipeline verdicts, answers, solver outputs, or failure reasons.",
+  "count": 46,
+  "omitted_fields": [
+    "source_group",
+    "primary_target",
+    "subtype",
+    "difficulty",
+    "vocabulary_domain",
+    "pipeline_final_state",
+    "generator_answer",
+    "reviewer_verdict",
+    "reviewer_independent_answer",
+    "solver_answer",
+    "failure_reason"
+  ],
+  "items": [
+    {
+      "calibration_id": "CAL-001",
+      "item_id": "batch1-struct-001",
+      "section": "Structure",
+      "question": "According to the latest forecast, the pattern of pressure changes near the coast ____ before dawn.",
+      "options": {
+        "A": "is expected to change",
+        "B": "are expected to change",
+        "C": "expecting to change",
+        "D": "the pattern expected changing"
+      }
+    },
+    {
+      "calibration_id": "CAL-002",
+      "item_id": "batch1-struct-002",
+      "section": "Structure",
+      "question": "The map archivist explained ____ during the survey.",
+      "options": {
+        "A": "where had the old boundary markers been moved",
+        "B": "where the old boundary markers had been moved",
+        "C": "where the old boundary markers",
+        "D": "where did the old boundary markers move"
+      }
+    },
+    {
+      "calibration_id": "CAL-003",
+      "item_id": "batch1-struct-003",
+      "section": "Structure",
+      "question": "The sandstone tablet, ____ during the excavation, is now displayed in the conservation laboratory.",
+      "options": {
+        "A": "what was uncovered",
+        "B": "which uncovering",
+        "C": "which was uncovered",
+        "D": "which it was uncovered"
+      }
+    },
+    {
+      "calibration_id": "CAL-004",
+      "item_id": "batch1-struct-004",
+      "section": "Structure",
+      "question": "The telescope records extra images ____ the sky becomes clear after sunset.",
+      "options": {
+        "A": "during",
+        "B": "when the sky becoming clear",
+        "C": "when clear the sky",
+        "D": "when the sky becomes clear"
+      }
+    },
+    {
+      "calibration_id": "CAL-005",
+      "item_id": "batch1-struct-005",
+      "section": "Structure",
+      "question": "The alloy remains flexible ____ repeated cooling and heating.",
+      "options": {
+        "A": "despite",
+        "B": "although",
+        "C": "in spite",
+        "D": "despite of"
+      }
+    },
+    {
+      "calibration_id": "CAL-006",
+      "item_id": "batch1-struct-011",
+      "section": "Structure",
+      "question": "The museum displayed ____ from the coastal excavation.",
+      "options": {
+        "A": "a small bronze worked bowl",
+        "B": "a finely work small bronze bowl",
+        "C": "a finely worked old small bronze bowl",
+        "D": "a finely worked small bronze bowl"
+      }
+    },
+    {
+      "calibration_id": "CAL-007",
+      "item_id": "batch1-struct-006",
+      "section": "Structure",
+      "question": "By the time the survey team arrived, the mineral samples ____ in sealed containers.",
+      "options": {
+        "A": "were being label",
+        "B": "had been labeled",
+        "C": "had labeled",
+        "D": "had been"
+      }
+    },
+    {
+      "calibration_id": "CAL-008",
+      "item_id": "batch1-struct-007",
+      "section": "Structure",
+      "question": "The monitoring station's new filter made the river water ____ after heavy rainfall.",
+      "options": {
+        "A": "clearer",
+        "B": "clearly",
+        "C": "to clear",
+        "D": "clearing"
+      }
+    },
+    {
+      "calibration_id": "CAL-009",
+      "item_id": "batch1-we-001",
+      "section": "Written Expression",
+      "question": "The calibration of the instruments record stable readings during each trial.",
+      "marked_parts": {
+        "A": "The calibration of the instruments record",
+        "B": "stable readings",
+        "C": "during each",
+        "D": "trial."
+      }
+    },
+    {
+      "calibration_id": "CAL-010",
+      "item_id": "batch1-we-015",
+      "section": "Written Expression",
+      "question": "The northern route is considerably more shorter than the southern route during winter.",
+      "marked_parts": {
+        "A": "The northern route is",
+        "B": "considerably",
+        "C": "more shorter than the southern route",
+        "D": "during winter."
+      }
+    },
+    {
+      "calibration_id": "CAL-011",
+      "item_id": "batch1-we-023",
+      "section": "Written Expression",
+      "question": "Last year, after the bridge had been inspected, engineers approves the repair plan.",
+      "marked_parts": {
+        "A": "Last year, after the bridge had been inspected,",
+        "B": "engineers approves",
+        "C": "the repair",
+        "D": "plan."
+      }
+    },
+    {
+      "calibration_id": "CAL-012",
+      "item_id": "batch1-we-002",
+      "section": "Written Expression",
+      "question": "The engineer selected several durability bearings for the test rig.",
+      "marked_parts": {
+        "A": "The engineer selected",
+        "B": "several durability bearings",
+        "C": "for the test",
+        "D": "rig."
+      }
+    },
+    {
+      "calibration_id": "CAL-013",
+      "item_id": "batch1-we-016",
+      "section": "Written Expression",
+      "question": "The plants grew slowly during the trial because of the soil remained unusually cold.",
+      "marked_parts": {
+        "A": "The plants grew slowly",
+        "B": "during the trial",
+        "C": "because",
+        "D": "of the soil remained unusually cold."
+      }
+    },
+    {
+      "calibration_id": "CAL-014",
+      "item_id": "batch3-we-025",
+      "section": "Written Expression",
+      "question": "The treatment plant replaced a concrete ancient pipe beneath the filtration basin.",
+      "marked_parts": {
+        "A": "The treatment plant replaced",
+        "B": "a concrete ancient pipe",
+        "C": "beneath the filtration basin",
+        "D": "the filtration basin"
+      }
+    },
+    {
+      "calibration_id": "CAL-015",
+      "item_id": "batch1-we-004",
+      "section": "Written Expression",
+      "question": "The archivist was deeply interested on maps from the coastal archive.",
+      "marked_parts": {
+        "A": "The archivist was",
+        "B": "deeply",
+        "C": "interested",
+        "D": "on maps from the coastal archive."
+      }
+    },
+    {
+      "calibration_id": "CAL-016",
+      "item_id": "batch1-we-018",
+      "section": "Written Expression",
+      "question": "The analyst could not determine why did the values change after calibration.",
+      "marked_parts": {
+        "A": "The analyst could not determine",
+        "B": "why did the values change",
+        "C": "after",
+        "D": "calibration."
+      }
+    },
+    {
+      "calibration_id": "CAL-017",
+      "item_id": "batch1-we-005",
+      "section": "Written Expression",
+      "question": "The workshop focuses on carve wood and shaping clay for architectural models.",
+      "marked_parts": {
+        "A": "The workshop focuses on carve",
+        "B": "wood and shaping",
+        "C": "clay for",
+        "D": "architectural models."
+      }
+    },
+    {
+      "calibration_id": "CAL-018",
+      "item_id": "batch1-we-019",
+      "section": "Written Expression",
+      "question": "The strength of the coating is dependent of temperature and humidity.",
+      "marked_parts": {
+        "A": "The strength of the coating",
+        "B": "is",
+        "C": "dependent of temperature",
+        "D": "and humidity."
+      }
+    },
+    {
+      "calibration_id": "CAL-019",
+      "item_id": "batch1-we-009",
+      "section": "Written Expression",
+      "question": "The collection of oral histories contain vivid accounts of migration from the valley.",
+      "marked_parts": {
+        "A": "The collection of oral histories contain",
+        "B": "vivid accounts",
+        "C": "of migration",
+        "D": "from the valley."
+      }
+    },
+    {
+      "calibration_id": "CAL-020",
+      "item_id": "batch1-we-022",
+      "section": "Written Expression",
+      "question": "The panels, having built from recycled glass, were tested for strength.",
+      "marked_parts": {
+        "A": "The panels,",
+        "B": "having built from recycled glass,",
+        "C": "were tested",
+        "D": "for strength."
+      }
+    },
+    {
+      "calibration_id": "CAL-021",
+      "item_id": "batch2-struct-003",
+      "section": "Structure",
+      "question": "The wetlands ___ the university restored now attract many birds.",
+      "options": {
+        "A": "that",
+        "B": "that they",
+        "C": "which they",
+        "D": "restoring"
+      }
+    },
+    {
+      "calibration_id": "CAL-022",
+      "item_id": "batch2-struct-004",
+      "section": "Structure",
+      "question": "___ the storm weakens, coastal residents will remain indoors.",
+      "options": {
+        "A": "Because",
+        "B": "Although",
+        "C": "Unless",
+        "D": "If"
+      }
+    },
+    {
+      "calibration_id": "CAL-023",
+      "item_id": "batch2-struct-006",
+      "section": "Structure",
+      "question": "Before publication, the alloy samples ___ by three independent laboratories.",
+      "options": {
+        "A": "tested",
+        "B": "had been tested",
+        "C": "have tested",
+        "D": "were testing"
+      }
+    },
+    {
+      "calibration_id": "CAL-024",
+      "item_id": "batch1-we-013",
+      "section": "Written Expression",
+      "question": "It was placed beside the research equipment after the technician finished.",
+      "marked_parts": {
+        "A": "It",
+        "B": "was placed beside",
+        "C": "the research equipment",
+        "D": "after the technician finished."
+      }
+    },
+    {
+      "calibration_id": "CAL-025",
+      "item_id": "batch1-we-007",
+      "section": "Written Expression",
+      "question": "The surveyor which mapped the village explained the boundary changes.",
+      "marked_parts": {
+        "A": "The surveyor",
+        "B": "which mapped",
+        "C": "the village explained",
+        "D": "the boundary changes."
+      }
+    },
+    {
+      "calibration_id": "CAL-026",
+      "item_id": "batch1-we-024",
+      "section": "Written Expression",
+      "question": "The questionnaire included much responses from first-year students.",
+      "marked_parts": {
+        "A": "The questionnaire included",
+        "B": "much",
+        "C": "responses",
+        "D": "from first-year students."
+      }
+    },
+    {
+      "calibration_id": "CAL-027",
+      "item_id": "batch2-struct-008",
+      "section": "Structure",
+      "question": "The fragments ___ in the crater were preserved for analysis.",
+      "options": {
+        "A": "discovering",
+        "B": "discovered",
+        "C": "were discovered",
+        "D": "to discover"
+      }
+    },
+    {
+      "calibration_id": "CAL-028",
+      "item_id": "batch2-struct-012",
+      "section": "Structure",
+      "question": "Never before ___ such a significant amendment been proposed.",
+      "options": {
+        "A": "has",
+        "B": "such has",
+        "C": "has it",
+        "D": "it has"
+      }
+    },
+    {
+      "calibration_id": "CAL-029",
+      "item_id": "batch3-struct-009",
+      "section": "Structure",
+      "question": "The memory task was so demanding that several participants, after practicing for weeks, ___ unable to finish it.",
+      "options": {
+        "A": "were more unable",
+        "B": "were",
+        "C": "being",
+        "D": "had been to"
+      }
+    },
+    {
+      "calibration_id": "CAL-030",
+      "item_id": "batch3-struct-011",
+      "section": "Structure",
+      "question": "Marie Curie, a pioneer in radioactivity research, ___ two Nobel Prizes.",
+      "options": {
+        "A": "awarding",
+        "B": "was award",
+        "C": "her award",
+        "D": "received"
+      }
+    },
+    {
+      "calibration_id": "CAL-031",
+      "item_id": "batch2-we-001",
+      "section": "Written Expression",
+      "question": "An ecosystem supports many forms of life.",
+      "marked_parts": {
+        "A": "An",
+        "B": "ecosystem",
+        "C": "supports",
+        "D": "many forms"
+      }
+    },
+    {
+      "calibration_id": "CAL-032",
+      "item_id": "batch2-we-002",
+      "section": "Written Expression",
+      "question": "The railway opened the mountain route in 1898.",
+      "marked_parts": {
+        "A": "The railway",
+        "B": "opened",
+        "C": "the mountain route",
+        "D": "in 1898"
+      }
+    },
+    {
+      "calibration_id": "CAL-033",
+      "item_id": "batch2-we-003",
+      "section": "Written Expression",
+      "question": "The study reports significant changes in memory.",
+      "marked_parts": {
+        "A": "The study",
+        "B": "reports",
+        "C": "significant",
+        "D": "changes in memory"
+      }
+    },
+    {
+      "calibration_id": "CAL-034",
+      "item_id": "batch2-we-005",
+      "section": "Written Expression",
+      "question": "The course emphasizes reading critically and writing clearly.",
+      "marked_parts": {
+        "A": "The course",
+        "B": "emphasizes",
+        "C": "reading critically",
+        "D": "and writing clearly"
+      }
+    },
+    {
+      "calibration_id": "CAL-035",
+      "item_id": "batch2-we-007",
+      "section": "Written Expression",
+      "question": "Scientists are committed to protecting the coral reef.",
+      "marked_parts": {
+        "A": "Scientists",
+        "B": "are committed",
+        "C": "to protecting",
+        "D": "the coral reef"
+      }
+    },
+    {
+      "calibration_id": "CAL-036",
+      "item_id": "batch2-we-008",
+      "section": "Written Expression",
+      "question": "The arch that supports the roof was recently repaired.",
+      "marked_parts": {
+        "A": "The arch",
+        "B": "that supports",
+        "C": "the roof",
+        "D": "was recently repaired"
+      }
+    },
+    {
+      "calibration_id": "CAL-037",
+      "item_id": "batch2-we-010",
+      "section": "Written Expression",
+      "question": "Investors are concerned about the sudden change.",
+      "marked_parts": {
+        "A": "Investors",
+        "B": "are concerned",
+        "C": "about",
+        "D": "the sudden change"
+      }
+    },
+    {
+      "calibration_id": "CAL-038",
+      "item_id": "batch2-we-017",
+      "section": "Written Expression",
+      "question": "The second estimate is more precise than the first.",
+      "marked_parts": {
+        "A": "The second estimate",
+        "B": "is more precise",
+        "C": "than",
+        "D": "the first"
+      }
+    },
+    {
+      "calibration_id": "CAL-039",
+      "item_id": "batch2-we-018",
+      "section": "Written Expression",
+      "question": "The device allows operators to adjust the pressure.",
+      "marked_parts": {
+        "A": "The device",
+        "B": "allows operators",
+        "C": "to adjust",
+        "D": "the pressure"
+      }
+    },
+    {
+      "calibration_id": "CAL-040",
+      "item_id": "batch2-we-021",
+      "section": "Written Expression",
+      "question": "The star whose spectrum changed was observed again.",
+      "marked_parts": {
+        "A": "The star",
+        "B": "whose spectrum",
+        "C": "changed",
+        "D": "was observed again"
+      }
+    },
+    {
+      "calibration_id": "CAL-041",
+      "item_id": "batch3-we-016",
+      "section": "Written Expression",
+      "question": "The museum displayed a clay ancient vessel from the excavation.",
+      "marked_parts": {
+        "A": "The museum displayed",
+        "B": "a clay ancient vessel",
+        "C": "from the excavation",
+        "D": "the excavation"
+      }
+    },
+    {
+      "calibration_id": "CAL-042",
+      "item_id": "batch1-we-003",
+      "section": "Written Expression",
+      "question": "Yesterday, after the lighthouse crew had repaired the lamp, the keeper records the inspection details.",
+      "marked_parts": {
+        "A": "Yesterday, after the lighthouse crew had repaired the lamp,",
+        "B": "the keeper",
+        "C": "records",
+        "D": "the inspection details."
+      },
+      "revision_versions": {
+        "original": {
+          "question": "After the lighthouse crew had repaired the lamp, the keeper records the inspection details.",
+          "sentence": "After the lighthouse crew had repaired the lamp, the keeper records the inspection details.",
+          "marked_parts": {
+            "A": "After the lighthouse crew had repaired the lamp,",
+            "B": "the keeper",
+            "C": "records",
+            "D": "the inspection details."
+          }
+        },
+        "revised": {
+          "question": "Yesterday, after the lighthouse crew had repaired the lamp, the keeper records the inspection details.",
+          "sentence": "Yesterday, after the lighthouse crew had repaired the lamp, the keeper records the inspection details.",
+          "marked_parts": {
+            "A": "Yesterday, after the lighthouse crew had repaired the lamp,",
+            "B": "the keeper",
+            "C": "records",
+            "D": "the inspection details."
+          }
+        },
+        "attempt_count": 2
+      }
+    },
+    {
+      "calibration_id": "CAL-043",
+      "item_id": "batch2-struct-001",
+      "section": "Structure",
+      "question": "During the severe drought of 2019, the leaves of the desert plant ___.",
+      "options": {
+        "A": "wilt",
+        "B": "wilted",
+        "C": "wilts",
+        "D": "wilting"
+      },
+      "revision_versions": {
+        "original": {
+          "question": "The leaves of the desert plant ___ during the dry season.",
+          "stem": "The leaves of the desert plant ___ during the dry season.",
+          "options": {
+            "A": "wilt",
+            "B": "wilted",
+            "C": "wilts",
+            "D": "wilting"
+          }
+        },
+        "revised": {
+          "question": "During the severe drought of 2019, the leaves of the desert plant ___.",
+          "stem": "During the severe drought of 2019, the leaves of the desert plant ___.",
+          "options": {
+            "A": "wilt",
+            "B": "wilted",
+            "C": "wilts",
+            "D": "wilting"
+          }
+        },
+        "attempt_count": 2
+      }
+    },
+    {
+      "calibration_id": "CAL-044",
+      "item_id": "batch3-we-005",
+      "section": "Written Expression",
+      "question": "The agency is responsible of monitoring water quality near the reservoir.",
+      "marked_parts": {
+        "A": "The agency is",
+        "B": "responsible of",
+        "C": "monitoring water quality",
+        "D": "near the reservoir"
+      },
+      "revision_versions": {
+        "original": {
+          "question": "The court found the new evidence convincing for the jury.",
+          "sentence": "The court found the new evidence convincing for the jury.",
+          "marked_parts": {
+            "A": "The court found",
+            "B": "the new evidence",
+            "C": "convincing for",
+            "D": "the jury"
+          }
+        },
+        "revised": {
+          "question": "The agency is responsible of monitoring water quality near the reservoir.",
+          "sentence": "The agency is responsible of monitoring water quality near the reservoir.",
+          "marked_parts": {
+            "A": "The agency is",
+            "B": "responsible of",
+            "C": "monitoring water quality",
+            "D": "near the reservoir"
+          }
+        },
+        "attempt_count": 2
+      }
+    },
+    {
+      "calibration_id": "CAL-045",
+      "item_id": "batch3-we-017",
+      "section": "Written Expression",
+      "question": "The archivist cataloged several traditional tale from the mountain region.",
+      "marked_parts": {
+        "A": "The archivist cataloged",
+        "B": "several traditional",
+        "C": "tale",
+        "D": "from the mountain region"
+      },
+      "revision_versions": {
+        "original": {
+          "question": "Each storyteller adapted their account to suit the audience.",
+          "sentence": "Each storyteller adapted their account to suit the audience.",
+          "marked_parts": {
+            "A": "Each storyteller",
+            "B": "adapted",
+            "C": "their account",
+            "D": "to suit the audience"
+          }
+        },
+        "revised": {
+          "question": "The archivist cataloged several traditional tale from the mountain region.",
+          "sentence": "The archivist cataloged several traditional tale from the mountain region.",
+          "marked_parts": {
+            "A": "The archivist cataloged",
+            "B": "several traditional",
+            "C": "tale",
+            "D": "from the mountain region"
+          }
+        },
+        "attempt_count": 2
+      }
+    },
+    {
+      "calibration_id": "CAL-046",
+      "item_id": "batch3-we-024",
+      "section": "Written Expression",
+      "question": "By the time the survey ended, the geologists concluded that the glacier had melt substantially.",
+      "marked_parts": {
+        "A": "By the time the survey ended",
+        "B": "the geologists concluded",
+        "C": "that the glacier had melt",
+        "D": "substantially"
+      },
+      "revision_versions": {
+        "original": {
+          "question": "The geologists realized that the glacier melted before they had reached the valley.",
+          "sentence": "The geologists realized that the glacier melted before they had reached the valley.",
+          "marked_parts": {
+            "A": "The geologists realized",
+            "B": "that the glacier melted",
+            "C": "before they had reached",
+            "D": "the valley"
+          }
+        },
+        "revised": {
+          "question": "By the time the survey ended, the geologists concluded that the glacier had melt substantially.",
+          "sentence": "By the time the survey ended, the geologists concluded that the glacier had melt substantially.",
+          "marked_parts": {
+            "A": "By the time the survey ended",
+            "B": "the geologists concluded",
+            "C": "that the glacier had melt",
+            "D": "substantially"
+          }
+        },
+        "attempt_count": 3
+      }
+    }
+  ]
+}

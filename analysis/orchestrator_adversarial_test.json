@@ -1,0 +1,550 @@
+{
+  "_purpose": "Orchestrator state-machine replay over deliberately broken Reviewer-test fixtures (multiple-answer, zero-answer, WE double-error, WE zero-error, metadata mismatch). Verifies ACCEPT rate = 0% and Solver is never called on a REVISE item. Not usable practice content.",
+  "pipeline_version": "1.0.0",
+  "items": [
+    {
+      "item_id": "adv-struct-multi-001",
+      "concept_id": "adv-struct-multi-001",
+      "section": "Structure",
+      "state": "REVISE_REQUIRED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "REVISE_REQUIRED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 1,
+      "generator": {
+        "answer": "A"
+      },
+      "reviewer": {
+        "verdict": "REVISE",
+        "independent_answer": "AMBIGUOUS",
+        "difficulty": "MEDIUM"
+      },
+      "solver": null,
+      "consensus": false,
+      "batch_slot": {
+        "section": "Structure",
+        "primary_target": "VERB_FORM_VOICE",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "A",
+        "vocabulary_domain": "museum studies"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": null,
+      "qa_audit": {
+        "item_id": "adv-struct-multi-001",
+        "concept_id": "adv-struct-multi-001",
+        "state": "REVISE_REQUIRED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "REVISE_REQUIRED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 1,
+        "reviewer": {
+          "item_id": "adv-struct-multi-001",
+          "section": "Structure",
+          "verdict": "REVISE",
+          "critical_failure": true,
+          "independent_answer": "AMBIGUOUS",
+          "generator_answer": "A",
+          "answer_match": false,
+          "reviewer_difficulty": "MEDIUM",
+          "generator_difficulty": "MEDIUM",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REJECT",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [
+            {
+              "severity": "CRITICAL",
+              "category": "multiple_correct_answers",
+              "description": "Both option A ('was not yet fully renovated', simple past passive) and option B ('had not yet been fully renovated', past perfect passive) are grammatical, coherent completions of the concessive clause. The item has two valid answers, not one.",
+              "related_check": "answer_uniqueness"
+            }
+          ],
+          "revision_requirements": [
+            "Replace distractor B with an option that is unambiguously invalid (e.g. an agreement or voice error) so that only option A remains grammatical."
+          ],
+          "source_similarity_risk": "LOW"
+        },
+        "solver": null,
+        "leakage_check": null,
+        "consensus": null,
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer REVISE (cycle 1/2); revision_requirements handed back to Generator, independent_answer withheld"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T15:18:05.411135+00:00",
+          "updated": "2026-08-23T15:18:05.539605+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "adv-struct-zero-002",
+      "concept_id": "adv-struct-zero-002",
+      "section": "Structure",
+      "state": "REVISE_REQUIRED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "REVISE_REQUIRED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 1,
+      "generator": {
+        "answer": "B"
+      },
+      "reviewer": {
+        "verdict": "REVISE",
+        "independent_answer": "NONE",
+        "difficulty": "MEDIUM"
+      },
+      "solver": null,
+      "consensus": false,
+      "batch_slot": {
+        "section": "Structure",
+        "primary_target": "VERB_FORM_VOICE",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "B",
+        "vocabulary_domain": "committee governance"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": null,
+      "qa_audit": {
+        "item_id": "adv-struct-zero-002",
+        "concept_id": "adv-struct-zero-002",
+        "state": "REVISE_REQUIRED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "REVISE_REQUIRED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 1,
+        "reviewer": {
+          "item_id": "adv-struct-zero-002",
+          "section": "Structure",
+          "verdict": "REVISE",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "generator_answer": "B",
+          "answer_match": false,
+          "reviewer_difficulty": "MEDIUM",
+          "generator_difficulty": "MEDIUM",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REJECT",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [
+            {
+              "severity": "CRITICAL",
+              "category": "no_correct_answer",
+              "description": "None of the four options produce a grammatical sentence: 'reviewing' is a fragment (no finite verb), 'have reviewed' does not agree with the singular collective subject 'the committee' (needs 'has reviewed'), 'was review' is not a valid verb form, and 'did reviewed' incorrectly pairs 'did' with a past-tense form instead of the base form.",
+              "related_check": "answer_uniqueness"
+            }
+          ],
+          "revision_requirements": [
+            "Fix option B to a genuinely grammatical form ('has reviewed', matching the singular subject in standard written English) so that exactly one option is correct."
+          ],
+          "source_similarity_risk": "LOW"
+        },
+        "solver": null,
+        "leakage_check": null,
+        "consensus": null,
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer REVISE (cycle 1/2); revision_requirements handed back to Generator, independent_answer withheld"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T15:18:05.539674+00:00",
+          "updated": "2026-08-23T15:18:05.664690+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "adv-we-double-003",
+      "concept_id": "adv-we-double-003",
+      "section": "Written Expression",
+      "state": "REVISE_REQUIRED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "REVISE_REQUIRED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 1,
+      "generator": {
+        "answer": "A"
+      },
+      "reviewer": {
+        "verdict": "REVISE",
+        "independent_answer": "AMBIGUOUS",
+        "difficulty": "MEDIUM"
+      },
+      "solver": null,
+      "consensus": false,
+      "batch_slot": {
+        "section": "Written Expression",
+        "primary_target": "CLAUSE_STRUCTURE",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "A",
+        "vocabulary_domain": "committee governance",
+        "tested_error_type": "agreement_error",
+        "error_scope": "clause_level"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": null,
+      "qa_audit": {
+        "item_id": "adv-we-double-003",
+        "concept_id": "adv-we-double-003",
+        "state": "REVISE_REQUIRED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "REVISE_REQUIRED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 1,
+        "reviewer": {
+          "item_id": "adv-we-double-003",
+          "section": "Written Expression",
+          "verdict": "REVISE",
+          "critical_failure": true,
+          "independent_answer": "AMBIGUOUS",
+          "generator_answer": "A",
+          "answer_match": false,
+          "reviewer_difficulty": "MEDIUM",
+          "generator_difficulty": "MEDIUM",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "REVISE"
+          },
+          "issues": [
+            {
+              "severity": "CRITICAL",
+              "category": "second_genuine_error",
+              "description": "A full-sentence audit (ignoring the marked-part labels) finds two independent genuine errors: 'have' at position A (agreement: 'the committee' requires 'has') and 'a final decisions' at position D (article/number mismatch: 'a' requires the singular 'decision'). The item's metadata acknowledges only the first.",
+              "related_check": "grammar_validity"
+            }
+          ],
+          "revision_requirements": [
+            "Change 'a final decisions' to 'a final decision' so that 'have' at position A remains the sentence's only genuine error."
+          ],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 2,
+          "detected_error_position": "A",
+          "non_error_parts_valid": false,
+          "minimal_correction_valid": true
+        },
+        "solver": null,
+        "leakage_check": null,
+        "consensus": null,
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer REVISE (cycle 1/2); revision_requirements handed back to Generator, independent_answer withheld"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T15:18:05.664777+00:00",
+          "updated": "2026-08-23T15:18:05.800887+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "adv-we-zero-004",
+      "concept_id": "adv-we-zero-004",
+      "section": "Written Expression",
+      "state": "REVISE_REQUIRED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "REVISE_REQUIRED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 1,
+      "generator": {
+        "answer": "C"
+      },
+      "reviewer": {
+        "verdict": "REVISE",
+        "independent_answer": "NONE",
+        "difficulty": "EASY"
+      },
+      "solver": null,
+      "consensus": false,
+      "batch_slot": {
+        "section": "Written Expression",
+        "primary_target": "NONFINITE_VERB_PHRASES",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "C",
+        "vocabulary_domain": "research methodology",
+        "tested_error_type": "wrong_verb_form",
+        "error_scope": "local"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": null,
+      "qa_audit": {
+        "item_id": "adv-we-zero-004",
+        "concept_id": "adv-we-zero-004",
+        "state": "REVISE_REQUIRED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "REVISE_REQUIRED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 1,
+        "reviewer": {
+          "item_id": "adv-we-zero-004",
+          "section": "Written Expression",
+          "verdict": "REVISE",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "generator_answer": "C",
+          "answer_match": false,
+          "reviewer_difficulty": "EASY",
+          "generator_difficulty": "MEDIUM",
+          "difficulty_mismatch": true,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REJECT",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "REJECT"
+          },
+          "issues": [
+            {
+              "severity": "CRITICAL",
+              "category": "no_genuine_error",
+              "description": "The sentence as written is fully grammatical. The part marked as the intended error, 'conducting a thorough review', is a standard gerund complement after the preposition 'after'. No genuine error exists anywhere in the sentence.",
+              "related_check": "answer_uniqueness"
+            },
+            {
+              "severity": "MINOR",
+              "category": "difficulty_mismatch",
+              "description": "Independent difficulty is not meaningfully assessable because the item has no real error to detect; provisional EASY estimate differs from the declared MEDIUM.",
+              "related_check": "difficulty"
+            }
+          ],
+          "revision_requirements": [
+            "Introduce an actual, unambiguous grammatical error into one of the four marked spans (e.g. 'after conduct a thorough review'), since none of the current spans contains a genuine defect."
+          ],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 0,
+          "detected_error_position": "NONE",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": false
+        },
+        "solver": null,
+        "leakage_check": null,
+        "consensus": null,
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer REVISE (cycle 1/2); revision_requirements handed back to Generator, independent_answer withheld"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T15:18:05.800926+00:00",
+          "updated": "2026-08-23T15:18:05.930885+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "adv-we-metamismatch-005",
+      "concept_id": "adv-we-metamismatch-005",
+      "section": "Written Expression",
+      "state": "REVISE_REQUIRED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "REVISE_REQUIRED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 1,
+      "generator": {
+        "answer": "C"
+      },
+      "reviewer": {
+        "verdict": "REVISE",
+        "independent_answer": "C",
+        "difficulty": "EASY"
+      },
+      "solver": null,
+      "consensus": false,
+      "batch_slot": {
+        "section": "Written Expression",
+        "primary_target": "VERB_FORM_VOICE",
+        "difficulty": "EASY",
+        "correct_answer_position": "C",
+        "vocabulary_domain": "higher education",
+        "tested_error_type": "wrong_verb_form",
+        "error_scope": "local"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": null,
+      "qa_audit": {
+        "item_id": "adv-we-metamismatch-005",
+        "concept_id": "adv-we-metamismatch-005",
+        "state": "REVISE_REQUIRED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "REVISE_REQUIRED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 1,
+        "reviewer": {
+          "item_id": "adv-we-metamismatch-005",
+          "section": "Written Expression",
+          "verdict": "REVISE",
+          "critical_failure": true,
+          "independent_answer": "C",
+          "generator_answer": "C",
+          "answer_match": true,
+          "reviewer_difficulty": "EASY",
+          "generator_difficulty": "EASY",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "REJECT",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "REJECT"
+          },
+          "issues": [
+            {
+              "severity": "CRITICAL",
+              "category": "metadata_target_mismatch",
+              "description": "The declared primary_target ('VERB_FORM_VOICE') and tested_error_type ('wrong_verb_form') do not match the actual defect, which is an incorrect relative marker: 'what' is used after the explicit antecedent 'skills', where 'that' or 'which' is required. This is a RELATIVE_CLAUSES / incorrect_relative_marker phenomenon.",
+              "related_check": "target_alignment"
+            }
+          ],
+          "revision_requirements": [
+            "Correct the metadata only: set primary_target to RELATIVE_CLAUSES, subtype to a relative-marker-selection description, and tested_error_type to incorrect_relative_marker. The sentence, marked_parts, correct_answer, and minimal_correction are otherwise sound and need no change."
+          ],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "C",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "solver": null,
+        "leakage_check": null,
+        "consensus": null,
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer REVISE (cycle 1/2); revision_requirements handed back to Generator, independent_answer withheld"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T15:18:05.930928+00:00",
+          "updated": "2026-08-23T15:18:06.057203+00:00"
+        }
+      }
+    }
+  ],
+  "accept_count": 0,
+  "total_count": 5,
+  "accept_rate": 0.0,
+  "solver_skip_log": [
+    "adv-struct-multi-001: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)",
+    "adv-struct-zero-002: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)",
+    "adv-we-double-003: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)",
+    "adv-we-zero-004: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)",
+    "adv-we-metamismatch-005: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)"
+  ]
+}

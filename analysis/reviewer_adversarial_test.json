@@ -1,0 +1,121 @@
+{
+  "_purpose": "Reviewer-test fixtures only. Deliberately broken candidate items used to verify the Reviewer Agent actually detects critical failures. NOT usable practice content and NOT part of any item bank.",
+  "items": [
+    {
+      "item_id": "adv-struct-multi-001",
+      "section": "Structure",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "passive voice with perfect aspect (deliberately ambiguous)",
+      "secondary_features": ["adverb placement 'not yet fully'"],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "museum studies",
+      "stem": "Although the museum's new wing ____, attendance figures for the quarter still exceeded expectations.",
+      "options": {
+        "A": "was not yet fully renovated",
+        "B": "had not yet been fully renovated",
+        "C": "not yet fully renovated",
+        "D": "was renovating not yet fully"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "(Deliberately mis-specified for testing) 'was not yet fully renovated' completes the concessive clause with a grammatical simple-past passive.",
+      "distractor_rationales": {
+        "A": "correct — simple past passive.",
+        "B": "claimed invalid, but 'had not yet been fully renovated' is in fact an equally grammatical past-perfect passive — this is the deliberate flaw.",
+        "C": "missing a finite verb ('was'), leaving a fragment.",
+        "D": "'was renovating not yet fully' has non-standard adverb placement and mixes active progressive with the intended passive meaning."
+      },
+      "_intended_flaw": "Options A and B are both grammatically valid completions (simple past passive vs. past perfect passive), so this item has two correct answers."
+    },
+    {
+      "item_id": "adv-struct-zero-002",
+      "section": "Structure",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "finite verb form selection (deliberately all-invalid)",
+      "secondary_features": ["collective subject", "perfect aspect"],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "committee governance",
+      "stem": "The committee ____ the proposal before the funding deadline passed.",
+      "options": {
+        "A": "reviewing",
+        "B": "have reviewed",
+        "C": "was review",
+        "D": "did reviewed"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "(Deliberately mis-specified for testing) 'have reviewed' is claimed to be the correct present-perfect form.",
+      "distractor_rationales": {
+        "A": "'reviewing' alone has no finite verb, leaving the clause a fragment.",
+        "B": "claimed correct, but 'the committee' takes the singular verb form 'has reviewed' in standard written English; 'have' does not agree — this is the deliberate flaw.",
+        "C": "'was review' is not a valid verb form; it would need to be 'was reviewing' or simply 'reviewed'.",
+        "D": "'did reviewed' incorrectly combines the auxiliary 'did' with the past-tense form 'reviewed' instead of the base form 'review'."
+      },
+      "_intended_flaw": "All four options are ungrammatical once inserted into the stem, so the item has zero correct answers."
+    },
+    {
+      "item_id": "adv-we-double-003",
+      "section": "Written Expression",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject-verb agreement with collective noun (deliberately incomplete audit)",
+      "secondary_features": ["collective subject", "gerund phrase"],
+      "tested_error_type": "agreement_error",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "committee governance",
+      "sentence": "The committee have reviewed the proposal carefully before submitting it to the board for a final decisions.",
+      "marked_parts": {
+        "A": "have",
+        "B": "reviewed the proposal carefully",
+        "C": "submitting it to the board",
+        "D": "a final decisions"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "has",
+      "answer_explanation": "(Deliberately mis-specified for testing) 'have' is claimed to be the sentence's only error; 'the committee' requires the singular 'has'.",
+      "_intended_flaw": "Part D ('a final decisions') is a second, independent genuine error (singular article 'a' with the plural noun 'decisions'; should be 'a final decision') that the item's metadata does not acknowledge, so the sentence actually contains two genuine errors, not one."
+    },
+    {
+      "item_id": "adv-we-zero-004",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "gerund complement after preposition (deliberately no actual error)",
+      "secondary_features": ["gerund phrase", "collective subject with notional plural agreement"],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "local",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "research methodology",
+      "sentence": "The research team published their findings after conducting a thorough review of existing literature on climate adaptation strategies.",
+      "marked_parts": {
+        "A": "published",
+        "B": "their findings",
+        "C": "conducting a thorough review",
+        "D": "climate adaptation strategies"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "having conducted a thorough review",
+      "answer_explanation": "(Deliberately mis-specified for testing) 'conducting a thorough review' is claimed to require a perfect gerund form.",
+      "_intended_flaw": "The sentence is fully grammatical as written; 'conducting a thorough review' is a standard gerund complement after the preposition 'after' and needs no correction. No genuine error exists anywhere in the sentence."
+    },
+    {
+      "item_id": "adv-we-metamismatch-005",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "passive voice in main clause (deliberately wrong primary_target)",
+      "secondary_features": ["relative clause"],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "higher education",
+      "sentence": "Students who study abroad often develop skills what employers value highly in competitive job markets.",
+      "marked_parts": {
+        "A": "who study abroad",
+        "B": "often develop skills",
+        "C": "what",
+        "D": "in competitive job markets"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "that",
+      "answer_explanation": "(Deliberately mis-specified for testing) labeled as a verb-form/voice error even though the actual defect is a relative-marker choice.",
+      "_intended_flaw": "The actual error at C is an incorrect relative marker ('what' used after an explicit antecedent 'skills'; should be 'that' or 'which') — a RELATIVE_CLAUSES / incorrect_relative_marker phenomenon. The declared primary_target ('VERB_FORM_VOICE') and tested_error_type ('wrong_verb_form') do not match the actual tested phenomenon at all."
+    }
+  ]
+}

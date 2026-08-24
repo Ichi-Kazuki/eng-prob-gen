@@ -1,0 +1,188 @@
+{
+  "_purpose": "Reviewer Agent's review results for the deliberately broken fixtures in analysis/reviewer_adversarial_test.json. Used only to demonstrate/verify critical-failure detection; not review results for real candidate items.",
+  "items": [
+    {
+      "item_id": "adv-struct-multi-001",
+      "section": "Structure",
+      "verdict": "REVISE",
+      "critical_failure": true,
+      "independent_answer": "AMBIGUOUS",
+      "generator_answer": "A",
+      "answer_match": false,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "REJECT",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "REJECT",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [
+        {
+          "severity": "CRITICAL",
+          "category": "multiple_correct_answers",
+          "description": "Both option A ('was not yet fully renovated', simple past passive) and option B ('had not yet been fully renovated', past perfect passive) are grammatical, coherent completions of the concessive clause. The item has two valid answers, not one.",
+          "related_check": "answer_uniqueness"
+        }
+      ],
+      "revision_requirements": [
+        "Replace distractor B with an option that is unambiguously invalid (e.g. an agreement or voice error) so that only option A remains grammatical."
+      ],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "adv-struct-zero-002",
+      "section": "Structure",
+      "verdict": "REVISE",
+      "critical_failure": true,
+      "independent_answer": "NONE",
+      "generator_answer": "B",
+      "answer_match": false,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "REJECT",
+        "answer_uniqueness": "REJECT",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "REJECT",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [
+        {
+          "severity": "CRITICAL",
+          "category": "no_correct_answer",
+          "description": "None of the four options produce a grammatical sentence: 'reviewing' is a fragment (no finite verb), 'have reviewed' does not agree with the singular collective subject 'the committee' (needs 'has reviewed'), 'was review' is not a valid verb form, and 'did reviewed' incorrectly pairs 'did' with a past-tense form instead of the base form.",
+          "related_check": "answer_uniqueness"
+        }
+      ],
+      "revision_requirements": [
+        "Fix option B to a genuinely grammatical form ('has reviewed', matching the singular subject in standard written English) so that exactly one option is correct."
+      ],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "adv-we-double-003",
+      "section": "Written Expression",
+      "verdict": "REVISE",
+      "critical_failure": true,
+      "independent_answer": "AMBIGUOUS",
+      "generator_answer": "A",
+      "answer_match": false,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "REJECT",
+        "answer_uniqueness": "REJECT",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "REVISE"
+      },
+      "issues": [
+        {
+          "severity": "CRITICAL",
+          "category": "second_genuine_error",
+          "description": "A full-sentence audit (ignoring the marked-part labels) finds two independent genuine errors: 'have' at position A (agreement: 'the committee' requires 'has') and 'a final decisions' at position D (article/number mismatch: 'a' requires the singular 'decision'). The item's metadata acknowledges only the first.",
+          "related_check": "grammar_validity"
+        }
+      ],
+      "revision_requirements": [
+        "Change 'a final decisions' to 'a final decision' so that 'have' at position A remains the sentence's only genuine error."
+      ],
+      "source_similarity_risk": "LOW",
+      "detected_error_count": 2,
+      "detected_error_position": "A",
+      "non_error_parts_valid": false,
+      "minimal_correction_valid": true
+    },
+    {
+      "item_id": "adv-we-zero-004",
+      "section": "Written Expression",
+      "verdict": "REVISE",
+      "critical_failure": true,
+      "independent_answer": "NONE",
+      "generator_answer": "C",
+      "answer_match": false,
+      "reviewer_difficulty": "EASY",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": true,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "REJECT",
+        "target_alignment": "REJECT",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "REJECT"
+      },
+      "issues": [
+        {
+          "severity": "CRITICAL",
+          "category": "no_genuine_error",
+          "description": "The sentence as written is fully grammatical. The part marked as the intended error, 'conducting a thorough review', is a standard gerund complement after the preposition 'after'. No genuine error exists anywhere in the sentence.",
+          "related_check": "answer_uniqueness"
+        },
+        {
+          "severity": "MINOR",
+          "category": "difficulty_mismatch",
+          "description": "Independent difficulty is not meaningfully assessable because the item has no real error to detect; provisional EASY estimate differs from the declared MEDIUM.",
+          "related_check": "difficulty"
+        }
+      ],
+      "revision_requirements": [
+        "Introduce an actual, unambiguous grammatical error into one of the four marked spans (e.g. 'after conduct a thorough review'), since none of the current spans contains a genuine defect."
+      ],
+      "source_similarity_risk": "LOW",
+      "detected_error_count": 0,
+      "detected_error_position": "NONE",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": false
+    },
+    {
+      "item_id": "adv-we-metamismatch-005",
+      "section": "Written Expression",
+      "verdict": "REVISE",
+      "critical_failure": true,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "reviewer_difficulty": "EASY",
+      "generator_difficulty": "EASY",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "REJECT",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "REJECT"
+      },
+      "issues": [
+        {
+          "severity": "CRITICAL",
+          "category": "metadata_target_mismatch",
+          "description": "The declared primary_target ('VERB_FORM_VOICE') and tested_error_type ('wrong_verb_form') do not match the actual defect, which is an incorrect relative marker: 'what' is used after the explicit antecedent 'skills', where 'that' or 'which' is required. This is a RELATIVE_CLAUSES / incorrect_relative_marker phenomenon.",
+          "related_check": "target_alignment"
+        }
+      ],
+      "revision_requirements": [
+        "Correct the metadata only: set primary_target to RELATIVE_CLAUSES, subtype to a relative-marker-selection description, and tested_error_type to incorrect_relative_marker. The sentence, marked_parts, correct_answer, and minimal_correction are otherwise sound and need no change."
+      ],
+      "source_similarity_risk": "LOW",
+      "detected_error_count": 1,
+      "detected_error_position": "C",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true
+    }
+  ]
+}

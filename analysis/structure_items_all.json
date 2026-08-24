@@ -1,0 +1,3221 @@
+{
+  "dataset": "TOEFL ITP Structure (Part A) Item Specification Dataset",
+  "taxonomy_version": "1.1",
+  "taxonomy_ref": "analysis/grammar_taxonomy.json",
+  "practice_tests": [
+    "Practice Test B",
+    "Practice Test C",
+    "Practice Test D",
+    "Practice Test E",
+    "Practice Test F"
+  ],
+  "item_count": 75,
+  "items": [
+    {
+      "source_id": "Practice Test B",
+      "question_number": 1,
+      "section_type": "Structure",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "predicate nominative after linking verb (be + NP)",
+      "secondary_features": [
+        "article_usage",
+        "reduced_relative_clause_modifying_object"
+      ],
+      "sentence_word_count": 22,
+      "clause_count": 1,
+      "correct_answer": "A",
+      "correct_answer_reason": "The correctly articled noun phrase serves as the subject complement of the linking verb 'is', matching the pattern 'is the source of X'.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the article before the noun and substitutes 'as', which cannot function as a copular complement marker."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds a relative pronoun ('which') with no following clause, leaving a dangling fragment after the noun."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "Inserts 'because' after the linking verb, which is not licensed by the sentence structure and breaks the complement pattern."
+        }
+      },
+      "vocabulary_domain": "forestry/natural resources",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 2,
+      "section_type": "Structure",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "adjective + enough + to-infinitive result construction",
+      "secondary_features": [
+        "infinitive_of_result",
+        "relative_clause_on_subject"
+      ],
+      "sentence_word_count": 18,
+      "clause_count": 2,
+      "correct_answer": "A",
+      "correct_answer_reason": "'enough' correctly follows the adjective and precedes the to-infinitive, forming the idiomatic degree + result structure.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "A bare comparative lacks a comparison object and cannot be followed directly by the infinitive of result."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "'so + adjective' requires a that-clause to express result, not a bare to-infinitive."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "'as...as' requires an explicit comparison target and is incompatible with the following infinitive."
+        }
+      },
+      "vocabulary_domain": "technology/everyday objects",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 3,
+      "section_type": "Structure",
+      "primary_target": "NOUN_CLAUSES",
+      "subtype": "embedded question (wh-word) word order",
+      "secondary_features": [
+        "infinitive_purpose_clause"
+      ],
+      "sentence_word_count": 25,
+      "clause_count": 2,
+      "correct_answer": "B",
+      "correct_answer_reason": "Normal subject-verb order is preserved inside the embedded noun clause introduced by 'what', as required for indirect questions.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Applies direct-question subject-auxiliary inversion inside an embedded clause, where it is not permitted."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_voice",
+          "error_explanation": "Switches to passive voice, reversing the logical agent-experiencer relationship intended by the sentence."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds the conjunction 'as', which is not licensed inside the noun clause introduced by 'what'."
+        }
+      },
+      "vocabulary_domain": "education",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 4,
+      "section_type": "Structure",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "object complement after causative verb (make + O + Adj)",
+      "secondary_features": [
+        "article_usage"
+      ],
+      "sentence_word_count": 14,
+      "clause_count": 1,
+      "correct_answer": "D",
+      "correct_answer_reason": "Object pronoun plus bare adjective correctly forms the object-complement pattern required after the causative verb 'makes'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Inserts a second finite verb after the causative verb, producing an ungrammatical double predicate."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "Reinterprets the pronoun as the subject of a new transitive verb, abandoning the required object-complement pattern."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "incorrect_part_of_speech",
+          "error_explanation": "Adds an article before the adjective as though it were a noun, which is ungrammatical for a bare adjective complement."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "physical science/optics",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 5,
+      "section_type": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "main clause (subject + finite verb) identification",
+      "secondary_features": [
+        "elliptical_adverbial_clause"
+      ],
+      "sentence_word_count": 10,
+      "clause_count": 2,
+      "correct_answer": "A",
+      "correct_answer_reason": "Only this option supplies a genuine subject plus finite verb, forming the sentence's required independent clause.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The subordinator 'That' converts the clause into a noun clause, leaving the sentence without an independent main clause."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The relative pronoun 'who' subordinates the verb into a relative clause modifying the noun, so no main verb remains."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "'For...to' forms a non-finite infinitive phrase, which cannot serve as the sentence's main predicate."
+        }
+      },
+      "vocabulary_domain": "academic biography/science",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 6,
+      "section_type": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "non-restrictive relative clause with parallel coordinate predicate",
+      "secondary_features": [
+        "parallel_structure_with_coordinate_verb"
+      ],
+      "sentence_word_count": 25,
+      "clause_count": 2,
+      "correct_answer": "B",
+      "correct_answer_reason": "The relative pronoun plus linking verb supplies the verb needed to parallel the coordinate verb later in the clause, correctly forming the non-restrictive relative clause.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "incorrect_relative_marker",
+          "error_explanation": "The possessive relative pronoun requires an immediately following noun, which is absent here."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "incorrect_relative_marker",
+          "error_explanation": "This word combination is not a valid relative-clause opener and does not connect grammatically to the main clause."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the linking verb, leaving the first conjunct without a verb and breaking parallelism with the coordinate verb."
+        }
+      },
+      "vocabulary_domain": "botany",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 7,
+      "section_type": "Structure",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "appositive noun phrase placement and internal word order",
+      "secondary_features": [
+        "adjective_noun_order"
+      ],
+      "sentence_word_count": 19,
+      "clause_count": 1,
+      "correct_answer": "D",
+      "correct_answer_reason": "A correctly ordered article + adjective + noun phrase functions as an appositive describing the sentence's subject.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Internal word order is faulty and leaves an incomplete relative-clause fragment attached to the noun phrase."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Inserting a finite verb creates an extra, ungrammatical predicate before the sentence's actual subject and verb."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Reverses standard adjective-noun order."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "arts/music biography",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 8,
+      "section_type": "Structure",
+      "primary_target": "ADVERBIAL_CLAUSES",
+      "subtype": "time clause introduced by 'when'",
+      "secondary_features": [
+        "relative_clause_on_object",
+        "intransitive_verb_complementation"
+      ],
+      "sentence_word_count": 22,
+      "clause_count": 3,
+      "correct_answer": "B",
+      "correct_answer_reason": "A time adverbial clause correctly introduced by the subordinator modifies the preceding intransitive verb.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "A noun phrase with an embedded relative clause cannot serve as the adverbial complement required by the intransitive verb."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Uses inverted question word order where a subordinate declarative clause is required."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "A bare participial phrase cannot follow the verb without a subordinating conjunction to connect it."
+        }
+      },
+      "vocabulary_domain": "earth science/paleontology",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 9,
+      "section_type": "Structure",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "elliptical comparative connector 'as' vs. subordinator/adverb",
+      "secondary_features": [
+        "ellipsis",
+        "preposition_vs_conjunction_distinction"
+      ],
+      "sentence_word_count": 15,
+      "clause_count": 1,
+      "correct_answer": "A",
+      "correct_answer_reason": "The elliptical comparative phrase correctly links the following example to the main clause via a preposition-like connector.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "Wrongly implies causation and, lacking a subject-verb pair after it, leaves a fragment."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Requires a following finite clause with a verb, which is missing."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "incorrect_part_of_speech",
+          "error_explanation": "An adverb is used where a preposition is needed to govern the following noun phrase."
+        }
+      },
+      "vocabulary_domain": "art/sculpture",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 10,
+      "section_type": "Structure",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "reduced passive relative clause (past participle modifying noun)",
+      "secondary_features": [
+        "passive_voice",
+        "reduced_relative_clause"
+      ],
+      "sentence_word_count": 25,
+      "clause_count": 2,
+      "correct_answer": "D",
+      "correct_answer_reason": "The past participle correctly forms a reduced passive relative clause modifying the preceding noun.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_verb_form",
+          "error_explanation": "The infinitive wrongly suggests purpose rather than describing something already provided."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Lacks the relative pronoun and auxiliary needed to license a bare 'be + participle' modifier."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_voice",
+          "error_explanation": "The active present participle reverses the intended passive relationship between the noun and the agent."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "government/US history",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 11,
+      "section_type": "Structure",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "participial phrase of result ('thereby' + -ing)",
+      "secondary_features": [
+        "result_expression"
+      ],
+      "sentence_word_count": 14,
+      "clause_count": 1,
+      "correct_answer": "C",
+      "correct_answer_reason": "The participial phrase correctly expresses the result of the preceding clause without requiring its own subject or conjunction.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "A bare verb form cannot attach after a comma without a subject or connector, producing a fragment."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "Coordinates a conjunction with an infinitive where the finite verb of the main clause requires a parallel non-finite result form instead."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "double_subject",
+          "error_explanation": "Combines a relative pronoun with a redundant pronoun, duplicating the subject of the clause."
+        }
+      },
+      "vocabulary_domain": "biology/health science",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 12,
+      "section_type": "Structure",
+      "primary_target": "INVERSION",
+      "subtype": "subject-auxiliary inversion after fronted negative adverbial ('Not until...')",
+      "secondary_features": [
+        "passive_voice",
+        "past_perfect_tense"
+      ],
+      "sentence_word_count": 16,
+      "clause_count": 2,
+      "correct_answer": "C",
+      "correct_answer_reason": "The fronted negative adverbial requires subject-auxiliary inversion in the main clause, which this option correctly applies.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds a redundant wh-word that does not fit the required inverted structure."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "Introduces a noun clause instead of the inverted main clause the fronted negative requires."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "A bare noun phrase cannot serve as the finite main clause the sentence requires."
+        }
+      },
+      "vocabulary_domain": "geography/natural landmarks",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 13,
+      "section_type": "Structure",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "infinitive modifying ordinal/superlative noun ('the first...to')",
+      "secondary_features": [
+        "relative_clause_on_subject"
+      ],
+      "sentence_word_count": 25,
+      "clause_count": 2,
+      "correct_answer": "C",
+      "correct_answer_reason": "The infinitive correctly modifies the preceding ordinal noun phrase, matching the idiomatic 'the first [noun] to [verb]' pattern.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "double_subject",
+          "error_explanation": "Adds a redundant pronoun alongside the relative-pronoun function of 'that', duplicating the subject."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "A finite verb here conflicts with the sentence's main verb later on, producing two unconnected predicates."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_verb_form",
+          "error_explanation": "A gerund is used instead of the required infinitive, and a redundant object pronoun is added."
+        }
+      },
+      "vocabulary_domain": "US history/exploration",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 14,
+      "section_type": "Structure",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "noun + postpositive adjective phrase word order",
+      "secondary_features": [
+        "participial_phrase_modifier"
+      ],
+      "sentence_word_count": 23,
+      "clause_count": 1,
+      "correct_answer": "D",
+      "correct_answer_reason": "The head noun is placed first, followed by the adjective phrase that logically and grammatically modifies it.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Reverses the required noun-adjective-prepositional phrase sequence into an ungrammatical order."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the head noun, leaving the adjective with nothing to modify."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Reverses the two nouns, producing an illogical and ungrammatical phrase."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "theater/literature",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test B",
+      "question_number": 15,
+      "section_type": "Structure",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "subtype": "expletive 'there + be' construction vs. pronoun/determiner",
+      "secondary_features": [
+        "relative_clause_on_appositive",
+        "appositive_phrase"
+      ],
+      "sentence_word_count": 19,
+      "clause_count": 2,
+      "correct_answer": "B",
+      "correct_answer_reason": "The expletive 'there + be' construction correctly introduces the existence of the following plural noun phrase.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "incorrect_reference",
+          "error_explanation": "The pronoun has no preceding noun to serve as its antecedent, making the reference invalid."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "A prepositional fragment cannot begin an independent clause."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "A bare determiner cannot function as a subject without an immediately following noun that completes the sentence."
+        }
+      },
+      "vocabulary_domain": "geography/economics",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 2,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 1,
+      "section_type": "Structure",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "predicate nominative after linking verb (be + NP)",
+      "secondary_features": [
+        "prepositional_phrase_adjunct",
+        "superlative_construction"
+      ],
+      "sentence_word_count": 14,
+      "clause_count": 1,
+      "correct_answer": "D",
+      "correct_answer_reason": "A correctly ordered adjective + superlative + noun phrase serves as the subject complement of the linking verb 'is'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Inserts a second finite verb ('is') after the noun, producing an ungrammatical double predicate."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Adds a relative pronoun but omits the verb the relative clause needs (e.g. 'that is most abundant')."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds a relative pronoun after the complete noun phrase with no following clause, leaving a dangling fragment."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "geology/mineralogy",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 2,
+      "section_type": "Structure",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "gerund vs. infinitive complement selection (continue + to-infinitive)",
+      "secondary_features": [
+        "reduced_participial_phrase_modifier",
+        "parallel_noun_phrases"
+      ],
+      "sentence_word_count": 19,
+      "clause_count": 1,
+      "correct_answer": "C",
+      "correct_answer_reason": "The to-infinitive correctly completes the verb 'continues', matching the idiomatic 'continue to V' complement pattern.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "'for' plus a gerund is not licensed as the complement of 'continues'."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "incorrect_part_of_speech",
+          "error_explanation": "Substitutes a noun for the required verb form after 'continues'."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_verb_form",
+          "error_explanation": "A bare verb form is used where the infinitive marker 'to' is required."
+        }
+      },
+      "vocabulary_domain": "linguistics",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 3,
+      "section_type": "Structure",
+      "primary_target": "ADVERBIAL_CLAUSES",
+      "subtype": "conditional/time clause introduced by 'whenever'",
+      "secondary_features": [
+        "comparative_clause_ellipsis",
+        "participial_phrase_modifier"
+      ],
+      "sentence_word_count": 22,
+      "clause_count": 3,
+      "correct_answer": "B",
+      "correct_answer_reason": "The subordinator correctly heads a full finite clause (subject + verb) expressing the indefinite-time/condition relation to the main clause.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "incorrect_part_of_speech",
+          "error_explanation": "A participle is used where a subordinating conjunction is required to head the clause."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Inserts an extra subject and modal between the subordinator and the clause's actual subject, scrambling the expected order."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "A bare verb form cannot connect the following clause to the sentence; no subordinating conjunction is supplied."
+        }
+      },
+      "vocabulary_domain": "earth science/hydrology",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 4,
+      "section_type": "Structure",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "adjective order within a noun phrase (direct object)",
+      "secondary_features": [
+        "gerund_phrase_of_purpose"
+      ],
+      "sentence_word_count": 16,
+      "clause_count": 1,
+      "correct_answer": "C",
+      "correct_answer_reason": "The article + adjective + noun sequence correctly forms the direct object of the transitive verb 'devised'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds a preposition before the noun phrase, blocking it from functioning as the required direct object."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Inserts a full finite clause where a noun phrase object is required, creating an ungrammatical double predicate."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Reverses the expected adjective-noun order and strands the adjective after 'of' with no noun following."
+        }
+      },
+      "vocabulary_domain": "geophysics/seismology",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 5,
+      "section_type": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "main clause (subject + finite verb) identification",
+      "secondary_features": [
+        "prepositional_phrase_time_adjunct"
+      ],
+      "sentence_word_count": 20,
+      "clause_count": 1,
+      "correct_answer": "C",
+      "correct_answer_reason": "Only this option supplies the finite verb needed to complete the sentence's sole independent clause.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The relative pronoun 'who' subordinates the verb into a relative clause, leaving no main verb for the sentence."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The gerund plus relative-pronoun combination is non-finite and cannot serve as the sentence's main predicate."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The infinitive form is non-finite and cannot function as the required main verb."
+        }
+      },
+      "vocabulary_domain": "US social/economic history",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 6,
+      "section_type": "Structure",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "word order within fixed exemplifying phrase ('of such things as')",
+      "secondary_features": [
+        "parallel_noun_phrases_in_list",
+        "present_perfect_tense"
+      ],
+      "sentence_word_count": 21,
+      "clause_count": 1,
+      "correct_answer": "A",
+      "correct_answer_reason": "The words are ordered correctly to form the fixed exemplifying phrase governing the following list of nouns.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Rearranges the same four words into an order that is not a valid English phrase."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Places the preposition after the noun it should precede, producing an invalid sequence."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Scrambles the four words into a sequence with no grammatical reading."
+        }
+      },
+      "vocabulary_domain": "materials science/manufacturing",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 5,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 7,
+      "section_type": "Structure",
+      "primary_target": "NOUN_CLAUSES",
+      "subtype": "embedded question with infinitive (wh-word + to-infinitive)",
+      "secondary_features": [
+        "that_clause_as_subject_complement",
+        "modal_need_not"
+      ],
+      "sentence_word_count": 21,
+      "clause_count": 2,
+      "correct_answer": "B",
+      "correct_answer_reason": "The wh-word correctly introduces the embedded infinitival question functioning as the object of 'tell readers'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "Uses a relative pronoun rather than the interrogative word required to introduce the embedded question, paired with the wrong non-finite form."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "'that' cannot introduce an embedded question in this position; a wh-word is required."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Places the wh-word after the infinitive instead of before it, reversing the required embedded-question order."
+        }
+      },
+      "vocabulary_domain": "literary criticism",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 8,
+      "section_type": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "non-restrictive relative clause with correct relative pronoun and verb",
+      "secondary_features": [
+        "parallel_coordinate_verbs_in_main_clause",
+        "non_restrictive_relative_clause"
+      ],
+      "sentence_word_count": 21,
+      "clause_count": 2,
+      "correct_answer": "C",
+      "correct_answer_reason": "The relative pronoun plus finite verb correctly forms the non-restrictive relative clause modifying the subject.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the relative pronoun needed to subordinate this verb, leaving an unconnected second finite verb."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "double_subject",
+          "error_explanation": "Adds a redundant pronoun alongside the relative pronoun, duplicating the subject of the clause."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "incorrect_relative_marker",
+          "error_explanation": "'of which' is not licensed directly before a verb in this position."
+        }
+      },
+      "vocabulary_domain": "anatomy/biology",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 9,
+      "section_type": "Structure",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "contrast connector selection (although vs. despite vs. however)",
+      "secondary_features": [
+        "parallel_prepositional_phrases",
+        "present_perfect_tense"
+      ],
+      "sentence_word_count": 23,
+      "clause_count": 2,
+      "correct_answer": "D",
+      "correct_answer_reason": "The subordinating conjunction correctly introduces a full concessive clause expressing the contrast intended by the sentence.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "Combines two connector words, wrongly implying a temporal relation rather than the intended contrast."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "Functions as a temporal boundary phrase rather than a connector expressing the required contrast."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "This connector is a preposition requiring a noun phrase, not a full clause with its own subject and verb."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "furniture/design history",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 10,
+      "section_type": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "main clause (subject + finite verb) identification",
+      "secondary_features": [
+        "infinitive_of_purpose",
+        "subordinate_time_clause"
+      ],
+      "sentence_word_count": 23,
+      "clause_count": 2,
+      "correct_answer": "C",
+      "correct_answer_reason": "The subject noun phrase plus finite verb correctly forms the sentence's required main clause.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "A non-finite participial phrase cannot serve as the sentence's main predicate."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The relative pronoun subordinates the verb into a relative clause, leaving the sentence without a main verb."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "This option is a bare noun phrase with no verb at all, leaving the clause without a predicate."
+        }
+      },
+      "vocabulary_domain": "chemistry/combustion",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 11,
+      "section_type": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative clause introduced by 'where' with passive voice parallel to elliptical comparative ('than is gained')",
+      "secondary_features": [
+        "elliptical_comparative_clause",
+        "relative_clause_introduced_by_where",
+        "passive_voice"
+      ],
+      "sentence_word_count": 17,
+      "clause_count": 3,
+      "correct_answer": "D",
+      "correct_answer_reason": "The subject plus passive verb correctly completes the relative clause and parallels the passive form in the following elliptical comparative.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "A bare noun phrase with no finite verb cannot complete the relative clause introduced by 'where'."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "The verb lacks a subject, leaving the relative clause incomplete."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Applies inverted question-style order in a position that requires ordinary declarative subject-verb order."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "earth science/desert ecology",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 12,
+      "section_type": "Structure",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "quantifier 'both' as pre-determiner directly modifying plural noun",
+      "secondary_features": [
+        "parallel_prepositional_phrases",
+        "gerund_object_of_preposition"
+      ],
+      "sentence_word_count": 17,
+      "clause_count": 2,
+      "correct_answer": "B",
+      "correct_answer_reason": "The quantifier directly precedes the plural noun it modifies, forming the correct pre-determiner pattern.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds a definite article before the quantifier, which is not permitted in this pre-determiner position."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Requires a determiner such as 'the' after 'of', which is missing before the bare plural noun."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds a coordinating conjunction that is not licensed after the preceding comma and subordinate clause."
+        }
+      },
+      "vocabulary_domain": "zoology/ornithology",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 13,
+      "section_type": "Structure",
+      "primary_target": "INVERSION",
+      "subtype": "subject-auxiliary inversion after fronted correlative 'not only' (not only...but also)",
+      "secondary_features": [
+        "relative_clause_on_object",
+        "correlative_conjunction_not_only_but_also"
+      ],
+      "sentence_word_count": 19,
+      "clause_count": 3,
+      "correct_answer": "A",
+      "correct_answer_reason": "The fronted correlative 'Not only' requires subject-auxiliary inversion, which this option correctly supplies.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "Supplies only the subject with no verb, leaving the clause without a predicate."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "Adds a quantifier before the subject but still supplies no verb for the clause."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Uses ordinary declarative subject-verb order instead of the inversion required after the fronted correlative."
+        }
+      },
+      "vocabulary_domain": "zoology/marine biology",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 14,
+      "section_type": "Structure",
+      "primary_target": "INVERSION",
+      "subtype": "inversion after fronted prepositional/source phrase",
+      "secondary_features": [
+        "coordinate_independent_clauses",
+        "pronoun_reference_them"
+      ],
+      "sentence_word_count": 16,
+      "clause_count": 2,
+      "correct_answer": "A",
+      "correct_answer_reason": "The fronted prepositional phrase triggers inversion of the finite verb and subject, correctly forming the second coordinate clause.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "Treats the intransitive verb as if it took a direct object and supplies no subject for the clause."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The infinitive is non-finite and cannot serve as the second coordinate main verb."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_voice",
+          "error_explanation": "Passivizes a verb that does not take this passive construction, producing an illogical reading."
+        }
+      },
+      "vocabulary_domain": "zoology/evolutionary biology",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test C",
+      "question_number": 15,
+      "section_type": "Structure",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "subtype": "expletive 'there + be' construction vs. pronoun/determiner",
+      "secondary_features": [
+        "concessive_clause_although",
+        "coordinate_independent_clauses"
+      ],
+      "sentence_word_count": 20,
+      "clause_count": 3,
+      "correct_answer": "C",
+      "correct_answer_reason": "The expletive 'there + be' construction correctly introduces the existence of the following plural quantity phrase.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the expletive subject and verb needed to open the independent clause."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "Combines a wh-word with an adverb in a way that produces no valid clause opener."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Adds a definite article before the number but still supplies no verb for the clause."
+        }
+      },
+      "vocabulary_domain": "marine biology/zoology",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 1,
+      "section_type": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "main clause (subject + finite verb) identification in coordinate clause",
+      "secondary_features": [
+        "parallel_tense_with_coordinate_clause",
+        "coordinating_conjunction_but"
+      ],
+      "sentence_word_count": 11,
+      "clause_count": 2,
+      "correct_answer": "A",
+      "correct_answer_reason": "The bare present-tense verb supplies the finite predicate needed for the subject 'others', matching the present tense of the coordinate verb 'lay' in the first clause.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The present participle cannot serve as the finite verb the second coordinate clause requires, leaving it without a predicate."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "double_subject",
+          "error_explanation": "Adds a redundant pronoun subject alongside the existing subject 'others', duplicating the subject slot."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The perfect infinitive is non-finite and cannot function as the main verb of the second clause."
+        }
+      },
+      "vocabulary_domain": "biology/zoology (reptiles)",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 2,
+      "section_type": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "main clause (subject + finite verb) identification following causal adverbial clause",
+      "secondary_features": [
+        "causal_adverbial_clause_because",
+        "superlative_noun_phrase_with_infinitive_modifier"
+      ],
+      "sentence_word_count": 17,
+      "clause_count": 2,
+      "correct_answer": "A",
+      "correct_answer_reason": "Only this option supplies a genuine subject ('drawing') plus finite verb ('was'), forming the main clause required after the introductory 'Because' clause.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Places an infinitive phrase in subject position and omits the article/superlative needed before the following noun, leaving 'was probably art form' incomplete."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "Supplies no finite verb at all, so the sentence never receives the main predicate it needs after the introductory clause."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "Also lacks any finite verb, stacking a bare noun ('draw') directly before 'art form' with nothing to license the clause."
+        }
+      },
+      "vocabulary_domain": "linguistics/communication and art",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 3,
+      "section_type": "Structure",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "temporal adverbial connector ('since then') vs. preposition/appositive marker",
+      "secondary_features": [
+        "passive_voice",
+        "coordinating_conjunction_and"
+      ],
+      "sentence_word_count": 24,
+      "clause_count": 2,
+      "correct_answer": "C",
+      "correct_answer_reason": "The adverbial phrase correctly links the following independent clause to the earlier time reference, expressing 'from that point until now'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "Turns the second clause into a subordinate one, so the coordination required by 'and' between two independent clauses is lost."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "This is a preposition requiring a noun-phrase object, not the finite clause that follows it here."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "This appositive/clarifying marker does not logically connect the time reference to the following clause and produces an ungrammatical sequence before the subject."
+        }
+      },
+      "vocabulary_domain": "astronomy",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 4,
+      "section_type": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject-verb agreement across intervening relative clause",
+      "secondary_features": [
+        "restrictive_relative_clause_on_subject",
+        "article_usage"
+      ],
+      "sentence_word_count": 21,
+      "clause_count": 2,
+      "correct_answer": "C",
+      "correct_answer_reason": "The singular, correctly articled subject agrees with the singular verb 'is' that follows the intervening relative clause.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "agreement_error",
+          "error_explanation": "The plural, article-less subject disagrees with the singular verb 'is' later in the sentence."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "Adding the subordinator converts the entire clause into a subordinate clause, leaving no independent main clause."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "A prepositional phrase cannot serve as the subject that 'is jumping' requires."
+        }
+      },
+      "vocabulary_domain": "psychology/business (problem solving)",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 5,
+      "section_type": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "restrictive relative clause with correct relative pronoun (who) referring to human antecedent",
+      "secondary_features": [
+        "embedded_noun_clause_as_object_of_preposition",
+        "human_antecedent"
+      ],
+      "sentence_word_count": 18,
+      "clause_count": 3,
+      "correct_answer": "C",
+      "correct_answer_reason": "The subject relative pronoun for human antecedents correctly introduces the relative clause and supplies the subject for 'settled'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "incorrect_relative_marker",
+          "error_explanation": "The object-of-preposition form leaves the following verb 'settled' without a subject."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "incorrect_relative_marker",
+          "error_explanation": "This marker is used for non-human antecedents and, like (A), leaves 'settled' without a subject."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "incorrect_relative_marker",
+          "error_explanation": "This relative pronoun is reserved for non-human antecedents, but 'the Pilgrims' is a human antecedent."
+        }
+      },
+      "vocabulary_domain": "US history/anthropology",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 6,
+      "section_type": "Structure",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "appositive noun phrase placement and internal word order",
+      "secondary_features": [
+        "non_restrictive_appositive",
+        "article_usage"
+      ],
+      "sentence_word_count": 20,
+      "clause_count": 1,
+      "correct_answer": "D",
+      "correct_answer_reason": "The bare article correctly introduces a non-restrictive appositive renaming 'Ross Macdonald', with no verb needed since the sentence's actual predicate is 'feature' later on.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Inserts an unlicensed finite verb into the appositive slot, producing an extra, ungrammatical predicate before the sentence's real verb."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Also inserts an unlicensed finite verb, and pairs it with the wrong article form for a consonant-initial noun."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds a pronoun subject, verb, and preposition that are not licensed in this appositive position."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "literature/mystery fiction",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 7,
+      "section_type": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "main clause (subject + finite verb) identification following appositive-modified subject",
+      "secondary_features": [
+        "infinitive_modifying_ordinal_noun",
+        "appositive_phrase",
+        "passive_voice"
+      ],
+      "sentence_word_count": 20,
+      "clause_count": 1,
+      "correct_answer": "B",
+      "correct_answer_reason": "This option supplies the appositive renaming the subject together with the finite passive verb 'was completed' that the sentence needs as its main predicate.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "'completed in 1885' functions only as a participial modifier here, not a finite verb, leaving the sentence without an independent predicate."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "Adding the subordinator turns the remainder into a subordinate clause, leaving no independent main clause for the sentence."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the finite verb entirely, so the sentence has no predicate at all after the appositive."
+        }
+      },
+      "vocabulary_domain": "architecture/US history",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 8,
+      "section_type": "Structure",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "reduced active relative clause (present participial phrase modifying noun)",
+      "secondary_features": [
+        "reduced_from_relative_clause",
+        "active_voice"
+      ],
+      "sentence_word_count": 18,
+      "clause_count": 1,
+      "correct_answer": "C",
+      "correct_answer_reason": "The present participle correctly reduces a relative clause ('that begins with...') into a non-finite modifier describing 'metamorphosis', since the sentence's only finite verb is already 'undergoes'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_verb_form",
+          "error_explanation": "The bare verb form cannot follow the noun directly without a subject or connector."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_verb_form",
+          "error_explanation": "A finite past-tense verb appears with no conjunction linking it to 'undergoes', producing an unconnected second predicate."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_voice",
+          "error_explanation": "The passive finite form again creates an unconnected second predicate and reverses the expected active description of the metamorphosis."
+        }
+      },
+      "vocabulary_domain": "biology/zoology (amphibian development)",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 9,
+      "section_type": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "non-restrictive relative clause with possessive relative pronoun (whose + noun) as clause subject",
+      "secondary_features": [
+        "non_restrictive_relative_clause",
+        "possessive_relative_pronoun"
+      ],
+      "sentence_word_count": 21,
+      "clause_count": 2,
+      "correct_answer": "D",
+      "correct_answer_reason": "The possessive relative pronoun plus noun correctly forms the subject of the non-restrictive relative clause's verb 'combined'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Introduces an expletive subject with no relative pronoun linking it back to 'Mahalia Jackson', fusing an unlicensed clause onto the sentence."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "incorrect_relative_marker",
+          "error_explanation": "Uses the non-human relative determiner with a noun ('songs') that was never introduced, so it cannot refer back to Jackson."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "The relative pronoun's own verb 'sang' uses up the clause's verb slot, leaving 'combined' with no subject or connector."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "music/gospel biography",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 10,
+      "section_type": "Structure",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "exemplification connector ('such...as') introducing examples",
+      "secondary_features": [
+        "exemplification",
+        "coordinating_conjunction_but"
+      ],
+      "sentence_word_count": 24,
+      "clause_count": 2,
+      "correct_answer": "C",
+      "correct_answer_reason": "'such materials as' correctly introduces the following list of examples (wood, glass, or plastic).",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "'such...that' introduces a result clause, not a list of examples, so it does not fit what follows."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Reorders 'such' after the noun, producing the fixed phrase 'as such' rather than the exemplifying construction needed here."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits 'as', the word required to introduce the following example list."
+        }
+      },
+      "vocabulary_domain": "manufacturing/materials science",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 11,
+      "section_type": "Structure",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "article selection (indefinite article introducing singular countable subject)",
+      "secondary_features": [
+        "fronted_locative_adverbial"
+      ],
+      "sentence_word_count": 13,
+      "clause_count": 1,
+      "correct_answer": "B",
+      "correct_answer_reason": "The indefinite article correctly introduces the singular countable subject 'much fainter secondary rainbow'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "This degree adverb cannot license the bare singular subject; the required article is absent."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "As a subordinator, this word turns the only available clause into a subordinate clause, leaving the sentence without an independent main clause."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "This adverb cannot function as the article the singular subject requires."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "physics/optics (rainbows)",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 2,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 12,
+      "section_type": "Structure",
+      "primary_target": "NOUN_CLAUSES",
+      "subtype": "that-clause as object complement (persuade + object + that-clause)",
+      "secondary_features": [
+        "restrictive_relative_clause_on_subject",
+        "infinitive_purpose_clause"
+      ],
+      "sentence_word_count": 25,
+      "clause_count": 3,
+      "correct_answer": "A",
+      "correct_answer_reason": "The that-clause correctly completes the 'persuade + object + that-clause' pattern, stating the content readers are to be persuaded of.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "The 'for...to' infinitive construction is not licensed as the complement of 'persuading...readers', which requires a that-clause."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "A bare infinitive complement is not licensed here, and it also reverses the expected noun-adjective order ('important poetry' vs. 'poetry is important')."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Stacks a second noun phrase directly after 'readers' with no connector, producing an unlicensed double object."
+        }
+      },
+      "vocabulary_domain": "literature/education (poetry readership)",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 13,
+      "section_type": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "main clause (subject + finite verb) identification following introductory participial phrase",
+      "secondary_features": [
+        "nonfinite_participial_phrase_opening",
+        "logical_subject_agreement_with_participle"
+      ],
+      "sentence_word_count": 23,
+      "clause_count": 1,
+      "correct_answer": "B",
+      "correct_answer_reason": "This option supplies the logical subject of the introductory participial phrase ('following the guidelines') together with a finite verb, correctly forming the main clause.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Opens with the coordinating conjunction 'and' with no prior clause to coordinate with, and supplies no subject for the verb 'avoid'."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Uses interrogative subject-auxiliary inversion, which is not permitted in this declarative main-clause position."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "The verb phrase appears with no subject preceding it, leaving the clause without a grammatical subject."
+        }
+      },
+      "vocabulary_domain": "organizational governance/parliamentary procedure",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 14,
+      "section_type": "Structure",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "reduced non-restrictive relative clause with adverb + passive participle ('so called')",
+      "secondary_features": [
+        "reduced_from_relative_clause",
+        "passive_voice",
+        "causal_adverbial_clause_because"
+      ],
+      "sentence_word_count": 14,
+      "clause_count": 2,
+      "correct_answer": "D",
+      "correct_answer_reason": "'so called' correctly reduces a non-restrictive relative clause ('which is so called') into a passive participial phrase describing the preceding subject.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "double_subject",
+          "error_explanation": "Combines the relative pronoun with a redundant subject pronoun before 'called', duplicating the subject slot."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds a full finite subject and verb, fusing an unlicensed second independent clause onto the first with only a comma."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "A contrastive coordinator is used where none is licensed, and no subject is present for 'called' to attach to."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "chemistry/dyes",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test D",
+      "question_number": 15,
+      "section_type": "Structure",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "adjective order within a noun phrase (coordinate adjectives + head noun)",
+      "secondary_features": [
+        "restrictive_relative_clause_on_object",
+        "participial_phrase_modifier"
+      ],
+      "sentence_word_count": 25,
+      "clause_count": 2,
+      "correct_answer": "D",
+      "correct_answer_reason": "The adjective-noun sequence correctly completes 'a powerful, expressive style', supplying the head noun 'style' that the following relative clause modifies.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Supplies only an adverb-adjective pair with no head noun, leaving the relative clause with nothing to modify."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Reverses the required adjective-noun order and adds a redundant second article after 'a powerful,'."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Again supplies only an adverb-adjective pair, lacking the head noun needed to complete the phrase."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "dance/performing arts biography",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 1,
+      "section_type": "Structure",
+      "primary_target": "NOUN_CLAUSES",
+      "subtype": "embedded wh-clause ('where') as subject complement",
+      "secondary_features": [
+        "copular_sentence",
+        "no_inversion_in_embedded_clause"
+      ],
+      "sentence_word_count": 13,
+      "clause_count": 2,
+      "correct_answer": "A",
+      "correct_answer_reason": "The wh-word introduces a noun clause with normal (uninverted) subject-verb order that serves as the subject complement of the linking verb 'is'.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Inserts a redundant pronoun 'it' before the wh-word, which has no grammatical role and duplicates the subject slot of the embedded clause."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Applies subject-auxiliary inversion ('where is') inside the embedded clause, which is not permitted in a noun clause functioning as a complement."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Stacks a relative pronoun and linking verb ('which is') in front of the wh-word, producing a doubly marked, ungrammatical complement."
+        }
+      },
+      "vocabulary_domain": "literature/poet biography",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 2,
+      "section_type": "Structure",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "infinitive complement after inchoative verb 'begin'",
+      "secondary_features": [
+        "adverbial_clause_of_time_or_cause",
+        "gerund_object_of_preposition"
+      ],
+      "sentence_word_count": 18,
+      "clause_count": 2,
+      "correct_answer": "D",
+      "correct_answer_reason": "The to-infinitive correctly completes the verb 'beginning', which licenses either a gerund or an infinitive complement.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "Substitutes a noun phrase plus a dangling relative marker 'that' with no following clause, which the verb 'beginning' cannot take as its complement."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Inserts a redundant object pronoun 'it' before the gerund, which is not licensed after 'beginning' in this pattern."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_verb_form",
+          "error_explanation": "Uses the bare base form of the verb, which cannot follow 'beginning' without 'to' or an '-ing' ending."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "business/marketing",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 3,
+      "section_type": "Structure",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "comparative adjective + infinitive complement + than-comparison ('more likely to be...than')",
+      "secondary_features": [
+        "passive_infinitive",
+        "reason_clause_with_because"
+      ],
+      "sentence_word_count": 21,
+      "clause_count": 2,
+      "correct_answer": "A",
+      "correct_answer_reason": "The comparative form correctly precedes the passive infinitive and is followed by 'than', properly introducing the comparison target.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Rearranges the comparative words so that 'more than' splits the infinitive phrase, leaving no 'than' available to introduce the comparison target."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Uses the fixed idiom 'more than likely', which absorbs 'than' internally and leaves no connector to link the following comparison target."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Scrambles the comparative and infinitive elements into an order that cannot attach grammatically to the following comparison target."
+        }
+      },
+      "vocabulary_domain": "anatomy/health science",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 4,
+      "section_type": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "restrictive relative clause with relative pronoun + linking verb ('that is')",
+      "secondary_features": [
+        "predicate_adjective_complement"
+      ],
+      "sentence_word_count": 19,
+      "clause_count": 2,
+      "correct_answer": "B",
+      "correct_answer_reason": "The relative pronoun plus linking verb correctly introduces a restrictive relative clause modifying the preceding noun phrase.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the relative pronoun, leaving a second finite verb with no connector to the first, producing a run-on."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "double_subject",
+          "error_explanation": "Adds a redundant pronoun 'it' after the relative pronoun 'that', duplicating the subject of the relative clause."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Inserts an extra finite verb 'is' before a second, redundant relative marker, duplicating the predication."
+        }
+      },
+      "vocabulary_domain": "botany",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 5,
+      "section_type": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "main clause (subject + finite verb) identification amid intervening participial phrase",
+      "secondary_features": [
+        "participial_phrase_including"
+      ],
+      "sentence_word_count": 14,
+      "clause_count": 1,
+      "correct_answer": "A",
+      "correct_answer_reason": "Only this option supplies the finite verb needed to complete the sentence's independent clause after the intervening 'including' phrase.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The relative pronoun 'which' subordinates the verb into a relative clause, leaving the sentence without an independent main verb."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The '-ing' form 'having' is non-finite and cannot serve as the sentence's main predicate."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "double_subject",
+          "error_explanation": "Adds a redundant pronoun subject that duplicates the sentence's actual subject, 'Many gases'."
+        }
+      },
+      "vocabulary_domain": "chemistry/atmospheric science",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 6,
+      "section_type": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "non-restrictive relative clause (parenthetical) with passive verb ('which was founded in')",
+      "secondary_features": [
+        "passive_voice",
+        "parenthetical_insertion"
+      ],
+      "sentence_word_count": 18,
+      "clause_count": 2,
+      "correct_answer": "C",
+      "correct_answer_reason": "The relative pronoun plus passive verb and preposition correctly form a non-restrictive relative clause set off by commas within the subject noun phrase.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "incorrect_relative_marker",
+          "error_explanation": "Uses the time subordinator 'when' with a redundant pronoun 'it' to modify an organization, which is not a valid relative marker for this antecedent, and also omits the preposition before the date."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the relative pronoun entirely, leaving the parenthetical verb with no subject connecting it to the preceding noun phrase."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the relative pronoun 'which', leaving the parenthetical passive verb without a subject."
+        }
+      },
+      "vocabulary_domain": "literary organizations/arts",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 7,
+      "section_type": "Structure",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "subtype": "expletive 'there + be' construction (past tense) vs. pronoun/determiner/inverted auxiliary",
+      "secondary_features": [
+        "relative_clause_on_predicate_noun",
+        "participial_phrase_of_result"
+      ],
+      "sentence_word_count": 24,
+      "clause_count": 2,
+      "correct_answer": "C",
+      "correct_answer_reason": "The expletive 'there were' correctly introduces the existence of the following plural noun phrase, 'portions of the Earth'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "A bare article with no verb cannot complete the sentence's main predicate after the fronted time adverbial."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "incorrect_reference",
+          "error_explanation": "The pronoun 'it' has no clear antecedent and also fails to agree with the following plural noun phrase 'portions'."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Applies question-style subject-auxiliary inversion ('have there been') in a declarative statement where it is not licensed."
+        }
+      },
+      "vocabulary_domain": "earth science/paleoclimatology",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 8,
+      "section_type": "Structure",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "object complement after causative verb (make + O + NP)",
+      "secondary_features": [
+        "relative_clause_in_which",
+        "possessive_determiner"
+      ],
+      "sentence_word_count": 27,
+      "clause_count": 2,
+      "correct_answer": "B",
+      "correct_answer_reason": "A possessive determiner plus noun correctly forms the object complement required after the causative verb 'makes', without an extra verb.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Inserts an extra finite verb 'are' after the causative verb's object, producing an ungrammatical double predicate."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Inserts an extra finite verb 'are' and drops the possessive determiner, again creating a double predicate after the causative verb."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Repeats a relative pronoun already supplied by 'in which' earlier in the clause, duplicating the clause's connector."
+        }
+      },
+      "vocabulary_domain": "photography/visual arts",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 9,
+      "section_type": "Structure",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "correlative comparative construction ('the + comparative..., the + comparative...') with verb-subject inversion",
+      "secondary_features": [
+        "inversion_after_fronted_comparative",
+        "embedded_that_clause"
+      ],
+      "sentence_word_count": 20,
+      "clause_count": 2,
+      "correct_answer": "B",
+      "correct_answer_reason": "The comparative form 'the greater' correctly parallels the comparative in the first half of the correlative construction ('the greater the distance...').",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_degree_form",
+          "error_explanation": "Uses the superlative degree instead of the comparative required to parallel 'the greater' in the first half of the correlative structure."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "The comparative-plus-'than' form requires a following noun phrase as its comparison object, not the finite verb 'is' that follows here."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "The 'as...as' construction likewise requires a noun phrase object rather than the finite verb that follows in this slot."
+        }
+      },
+      "vocabulary_domain": "astronomy/physics",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 10,
+      "section_type": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "non-restrictive relative clause with linking verb ('which is the source of')",
+      "secondary_features": [
+        "reduced_passive_participle_composed_of"
+      ],
+      "sentence_word_count": 27,
+      "clause_count": 2,
+      "correct_answer": "A",
+      "correct_answer_reason": "The relative pronoun plus linking verb correctly opens a non-restrictive relative clause identifying the preceding noun phrase as the source of the taste.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Reverses the required order of subject and verb within the clause ('the source is' instead of 'is the source'), and pairs it with a subordinator, 'that', that does not open non-restrictive clauses."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the relative pronoun and linking verb, leaving an ambiguous bare noun phrase rather than the intended relative clause."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Scrambles the preposition, article, and verb into an order that cannot attach grammatically to the preceding noun phrase."
+        }
+      },
+      "vocabulary_domain": "botany/food science",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 11,
+      "section_type": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "main clause (subject + finite verb) identification after fronted appositive phrase",
+      "secondary_features": [
+        "appositive_phrase",
+        "biographical_present_tense"
+      ],
+      "sentence_word_count": 23,
+      "clause_count": 1,
+      "correct_answer": "B",
+      "correct_answer_reason": "The proper noun plus finite present-tense verb correctly supplies the main subject and predicate following the fronted appositive phrase.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds the coordinating conjunction 'and' as though joining two independent clauses, but no prior independent clause exists for it to coordinate with."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The subordinator 'because' turns the clause into a subordinate clause, leaving the sentence without an independent main clause."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The infinitive 'to people' is non-finite and cannot serve as the sentence's main predicate."
+        }
+      },
+      "vocabulary_domain": "literature/author biography",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 12,
+      "section_type": "Structure",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "past participle phrase of comparison, reduced from passive relative clause ('compared with')",
+      "secondary_features": [
+        "reduced_from_relative_clause",
+        "contact_relative_clauses"
+      ],
+      "sentence_word_count": 25,
+      "clause_count": 3,
+      "correct_answer": "B",
+      "correct_answer_reason": "The past participle correctly forms a reduced passive modifier expressing that the contained amount is compared with the potential amount.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_verb_form",
+          "error_explanation": "The infinitive wrongly suggests purpose ('in order to compare') rather than describing the amount as being compared."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_voice",
+          "error_explanation": "The active present participle implies the amount itself performs the comparing, reversing the intended passive relationship."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds a second bare finite verb with no coordinating conjunction, producing a run-on alongside the clause's existing finite verb."
+        }
+      },
+      "vocabulary_domain": "earth science/meteorology",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 13,
+      "section_type": "Structure",
+      "primary_target": "NOUN_CLAUSES",
+      "subtype": "free relative (nominal) clause with 'what' as object of coordinated verb",
+      "secondary_features": [
+        "relative_clause_on_land_bridge",
+        "coordination_of_two_objects"
+      ],
+      "sentence_word_count": 27,
+      "clause_count": 4,
+      "correct_answer": "D",
+      "correct_answer_reason": "The free relative clause 'what is now Alaska' correctly functions as a noun phrase naming the region, coordinated with 'Siberia' as the second object of the verb.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "Supplies a full finite clause where the coordinated verb requires a noun phrase object, so the sentence lacks a valid second object."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Reorders subject and predicate so that the phrase can no longer function as a noun phrase object of the coordinated verb."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the wh-word needed to form a free relative clause, leaving the verb with no subject."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "anthropology/US history",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 14,
+      "section_type": "Structure",
+      "primary_target": "ADVERBIAL_CLAUSES",
+      "subtype": "conditional clause with 'be to' construction expressing purpose/necessity ('if they are to be')",
+      "secondary_features": [
+        "passive_infinitive",
+        "modal_necessity_be_to"
+      ],
+      "sentence_word_count": 24,
+      "clause_count": 2,
+      "correct_answer": "D",
+      "correct_answer_reason": "The conditional subordinator plus 'be to' construction correctly expresses the purpose condition under which the fibers must be spun.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Applies subject-auxiliary inversion after 'as', which is not licensed in this context and produces an ungrammatical clause."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Combines the finite subordinator 'when' with a bare infinitive, leaving the clause without a subject."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "The subordinator 'that' does not license the following clause in this position and does not express the intended conditional/purpose relationship."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "textiles/materials science",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test E",
+      "question_number": 15,
+      "section_type": "Structure",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "superlative within partitive construction ('one of the' + superlative + plural noun)",
+      "secondary_features": [
+        "reduced_causal_phrase_because_of"
+      ],
+      "sentence_word_count": 18,
+      "clause_count": 1,
+      "correct_answer": "B",
+      "correct_answer_reason": "The partitive phrase 'one of the' correctly precedes the superlative adjective and plural noun to express membership in the top group.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "The embedded wh-clause lacks a verb, leaving the noun phrase without a valid predicate inside the clause."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "The linking verb 'became' cannot take the interrogative/relative word 'who' as its complement in this position."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "The relative clause introduced by 'that' lacks a verb, leaving it incomplete."
+        }
+      },
+      "vocabulary_domain": "US colonial history/biography",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 1,
+      "section_type": "Structure",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "noun phrase internal word order (of-genitive complement of preposition)",
+      "secondary_features": [
+        "parallel_structure_in_list",
+        "prepositional_object_np"
+      ],
+      "sentence_word_count": 25,
+      "clause_count": 1,
+      "correct_answer": "B",
+      "correct_answer_reason": "Only this option orders the head noun before its 'of' complement, forming 'the structure of each play' as a grammatical object of the preposition 'to'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Fronts the 'of' phrase before the head noun, reversing the required noun + of-complement order."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Scrambles noun and determiner order and leaves the preposition 'of' without a following object."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Places the determiner-noun sequence before the head noun it should follow, and strands 'of' without an object."
+        }
+      },
+      "vocabulary_domain": "theater/performing arts biography",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 2,
+      "section_type": "Structure",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "active vs. passive voice in main clause ('is composed of')",
+      "secondary_features": [
+        "relative_clause_on_object",
+        "idiomatic_be_composed_of"
+      ],
+      "sentence_word_count": 22,
+      "clause_count": 2,
+      "correct_answer": "C",
+      "correct_answer_reason": "The passive form correctly fills the sentence's single main-verb slot, matching the idiom 'is composed of'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "double_subject",
+          "error_explanation": "Adds a redundant pronoun subject after the full subject noun phrase has already been stated."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "A bare infinitive cannot serve as the sentence's required finite main verb."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_voice",
+          "error_explanation": "Uses active voice with a redundant object pronoun where the passive 'composed of' pattern is required."
+        }
+      },
+      "vocabulary_domain": "physics/optics",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 3,
+      "section_type": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "main clause (subject + finite verb) identification, with that-clause object",
+      "secondary_features": [
+        "that_clause_as_object",
+        "appositive_phrase"
+      ],
+      "sentence_word_count": 12,
+      "clause_count": 2,
+      "correct_answer": "A",
+      "correct_answer_reason": "Only this option supplies a finite transitive verb that can head the sentence and take the following 'that' clause as its object.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "The gerund form leaves the sentence without a finite main verb."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_complementation",
+          "error_explanation": "The phrasal verb 'believe in' does not license a directly following bare 'that' clause."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "A possessive noun phrase cannot supply the finite verb the sentence needs."
+        }
+      },
+      "vocabulary_domain": "paleontology/prehistoric life",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 4,
+      "section_type": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "main clause supplied via it-cleft ('It was X that...') vs. fragment",
+      "secondary_features": [
+        "it_cleft_construction",
+        "relative_clause_on_predicate_nominative",
+        "parallel_coordinate_verb"
+      ],
+      "sentence_word_count": 26,
+      "clause_count": 2,
+      "correct_answer": "B",
+      "correct_answer_reason": "The cleft 'It was...' supplies the sentence's only finite main verb, letting the following 'that' clause function as a relative clause rather than leaving the sentence a bare noun phrase.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "A noun phrase followed by its relative clause has no finite main verb of its own."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "Adding 'When' turns the noun phrase into a subordinate clause, so the sentence still lacks an independent main clause."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "fragment",
+          "error_explanation": "Reordering the noun phrase still leaves it without a finite verb of its own."
+        }
+      },
+      "vocabulary_domain": "art history/American painting",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 5,
+      "section_type": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "non-restrictive relative clause referring to the preceding clause (sentential 'which')",
+      "secondary_features": [
+        "sentential_relative_clause"
+      ],
+      "sentence_word_count": 22,
+      "clause_count": 2,
+      "correct_answer": "C",
+      "correct_answer_reason": "The relative pronoun 'which' both supplies the subject and connects the added clause back to the whole idea expressed in the main clause.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the relative pronoun needed to connect a second verb to the main clause, producing a run-on."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "double_subject",
+          "error_explanation": "Inserts a new subject pronoun with no connector, effectively restating the referent that 'which' should express."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds a redundant object pronoun referring back to the subject, still without the required connector."
+        }
+      },
+      "vocabulary_domain": "US history/social studies",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 6,
+      "section_type": "Structure",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "predicate nominative after linking verb (be + superlative adjective + noun modifier + head noun)",
+      "secondary_features": [
+        "reduced_relative_clause_modifying_predicate_nominative",
+        "superlative_construction"
+      ],
+      "sentence_word_count": 16,
+      "clause_count": 1,
+      "correct_answer": "A",
+      "correct_answer_reason": "The superlative adjective, noun modifier, and head noun are ordered correctly to form the predicate nominative after 'is the'.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Leaves the adjective 'scientific' with no following head noun to modify."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds an unnecessary relative clause and still leaves 'scientific' without a head noun."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "incorrect_part_of_speech",
+          "error_explanation": "Adds 'and' and substitutes a participle for the required noun after the superlative adjective."
+        }
+      },
+      "vocabulary_domain": "government/science awards",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 7,
+      "section_type": "Structure",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "exemplification connector ('such as') vs. subordinator confusion",
+      "secondary_features": [
+        "gerund_phrase_with_prepositional_object"
+      ],
+      "sentence_word_count": 18,
+      "clause_count": 1,
+      "correct_answer": "D",
+      "correct_answer_reason": "'such as' correctly introduces examples of the preceding noun without requiring a following clause.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "'if' requires its own clause with a verb, which is absent, and does not fit the intended exemplifying meaning."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "incorrect_relative_marker",
+          "error_explanation": "Misuses 'that' as a relative pronoun, disrupting the verb slot needed later in the phrase."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "'how' cannot introduce a bare noun phrase and leaves the intended clause without a verb."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "archaeology/prehistoric technology",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 2,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 8,
+      "section_type": "Structure",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "appositive noun phrase defining preceding noun ('the transmission of')",
+      "secondary_features": [
+        "appositive_phrase"
+      ],
+      "sentence_word_count": 22,
+      "clause_count": 1,
+      "correct_answer": "A",
+      "correct_answer_reason": "The article-plus-noun phrase functions as an appositive that renames and defines the preceding noun.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Inserts a finite verb, creating a second, conflicting predicate before the sentence's actual main verb."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the article and the 'of' needed to complete the appositive noun phrase."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "incorrect_part_of_speech",
+          "error_explanation": "Uses the bare gerund without the preposition needed to link it to the following noun."
+        }
+      },
+      "vocabulary_domain": "media history/technology",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 9,
+      "section_type": "Structure",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "direct object noun phrase after ditransitive verb ('give' + indirect object + direct object)",
+      "secondary_features": [
+        "correlative_conjunction_both_and",
+        "participial_phrase_of_result"
+      ],
+      "sentence_word_count": 16,
+      "clause_count": 1,
+      "correct_answer": "A",
+      "correct_answer_reason": "A noun phrase correctly fills the required direct-object slot after the indirect object 'computers'.",
+      "distractors": {
+        "A": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Tacks on an unconnected finite verb 'is' where a single noun-phrase object is required."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Tacks on an unconnected finite verb phrase 'are capable' where a single noun-phrase object is required."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "incorrect_part_of_speech",
+          "error_explanation": "Uses a bare adjective where the ditransitive verb requires a noun-phrase direct object."
+        }
+      },
+      "vocabulary_domain": "technology/computers",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 10,
+      "section_type": "Structure",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "gerund phrase as clause subject",
+      "secondary_features": [
+        "subject_verb_agreement_with_gerund_subject"
+      ],
+      "sentence_word_count": 25,
+      "clause_count": 2,
+      "correct_answer": "B",
+      "correct_answer_reason": "The gerund phrase correctly functions as a singular subject, agreeing with the following singular verb 'was'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "incorrect_part_of_speech",
+          "error_explanation": "A noun-noun compound is used where the gerund naming the activity is needed as subject."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_verb_form",
+          "error_explanation": "The bare verb form cannot function as a subject."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "agreement_error",
+          "error_explanation": "The plural head noun disagrees with the following singular verb 'was'."
+        }
+      },
+      "vocabulary_domain": "music history/biography",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 11,
+      "section_type": "Structure",
+      "primary_target": "NOUN_CLAUSES",
+      "subtype": "free relative clause ('what is now X') as object of a preposition",
+      "secondary_features": [
+        "nonrestrictive_relative_clause_on_subject"
+      ],
+      "sentence_word_count": 27,
+      "clause_count": 3,
+      "correct_answer": "B",
+      "correct_answer_reason": "The free relative headed by 'what' correctly nominalizes the clause so it can serve as the object of the preposition 'in'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Scrambles the wh-word and verb order needed to head the embedded clause."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Substitutes a plain pronoun for the wh-word needed to nominalize the clause as the object of 'in'."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Scrambles the demonstrative and verb order needed to head the embedded clause."
+        }
+      },
+      "vocabulary_domain": "history/Pacific geography",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 12,
+      "section_type": "Structure",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "noun phrase direct object after transitive verb ('exhibits' + adjective-noun combination)",
+      "secondary_features": [
+        "parallel_prepositional_phrases_with_both_and"
+      ],
+      "sentence_word_count": 18,
+      "clause_count": 1,
+      "correct_answer": "D",
+      "correct_answer_reason": "The adjective-plus-noun combination correctly forms the noun-phrase direct object required after the transitive verb 'exhibits'.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "The inserted 'and' breaks the adjective-noun combination into disconnected pieces."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "incorrect_part_of_speech",
+          "error_explanation": "An adverb-plus-adjective combination cannot serve as the required noun-phrase object."
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "incorrect_part_of_speech",
+          "error_explanation": "An adverb-plus-adjective combination forms a predicate-adjective-like phrase, not the noun object the verb requires."
+        },
+        "D": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        }
+      },
+      "vocabulary_domain": "zoology/marine biology",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 13,
+      "section_type": "Structure",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "correlative conjunction 'both...and' parallelism with parallel prepositional gerund phrases",
+      "secondary_features": [
+        "gerund_phrase_object_of_preposition"
+      ],
+      "sentence_word_count": 11,
+      "clause_count": 1,
+      "correct_answer": "C",
+      "correct_answer_reason": "Both conjuncts of 'both...and' repeat the same 'by' + gerund pattern, keeping the two elements grammatically parallel.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits 'by' before the first gerund and shifts the second conjunct to a passive gerund with a different implied subject, breaking parallelism."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Adds a redundant 'and' immediately after 'both', disrupting the correlative pattern."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_verb_form",
+          "error_explanation": "Uses finite verb forms where non-finite parallel phrases matching 'by' + gerund are required."
+        }
+      },
+      "vocabulary_domain": "medicine/microbiology",
+      "syntactic_complexity": 2,
+      "distractor_similarity": 4,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 14,
+      "section_type": "Structure",
+      "primary_target": "INVERSION",
+      "subtype": "subject-auxiliary inversion (do-support) after fronted negative time adverbial ('Not until...')",
+      "secondary_features": [
+        "do_support_auxiliary"
+      ],
+      "sentence_word_count": 20,
+      "clause_count": 1,
+      "correct_answer": "B",
+      "correct_answer_reason": "The fronted negative time adverbial triggers do-support inversion, which this option correctly supplies before the subject.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "missing_required_element",
+          "error_explanation": "Omits the inverted auxiliary 'did' that the fronted negative adverbial requires."
+        },
+        "B": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "C": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Reorders noun and adjective and still lacks the required inverted auxiliary."
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "incorrect_subordinator",
+          "error_explanation": "Adding 'when' turns the clause into a subordinate clause, preventing the required main-clause inversion."
+        }
+      },
+      "vocabulary_domain": "history/historic preservation",
+      "syntactic_complexity": 3,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 4,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    },
+    {
+      "source_id": "Practice Test F",
+      "question_number": 15,
+      "section_type": "Structure",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "so + adjective + that-clause result construction (postpositive adjective phrase modifying noun)",
+      "secondary_features": [
+        "result_clause_with_that",
+        "appositive_phrase"
+      ],
+      "sentence_word_count": 25,
+      "clause_count": 3,
+      "correct_answer": "C",
+      "correct_answer_reason": "The postpositive 'so soft' correctly modifies the preceding noun and licenses the following 'that' result clause.",
+      "distractors": {
+        "A": {
+          "is_correct": false,
+          "error_type": "extraneous_element",
+          "error_explanation": "Inserts an unwanted finite verb 'is' where a noun phrase completing the appositive is required."
+        },
+        "B": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Inverts the verb and subject where a plain adjective phrase modifying the noun is required."
+        },
+        "C": {
+          "is_correct": true,
+          "error_type": null,
+          "error_explanation": null
+        },
+        "D": {
+          "is_correct": false,
+          "error_type": "wrong_word_order",
+          "error_explanation": "Reverses the adjective phrase and the noun it should follow."
+        }
+      },
+      "vocabulary_domain": "chemistry/materials science",
+      "syntactic_complexity": 4,
+      "distractor_similarity": 3,
+      "estimated_difficulty_ai": 3,
+      "taxonomy_issue": false,
+      "taxonomy_issue_reason": null
+    }
+  ]
+}

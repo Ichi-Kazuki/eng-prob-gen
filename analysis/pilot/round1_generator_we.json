@@ -1,0 +1,529 @@
+{
+  "items": [
+    {
+      "item_id": "pilot-we-001",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "quantifier agreement with uncountable noun",
+      "secondary_features": ["passive voice", "participial modifier"],
+      "tested_error_type": "agreement_error",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "art history",
+      "sentence": "According to the museum curator, many of the evidence displayed here was examined carefully by outside experts.",
+      "marked_parts": {
+        "A": "many of the evidence",
+        "B": "displayed here",
+        "C": "was examined carefully",
+        "D": "by outside experts"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "much of the evidence",
+      "answer_explanation": "\"Evidence\" is an uncountable noun, so it requires the quantifier \"much,\" not \"many,\" which is reserved for countable plural nouns."
+    },
+    {
+      "item_id": "pilot-we-002",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "pronoun with no clear antecedent",
+      "secondary_features": ["coordinate clause", "compound subject nouns"],
+      "tested_error_type": "incorrect_reference",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "astronomy",
+      "sentence": "The observatory recently installed a sophisticated new spectrograph beside its aging telescope, and it will soon rival several professional facilities elsewhere.",
+      "marked_parts": {
+        "A": "recently installed a sophisticated new spectrograph",
+        "B": "it",
+        "C": "will soon rival",
+        "D": "several professional facilities elsewhere"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "the new instrument",
+      "answer_explanation": "The pronoun \"it\" could refer to \"the observatory,\" \"the spectrograph,\" or \"the telescope,\" leaving its antecedent unclear; a specific noun phrase is needed to remove the ambiguity."
+    },
+    {
+      "item_id": "pilot-we-003",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "article selection with first-mention noun",
+      "secondary_features": ["participial phrase modifying subject", "participial phrase modifying object"],
+      "tested_error_type": "agreement_error",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "geology",
+      "sentence": "Field geologists exploring a remote canyon recently discovered a unusual mineral formation attracting worldwide attention.",
+      "marked_parts": {
+        "A": "Field geologists exploring a remote canyon",
+        "B": "recently discovered",
+        "C": "a unusual mineral formation",
+        "D": "attracting worldwide attention"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "an unusual mineral formation",
+      "answer_explanation": "\"Unusual\" begins with a vowel sound, so the indefinite article before it must be \"an,\" not \"a.\""
+    },
+    {
+      "item_id": "pilot-we-004",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "pronoun-antecedent number mismatch",
+      "secondary_features": ["purpose clause", "passive-capable verb used actively"],
+      "tested_error_type": "incorrect_reference",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "marine biology",
+      "sentence": "Marine biologists attached tracking devices to several dolphins living near the reef so that scientists could monitor its movements throughout migration season.",
+      "marked_parts": {
+        "A": "attached tracking devices",
+        "B": "to several dolphins living near the reef",
+        "C": "so that scientists could monitor",
+        "D": "its movements throughout migration season"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "their movements throughout migration season",
+      "answer_explanation": "The pronoun must agree in number with its plural antecedent \"dolphins,\" so \"their\" is required instead of the singular \"its.\""
+    },
+    {
+      "item_id": "pilot-we-005",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "quantifier agreement with countable plural noun",
+      "secondary_features": ["passive voice", "participial modifier"],
+      "tested_error_type": "agreement_error",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "paleontology",
+      "sentence": "Much of the fossilized bones recovered from the quarry belonged to a previously unknown species of dinosaur.",
+      "marked_parts": {
+        "A": "Much of the fossilized bones",
+        "B": "recovered from the quarry",
+        "C": "belonged to",
+        "D": "a previously unknown species of dinosaur"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "Many of the fossilized bones",
+      "answer_explanation": "\"Bones\" is a countable plural noun, so the quantifier \"many,\" not \"much\" (which modifies uncountable nouns), is required."
+    },
+    {
+      "item_id": "pilot-we-006",
+      "section": "Written Expression",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "predicate adjective after linking verb misrendered as noun",
+      "secondary_features": ["noun clause object", "sensory/perception verb complement"],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "sociology",
+      "sentence": "Sociologists have found that prolonged unemployment often leaves individuals feeling isolation from their communities and support networks.",
+      "marked_parts": {
+        "A": "Sociologists have found that prolonged unemployment",
+        "B": "often leaves individuals feeling isolation",
+        "C": "from their communities",
+        "D": "and support networks"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "often leaves individuals feeling isolated",
+      "answer_explanation": "After the verb \"feeling,\" a predicate adjective describing the individuals' state is required, so \"isolated\" (adjective) must replace the noun \"isolation.\""
+    },
+    {
+      "item_id": "pilot-we-007",
+      "section": "Written Expression",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "object complement after causative verb misrendered as adverb",
+      "secondary_features": ["causative verb construction", "participial phrase of result"],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "political science",
+      "sentence": "The new legislation made the approval process considerably more efficiently, allowing agencies to issue permits within weeks.",
+      "marked_parts": {
+        "A": "The new legislation",
+        "B": "made the approval process",
+        "C": "considerably more efficiently",
+        "D": "allowing agencies to issue permits within weeks"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "considerably more efficient",
+      "answer_explanation": "The causative verb \"made\" requires an adjective object complement describing \"the approval process,\" so \"efficient\" is needed instead of the adverb \"efficiently.\""
+    },
+    {
+      "item_id": "pilot-we-008",
+      "section": "Written Expression",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "fixed preposition collocation governed by verb",
+      "secondary_features": ["relative clause", "contrastive phrase"],
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_scope": "local",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "philosophy",
+      "sentence": "Many contemporary philosophers who study ethics remain skeptical of arguments that rely heavily of intuition rather than rigorous analysis.",
+      "marked_parts": {
+        "A": "Many contemporary philosophers who study ethics",
+        "B": "remain skeptical of arguments",
+        "C": "that rely heavily",
+        "D": "of intuition rather than rigorous analysis"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "on intuition rather than rigorous analysis",
+      "answer_explanation": "The verb \"rely\" takes the fixed preposition \"on,\" not \"of\"; \"rely on intuition\" is the correct collocation."
+    },
+    {
+      "item_id": "pilot-we-009",
+      "section": "Written Expression",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel verb forms in a list (gerund vs. base form)",
+      "secondary_features": ["compound subject", "infinitive phrase list"],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "sentence_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "chemistry",
+      "sentence": "Measuring reaction rates precisely, to control temperature fluctuations, and to record every observation carefully are essential skills for any laboratory chemist.",
+      "marked_parts": {
+        "A": "Measuring reaction rates precisely",
+        "B": "to control temperature fluctuations",
+        "C": "and to record every observation carefully",
+        "D": "are essential skills for any laboratory chemist"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "To measure reaction rates precisely",
+      "answer_explanation": "The compound subject lists parallel infinitive phrases (\"to control,\" \"to record\"), so the first item must also be an infinitive (\"To measure\") rather than the gerund \"Measuring.\""
+    },
+    {
+      "item_id": "pilot-we-010",
+      "section": "Written Expression",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "correlative conjunction parallelism (not only...but also)",
+      "secondary_features": ["correlative conjunction", "relative clause"],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "sentence_level",
+      "difficulty": "HARD",
+      "vocabulary_domain": "physics",
+      "sentence": "The experiment not only confirmed the researchers' initial hypothesis but also were revealing unexpected patterns in the particle collisions that occurred at extremely high energies.",
+      "marked_parts": {
+        "A": "The experiment not only confirmed the researchers' initial hypothesis",
+        "B": "but also were revealing unexpected patterns",
+        "C": "in the particle collisions",
+        "D": "that occurred at extremely high energies"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "but also revealed unexpected patterns",
+      "answer_explanation": "The correlative \"not only...but also\" requires parallel verb forms; since the first verb is simple past (\"confirmed\"), the second must also be simple past (\"revealed\"), not the past progressive \"were revealing.\""
+    },
+    {
+      "item_id": "pilot-we-011",
+      "section": "Written Expression",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel noun phrases in enumeration, one item shifted to adjective",
+      "secondary_features": ["list enumeration", "adverbial time clause"],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "botany",
+      "sentence": "Botanists typically classify climbing plants according to their leaf shape, root structure, and stem flexible when studying adaptation to their environment.",
+      "marked_parts": {
+        "A": "Botanists typically classify climbing plants",
+        "B": "according to their leaf shape, root structure,",
+        "C": "and stem flexible",
+        "D": "when studying adaptation to their environment"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "and stem flexibility",
+      "answer_explanation": "The list of three parallel noun phrases (\"leaf shape,\" \"root structure\") requires a matching noun (\"stem flexibility\"), not the adjective \"flexible.\""
+    },
+    {
+      "item_id": "pilot-we-012",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "gerund vs. infinitive complement selection after verb",
+      "secondary_features": ["participial phrase", "causative-adjacent decision verb"],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "zoology",
+      "sentence": "After spotting several rare shorebirds nesting near the shoreline, the research team decided avoiding the nesting site entirely for the remainder of the season.",
+      "marked_parts": {
+        "A": "After spotting several rare shorebirds nesting near the shoreline",
+        "B": "the research team",
+        "C": "decided",
+        "D": "avoiding the nesting site entirely for the remainder of the season"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "to avoid the nesting site entirely for the remainder of the season",
+      "answer_explanation": "The verb \"decided\" requires an infinitive complement (\"to avoid\"), not the gerund \"avoiding.\""
+    },
+    {
+      "item_id": "pilot-we-013",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "participial phrase of result mis-formed as finite clause fragment",
+      "secondary_features": ["fronted modifier", "result phrase"],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "climatology",
+      "sentence": "Causes extensive soil erosion throughout the region, the prolonged drought forced many farmers to abandon their fields entirely last year.",
+      "marked_parts": {
+        "A": "Causes extensive soil erosion throughout the region",
+        "B": "the prolonged drought",
+        "C": "forced many farmers",
+        "D": "to abandon their fields entirely last year"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "Causing extensive soil erosion throughout the region",
+      "answer_explanation": "This fronted phrase functions as a participial phrase describing a result of the drought and must use the -ing participle \"Causing,\" not the finite verb form \"Causes,\" which has no subject of its own."
+    },
+    {
+      "item_id": "pilot-we-014",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "infinitive modifying superlative noun rendered as gerund",
+      "secondary_features": ["ordinal noun phrase", "appositive phrase"],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "volcanology",
+      "sentence": "The young volcanologist was the first researcher studying the mountain's seismic tremors continuously, an effort that greatly improved eruption forecasting methods.",
+      "marked_parts": {
+        "A": "The young volcanologist",
+        "B": "was the first researcher studying the mountain's seismic tremors continuously",
+        "C": "an effort",
+        "D": "that greatly improved eruption forecasting methods"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "was the first researcher to study the mountain's seismic tremors continuously",
+      "answer_explanation": "After an ordinal expression like \"the first researcher,\" an infinitive (\"to study\") is required, not the gerund \"studying.\""
+    },
+    {
+      "item_id": "pilot-we-015",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adjective required, adverb used to modify a following noun",
+      "secondary_features": ["participial phrase modifying subject", "coordinated noun phrase"],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "cartography",
+      "sentence": "Early cartographers relying on approximately measurements and careful celestial observations still managed to draw coastlines with reasonable accuracy.",
+      "marked_parts": {
+        "A": "Early cartographers",
+        "B": "relying on",
+        "C": "approximately measurements and careful celestial observations",
+        "D": "still managed to draw coastlines with reasonable accuracy"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "approximate measurements and careful celestial observations",
+      "answer_explanation": "The noun \"measurements\" needs an adjective modifier (\"approximate\"), not the adverb \"approximately.\""
+    },
+    {
+      "item_id": "pilot-we-016",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adverb required, adjective used to modify a verb",
+      "secondary_features": ["coordinate predicate", "time adverbial phrase"],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "epidemiology",
+      "sentence": "During the outbreak, public health officials tracked new infections carefully and updated their containment strategies quick.",
+      "marked_parts": {
+        "A": "During the outbreak, public health officials",
+        "B": "tracked new infections carefully",
+        "C": "and updated their containment strategies",
+        "D": "quick"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "quickly",
+      "answer_explanation": "The adverb \"quickly,\" not the adjective \"quick,\" is needed to modify the verb \"updated.\""
+    },
+    {
+      "item_id": "pilot-we-017",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "noun required, adjective used as clause subject",
+      "secondary_features": ["parenthetical phrase", "parallel gerund phrases"],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "nutrition science",
+      "sentence": "Nutritious, according to many dietitians, plays a central role in preventing chronic disease and supporting long-term health.",
+      "marked_parts": {
+        "A": "Nutritious, according to many dietitians,",
+        "B": "plays a central role",
+        "C": "in preventing chronic disease",
+        "D": "and supporting long-term health"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "Nutrition, according to many dietitians,",
+      "answer_explanation": "The clause subject must be the noun \"nutrition,\" not the adjective \"nutritious.\""
+    },
+    {
+      "item_id": "pilot-we-018",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "active voice used where passive is required (logical object as subject)",
+      "secondary_features": ["relative clause", "present perfect tense"],
+      "tested_error_type": "wrong_voice",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "forestry",
+      "sentence": "The old-growth forest has protected for over a century by strict conservation laws that limit logging and development.",
+      "marked_parts": {
+        "A": "The old-growth forest",
+        "B": "has protected for over a century",
+        "C": "by strict conservation laws",
+        "D": "that limit logging and development"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "has been protected for over a century",
+      "answer_explanation": "Because the forest is the recipient of the action described by the \"by\" phrase, the passive voice \"has been protected\" is required, not the active \"has protected.\""
+    },
+    {
+      "item_id": "pilot-we-019",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "past perfect vs. simple past selection",
+      "secondary_features": ["time clause", "participial phrase of result"],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "cross_clause",
+      "difficulty": "HARD",
+      "vocabulary_domain": "mycology",
+      "sentence": "By the time researchers finally identified the rare fungal species growing beneath the forest canopy, it already spread across nearly half of the reserve, threatening several native plant populations.",
+      "marked_parts": {
+        "A": "By the time researchers finally identified",
+        "B": "the rare fungal species growing beneath the forest canopy,",
+        "C": "it already spread across nearly half of the reserve,",
+        "D": "threatening several native plant populations"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "it had already spread across nearly half of the reserve,",
+      "answer_explanation": "Because the spreading occurred before the researchers' identification, which is also in the past, the past perfect \"had already spread\" is required instead of the simple past \"already spread.\""
+    },
+    {
+      "item_id": "pilot-we-020",
+      "section": "Written Expression",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject-verb agreement across intervening prepositional phrase",
+      "secondary_features": ["noun clause object", "participial phrase"],
+      "tested_error_type": "agreement_error",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "entomology",
+      "sentence": "Entomologists studying colony organization note that the behavior of social insects such as ants and termites remain remarkably complex.",
+      "marked_parts": {
+        "A": "Entomologists studying colony organization note",
+        "B": "that the behavior",
+        "C": "of social insects such as ants and termites",
+        "D": "remain remarkably complex"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "remains remarkably complex",
+      "answer_explanation": "The subject of the clause is the singular noun \"behavior\"; the intervening prepositional phrase \"of social insects such as ants and termites\" does not change the verb's number, so the singular verb \"remains\" is required."
+    },
+    {
+      "item_id": "pilot-we-021",
+      "section": "Written Expression",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "missing required correlative element in a compound predicate",
+      "secondary_features": ["correlative conjunction", "relative clause"],
+      "tested_error_type": "missing_required_element",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "ethnomusicology",
+      "sentence": "Not only ethnomusicologists study traditional instruments but also examine the cultural contexts in which they are played.",
+      "marked_parts": {
+        "A": "Not only ethnomusicologists study traditional instruments",
+        "B": "but also examine",
+        "C": "the cultural contexts",
+        "D": "in which they are played"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "Not only do ethnomusicologists study traditional instruments",
+      "answer_explanation": "A clause beginning with the correlative \"Not only\" requires subject-auxiliary inversion, so the auxiliary \"do\" must be inserted before the subject: \"Not only do ethnomusicologists study...\""
+    },
+    {
+      "item_id": "pilot-we-022",
+      "section": "Written Expression",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative pronoun case (who/whom) selection",
+      "secondary_features": ["nonrestrictive-like embedded clause", "prepositional phrase modifier"],
+      "tested_error_type": "incorrect_relative_marker",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "textile history",
+      "sentence": "The weaver who historians credit with reviving an ancient dyeing technique trained dozens of apprentices throughout her long career in the textile guild.",
+      "marked_parts": {
+        "A": "The weaver",
+        "B": "who historians credit with reviving an ancient dyeing technique",
+        "C": "trained dozens of apprentices",
+        "D": "throughout her long career in the textile guild"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "whom historians credit with reviving an ancient dyeing technique",
+      "answer_explanation": "The relative pronoun functions as the object of \"credit\" (\"historians credit her\"), so the objective case \"whom\" is required instead of the subjective \"who.\""
+    },
+    {
+      "item_id": "pilot-we-023",
+      "section": "Written Expression",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "verb agreement within a restrictive relative clause",
+      "secondary_features": ["restrictive relative clause", "prepositional phrase"],
+      "tested_error_type": "agreement_error",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "cryptography",
+      "sentence": "Modern cryptographers rely on algorithms that processes enormous quantities of data within fractions of a second.",
+      "marked_parts": {
+        "A": "Modern cryptographers",
+        "B": "rely on algorithms",
+        "C": "that processes enormous quantities of data",
+        "D": "within fractions of a second"
+      },
+      "correct_answer": "C",
+      "minimal_correction": "that process enormous quantities of data",
+      "answer_explanation": "The relative pronoun \"that\" refers back to the plural antecedent \"algorithms,\" so the verb in the relative clause must be plural \"process,\" not \"processes.\""
+    },
+    {
+      "item_id": "pilot-we-024",
+      "section": "Written Expression",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "wrong subordinating conjunction for concessive relation",
+      "secondary_features": ["causal vs. concessive contrast", "reversed clause order"],
+      "tested_error_type": "incorrect_subordinator",
+      "error_scope": "sentence_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "horticulture",
+      "sentence": "The orchids still failed to bloom on schedule, because the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season.",
+      "marked_parts": {
+        "A": "The orchids",
+        "B": "still failed",
+        "C": "to bloom on schedule,",
+        "D": "because the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "although the greenhouse maintained nearly ideal humidity and temperature conditions throughout the season",
+      "answer_explanation": "The clause describes a contrast (good conditions but failed blooming), so the concessive subordinator \"although\" is required instead of the causal \"because,\" which incorrectly implies the good conditions caused the failure."
+    },
+    {
+      "item_id": "pilot-we-025",
+      "section": "Written Expression",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "noun + postpositive adjective phrase word order",
+      "secondary_features": ["postpositive modifier", "purpose infinitive phrase"],
+      "tested_error_type": "wrong_word_order",
+      "error_scope": "local",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "seismology",
+      "sentence": "Prone regions to frequent earthquakes require strict building codes designed to minimize structural damage during sudden ground shaking.",
+      "marked_parts": {
+        "A": "Prone regions to frequent earthquakes",
+        "B": "require strict building codes",
+        "C": "designed to minimize structural damage",
+        "D": "during sudden ground shaking"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "Regions prone to frequent earthquakes",
+      "answer_explanation": "The adjective phrase \"prone to frequent earthquakes\" must follow the noun it modifies (\"regions\"), not precede it, so the correct order is \"Regions prone to frequent earthquakes.\""
+    }
+  ]
+}

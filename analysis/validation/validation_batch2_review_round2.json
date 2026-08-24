@@ -1,0 +1,59 @@
+{
+  "items": [
+    {
+      "item_id": "batch2-struct-001",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "B",
+      "generator_answer": "B",
+      "answer_match": true,
+      "reviewer_difficulty": "EASY",
+      "generator_difficulty": "EASY",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "batch2-struct-009",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "A",
+      "generator_answer": "A",
+      "answer_match": true,
+      "reviewer_difficulty": "EASY",
+      "generator_difficulty": "HARD",
+      "difficulty_mismatch": true,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [
+        {
+          "severity": "MINOR",
+          "category": "difficulty",
+          "description": "The such a + adjective + singular count noun + that-clause pattern is straightforward in this sentence; HARD overstates the grammatical difficulty.",
+          "related_check": "metadata_consistency"
+        }
+      ],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    }
+  ]
+}

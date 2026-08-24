@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "reviewer_output.schema.json",
+  "title": "TOEFL ITP Reviewer Agent - review result item",
+  "description": "Schema-level validation of the Reviewer Agent's own output shape. Does not judge whether the verdict itself is correct - that is a matter of review quality, checked by the adversarial/smoke test process, not by this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_id",
+    "section",
+    "verdict",
+    "critical_failure",
+    "independent_answer",
+    "generator_answer",
+    "answer_match",
+    "reviewer_difficulty",
+    "generator_difficulty",
+    "difficulty_mismatch",
+    "checks",
+    "issues",
+    "revision_requirements",
+    "source_similarity_risk"
+  ],
+  "properties": {
+    "item_id": { "type": "string", "minLength": 1 },
+    "section": { "enum": ["Structure", "Written Expression"] },
+    "verdict": { "enum": ["PASS", "REVISE", "REJECT"] },
+    "critical_failure": { "type": "boolean" },
+    "independent_answer": { "enum": ["A", "B", "C", "D", "NONE", "AMBIGUOUS"] },
+    "generator_answer": { "enum": ["A", "B", "C", "D"] },
+    "answer_match": { "type": "boolean" },
+    "reviewer_difficulty": { "enum": ["EASY", "MEDIUM", "HARD"] },
+    "generator_difficulty": { "enum": ["EASY", "MEDIUM", "HARD"] },
+    "difficulty_mismatch": { "type": "boolean" },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grammar_validity",
+        "answer_uniqueness",
+        "target_alignment",
+        "naturalness",
+        "toefl_style",
+        "distractor_quality",
+        "metadata_consistency"
+      ],
+      "properties": {
+        "grammar_validity": { "enum": ["PASS", "REVISE", "REJECT"] },
+        "answer_uniqueness": { "enum": ["PASS", "REVISE", "REJECT"] },
+        "target_alignment": { "enum": ["PASS", "REVISE", "REJECT"] },
+        "naturalness": { "enum": ["PASS", "REVISE", "REJECT"] },
+        "toefl_style": { "enum": ["PASS", "REVISE", "REJECT"] },
+        "distractor_quality": { "enum": ["PASS", "REVISE", "REJECT"] },
+        "metadata_consistency": { "enum": ["PASS", "REVISE", "REJECT"] }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "category", "description", "related_check"],
+        "properties": {
+          "severity": { "enum": ["CRITICAL", "MAJOR", "MINOR"] },
+          "category": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 },
+          "related_check": {
+            "enum": [
+              "grammar_validity",
+              "answer_uniqueness",
+              "target_alignment",
+              "naturalness",
+              "toefl_style",
+              "distractor_quality",
+              "metadata_consistency",
+              "source_similarity_risk",
+              "difficulty"
+            ]
+          }
+        }
+      }
+    },
+    "revision_requirements": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "source_similarity_risk": { "enum": ["LOW", "MEDIUM", "HIGH"] },
+    "detected_error_count": { "type": "integer", "minimum": 0 },
+    "detected_error_position": { "enum": ["A", "B", "C", "D", "NONE"] },
+    "non_error_parts_valid": { "type": "boolean" },
+    "minimal_correction_valid": { "type": "boolean" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "section": { "const": "Written Expression" } },
+        "required": ["section"]
+      },
+      "then": {
+        "required": [
+          "detected_error_count",
+          "detected_error_position",
+          "non_error_parts_valid",
+          "minimal_correction_valid"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": { "critical_failure": { "const": true } },
+        "required": ["critical_failure"]
+      },
+      "then": {
+        "properties": { "verdict": { "enum": ["REVISE", "REJECT"] } }
+      }
+    }
+  ]
+}

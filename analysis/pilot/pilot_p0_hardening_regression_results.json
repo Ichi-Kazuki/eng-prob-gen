@@ -1,0 +1,97 @@
+{
+  "_purpose": "Static P0 hardening regression contract; no live model call.",
+  "fixture_version": "1.0.0",
+  "case_count": 7,
+  "failure_count": 0,
+  "results": [
+    {
+      "item_id": "pilot-we-002",
+      "fixture_class": "semantic_reference_resolution",
+      "generator_guard": "AVOID_OR_REFRAME",
+      "historical_round1_verdict": "PASS",
+      "historical_round2_verdict": null,
+      "historical_solver_answers": [
+        "NONE"
+      ],
+      "post_hardening_contract": "PASS prohibited"
+    },
+    {
+      "item_id": "pilot-we-009",
+      "fixture_class": "parallelism_alternate_parse_and_repair",
+      "generator_guard": "AVOID",
+      "historical_round1_verdict": "PASS",
+      "historical_round2_verdict": null,
+      "historical_solver_answers": [
+        "AMBIGUOUS"
+      ],
+      "post_hardening_contract": "PASS prohibited"
+    },
+    {
+      "item_id": "pilot-we-024",
+      "fixture_class": "semantic_connector_oddity",
+      "generator_guard": "AVOID_OR_REFRAME",
+      "historical_round1_verdict": "PASS",
+      "historical_round2_verdict": null,
+      "historical_solver_answers": [
+        "NONE"
+      ],
+      "post_hardening_contract": "PASS prohibited"
+    },
+    {
+      "item_id": "pilot-struct-012",
+      "fixture_class": "structure_distractor_pp_attachment",
+      "generator_guard": "RETAIN_AS_GUARD",
+      "historical_round1_verdict": "REVISE",
+      "historical_round2_verdict": "PASS",
+      "historical_solver_answers": [
+        "D"
+      ],
+      "revision_contract": "original detected; revised remains accepted"
+    },
+    {
+      "item_id": "pilot-we-006",
+      "fixture_class": "lexical_complement_frame",
+      "generator_guard": "AVOID_OR_REFRAME",
+      "historical_round1_verdict": "REVISE",
+      "historical_round2_verdict": "PASS",
+      "historical_solver_answers": [
+        "B"
+      ],
+      "revision_contract": "original detected; revised remains accepted"
+    },
+    {
+      "item_id": "pilot-we-014",
+      "fixture_class": "ordinal_reduced_relative_alternate_parse",
+      "generator_guard": "AVOID_OR_DISAMBIGUATE",
+      "historical_round1_verdict": "REVISE",
+      "historical_round2_verdict": "PASS",
+      "historical_solver_answers": [
+        "B"
+      ],
+      "revision_contract": "original detected; revised remains accepted"
+    },
+    {
+      "item_id": "pilot-we-021",
+      "fixture_class": "target_alignment_inversion",
+      "generator_guard": "ALIGN_METADATA",
+      "historical_round1_verdict": "REVISE",
+      "historical_round2_verdict": "PASS",
+      "historical_solver_answers": [
+        "A"
+      ],
+      "revision_contract": "original detected; revised remains accepted"
+    }
+  ],
+  "checks": {
+    "three_failure_classes_registered": true,
+    "four_revise_cases_registered": true,
+    "generator_p0_prompt_controls_present": true,
+    "reviewer_p0_prompt_controls_present": true
+  },
+  "prompt_versions": {
+    "generator_version": "sha256:3567f2b6e246",
+    "reviewer_version": "sha256:e4142013a3cb",
+    "solver_version": "sha256:df1200bed2b1"
+  },
+  "failures": []
+}

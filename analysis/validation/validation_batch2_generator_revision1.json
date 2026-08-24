@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "item_id": "batch2-struct-001",
+      "section": "Structure",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject-verb agreement across an intervening prepositional phrase",
+      "secondary_features": ["agreement", "simple past tense"],
+      "difficulty": "EASY",
+      "vocabulary_domain": "botany",
+      "stem": "During the severe drought of 2019, the leaves of the desert plant ___.",
+      "options": {
+        "A": "wilt",
+        "B": "wilted",
+        "C": "wilts",
+        "D": "wilting"
+      },
+      "correct_answer": "B",
+      "answer_explanation": "The dated past-time context requires the simple past verb wilted; the plural subject leaves takes the plural-compatible form.",
+      "distractor_rationales": {
+        "A": "The present-tense form does not fit the dated past-time context.",
+        "B": "Correct: wilted is the simple past finite verb required by the 2019 context and agrees with plural leaves.",
+        "C": "The singular present form does not agree with plural leaves and does not fit the past-time context.",
+        "D": "The -ing form cannot serve as the finite verb without an auxiliary."
+      }
+    },
+    {
+      "item_id": "batch2-struct-009",
+      "section": "Structure",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "such a plus adjective plus singular count noun licensing a result that-clause",
+      "secondary_features": ["result clause", "singular count noun article"],
+      "difficulty": "HARD",
+      "vocabulary_domain": "acoustics",
+      "stem": "The chamber produced ___ loud echo that the recording equipment had to be recalibrated.",
+      "options": {
+        "A": "such a",
+        "B": "so a",
+        "C": "very a",
+        "D": "as a"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "The pattern such a + adjective + singular count noun correctly introduces the result clause: such a loud echo that ...",
+      "distractor_rationales": {
+        "A": "Correct: such a precedes the adjective and singular count noun in the result construction.",
+        "B": "So cannot directly precede an article in this position.",
+        "C": "Very cannot directly precede an article in this position.",
+        "D": "As a does not form the required degree expression licensing this result clause."
+      }
+    }
+  ]
+}

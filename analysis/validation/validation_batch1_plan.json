@@ -1,0 +1,113 @@
+{
+  "batch_id": "validation_batch1",
+  "generator_version": "1.1",
+  "taxonomy_version": "1.1",
+  "purpose": "Independent validation batch generation plan",
+  "source_separation": {
+    "authoring_mode": "independent",
+    "source_text_reuse": false,
+    "fixture_reuse": false,
+    "reviewer_verdicts_included": false,
+    "solver_verdicts_included": false
+  },
+  "dimension_metadata": {
+    "primary_target": {
+      "classification": "DERIVED",
+      "note": "Uses the closed taxonomy categories defined from OBSERVED corpus counts; batch allocation is a HEURISTIC spread, not a quota."
+    },
+    "subtype": {
+      "classification": "DERIVED",
+      "note": "Names the exact construction within each closed primary_target, independently authored for this batch."
+    },
+    "tested_error_type": {
+      "classification": "DERIVED",
+      "note": "Uses the closed 15-value mechanism vocabulary defined from OBSERVED taxonomy evidence."
+    },
+    "sentence_length_target": {
+      "classification": "HEURISTIC",
+      "note": "Targets the OBSERVED section ranges and means while varying short, medium, and long items."
+    },
+    "clause_count_target": {
+      "classification": "HEURISTIC",
+      "note": "Follows the OBSERVED one-/two-/three-clause shape approximately for each section."
+    },
+    "distractor_type": {
+      "classification": "DERIVED",
+      "note": "Each Structure distractor is assigned one of the OBSERVED/closed tested_error_type mechanisms."
+    },
+    "error_span_type": {
+      "classification": "DERIVED",
+      "note": "Uses the span-type vocabulary and diversity guidance derived from the OBSERVED Written Expression distribution."
+    },
+    "error_scope": {
+      "classification": "DERIVED",
+      "note": "Uses the defined local/clause_level/sentence_level/cross_clause labels; the batch mix is HEURISTIC."
+    },
+    "error_location": {
+      "classification": "HEURISTIC",
+      "note": "Randomized with a mild late/sentence_final emphasis based on the OBSERVED distribution."
+    },
+    "difficulty": {
+      "classification": "HEURISTIC",
+      "note": "EASY/MEDIUM/HARD is assigned from syntax, dependency, span scope, and confusability; vocabulary rarity is not used."
+    },
+    "correct_answer_position": {
+      "classification": "HEURISTIC",
+      "note": "Positions are spread across A-D using the OBSERVED near-even pattern without forcing a small-batch quota."
+    },
+    "vocabulary_domain": {
+      "classification": "HEURISTIC",
+      "note": "Uses diverse academic/general-interest domains, following the OBSERVED diversity principle without reusing a source-domain roster."
+    }
+  },
+  "structure": {
+    "count": 15,
+    "items": [
+      {"item_id":"batch1-struct-001","primary_target":"CLAUSE_STRUCTURE","subtype":"subject-verb agreement across an intervening prepositional phrase","difficulty":"EASY","correct_answer_position":"A","vocabulary_domain":"meteorology","sentence_length_target":18,"clause_count_target":1,"distractor_type":["agreement_error","fragment","missing_required_element"]},
+      {"item_id":"batch1-struct-002","primary_target":"NOUN_CLAUSES","subtype":"embedded question with statement word order","difficulty":"MEDIUM","correct_answer_position":"B","vocabulary_domain":"cartography","sentence_length_target":19,"clause_count_target":2,"distractor_type":["wrong_word_order","extraneous_element","missing_required_element"]},
+      {"item_id":"batch1-struct-003","primary_target":"RELATIVE_CLAUSES","subtype":"non-restrictive relative clause with passive predicate","difficulty":"HARD","correct_answer_position":"C","vocabulary_domain":"archaeological conservation","sentence_length_target":22,"clause_count_target":2,"distractor_type":["incorrect_relative_marker","wrong_verb_form","double_subject"]},
+      {"item_id":"batch1-struct-004","primary_target":"ADVERBIAL_CLAUSES","subtype":"time clause introduced by when","difficulty":"MEDIUM","correct_answer_position":"D","vocabulary_domain":"observatory operations","sentence_length_target":17,"clause_count_target":2,"distractor_type":["incorrect_subordinator","fragment","missing_required_element"]},
+      {"item_id":"batch1-struct-005","primary_target":"CONNECTORS_CONJUNCTIONS","subtype":"contrast connector before a noun phrase","difficulty":"EASY","correct_answer_position":"A","vocabulary_domain":"materials engineering","sentence_length_target":20,"clause_count_target":2,"distractor_type":["incorrect_subordinator","missing_required_element","extraneous_element"]},
+      {"item_id":"batch1-struct-006","primary_target":"VERB_FORM_VOICE","subtype":"past perfect passive before a later past event","difficulty":"MEDIUM","correct_answer_position":"B","vocabulary_domain":"mineral surveying","sentence_length_target":21,"clause_count_target":2,"distractor_type":["wrong_verb_form","wrong_voice","missing_required_element"]},
+      {"item_id":"batch1-struct-007","primary_target":"VERB_COMPLEMENTATION","subtype":"causative verb with object plus predicate adjective","difficulty":"EASY","correct_answer_position":"A","vocabulary_domain":"environmental monitoring","sentence_length_target":18,"clause_count_target":1,"distractor_type":["wrong_complementation","incorrect_part_of_speech","missing_required_element"]},
+      {"item_id":"batch1-struct-008","primary_target":"NONFINITE_VERB_PHRASES","subtype":"reduced passive participial modifier","difficulty":"MEDIUM","correct_answer_position":"C","vocabulary_domain":"seed ecology","sentence_length_target":19,"clause_count_target":2,"distractor_type":["wrong_verb_form","wrong_voice","fragment"]},
+      {"item_id":"batch1-struct-009","primary_target":"COMPARATIVES_DEGREE","subtype":"adjective plus enough plus to-infinitive result construction","difficulty":"MEDIUM","correct_answer_position":"B","vocabulary_domain":"astronomical instrumentation","sentence_length_target":16,"clause_count_target":1,"distractor_type":["wrong_degree_form","wrong_verb_form","missing_required_element"]},
+      {"item_id":"batch1-struct-010","primary_target":"PARALLEL_STRUCTURE","subtype":"parallel bare infinitives in a three-part list","difficulty":"MEDIUM","correct_answer_position":"C","vocabulary_domain":"geological fieldwork","sentence_length_target":18,"clause_count_target":1,"distractor_type":["wrong_verb_form","incorrect_part_of_speech","wrong_word_order"]},
+      {"item_id":"batch1-struct-011","primary_target":"WORD_ORDER_MODIFICATION","subtype":"adjective order inside a complex noun phrase","difficulty":"HARD","correct_answer_position":"D","vocabulary_domain":"museum studies","sentence_length_target":20,"clause_count_target":2,"distractor_type":["wrong_word_order","incorrect_part_of_speech","extraneous_element"]},
+      {"item_id":"batch1-struct-012","primary_target":"INVERSION","subtype":"subject-auxiliary inversion after only after","difficulty":"HARD","correct_answer_position":"B","vocabulary_domain":"glaciology","sentence_length_target":18,"clause_count_target":2,"distractor_type":["missing_required_element","wrong_word_order","fragment"]},
+      {"item_id":"batch1-struct-013","primary_target":"EXISTENTIAL_EXPLETIVE","subtype":"there plus be with a plural postposed noun phrase","difficulty":"EASY","correct_answer_position":"A","vocabulary_domain":"wind erosion","sentence_length_target":17,"clause_count_target":1,"distractor_type":["agreement_error","incorrect_reference","missing_required_element"]},
+      {"item_id":"batch1-struct-014","primary_target":"REFERENCE_AND_DETERMINERS","subtype":"plural pronoun reference for a coordinated human subject","difficulty":"MEDIUM","correct_answer_position":"C","vocabulary_domain":"apprenticeship training","sentence_length_target":16,"clause_count_target":2,"distractor_type":["incorrect_reference","agreement_error","incorrect_part_of_speech"]},
+      {"item_id":"batch1-struct-015","primary_target":"WORD_CLASS_FORM","subtype":"noun required as the object of a preposition","difficulty":"MEDIUM","correct_answer_position":"D","vocabulary_domain":"experimental measurement","sentence_length_target":15,"clause_count_target":2,"distractor_type":["incorrect_part_of_speech","wrong_word_order","missing_required_element"]}
+    ]
+  },
+  "written_expression": {
+    "count": 25,
+    "items": [
+      {"item_id":"batch1-we-001","primary_target":"REFERENCE_AND_DETERMINERS","subtype":"singular head noun in an of-phrase subject","tested_error_type":"agreement_error","error_span_type":"noun_phrase","error_scope":"clause_level","error_location":"early","difficulty":"EASY","correct_answer_position":"A","vocabulary_domain":"instrument calibration","sentence_length_target":17},
+      {"item_id":"batch1-we-002","primary_target":"WORD_CLASS_FORM","subtype":"adjective required before a plural head noun","tested_error_type":"incorrect_part_of_speech","error_span_type":"adjective","error_scope":"local","error_location":"middle","difficulty":"EASY","correct_answer_position":"B","vocabulary_domain":"mechanical engineering","sentence_length_target":16},
+      {"item_id":"batch1-we-003","primary_target":"VERB_FORM_VOICE","subtype":"simple past main verb after a past perfect subordinate clause","tested_error_type":"wrong_verb_form","error_span_type":"verb_phrase","error_scope":"clause_level","error_location":"late","difficulty":"EASY","correct_answer_position":"C","vocabulary_domain":"lighthouse preservation","sentence_length_target":20},
+      {"item_id":"batch1-we-004","primary_target":"CONNECTORS_CONJUNCTIONS","subtype":"adjective-governed preposition in an interested-in phrase","tested_error_type":"wrong_preposition_collocation","error_span_type":"prepositional_phrase","error_scope":"local","error_location":"sentence_final","difficulty":"EASY","correct_answer_position":"D","vocabulary_domain":"archival science","sentence_length_target":18},
+      {"item_id":"batch1-we-005","primary_target":"PARALLEL_STRUCTURE","subtype":"gerund complements coordinated after a training preposition","tested_error_type":"wrong_verb_form","error_span_type":"gerund_phrase","error_scope":"clause_level","error_location":"early","difficulty":"EASY","correct_answer_position":"A","vocabulary_domain":"craft education","sentence_length_target":18},
+      {"item_id":"batch1-we-006","primary_target":"VERB_COMPLEMENTATION","subtype":"adjective complement after responsible for","tested_error_type":"wrong_preposition_collocation","error_span_type":"prepositional_phrase","error_scope":"local","error_location":"middle","difficulty":"EASY","correct_answer_position":"B","vocabulary_domain":"mountain architecture","sentence_length_target":17},
+      {"item_id":"batch1-we-007","primary_target":"RELATIVE_CLAUSES","subtype":"subject relative pronoun for a human antecedent","tested_error_type":"incorrect_relative_marker","error_span_type":"relative_marker","error_scope":"clause_level","error_location":"late","difficulty":"EASY","correct_answer_position":"C","vocabulary_domain":"community surveying","sentence_length_target":16},
+      {"item_id":"batch1-we-008","primary_target":"WORD_ORDER_MODIFICATION","subtype":"participial adjective before a material adjective in a noun phrase","tested_error_type":"wrong_word_order","error_span_type":"noun_phrase","error_scope":"local","error_location":"sentence_final","difficulty":"EASY","correct_answer_position":"D","vocabulary_domain":"museum curation","sentence_length_target":17},
+      {"item_id":"batch1-we-009","primary_target":"CLAUSE_STRUCTURE","subtype":"singular head noun with an of-phrase interrupter","tested_error_type":"agreement_error","error_span_type":"main_verb","error_scope":"clause_level","error_location":"early","difficulty":"EASY","correct_answer_position":"A","vocabulary_domain":"oral history","sentence_length_target":17},
+      {"item_id":"batch1-we-010","primary_target":"CONNECTORS_CONJUNCTIONS","subtype":"removal of a redundant coordinator after an although clause","tested_error_type":"extraneous_element","error_span_type":"conjunction","error_scope":"clause_level","error_location":"middle","difficulty":"EASY","correct_answer_position":"B","vocabulary_domain":"transportation geography","sentence_length_target":17},
+      {"item_id":"batch1-we-011","primary_target":"VERB_FORM_VOICE","subtype":"passive transitive verb requiring a by-agent phrase","tested_error_type":"wrong_voice","error_span_type":"verb_phrase","error_scope":"clause_level","error_location":"late","difficulty":"EASY","correct_answer_position":"C","vocabulary_domain":"manuscript librarianship","sentence_length_target":18},
+      {"item_id":"batch1-we-012","primary_target":"NONFINITE_VERB_PHRASES","subtype":"past participle after a perfect auxiliary","tested_error_type":"wrong_verb_form","error_span_type":"verb_phrase","error_scope":"clause_level","error_location":"sentence_final","difficulty":"EASY","correct_answer_position":"D","vocabulary_domain":"laboratory procedure","sentence_length_target":20},
+      {"item_id":"batch1-we-013","primary_target":"REFERENCE_AND_DETERMINERS","subtype":"pronoun without an explicit antecedent","tested_error_type":"incorrect_reference","error_span_type":"pronoun","error_scope":"sentence_level","error_location":"sentence_initial","difficulty":"EASY","correct_answer_position":"A","vocabulary_domain":"research equipment","sentence_length_target":17},
+      {"item_id":"batch1-we-014","primary_target":"WORD_CLASS_FORM","subtype":"adjective required as a noun modifier after an article","tested_error_type":"incorrect_part_of_speech","error_span_type":"adjective","error_scope":"local","error_location":"middle","difficulty":"EASY","correct_answer_position":"B","vocabulary_domain":"public lectures","sentence_length_target":16},
+      {"item_id":"batch1-we-015","primary_target":"COMPARATIVES_DEGREE","subtype":"comparative adjective without a redundant more marker","tested_error_type":"wrong_degree_form","error_span_type":"comparative_marker","error_scope":"local","error_location":"late","difficulty":"MEDIUM","correct_answer_position":"C","vocabulary_domain":"regional transportation","sentence_length_target":15},
+      {"item_id":"batch1-we-016","primary_target":"ADVERBIAL_CLAUSES","subtype":"because clause rather than because-of before a finite clause","tested_error_type":"incorrect_subordinator","error_span_type":"conjunction","error_scope":"clause_level","error_location":"sentence_final","difficulty":"MEDIUM","correct_answer_position":"D","vocabulary_domain":"greenhouse cultivation","sentence_length_target":17},
+      {"item_id":"batch1-we-017","primary_target":"EXISTENTIAL_EXPLETIVE","subtype":"there-be agreement with a plural postposed noun phrase","tested_error_type":"agreement_error","error_span_type":"verb_phrase","error_scope":"clause_level","error_location":"sentence_initial","difficulty":"EASY","correct_answer_position":"A","vocabulary_domain":"theater architecture","sentence_length_target":12},
+      {"item_id":"batch1-we-018","primary_target":"NOUN_CLAUSES","subtype":"embedded why-question with statement word order","tested_error_type":"wrong_word_order","error_span_type":"verb_phrase","error_scope":"cross_clause","error_location":"middle","difficulty":"MEDIUM","correct_answer_position":"B","vocabulary_domain":"data analysis","sentence_length_target":17},
+      {"item_id":"batch1-we-019","primary_target":"VERB_COMPLEMENTATION","subtype":"adjective-governed dependent-on preposition","tested_error_type":"wrong_preposition_collocation","error_span_type":"prepositional_phrase","error_scope":"local","error_location":"late","difficulty":"MEDIUM","correct_answer_position":"C","vocabulary_domain":"thermal materials","sentence_length_target":15},
+      {"item_id":"batch1-we-020","primary_target":"PARALLEL_STRUCTURE","subtype":"gerund coordination after recommends","tested_error_type":"wrong_verb_form","error_span_type":"infinitive_phrase","error_scope":"clause_level","error_location":"sentence_final","difficulty":"MEDIUM","correct_answer_position":"D","vocabulary_domain":"municipal planning","sentence_length_target":17},
+      {"item_id":"batch1-we-021","primary_target":"WORD_CLASS_FORM","subtype":"adverb required to modify a verb","tested_error_type":"incorrect_part_of_speech","error_span_type":"adverb","error_scope":"local","error_location":"middle","difficulty":"EASY","correct_answer_position":"A","vocabulary_domain":"plant physiology","sentence_length_target":15},
+      {"item_id":"batch1-we-022","primary_target":"NONFINITE_VERB_PHRASES","subtype":"reduced passive modifier before a finite passive predicate","tested_error_type":"wrong_voice","error_span_type":"participial_phrase","error_scope":"clause_level","error_location":"early","difficulty":"MEDIUM","correct_answer_position":"B","vocabulary_domain":"wetland ecology","sentence_length_target":16},
+      {"item_id":"batch1-we-023","primary_target":"VERB_FORM_VOICE","subtype":"simple past main verb after a past perfect passive clause","tested_error_type":"wrong_verb_form","error_span_type":"main_verb","error_scope":"cross_clause","error_location":"middle","difficulty":"HARD","correct_answer_position":"B","vocabulary_domain":"bridge engineering","sentence_length_target":17},
+      {"item_id":"batch1-we-024","primary_target":"REFERENCE_AND_DETERMINERS","subtype":"countable quantifier before a plural count noun","tested_error_type":"agreement_error","error_span_type":"quantifier","error_scope":"local","error_location":"late","difficulty":"MEDIUM","correct_answer_position":"C","vocabulary_domain":"questionnaire design","sentence_length_target":14},
+      {"item_id":"batch1-we-025","primary_target":"WORD_CLASS_FORM","subtype":"adverb required to modify an adverb","tested_error_type":"incorrect_part_of_speech","error_span_type":"adverb","error_scope":"local","error_location":"middle","difficulty":"HARD","correct_answer_position":"A","vocabulary_domain":"horticultural experiments","sentence_length_target":15}
+    ]
+  }
+}

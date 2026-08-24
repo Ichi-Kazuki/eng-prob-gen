@@ -1,0 +1,62 @@
+{
+  "items": [
+    {
+      "item_id": "pilot-we-009",
+      "section": "Written Expression",
+      "item": {
+        "item_id": "pilot-we-009",
+        "section": "Written Expression",
+        "primary_target": "PARALLEL_STRUCTURE",
+        "subtype": "parallel verb forms in a list (gerund vs. base form)",
+        "secondary_features": [
+          "compound subject",
+          "infinitive phrase list"
+        ],
+        "tested_error_type": "wrong_verb_form",
+        "error_scope": "sentence_level",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "chemistry",
+        "sentence": "Measuring reaction rates precisely, to control temperature fluctuations, and to record every observation carefully are essential skills for any laboratory chemist.",
+        "marked_parts": {
+          "A": "Measuring reaction rates precisely",
+          "B": "to control temperature fluctuations",
+          "C": "and to record every observation carefully",
+          "D": "are essential skills for any laboratory chemist"
+        },
+        "correct_answer": "A",
+        "minimal_correction": "To measure reaction rates precisely",
+        "answer_explanation": "The compound subject lists parallel infinitive phrases (\"to control,\" \"to record\"), so the first item must also be an infinitive (\"To measure\") rather than the gerund \"Measuring.\""
+      },
+      "disagreement_reasons": [
+        "solver_ambiguous"
+      ],
+      "generator_answer": "A",
+      "reviewer_answer": "A",
+      "solver_answer": "AMBIGUOUS",
+      "solver_confidence": "MEDIUM",
+      "issues": [
+        {
+          "severity": "MINOR",
+          "category": "subtype_wording_precision",
+          "description": "Subtype text reads \"gerund vs. base form\" but the actual contrast in the sentence is gerund vs. to-infinitive (B and C are infinitive phrases \"to control\"/\"to record\"), not bare base form. Wording only; does not affect the correctness of the item.",
+          "related_check": "metadata_consistency"
+        }
+      ],
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "MANUAL_REVIEW"
+      ],
+      "possible_actions": [
+        "ACCEPT",
+        "REGENERATE",
+        "DISCARD"
+      ],
+      "failure_classification": {
+        "primary_failure_reason": "solver_ambiguous",
+        "secondary_reasons": []
+      }
+    }
+  ]
+}

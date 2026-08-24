@@ -1,0 +1,951 @@
+{
+  "_purpose": "Orchestrator state-machine replay over the existing 6-item smoke fixtures. Not a new content generation run.",
+  "pipeline_version": "1.0.0",
+  "items": [
+    {
+      "item_id": "gen-struct-001",
+      "concept_id": "gen-struct-001",
+      "section": "Structure",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "generator": {
+        "answer": "C"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "difficulty": "MEDIUM"
+      },
+      "solver": {
+        "answer": "C",
+        "confidence": "HIGH"
+      },
+      "consensus": true,
+      "batch_slot": {
+        "section": "Structure",
+        "primary_target": "RELATIVE_CLAUSES",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "C",
+        "vocabulary_domain": "marine biology"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": {
+        "item_id": "gen-struct-001",
+        "section": "Structure",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "marine biology",
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "stem": "The marine biologist ____ has spent the past decade cataloguing coral species along the Pacific coast.",
+        "options": {
+          "A": "which discovered the new coral species",
+          "B": "who discover the new coral species",
+          "C": "who discovered the new coral species",
+          "D": "discovered the new coral species"
+        },
+        "correct_answer": "C",
+        "explanation": {
+          "answer_explanation": "The gap in the relative clause is the subject and refers to a person, so the clause requires the subject relative pronoun 'who' together with a finite verb that agrees with the singular antecedent and matches the past time frame of the discovery.",
+          "distractor_rationales": {
+            "A": "'which' is used for non-human antecedents; 'the marine biologist' is a person, so 'who' is required instead.",
+            "B": "'discover' does not agree with the third-person singular subject that 'who' stands for ('the marine biologist'); the clause needs 'discovered'.",
+            "C": "correct — 'who' correctly introduces a subject relative clause referring to a person, and 'discovered' matches the intended past time frame.",
+            "D": "omitting the relative pronoun 'who' is only grammatical when the clause's gap is an object, not a subject; without it the sentence collapses into two finite clauses with no connector between them."
+          }
+        },
+        "taxonomy": {
+          "primary_target": "RELATIVE_CLAUSES",
+          "subtype": "restrictive relative clause with subject gap (who + finite verb)",
+          "secondary_features": [
+            "subject relative pronoun",
+            "past-tense embedded verb"
+          ]
+        }
+      },
+      "qa_audit": {
+        "item_id": "gen-struct-001",
+        "concept_id": "gen-struct-001",
+        "state": "ACCEPTED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "ACCEPTED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "reviewer": {
+          "item_id": "gen-struct-001",
+          "section": "Structure",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "C",
+          "generator_answer": "C",
+          "answer_match": true,
+          "reviewer_difficulty": "MEDIUM",
+          "generator_difficulty": "MEDIUM",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW"
+        },
+        "solver": {
+          "item_id": "gen-struct-001",
+          "section": "Structure",
+          "solver_answer": "C",
+          "confidence": "HIGH",
+          "reason": "Only 'who discovered the new coral species' works: the gap is the subject of the relative clause and the antecedent is a person, so it needs the subject relative pronoun 'who' plus a verb agreeing with it. A uses 'which', wrong for a human antecedent. B uses 'discover', which does not agree with the implied third-person singular subject. D omits the relative pronoun, which is only possible when the gap is an object, not a subject; without it the sentence has two finite verbs ('discovered'...'has spent') with no connector.",
+          "ambiguity_detected": false
+        },
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "options",
+            "section",
+            "stem"
+          ]
+        },
+        "consensus": {
+          "auto_accept": true,
+          "routing": "ACCEPTED",
+          "failed_conditions": [],
+          "disagreement_reasons": []
+        },
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: auto_accept"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T15:18:03.809699+00:00",
+          "updated": "2026-08-23T15:18:04.108010+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "gen-struct-002",
+      "concept_id": "gen-struct-002",
+      "section": "Structure",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "generator": {
+        "answer": "A"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "A",
+        "difficulty": "EASY"
+      },
+      "solver": {
+        "answer": "A",
+        "confidence": "HIGH"
+      },
+      "consensus": true,
+      "batch_slot": {
+        "section": "Structure",
+        "primary_target": "VERB_FORM_VOICE",
+        "difficulty": "EASY",
+        "correct_answer_position": "A",
+        "vocabulary_domain": "economic history"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": {
+        "item_id": "gen-struct-002",
+        "section": "Structure",
+        "difficulty": "EASY",
+        "vocabulary_domain": "economic history",
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "stem": "During the early twentieth century, tariffs on imported steel ____ by the federal government in order to protect domestic manufacturers.",
+        "options": {
+          "A": "were raised significantly",
+          "B": "raised significantly",
+          "C": "was raised significantly",
+          "D": "are raised significantly"
+        },
+        "correct_answer": "A",
+        "explanation": {
+          "answer_explanation": "The agent phrase 'by the federal government' signals passive voice, and the subject 'tariffs' is plural, so the verb must be the plural past-tense passive form 'were raised.'",
+          "distractor_rationales": {
+            "A": "correct — 'were raised' correctly forms the plural past-tense passive, matching both the plural subject 'tariffs' and the 'by' agent phrase.",
+            "B": "'raised' without an auxiliary is active voice; with the agent phrase 'by the federal government' present, the passive auxiliary 'were' is required.",
+            "C": "'was' is singular, but the subject 'tariffs' is plural; the auxiliary must be 'were'.",
+            "D": "'are' is present tense, which is inconsistent with the past time frame established by 'During the early twentieth century.'"
+          }
+        },
+        "taxonomy": {
+          "primary_target": "VERB_FORM_VOICE",
+          "subtype": "passive voice in main clause with plural subject",
+          "secondary_features": [
+            "agent phrase 'by + NP'",
+            "past-tense passive"
+          ]
+        }
+      },
+      "qa_audit": {
+        "item_id": "gen-struct-002",
+        "concept_id": "gen-struct-002",
+        "state": "ACCEPTED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "ACCEPTED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "reviewer": {
+          "item_id": "gen-struct-002",
+          "section": "Structure",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "A",
+          "generator_answer": "A",
+          "answer_match": true,
+          "reviewer_difficulty": "EASY",
+          "generator_difficulty": "EASY",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW"
+        },
+        "solver": {
+          "item_id": "gen-struct-002",
+          "section": "Structure",
+          "solver_answer": "A",
+          "confidence": "HIGH",
+          "reason": "'were raised significantly' is the only option that is both passive (matching the 'by the federal government' agent phrase) and correctly agrees with the plural subject 'tariffs' in past tense. B lacks the passive auxiliary. C uses the singular auxiliary 'was' against a plural subject. D is present tense, inconsistent with 'During the early twentieth century'.",
+          "ambiguity_detected": false
+        },
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "options",
+            "section",
+            "stem"
+          ]
+        },
+        "consensus": {
+          "auto_accept": true,
+          "routing": "ACCEPTED",
+          "failed_conditions": [],
+          "disagreement_reasons": []
+        },
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: auto_accept"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T15:18:04.108064+00:00",
+          "updated": "2026-08-23T15:18:04.377693+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "gen-struct-003",
+      "concept_id": "gen-struct-003",
+      "section": "Structure",
+      "state": "REVISE_REQUIRED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "REVISE_REQUIRED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 1,
+      "generator": {
+        "answer": "D"
+      },
+      "reviewer": {
+        "verdict": "REVISE",
+        "independent_answer": "D",
+        "difficulty": "HARD"
+      },
+      "solver": null,
+      "consensus": false,
+      "batch_slot": {
+        "section": "Structure",
+        "primary_target": "PARALLEL_STRUCTURE",
+        "difficulty": "HARD",
+        "correct_answer_position": "D",
+        "vocabulary_domain": "astronomy"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": null,
+      "qa_audit": {
+        "item_id": "gen-struct-003",
+        "concept_id": "gen-struct-003",
+        "state": "REVISE_REQUIRED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "REVISE_REQUIRED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 1,
+        "reviewer": {
+          "item_id": "gen-struct-003",
+          "section": "Structure",
+          "verdict": "REVISE",
+          "critical_failure": false,
+          "independent_answer": "D",
+          "generator_answer": "D",
+          "answer_match": true,
+          "reviewer_difficulty": "HARD",
+          "generator_difficulty": "HARD",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "REVISE",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [
+            {
+              "severity": "MAJOR",
+              "category": "distractor_marginal_validity",
+              "description": "Option C ('possesses also a thin, nitrogen-rich atmosphere...') postposes 'also' after the verb and before its object. This ordering is attested in more formal/literary registers ('the general possesses also a keen sense of humor') and is not unambiguously ungrammatical in the way the other three distractors are. A careful test-taker could defend it as merely stylistically marked rather than incorrect, which threatens the 'VALID = exactly 1' requirement (option C rates MARGINAL rather than a clean INVALID under independent review).",
+              "related_check": "answer_uniqueness"
+            }
+          ],
+          "revision_requirements": [
+            "Replace distractor C with an unambiguously ungrammatical word-order error (e.g., splitting the verb from its auxiliary, or placing 'also' somewhere no register accepts, such as 'possesses a thin also nitrogen-rich atmosphere'), so that only option D is defensible as correct."
+          ],
+          "source_similarity_risk": "LOW"
+        },
+        "solver": null,
+        "leakage_check": null,
+        "consensus": null,
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer REVISE (cycle 1/2); revision_requirements handed back to Generator, independent_answer withheld"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T15:18:04.377841+00:00",
+          "updated": "2026-08-23T15:18:04.519411+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "gen-we-001",
+      "concept_id": "gen-we-001",
+      "section": "Written Expression",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "generator": {
+        "answer": "B"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "B",
+        "difficulty": "EASY"
+      },
+      "solver": {
+        "answer": "B",
+        "confidence": "HIGH"
+      },
+      "consensus": true,
+      "batch_slot": {
+        "section": "Written Expression",
+        "primary_target": "WORD_CLASS_FORM",
+        "difficulty": "EASY",
+        "correct_answer_position": "B",
+        "vocabulary_domain": "geology",
+        "tested_error_type": "incorrect_part_of_speech",
+        "error_scope": "local"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": {
+        "item_id": "gen-we-001",
+        "section": "Written Expression",
+        "difficulty": "EASY",
+        "vocabulary_domain": "geology",
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "sentence": "The geologist carefully examined the unusually rock formation before concluding that it had formed through volcanic activity.",
+        "marked_parts": {
+          "A": "carefully",
+          "B": "unusually",
+          "C": "had formed",
+          "D": "volcanic activity"
+        },
+        "correct_answer": "B",
+        "explanation": {
+          "answer_explanation": "'Unusually' is an adverb, but here it modifies the noun 'rock formation,' which requires the adjective form 'unusual.' The other marked parts are standard: 'carefully' correctly modifies the verb 'examined,' 'had formed' is an appropriate past-perfect form for an action prior to the conclusion, and 'volcanic activity' is a correctly formed noun phrase.",
+          "minimal_correction": "unusual"
+        },
+        "taxonomy": {
+          "primary_target": "WORD_CLASS_FORM",
+          "subtype": "adjective required, adverb used to modify a following noun",
+          "secondary_features": [
+            "noun-phrase-internal modifier",
+            "past perfect tense"
+          ],
+          "tested_error_type": "incorrect_part_of_speech",
+          "error_scope": "local"
+        }
+      },
+      "qa_audit": {
+        "item_id": "gen-we-001",
+        "concept_id": "gen-we-001",
+        "state": "ACCEPTED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "ACCEPTED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "reviewer": {
+          "item_id": "gen-we-001",
+          "section": "Written Expression",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "B",
+          "generator_answer": "B",
+          "answer_match": true,
+          "reviewer_difficulty": "EASY",
+          "generator_difficulty": "EASY",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "B",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "solver": {
+          "item_id": "gen-we-001",
+          "section": "Written Expression",
+          "solver_answer": "B",
+          "confidence": "HIGH",
+          "reason": "'unusually' is an adverb, but it modifies the noun 'rock formation', which requires the adjective 'unusual'. 'carefully' correctly modifies 'examined', 'had formed' is an appropriate past-perfect form for an action prior to the conclusion, and 'volcanic activity' is a well-formed noun phrase.",
+          "suggested_correction": "unusual",
+          "ambiguity_detected": false
+        },
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "marked_parts",
+            "section",
+            "sentence"
+          ]
+        },
+        "consensus": {
+          "auto_accept": true,
+          "routing": "ACCEPTED",
+          "failed_conditions": [],
+          "disagreement_reasons": []
+        },
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: auto_accept"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T15:18:04.519455+00:00",
+          "updated": "2026-08-23T15:18:04.768030+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "gen-we-002",
+      "concept_id": "gen-we-002",
+      "section": "Written Expression",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "generator": {
+        "answer": "A"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "A",
+        "difficulty": "MEDIUM"
+      },
+      "solver": {
+        "answer": "A",
+        "confidence": "HIGH"
+      },
+      "consensus": true,
+      "batch_slot": {
+        "section": "Written Expression",
+        "primary_target": "CLAUSE_STRUCTURE",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "A",
+        "vocabulary_domain": "urban planning",
+        "tested_error_type": "agreement_error",
+        "error_scope": "clause_level"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": {
+        "item_id": "gen-we-002",
+        "section": "Written Expression",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "urban planning",
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "sentence": "The proposal for new bicycle lanes throughout downtown neighborhoods have generated considerable attention from residents and city planners who study traffic patterns.",
+        "marked_parts": {
+          "A": "have",
+          "B": "considerable",
+          "C": "attention from residents",
+          "D": "who"
+        },
+        "correct_answer": "A",
+        "explanation": {
+          "answer_explanation": "The subject of the clause is the singular noun 'proposal'; the intervening plural phrase 'bicycle lanes throughout downtown neighborhoods' does not change the grammatical number of the subject, so the verb must be the singular 'has,' not 'have.' The other marked parts are standard: 'considerable' correctly modifies 'attention,' 'attention from residents' is a well-formed noun phrase, and 'who' correctly introduces a relative clause referring to the plural, human antecedent 'city planners.'",
+          "minimal_correction": "has"
+        },
+        "taxonomy": {
+          "primary_target": "CLAUSE_STRUCTURE",
+          "subtype": "subject-verb agreement across intervening phrase",
+          "secondary_features": [
+            "relative clause with 'who'",
+            "plural intervening noun phrase"
+          ],
+          "tested_error_type": "agreement_error",
+          "error_scope": "clause_level"
+        }
+      },
+      "qa_audit": {
+        "item_id": "gen-we-002",
+        "concept_id": "gen-we-002",
+        "state": "ACCEPTED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "ACCEPTED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "reviewer": {
+          "item_id": "gen-we-002",
+          "section": "Written Expression",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "A",
+          "generator_answer": "A",
+          "answer_match": true,
+          "reviewer_difficulty": "MEDIUM",
+          "generator_difficulty": "MEDIUM",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "A",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "solver": {
+          "item_id": "gen-we-002",
+          "section": "Written Expression",
+          "solver_answer": "A",
+          "confidence": "HIGH",
+          "reason": "The subject of the clause is the singular noun 'proposal'; the intervening plural phrase 'bicycle lanes throughout downtown neighborhoods' does not change its number, so the verb must be 'has', not 'have'. 'considerable' correctly modifies 'attention', 'attention from residents' is a well-formed noun phrase, and 'who' correctly introduces a relative clause for the plural human antecedent 'city planners'.",
+          "suggested_correction": "has",
+          "ambiguity_detected": false
+        },
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "marked_parts",
+            "section",
+            "sentence"
+          ]
+        },
+        "consensus": {
+          "auto_accept": true,
+          "routing": "ACCEPTED",
+          "failed_conditions": [],
+          "disagreement_reasons": []
+        },
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: auto_accept"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T15:18:04.768084+00:00",
+          "updated": "2026-08-23T15:18:05.022725+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "gen-we-003",
+      "concept_id": "gen-we-003",
+      "section": "Written Expression",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "generator": {
+        "answer": "D"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "difficulty": "HARD"
+      },
+      "solver": {
+        "answer": "D",
+        "confidence": "MEDIUM"
+      },
+      "consensus": true,
+      "batch_slot": {
+        "section": "Written Expression",
+        "primary_target": "COMPARATIVES_DEGREE",
+        "difficulty": "HARD",
+        "correct_answer_position": "D",
+        "vocabulary_domain": "meteorology",
+        "tested_error_type": "wrong_degree_form",
+        "error_scope": "sentence_level"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1"
+      },
+      "accepted_item": {
+        "item_id": "gen-we-003",
+        "section": "Written Expression",
+        "difficulty": "HARD",
+        "vocabulary_domain": "meteorology",
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "sentence": "Meteorologists compared two competing radar systems and concluded that, of the two, the newer model was significantly the most reliable during periods of heavy precipitation.",
+        "marked_parts": {
+          "A": "compared",
+          "B": "the newer model",
+          "C": "significantly",
+          "D": "the most"
+        },
+        "correct_answer": "D",
+        "explanation": {
+          "answer_explanation": "Only two radar systems are being compared, as established by 'of the two' earlier in the sentence, so the comparative form 'more reliable' is required; the superlative 'the most' is reserved for comparisons among three or more items. The other marked parts are standard: 'compared' is a correctly formed past-tense verb, 'the newer model' is a well-formed noun phrase, and 'significantly' correctly modifies the degree expression.",
+          "minimal_correction": "more"
+        },
+        "taxonomy": {
+          "primary_target": "COMPARATIVES_DEGREE",
+          "subtype": "superlative used for a two-item comparison (should be comparative)",
+          "secondary_features": [
+            "adverb of degree 'significantly'",
+            "two-item comparison established earlier in the sentence"
+          ],
+          "tested_error_type": "wrong_degree_form",
+          "error_scope": "sentence_level"
+        }
+      },
+      "qa_audit": {
+        "item_id": "gen-we-003",
+        "concept_id": "gen-we-003",
+        "state": "ACCEPTED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "ACCEPTED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "reviewer": {
+          "item_id": "gen-we-003",
+          "section": "Written Expression",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "D",
+          "generator_answer": "D",
+          "answer_match": true,
+          "reviewer_difficulty": "HARD",
+          "generator_difficulty": "HARD",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "D",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "solver": {
+          "item_id": "gen-we-003",
+          "section": "Written Expression",
+          "solver_answer": "D",
+          "confidence": "MEDIUM",
+          "reason": "'of the two' earlier in the sentence establishes that only two radar systems are being compared, so the comparative 'more reliable' is required; the superlative 'the most' is reserved for comparisons among three or more items. 'compared', 'the newer model', and 'significantly' are all standard as written.",
+          "suggested_correction": "more",
+          "ambiguity_detected": false
+        },
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "marked_parts",
+            "section",
+            "sentence"
+          ]
+        },
+        "consensus": {
+          "auto_accept": true,
+          "routing": "ACCEPTED",
+          "failed_conditions": [],
+          "disagreement_reasons": []
+        },
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: auto_accept"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1"
+        },
+        "timestamps": {
+          "created": "2026-08-23T15:18:05.022774+00:00",
+          "updated": "2026-08-23T15:18:05.299329+00:00"
+        }
+      }
+    }
+  ],
+  "batch_summary": {
+    "planned": {
+      "primary_target": {
+        "RELATIVE_CLAUSES": 1,
+        "VERB_FORM_VOICE": 1,
+        "PARALLEL_STRUCTURE": 1,
+        "WORD_CLASS_FORM": 1,
+        "CLAUSE_STRUCTURE": 1,
+        "COMPARATIVES_DEGREE": 1
+      },
+      "difficulty": {
+        "MEDIUM": 2,
+        "EASY": 2,
+        "HARD": 2
+      },
+      "correct_answer_position": {
+        "C": 1,
+        "A": 2,
+        "D": 2,
+        "B": 1
+      },
+      "vocabulary_domain": {
+        "marine biology": 1,
+        "economic history": 1,
+        "astronomy": 1,
+        "geology": 1,
+        "urban planning": 1,
+        "meteorology": 1
+      },
+      "tested_error_type": {
+        "incorrect_part_of_speech": 1,
+        "agreement_error": 1,
+        "wrong_degree_form": 1
+      }
+    },
+    "actual_accepted": {
+      "primary_target": {
+        "RELATIVE_CLAUSES": 1,
+        "VERB_FORM_VOICE": 1,
+        "WORD_CLASS_FORM": 1,
+        "CLAUSE_STRUCTURE": 1,
+        "COMPARATIVES_DEGREE": 1
+      },
+      "difficulty": {
+        "MEDIUM": 2,
+        "EASY": 2,
+        "HARD": 1
+      },
+      "correct_answer_position": {
+        "C": 1,
+        "A": 2,
+        "B": 1,
+        "D": 1
+      },
+      "vocabulary_domain": {
+        "marine biology": 1,
+        "economic history": 1,
+        "geology": 1,
+        "urban planning": 1,
+        "meteorology": 1
+      },
+      "tested_error_type": {
+        "incorrect_part_of_speech": 1,
+        "agreement_error": 1,
+        "wrong_degree_form": 1
+      }
+    }
+  },
+  "solver_skip_log": [
+    "gen-struct-003: solver fixture data exists but was NOT sent to Solver (reviewer verdict != PASS; candidate state=REVISE_REQUIRED)"
+  ]
+}

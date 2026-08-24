@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "structure_item.schema.json",
+  "title": "TOEFL ITP Generator Agent - Structure (Part A) output item",
+  "description": "Schema-level validation only (spec section 9). Does not judge grammatical correctness, distractor quality, or TOEFL-ITP-likeness - that is Reviewer Agent's job.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_id",
+    "section",
+    "primary_target",
+    "subtype",
+    "secondary_features",
+    "difficulty",
+    "vocabulary_domain",
+    "stem",
+    "options",
+    "correct_answer",
+    "answer_explanation",
+    "distractor_rationales"
+  ],
+  "properties": {
+    "item_id": { "type": "string", "minLength": 1 },
+    "section": { "const": "Structure" },
+    "primary_target": {
+      "enum": [
+        "CLAUSE_STRUCTURE",
+        "NOUN_CLAUSES",
+        "RELATIVE_CLAUSES",
+        "ADVERBIAL_CLAUSES",
+        "CONNECTORS_CONJUNCTIONS",
+        "VERB_FORM_VOICE",
+        "VERB_COMPLEMENTATION",
+        "NONFINITE_VERB_PHRASES",
+        "COMPARATIVES_DEGREE",
+        "PARALLEL_STRUCTURE",
+        "WORD_ORDER_MODIFICATION",
+        "INVERSION",
+        "EXISTENTIAL_EXPLETIVE",
+        "REFERENCE_AND_DETERMINERS",
+        "WORD_CLASS_FORM"
+      ]
+    },
+    "subtype": { "type": "string", "minLength": 1 },
+    "secondary_features": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "difficulty": { "enum": ["EASY", "MEDIUM", "HARD"] },
+    "vocabulary_domain": { "type": "string", "minLength": 1 },
+    "stem": { "type": "string", "minLength": 1 },
+    "options": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B", "C", "D"],
+      "properties": {
+        "A": { "type": "string", "minLength": 1 },
+        "B": { "type": "string", "minLength": 1 },
+        "C": { "type": "string", "minLength": 1 },
+        "D": { "type": "string", "minLength": 1 }
+      }
+    },
+    "correct_answer": { "enum": ["A", "B", "C", "D"] },
+    "answer_explanation": { "type": "string", "minLength": 1 },
+    "distractor_rationales": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B", "C", "D"],
+      "properties": {
+        "A": { "type": "string", "minLength": 1 },
+        "B": { "type": "string", "minLength": 1 },
+        "C": { "type": "string", "minLength": 1 },
+        "D": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

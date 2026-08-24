@@ -1,0 +1,117 @@
+{
+  "_purpose": "Reviewer Agent's review results for the deliberately unsalvageable fixtures in analysis/reviewer_reject_test.json. Used to verify the Reviewer distinguishes REJECT (regenerate) from REVISE (locally fixable) when an item is broken beyond local repair.",
+  "items": [
+    {
+      "item_id": "reject-struct-001",
+      "section": "Structure",
+      "verdict": "REJECT",
+      "critical_failure": true,
+      "independent_answer": "NONE",
+      "generator_answer": "A",
+      "answer_match": false,
+      "reviewer_difficulty": "HARD",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": true,
+      "checks": {
+        "grammar_validity": "REJECT",
+        "answer_uniqueness": "REJECT",
+        "target_alignment": "REJECT",
+        "naturalness": "REJECT",
+        "toefl_style": "REJECT",
+        "distractor_quality": "REJECT",
+        "metadata_consistency": "REJECT"
+      },
+      "issues": [
+        {
+          "severity": "CRITICAL",
+          "category": "stem_defect_independent_of_blank",
+          "description": "'the committee's the annual reports' is a double-determiner collision (a possessive immediately followed by a second determiner) that is ungrammatical regardless of which option fills the blank.",
+          "related_check": "grammar_validity"
+        },
+        {
+          "severity": "CRITICAL",
+          "category": "stem_defect_independent_of_blank",
+          "description": "The clause after the blank, 'therefore the board eventually the initiative approved reluctantly', has scrambled word order (two bare noun phrases with no verb between them) that lies entirely outside the blank's scope and cannot be fixed by any option.",
+          "related_check": "grammar_validity"
+        },
+        {
+          "severity": "CRITICAL",
+          "category": "no_correct_answer",
+          "description": "Inserting each option in turn: A ('was fully reviewed by staff') mismatches the intended plural subject ('reports... was' instead of 'were') in addition to sitting inside an already-broken stem; B is non-finite and leaves the 'Because' clause without a main verb; C introduces an unintegrated second subject ('staff') alongside the existing subject; D is not a coherent phrase at all. None of the four options, even combined with fixing nothing else, produces a grammatical sentence.",
+          "related_check": "answer_uniqueness"
+        },
+        {
+          "severity": "CRITICAL",
+          "category": "ambiguous_target_grammar",
+          "description": "Because the stem simultaneously breaks possessive NP structure, relative-clause attachment, and clause-final word order, it is not possible to identify a single, confident primary_target being tested; the declared ADVERBIAL_CLAUSES label is not clearly supported over several equally plausible alternatives.",
+          "related_check": "target_alignment"
+        }
+      ],
+      "revision_requirements": [
+        "Do not attempt a local fix. Regenerate this item from a fresh, coherent stem: pick one grammar point to test, write a stem that is grammatical and semantically coherent apart from the blank, and design four options where exactly one is valid."
+      ],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "reject-we-002",
+      "section": "Written Expression",
+      "verdict": "REJECT",
+      "critical_failure": true,
+      "independent_answer": "AMBIGUOUS",
+      "generator_answer": "B",
+      "answer_match": false,
+      "reviewer_difficulty": "HARD",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": true,
+      "checks": {
+        "grammar_validity": "REJECT",
+        "answer_uniqueness": "REJECT",
+        "target_alignment": "REJECT",
+        "naturalness": "REJECT",
+        "toefl_style": "REJECT",
+        "distractor_quality": "REJECT",
+        "metadata_consistency": "REJECT"
+      },
+      "issues": [
+        {
+          "severity": "CRITICAL",
+          "category": "pervasive_multiple_errors",
+          "description": "A full-sentence audit finds five independent genuine errors: 'employees was' (agreement, needs 'were'), 'which effecting' (missing auxiliary / wrong verb form), 'will implementing' (invalid verb form, needs passive 'will be implemented'), 'despite of the objections' (non-standard preposition collocation), and 'whom attended' (wrong relative-pronoun case, needs 'who'). This is far beyond the single-error requirement for Written Expression.",
+          "related_check": "grammar_validity"
+        },
+        {
+          "severity": "CRITICAL",
+          "category": "error_outside_marked_spans",
+          "description": "'despite of the objections' is a genuine error that falls entirely outside all four marked spans (A-D), meaning the item's four candidate positions do not exhaustively represent the sentence's actual defects.",
+          "related_check": "answer_uniqueness"
+        },
+        {
+          "severity": "CRITICAL",
+          "category": "marked_span_boundary_flaw",
+          "description": "Marked span A ('was informed') does not itself contain the true defect near it: the subject-verb agreement mismatch is between 'employees' (outside the span) and 'was' (inside it), so span A reads as acceptable in isolation even though a genuine error sits immediately adjacent to it.",
+          "related_check": "distractor_quality"
+        },
+        {
+          "severity": "CRITICAL",
+          "category": "metadata_target_mismatch",
+          "description": "The declared metadata (primary_target REFERENCE_AND_DETERMINERS, tested_error_type incorrect_reference) matches none of the sentence's actual defects; there is no pronoun-antecedent reference problem anywhere in the sentence.",
+          "related_check": "metadata_consistency"
+        },
+        {
+          "severity": "CRITICAL",
+          "category": "correction_introduces_new_error",
+          "description": "The proposed minimal_correction ('which affects their benefits') introduces a new subject-verb agreement error: the plural subject 'policies' requires 'affect', not 'affects'.",
+          "related_check": "grammar_validity"
+        }
+      ],
+      "revision_requirements": [
+        "Do not attempt a local fix. Regenerate this item from a fresh sentence containing exactly one genuine error, redesign the four marked spans so each is a self-contained natural unit of scrutiny that jointly covers the sentence's real points of interest, and set metadata to match whichever single error is retained."
+      ],
+      "source_similarity_risk": "LOW",
+      "detected_error_count": 5,
+      "detected_error_position": "B",
+      "non_error_parts_valid": false,
+      "minimal_correction_valid": false
+    }
+  ]
+}

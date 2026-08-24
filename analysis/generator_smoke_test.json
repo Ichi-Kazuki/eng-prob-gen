@@ -1,0 +1,139 @@
+{
+  "items": [
+    {
+      "item_id": "gen-struct-001",
+      "section": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "restrictive relative clause with subject gap (who + finite verb)",
+      "secondary_features": ["subject relative pronoun", "past-tense embedded verb"],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "marine biology",
+      "stem": "The marine biologist ____ has spent the past decade cataloguing coral species along the Pacific coast.",
+      "options": {
+        "A": "which discovered the new coral species",
+        "B": "who discover the new coral species",
+        "C": "who discovered the new coral species",
+        "D": "discovered the new coral species"
+      },
+      "correct_answer": "C",
+      "answer_explanation": "The gap in the relative clause is the subject and refers to a person, so the clause requires the subject relative pronoun 'who' together with a finite verb that agrees with the singular antecedent and matches the past time frame of the discovery.",
+      "distractor_rationales": {
+        "A": "'which' is used for non-human antecedents; 'the marine biologist' is a person, so 'who' is required instead.",
+        "B": "'discover' does not agree with the third-person singular subject that 'who' stands for ('the marine biologist'); the clause needs 'discovered'.",
+        "C": "correct — 'who' correctly introduces a subject relative clause referring to a person, and 'discovered' matches the intended past time frame.",
+        "D": "omitting the relative pronoun 'who' is only grammatical when the clause's gap is an object, not a subject; without it the sentence collapses into two finite clauses with no connector between them."
+      }
+    },
+    {
+      "item_id": "gen-struct-002",
+      "section": "Structure",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "passive voice in main clause with plural subject",
+      "secondary_features": ["agent phrase 'by + NP'", "past-tense passive"],
+      "difficulty": "EASY",
+      "vocabulary_domain": "economic history",
+      "stem": "During the early twentieth century, tariffs on imported steel ____ by the federal government in order to protect domestic manufacturers.",
+      "options": {
+        "A": "were raised significantly",
+        "B": "raised significantly",
+        "C": "was raised significantly",
+        "D": "are raised significantly"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "The agent phrase 'by the federal government' signals passive voice, and the subject 'tariffs' is plural, so the verb must be the plural past-tense passive form 'were raised.'",
+      "distractor_rationales": {
+        "A": "correct — 'were raised' correctly forms the plural past-tense passive, matching both the plural subject 'tariffs' and the 'by' agent phrase.",
+        "B": "'raised' without an auxiliary is active voice; with the agent phrase 'by the federal government' present, the passive auxiliary 'were' is required.",
+        "C": "'was' is singular, but the subject 'tariffs' is plural; the auxiliary must be 'were'.",
+        "D": "'are' is present tense, which is inconsistent with the past time frame established by 'During the early twentieth century.'"
+      }
+    },
+    {
+      "item_id": "gen-struct-003",
+      "section": "Structure",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "correlative conjunction parallelism (not only...but also)",
+      "secondary_features": ["finite verb parallelism", "fixed correlative word order"],
+      "difficulty": "HARD",
+      "vocabulary_domain": "astronomy",
+      "stem": "The newly discovered exoplanet not only orbits its star at a distance suitable for liquid water but also ____ a thin, nitrogen-rich atmosphere detectable through spectroscopic analysis.",
+      "options": {
+        "A": "possession of",
+        "B": "also possesses",
+        "C": "possesses also",
+        "D": "possesses"
+      },
+      "correct_answer": "D",
+      "answer_explanation": "The correlative pair 'not only...but also' requires parallel verb phrases; since the first part uses the finite verb 'orbits,' the second part must use the matching finite verb form 'possesses.'",
+      "distractor_rationales": {
+        "A": "'possession of' is a noun phrase, not a finite verb, so it breaks the parallelism required after 'but also' with the verb 'orbits.'",
+        "B": "'also' is redundant here because 'but also' already supplies the correlative meaning; adding a second 'also' duplicates that function unnecessarily.",
+        "C": "placing 'also' after the verb disrupts the fixed 'not only...but also' correlative pattern, which requires 'also' to immediately follow 'but.'",
+        "D": "correct — 'possesses' is the finite verb form parallel to 'orbits,' correctly completing the 'not only...but also' construction."
+      }
+    },
+    {
+      "item_id": "gen-we-001",
+      "section": "Written Expression",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adjective required, adverb used to modify a following noun",
+      "secondary_features": ["noun-phrase-internal modifier", "past perfect tense"],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "geology",
+      "sentence": "The geologist carefully examined the unusually rock formation before concluding that it had formed through volcanic activity.",
+      "marked_parts": {
+        "A": "carefully",
+        "B": "unusually",
+        "C": "had formed",
+        "D": "volcanic activity"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "unusual",
+      "answer_explanation": "'Unusually' is an adverb, but here it modifies the noun 'rock formation,' which requires the adjective form 'unusual.' The other marked parts are standard: 'carefully' correctly modifies the verb 'examined,' 'had formed' is an appropriate past-perfect form for an action prior to the conclusion, and 'volcanic activity' is a correctly formed noun phrase."
+    },
+    {
+      "item_id": "gen-we-002",
+      "section": "Written Expression",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject-verb agreement across intervening phrase",
+      "secondary_features": ["relative clause with 'who'", "plural intervening noun phrase"],
+      "tested_error_type": "agreement_error",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "urban planning",
+      "sentence": "The proposal for new bicycle lanes throughout downtown neighborhoods have generated considerable attention from residents and city planners who study traffic patterns.",
+      "marked_parts": {
+        "A": "have",
+        "B": "considerable",
+        "C": "attention from residents",
+        "D": "who"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "has",
+      "answer_explanation": "The subject of the clause is the singular noun 'proposal'; the intervening plural phrase 'bicycle lanes throughout downtown neighborhoods' does not change the grammatical number of the subject, so the verb must be the singular 'has,' not 'have.' The other marked parts are standard: 'considerable' correctly modifies 'attention,' 'attention from residents' is a well-formed noun phrase, and 'who' correctly introduces a relative clause referring to the plural, human antecedent 'city planners.'"
+    },
+    {
+      "item_id": "gen-we-003",
+      "section": "Written Expression",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "superlative used for a two-item comparison (should be comparative)",
+      "secondary_features": ["adverb of degree 'significantly'", "two-item comparison established earlier in the sentence"],
+      "tested_error_type": "wrong_degree_form",
+      "error_scope": "sentence_level",
+      "difficulty": "HARD",
+      "vocabulary_domain": "meteorology",
+      "sentence": "Meteorologists compared two competing radar systems and concluded that, of the two, the newer model was significantly the most reliable during periods of heavy precipitation.",
+      "marked_parts": {
+        "A": "compared",
+        "B": "the newer model",
+        "C": "significantly",
+        "D": "the most"
+      },
+      "correct_answer": "D",
+      "minimal_correction": "more",
+      "answer_explanation": "Only two radar systems are being compared, as established by 'of the two' earlier in the sentence, so the comparative form 'more reliable' is required; the superlative 'the most' is reserved for comparisons among three or more items. The other marked parts are standard: 'compared' is a correctly formed past-tense verb, 'the newer model' is a well-formed noun phrase, and 'significantly' correctly modifies the degree expression."
+    }
+  ]
+}

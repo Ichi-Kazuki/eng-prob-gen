@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qa_audit.schema.json",
+  "title": "TOEFL ITP Orchestrator - qa_audit (internal-only, never shipped to the site)",
+  "description": "Full pipeline history for one candidate: Reviewer verdict, Solver answer, revision history, issues, timestamps, and agent/spec version stamps. Kept separate from accepted_item.schema.json by construction - orchestrator.build_qa_audit() never receives or copies fields into the public accepted_item, and vice versa. Descriptive documentation of orchestrator.build_qa_audit()'s output shape; not enforced by a JSON Schema library at runtime (see accepted_item.schema.json note).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_id", "concept_id", "state", "state_history", "generation_attempt",
+    "revision_count", "reviewer", "solver", "leakage_check", "consensus",
+    "failure", "notes", "versions", "timestamps"
+  ],
+  "properties": {
+    "item_id": { "type": "string" },
+    "concept_id": { "type": "string", "description": "Stable identifier across regeneration attempts for the same batch slot" },
+    "state": { "type": "string", "description": "One of the Orchestrator states, see TOEFL_ITP_GRAMMAR_PIPELINE.md section 2" },
+    "state_history": { "type": "array", "items": { "type": "string" } },
+    "generation_attempt": { "type": "integer", "minimum": 1 },
+    "revision_count": { "type": "integer", "minimum": 0 },
+    "reviewer": {
+      "description": "Full Reviewer Agent output object (see agents/toefl_itp_grammar_reviewer/schema/reviewer_output.schema.json), or null if the candidate never reached REVIEWING.",
+      "type": ["object", "null"]
+    },
+    "solver": {
+      "description": "Full Solver Agent output object (see agents/toefl_itp_grammar_solver/schema/solver_output.schema.json), or null if the candidate never reached SOLVING.",
+      "type": ["object", "null"]
+    },
+    "leakage_check": {
+      "type": ["object", "null"],
+      "properties": {
+        "ok": { "type": "boolean" },
+        "problems": { "type": "array", "items": { "type": "string" } },
+        "blinded_keys": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "consensus": {
+      "type": ["object", "null"],
+      "properties": {
+        "auto_accept": { "type": "boolean" },
+        "routing": { "type": "string" },
+        "failed_conditions": { "type": "array", "items": { "type": "string" } },
+        "disagreement_reasons": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "failure": {
+      "type": ["object", "null"],
+      "properties": {
+        "kind": { "enum": ["system", "content"] },
+        "stage": { "enum": ["generator", "reviewer", "solver"] },
+        "detail": { "type": "string" }
+      }
+    },
+    "notes": { "type": "array", "items": { "type": "string" } },
+    "versions": {
+      "type": "object",
+      "properties": {
+        "spec_version": { "type": "string" },
+        "taxonomy_version": { "type": "string" },
+        "generator_version": { "type": "string" },
+        "reviewer_version": { "type": "string" },
+        "solver_version": { "type": "string" }
+      }
+    },
+    "timestamps": {
+      "type": "object",
+      "properties": {
+        "created": { "type": "string" },
+        "updated": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,626 @@
+{
+  "spec_id": "TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM",
+  "spec_version": "1.0.0",
+  "date": "2026-08-24",
+  "status": "ADDENDUM_ONLY",
+  "scope": {
+    "section": "Written Expression",
+    "official_item_count": 125,
+    "official_marked_span_count": 500,
+    "official_marked_spans_per_item": 4,
+    "future_consumers": [
+      "Generator v1.2",
+      "Reviewer v1.2"
+    ],
+    "current_task_non_changes": [
+      "Generator v1.1",
+      "Reviewer v1.1",
+      "Solver",
+      "Orchestrator",
+      "grammar taxonomy",
+      "DB",
+      "Website"
+    ]
+  },
+  "classification_contract": {
+    "labels": {
+      "OBSERVED": "Directly measured or counted from the cited dataset. It is evidence, not automatically a generation quota.",
+      "DERIVED RULE": "A generation or review constraint logically derived from an OBSERVED fact.",
+      "HEURISTIC": "A practical safety recommendation or implementation choice not directly measured by the official data."
+    },
+    "requirement": "Every normative rule in this addendum must carry exactly one of the three labels above. OBSERVED facts must not be silently promoted to hard generation constraints."
+  },
+  "source_of_truth": {
+    "required_sources": [
+      "analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md",
+      "analysis/we_format/written_expression_format_official.json",
+      "analysis/we_format/written_expression_format_official.csv",
+      "analysis/we_format/written_expression_format_validation.json",
+      "specs/TOEFL_ITP_GRAMMAR_SPEC.md",
+      "specs/toefl_itp_grammar_spec.json",
+      "analysis/written_expression_items_all.json",
+      "analysis/WRITTEN_EXPRESSION_ANALYSIS_REPORT.md"
+    ],
+    "precedence": "Structured JSON/CSV artifacts are authoritative over presentation reports if a discrepancy appears.",
+    "official_sample": {
+      "practice_tests": ["B", "C", "D", "E", "F"],
+      "items_per_test": 25,
+      "item_count": 125,
+      "marked_spans_per_item": 4,
+      "marked_span_count": 500
+    },
+    "tokenization_rule": "Unicode-aware lexical tokens: letter/number sequences are words; internal apostrophes and hyphens remain inside one token; punctuation-only tokens are excluded. The same rule is used for sentences, spans, corrections, and gaps."
+  },
+  "relationship_to_grammar_spec": {
+    "existing_grammar_spec": "specs/TOEFL_ITP_GRAMMAR_SPEC.md",
+    "existing_grammar_json": "specs/toefl_itp_grammar_spec.json",
+    "grammar_spec_role": "what grammatical phenomenon to test",
+    "we_format_spec_role": "how a Written Expression item is physically and linguistically constructed",
+    "integration_mode": "additive layer; existing grammar specification is not rewritten"
+  },
+  "confidence_and_limitations": {
+    "official_counts": {
+      "classification": "OBSERVED",
+      "confidence": "HIGH",
+      "basis": "Full official 125-item analysis and 500 marked spans."
+    },
+    "official_sentence_remeasurement": {
+      "classification": "OBSERVED",
+      "confidence": "HIGH",
+      "all_remeasurement_deltas_zero": true
+    },
+    "official_span_position_and_gap": {
+      "classification": "OBSERVED",
+      "confidence": "APPROXIMATE",
+      "method": "ordered-PDF-geometry approximation",
+      "limitation": "The official PDF text layer has no reliable exact token offsets; span placement and gap values are ordered token-index approximations.",
+      "constraint_policy": {
+        "classification": "DERIVED RULE",
+        "statement": "Do not convert PDF gap values into over-precise absolute placement constraints."
+      }
+    }
+  },
+  "observed_dimensions": {
+    "sentence_length": {
+      "classification": "OBSERVED",
+      "sample_n": 125,
+      "unit": "words",
+      "statistics": {
+        "mean": 20.05,
+        "median": 20,
+        "min": 10,
+        "max": 33,
+        "stdev": 4.27
+      },
+      "bins": {
+        "<=10": 1,
+        "11-15": 15,
+        "16-20": 49,
+        "21-25": 48,
+        "26-30": 10,
+        "31+": 2
+      },
+      "notable_fact": {
+        "classification": "OBSERVED",
+        "expression": "sentence_word_count <= 15",
+        "count": 16,
+        "denominator": 125,
+        "ratio": 0.128
+      }
+    },
+    "marked_span_word_count": {
+      "classification": "OBSERVED",
+      "sample_n": 500,
+      "unit": "words",
+      "statistics": {
+        "mean": 1.29,
+        "median": 1,
+        "min": 1,
+        "max": 4
+      },
+      "distribution": {
+        "1": 375,
+        "2": 106,
+        "3": 16,
+        "4": 3,
+        "5+": 0
+      }
+    },
+    "syntactic_span_type": {
+      "classification": "OBSERVED",
+      "sample_n": 500,
+      "counts": {
+        "SINGLE_WORD": 375,
+        "SHORT_PHRASE": 55,
+        "CLAUSE_OR_CLAUSE_LIKE": 70
+      },
+      "vocabulary": {
+        "SINGLE_WORD": "1 lexical token",
+        "SHORT_PHRASE": "2-4 tokens, non-clausal phrase",
+        "LONG_PHRASE": "5+ tokens; no official marked span in this sample",
+        "CLAUSE_OR_CLAUSE_LIKE": "A clause or clause-like unit identified using grammatical role, subtype, or error scope as well as surface length"
+      },
+      "dimension_separation": {
+        "classification": "DERIVED RULE",
+        "rule": "Record surface word count and syntactic span type as independent metadata dimensions; do not use one as a substitute for the other."
+      }
+    },
+    "marked_coverage": {
+      "classification": "OBSERVED",
+      "sample_n": 125,
+      "definition": "unique_marked_token_count / sentence_word_count",
+      "statistics": {
+        "mean": 0.271,
+        "median": 0.263,
+        "min": 0.129,
+        "max": 0.6
+      },
+      "bins": {
+        "<20%": 27,
+        "20-29%": 54,
+        "30-39%": 35,
+        "40-49%": 8,
+        "50-59%": 0,
+        ">=60%": 1
+      },
+      "notable_fact": {
+        "classification": "OBSERVED",
+        "expression": "marked_coverage_ratio >= 0.60",
+        "count": 1,
+        "denominator": 125,
+        "ratio": 0.008
+      }
+    },
+    "unmarked_context": {
+      "classification": "OBSERVED",
+      "unit": "words",
+      "statistics": {
+        "mean": 14.87,
+        "median": 15,
+        "min": 4,
+        "max": 27
+      },
+      "format_characteristic": "Official items retain natural unmarked linguistic context outside the marked spans.",
+      "hard_minimum_established": false
+    },
+    "span_spacing": {
+      "classification": "OBSERVED",
+      "measurement_confidence": "APPROXIMATE",
+      "method": "ordered-PDF-geometry approximation using ordered span anchors and token-index approximations",
+      "unit": "unmarked lexical tokens between successive spans",
+      "gaps": {
+        "gap_A_B": {"mean": 3.54, "median": 4, "min": 1, "max": 6},
+        "gap_B_C": {"mean": 3.82, "median": 4, "min": 1, "max": 7},
+        "gap_C_D": {"mean": 3.77, "median": 4, "min": 1, "max": 7}
+      },
+      "constraint_note": {
+        "classification": "DERIVED RULE",
+        "statement": "Use as approximate reference geometry, not an exact absolute placement constraint."
+      }
+    },
+    "correct_span": {
+      "classification": "OBSERVED",
+      "sample_n": 125,
+      "word_count_statistics": {
+        "mean": 1.27,
+        "median": 1,
+        "min": 1,
+        "max": 4
+      },
+      "type_counts": {
+        "SINGLE_WORD": 98,
+        "SHORT_PHRASE": 12,
+        "CLAUSE_OR_CLAUSE_LIKE": 15
+      },
+      "not_single_word_claim": {
+        "classification": "OBSERVED",
+        "statement": "The correct error span is not always one word; multiword and clause-like correct spans are officially observed."
+      }
+    },
+    "correction_locality": {
+      "classification": "OBSERVED",
+      "sample_n": 125,
+      "counts": {
+        "DEPENDENCY_BASED": 19,
+        "LOCAL_SHORT_SPAN": 13,
+        "SEMANTIC_OR_CONTEXT_DEPENDENT": 11,
+        "LOCAL_SINGLE_TOKEN": 28,
+        "CLAUSE_LEVEL": 54
+      },
+      "dimension_note": "Correction locality records the information required to identify and repair the error; it is not reducible to marked span length."
+    },
+    "decision_granularity": {
+      "classification": "OBSERVED",
+      "sample_n": 125,
+      "counts": {
+        "FUNCTION_WORD": 26,
+        "WORD_ORDER": 6,
+        "CLAUSE_RELATION": 8,
+        "VERB_FRAME": 44,
+        "OTHER": 7,
+        "MORPHOLOGY": 15,
+        "WORD_CLASS": 4,
+        "AGREEMENT_DEPENDENCY": 14,
+        "LOCAL_PHRASE": 1
+      },
+      "dimension_note": "A Written Expression-specific design dimension independent of primary_target."
+    }
+  },
+  "validation_evidence": {
+    "classification": "OBSERVED",
+    "source": "analysis/we_format/written_expression_format_validation.json",
+    "sample": {
+      "official_items": 125,
+      "ai_validation_items": 75,
+      "ai_validation_version": "v1.1"
+    },
+    "comparison": {
+      "sentence_median_words": {"official": 20, "ai_validation": 10},
+      "marked_span_median_words": {"official": 1, "ai_validation": 2},
+      "marked_coverage_median": {"official": 0.263, "ai_validation": 1.0},
+      "unmarked_context_median_words": {"official": 15, "ai_validation": 0},
+      "gap_medians": {
+        "gap_A_B": {"official": 4, "ai_validation": 0},
+        "gap_B_C": {"official": 4, "ai_validation": 0},
+        "gap_C_D": {"official": 4, "ai_validation": 0}
+      },
+      "sentence_word_count_lte_15": {
+        "official_count": 16,
+        "official_denominator": 125,
+        "ai_count": 75,
+        "ai_denominator": 75
+      },
+      "coverage_gte_60_percent": {
+        "official_count": 1,
+        "official_denominator": 125,
+        "ai_count": 75,
+        "ai_denominator": 75
+      },
+      "item_mean_span_length_lte_1_5": {
+        "official_count": 110,
+        "official_denominator": 125,
+        "ai_count": 3,
+        "ai_denominator": 75
+      }
+    },
+    "interpretation": {
+      "classification": "DERIVED RULE",
+      "rule": "A future WE generator and reviewer must evaluate format geometry separately from grammatical validity because grammatical analyzability alone does not ensure an ETS-like Written Expression format.",
+      "evidence_use": "The official-versus-AI mismatch justifies this addendum; it is not itself a grammar taxonomy change."
+    }
+  },
+  "coverage_policy": {
+    "classification": "DERIVED RULE",
+    "policy": {
+      "preferred_range": {
+        "classification": "HEURISTIC",
+        "status": "DEFERRED_TO_GENERATOR_V1_2",
+        "method": "central empirical band derived from the official item-level coverage distribution",
+        "recommended_machine_method": "empirical_quantile",
+        "lower_quantile": 0.10,
+        "upper_quantile": 0.90,
+        "numeric_boundary": null,
+        "note": "Quantile choices are a provisional implementation method, not an official threshold."
+      },
+      "warning_range": {
+        "classification": "HEURISTIC",
+        "status": "DEFERRED_TO_GENERATOR_V1_2",
+        "method": "values outside preferred range but within observed or plausible tail",
+        "recommended_machine_method": "empirical_quantile_or_reference_distribution_distance",
+        "numeric_boundary": null,
+        "action": "diagnostic warning or reviewer attention; not automatic grammar rejection"
+      },
+      "extreme_outlier": {
+        "classification": "DERIVED RULE",
+        "expression": "marked_coverage_ratio >= 0.60",
+        "basis": "Official >=60% bin occurred in 1/125 items.",
+        "action": "Do not use as the normal generation pattern; flag for format review.",
+        "hard_rejection": false
+      },
+      "explicit_non_rule": {
+        "classification": "DERIVED RULE",
+        "statement": "Do not invent a universal hard minimum for unmarked_word_count or a universal hard maximum for span_word_count from this addendum alone."
+      }
+    }
+  },
+  "derived_rules": [
+    {
+      "id": "WE-FMT-DR-001",
+      "classification": "DERIVED RULE",
+      "statement": "Model a Written Expression item as one complete sentence with four locally inspectable marked spans and natural unmarked linguistic context.",
+      "basis": ["marked coverage distribution", "unmarked context distribution", "official item format"],
+      "enforcement": "future_generator_and_reviewer"
+    },
+    {
+      "id": "WE-FMT-DR-002",
+      "classification": "DERIVED RULE",
+      "statement": "Do not generate the item as a sentence wholly divided into four answer options; A-D are local marked spans inside the sentence.",
+      "basis": ["official marked coverage median 26.3%", "official unmarked context median 15", "AI validation coverage median 100%"],
+      "enforcement": "future_generator_and_reviewer"
+    },
+    {
+      "id": "WE-FMT-DR-003",
+      "classification": "DERIVED RULE",
+      "statement": "Use the sentence-first construction order: natural sentence, syntax/meaning validation, one genuine defect, error location, four spans, three correct-span checks, then geometry diagnostics.",
+      "basis": ["official format geometry", "official-vs-AI mismatch"],
+      "enforcement": "future_generator_design"
+    },
+    {
+      "id": "WE-FMT-DR-004",
+      "classification": "DERIVED RULE",
+      "statement": "Each marked span must be grammar-relevant, locally identifiable, sentence-distributed, and a plausible candidate for scrutiny.",
+      "basis": ["official marked span type distribution", "official span placement distribution", "underlined-part analysis"],
+      "enforcement": "future_generator_and_reviewer"
+    },
+    {
+      "id": "WE-FMT-DR-005",
+      "classification": "DERIVED RULE",
+      "statement": "Record surface word count and syntactic span type independently.",
+      "basis": ["official 500-span word-count distribution", "official syntactic span-type distribution"],
+      "enforcement": "future_metadata_contract"
+    },
+    {
+      "id": "WE-FMT-DR-006",
+      "classification": "DERIVED RULE",
+      "statement": "Do not impose an absolute max-2-word or max-3-word marked-span rule; official 4-word spans exist and the correct error span reaches four words.",
+      "basis": ["official marked span max 4", "official correct span max 4"],
+      "enforcement": "future_generator_and_reviewer"
+    },
+    {
+      "id": "WE-FMT-DR-007",
+      "classification": "DERIVED RULE",
+      "statement": "Treat marked coverage as a distribution-aware property with preferred, warning, and extreme-outlier concepts rather than one arbitrary hard threshold.",
+      "basis": ["official coverage bins", "official coverage median and max"],
+      "enforcement": "future_generator_and_reviewer"
+    },
+    {
+      "id": "WE-FMT-DR-008",
+      "classification": "DERIVED RULE",
+      "statement": "Do not use 100% marked coverage as the normal generation pattern.",
+      "basis": ["official coverage >=60% occurred 1/125", "AI validation coverage >=60% occurred 75/75"],
+      "enforcement": "future_generator"
+    },
+    {
+      "id": "WE-FMT-DR-009",
+      "classification": "DERIVED RULE",
+      "statement": "Retain enough unmarked context to support syntactic dependency, lexical context, sentence naturalness, and meaningful difficulty.",
+      "basis": ["official unmarked context mean 14.87", "official unmarked context median 15"],
+      "enforcement": "future_generator_and_reviewer"
+    },
+    {
+      "id": "WE-FMT-DR-010",
+      "classification": "DERIVED RULE",
+      "statement": "Do not convert approximate PDF gap values into exact absolute placement constraints.",
+      "basis": ["official span-position confidence note"],
+      "enforcement": "future_implementation"
+    },
+    {
+      "id": "WE-FMT-DR-011",
+      "classification": "DERIVED RULE",
+      "statement": "Keep format validity diagnostics separate from grammatical validity and report them in separate result dimensions.",
+      "basis": ["official-vs-AI mismatch", "correction locality and decision granularity evidence"],
+      "enforcement": "future_reviewer"
+    },
+    {
+      "id": "WE-FMT-DR-012",
+      "classification": "DERIVED RULE",
+      "statement": "Keep correction locality and decision granularity as explicit WE metadata independent of primary_target.",
+      "basis": ["official correction locality counts", "official decision granularity counts"],
+      "enforcement": "future_metadata_contract"
+    }
+  ],
+  "heuristics": [
+    {
+      "id": "WE-FMT-H-001",
+      "classification": "HEURISTIC",
+      "statement": "Avoid designs in which marked spans cover almost the entire sentence.",
+      "basis": "Official coverage center and unmarked-context profile.",
+      "not_a_hard_rule": true
+    },
+    {
+      "id": "WE-FMT-H-002",
+      "classification": "HEURISTIC",
+      "statement": "Choose exact preferred and warning coverage boundaries using a documented empirical-quantile or equivalent reference-distribution method in Generator v1.2.",
+      "basis": "Coverage policy requires machine-readable derivation but the implementation thresholds are intentionally deferred.",
+      "not_a_hard_rule": true
+    },
+    {
+      "id": "WE-FMT-H-003",
+      "classification": "HEURISTIC",
+      "statement": "Use dependency distance, clause structure, verb frame, subtle morphology, function-word choice, agreement relationships, and plausible-but-incorrect forms as primary difficulty levers.",
+      "basis": "Official correction locality and decision granularity observations plus existing grammar analysis.",
+      "not_a_hard_rule": true
+    },
+    {
+      "id": "WE-FMT-H-004",
+      "classification": "HEURISTIC",
+      "statement": "Use approximate gap medians as diagnostic reference values and batch-shape guidance, not exact token-placement quotas.",
+      "basis": "PDF geometry confidence limitation.",
+      "not_a_hard_rule": true
+    },
+    {
+      "id": "WE-FMT-H-005",
+      "classification": "HEURISTIC",
+      "statement": "Allow occasional tail-format items when the grammatical design is strong, but route extreme geometry outliers to format review.",
+      "basis": "Observed distributions have non-zero tails and small samples cannot be reproduced exactly in every batch.",
+      "not_a_hard_rule": true
+    },
+    {
+      "id": "WE-FMT-H-006",
+      "classification": "HEURISTIC",
+      "statement": "Future reviewer statuses may use independent PASS, WARN, FAIL, and NOT_EVALUATED values for grammar_validity and format_validity; exact status vocabulary is deferred.",
+      "basis": "Need to separate grammatical invalidity from format/style failure.",
+      "not_a_hard_rule": true
+    }
+  ],
+  "construction_sequence": {
+    "classification": "DERIVED RULE",
+    "steps": [
+      "Create a natural complete academic-style sentence.",
+      "Validate whole-sentence syntax and meaning.",
+      "Design or inject one genuine grammatical defect.",
+      "Confirm the error location.",
+      "Select four local spans A-D from the existing sentence.",
+      "Verify the other three spans are grammatically acceptable and the corrected sentence has no secondary error.",
+      "Run span geometry and distribution diagnostics."
+    ],
+    "avoid": "Create four marked parts first and join them into a sentence."
+  },
+  "diagnostic_definitions": {
+    "sentence_word_count": {
+      "classification": "OBSERVED",
+      "type": "integer",
+      "definition": "Lexical word count of the complete sentence using the source tokenization rule."
+    },
+    "span_word_counts": {
+      "classification": "OBSERVED",
+      "type": "object",
+      "keys": ["A", "B", "C", "D"],
+      "definition": "Lexical word count of each marked span using the source tokenization rule."
+    },
+    "mean_span_length": {
+      "classification": "OBSERVED",
+      "type": "number",
+      "definition": "Arithmetic mean of the four marked span word counts for one item."
+    },
+    "max_span_length": {
+      "classification": "OBSERVED",
+      "type": "integer",
+      "definition": "Maximum of the four marked span word counts for one item."
+    },
+    "marked_coverage_ratio": {
+      "classification": "OBSERVED",
+      "type": "number",
+      "definition": "unique_marked_token_count / sentence_word_count; use unique marked tokens if spans overlap."
+    },
+    "unmarked_word_count": {
+      "classification": "OBSERVED",
+      "type": "integer",
+      "definition": "sentence_word_count - unique_marked_token_count."
+    },
+    "gap_A_B": {
+      "classification": "OBSERVED",
+      "type": "integer",
+      "definition": "Number of unmarked lexical tokens between the end of A and the start of B. Exact for generated token offsets; approximate for the official PDF reference."
+    },
+    "gap_B_C": {
+      "classification": "OBSERVED",
+      "type": "integer",
+      "definition": "Number of unmarked lexical tokens between the end of B and the start of C."
+    },
+    "gap_C_D": {
+      "classification": "OBSERVED",
+      "type": "integer",
+      "definition": "Number of unmarked lexical tokens between the end of C and the start of D."
+    },
+    "correct_span_word_count": {
+      "classification": "OBSERVED",
+      "type": "integer",
+      "definition": "Lexical word count of the one marked span identified as containing the intended error."
+    },
+    "correct_span_type": {
+      "classification": "OBSERVED",
+      "type": "enum",
+      "values": ["SINGLE_WORD", "SHORT_PHRASE", "LONG_PHRASE", "CLAUSE_OR_CLAUSE_LIKE"],
+      "definition": "Syntactic type of the correct/error span, independent of word count."
+    },
+    "correction_locality": {
+      "classification": "OBSERVED",
+      "type": "enum",
+      "values": ["DEPENDENCY_BASED", "LOCAL_SHORT_SPAN", "SEMANTIC_OR_CONTEXT_DEPENDENT", "LOCAL_SINGLE_TOKEN", "CLAUSE_LEVEL"],
+      "definition": "Information scope required to identify and repair the error."
+    },
+    "decision_granularity": {
+      "classification": "OBSERVED",
+      "type": "enum",
+      "values": ["FUNCTION_WORD", "WORD_ORDER", "CLAUSE_RELATION", "VERB_FRAME", "OTHER", "MORPHOLOGY", "WORD_CLASS", "AGREEMENT_DEPENDENCY", "LOCAL_PHRASE"],
+      "definition": "Primary level at which the Written Expression decision is made; independent of primary_target."
+    },
+    "format_distribution_distance": {
+      "classification": "HEURISTIC",
+      "type": "object_or_number",
+      "status": "CONCEPT_DEFINED_ALGORITHM_DEFERRED",
+      "definition": "Distance between an item or batch's format metrics and the official reference profile.",
+      "recommended_components": [
+        "sentence_word_count",
+        "mean_span_length",
+        "span_word_counts",
+        "marked_coverage_ratio",
+        "unmarked_word_count",
+        "gap_A_B",
+        "gap_B_C",
+        "gap_C_D",
+        "span_type",
+        "correct_span_type",
+        "correction_locality",
+        "decision_granularity"
+      ],
+      "recommended_methods": ["standardized_absolute_difference", "empirical_distribution_distance", "documented_equivalent"],
+      "final_metric_owner": "Generator/Reviewer v1.2 design",
+      "not_a_hard_rule": true
+    }
+  },
+  "future_generator_v1_2_requirements": {
+    "status": "DESIGN_REQUIREMENT_ONLY",
+    "classification": "DERIVED RULE",
+    "requirements": [
+      "Construct the complete sentence before selecting A-D.",
+      "Maintain exactly four marked spans and one intended erroneous span.",
+      "Retain natural unmarked context around and between spans.",
+      "Select grammar-relevant, locally inspectable, plausible spans.",
+      "Use distribution-aware span lengths without an absolute 2-word or 3-word maximum.",
+      "Treat marked coverage as preferred/warning/extreme-outlier diagnostics.",
+      "Do not normalize all items to 100% marked coverage.",
+      "Record correction_locality and decision_granularity independently of primary_target.",
+      "Verify three non-error spans and absence of secondary grammatical errors.",
+      "Run geometry diagnostics after grammatical and whole-sentence validation."
+    ],
+    "heuristic_choices_deferred": [
+      "Exact coverage tolerance boundaries",
+      "Batch-level tolerance policy",
+      "Use of gap medians as soft reference values",
+      "Routing policy for extreme format outliers"
+    ]
+  },
+  "future_reviewer_v1_2_requirements": {
+    "status": "DESIGN_REQUIREMENT_ONLY",
+    "format_checks": {
+      "classification": "DERIVED RULE",
+      "checks": [
+        "sentence length profile",
+        "span length profile",
+        "marked coverage",
+        "unmarked context",
+        "span spacing",
+        "span type",
+        "correct span length and type",
+        "correction locality",
+        "decision granularity",
+        "format distribution distance or equivalent"
+      ]
+    },
+    "separation_rule": {
+      "classification": "DERIVED RULE",
+      "rule": "Report format violation separately from grammatical invalidity.",
+      "examples": {
+        "grammatically_valid_but_format_outlier": "format/style warning or failure; not automatically a grammar rejection",
+        "good_geometry_but_two_genuine_errors": "grammatical validity failure"
+      }
+    },
+    "possible_status_vocabulary": {
+      "classification": "HEURISTIC",
+      "values": ["PASS", "WARN", "FAIL", "NOT_EVALUATED"],
+      "status": "DEFERRED_TO_REVIEWER_V1_2"
+    }
+  },
+  "non_changes_in_this_addendum": [
+    "No Generator v1.1 changes",
+    "No Reviewer v1.1 changes",
+    "No Solver changes",
+    "No Orchestrator changes",
+    "No grammar taxonomy changes",
+    "No DB changes",
+    "No Website changes",
+    "No rewrite of existing grammar specification"
+  ]
+}

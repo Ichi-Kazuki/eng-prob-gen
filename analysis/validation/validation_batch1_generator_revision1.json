@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "item_id": "batch1-we-003",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "simple past main verb after a past perfect subordinate clause",
+      "secondary_features": ["past perfect tense"],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "clause_level",
+      "difficulty": "EASY",
+      "vocabulary_domain": "lighthouse preservation",
+      "sentence": "Yesterday, after the lighthouse crew had repaired the lamp, the keeper records the inspection details.",
+      "marked_parts": {
+        "A": "Yesterday, after the lighthouse crew had repaired the lamp,",
+        "B": "the keeper",
+        "C": "records",
+        "D": "the inspection details."
+      },
+      "correct_answer": "C",
+      "minimal_correction": "records -> recorded",
+      "answer_explanation": "The explicit past-time adverb Yesterday and the past perfect subordinate clause establish a completed past narrative, so the main verb must be the simple past recorded."
+    },
+    {
+      "item_id": "batch1-we-023",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "simple past main verb after a past perfect passive clause",
+      "secondary_features": ["past perfect tense", "passive voice"],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "cross_clause",
+      "difficulty": "HARD",
+      "vocabulary_domain": "bridge engineering",
+      "sentence": "Last year, after the bridge had been inspected, engineers approves the repair plan.",
+      "marked_parts": {
+        "A": "Last year, after the bridge had been inspected,",
+        "B": "engineers approves",
+        "C": "the repair",
+        "D": "plan."
+      },
+      "correct_answer": "B",
+      "minimal_correction": "approves -> approved",
+      "answer_explanation": "The explicit past-time adverb Last year and the past perfect passive clause establish a completed past narrative, so the main verb must be the simple past approved."
+    }
+  ]
+}

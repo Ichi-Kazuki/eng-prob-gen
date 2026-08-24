@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "item_id": "pilot-struct-012",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "D",
+      "generator_answer": "D",
+      "answer_match": true,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "item_id": "batch3-we-024",
+      "issues": [
+        {
+          "severity": "MAJOR",
+          "category": "metadata_consistency",
+          "description": "The subtype identifies a modal perfect construction, but the sentence contains a past perfect construction (had + past participle), not a modal perfect.",
+          "related_check": "metadata_consistency"
+        }
+      ],
+      "revision_requirements": [
+        "Align the subtype and secondary_features with the actual past perfect construction, or revise the sentence so it genuinely tests a modal perfect."
+      ]
+    }
+  ]
+}

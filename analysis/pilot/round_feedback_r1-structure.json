@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "item_id": "pilot-struct-012",
+      "issues": [
+        {
+          "severity": "MAJOR",
+          "category": "distractor_ambiguity",
+          "description": "Distractor B ('for pedestrians and cyclists alike more accessible') is grammatically parseable as correct under an alternate bracketing: 'the downtown corridor for pedestrians and cyclists alike' can be read as a single complex object noun phrase (postnominal PP modifying 'corridor', similar to 'the room for guests'), with 'more accessible' as the causative object complement — i.e. 'will make [the downtown corridor for pedestrians and cyclists alike] [more accessible]'. Under that (marked but grammatical) reading the sentence is fully coherent, making B MARGINAL rather than cleanly INVALID. This is in tension with Hard Rule §7.2.3 ('no distractor may be correct under any plausible reading'). D remains the clearly intended and more natural answer, and most test-takers would reject B on first reading, so this falls short of a full two-valid-answers critical failure, but it is a real design weakness.",
+          "related_check": "answer_uniqueness"
+        }
+      ],
+      "revision_requirements": [
+        "Rework distractor B so 'for pedestrians and cyclists alike' cannot be reanalyzed as a postnominal modifier of 'the downtown corridor' forming an alternative valid object NP (e.g., restructure the word-order distractor so every constituent bracketing remains ungrammatical, or choose a different tested_error_type mechanism for this distractor slot)."
+      ]
+    }
+  ]
+}

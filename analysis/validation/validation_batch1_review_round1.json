@@ -1,0 +1,1234 @@
+{
+    "items":  [
+                  {
+                      "item_id":  "batch1-struct-001",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "A",
+                      "generator_answer":  "A",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-002",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "B",
+                      "generator_answer":  "B",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-003",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "C",
+                      "generator_answer":  "C",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "HARD",
+                      "generator_difficulty":  "HARD",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-004",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "D",
+                      "generator_answer":  "D",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-005",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "A",
+                      "generator_answer":  "A",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-006",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "B",
+                      "generator_answer":  "B",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-007",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "A",
+                      "generator_answer":  "A",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-008",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "C",
+                      "generator_answer":  "C",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-009",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "B",
+                      "generator_answer":  "B",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-010",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "C",
+                      "generator_answer":  "C",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-011",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "D",
+                      "generator_answer":  "D",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "HARD",
+                      "generator_difficulty":  "HARD",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-012",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "B",
+                      "generator_answer":  "B",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "HARD",
+                      "generator_difficulty":  "HARD",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-013",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "A",
+                      "generator_answer":  "A",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-014",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "C",
+                      "generator_answer":  "C",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-struct-015",
+                      "section":  "Structure",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "D",
+                      "generator_answer":  "D",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-001",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "A",
+                      "generator_answer":  "A",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "A",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-002",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "B",
+                      "generator_answer":  "B",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "B",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-003",
+                      "section":  "Written Expression",
+                      "verdict":  "REVISE",
+                      "critical_failure":  false,
+                      "independent_answer":  "C",
+                      "generator_answer":  "C",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "C",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  false,
+                      "checks":  {
+                                     "grammar_validity":  "REVISE",
+                                     "answer_uniqueness":  "REVISE",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+                                     {
+                                         "severity":  "MAJOR",
+                                         "category":  "alternate_repair",
+                                         "description":  "The intended correction is not uniquely forced by the sentence context.",
+                                         "related_check":  "answer_uniqueness"
+                                     }
+                                 ],
+                      "revision_requirements":  [
+                                                    "Rewrite the item so exactly one minimal correction is valid."
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-004",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "D",
+                      "generator_answer":  "D",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "D",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-005",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "A",
+                      "generator_answer":  "A",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "A",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-006",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "B",
+                      "generator_answer":  "B",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "B",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-007",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "C",
+                      "generator_answer":  "C",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "C",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-008",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "D",
+                      "generator_answer":  "D",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "D",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-009",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "A",
+                      "generator_answer":  "A",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "A",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-010",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "B",
+                      "generator_answer":  "B",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "B",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-011",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "C",
+                      "generator_answer":  "C",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "C",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-012",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "D",
+                      "generator_answer":  "D",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "D",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-013",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "A",
+                      "generator_answer":  "A",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "A",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-014",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "B",
+                      "generator_answer":  "B",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "B",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-015",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "C",
+                      "generator_answer":  "C",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "C",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-016",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "D",
+                      "generator_answer":  "D",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "D",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-017",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "A",
+                      "generator_answer":  "A",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "A",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-018",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "B",
+                      "generator_answer":  "B",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "B",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-019",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "C",
+                      "generator_answer":  "C",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "C",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-020",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "D",
+                      "generator_answer":  "D",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "D",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-021",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "A",
+                      "generator_answer":  "A",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "EASY",
+                      "generator_difficulty":  "EASY",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "A",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-022",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "B",
+                      "generator_answer":  "B",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "B",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-023",
+                      "section":  "Written Expression",
+                      "verdict":  "REVISE",
+                      "critical_failure":  false,
+                      "independent_answer":  "B",
+                      "generator_answer":  "B",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "HARD",
+                      "generator_difficulty":  "HARD",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "B",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  false,
+                      "checks":  {
+                                     "grammar_validity":  "REVISE",
+                                     "answer_uniqueness":  "REVISE",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+                                     {
+                                         "severity":  "MAJOR",
+                                         "category":  "alternate_repair",
+                                         "description":  "The intended correction is not uniquely forced by the sentence context.",
+                                         "related_check":  "answer_uniqueness"
+                                     }
+                                 ],
+                      "revision_requirements":  [
+                                                    "Rewrite the item so exactly one minimal correction is valid."
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-024",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "C",
+                      "generator_answer":  "C",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "MEDIUM",
+                      "generator_difficulty":  "MEDIUM",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "C",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  },
+                  {
+                      "item_id":  "batch1-we-025",
+                      "section":  "Written Expression",
+                      "verdict":  "PASS",
+                      "critical_failure":  false,
+                      "independent_answer":  "A",
+                      "generator_answer":  "A",
+                      "answer_match":  true,
+                      "reviewer_difficulty":  "HARD",
+                      "generator_difficulty":  "HARD",
+                      "difficulty_mismatch":  false,
+                      "detected_error_count":  1,
+                      "detected_error_position":  "A",
+                      "non_error_parts_valid":  true,
+                      "minimal_correction_valid":  true,
+                      "checks":  {
+                                     "grammar_validity":  "PASS",
+                                     "answer_uniqueness":  "PASS",
+                                     "target_alignment":  "PASS",
+                                     "naturalness":  "PASS",
+                                     "toefl_style":  "PASS",
+                                     "distractor_quality":  "PASS",
+                                     "metadata_consistency":  "PASS"
+                                 },
+                      "issues":  [
+
+                                 ],
+                      "revision_requirements":  [
+
+                                                ],
+                      "source_similarity_risk":  "LOW"
+                  }
+              ]
+}

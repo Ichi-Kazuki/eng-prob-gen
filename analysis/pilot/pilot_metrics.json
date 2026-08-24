@@ -1,0 +1,461 @@
+{
+  "metrics": {
+    "overall": {
+      "initial_generated": 40,
+      "generator_validation_pass": 40,
+      "reviewer_PASS": 36,
+      "reviewer_REVISE": 4,
+      "reviewer_REJECT": 0,
+      "reviewer_all_rounds": {
+        "PASS": 40,
+        "REVISE": 4
+      },
+      "reviewer_submission_count": 44,
+      "solver_reached": 40,
+      "solver_consensus": 37,
+      "solver_disagreement": 0,
+      "solver_AMBIGUOUS": 1,
+      "solver_NONE": 2,
+      "solver_LOW_confidence": 0,
+      "AUTO_ACCEPTED": 37,
+      "MANUAL_REVIEW": 1,
+      "DISCARDED": 2,
+      "REJECTED": 0
+    },
+    "rates": {
+      "generator_schema_pass_rate": {
+        "n": 40,
+        "d": 40
+      },
+      "reviewer_first_pass_rate": {
+        "n": 36,
+        "d": 40
+      },
+      "reviewer_revise_rate": {
+        "n": 4,
+        "d": 40
+      },
+      "reviewer_reject_rate": {
+        "n": 0,
+        "d": 40
+      },
+      "solver_consensus_rate": {
+        "n": 37,
+        "d": 40
+      },
+      "final_auto_accept_rate": {
+        "n": 37,
+        "d": 40
+      }
+    },
+    "solver_ids": {
+      "consensus": [
+        "pilot-struct-001",
+        "pilot-struct-002",
+        "pilot-struct-003",
+        "pilot-struct-004",
+        "pilot-struct-005",
+        "pilot-struct-006",
+        "pilot-struct-007",
+        "pilot-struct-008",
+        "pilot-struct-009",
+        "pilot-struct-010",
+        "pilot-struct-011",
+        "pilot-struct-012",
+        "pilot-struct-013",
+        "pilot-struct-014",
+        "pilot-struct-015",
+        "pilot-we-001",
+        "pilot-we-003",
+        "pilot-we-004",
+        "pilot-we-005",
+        "pilot-we-006",
+        "pilot-we-007",
+        "pilot-we-008",
+        "pilot-we-010",
+        "pilot-we-011",
+        "pilot-we-012",
+        "pilot-we-013",
+        "pilot-we-014",
+        "pilot-we-015",
+        "pilot-we-016",
+        "pilot-we-017",
+        "pilot-we-018",
+        "pilot-we-019",
+        "pilot-we-020",
+        "pilot-we-021",
+        "pilot-we-022",
+        "pilot-we-023",
+        "pilot-we-025"
+      ],
+      "disagreement": [],
+      "ambiguous": [
+        "pilot-we-009"
+      ],
+      "none": [
+        "pilot-we-002",
+        "pilot-we-024"
+      ],
+      "low_confidence": []
+    },
+    "section": {
+      "Structure": {
+        "generated": 15,
+        "reviewer_PASS": 14,
+        "reviewer_REVISE": 1,
+        "reviewer_REJECT": 0,
+        "first_pass_rate": {
+          "n": 14,
+          "d": 15
+        },
+        "final_accepted": 15,
+        "final_acceptance_rate": {
+          "n": 15,
+          "d": 15
+        }
+      },
+      "Written Expression": {
+        "generated": 25,
+        "reviewer_PASS": 22,
+        "reviewer_REVISE": 3,
+        "reviewer_REJECT": 0,
+        "first_pass_rate": {
+          "n": 22,
+          "d": 25
+        },
+        "final_accepted": 22,
+        "final_acceptance_rate": {
+          "n": 22,
+          "d": 25
+        }
+      }
+    }
+  },
+  "analyses": {
+    "grammar_target": {
+      "CLAUSE_STRUCTURE": {
+        "generated": 4,
+        "reviewer_PASS": 3,
+        "final_ACCEPTED": 4,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 4,
+          "d": 4
+        }
+      },
+      "COMPARATIVES_DEGREE": {
+        "generated": 1,
+        "reviewer_PASS": 1,
+        "final_ACCEPTED": 1,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 1,
+          "d": 1
+        }
+      },
+      "CONNECTORS_CONJUNCTIONS": {
+        "generated": 2,
+        "reviewer_PASS": 2,
+        "final_ACCEPTED": 1,
+        "failure_count": 1,
+        "acceptance_rate": {
+          "n": 1,
+          "d": 2
+        }
+      },
+      "INVERSION": {
+        "generated": 1,
+        "reviewer_PASS": 1,
+        "final_ACCEPTED": 1,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 1,
+          "d": 1
+        }
+      },
+      "NONFINITE_VERB_PHRASES": {
+        "generated": 5,
+        "reviewer_PASS": 4,
+        "final_ACCEPTED": 5,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 5,
+          "d": 5
+        }
+      },
+      "NOUN_CLAUSES": {
+        "generated": 1,
+        "reviewer_PASS": 1,
+        "final_ACCEPTED": 1,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 1,
+          "d": 1
+        }
+      },
+      "PARALLEL_STRUCTURE": {
+        "generated": 4,
+        "reviewer_PASS": 4,
+        "final_ACCEPTED": 3,
+        "failure_count": 1,
+        "acceptance_rate": {
+          "n": 3,
+          "d": 4
+        }
+      },
+      "REFERENCE_AND_DETERMINERS": {
+        "generated": 5,
+        "reviewer_PASS": 5,
+        "final_ACCEPTED": 4,
+        "failure_count": 1,
+        "acceptance_rate": {
+          "n": 4,
+          "d": 5
+        }
+      },
+      "RELATIVE_CLAUSES": {
+        "generated": 4,
+        "reviewer_PASS": 4,
+        "final_ACCEPTED": 4,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 4,
+          "d": 4
+        }
+      },
+      "VERB_COMPLEMENTATION": {
+        "generated": 5,
+        "reviewer_PASS": 3,
+        "final_ACCEPTED": 5,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 5,
+          "d": 5
+        }
+      },
+      "VERB_FORM_VOICE": {
+        "generated": 2,
+        "reviewer_PASS": 2,
+        "final_ACCEPTED": 2,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 2,
+          "d": 2
+        }
+      },
+      "WORD_CLASS_FORM": {
+        "generated": 3,
+        "reviewer_PASS": 3,
+        "final_ACCEPTED": 3,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 3,
+          "d": 3
+        }
+      },
+      "WORD_ORDER_MODIFICATION": {
+        "generated": 3,
+        "reviewer_PASS": 3,
+        "final_ACCEPTED": 3,
+        "failure_count": 0,
+        "acceptance_rate": {
+          "n": 3,
+          "d": 3
+        }
+      }
+    },
+    "difficulty": {
+      "EASY": {
+        "generated": 20,
+        "reviewer_PASS": 17,
+        "solver_consensus": 18,
+        "final_accepted": 18
+      },
+      "MEDIUM": {
+        "generated": 15,
+        "reviewer_PASS": 14,
+        "solver_consensus": 14,
+        "final_accepted": 14
+      },
+      "HARD": {
+        "generated": 5,
+        "reviewer_PASS": 5,
+        "solver_consensus": 5,
+        "final_accepted": 5
+      }
+    },
+    "answer_position": {
+      "Structure": {
+        "planned_generated": {
+          "A": 4,
+          "B": 4,
+          "C": 4,
+          "D": 3
+        },
+        "generated_actual": {
+          "A": 4,
+          "B": 4,
+          "C": 4,
+          "D": 3
+        },
+        "accepted": {
+          "D": 3,
+          "C": 4,
+          "B": 4,
+          "A": 4
+        }
+      },
+      "Written Expression": {
+        "planned_generated": {
+          "A": 7,
+          "B": 6,
+          "C": 6,
+          "D": 6
+        },
+        "generated_actual": {
+          "A": 7,
+          "B": 6,
+          "C": 6,
+          "D": 6
+        },
+        "accepted": {
+          "C": 6,
+          "A": 6,
+          "D": 5,
+          "B": 5
+        }
+      }
+    },
+    "domain": {
+      "topic_diversity": 35,
+      "counts": {
+        "botany": 3,
+        "ornithology": 1,
+        "archaeology": 1,
+        "art history": 2,
+        "economics": 1,
+        "linguistics": 1,
+        "geology": 2,
+        "meteorology": 1,
+        "oceanography": 1,
+        "anthropology": 1,
+        "musicology": 1,
+        "urban planning": 1,
+        "ancient history": 1,
+        "astronomy": 2,
+        "marine biology": 1,
+        "paleontology": 1,
+        "sociology": 1,
+        "political science": 1,
+        "philosophy": 1,
+        "chemistry": 1,
+        "physics": 1,
+        "zoology": 1,
+        "climatology": 1,
+        "volcanology": 1,
+        "cartography": 1,
+        "epidemiology": 1,
+        "nutrition science": 1,
+        "forestry": 1,
+        "mycology": 1,
+        "entomology": 1,
+        "ethnomusicology": 1,
+        "textile history": 1,
+        "cryptography": 1,
+        "horticulture": 1,
+        "seismology": 1
+      },
+      "repeated_domains": {
+        "botany": 3,
+        "art history": 2,
+        "geology": 2,
+        "astronomy": 2
+      },
+      "domain_nonaccepted": {
+        "astronomy": 1,
+        "chemistry": 1,
+        "horticulture": 1
+      }
+    },
+    "reviewer_failure_reasons": {
+      "event_counts": {
+        "multiple_valid_answers": 2,
+        "no_genuine_error": 1,
+        "target_mismatch": 1,
+        "difficulty_mismatch": 1
+      },
+      "item_counts": {
+        "multiple_valid_answers": 2,
+        "no_genuine_error": 1,
+        "target_mismatch": 1,
+        "difficulty_mismatch": 1
+      },
+      "primary_reason_order": [
+        "multiple_valid_answers",
+        "no_genuine_error",
+        "target_mismatch",
+        "difficulty_mismatch"
+      ]
+    },
+    "final_failure_taxonomy": {
+      "primary_counts": {
+        "no_valid_answer": 2,
+        "solver_ambiguous": 1
+      },
+      "affected_final_nonaccepted": 3
+    },
+    "revision_effectiveness": {
+      "revised_item_count": 4,
+      "revision_items": {
+        "pilot-struct-012": {
+          "attempt_count": 1,
+          "after_revision_PASS": true,
+          "final_verdict": "PASS"
+        },
+        "pilot-we-006": {
+          "attempt_count": 1,
+          "after_revision_PASS": true,
+          "final_verdict": "PASS"
+        },
+        "pilot-we-014": {
+          "attempt_count": 1,
+          "after_revision_PASS": true,
+          "final_verdict": "PASS"
+        },
+        "pilot-we-021": {
+          "attempt_count": 1,
+          "after_revision_PASS": true,
+          "final_verdict": "PASS"
+        }
+      },
+      "revision_success_count": 4,
+      "revision_failed_count": 0,
+      "revision_success_rate": {
+        "n": 4,
+        "d": 4
+      },
+      "by_failure_reason": {
+        "multiple_valid_answers": {
+          "items_with_failure": 2,
+          "revised_items": 2,
+          "revision_improved": 2
+        },
+        "no_genuine_error": {
+          "items_with_failure": 1,
+          "revised_items": 1,
+          "revision_improved": 1
+        },
+        "target_mismatch": {
+          "items_with_failure": 1,
+          "revised_items": 1,
+          "revision_improved": 1
+        },
+        "difficulty_mismatch": {
+          "items_with_failure": 1,
+          "revised_items": 1,
+          "revision_improved": 1
+        }
+      }
+    }
+  }
+}

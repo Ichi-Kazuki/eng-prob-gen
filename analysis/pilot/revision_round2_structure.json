@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "item_id": "pilot-struct-012",
+      "section": "Structure",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "object complement after causative verb (make + O + Adj)",
+      "secondary_features": [
+        "noun clause as object",
+        "urban infrastructure description"
+      ],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "urban planning",
+      "stem": "City planners hope that wider sidewalks and dedicated bike lanes will make the downtown corridor ___.",
+      "options": {
+        "A": "more accessibility for pedestrians and cyclists alike",
+        "B": "for pedestrians and cyclists alike accessible more",
+        "C": "accessible pedestrians and cyclists alike",
+        "D": "more accessible for pedestrians and cyclists alike"
+      },
+      "correct_answer": "D",
+      "answer_explanation": "The causative verb 'make' requires an adjective object complement; 'more accessible for pedestrians and cyclists alike' correctly supplies that adjective plus its prepositional complement.",
+      "distractor_rationales": {
+        "A": "wrong_complementation - a noun phrase ('more accessibility') is used where the causative verb 'make' requires an adjective complement.",
+        "B": "wrong_word_order - the degree marker, adjective, and prepositional phrase are arranged so that no grammatical object-complement bracketing is available.",
+        "C": "missing_required_element - the preposition 'for', which links the adjective to its complement, is missing.",
+        "D": "correct - the adjective complement is correctly followed by its prepositional phrase after the causative verb 'make'."
+      }
+    }
+  ]
+}

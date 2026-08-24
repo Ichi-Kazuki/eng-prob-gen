@@ -1,0 +1,4636 @@
+{
+  "audit_title": "TOEFL ITP Grammar Pipeline v1.1 Validation Failure Audit + Batch Instability Analysis + Human Calibration Preparation",
+  "audit_date": "2026-08-24",
+  "scope": "Analysis and human-calibration preparation only. No Generator/Reviewer/Solver/Orchestrator/Specification/Taxonomy/DB/Web changes.",
+  "source_of_truth": [
+    "analysis/validation/validation_metrics.json",
+    "analysis/validation/validation_provenance.json",
+    "analysis/validation/validation_initial_items.json",
+    "analysis/validation/validation_accepted_items.json",
+    "analysis/validation/validation_failure_items.json",
+    "analysis/validation/validation_manual_review.json",
+    "analysis/validation/validation_batch_plans.json",
+    "analysis/validation/human_review_sample.json",
+    "analysis/pilot/PILOT_BATCH_REPORT.md",
+    "analysis/pilot/PILOT_FAILURE_ANALYSIS.md",
+    "analysis/pilot/pilot_failure_analysis.json",
+    "analysis/pilot/PILOT_P0_HARDENING_CHANGELOG.md",
+    ".claude/agents/toefl-itp-grammar-generator.md",
+    ".claude/agents/toefl-itp-grammar-reviewer.md",
+    ".claude/agents/toefl-itp-grammar-solver.md",
+    "specs/TOEFL_ITP_GRAMMAR_SPEC.md",
+    "specs/toefl_itp_grammar_spec.json",
+    "analysis/GRAMMAR_TAXONOMY.md",
+    "analysis/grammar_taxonomy.json"
+  ],
+  "version_lock": {
+    "spec_version": "1.0.0",
+    "taxonomy_version": "1.1",
+    "generator_version": "sha256:3567f2b6e246",
+    "reviewer_version": "sha256:e4142013a3cb",
+    "solver_version": "sha256:df1200bed2b1"
+  },
+  "independent_reconciliation": {
+    "initial_candidates": 120,
+    "generator_schema_pass": 120,
+    "final_state_counts": {
+      "ACCEPTED": 83,
+      "MANUAL_REVIEW": 5,
+      "DISCARDED": 2,
+      "REJECTED": 30
+    },
+    "final_state_equation": "83 + 5 + 2 + 30 = 120",
+    "final_state_equation_value": 120,
+    "final_state_equation_pass": true,
+    "reviewer_round1": {
+      "PASS": 80,
+      "REVISE": 10,
+      "REJECT": 30
+    },
+    "reviewer_eventual_pass": 89,
+    "solver": {
+      "reached": 89,
+      "consensus": 83,
+      "A_D_disagreement": 2,
+      "AMBIGUOUS": 3,
+      "NONE": 1,
+      "LOW_confidence": 1
+    }
+  },
+  "non_auto_accept_summary": {
+    "count": 37,
+    "equation": "120 - 83 = 37",
+    "final_state_counts": {
+      "MANUAL_REVIEW": 5,
+      "DISCARDED": 2,
+      "REJECTED": 30
+    },
+    "primary_reason_counts": {
+      "metadata_mismatch": 5,
+      "reference_resolution_dependency": 1,
+      "solver_ambiguous": 1,
+      "connector_semantics": 1,
+      "alternate_repair": 1,
+      "no_genuine_error": 25,
+      "target_mismatch": 2,
+      "revision_failure": 1
+    }
+  },
+  "non_auto_accept_items": [
+    {
+      "item_id": "batch1-we-007",
+      "batch": "batch1",
+      "section": "Written Expression",
+      "final_state": "MANUAL_REVIEW",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "subject relative pronoun for a human antecedent",
+      "difficulty": "EASY",
+      "vocabulary_domain": "community surveying",
+      "tested_error_type": "incorrect_relative_marker",
+      "error_scope": "clause_level",
+      "error_span_type": "relative_marker",
+      "error_location": "late",
+      "reviewer_round1_verdict": "PASS",
+      "solver_answer": "B",
+      "primary_reason": "metadata_mismatch",
+      "secondary_reasons": [
+        "solver_answer_disagreement",
+        "metadata_mismatch"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": null,
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The genuine relative-marker error is B (which → who). Generator and Reviewer selected C; Solver B is independently correct."
+    },
+    {
+      "item_id": "batch1-we-013",
+      "batch": "batch1",
+      "section": "Written Expression",
+      "final_state": "DISCARDED",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "pronoun without an explicit antecedent",
+      "difficulty": "EASY",
+      "vocabulary_domain": "research equipment",
+      "tested_error_type": "incorrect_reference",
+      "error_scope": "sentence_level",
+      "error_span_type": "pronoun",
+      "error_location": "sentence_initial",
+      "reviewer_round1_verdict": "PASS",
+      "solver_answer": "NONE",
+      "primary_reason": "reference_resolution_dependency",
+      "secondary_reasons": [
+        "no_genuine_error",
+        "solver_none"
+      ],
+      "independent_classification": "LIKELY_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": null,
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The standalone sentence has no explicit antecedent for It. This is the Pilot P0-A recurrence: the intended reference problem is context-dependent rather than a clean marked grammar error."
+    },
+    {
+      "item_id": "batch1-we-024",
+      "batch": "batch1",
+      "section": "Written Expression",
+      "final_state": "MANUAL_REVIEW",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "countable quantifier before a plural count noun",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "questionnaire design",
+      "tested_error_type": "agreement_error",
+      "error_scope": "local",
+      "error_span_type": "quantifier",
+      "error_location": "late",
+      "reviewer_round1_verdict": "PASS",
+      "solver_answer": "B",
+      "primary_reason": "metadata_mismatch",
+      "secondary_reasons": [
+        "solver_answer_disagreement",
+        "metadata_mismatch"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": null,
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The quantifier error is B (much → many), not C. Generator and Reviewer selected C; Solver B is independently correct."
+    },
+    {
+      "item_id": "batch2-struct-003",
+      "batch": "batch2",
+      "section": "Structure",
+      "final_state": "MANUAL_REVIEW",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "restrictive relative clause with object relative marker",
+      "difficulty": "EASY",
+      "vocabulary_domain": "environmental science",
+      "tested_error_type": null,
+      "error_scope": null,
+      "error_span_type": null,
+      "error_location": null,
+      "reviewer_round1_verdict": "PASS",
+      "solver_answer": "AMBIGUOUS",
+      "primary_reason": "solver_ambiguous",
+      "secondary_reasons": [
+        "alternate_parse",
+        "solver_overstrict"
+      ],
+      "independent_classification": "SPEC_OR_TAXONOMY_EDGE_CASE",
+      "reviewer_boundary_judgement": null,
+      "root_cause": "SOLVER_OVERSTRICT",
+      "independent_note": "Literal insertion of C yields which they the university restored, with a duplicate subject. The Solver's proposed which they restored silently drops the stem's the university; A remains the unique licensed option."
+    },
+    {
+      "item_id": "batch2-struct-004",
+      "batch": "batch2",
+      "section": "Structure",
+      "final_state": "MANUAL_REVIEW",
+      "primary_target": "ADVERBIAL_CLAUSES",
+      "subtype": "conditional clause with a finite subordinate clause",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "meteorology",
+      "tested_error_type": null,
+      "error_scope": null,
+      "error_span_type": null,
+      "error_location": null,
+      "reviewer_round1_verdict": "PASS",
+      "solver_answer": "AMBIGUOUS",
+      "primary_reason": "connector_semantics",
+      "secondary_reasons": [
+        "solver_ambiguous",
+        "semantic_only_error"
+      ],
+      "independent_classification": "LIKELY_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": null,
+      "root_cause": "GENERATOR_DESIGN",
+      "independent_note": "Because, although, unless, and if can all form grammatical subordinate clauses here. The sentence lacks a semantic relation that uniquely selects D; Reviewer missed semantic underspecification."
+    },
+    {
+      "item_id": "batch2-struct-006",
+      "batch": "batch2",
+      "section": "Structure",
+      "final_state": "MANUAL_REVIEW",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "passive voice in a completed research process",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "materials science",
+      "tested_error_type": null,
+      "error_scope": null,
+      "error_span_type": null,
+      "error_location": null,
+      "reviewer_round1_verdict": "PASS",
+      "solver_answer": "AMBIGUOUS",
+      "primary_reason": "alternate_repair",
+      "secondary_reasons": [
+        "solver_ambiguous",
+        "difficulty_mismatch"
+      ],
+      "independent_classification": "LIKELY_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": null,
+      "root_cause": "GENERATOR_DESIGN",
+      "independent_note": "Both tested and had been tested are grammatical after before publication. Past perfect is not forced; Reviewer missed tense ambiguity."
+    },
+    {
+      "item_id": "batch2-struct-008",
+      "batch": "batch2",
+      "section": "Structure",
+      "final_state": "REJECTED",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "reduced passive relative clause with a past participle",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "meteorite studies",
+      "tested_error_type": null,
+      "error_scope": null,
+      "error_span_type": null,
+      "error_location": null,
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "metadata_mismatch",
+      "secondary_reasons": [
+        "metadata_mismatch"
+      ],
+      "independent_classification": "SHOULD_HAVE_BEEN_REVISE",
+      "reviewer_boundary_judgement": "SHOULD_HAVE_BEEN_REVISE",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The sentence has one valid completion, discovered (B). Correcting correct_answer, explanation, and rationales is a local repair; rejection was too strong."
+    },
+    {
+      "item_id": "batch2-struct-012",
+      "batch": "batch2",
+      "section": "Structure",
+      "final_state": "REJECTED",
+      "primary_target": "INVERSION",
+      "subtype": "subject-auxiliary inversion after a fronted negative adverbial",
+      "difficulty": "HARD",
+      "vocabulary_domain": "constitutional history",
+      "tested_error_type": null,
+      "error_scope": null,
+      "error_span_type": null,
+      "error_location": null,
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "metadata_mismatch",
+      "secondary_reasons": [
+        "metadata_mismatch"
+      ],
+      "independent_classification": "SHOULD_HAVE_BEEN_REVISE",
+      "reviewer_boundary_judgement": "SHOULD_HAVE_BEEN_REVISE",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The sentence has one valid completion, has (A). Correcting the key and explanation is a local repair; rejection was too strong."
+    },
+    {
+      "item_id": "batch2-we-001",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "article before a singular count noun",
+      "difficulty": "EASY",
+      "vocabulary_domain": "ecology",
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "error_span_type": "determiner",
+      "error_location": "sentence_initial",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-002",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "simple past in a dated historical sequence",
+      "difficulty": "EASY",
+      "vocabulary_domain": "transportation history",
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "local",
+      "error_span_type": "verb_phrase",
+      "error_location": "early",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-003",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adjective modifying a research noun",
+      "difficulty": "EASY",
+      "vocabulary_domain": "psychology",
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "error_span_type": "adjective",
+      "error_location": "middle",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-004",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "quantifier with a plural count noun",
+      "difficulty": "EASY",
+      "vocabulary_domain": "agriculture",
+      "tested_error_type": "agreement_error",
+      "error_scope": "local",
+      "error_span_type": "quantifier",
+      "error_location": "late",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-005",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel gerund phrases after a coordinator",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "education",
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "clause_level",
+      "error_span_type": "gerund_phrase",
+      "error_location": "sentence_final",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-006",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "adjective complement after a linking verb",
+      "difficulty": "EASY",
+      "vocabulary_domain": "geography",
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_scope": "local",
+      "error_span_type": "adjective",
+      "error_location": "early",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-007",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "gerund as the object of a preposition",
+      "difficulty": "EASY",
+      "vocabulary_domain": "marine conservation",
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "local",
+      "error_span_type": "gerund_phrase",
+      "error_location": "middle",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-008",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative pronoun as the subject of a restrictive clause",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "architecture",
+      "tested_error_type": "incorrect_relative_marker",
+      "error_scope": "clause_level",
+      "error_span_type": "relative_marker",
+      "error_location": "late",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-009",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adverb modifying a participle",
+      "difficulty": "EASY",
+      "vocabulary_domain": "meteorology",
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "error_span_type": "adverb",
+      "error_location": "sentence_final",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-010",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "preposition selected for a noun phrase",
+      "difficulty": "EASY",
+      "vocabulary_domain": "finance",
+      "tested_error_type": "wrong_preposition_collocation",
+      "error_scope": "local",
+      "error_span_type": "prepositional_phrase",
+      "error_location": "early",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-011",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "pronoun agreement with a singular antecedent",
+      "difficulty": "HARD",
+      "vocabulary_domain": "sociology",
+      "tested_error_type": "agreement_error",
+      "error_scope": "cross_clause",
+      "error_span_type": "pronoun",
+      "error_location": "middle",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-012",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel noun phrases after both and",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "political science",
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "clause_level",
+      "error_span_type": "noun_phrase",
+      "error_location": "late",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-013",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "passive voice with an object receiving an action",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "public health",
+      "tested_error_type": "wrong_voice",
+      "error_scope": "clause_level",
+      "error_span_type": "verb_phrase",
+      "error_location": "sentence_final",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-014",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "adjective phrase in postmodifier position",
+      "difficulty": "EASY",
+      "vocabulary_domain": "literary studies",
+      "tested_error_type": "wrong_word_order",
+      "error_scope": "local",
+      "error_span_type": "adjective",
+      "error_location": "early",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-015",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "present participle in a reduced active clause",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "robotics",
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "clause_level",
+      "error_span_type": "participial_phrase",
+      "error_location": "middle",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-016",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "definite article for a uniquely identified institution",
+      "difficulty": "EASY",
+      "vocabulary_domain": "law",
+      "tested_error_type": "missing_required_element",
+      "error_scope": "local",
+      "error_span_type": "determiner",
+      "error_location": "late",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-017",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "comparative adjective with than",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "statistics",
+      "tested_error_type": "wrong_degree_form",
+      "error_scope": "clause_level",
+      "error_span_type": "comparative_marker",
+      "error_location": "sentence_final",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-018",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "verb governed by an infinitive complement",
+      "difficulty": "EASY",
+      "vocabulary_domain": "engineering",
+      "tested_error_type": "missing_required_element",
+      "error_scope": "local",
+      "error_span_type": "infinitive_phrase",
+      "error_location": "early",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-019",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel finite verbs coordinated by and",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "music",
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "clause_level",
+      "error_span_type": "verb_phrase",
+      "error_location": "middle",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-020",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "noun required as the object of a preposition",
+      "difficulty": "EASY",
+      "vocabulary_domain": "anthropology",
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "error_span_type": "noun_phrase",
+      "error_location": "late",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-021",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "whose for a possessive relative relationship",
+      "difficulty": "HARD",
+      "vocabulary_domain": "astronomy",
+      "tested_error_type": "incorrect_relative_marker",
+      "error_scope": "cross_clause",
+      "error_span_type": "relative_marker",
+      "error_location": "sentence_initial",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-022",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "although introducing a finite concessive clause",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "climate policy",
+      "tested_error_type": "incorrect_subordinator",
+      "error_scope": "clause_level",
+      "error_span_type": "conjunction",
+      "error_location": "early",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-023",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "past perfect before a later past event",
+      "difficulty": "HARD",
+      "vocabulary_domain": "medical history",
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "cross_clause",
+      "error_span_type": "verb_phrase",
+      "error_location": "middle",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-024",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "few with a plural count noun",
+      "difficulty": "EASY",
+      "vocabulary_domain": "demography",
+      "tested_error_type": "agreement_error",
+      "error_scope": "local",
+      "error_span_type": "quantifier",
+      "error_location": "late",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch2-we-025",
+      "batch": "batch2",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "infinitive of purpose before a main clause",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "renewable energy",
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "sentence_level",
+      "error_span_type": "infinitive_phrase",
+      "error_location": "sentence_initial",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "no_genuine_error",
+      "secondary_reasons": [
+        "no_valid_answer",
+        "semantic_only_error"
+      ],
+      "independent_classification": "TRUE_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted."
+    },
+    {
+      "item_id": "batch3-struct-009",
+      "batch": "batch3",
+      "section": "Structure",
+      "final_state": "REJECTED",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "so plus adjective licensing a result that-clause",
+      "difficulty": "HARD",
+      "vocabulary_domain": "cognitive science",
+      "tested_error_type": null,
+      "error_scope": null,
+      "error_span_type": null,
+      "error_location": null,
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "target_mismatch",
+      "secondary_reasons": [
+        "metadata_mismatch"
+      ],
+      "independent_classification": "SHOULD_HAVE_BEEN_REVISE",
+      "reviewer_boundary_judgement": "SHOULD_HAVE_BEEN_REVISE",
+      "root_cause": "GENERATOR_DESIGN",
+      "independent_note": "The item is grammatical and uniquely answerable, but it tests finite predicate selection rather than COMPARATIVES_DEGREE. Relabeling or a local target correction is feasible."
+    },
+    {
+      "item_id": "batch3-struct-011",
+      "batch": "batch3",
+      "section": "Structure",
+      "final_state": "REJECTED",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "appositive noun phrase in post-subject position",
+      "difficulty": "EASY",
+      "vocabulary_domain": "biography",
+      "tested_error_type": null,
+      "error_scope": null,
+      "error_span_type": null,
+      "error_location": null,
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "target_mismatch",
+      "secondary_reasons": [
+        "metadata_mismatch"
+      ],
+      "independent_classification": "SHOULD_HAVE_BEEN_REVISE",
+      "reviewer_boundary_judgement": "SHOULD_HAVE_BEEN_REVISE",
+      "root_cause": "GENERATOR_DESIGN",
+      "independent_note": "The item is grammatical and uniquely answerable, but it tests a finite main verb rather than WORD_ORDER_MODIFICATION. Relabeling is a local repair."
+    },
+    {
+      "item_id": "batch3-we-016",
+      "batch": "batch3",
+      "section": "Written Expression",
+      "final_state": "REJECTED",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "adjective order inside a noun phrase",
+      "difficulty": "EASY",
+      "vocabulary_domain": "ceramics",
+      "tested_error_type": "wrong_word_order",
+      "error_scope": "local",
+      "error_span_type": "noun_modifier",
+      "error_location": "middle",
+      "reviewer_round1_verdict": "REJECT",
+      "solver_answer": null,
+      "primary_reason": "metadata_mismatch",
+      "secondary_reasons": [
+        "metadata_mismatch",
+        "other"
+      ],
+      "independent_classification": "SHOULD_HAVE_BEEN_REVISE",
+      "reviewer_boundary_judgement": "SHOULD_HAVE_BEEN_REVISE",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_note": "The genuine word-order error is in B, not C. Updating the marked span/key/explanation is a local repair; the item need not be regenerated from zero."
+    },
+    {
+      "item_id": "batch3-we-024",
+      "batch": "batch3",
+      "section": "Written Expression",
+      "final_state": "DISCARDED",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "past perfect for the earlier of two past events",
+      "difficulty": "HARD",
+      "vocabulary_domain": "geology",
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "cross_clause",
+      "error_span_type": "main_verb",
+      "error_location": "sentence_final",
+      "reviewer_round1_verdict": "REVISE",
+      "solver_answer": null,
+      "primary_reason": "revision_failure",
+      "secondary_reasons": [
+        "no_genuine_error",
+        "metadata_mismatch",
+        "difficulty_mismatch"
+      ],
+      "independent_classification": "LIKELY_GENERATOR_DEFECT",
+      "reviewer_boundary_judgement": null,
+      "root_cause": "REVISION_FAILURE",
+      "independent_note": "Original simple past melted is grammatical with before. Revision 1 produced a valid had melt error but mislabeled it as modal perfect; the next revision retained a HARD mismatch and never reached PASS."
+    }
+  ],
+  "reviewer_reject_audit": {
+    "count": 30,
+    "primary_reason_counts": {
+      "metadata_mismatch": 3,
+      "no_genuine_error": 25,
+      "target_mismatch": 2
+    },
+    "boundary_counts": {
+      "SHOULD_HAVE_BEEN_REVISE": 5,
+      "CLEARLY_JUSTIFIED_REJECT": 25
+    },
+    "classification_counts": {
+      "SHOULD_HAVE_BEEN_REVISE": 5,
+      "TRUE_GENERATOR_DEFECT": 25
+    },
+    "items": [
+      {
+        "item_id": "batch2-struct-008",
+        "batch": "batch2",
+        "section": "Structure",
+        "primary_target": "NONFINITE_VERB_PHRASES",
+        "subtype": "reduced passive relative clause with a past participle",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "meteorite studies",
+        "tested_error_type": null,
+        "error_scope": null,
+        "error_span_type": null,
+        "error_location": null,
+        "question_payload": {
+          "question": "The fragments ___ in the crater were preserved for analysis.",
+          "stem": "The fragments ___ in the crater were preserved for analysis.",
+          "options": {
+            "A": "discovering",
+            "B": "discovered",
+            "C": "were discovered",
+            "D": "to discover"
+          }
+        },
+        "generator": {
+          "answer": "D",
+          "declared_correct_answer": "D",
+          "minimal_correction": null
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "B",
+          "reviewer_difficulty": "MEDIUM",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The marked sentence is grammatical with discovered; the declared answer to discover does not fit, so the item has no valid unique answer.",
+          "secondary_issues": [],
+          "reject_reason": "The marked sentence is grammatical with discovered; the declared answer to discover does not fit, so the item has no valid unique answer.",
+          "revision_requirements": [
+            "Revise the stem/options to make the intended answer unique."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "SHOULD_HAVE_BEEN_REVISE",
+          "primary_reason": "metadata_mismatch",
+          "secondary_reasons": [
+            "metadata_mismatch"
+          ],
+          "boundary_judgement": "SHOULD_HAVE_BEEN_REVISE",
+          "judgement": "The sentence has one valid completion, discovered (B). Correcting correct_answer, explanation, and rationales is a local repair; rejection was too strong.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-struct-012",
+        "batch": "batch2",
+        "section": "Structure",
+        "primary_target": "INVERSION",
+        "subtype": "subject-auxiliary inversion after a fronted negative adverbial",
+        "difficulty": "HARD",
+        "vocabulary_domain": "constitutional history",
+        "tested_error_type": null,
+        "error_scope": null,
+        "error_span_type": null,
+        "error_location": null,
+        "question_payload": {
+          "question": "Never before ___ such a significant amendment been proposed.",
+          "stem": "Never before ___ such a significant amendment been proposed.",
+          "options": {
+            "A": "has",
+            "B": "such has",
+            "C": "has it",
+            "D": "it has"
+          }
+        },
+        "generator": {
+          "answer": "D",
+          "declared_correct_answer": "D",
+          "minimal_correction": null
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "A",
+          "reviewer_difficulty": "HARD",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The correct completion is has, yielding Never before has such a significant amendment been proposed; it has is ungrammatical here.",
+          "secondary_issues": [],
+          "reject_reason": "The correct completion is has, yielding Never before has such a significant amendment been proposed; it has is ungrammatical here.",
+          "revision_requirements": [
+            "Revise the stem/options to make the intended answer unique."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "SHOULD_HAVE_BEEN_REVISE",
+          "primary_reason": "metadata_mismatch",
+          "secondary_reasons": [
+            "metadata_mismatch"
+          ],
+          "boundary_judgement": "SHOULD_HAVE_BEEN_REVISE",
+          "judgement": "The sentence has one valid completion, has (A). Correcting the key and explanation is a local repair; rejection was too strong.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-001",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "REFERENCE_AND_DETERMINERS",
+        "subtype": "article before a singular count noun",
+        "difficulty": "EASY",
+        "vocabulary_domain": "ecology",
+        "tested_error_type": "incorrect_part_of_speech",
+        "error_scope": "local",
+        "error_span_type": "determiner",
+        "error_location": "sentence_initial",
+        "question_payload": {
+          "question": "An ecosystem supports many forms of life.",
+          "sentence": "An ecosystem supports many forms of life.",
+          "marked_parts": {
+            "A": "An",
+            "B": "ecosystem",
+            "C": "supports",
+            "D": "many forms"
+          }
+        },
+        "generator": {
+          "answer": "A",
+          "declared_correct_answer": "A",
+          "minimal_correction": "A: An → An (no correction needed)"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-002",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "VERB_FORM_VOICE",
+        "subtype": "simple past in a dated historical sequence",
+        "difficulty": "EASY",
+        "vocabulary_domain": "transportation history",
+        "tested_error_type": "wrong_verb_form",
+        "error_scope": "local",
+        "error_span_type": "verb_phrase",
+        "error_location": "early",
+        "question_payload": {
+          "question": "The railway opened the mountain route in 1898.",
+          "sentence": "The railway opened the mountain route in 1898.",
+          "marked_parts": {
+            "A": "The railway",
+            "B": "opened",
+            "C": "the mountain route",
+            "D": "in 1898"
+          }
+        },
+        "generator": {
+          "answer": "B",
+          "declared_correct_answer": "B",
+          "minimal_correction": "B: opened → opened (no correction needed)"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-003",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "WORD_CLASS_FORM",
+        "subtype": "adjective modifying a research noun",
+        "difficulty": "EASY",
+        "vocabulary_domain": "psychology",
+        "tested_error_type": "incorrect_part_of_speech",
+        "error_scope": "local",
+        "error_span_type": "adjective",
+        "error_location": "middle",
+        "question_payload": {
+          "question": "The study reports significant changes in memory.",
+          "sentence": "The study reports significant changes in memory.",
+          "marked_parts": {
+            "A": "The study",
+            "B": "reports",
+            "C": "significant",
+            "D": "changes in memory"
+          }
+        },
+        "generator": {
+          "answer": "C",
+          "declared_correct_answer": "C",
+          "minimal_correction": "C: significant → significant (no correction needed)"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "MEDIUM",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-004",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "REFERENCE_AND_DETERMINERS",
+        "subtype": "quantifier with a plural count noun",
+        "difficulty": "EASY",
+        "vocabulary_domain": "agriculture",
+        "tested_error_type": "agreement_error",
+        "error_scope": "local",
+        "error_span_type": "quantifier",
+        "error_location": "late",
+        "question_payload": {
+          "question": "Several methods improve the harvest yield.",
+          "sentence": "Several methods improve the harvest yield.",
+          "marked_parts": {
+            "A": "Several",
+            "B": "methods",
+            "C": "improve",
+            "D": "the harvest yield"
+          }
+        },
+        "generator": {
+          "answer": "D",
+          "declared_correct_answer": "D",
+          "minimal_correction": "D: the harvest yield → the harvest yields"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-005",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "PARALLEL_STRUCTURE",
+        "subtype": "parallel gerund phrases after a coordinator",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "education",
+        "tested_error_type": "incorrect_part_of_speech",
+        "error_scope": "clause_level",
+        "error_span_type": "gerund_phrase",
+        "error_location": "sentence_final",
+        "question_payload": {
+          "question": "The course emphasizes reading critically and writing clearly.",
+          "sentence": "The course emphasizes reading critically and writing clearly.",
+          "marked_parts": {
+            "A": "The course",
+            "B": "emphasizes",
+            "C": "reading critically",
+            "D": "and writing clearly"
+          }
+        },
+        "generator": {
+          "answer": "A",
+          "declared_correct_answer": "A",
+          "minimal_correction": "A: The course → The course"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-006",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "VERB_COMPLEMENTATION",
+        "subtype": "adjective complement after a linking verb",
+        "difficulty": "EASY",
+        "vocabulary_domain": "geography",
+        "tested_error_type": "wrong_preposition_collocation",
+        "error_scope": "local",
+        "error_span_type": "adjective",
+        "error_location": "early",
+        "question_payload": {
+          "question": "The plateau appears stable during the dry season.",
+          "sentence": "The plateau appears stable during the dry season.",
+          "marked_parts": {
+            "A": "The plateau",
+            "B": "appears",
+            "C": "stable",
+            "D": "during the dry season"
+          }
+        },
+        "generator": {
+          "answer": "B",
+          "declared_correct_answer": "B",
+          "minimal_correction": "B: appears → appears"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "MEDIUM",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-007",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "NONFINITE_VERB_PHRASES",
+        "subtype": "gerund as the object of a preposition",
+        "difficulty": "EASY",
+        "vocabulary_domain": "marine conservation",
+        "tested_error_type": "wrong_verb_form",
+        "error_scope": "local",
+        "error_span_type": "gerund_phrase",
+        "error_location": "middle",
+        "question_payload": {
+          "question": "Scientists are committed to protecting the coral reef.",
+          "sentence": "Scientists are committed to protecting the coral reef.",
+          "marked_parts": {
+            "A": "Scientists",
+            "B": "are committed",
+            "C": "to protecting",
+            "D": "the coral reef"
+          }
+        },
+        "generator": {
+          "answer": "C",
+          "declared_correct_answer": "C",
+          "minimal_correction": "C: to protecting → to protecting"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-008",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "RELATIVE_CLAUSES",
+        "subtype": "relative pronoun as the subject of a restrictive clause",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "architecture",
+        "tested_error_type": "incorrect_relative_marker",
+        "error_scope": "clause_level",
+        "error_span_type": "relative_marker",
+        "error_location": "late",
+        "question_payload": {
+          "question": "The arch that supports the roof was recently repaired.",
+          "sentence": "The arch that supports the roof was recently repaired.",
+          "marked_parts": {
+            "A": "The arch",
+            "B": "that supports",
+            "C": "the roof",
+            "D": "was recently repaired"
+          }
+        },
+        "generator": {
+          "answer": "D",
+          "declared_correct_answer": "D",
+          "minimal_correction": "D: was recently repaired → was recently repaired"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-009",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "WORD_CLASS_FORM",
+        "subtype": "adverb modifying a participle",
+        "difficulty": "EASY",
+        "vocabulary_domain": "meteorology",
+        "tested_error_type": "incorrect_part_of_speech",
+        "error_scope": "local",
+        "error_span_type": "adverb",
+        "error_location": "sentence_final",
+        "question_payload": {
+          "question": "The rapidly moving clouds covered the horizon.",
+          "sentence": "The rapidly moving clouds covered the horizon.",
+          "marked_parts": {
+            "A": "The rapidly",
+            "B": "moving clouds",
+            "C": "covered",
+            "D": "the horizon"
+          }
+        },
+        "generator": {
+          "answer": "A",
+          "declared_correct_answer": "A",
+          "minimal_correction": "A: The rapidly → The rapidly"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "MEDIUM",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-010",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "CONNECTORS_CONJUNCTIONS",
+        "subtype": "preposition selected for a noun phrase",
+        "difficulty": "EASY",
+        "vocabulary_domain": "finance",
+        "tested_error_type": "wrong_preposition_collocation",
+        "error_scope": "local",
+        "error_span_type": "prepositional_phrase",
+        "error_location": "early",
+        "question_payload": {
+          "question": "Investors are concerned about the sudden change.",
+          "sentence": "Investors are concerned about the sudden change.",
+          "marked_parts": {
+            "A": "Investors",
+            "B": "are concerned",
+            "C": "about",
+            "D": "the sudden change"
+          }
+        },
+        "generator": {
+          "answer": "B",
+          "declared_correct_answer": "B",
+          "minimal_correction": "B: are concerned → are concerned"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-011",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "REFERENCE_AND_DETERMINERS",
+        "subtype": "pronoun agreement with a singular antecedent",
+        "difficulty": "HARD",
+        "vocabulary_domain": "sociology",
+        "tested_error_type": "agreement_error",
+        "error_scope": "cross_clause",
+        "error_span_type": "pronoun",
+        "error_location": "middle",
+        "question_payload": {
+          "question": "Each participant submitted their questionnaire before leaving.",
+          "sentence": "Each participant submitted their questionnaire before leaving.",
+          "marked_parts": {
+            "A": "Each participant",
+            "B": "submitted",
+            "C": "their questionnaire",
+            "D": "before leaving"
+          }
+        },
+        "generator": {
+          "answer": "C",
+          "declared_correct_answer": "C",
+          "minimal_correction": "C: their questionnaire → his or her questionnaire"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "HARD",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-012",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "PARALLEL_STRUCTURE",
+        "subtype": "parallel noun phrases after both and",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "political science",
+        "tested_error_type": "incorrect_part_of_speech",
+        "error_scope": "clause_level",
+        "error_span_type": "noun_phrase",
+        "error_location": "late",
+        "question_payload": {
+          "question": "The survey measured both public trust and policy awareness.",
+          "sentence": "The survey measured both public trust and policy awareness.",
+          "marked_parts": {
+            "A": "The survey",
+            "B": "measured",
+            "C": "both public trust",
+            "D": "and policy awareness"
+          }
+        },
+        "generator": {
+          "answer": "D",
+          "declared_correct_answer": "D",
+          "minimal_correction": "D: and policy awareness → and policy awareness"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "MEDIUM",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-013",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "VERB_FORM_VOICE",
+        "subtype": "passive voice with an object receiving an action",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "public health",
+        "tested_error_type": "wrong_voice",
+        "error_scope": "clause_level",
+        "error_span_type": "verb_phrase",
+        "error_location": "sentence_final",
+        "question_payload": {
+          "question": "The vaccine was tested on volunteers before approval.",
+          "sentence": "The vaccine was tested on volunteers before approval.",
+          "marked_parts": {
+            "A": "The vaccine",
+            "B": "was tested",
+            "C": "on volunteers",
+            "D": "before approval"
+          }
+        },
+        "generator": {
+          "answer": "A",
+          "declared_correct_answer": "A",
+          "minimal_correction": "A: The vaccine → The vaccine"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-014",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "WORD_ORDER_MODIFICATION",
+        "subtype": "adjective phrase in postmodifier position",
+        "difficulty": "EASY",
+        "vocabulary_domain": "literary studies",
+        "tested_error_type": "wrong_word_order",
+        "error_scope": "local",
+        "error_span_type": "adjective",
+        "error_location": "early",
+        "question_payload": {
+          "question": "The poems written during exile reveal a new style.",
+          "sentence": "The poems written during exile reveal a new style.",
+          "marked_parts": {
+            "A": "The poems",
+            "B": "written during exile",
+            "C": "reveal",
+            "D": "a new style"
+          }
+        },
+        "generator": {
+          "answer": "B",
+          "declared_correct_answer": "B",
+          "minimal_correction": "B: written during exile → written during exile"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-015",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "NONFINITE_VERB_PHRASES",
+        "subtype": "present participle in a reduced active clause",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "robotics",
+        "tested_error_type": "wrong_verb_form",
+        "error_scope": "clause_level",
+        "error_span_type": "participial_phrase",
+        "error_location": "middle",
+        "question_payload": {
+          "question": "Using infrared sensors, the robot avoids obstacles.",
+          "sentence": "Using infrared sensors, the robot avoids obstacles.",
+          "marked_parts": {
+            "A": "Using infrared sensors",
+            "B": "the robot",
+            "C": "avoids",
+            "D": "obstacles"
+          }
+        },
+        "generator": {
+          "answer": "C",
+          "declared_correct_answer": "C",
+          "minimal_correction": "C: avoids → avoids"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "MEDIUM",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-016",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "REFERENCE_AND_DETERMINERS",
+        "subtype": "definite article for a uniquely identified institution",
+        "difficulty": "EASY",
+        "vocabulary_domain": "law",
+        "tested_error_type": "missing_required_element",
+        "error_scope": "local",
+        "error_span_type": "determiner",
+        "error_location": "late",
+        "question_payload": {
+          "question": "The court published its decision on Monday.",
+          "sentence": "The court published its decision on Monday.",
+          "marked_parts": {
+            "A": "The court",
+            "B": "published",
+            "C": "its decision",
+            "D": "on Monday"
+          }
+        },
+        "generator": {
+          "answer": "D",
+          "declared_correct_answer": "D",
+          "minimal_correction": "D: on Monday → on the Monday"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-017",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "COMPARATIVES_DEGREE",
+        "subtype": "comparative adjective with than",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "statistics",
+        "tested_error_type": "wrong_degree_form",
+        "error_scope": "clause_level",
+        "error_span_type": "comparative_marker",
+        "error_location": "sentence_final",
+        "question_payload": {
+          "question": "The second estimate is more precise than the first.",
+          "sentence": "The second estimate is more precise than the first.",
+          "marked_parts": {
+            "A": "The second estimate",
+            "B": "is more precise",
+            "C": "than",
+            "D": "the first"
+          }
+        },
+        "generator": {
+          "answer": "A",
+          "declared_correct_answer": "A",
+          "minimal_correction": "A: The second estimate → The second estimate"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-018",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "VERB_COMPLEMENTATION",
+        "subtype": "verb governed by an infinitive complement",
+        "difficulty": "EASY",
+        "vocabulary_domain": "engineering",
+        "tested_error_type": "missing_required_element",
+        "error_scope": "local",
+        "error_span_type": "infinitive_phrase",
+        "error_location": "early",
+        "question_payload": {
+          "question": "The device allows operators to adjust the pressure.",
+          "sentence": "The device allows operators to adjust the pressure.",
+          "marked_parts": {
+            "A": "The device",
+            "B": "allows operators",
+            "C": "to adjust",
+            "D": "the pressure"
+          }
+        },
+        "generator": {
+          "answer": "B",
+          "declared_correct_answer": "B",
+          "minimal_correction": "B: allows operators → allows operators"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "MEDIUM",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-019",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "PARALLEL_STRUCTURE",
+        "subtype": "parallel finite verbs coordinated by and",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "music",
+        "tested_error_type": "wrong_verb_form",
+        "error_scope": "clause_level",
+        "error_span_type": "verb_phrase",
+        "error_location": "middle",
+        "question_payload": {
+          "question": "The conductor raised the baton and began the performance.",
+          "sentence": "The conductor raised the baton and began the performance.",
+          "marked_parts": {
+            "A": "The conductor",
+            "B": "raised",
+            "C": "the baton and began",
+            "D": "the performance"
+          }
+        },
+        "generator": {
+          "answer": "C",
+          "declared_correct_answer": "C",
+          "minimal_correction": "C: raised the baton and began → raised the baton and began"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-020",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "WORD_CLASS_FORM",
+        "subtype": "noun required as the object of a preposition",
+        "difficulty": "EASY",
+        "vocabulary_domain": "anthropology",
+        "tested_error_type": "incorrect_part_of_speech",
+        "error_scope": "local",
+        "error_span_type": "noun_phrase",
+        "error_location": "late",
+        "question_payload": {
+          "question": "The artifact provides evidence of early settlement.",
+          "sentence": "The artifact provides evidence of early settlement.",
+          "marked_parts": {
+            "A": "The artifact",
+            "B": "provides",
+            "C": "evidence of",
+            "D": "early settlement"
+          }
+        },
+        "generator": {
+          "answer": "D",
+          "declared_correct_answer": "D",
+          "minimal_correction": "D: early settlement → early settlement"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-021",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "RELATIVE_CLAUSES",
+        "subtype": "whose for a possessive relative relationship",
+        "difficulty": "HARD",
+        "vocabulary_domain": "astronomy",
+        "tested_error_type": "incorrect_relative_marker",
+        "error_scope": "cross_clause",
+        "error_span_type": "relative_marker",
+        "error_location": "sentence_initial",
+        "question_payload": {
+          "question": "The star whose spectrum changed was observed again.",
+          "sentence": "The star whose spectrum changed was observed again.",
+          "marked_parts": {
+            "A": "The star",
+            "B": "whose spectrum",
+            "C": "changed",
+            "D": "was observed again"
+          }
+        },
+        "generator": {
+          "answer": "A",
+          "declared_correct_answer": "A",
+          "minimal_correction": "A: The star → The star"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "MEDIUM",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-022",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "CONNECTORS_CONJUNCTIONS",
+        "subtype": "although introducing a finite concessive clause",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "climate policy",
+        "tested_error_type": "incorrect_subordinator",
+        "error_scope": "clause_level",
+        "error_span_type": "conjunction",
+        "error_location": "early",
+        "question_payload": {
+          "question": "Although costs increased, the program continued to expand.",
+          "sentence": "Although costs increased, the program continued to expand.",
+          "marked_parts": {
+            "A": "Although costs increased",
+            "B": "the program",
+            "C": "continued",
+            "D": "to expand"
+          }
+        },
+        "generator": {
+          "answer": "B",
+          "declared_correct_answer": "B",
+          "minimal_correction": "B: the program → the program"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-023",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "VERB_FORM_VOICE",
+        "subtype": "past perfect before a later past event",
+        "difficulty": "HARD",
+        "vocabulary_domain": "medical history",
+        "tested_error_type": "wrong_verb_form",
+        "error_scope": "cross_clause",
+        "error_span_type": "verb_phrase",
+        "error_location": "middle",
+        "question_payload": {
+          "question": "The patient had recovered before the physician arrived.",
+          "sentence": "The patient had recovered before the physician arrived.",
+          "marked_parts": {
+            "A": "The patient",
+            "B": "had recovered",
+            "C": "before",
+            "D": "the physician arrived"
+          }
+        },
+        "generator": {
+          "answer": "C",
+          "declared_correct_answer": "C",
+          "minimal_correction": "C: before → before"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-024",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "REFERENCE_AND_DETERMINERS",
+        "subtype": "few with a plural count noun",
+        "difficulty": "EASY",
+        "vocabulary_domain": "demography",
+        "tested_error_type": "agreement_error",
+        "error_scope": "local",
+        "error_span_type": "quantifier",
+        "error_location": "late",
+        "question_payload": {
+          "question": "Few residents opposed the construction plan.",
+          "sentence": "Few residents opposed the construction plan.",
+          "marked_parts": {
+            "A": "Few",
+            "B": "residents",
+            "C": "opposed",
+            "D": "the construction plan"
+          }
+        },
+        "generator": {
+          "answer": "D",
+          "declared_correct_answer": "D",
+          "minimal_correction": "D: the construction plan → the construction plans"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "MEDIUM",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch2-we-025",
+        "batch": "batch2",
+        "section": "Written Expression",
+        "primary_target": "NONFINITE_VERB_PHRASES",
+        "subtype": "infinitive of purpose before a main clause",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "renewable energy",
+        "tested_error_type": "incorrect_part_of_speech",
+        "error_scope": "sentence_level",
+        "error_span_type": "infinitive_phrase",
+        "error_location": "sentence_initial",
+        "question_payload": {
+          "question": "To reduce emissions, the city expanded its solar program.",
+          "sentence": "To reduce emissions, the city expanded its solar program.",
+          "marked_parts": {
+            "A": "To reduce emissions",
+            "B": "the city",
+            "C": "expanded",
+            "D": "its solar program"
+          }
+        },
+        "generator": {
+          "answer": "A",
+          "declared_correct_answer": "A",
+          "minimal_correction": "A: To reduce emissions → To reduce emissions"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "NONE",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "REJECT",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REVISE",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "REVISE"
+          },
+          "primary_issue": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "secondary_issues": [],
+          "reject_reason": "The full sentence contains no genuine grammatical error; the marked part is acceptable standard written English, so the item cannot support a unique error-identification answer.",
+          "revision_requirements": [
+            "Replace the sentence with one containing exactly one genuine grammatical error."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "TRUE_GENERATOR_DEFECT",
+          "primary_reason": "no_genuine_error",
+          "secondary_reasons": [
+            "no_valid_answer",
+            "semantic_only_error"
+          ],
+          "boundary_judgement": "CLEARLY_JUSTIFIED_REJECT",
+          "judgement": "The complete sentence is acceptable standard written English and the intended correction is a no-op. The item has no genuine marked error and is not usable as submitted.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch3-struct-009",
+        "batch": "batch3",
+        "section": "Structure",
+        "primary_target": "COMPARATIVES_DEGREE",
+        "subtype": "so plus adjective licensing a result that-clause",
+        "difficulty": "HARD",
+        "vocabulary_domain": "cognitive science",
+        "tested_error_type": null,
+        "error_scope": null,
+        "error_span_type": null,
+        "error_location": null,
+        "question_payload": {
+          "question": "The memory task was so demanding that several participants, after practicing for weeks, ___ unable to finish it.",
+          "stem": "The memory task was so demanding that several participants, after practicing for weeks, ___ unable to finish it.",
+          "options": {
+            "A": "were more unable",
+            "B": "were",
+            "C": "being",
+            "D": "had been to"
+          }
+        },
+        "generator": {
+          "answer": "B",
+          "declared_correct_answer": "B",
+          "minimal_correction": null
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "B",
+          "reviewer_difficulty": "HARD",
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "REJECT",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "REJECT"
+          },
+          "primary_issue": "The item tests finite verb selection/agreement in the that-clause, not comparative degree.",
+          "secondary_issues": [],
+          "reject_reason": "The item tests finite verb selection/agreement in the that-clause, not comparative degree.",
+          "revision_requirements": [
+            "Rebuild the item around the declared taxonomy target."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "SHOULD_HAVE_BEEN_REVISE",
+          "primary_reason": "target_mismatch",
+          "secondary_reasons": [
+            "metadata_mismatch"
+          ],
+          "boundary_judgement": "SHOULD_HAVE_BEEN_REVISE",
+          "judgement": "The item is grammatical and uniquely answerable, but it tests finite predicate selection rather than COMPARATIVES_DEGREE. Relabeling or a local target correction is feasible.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch3-struct-011",
+        "batch": "batch3",
+        "section": "Structure",
+        "primary_target": "WORD_ORDER_MODIFICATION",
+        "subtype": "appositive noun phrase in post-subject position",
+        "difficulty": "EASY",
+        "vocabulary_domain": "biography",
+        "tested_error_type": null,
+        "error_scope": null,
+        "error_span_type": null,
+        "error_location": null,
+        "question_payload": {
+          "question": "Marie Curie, a pioneer in radioactivity research, ___ two Nobel Prizes.",
+          "stem": "Marie Curie, a pioneer in radioactivity research, ___ two Nobel Prizes.",
+          "options": {
+            "A": "awarding",
+            "B": "was award",
+            "C": "her award",
+            "D": "received"
+          }
+        },
+        "generator": {
+          "answer": "D",
+          "declared_correct_answer": "D",
+          "minimal_correction": null
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "D",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "REJECT",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "REJECT"
+          },
+          "primary_issue": "The item tests selection of a finite lexical verb, not word-order modification.",
+          "secondary_issues": [],
+          "reject_reason": "The item tests selection of a finite lexical verb, not word-order modification.",
+          "revision_requirements": [
+            "Rebuild the item around the declared taxonomy target."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "SHOULD_HAVE_BEEN_REVISE",
+          "primary_reason": "target_mismatch",
+          "secondary_reasons": [
+            "metadata_mismatch"
+          ],
+          "boundary_judgement": "SHOULD_HAVE_BEEN_REVISE",
+          "judgement": "The item is grammatical and uniquely answerable, but it tests a finite main verb rather than WORD_ORDER_MODIFICATION. Relabeling is a local repair.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      },
+      {
+        "item_id": "batch3-we-016",
+        "batch": "batch3",
+        "section": "Written Expression",
+        "primary_target": "WORD_ORDER_MODIFICATION",
+        "subtype": "adjective order inside a noun phrase",
+        "difficulty": "EASY",
+        "vocabulary_domain": "ceramics",
+        "tested_error_type": "wrong_word_order",
+        "error_scope": "local",
+        "error_span_type": "noun_modifier",
+        "error_location": "middle",
+        "question_payload": {
+          "question": "The museum displayed a clay ancient vessel from the excavation.",
+          "sentence": "The museum displayed a clay ancient vessel from the excavation.",
+          "marked_parts": {
+            "A": "The museum displayed",
+            "B": "a clay ancient vessel",
+            "C": "from the excavation",
+            "D": "the excavation"
+          }
+        },
+        "generator": {
+          "answer": "C",
+          "declared_correct_answer": "C",
+          "minimal_correction": "an ancient clay vessel from the excavation"
+        },
+        "reviewer": {
+          "verdict": "REJECT",
+          "critical_failure": true,
+          "independent_answer": "B",
+          "reviewer_difficulty": "EASY",
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "REJECT",
+            "target_alignment": "REJECT",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "REJECT"
+          },
+          "primary_issue": "The genuine word-order error is in marked part B, while the generator marks C; the intended answer therefore does not match the independent audit.",
+          "secondary_issues": [],
+          "reject_reason": "The genuine word-order error is in marked part B, while the generator marks C; the intended answer therefore does not match the independent audit.",
+          "revision_requirements": [
+            "The genuine word-order error is in marked part B, while the generator marks C; the intended answer therefore does not match the independent audit."
+          ]
+        },
+        "solver": null,
+        "independent_reassessment": {
+          "classification": "SHOULD_HAVE_BEEN_REVISE",
+          "primary_reason": "metadata_mismatch",
+          "secondary_reasons": [
+            "metadata_mismatch",
+            "other"
+          ],
+          "boundary_judgement": "SHOULD_HAVE_BEEN_REVISE",
+          "judgement": "The genuine word-order error is in B, not C. Updating the marked span/key/explanation is a local repair; the item need not be regenerated from zero.",
+          "human_calibration_required": true
+        },
+        "pipeline_final_state": "REJECTED"
+      }
+    ]
+  },
+  "reject_revise_boundary": {
+    "reviewer_round1_REJECT_denominator": 30,
+    "clearly_justified_REJECT": 25,
+    "likely_justified_REJECT": 0,
+    "should_have_been_REVISE": 5,
+    "possible_reviewer_over_rejection": 0,
+    "clear_reviewer_over_rejection": 0,
+    "should_have_been_REVISE_ids": [
+      "batch2-struct-008",
+      "batch2-struct-012",
+      "batch3-struct-009",
+      "batch3-struct-011",
+      "batch3-we-016"
+    ],
+    "over_rejection_note": "No item in the 30 REJECT set was independently judged a standard-English-valid item that should have been kept. Five were judged locally repairable, so the issue is REJECT/REVISE boundary strictness rather than false rejection."
+  },
+  "batch_analysis": {
+    "batch1": {
+      "batch_id": "validation_batch1",
+      "generated": 40,
+      "planned_composition": {
+        "section": {
+          "Structure": 15,
+          "Written Expression": 25
+        },
+        "difficulty": {
+          "EASY": 20,
+          "MEDIUM": 15,
+          "HARD": 5
+        },
+        "primary_target": {
+          "ADVERBIAL_CLAUSES": 2,
+          "CLAUSE_STRUCTURE": 2,
+          "COMPARATIVES_DEGREE": 2,
+          "CONNECTORS_CONJUNCTIONS": 3,
+          "EXISTENTIAL_EXPLETIVE": 2,
+          "INVERSION": 1,
+          "NONFINITE_VERB_PHRASES": 3,
+          "NOUN_CLAUSES": 2,
+          "PARALLEL_STRUCTURE": 3,
+          "REFERENCE_AND_DETERMINERS": 4,
+          "RELATIVE_CLAUSES": 2,
+          "VERB_COMPLEMENTATION": 3,
+          "VERB_FORM_VOICE": 4,
+          "WORD_CLASS_FORM": 5,
+          "WORD_ORDER_MODIFICATION": 2
+        },
+        "answer_position": {
+          "A": 11,
+          "B": 11,
+          "C": 10,
+          "D": 8
+        },
+        "structure_clause_count_target": {
+          "1": 5,
+          "2": 10
+        },
+        "written_expression_tested_error_type": {
+          "agreement_error": 4,
+          "incorrect_part_of_speech": 4,
+          "wrong_verb_form": 5,
+          "wrong_preposition_collocation": 3,
+          "incorrect_relative_marker": 1,
+          "wrong_word_order": 2,
+          "extraneous_element": 1,
+          "wrong_voice": 2,
+          "incorrect_reference": 1,
+          "wrong_degree_form": 1,
+          "incorrect_subordinator": 1
+        },
+        "written_expression_error_scope": {
+          "clause_level": 12,
+          "local": 10,
+          "sentence_level": 1,
+          "cross_clause": 2
+        },
+        "written_expression_error_span_type": {
+          "noun_phrase": 2,
+          "adjective": 2,
+          "verb_phrase": 5,
+          "prepositional_phrase": 3,
+          "gerund_phrase": 1,
+          "relative_marker": 1,
+          "main_verb": 2,
+          "conjunction": 2,
+          "pronoun": 1,
+          "comparative_marker": 1,
+          "infinitive_phrase": 1,
+          "adverb": 2,
+          "participial_phrase": 1,
+          "quantifier": 1
+        },
+        "written_expression_error_location": {
+          "early": 4,
+          "middle": 8,
+          "late": 6,
+          "sentence_final": 5,
+          "sentence_initial": 2
+        },
+        "sentence_length_target": {
+          "n": 40,
+          "min": 12,
+          "max": 22,
+          "mean": 17.2,
+          "note": null
+        }
+      },
+      "actual_composition": {
+        "section": {
+          "Structure": 15,
+          "Written Expression": 25
+        },
+        "difficulty": {
+          "EASY": 20,
+          "MEDIUM": 15,
+          "HARD": 5
+        },
+        "primary_target": {
+          "ADVERBIAL_CLAUSES": 2,
+          "CLAUSE_STRUCTURE": 2,
+          "COMPARATIVES_DEGREE": 2,
+          "CONNECTORS_CONJUNCTIONS": 3,
+          "EXISTENTIAL_EXPLETIVE": 2,
+          "INVERSION": 1,
+          "NONFINITE_VERB_PHRASES": 3,
+          "NOUN_CLAUSES": 2,
+          "PARALLEL_STRUCTURE": 3,
+          "REFERENCE_AND_DETERMINERS": 4,
+          "RELATIVE_CLAUSES": 2,
+          "VERB_COMPLEMENTATION": 3,
+          "VERB_FORM_VOICE": 4,
+          "WORD_CLASS_FORM": 5,
+          "WORD_ORDER_MODIFICATION": 2
+        },
+        "answer_position": {
+          "A": 11,
+          "B": 11,
+          "C": 10,
+          "D": 8
+        },
+        "vocabulary_domain": {
+          "distinct": 40,
+          "top": [
+            [
+              "apprenticeship training",
+              1
+            ],
+            [
+              "archaeological conservation",
+              1
+            ],
+            [
+              "archival science",
+              1
+            ],
+            [
+              "astronomical instrumentation",
+              1
+            ],
+            [
+              "bridge engineering",
+              1
+            ],
+            [
+              "cartography",
+              1
+            ],
+            [
+              "community surveying",
+              1
+            ],
+            [
+              "craft education",
+              1
+            ],
+            [
+              "data analysis",
+              1
+            ],
+            [
+              "environmental monitoring",
+              1
+            ]
+          ]
+        },
+        "written_expression_tested_error_type": {
+          "agreement_error": 4,
+          "incorrect_part_of_speech": 4,
+          "wrong_verb_form": 5,
+          "wrong_preposition_collocation": 3,
+          "incorrect_relative_marker": 1,
+          "wrong_word_order": 2,
+          "extraneous_element": 1,
+          "wrong_voice": 2,
+          "incorrect_reference": 1,
+          "wrong_degree_form": 1,
+          "incorrect_subordinator": 1
+        },
+        "written_expression_error_scope": {
+          "clause_level": 12,
+          "local": 10,
+          "sentence_level": 1,
+          "cross_clause": 2
+        },
+        "surface_word_count": {
+          "n": 40,
+          "min": 8,
+          "max": 17,
+          "mean": 11.45
+        },
+        "surface_word_count_by_section": {
+          "Structure": {
+            "n": 15,
+            "min": 8,
+            "max": 17,
+            "mean": 12.33
+          },
+          "Written Expression": {
+            "n": 25,
+            "min": 8,
+            "max": 14,
+            "mean": 10.92
+          }
+        },
+        "target_drift_ids": [],
+        "difficulty_drift_ids": [],
+        "clause_count_note": "Provenance stores batch-plan clause_count_target but not an independently parsed clause_count; report uses plan targets and surface sentence length, not an invented parse count."
+      },
+      "qa_results": {
+        "reviewer_round1": {
+          "PASS": 38,
+          "REVISE": 2
+        },
+        "solver_answer": {
+          "A": 10,
+          "B": 13,
+          "C": 8,
+          "D": 8,
+          "NONE": 1
+        },
+        "final_state": {
+          "ACCEPTED": 37,
+          "MANUAL_REVIEW": 2,
+          "DISCARDED": 1
+        },
+        "non_accepted_positions_in_generation_order": [
+          22,
+          28,
+          39
+        ],
+        "written_expression_non_accepted_positions": [
+          7,
+          13,
+          24
+        ]
+      }
+    },
+    "batch2": {
+      "batch_id": "validation-batch2",
+      "generated": 40,
+      "planned_composition": {
+        "section": {
+          "Structure": 15,
+          "Written Expression": 25
+        },
+        "difficulty": {
+          "EASY": 19,
+          "MEDIUM": 15,
+          "HARD": 6
+        },
+        "primary_target": {
+          "ADVERBIAL_CLAUSES": 1,
+          "CLAUSE_STRUCTURE": 1,
+          "COMPARATIVES_DEGREE": 2,
+          "CONNECTORS_CONJUNCTIONS": 3,
+          "EXISTENTIAL_EXPLETIVE": 1,
+          "INVERSION": 1,
+          "NONFINITE_VERB_PHRASES": 4,
+          "NOUN_CLAUSES": 1,
+          "PARALLEL_STRUCTURE": 4,
+          "REFERENCE_AND_DETERMINERS": 6,
+          "RELATIVE_CLAUSES": 3,
+          "VERB_COMPLEMENTATION": 3,
+          "VERB_FORM_VOICE": 4,
+          "WORD_CLASS_FORM": 4,
+          "WORD_ORDER_MODIFICATION": 2
+        },
+        "answer_position": {
+          "B": 10,
+          "C": 10,
+          "A": 11,
+          "D": 9
+        },
+        "structure_clause_count_target": {
+          "1": 5,
+          "2": 9,
+          "3": 1
+        },
+        "written_expression_tested_error_type": {
+          "incorrect_part_of_speech": 7,
+          "wrong_verb_form": 5,
+          "agreement_error": 3,
+          "wrong_complementation": 1,
+          "incorrect_relative_marker": 2,
+          "wrong_preposition_collocation": 1,
+          "wrong_voice": 1,
+          "wrong_word_order": 1,
+          "missing_required_element": 2,
+          "wrong_degree_form": 1,
+          "incorrect_subordinator": 1
+        },
+        "written_expression_error_scope": {
+          "local": 13,
+          "clause_level": 8,
+          "cross_clause": 3,
+          "sentence_level": 1
+        },
+        "written_expression_error_span_type": {
+          "determiner": 2,
+          "verb_phrase": 4,
+          "adjective": 3,
+          "quantifier": 2,
+          "gerund_phrase": 2,
+          "relative_marker": 2,
+          "adverb": 1,
+          "prepositional_phrase": 1,
+          "pronoun": 1,
+          "noun_phrase": 2,
+          "participial_phrase": 1,
+          "comparative_marker": 1,
+          "infinitive_phrase": 2,
+          "conjunction": 1
+        },
+        "written_expression_error_location": {
+          "sentence_initial": 3,
+          "early": 6,
+          "middle": 6,
+          "late": 6,
+          "sentence_final": 4
+        },
+        "sentence_length_target": {
+          "n": 15,
+          "min": 14,
+          "max": 26,
+          "mean": 19.8,
+          "note": "Batch 2/3 plans do not provide a sentence_length_target for Written Expression items."
+        }
+      },
+      "actual_composition": {
+        "section": {
+          "Structure": 15,
+          "Written Expression": 25
+        },
+        "difficulty": {
+          "EASY": 19,
+          "MEDIUM": 15,
+          "HARD": 6
+        },
+        "primary_target": {
+          "ADVERBIAL_CLAUSES": 1,
+          "CLAUSE_STRUCTURE": 1,
+          "COMPARATIVES_DEGREE": 2,
+          "CONNECTORS_CONJUNCTIONS": 3,
+          "EXISTENTIAL_EXPLETIVE": 1,
+          "INVERSION": 1,
+          "NONFINITE_VERB_PHRASES": 4,
+          "NOUN_CLAUSES": 1,
+          "PARALLEL_STRUCTURE": 4,
+          "REFERENCE_AND_DETERMINERS": 6,
+          "RELATIVE_CLAUSES": 3,
+          "VERB_COMPLEMENTATION": 3,
+          "VERB_FORM_VOICE": 4,
+          "WORD_CLASS_FORM": 4,
+          "WORD_ORDER_MODIFICATION": 2
+        },
+        "answer_position": {
+          "B": 9,
+          "C": 10,
+          "A": 12,
+          "D": 9
+        },
+        "vocabulary_domain": {
+          "distinct": 39,
+          "top": [
+            [
+              "meteorology",
+              2
+            ],
+            [
+              "acoustics",
+              1
+            ],
+            [
+              "agriculture",
+              1
+            ],
+            [
+              "anthropology",
+              1
+            ],
+            [
+              "archaeology",
+              1
+            ],
+            [
+              "architecture",
+              1
+            ],
+            [
+              "astronomy",
+              1
+            ],
+            [
+              "botany",
+              1
+            ],
+            [
+              "climate policy",
+              1
+            ],
+            [
+              "constitutional history",
+              1
+            ]
+          ]
+        },
+        "written_expression_tested_error_type": {
+          "incorrect_part_of_speech": 7,
+          "wrong_verb_form": 5,
+          "agreement_error": 3,
+          "wrong_preposition_collocation": 2,
+          "incorrect_relative_marker": 2,
+          "wrong_voice": 1,
+          "wrong_word_order": 1,
+          "missing_required_element": 2,
+          "wrong_degree_form": 1,
+          "incorrect_subordinator": 1
+        },
+        "written_expression_error_scope": {
+          "local": 13,
+          "clause_level": 8,
+          "cross_clause": 3,
+          "sentence_level": 1
+        },
+        "surface_word_count": {
+          "n": 40,
+          "min": 6,
+          "max": 12,
+          "mean": 8.45
+        },
+        "surface_word_count_by_section": {
+          "Structure": {
+            "n": 15,
+            "min": 8,
+            "max": 12,
+            "mean": 9.6
+          },
+          "Written Expression": {
+            "n": 25,
+            "min": 6,
+            "max": 9,
+            "mean": 7.76
+          }
+        },
+        "target_drift_ids": [],
+        "difficulty_drift_ids": [],
+        "clause_count_note": "Provenance stores batch-plan clause_count_target but not an independently parsed clause_count; report uses plan targets and surface sentence length, not an invented parse count."
+      },
+      "qa_results": {
+        "reviewer_round1": {
+          "REVISE": 2,
+          "PASS": 11,
+          "REJECT": 27
+        },
+        "solver_answer": {
+          "B": 2,
+          "C": 4,
+          "AMBIGUOUS": 3,
+          "A": 4,
+          "NOT_REACHED": 27
+        },
+        "final_state": {
+          "ACCEPTED": 10,
+          "MANUAL_REVIEW": 3,
+          "REJECTED": 27
+        },
+        "non_accepted_positions_in_generation_order": [
+          3,
+          4,
+          6,
+          8,
+          12,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40
+        ],
+        "written_expression_non_accepted_positions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25
+        ]
+      }
+    },
+    "batch3": {
+      "batch_id": "batch3",
+      "generated": 40,
+      "planned_composition": {
+        "section": {
+          "Structure": 15,
+          "Written Expression": 25
+        },
+        "difficulty": {
+          "MEDIUM": 14,
+          "EASY": 21,
+          "HARD": 5
+        },
+        "primary_target": {
+          "ADVERBIAL_CLAUSES": 1,
+          "CLAUSE_STRUCTURE": 2,
+          "COMPARATIVES_DEGREE": 2,
+          "CONNECTORS_CONJUNCTIONS": 3,
+          "EXISTENTIAL_EXPLETIVE": 1,
+          "INVERSION": 1,
+          "NONFINITE_VERB_PHRASES": 4,
+          "NOUN_CLAUSES": 1,
+          "PARALLEL_STRUCTURE": 4,
+          "REFERENCE_AND_DETERMINERS": 5,
+          "RELATIVE_CLAUSES": 2,
+          "VERB_COMPLEMENTATION": 3,
+          "VERB_FORM_VOICE": 4,
+          "WORD_CLASS_FORM": 4,
+          "WORD_ORDER_MODIFICATION": 3
+        },
+        "answer_position": {
+          "B": 11,
+          "C": 10,
+          "A": 10,
+          "D": 9
+        },
+        "structure_clause_count_target": {
+          "1": 6,
+          "2": 8,
+          "3": 1
+        },
+        "written_expression_tested_error_type": {
+          "incorrect_part_of_speech": 4,
+          "wrong_verb_form": 6,
+          "wrong_complementation": 2,
+          "incorrect_subordinator": 1,
+          "incorrect_relative_marker": 1,
+          "agreement_error": 3,
+          "wrong_voice": 1,
+          "wrong_word_order": 3,
+          "wrong_degree_form": 1,
+          "incorrect_reference": 1,
+          "missing_required_element": 1,
+          "wrong_preposition_collocation": 1
+        },
+        "written_expression_error_scope": {
+          "local": 16,
+          "clause_level": 7,
+          "cross_clause": 1,
+          "sentence_level": 1
+        },
+        "written_expression_error_span_type": {
+          "determiner": 1,
+          "adjective": 2,
+          "verb_phrase": 3,
+          "gerund_phrase": 2,
+          "predicate_adjective": 2,
+          "participial_phrase": 1,
+          "conjunction": 1,
+          "relative_marker": 1,
+          "main_verb": 3,
+          "quantifier": 1,
+          "noun_phrase": 2,
+          "comparative_marker": 1,
+          "noun_modifier": 1,
+          "pronoun": 1,
+          "adverb": 1,
+          "infinitive_phrase": 1,
+          "prepositional_phrase": 1
+        },
+        "written_expression_error_location": {
+          "sentence_initial": 1,
+          "early": 6,
+          "middle": 6,
+          "late": 8,
+          "sentence_final": 4
+        },
+        "sentence_length_target": {
+          "n": 15,
+          "min": 13,
+          "max": 24,
+          "mean": 18.8,
+          "note": "Batch 2/3 plans do not provide a sentence_length_target for Written Expression items."
+        }
+      },
+      "actual_composition": {
+        "section": {
+          "Structure": 15,
+          "Written Expression": 25
+        },
+        "difficulty": {
+          "MEDIUM": 14,
+          "EASY": 22,
+          "HARD": 4
+        },
+        "primary_target": {
+          "ADVERBIAL_CLAUSES": 1,
+          "CLAUSE_STRUCTURE": 3,
+          "COMPARATIVES_DEGREE": 2,
+          "CONNECTORS_CONJUNCTIONS": 3,
+          "EXISTENTIAL_EXPLETIVE": 1,
+          "INVERSION": 1,
+          "NONFINITE_VERB_PHRASES": 3,
+          "NOUN_CLAUSES": 1,
+          "PARALLEL_STRUCTURE": 4,
+          "REFERENCE_AND_DETERMINERS": 5,
+          "RELATIVE_CLAUSES": 2,
+          "VERB_COMPLEMENTATION": 3,
+          "VERB_FORM_VOICE": 4,
+          "WORD_CLASS_FORM": 4,
+          "WORD_ORDER_MODIFICATION": 3
+        },
+        "answer_position": {
+          "B": 14,
+          "C": 15,
+          "A": 7,
+          "D": 4
+        },
+        "vocabulary_domain": {
+          "distinct": 36,
+          "top": [
+            [
+              "astronomy",
+              2
+            ],
+            [
+              "botany",
+              2
+            ],
+            [
+              "meteorology",
+              2
+            ],
+            [
+              "nutrition",
+              2
+            ],
+            [
+              "archaeology",
+              1
+            ],
+            [
+              "architecture",
+              1
+            ],
+            [
+              "archival science",
+              1
+            ],
+            [
+              "biography",
+              1
+            ],
+            [
+              "cartography",
+              1
+            ],
+            [
+              "ceramics",
+              1
+            ]
+          ]
+        },
+        "written_expression_tested_error_type": {
+          "incorrect_part_of_speech": 4,
+          "wrong_verb_form": 6,
+          "wrong_preposition_collocation": 3,
+          "incorrect_subordinator": 1,
+          "incorrect_relative_marker": 1,
+          "agreement_error": 3,
+          "wrong_voice": 1,
+          "wrong_word_order": 3,
+          "wrong_degree_form": 1,
+          "incorrect_reference": 1,
+          "missing_required_element": 1
+        },
+        "written_expression_error_scope": {
+          "local": 16,
+          "clause_level": 7,
+          "cross_clause": 1,
+          "sentence_level": 1
+        },
+        "surface_word_count": {
+          "n": 40,
+          "min": 7,
+          "max": 18,
+          "mean": 11.7
+        },
+        "surface_word_count_by_section": {
+          "Structure": {
+            "n": 15,
+            "min": 9,
+            "max": 18,
+            "mean": 12.73
+          },
+          "Written Expression": {
+            "n": 25,
+            "min": 7,
+            "max": 15,
+            "mean": 11.08
+          }
+        },
+        "target_drift_ids": [
+          "batch3-we-006"
+        ],
+        "difficulty_drift_ids": [
+          "batch3-we-025"
+        ],
+        "clause_count_note": "Provenance stores batch-plan clause_count_target but not an independently parsed clause_count; report uses plan targets and surface sentence length, not an invented parse count."
+      },
+      "qa_results": {
+        "reviewer_round1": {
+          "PASS": 31,
+          "REJECT": 3,
+          "REVISE": 6
+        },
+        "solver_answer": {
+          "B": 13,
+          "C": 13,
+          "A": 7,
+          "D": 3,
+          "NOT_REACHED": 4
+        },
+        "final_state": {
+          "ACCEPTED": 36,
+          "REJECTED": 3,
+          "DISCARDED": 1
+        },
+        "non_accepted_positions_in_generation_order": [
+          9,
+          11,
+          31,
+          39
+        ],
+        "written_expression_non_accepted_positions": [
+          16,
+          24
+        ]
+      }
+    }
+  },
+  "batch2_instability_conclusion": {
+    "most_likely_cause": "batch_generation_degradation / generator context drift concentrated in the Batch 2 Written Expression segment",
+    "evidence": [
+      "All 25 Batch 2 Written Expression candidates were rejected for no genuine error; the two additional Batch 2 Structure rejects were key/answer defects.",
+      "Batch 2 Written Expression had surface word count mean 7.76, versus 10.92 in Batch 1 and 11.08 in Batch 3; Batch 2 Structure mean was 9.60 versus 12.33 and 12.73.",
+      "Batch 2 failure begins at WE-001 and remains 13/13 in the first half and 12/12 in the second half; there is no within-WE gradual decline.",
+      "Target, difficulty, answer-position, and vocabulary distributions are not extreme enough to explain 25 clean outputs; difficulty was 19 EASY/15 MEDIUM/6 HARD, close to the other batches.",
+      "All 120 candidates have the same locked version hashes, and schema pass is 120/120, so the failure is semantic/item-construction quality rather than schema failure."
+    ],
+    "hypothesis_assessment": {
+      "category_composition": "low",
+      "difficulty": "low",
+      "written_expression_concentration": "high as a location signal, not a sufficient mechanism",
+      "generator_context_drift": "high",
+      "batch_generation_degradation": "high",
+      "particular_subtype": "low; failures span many targets",
+      "particular_error_type": "low; clean outputs span the planned mechanisms",
+      "reviewer_policy": "low as the primary cause; Reviewer correctly blocked most zero-error items",
+      "accidental_sampling_variance": "very low for a 25/25 same-direction failure"
+    },
+    "not_observable_from_provenance": [
+      "Agent invocation ID and context-window ID",
+      "Whether Batch 2 was produced in one external invocation",
+      "Prompt token history or hidden conversational context"
+    ],
+    "observable_generation_timing": "All three batches were created sequentially within the same 14:50 UTC minute with similar per-item timestamp spacing; this does not prove a shared context window. Batch 2 WE rejection updates were contiguous at 14:58:54-56, which is review timing rather than generation evidence."
+  },
+  "post_pass_anomalies": [
+    {
+      "item_id": "batch2-struct-003",
+      "batch": "batch2",
+      "section": "Structure",
+      "pipeline_final_state": "MANUAL_REVIEW",
+      "generator_answer": "A",
+      "reviewer_answer": "A",
+      "solver_answer": "AMBIGUOUS",
+      "root_cause": "SOLVER_OVERSTRICT",
+      "independent_answer": "A",
+      "independent_validity": "VALID",
+      "unique_answer": "YES",
+      "judgement": "Options B/C literally create a duplicate subject (that/which they the university restored). The Solver's alternate parse silently removes the stem words the university; no second valid option exists.",
+      "secondary": [
+        "REVIEWER_MISSED_ALTERNATE_PARSE is not supported by literal insertion; reviewer PASS is defensible"
+      ]
+    },
+    {
+      "item_id": "batch2-struct-004",
+      "batch": "batch2",
+      "section": "Structure",
+      "pipeline_final_state": "MANUAL_REVIEW",
+      "generator_answer": "D",
+      "reviewer_answer": "D",
+      "solver_answer": "AMBIGUOUS",
+      "root_cause": "GENERATOR_DESIGN",
+      "independent_answer": "AMBIGUOUS",
+      "independent_validity": "AMBIGUOUS",
+      "unique_answer": "NO",
+      "judgement": "Because, although, unless, and if all form grammatical clauses; the sentence does not encode a relation that selects only if.",
+      "secondary": [
+        "REVIEWER_MISSED_SEMANTIC_UNDERSPECIFICATION"
+      ]
+    },
+    {
+      "item_id": "batch2-struct-006",
+      "batch": "batch2",
+      "section": "Structure",
+      "pipeline_final_state": "MANUAL_REVIEW",
+      "generator_answer": "B",
+      "reviewer_answer": "B",
+      "solver_answer": "AMBIGUOUS",
+      "root_cause": "GENERATOR_DESIGN",
+      "independent_answer": "AMBIGUOUS",
+      "independent_validity": "AMBIGUOUS",
+      "unique_answer": "NO",
+      "judgement": "Both tested and had been tested are grammatical after Before publication; past perfect is optional rather than required.",
+      "secondary": [
+        "REVIEWER_MISSED_TENSE_AMBIGUITY"
+      ]
+    },
+    {
+      "item_id": "batch1-we-013",
+      "batch": "batch1",
+      "section": "Written Expression",
+      "pipeline_final_state": "DISCARDED",
+      "generator_answer": "A",
+      "reviewer_answer": "A",
+      "solver_answer": "NONE",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_answer": "NONE",
+      "independent_validity": "AMBIGUOUS",
+      "unique_answer": "NO",
+      "judgement": "It lacks an explicit antecedent in a standalone item. The intended error depends on discourse context and is not a clean grammar error; Solver NONE is a valid containment result.",
+      "secondary": [
+        "REVIEWER_MISSED_NO_ANSWER",
+        "P0_A_RECURRING"
+      ]
+    },
+    {
+      "item_id": "batch1-we-007",
+      "batch": "batch1",
+      "section": "Written Expression",
+      "pipeline_final_state": "MANUAL_REVIEW",
+      "generator_answer": "C",
+      "reviewer_answer": "C",
+      "solver_answer": "B",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_answer": "B",
+      "independent_validity": "VALID",
+      "unique_answer": "YES",
+      "judgement": "Which in marked B is the relative-marker error for the human subject antecedent; C is grammatical. Generator and Reviewer selected the wrong span; Solver B is correct.",
+      "secondary": [
+        "ORDINARY_GRAMMAR_FALSE_NEGATIVE"
+      ]
+    },
+    {
+      "item_id": "batch1-we-024",
+      "batch": "batch1",
+      "section": "Written Expression",
+      "pipeline_final_state": "MANUAL_REVIEW",
+      "generator_answer": "C",
+      "reviewer_answer": "C",
+      "solver_answer": "B",
+      "root_cause": "GENERATOR_REALIZATION",
+      "independent_answer": "B",
+      "independent_validity": "VALID",
+      "unique_answer": "YES",
+      "judgement": "Much in marked B is the quantifier error before plural count noun responses; C is grammatical. Generator and Reviewer selected the wrong span; Solver B is correct.",
+      "secondary": [
+        "ORDINARY_GRAMMAR_FALSE_NEGATIVE"
+      ]
+    }
+  ],
+  "reviewer_false_negative_metrics": {
+    "narrow": {
+      "n": 4,
+      "overall_denominator": 120,
+      "overall_rate_percent": 3.33,
+      "solver_reached_denominator": 89,
+      "solver_reached_rate_percent": 4.49,
+      "by_section": {
+        "Structure": {
+          "n": 3,
+          "overall_denominator": 45,
+          "overall_rate_percent": 6.67,
+          "solver_reached_denominator": 41,
+          "solver_reached_rate_percent": 7.32
+        },
+        "Written Expression": {
+          "n": 1,
+          "overall_denominator": 75,
+          "overall_rate_percent": 1.33,
+          "solver_reached_denominator": 48,
+          "solver_reached_rate_percent": 2.08
+        }
+      },
+      "ids": [
+        "batch2-struct-003",
+        "batch2-struct-004",
+        "batch2-struct-006",
+        "batch1-we-013"
+      ]
+    },
+    "broad": {
+      "n": 6,
+      "overall_denominator": 120,
+      "overall_rate_percent": 5.0,
+      "solver_reached_denominator": 89,
+      "solver_reached_rate_percent": 6.74,
+      "by_section": {
+        "Structure": {
+          "n": 3,
+          "overall_denominator": 45,
+          "overall_rate_percent": 6.67,
+          "solver_reached_denominator": 41,
+          "solver_reached_rate_percent": 7.32
+        },
+        "Written Expression": {
+          "n": 3,
+          "overall_denominator": 75,
+          "overall_rate_percent": 4.0,
+          "solver_reached_denominator": 48,
+          "solver_reached_rate_percent": 6.25
+        }
+      },
+      "ids": [
+        "batch2-struct-003",
+        "batch2-struct-004",
+        "batch2-struct-006",
+        "batch1-we-013",
+        "batch1-we-007",
+        "batch1-we-024"
+      ]
+    }
+  },
+  "p0_hardening_effectiveness": {
+    "pilot_root_causes": {
+      "A_semantic_reference_resolution": [
+        "batch1-we-013"
+      ],
+      "B_parallel_coordination_alternate_parse": [],
+      "C_semantic_connector_oddity": []
+    },
+    "validation_counts": {
+      "A": 1,
+      "B": 0,
+      "C": 0
+    },
+    "validation_auto_accepted_counts": {
+      "A": 0,
+      "B": 0,
+      "C": 0
+    },
+    "defense_layer_readout": {
+      "A": {
+        "generator_prevention": "not stopped",
+        "reviewer": "not stopped (round1 PASS)",
+        "solver": "stopped with NONE and ambiguity_detected=true",
+        "orchestrator": "contained by DISCARD"
+      },
+      "B": {
+        "generator_prevention": "no recurrence observed",
+        "reviewer": "no recurrence observed",
+        "solver": "no recurrence observed",
+        "orchestrator": "not applicable"
+      },
+      "C": {
+        "generator_prevention": "no recurrence observed",
+        "reviewer": "no recurrence observed",
+        "solver": "no recurrence observed",
+        "orchestrator": "not applicable"
+      }
+    },
+    "interpretation": "P0 was not a total failure: B/C did not recur and A was contained by Solver/Orchestrator. The Generator prevention rule and Reviewer audit did not block the A-type item, so human calibration must test the reference-resolution boundary before hardening."
+  },
+  "revision_analysis": {
+    "initial_round1_REVISE": 10,
+    "eventual_PASS": 9,
+    "failure": 1,
+    "success_rate_percent": 90.0,
+    "items": [
+      {
+        "item_id": "batch1-we-003",
+        "batch": "batch1",
+        "section": "Written Expression",
+        "original_defect": [
+          {
+            "severity": "MAJOR",
+            "category": "alternate_repair",
+            "description": "The intended correction is not uniquely forced by the sentence context.",
+            "related_check": "answer_uniqueness"
+          }
+        ],
+        "revision_requirement": [
+          "Rewrite the item so exactly one minimal correction is valid."
+        ],
+        "actual_revision": "Revision changed the sentence/stem or construction in the requested dimension and later reviewer PASSed it.",
+        "original_question": {
+          "question": "After the lighthouse crew had repaired the lamp, the keeper records the inspection details.",
+          "sentence": "After the lighthouse crew had repaired the lamp, the keeper records the inspection details.",
+          "marked_parts": {
+            "A": "After the lighthouse crew had repaired the lamp,",
+            "B": "the keeper",
+            "C": "records",
+            "D": "the inspection details."
+          }
+        },
+        "final_question": {
+          "question": "Yesterday, after the lighthouse crew had repaired the lamp, the keeper records the inspection details.",
+          "sentence": "Yesterday, after the lighthouse crew had repaired the lamp, the keeper records the inspection details.",
+          "marked_parts": {
+            "A": "Yesterday, after the lighthouse crew had repaired the lamp,",
+            "B": "the keeper",
+            "C": "records",
+            "D": "the inspection details."
+          }
+        },
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_count": 1,
+        "new_defect_introduced": false,
+        "revised_item_quality": "PASS and solver-consistent",
+        "final_state": "ACCEPTED"
+      },
+      {
+        "item_id": "batch1-we-023",
+        "batch": "batch1",
+        "section": "Written Expression",
+        "original_defect": [
+          {
+            "severity": "MAJOR",
+            "category": "alternate_repair",
+            "description": "The intended correction is not uniquely forced by the sentence context.",
+            "related_check": "answer_uniqueness"
+          }
+        ],
+        "revision_requirement": [
+          "Rewrite the item so exactly one minimal correction is valid."
+        ],
+        "actual_revision": "Revision changed the sentence/stem or construction in the requested dimension and later reviewer PASSed it.",
+        "original_question": {
+          "question": "After the bridge had been inspected, engineers approves the repair plan.",
+          "sentence": "After the bridge had been inspected, engineers approves the repair plan.",
+          "marked_parts": {
+            "A": "After the bridge had been inspected,",
+            "B": "engineers approves",
+            "C": "the repair",
+            "D": "plan."
+          }
+        },
+        "final_question": {
+          "question": "Last year, after the bridge had been inspected, engineers approves the repair plan.",
+          "sentence": "Last year, after the bridge had been inspected, engineers approves the repair plan.",
+          "marked_parts": {
+            "A": "Last year, after the bridge had been inspected,",
+            "B": "engineers approves",
+            "C": "the repair",
+            "D": "plan."
+          }
+        },
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_count": 1,
+        "new_defect_introduced": false,
+        "revised_item_quality": "PASS and solver-consistent",
+        "final_state": "ACCEPTED"
+      },
+      {
+        "item_id": "batch2-struct-001",
+        "batch": "batch2",
+        "section": "Structure",
+        "original_defect": [
+          {
+            "severity": "MAJOR",
+            "category": "answer_uniqueness",
+            "description": "The stem does not establish a past-time context, so present plural wilt and past wilted are both defensible.",
+            "related_check": "answer_uniqueness"
+          }
+        ],
+        "revision_requirement": [
+          "Revise the stem/options to make the intended answer unique."
+        ],
+        "actual_revision": "Revision changed the sentence/stem or construction in the requested dimension and later reviewer PASSed it.",
+        "original_question": {
+          "question": "The leaves of the desert plant ___ during the dry season.",
+          "stem": "The leaves of the desert plant ___ during the dry season.",
+          "options": {
+            "A": "wilt",
+            "B": "wilted",
+            "C": "wilts",
+            "D": "wilting"
+          }
+        },
+        "final_question": {
+          "question": "During the severe drought of 2019, the leaves of the desert plant ___.",
+          "stem": "During the severe drought of 2019, the leaves of the desert plant ___.",
+          "options": {
+            "A": "wilt",
+            "B": "wilted",
+            "C": "wilts",
+            "D": "wilting"
+          }
+        },
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_count": 1,
+        "new_defect_introduced": false,
+        "revised_item_quality": "PASS and solver-consistent",
+        "final_state": "ACCEPTED"
+      },
+      {
+        "item_id": "batch2-struct-009",
+        "batch": "batch2",
+        "section": "Structure",
+        "original_defect": [
+          {
+            "severity": "MAJOR",
+            "category": "answer_uniqueness",
+            "description": "So quiet that is standard, while such quiet that is also syntactically possible in formal English; the options do not ensure uniqueness.",
+            "related_check": "answer_uniqueness"
+          }
+        ],
+        "revision_requirement": [
+          "Revise the stem/options to make the intended answer unique."
+        ],
+        "actual_revision": "Revision changed the sentence/stem or construction in the requested dimension and later reviewer PASSed it.",
+        "original_question": {
+          "question": "The chamber was ___ that even a whisper could be recorded clearly.",
+          "stem": "The chamber was ___ that even a whisper could be recorded clearly.",
+          "options": {
+            "A": "so quiet",
+            "B": "such quiet",
+            "C": "very quietly",
+            "D": "as quiet"
+          }
+        },
+        "final_question": {
+          "question": "The chamber produced ___ loud echo that the recording equipment had to be recalibrated.",
+          "stem": "The chamber produced ___ loud echo that the recording equipment had to be recalibrated.",
+          "options": {
+            "A": "such a",
+            "B": "so a",
+            "C": "very a",
+            "D": "as a"
+          }
+        },
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_count": 1,
+        "new_defect_introduced": false,
+        "revised_item_quality": "PASS and solver-consistent",
+        "final_state": "ACCEPTED"
+      },
+      {
+        "item_id": "batch3-we-005",
+        "batch": "batch3",
+        "section": "Written Expression",
+        "original_defect": [
+          {
+            "severity": "MAJOR",
+            "category": "written_expression_gate",
+            "description": "The phrase “convincing for the jury” is grammatical; the proposed correction is only a preference, so the marked part is not a definite error.",
+            "related_check": "answer_uniqueness"
+          }
+        ],
+        "revision_requirement": [
+          "The phrase “convincing for the jury” is grammatical; the proposed correction is only a preference, so the marked part is not a definite error."
+        ],
+        "actual_revision": "Revision changed the sentence/stem or construction in the requested dimension and later reviewer PASSed it.",
+        "original_question": {
+          "question": "The court found the new evidence convincing for the jury.",
+          "sentence": "The court found the new evidence convincing for the jury.",
+          "marked_parts": {
+            "A": "The court found",
+            "B": "the new evidence",
+            "C": "convincing for",
+            "D": "the jury"
+          }
+        },
+        "final_question": {
+          "question": "The agency is responsible of monitoring water quality near the reservoir.",
+          "sentence": "The agency is responsible of monitoring water quality near the reservoir.",
+          "marked_parts": {
+            "A": "The agency is",
+            "B": "responsible of",
+            "C": "monitoring water quality",
+            "D": "near the reservoir"
+          }
+        },
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_count": 1,
+        "new_defect_introduced": false,
+        "revised_item_quality": "PASS and solver-consistent",
+        "final_state": "ACCEPTED"
+      },
+      {
+        "item_id": "batch3-we-006",
+        "batch": "batch3",
+        "section": "Written Expression",
+        "original_defect": [
+          {
+            "severity": "MAJOR",
+            "category": "written_expression_gate",
+            "description": "The sentence is a fragment because it lacks a finite main verb; repair requires rewriting beyond the marked participle.",
+            "related_check": "answer_uniqueness"
+          }
+        ],
+        "revision_requirement": [
+          "The sentence is a fragment because it lacks a finite main verb; repair requires rewriting beyond the marked participle."
+        ],
+        "actual_revision": "Revision changed the sentence/stem or construction in the requested dimension and later reviewer PASSed it.",
+        "original_question": {
+          "question": "The buses traveling along the old route, carrying commuters into the city each morning.",
+          "sentence": "The buses traveling along the old route, carrying commuters into the city each morning.",
+          "marked_parts": {
+            "A": "The buses traveling",
+            "B": "along the old route",
+            "C": "carrying commuters",
+            "D": "into the city each morning"
+          }
+        },
+        "final_question": {
+          "question": "The buses that travels along the old route carry commuters into the city each morning.",
+          "sentence": "The buses that travels along the old route carry commuters into the city each morning.",
+          "marked_parts": {
+            "A": "The buses that travels",
+            "B": "along the old route",
+            "C": "carry commuters",
+            "D": "into the city each morning"
+          }
+        },
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_count": 1,
+        "new_defect_introduced": false,
+        "revised_item_quality": "PASS and solver-consistent",
+        "final_state": "ACCEPTED"
+      },
+      {
+        "item_id": "batch3-we-013",
+        "batch": "batch3",
+        "section": "Written Expression",
+        "original_defect": [
+          {
+            "severity": "MAJOR",
+            "category": "written_expression_gate",
+            "description": "The sentence has a coordination/parallelism problem, and the repair changes the complement structure rather than making a unique local correction.",
+            "related_check": "answer_uniqueness"
+          }
+        ],
+        "revision_requirement": [
+          "The sentence has a coordination/parallelism problem, and the repair changes the complement structure rather than making a unique local correction."
+        ],
+        "actual_revision": "Revision changed the sentence/stem or construction in the requested dimension and later reviewer PASSed it.",
+        "original_question": {
+          "question": "The proposal addresses not only traffic congestion but also should improve pedestrian safety.",
+          "sentence": "The proposal addresses not only traffic congestion but also should improve pedestrian safety.",
+          "marked_parts": {
+            "A": "The proposal addresses",
+            "B": "not only traffic congestion",
+            "C": "but also should improve",
+            "D": "pedestrian safety"
+          }
+        },
+        "final_question": {
+          "question": "The committee reviewed the proposal and approving the revised budget after the public hearing.",
+          "sentence": "The committee reviewed the proposal and approving the revised budget after the public hearing.",
+          "marked_parts": {
+            "A": "The committee reviewed",
+            "B": "the proposal",
+            "C": "and approving",
+            "D": "the revised budget after the public hearing"
+          }
+        },
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_count": 1,
+        "new_defect_introduced": false,
+        "revised_item_quality": "PASS and solver-consistent",
+        "final_state": "ACCEPTED"
+      },
+      {
+        "item_id": "batch3-we-017",
+        "batch": "batch3",
+        "section": "Written Expression",
+        "original_defect": [
+          {
+            "severity": "MAJOR",
+            "category": "written_expression_gate",
+            "description": "Singular they is acceptable in current standard written English, so the marked part is not a definite grammatical error under the reviewer standard.",
+            "related_check": "grammar_validity"
+          }
+        ],
+        "revision_requirement": [
+          "Singular they is acceptable in current standard written English, so the marked part is not a definite grammatical error under the reviewer standard."
+        ],
+        "actual_revision": "Revision changed the sentence/stem or construction in the requested dimension and later reviewer PASSed it.",
+        "original_question": {
+          "question": "Each storyteller adapted their account to suit the audience.",
+          "sentence": "Each storyteller adapted their account to suit the audience.",
+          "marked_parts": {
+            "A": "Each storyteller",
+            "B": "adapted",
+            "C": "their account",
+            "D": "to suit the audience"
+          }
+        },
+        "final_question": {
+          "question": "The archivist cataloged several traditional tale from the mountain region.",
+          "sentence": "The archivist cataloged several traditional tale from the mountain region.",
+          "marked_parts": {
+            "A": "The archivist cataloged",
+            "B": "several traditional",
+            "C": "tale",
+            "D": "from the mountain region"
+          }
+        },
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_count": 1,
+        "new_defect_introduced": false,
+        "revised_item_quality": "PASS and solver-consistent",
+        "final_state": "ACCEPTED"
+      },
+      {
+        "item_id": "batch3-we-024",
+        "batch": "batch3",
+        "section": "Written Expression",
+        "original_defect": [
+          {
+            "severity": "MAJOR",
+            "category": "written_expression_gate",
+            "description": "The simple past “melted” is grammatical with “before”; past perfect is optional here, so the marked part is not a definite error.",
+            "related_check": "grammar_validity"
+          }
+        ],
+        "revision_requirement": [
+          "The simple past “melted” is grammatical with “before”; past perfect is optional here, so the marked part is not a definite error."
+        ],
+        "actual_revision": "Revision 1 changed the item to a local had + past participle error; revision 2 repeated the same text while changing subtype/difficulty metadata, and the item never reached PASS.",
+        "original_question": {
+          "question": "The geologists realized that the glacier melted before they had reached the valley.",
+          "sentence": "The geologists realized that the glacier melted before they had reached the valley.",
+          "marked_parts": {
+            "A": "The geologists realized",
+            "B": "that the glacier melted",
+            "C": "before they had reached",
+            "D": "the valley"
+          }
+        },
+        "final_question": {
+          "question": "By the time the survey ended, the geologists concluded that the glacier had melt substantially.",
+          "sentence": "By the time the survey ended, the geologists concluded that the glacier had melt substantially.",
+          "marked_parts": {
+            "A": "By the time the survey ended",
+            "B": "the geologists concluded",
+            "C": "that the glacier had melt",
+            "D": "substantially"
+          }
+        },
+        "later_review_verdicts": [
+          "REVISE",
+          "REVISE"
+        ],
+        "revision_count": 3,
+        "new_defect_introduced": true,
+        "revised_item_quality": "Not accepted; metadata/difficulty problems persisted",
+        "final_state": "DISCARDED"
+      },
+      {
+        "item_id": "batch3-we-025",
+        "batch": "batch3",
+        "section": "Written Expression",
+        "original_defect": [
+          {
+            "severity": "MAJOR",
+            "category": "written_expression_gate",
+            "description": "The sentence is grammatical; the proposed change addresses intended meaning rather than a genuine grammatical error.",
+            "related_check": "grammar_validity"
+          }
+        ],
+        "revision_requirement": [
+          "The sentence is grammatical; the proposed change addresses intended meaning rather than a genuine grammatical error."
+        ],
+        "actual_revision": "Revision changed the sentence/stem or construction in the requested dimension and later reviewer PASSed it.",
+        "original_question": {
+          "question": "The treatment plant needs something useful for removing sediment efficiently.",
+          "sentence": "The treatment plant needs something useful for removing sediment efficiently.",
+          "marked_parts": {
+            "A": "The treatment plant",
+            "B": "needs something",
+            "C": "useful for removing sediment",
+            "D": "efficiently"
+          }
+        },
+        "final_question": {
+          "question": "The treatment plant replaced a concrete ancient pipe beneath the filtration basin.",
+          "sentence": "The treatment plant replaced a concrete ancient pipe beneath the filtration basin.",
+          "marked_parts": {
+            "A": "The treatment plant replaced",
+            "B": "a concrete ancient pipe",
+            "C": "beneath the filtration basin",
+            "D": "the filtration basin"
+          }
+        },
+        "later_review_verdicts": [
+          "PASS"
+        ],
+        "revision_count": 1,
+        "new_defect_introduced": false,
+        "revised_item_quality": "PASS and solver-consistent",
+        "final_state": "ACCEPTED"
+      }
+    ]
+  },
+  "acceptance_rate_decomposition": {
+    "pilot": {
+      "accepted": 37,
+      "n": 40,
+      "rate_percent": 92.5
+    },
+    "validation": {
+      "accepted": 83,
+      "n": 120,
+      "rate_percent": 69.17
+    },
+    "drop_percentage_points": 23.33,
+    "funnel_losses_from_120": {
+      "round1_REJECT": 30,
+      "revision_failure": 1,
+      "solver_AMBIGUOUS": 3,
+      "solver_NONE": 1,
+      "solver_A_D_disagreement": 2,
+      "solver_LOW_confidence_overlap_note": "1 LOW item is batch2-struct-004 and is already included in AMBIGUOUS; it is not an additional loss.",
+      "manual_review_total": 5,
+      "discarded_total": 2,
+      "total_not_auto_accepted": 37
+    },
+    "batch_contribution": {
+      "batch1": {
+        "accepted": 37,
+        "n": 40,
+        "rate_percent": 92.5
+      },
+      "batch2": {
+        "accepted": 10,
+        "n": 40,
+        "rate_percent": 25.0
+      },
+      "batch3": {
+        "accepted": 36,
+        "n": 40,
+        "rate_percent": 90.0
+      },
+      "batch1_plus_batch3": {
+        "accepted": 73,
+        "n": 80,
+        "rate_percent": 91.25
+      },
+      "batch2_shortfall_vs_batch1_plus_batch3_rate": {
+        "expected_batch2_accepts_at_91_25_percent": 36.5,
+        "actual": 10,
+        "shortfall_items": 26.5,
+        "percentage_points_of_full_120": 22.08
+      },
+      "residual_pilot_vs_batch1_plus_batch3": {
+        "pilot_rate_percent": 92.5,
+        "validation_excluding_batch2_rate_percent": 91.25,
+        "difference_percentage_points": 1.25
+      }
+    }
+  },
+  "generator_quality_estimate": {
+    "denominator": 120,
+    "estimated_not_human_confirmed": true,
+    "clearly_defective_initial_candidates": {
+      "n": 32,
+      "percent_of_initial": 26.67,
+      "items": [
+        "batch2-struct-008",
+        "batch2-struct-012",
+        "batch2-we-001",
+        "batch2-we-002",
+        "batch2-we-003",
+        "batch2-we-004",
+        "batch2-we-005",
+        "batch2-we-006",
+        "batch2-we-007",
+        "batch2-we-008",
+        "batch2-we-009",
+        "batch2-we-010",
+        "batch2-we-011",
+        "batch2-we-012",
+        "batch2-we-013",
+        "batch2-we-014",
+        "batch2-we-015",
+        "batch2-we-016",
+        "batch2-we-017",
+        "batch2-we-018",
+        "batch2-we-019",
+        "batch2-we-020",
+        "batch2-we-021",
+        "batch2-we-022",
+        "batch2-we-023",
+        "batch2-we-024",
+        "batch2-we-025",
+        "batch3-struct-009",
+        "batch3-struct-011",
+        "batch3-we-016",
+        "batch1-we-007",
+        "batch1-we-024"
+      ]
+    },
+    "likely_defective_or_edge_initial_candidates": {
+      "n": 4,
+      "percent_of_initial": 3.33,
+      "items": [
+        "batch1-we-013",
+        "batch2-struct-004",
+        "batch2-struct-006",
+        "batch3-we-024"
+      ]
+    },
+    "apparently_valid_solver_or_boundary_cases": {
+      "n": 1,
+      "items": [
+        "batch2-struct-003"
+      ]
+    },
+    "salvageable_by_revision": {
+      "successful": 9,
+      "attempted": 10,
+      "success_rate_percent": 90.0,
+      "failed_item": "batch3-we-024"
+    },
+    "apparently_valid_but_reviewer_rejected": {
+      "n": 0,
+      "rate_among_reviewer_rejects_percent": 0.0
+    },
+    "note": "The 32/4/1 buckets describe the 37 final non-AUTO_ACCEPT candidates and are estimates; revision success is reported separately because 9 revised items eventually became accepted and are not in the final failure set."
+  },
+  "reviewer_strictness_estimate": {
+    "reviewer_round1_REJECT_denominator": 30,
+    "clearly_justified_REJECT": 25,
+    "likely_justified_REJECT": 0,
+    "should_have_been_REVISE": 5,
+    "possible_reviewer_over_rejection": 0,
+    "clear_reviewer_over_rejection": 0,
+    "should_have_been_REVISE_ids": [
+      "batch2-struct-008",
+      "batch2-struct-012",
+      "batch3-struct-009",
+      "batch3-struct-011",
+      "batch3-we-016"
+    ],
+    "over_rejection_note": "No item in the 30 REJECT set was independently judged a standard-English-valid item that should have been kept. Five were judged locally repairable, so the issue is REJECT/REVISE boundary strictness rather than false rejection."
+  },
+  "human_calibration": {
+    "total": 46,
+    "counts_by_source_group": {
+      "AUTO_ACCEPT": 20,
+      "POST_PASS_ANOMALY": 6,
+      "REVIEWER_REJECT": 15,
+      "REVISION_CASE": 5
+    },
+    "counts_by_section": {
+      "Structure": 16,
+      "Written Expression": 30
+    },
+    "source_groups": {
+      "AUTO_ACCEPT": {
+        "n": 20,
+        "section_split": {
+          "Structure": 8,
+          "Written Expression": 12
+        },
+        "source": "analysis/validation/human_review_sample.json"
+      },
+      "POST_PASS_ANOMALY": {
+        "n": 6,
+        "ids": [
+          "batch2-struct-003",
+          "batch2-struct-004",
+          "batch2-struct-006",
+          "batch1-we-013",
+          "batch1-we-007",
+          "batch1-we-024"
+        ]
+      },
+      "REVIEWER_REJECT": {
+        "n": 15,
+        "ids": [
+          "batch2-struct-008",
+          "batch2-struct-012",
+          "batch3-struct-009",
+          "batch3-struct-011",
+          "batch2-we-001",
+          "batch2-we-002",
+          "batch2-we-003",
+          "batch2-we-005",
+          "batch2-we-007",
+          "batch2-we-008",
+          "batch2-we-010",
+          "batch2-we-017",
+          "batch2-we-018",
+          "batch2-we-021",
+          "batch3-we-016"
+        ],
+        "stratification": "All four Structure rejects, ten Batch 2 Written Expression clean outputs, and one Batch 3 answer-span/key mismatch."
+      },
+      "REVISION_CASE": {
+        "n": 5,
+        "ids": [
+          "batch1-we-003",
+          "batch2-struct-001",
+          "batch3-we-005",
+          "batch3-we-017",
+          "batch3-we-024"
+        ],
+        "includes_success_and_failure": true
+      }
+    }
+  },
+  "recommendations": {
+    "next_hardening_recommendation": "F. Prompt変更前にHuman Calibration必須",
+    "rationale": "The dominant Batch 2 signal is generator-side degradation, but five REJECTs are locally repairable and the six post-PASS anomalies include a Solver overstrict case plus genuine generator/reviewer misses. Human judgments are needed before choosing section-specific Generator/Reviewer changes.",
+    "P0": [
+      {
+        "owner": "No code change / Human review",
+        "action": "Run the 46-item blind calibration set; adjudicate no-error vs semantic/reference dependency, alternate connector/tense answers, key/span mismatch, and REJECT/REVISE boundary."
+      },
+      {
+        "owner": "Batch generation strategy",
+        "action": "Do not treat Batch 2 as representative quality. Add per-section/per-batch stopping diagnostics for clean-sentence rate, surface length, and planted-error presence before any new validation."
+      },
+      {
+        "owner": "Orchestrator",
+        "action": "Keep current consensus containment: NONE/AMBIGUOUS/disagreement must not AUTO_ACCEPT; do not relax policy before calibration."
+      },
+      {
+        "owner": "Generator/Reviewer",
+        "action": "Preserve the existing P0 defense objective; do not automatically edit prompts from this audit."
+      }
+    ],
+    "P1": [
+      {
+        "owner": "Generator",
+        "action": "After calibration, investigate Batch 2 section/context drift and add a generated-item check that the designated WE span contains a real, standalone grammar error."
+      },
+      {
+        "owner": "Reviewer",
+        "action": "After calibration, define an explicit REJECT vs REVISE boundary for answer-key/target metadata defects while preserving hard blocking of zero-error and ambiguous items."
+      },
+      {
+        "owner": "Structure Generator + Reviewer",
+        "action": "Focus on connector relation, tense/aspect optionality, and literal all-options insertion; do not assume the Solver's alternate parse is valid without stem-preserving reconstruction."
+      },
+      {
+        "owner": "Written Expression Generator + Reviewer",
+        "action": "Focus on reference antecedents, marked-span alignment, and clean-sentence/error planting; calibration must determine whether these are grammar, semantics, or policy edges."
+      },
+      {
+        "owner": "Batch generation strategy",
+        "action": "Record invocation/context identifiers and per-item generation order in the next diagnostic run so batch degradation can be confirmed or falsified."
+      }
+    ],
+    "P2": [
+      {
+        "owner": "Specification/Taxonomy",
+        "action": "Only if human agreement shows recurring unresolved cases, add operational examples for reference-resolution dependency, semantic connector selection, tense optionality, and target relabeling; do not expand taxonomy from this AI-only audit."
+      },
+      {
+        "owner": "Generator/Reviewer",
+        "action": "Consider grammar-aware attachment/verb-frame linting and template-level recurrence tracking after calibration."
+      },
+      {
+        "owner": "Human review",
+        "action": "Maintain a small recurring calibration panel for post-PASS anomalies and REJECT/REVISE boundary cases."
+      }
+    ],
+    "unchanged_before_human_calibration": [
+      "Generator prompt",
+      "Reviewer prompt",
+      "Solver",
+      "Orchestrator consensus policy",
+      "Specification",
+      "Taxonomy",
+      "thresholds",
+      "acceptance policy",
+      "DB",
+      "Web site"
+    ]
+  }
+}

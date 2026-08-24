@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "item_id": "batch3-we-024",
+      "section": "Written Expression",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "past perfect with a past participle after had",
+      "secondary_features": ["past perfect", "past participle"],
+      "tested_error_type": "wrong_verb_form",
+      "error_scope": "local",
+      "difficulty": "HARD",
+      "vocabulary_domain": "geology",
+      "sentence": "By the time the survey ended, the geologists concluded that the glacier had melt substantially.",
+      "marked_parts": {"A": "By the time the survey ended", "B": "the geologists concluded", "C": "that the glacier had melt", "D": "substantially"},
+      "correct_answer": "C",
+      "minimal_correction": "that the glacier had melted",
+      "answer_explanation": "The auxiliary had must be followed by the past participle melted, not the bare form melt."
+    }
+  ]
+}

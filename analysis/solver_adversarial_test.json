@@ -1,0 +1,47 @@
+{
+  "items": [
+    {
+      "item_id": "adv-struct-multi-001",
+      "section": "Structure",
+      "solver_answer": "AMBIGUOUS",
+      "confidence": "MEDIUM",
+      "reason": "Both A ('was not yet fully renovated', simple past passive) and B ('had not yet been fully renovated', past perfect passive) are grammatical, coherent completions of the concessive clause. C is a fragment (no finite verb). D mixes active progressive with non-standard adverb placement. Two options are independently valid, so no single answer is unique.",
+      "ambiguity_detected": true
+    },
+    {
+      "item_id": "adv-struct-zero-002",
+      "section": "Structure",
+      "solver_answer": "NONE",
+      "confidence": "HIGH",
+      "reason": "None of the four options is grammatical: A ('reviewing') has no finite verb, leaving a fragment. B ('have reviewed') does not agree with the singular collective subject 'the committee' (needs 'has reviewed'). C ('was review') is not a valid verb form. D ('did reviewed') incorrectly pairs 'did' with a past-tense form instead of the base form 'review'.",
+      "ambiguity_detected": true
+    },
+    {
+      "item_id": "adv-we-double-003",
+      "section": "Written Expression",
+      "solver_answer": "AMBIGUOUS",
+      "confidence": "MEDIUM",
+      "reason": "A full audit finds two independent genuine errors: 'have' at A (the committee, singular, requires 'has') and 'a final decisions' at D (article 'a' does not agree with the plural noun 'decisions'). B and C are acceptable as written. With two genuine errors present, no single marked part is uniquely 'the' answer.",
+      "suggested_correction": "N/A - two independent errors present ('have' -> 'has'; 'a final decisions' -> 'a final decision'), so no single correction resolves the sentence to exactly one error.",
+      "ambiguity_detected": true
+    },
+    {
+      "item_id": "adv-we-zero-004",
+      "section": "Written Expression",
+      "solver_answer": "NONE",
+      "confidence": "HIGH",
+      "reason": "The sentence is fully grammatical as written. 'published' is a correctly formed past-tense verb, 'their findings' is standard notional agreement with the collective subject 'the research team', 'conducting a thorough review' is a standard gerund complement after the preposition 'after', and 'climate adaptation strategies' is a well-formed noun phrase. No part contains an error.",
+      "suggested_correction": "N/A - no error detected in any of the four marked parts.",
+      "ambiguity_detected": true
+    },
+    {
+      "item_id": "adv-we-metamismatch-005",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "'what' is used after the explicit antecedent 'skills', but 'what' (a fused relative meaning 'that which') cannot follow an overt antecedent; standard written English requires 'that' or 'which' here. 'who study abroad', 'often develop skills', and 'in competitive job markets' are all standard as written.",
+      "suggested_correction": "that",
+      "ambiguity_detected": false
+    }
+  ]
+}

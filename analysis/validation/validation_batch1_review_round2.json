@@ -1,0 +1,70 @@
+{
+  "items": [
+    {
+      "item_id": "batch1-we-003",
+      "section": "Written Expression",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "reviewer_difficulty": "EASY",
+      "generator_difficulty": "EASY",
+      "difficulty_mismatch": false,
+      "grammar_validity": "VALID",
+      "answer_uniqueness": "VALID",
+      "naturalness": "PASS",
+      "style_validity": "VALID",
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "naturalness": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS",
+        "target_alignment": "PASS",
+        "toefl_style": "PASS",
+        "style_validity": "PASS"
+      },
+      "detected_error_count": 1,
+      "detected_error_position": "C",
+      "minimal_correction_valid": true,
+      "non_error_parts_valid": true
+    },
+    {
+      "item_id": "batch1-we-023",
+      "section": "Written Expression",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "B",
+      "generator_answer": "B",
+      "answer_match": true,
+      "reviewer_difficulty": "HARD",
+      "generator_difficulty": "HARD",
+      "difficulty_mismatch": false,
+      "grammar_validity": "VALID",
+      "answer_uniqueness": "VALID",
+      "naturalness": "PASS",
+      "style_validity": "VALID",
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "naturalness": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS",
+        "target_alignment": "PASS",
+        "toefl_style": "PASS",
+        "style_validity": "PASS"
+      },
+      "detected_error_count": 1,
+      "detected_error_position": "B",
+      "minimal_correction_valid": true,
+      "non_error_parts_valid": true
+    }
+  ]
+}

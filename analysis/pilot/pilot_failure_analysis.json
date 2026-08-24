@@ -1,0 +1,193 @@
+{
+  "pilot_batch_id": "pilot-2026-08-23",
+  "analysis_scope": {
+    "initial_items": 40,
+    "failure_items": 3,
+    "revise_items": 4,
+    "candidate_ids": [
+      "pilot-we-002",
+      "pilot-we-009",
+      "pilot-we-024",
+      "pilot-struct-012",
+      "pilot-we-006",
+      "pilot-we-014",
+      "pilot-we-021"
+    ],
+    "implementation_changes_made": false
+  },
+  "baseline": {
+    "generator_schema_pass": {"n": 40, "d": 40},
+    "reviewer_first_pass": {"n": 36, "d": 40},
+    "reviewer_revise": {"n": 4, "d": 40},
+    "solver_none": 2,
+    "solver_ambiguous": 1,
+    "auto_accepted": {"n": 37, "d": 40},
+    "manual_review": 1,
+    "discarded": 2,
+    "section": {
+      "Structure": {"generated": 15, "first_pass": 14, "final_accepted": 15},
+      "Written Expression": {"generated": 25, "first_pass": 22, "final_accepted": 22}
+    }
+  },
+  "versions": {
+    "spec_version": "1.0.0",
+    "taxonomy_version": "1.1",
+    "generator_version": "sha256:ce09d72ff092",
+    "reviewer_version": "sha256:15235bfbb07f",
+    "solver_version": "sha256:df1200bed2b1"
+  },
+  "candidates": [
+    {
+      "item_id": "pilot-we-002",
+      "section": "Written Expression",
+      "final_state": "DISCARDED",
+      "final_failure_reason": "no_valid_answer",
+      "generator_answer": "B",
+      "reviewer_round1": {"verdict": "PASS", "independent_answer": "B"},
+      "solver": {"answer": "NONE", "confidence": "HIGH", "ambiguity_detected": true},
+      "primary_root_cause": "GENERATOR_REALIZATION",
+      "secondary_root_causes": ["REVIEWER_MISSED_NO_ANSWER", "SPECIFICATION_GAP"],
+      "independent_reassessment": "The sentence is grammatical; semantic compatibility strongly favors the observatory as antecedent, so B is not an unambiguous grammatical error.",
+      "recurrence_risk": "MEDIUM"
+    },
+    {
+      "item_id": "pilot-we-009",
+      "section": "Written Expression",
+      "final_state": "MANUAL_REVIEW",
+      "final_failure_reason": "solver_ambiguous",
+      "generator_answer": "A",
+      "reviewer_round1": {"verdict": "PASS", "independent_answer": "A"},
+      "solver": {"answer": "AMBIGUOUS", "confidence": "MEDIUM", "ambiguity_detected": true},
+      "primary_root_cause": "GENERATOR_DESIGN",
+      "secondary_root_causes": ["REVIEWER_MISSED_AMBIGUITY", "SPECIFICATION_GAP"],
+      "independent_reassessment": "The list admits competing normalization analyses: A can be changed to a to-infinitive, or B/C can be changed to gerunds. One marked error is therefore not uniquely isolatable.",
+      "recurrence_risk": "HIGH"
+    },
+    {
+      "item_id": "pilot-we-024",
+      "section": "Written Expression",
+      "final_state": "DISCARDED",
+      "final_failure_reason": "no_valid_answer",
+      "generator_answer": "D",
+      "reviewer_round1": {"verdict": "PASS", "independent_answer": "D"},
+      "solver": {"answer": "NONE", "confidence": "MEDIUM", "ambiguity_detected": true},
+      "primary_root_cause": "GENERATOR_REALIZATION",
+      "secondary_root_causes": ["REVIEWER_MISSED_NO_ANSWER", "SPECIFICATION_GAP"],
+      "independent_reassessment": "Because introduces a syntactically valid clause; an implausible or context-dependent causal claim is not by itself a grammar error.",
+      "recurrence_risk": "MEDIUM"
+    },
+    {
+      "item_id": "pilot-struct-012",
+      "section": "Structure",
+      "final_state": "ACCEPTED",
+      "initial_reviewer_verdict": "REVISE",
+      "final_reviewer_verdict": "PASS",
+      "solver_after_revision": "D",
+      "primary_root_cause": "GENERATOR_DESIGN",
+      "secondary_root_causes": [],
+      "revision_substantive": true,
+      "recurrence_risk": "MEDIUM"
+    },
+    {
+      "item_id": "pilot-we-006",
+      "section": "Written Expression",
+      "final_state": "ACCEPTED",
+      "initial_reviewer_verdict": "REVISE",
+      "final_reviewer_verdict": "PASS",
+      "solver_after_revision": "B",
+      "primary_root_cause": "GENERATOR_REALIZATION",
+      "secondary_root_causes": ["SPECIFICATION_GAP"],
+      "revision_substantive": true,
+      "recurrence_risk": "HIGH"
+    },
+    {
+      "item_id": "pilot-we-014",
+      "section": "Written Expression",
+      "final_state": "ACCEPTED",
+      "initial_reviewer_verdict": "REVISE",
+      "final_reviewer_verdict": "PASS",
+      "solver_after_revision": "B",
+      "primary_root_cause": "GENERATOR_DESIGN",
+      "secondary_root_causes": ["GENERATOR_REALIZATION"],
+      "revision_substantive": true,
+      "recurrence_risk": "MEDIUM"
+    },
+    {
+      "item_id": "pilot-we-021",
+      "section": "Written Expression",
+      "final_state": "ACCEPTED",
+      "initial_reviewer_verdict": "REVISE",
+      "final_reviewer_verdict": "PASS",
+      "solver_after_revision": "A",
+      "primary_root_cause": "GENERATOR_REALIZATION",
+      "secondary_root_causes": [],
+      "taxonomy_gap": false,
+      "revision_substantive": true,
+      "recurrence_risk": "MEDIUM"
+    }
+  ],
+  "reviewer_false_negative": {
+    "count": 3,
+    "items": ["pilot-we-002", "pilot-we-009", "pilot-we-024"],
+    "recommended_focus": [
+      "answer uniqueness audit",
+      "all-marked-parts validation",
+      "full-sentence audit",
+      "alternate parse detection"
+    ]
+  },
+  "generator_pattern": {
+    "final_failures_all_written_expression": true,
+    "primary_targets_repeated": false,
+    "common_scopes": ["clause_level", "sentence_level"],
+    "common_length_band": "20-24 words",
+    "common_pattern": "context-dependent semantics, alternate parses, and non-local uniqueness rather than schema failure",
+    "structure_vs_we": "Structure 15/15 final accepted; Written Expression 22/25 final accepted. Descriptive small-sample signal, not a stable rate."
+  },
+  "root_cause_risk": {
+    "GENERATOR_DESIGN": "HIGH",
+    "GENERATOR_REALIZATION": "HIGH",
+    "REVIEWER_MISSED_AMBIGUITY": "HIGH",
+    "REVIEWER_MISSED_NO_ANSWER": "HIGH",
+    "REVIEWER_TARGET_ANALYSIS": "LOW",
+    "REVISION_REGRESSION": "LOW",
+    "SPECIFICATION_GAP": "MEDIUM",
+    "TAXONOMY_GAP": "LOW",
+    "SOLVER_OVERSTRICT": "LOW",
+    "OTHER": "LOW"
+  },
+  "recommendations": {
+    "P0": [
+      {"owner": "Generator", "type": "Generator change", "action": "Constrain or reject semantic-only reference/connector errors, mixed nonfinite coordination, risky ordinal+participle, PP-attachment distractors, and ambiguous lexical complement frames."},
+      {"owner": "Reviewer", "type": "Reviewer change", "action": "Make zero-genuine-error, multiple-parse, and standard-English marked-span findings hard PASS blockers; enumerate alternate repairs before accepting."},
+      {"owner": "Orchestrator", "type": "No change", "action": "Retain the existing Solver NONE/AMBIGUOUS containment gate; it correctly prevented auto-acceptance."},
+      {"owner": "Solver", "type": "No change", "action": "Retain non-forced NONE/AMBIGUOUS outputs."},
+      {"owner": "Specification", "type": "No change", "action": "Do not redesign the specification; its high-level uniqueness rules are already adequate."}
+    ],
+    "P1": [
+      {"owner": "Generator", "type": "Generator change", "action": "Create safer template classes and fixture-driven validation for reference, connector, complement-frame, parallelism, and ordinal constructions."},
+      {"owner": "Reviewer", "type": "Reviewer change", "action": "Run focused adversarial regression checks over all seven candidate fixtures."},
+      {"owner": "Orchestrator", "type": "Orchestrator change", "action": "Track Reviewer PASS to Solver NONE/AMBIGUOUS, final non-accepted, and revision regression as scale gates."},
+      {"owner": "Specification", "type": "Spec change", "action": "Add operational examples distinguishing grammatical error from semantic awkwardness and documenting alternate-parse handling."}
+    ],
+    "P2": [
+      {"owner": "Generator/Reviewer", "type": "Generator + Reviewer change", "action": "Add grammar-aware attachment and verb-frame linting."},
+      {"owner": "Reviewer", "type": "Reviewer change", "action": "Consider dual-reviewer or human calibration for semantic ambiguity."},
+      {"owner": "Orchestrator", "type": "Orchestrator change", "action": "Accumulate template-level recurrence and quarantine risky templates."}
+    ]
+  },
+  "regression_fixtures": [
+    "pilot-we-002",
+    "pilot-we-009",
+    "pilot-we-024",
+    "pilot-struct-012 original and revised",
+    "pilot-we-006 original and revised",
+    "pilot-we-014 original and revised",
+    "pilot-we-021 original and revised"
+  ],
+  "readiness_recommendation": {
+    "choice": "D",
+    "label": "Generator + Reviewerを小修正してvalidation batch",
+    "rationale": "Generator has repeatable WE construction risks and Reviewer has three false negatives; Orchestrator/Solver containment works and the Specification/taxonomy do not require a full restart."
+  }
+}

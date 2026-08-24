@@ -1,0 +1,52 @@
+{
+  "_purpose": "Reviewer-test fixtures only. Deliberately unsalvageable candidate items (fundamental, multi-point breakage) used to verify the Reviewer Agent returns REJECT rather than REVISE when local fixes cannot save the item. NOT usable practice content and NOT part of any item bank.",
+  "items": [
+    {
+      "item_id": "reject-struct-001",
+      "section": "Structure",
+      "primary_target": "ADVERBIAL_CLAUSES",
+      "subtype": "cause clause structure (deliberately incoherent stem)",
+      "secondary_features": ["possessive noun phrase", "relative clause", "passive voice"],
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "organizational management",
+      "stem": "Because the committee's the annual reports which had been under discussion for several quarters regarding efficiency, ____ therefore the board eventually the initiative approved reluctantly.",
+      "options": {
+        "A": "was fully reviewed by staff",
+        "B": "having been fully reviewed by staff",
+        "C": "staff reviewed it fully",
+        "D": "review being fully staff"
+      },
+      "correct_answer": "A",
+      "answer_explanation": "(Deliberately mis-specified for testing) 'was fully reviewed by staff' is claimed to complete the cause clause correctly.",
+      "distractor_rationales": {
+        "A": "claimed correct — but see _intended_flaw.",
+        "B": "claimed non-finite and therefore invalid.",
+        "C": "claimed to introduce an unintegrated subject.",
+        "D": "claimed to be word-salad."
+      },
+      "_intended_flaw": "The stem itself is broken independently of the blank in at least two places: (1) 'the committee's the annual reports' is a double-determiner collision (possessive 'the committee's' directly followed by another determiner 'the') that no option can repair, and (2) the clause after the blank, 'therefore the board eventually the initiative approved reluctantly', is scrambled word order with two bare noun phrases and no verb between them, also outside the blank's scope. In addition, option A itself does not actually agree with the intended plural subject ('reports... was' instead of 'were'), so even the 'intended' answer fails. No single option can rescue this item; the target grammar point is also ambiguous (cause clause? relative clause? possessive NP? passive voice?). This is designed to require REJECT, not REVISE."
+    },
+    {
+      "item_id": "reject-we-002",
+      "section": "Written Expression",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "pronoun-antecedent reference (deliberately mis-specified)",
+      "secondary_features": ["passive voice", "relative clause"],
+      "tested_error_type": "incorrect_reference",
+      "error_scope": "local",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "labor relations",
+      "sentence": "The company's employees was informed that new policies which effecting their benefits will implementing next quarter despite of the objections raised by the union representatives whom attended the meeting.",
+      "marked_parts": {
+        "A": "was informed",
+        "B": "which effecting their benefits",
+        "C": "will implementing next quarter",
+        "D": "whom attended the meeting"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "which affects their benefits",
+      "answer_explanation": "(Deliberately mis-specified for testing) 'which effecting their benefits' is claimed to be the sentence's sole error, a reference problem.",
+      "_intended_flaw": "The sentence contains at least five independent genuine errors: (1) 'employees was' - agreement (needs 'were'), (2) 'which effecting' - missing auxiliary/wrong verb form (needs 'are affecting' or 'affect'), (3) 'will implementing' - invalid verb form, needs passive 'will be implemented', (4) 'despite of the objections' - non-standard preposition collocation (needs 'despite' alone), (5) 'whom attended' - wrong relative-pronoun case (needs subject 'who'). Error (4) falls entirely outside all four marked spans. Marked span A ('was informed') does not itself contain the true agreement mismatch, which sits at the boundary with the excluded word 'employees'. The declared metadata (REFERENCE_AND_DETERMINERS / incorrect_reference) matches none of the actual defects - there is no pronoun-antecedent problem anywhere. The proposed minimal_correction itself introduces a new agreement error ('policies... affects' should be 'affect'). This is designed to require REJECT, not REVISE."
+    }
+  ]
+}

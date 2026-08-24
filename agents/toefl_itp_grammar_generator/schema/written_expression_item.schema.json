@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "written_expression_item.schema.json",
+  "title": "TOEFL ITP Generator Agent - Written Expression (Part B) output item",
+  "description": "Schema-level validation only (spec section 9). Does not judge grammatical correctness, error plausibility, or TOEFL-ITP-likeness - that is Reviewer Agent's job.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_id",
+    "section",
+    "primary_target",
+    "subtype",
+    "secondary_features",
+    "tested_error_type",
+    "error_scope",
+    "difficulty",
+    "vocabulary_domain",
+    "sentence",
+    "marked_parts",
+    "correct_answer",
+    "minimal_correction",
+    "answer_explanation"
+  ],
+  "properties": {
+    "item_id": { "type": "string", "minLength": 1 },
+    "section": { "const": "Written Expression" },
+    "primary_target": {
+      "enum": [
+        "CLAUSE_STRUCTURE",
+        "NOUN_CLAUSES",
+        "RELATIVE_CLAUSES",
+        "ADVERBIAL_CLAUSES",
+        "CONNECTORS_CONJUNCTIONS",
+        "VERB_FORM_VOICE",
+        "VERB_COMPLEMENTATION",
+        "NONFINITE_VERB_PHRASES",
+        "COMPARATIVES_DEGREE",
+        "PARALLEL_STRUCTURE",
+        "WORD_ORDER_MODIFICATION",
+        "INVERSION",
+        "EXISTENTIAL_EXPLETIVE",
+        "REFERENCE_AND_DETERMINERS",
+        "WORD_CLASS_FORM"
+      ]
+    },
+    "subtype": { "type": "string", "minLength": 1 },
+    "secondary_features": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "tested_error_type": {
+      "enum": [
+        "wrong_verb_form",
+        "wrong_voice",
+        "missing_required_element",
+        "extraneous_element",
+        "wrong_word_order",
+        "incorrect_subordinator",
+        "incorrect_relative_marker",
+        "double_subject",
+        "agreement_error",
+        "incorrect_part_of_speech",
+        "incorrect_reference",
+        "wrong_preposition_collocation",
+        "wrong_degree_form"
+      ],
+      "description": "fragment and wrong_complementation are excluded here: fragment is a structural impossibility for Written Expression (spec footnote 1), and wrong_complementation was fully superseded by wrong_preposition_collocation for this section in taxonomy v1.1 (spec footnote 2)."
+    },
+    "error_scope": {
+      "enum": ["local", "clause_level", "sentence_level", "cross_clause"]
+    },
+    "difficulty": { "enum": ["EASY", "MEDIUM", "HARD"] },
+    "vocabulary_domain": { "type": "string", "minLength": 1 },
+    "sentence": { "type": "string", "minLength": 1 },
+    "marked_parts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B", "C", "D"],
+      "properties": {
+        "A": { "type": "string", "minLength": 1 },
+        "B": { "type": "string", "minLength": 1 },
+        "C": { "type": "string", "minLength": 1 },
+        "D": { "type": "string", "minLength": 1 }
+      }
+    },
+    "correct_answer": { "enum": ["A", "B", "C", "D"] },
+    "minimal_correction": { "type": "string", "minLength": 1 },
+    "answer_explanation": { "type": "string", "minLength": 1 }
+  }
+}

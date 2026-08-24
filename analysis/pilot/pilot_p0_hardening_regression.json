@@ -1,0 +1,126 @@
+{
+  "_purpose": "P0 hardening regression contract for the 3 final Written Expression failures and the 4 Reviewer-REVISE candidates. The item text is intentionally not duplicated here; tests resolve it from pilot_provenance.json.",
+  "fixture_version": "1.0.0",
+  "source_provenance": "analysis/pilot/pilot_provenance.json",
+  "source_analysis": "analysis/pilot/PILOT_FAILURE_ANALYSIS.md",
+  "items": [
+    {
+      "item_id": "pilot-we-002",
+      "section": "Written Expression",
+      "fixture_class": "semantic_reference_resolution",
+      "generator_guard": "AVOID_OR_REFRAME",
+      "required_generator_behavior": "Do not emit a reference-error design when selectional semantics make one antecedent clearly acceptable.",
+      "expected_hardened_reviewer": {
+        "verdict_not": ["PASS"],
+        "independent_answer": "NONE",
+        "ambiguity_or_no_error": true
+      },
+      "historical_solver_answer": "NONE"
+    },
+    {
+      "item_id": "pilot-we-009",
+      "section": "Written Expression",
+      "fixture_class": "parallelism_alternate_parse_and_repair",
+      "generator_guard": "AVOID",
+      "required_generator_behavior": "Do not emit mixed nonfinite coordination when another parse or repair changes which marked part is erroneous.",
+      "expected_hardened_reviewer": {
+        "verdict_not": ["PASS"],
+        "independent_answer": "AMBIGUOUS",
+        "ambiguity_or_no_error": true
+      },
+      "historical_solver_answer": "AMBIGUOUS"
+    },
+    {
+      "item_id": "pilot-we-024",
+      "section": "Written Expression",
+      "fixture_class": "semantic_connector_oddity",
+      "generator_guard": "AVOID_OR_REFRAME",
+      "required_generator_behavior": "Do not use because/although as a grammatical error when the contrast is only semantic or logically unusual.",
+      "expected_hardened_reviewer": {
+        "verdict_not": ["PASS"],
+        "independent_answer": "NONE",
+        "ambiguity_or_no_error": true
+      },
+      "historical_solver_answer": "NONE"
+    },
+    {
+      "item_id": "pilot-struct-012",
+      "section": "Structure",
+      "fixture_class": "structure_distractor_pp_attachment",
+      "generator_guard": "RETAIN_AS_GUARD",
+      "original_expected": {
+        "reviewer_verdict": "REVISE",
+        "solver_not_reached": true
+      },
+      "revised_expected": {
+        "reviewer_verdict": "PASS",
+        "solver_answer": "D"
+      }
+    },
+    {
+      "item_id": "pilot-we-006",
+      "section": "Written Expression",
+      "fixture_class": "lexical_complement_frame",
+      "generator_guard": "AVOID_OR_REFRAME",
+      "required_generator_behavior": "Do not use a verb such as feel for a predicate-adjective error when its noun-object frame remains standard English.",
+      "original_expected": {
+        "reviewer_verdict": "REVISE",
+        "independent_answer": "NONE"
+      },
+      "revised_expected": {
+        "reviewer_verdict": "PASS",
+        "solver_answer": "B"
+      }
+    },
+    {
+      "item_id": "pilot-we-014",
+      "section": "Written Expression",
+      "fixture_class": "ordinal_reduced_relative_alternate_parse",
+      "generator_guard": "AVOID_OR_DISAMBIGUATE",
+      "required_generator_behavior": "Audit first/last/only plus participle constructions for a reduced-relative reading before emission.",
+      "original_expected": {
+        "reviewer_verdict": "REVISE",
+        "independent_answer": "B"
+      },
+      "revised_expected": {
+        "reviewer_verdict": "PASS",
+        "solver_answer": "B"
+      }
+    },
+    {
+      "item_id": "pilot-we-021",
+      "section": "Written Expression",
+      "fixture_class": "target_alignment_inversion",
+      "generator_guard": "ALIGN_METADATA",
+      "required_generator_behavior": "Keep fronted-negative inversion constructions aligned to INVERSION rather than CLAUSE_STRUCTURE.",
+      "original_expected": {
+        "reviewer_verdict": "REVISE",
+        "independent_answer": "A"
+      },
+      "revised_expected": {
+        "reviewer_verdict": "PASS",
+        "solver_answer": "A"
+      }
+    }
+  ],
+  "required_prompt_controls": {
+    "generator": [
+      "genuine grammatical error",
+      "semantic oddity",
+      "Alternate parse prevention",
+      "Unique repair check",
+      "Lexical complement",
+      "because",
+      "feel"
+    ],
+    "reviewer": [
+      "zero-based full-sentence audit",
+      "NONE",
+      "marked-part classification",
+      "alternate parse audit",
+      "alternate repair audit",
+      "semantic oddity",
+      "PASSは禁止"
+    ]
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "items": [
+    {
+      "item_id": "pilot-we-006",
+      "section": "Written Expression",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "predicate adjective after linking verb misrendered as noun",
+      "secondary_features": [
+        "noun clause object",
+        "causative verb complement"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "sociology",
+      "sentence": "Sociologists have found that prolonged unemployment often causes individuals to become isolation from their communities and support networks.",
+      "marked_parts": {
+        "A": "Sociologists have found that prolonged unemployment",
+        "B": "often causes individuals to become isolation",
+        "C": "from their communities",
+        "D": "and support networks"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "often causes individuals to become isolated",
+      "answer_explanation": "The verb 'become' requires a predicate complement; the adjective 'isolated' is required, not the noun 'isolation'."
+    },
+    {
+      "item_id": "pilot-we-014",
+      "section": "Written Expression",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "infinitive modifying superlative noun rendered as gerund",
+      "secondary_features": [
+        "ordinal noun phrase",
+        "achievement reading"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "error_scope": "local",
+      "difficulty": "EASY",
+      "vocabulary_domain": "volcanology",
+      "sentence": "The young volcanologist was the first researcher ever identifying the mountain's seismic pattern for eruption forecasting.",
+      "marked_parts": {
+        "A": "The young volcanologist",
+        "B": "was the first researcher ever identifying the mountain's seismic pattern",
+        "C": "for eruption",
+        "D": "forecasting"
+      },
+      "correct_answer": "B",
+      "minimal_correction": "was the first researcher ever to identify the mountain's seismic pattern",
+      "answer_explanation": "The fixed ordinal construction 'the first researcher ever' takes an infinitive of achievement ('to identify'), not a reduced participial form ('identifying')."
+    },
+    {
+      "item_id": "pilot-we-021",
+      "section": "Written Expression",
+      "primary_target": "INVERSION",
+      "subtype": "subject-auxiliary inversion after a fronted negative correlative ('Not only')",
+      "secondary_features": [
+        "correlative conjunction",
+        "relative clause"
+      ],
+      "tested_error_type": "missing_required_element",
+      "error_scope": "clause_level",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "ethnomusicology",
+      "sentence": "Not only ethnomusicologists study traditional instruments but also examine the cultural contexts in which they are played.",
+      "marked_parts": {
+        "A": "Not only ethnomusicologists study traditional instruments",
+        "B": "but also examine",
+        "C": "the cultural contexts",
+        "D": "in which they are played"
+      },
+      "correct_answer": "A",
+      "minimal_correction": "Not only do ethnomusicologists study traditional instruments",
+      "answer_explanation": "A clause beginning with the fronted negative correlative 'Not only' requires subject-auxiliary inversion, so the auxiliary 'do' must precede the subject."
+    }
+  ]
+}

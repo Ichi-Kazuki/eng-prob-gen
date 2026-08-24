@@ -1,0 +1,169 @@
+{
+  "items": [
+    {
+      "item_id": "gen-struct-001",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "gen-struct-002",
+      "section": "Structure",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "A",
+      "generator_answer": "A",
+      "answer_match": true,
+      "reviewer_difficulty": "EASY",
+      "generator_difficulty": "EASY",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "gen-struct-003",
+      "section": "Structure",
+      "verdict": "REVISE",
+      "critical_failure": false,
+      "independent_answer": "D",
+      "generator_answer": "D",
+      "answer_match": true,
+      "reviewer_difficulty": "HARD",
+      "generator_difficulty": "HARD",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "REVISE",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "REVISE",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [
+        {
+          "severity": "MAJOR",
+          "category": "distractor_marginal_validity",
+          "description": "Option C ('possesses also a thin, nitrogen-rich atmosphere...') postposes 'also' after the verb and before its object. This ordering is attested in more formal/literary registers ('the general possesses also a keen sense of humor') and is not unambiguously ungrammatical in the way the other three distractors are. A careful test-taker could defend it as merely stylistically marked rather than incorrect, which threatens the 'VALID = exactly 1' requirement (option C rates MARGINAL rather than a clean INVALID under independent review).",
+          "related_check": "answer_uniqueness"
+        }
+      ],
+      "revision_requirements": [
+        "Replace distractor C with an unambiguously ungrammatical word-order error (e.g., splitting the verb from its auxiliary, or placing 'also' somewhere no register accepts, such as 'possesses a thin also nitrogen-rich atmosphere'), so that only option D is defensible as correct."
+      ],
+      "source_similarity_risk": "LOW"
+    },
+    {
+      "item_id": "gen-we-001",
+      "section": "Written Expression",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "B",
+      "generator_answer": "B",
+      "answer_match": true,
+      "reviewer_difficulty": "EASY",
+      "generator_difficulty": "EASY",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "detected_error_count": 1,
+      "detected_error_position": "B",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true
+    },
+    {
+      "item_id": "gen-we-002",
+      "section": "Written Expression",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "A",
+      "generator_answer": "A",
+      "answer_match": true,
+      "reviewer_difficulty": "MEDIUM",
+      "generator_difficulty": "MEDIUM",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "detected_error_count": 1,
+      "detected_error_position": "A",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true
+    },
+    {
+      "item_id": "gen-we-003",
+      "section": "Written Expression",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "D",
+      "generator_answer": "D",
+      "answer_match": true,
+      "reviewer_difficulty": "HARD",
+      "generator_difficulty": "HARD",
+      "difficulty_mismatch": false,
+      "checks": {
+        "grammar_validity": "PASS",
+        "answer_uniqueness": "PASS",
+        "target_alignment": "PASS",
+        "naturalness": "PASS",
+        "toefl_style": "PASS",
+        "distractor_quality": "PASS",
+        "metadata_consistency": "PASS"
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "detected_error_count": 1,
+      "detected_error_position": "D",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true
+    }
+  ]
+}

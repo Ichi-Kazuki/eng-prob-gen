@@ -1,0 +1,2090 @@
+﻿{
+    "image":  "E_p1.png",
+    "width":  1684,
+    "height":  1191,
+    "lines":  [
+                  {
+                      "text":  "Section 2",
+                      "words":  [
+                                    {
+                                        "text":  "Section",
+                                        "x":  1238,
+                                        "y":  34,
+                                        "width":  142,
+                                        "height":  29
+                                    },
+                                    {
+                                        "text":  "2",
+                                        "x":  1395,
+                                        "y":  36,
+                                        "width":  22,
+                                        "height":  27
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "Structure and",
+                      "words":  [
+                                    {
+                                        "text":  "Structure",
+                                        "x":  1156,
+                                        "y":  72,
+                                        "width":  179,
+                                        "height":  29
+                                    },
+                                    {
+                                        "text":  "and",
+                                        "x":  1349,
+                                        "y":  74,
+                                        "width":  68,
+                                        "height":  27
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "Written Expression",
+                      "words":  [
+                                    {
+                                        "text":  "Written",
+                                        "x":  1056,
+                                        "y":  110,
+                                        "width":  138,
+                                        "height":  28
+                                    },
+                                    {
+                                        "text":  "Expression",
+                                        "x":  1210,
+                                        "y":  111,
+                                        "width":  206,
+                                        "height":  33
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "第 me : 25 minutes れ 0 他 山 れ 9 the reading of the d 00 載 on 可",
+                      "words":  [
+                                    {
+                                        "text":  "第",
+                                        "x":  924,
+                                        "y":  152,
+                                        "width":  18,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "me",
+                                        "x":  944,
+                                        "y":  156,
+                                        "width":  27,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  ":",
+                                        "x":  972,
+                                        "y":  156,
+                                        "width":  5,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "25",
+                                        "x":  985,
+                                        "y":  153,
+                                        "width":  23,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "minutes",
+                                        "x":  1015,
+                                        "y":  153,
+                                        "width":  77,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "れ",
+                                        "x":  1110,
+                                        "y":  157,
+                                        "width":  11,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  1122,
+                                        "y":  157,
+                                        "width":  10,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "他",
+                                        "x":  1133,
+                                        "y":  154,
+                                        "width":  17,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "山",
+                                        "x":  1151,
+                                        "y":  154,
+                                        "width":  16,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "れ",
+                                        "x":  1168,
+                                        "y":  158,
+                                        "width":  11,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "9",
+                                        "x":  1180,
+                                        "y":  158,
+                                        "width":  11,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1197,
+                                        "y":  154,
+                                        "width":  31,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "reading",
+                                        "x":  1235,
+                                        "y":  155,
+                                        "width":  71,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "of",
+                                        "x":  1313,
+                                        "y":  155,
+                                        "width":  19,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1337,
+                                        "y":  155,
+                                        "width":  31,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "d",
+                                        "x":  1375,
+                                        "y":  155,
+                                        "width":  11,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "00",
+                                        "x":  1400,
+                                        "y":  158,
+                                        "width":  22,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "載",
+                                        "x":  1423,
+                                        "y":  155,
+                                        "width":  12,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "on",
+                                        "x":  1436,
+                                        "y":  159,
+                                        "width":  23,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "可",
+                                        "x":  1460,
+                                        "y":  155,
+                                        "width":  16,
+                                        "height":  18
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "NO set your d00 fo ′ 25 min び t03.",
+                      "words":  [
+                                    {
+                                        "text":  "NO",
+                                        "x":  925,
+                                        "y":  172,
+                                        "width":  25,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "set",
+                                        "x":  972,
+                                        "y":  173,
+                                        "width":  30,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "your",
+                                        "x":  1007,
+                                        "y":  176,
+                                        "width":  43,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "d00",
+                                        "x":  1056,
+                                        "y":  173,
+                                        "width":  39,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "fo",
+                                        "x":  1113,
+                                        "y":  173,
+                                        "width":  18,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "′",
+                                        "x":  1132,
+                                        "y":  177,
+                                        "width":  8,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "25",
+                                        "x":  1146,
+                                        "y":  174,
+                                        "width":  24,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "min",
+                                        "x":  1177,
+                                        "y":  174,
+                                        "width":  35,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "び",
+                                        "x":  1213,
+                                        "y":  177,
+                                        "width":  10,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "t03.",
+                                        "x":  1224,
+                                        "y":  175,
+                                        "width":  35,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "This section is designed い measure your ability い recognize language thatis",
+                      "words":  [
+                                    {
+                                        "text":  "This",
+                                        "x":  924,
+                                        "y":  247,
+                                        "width":  32,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "section",
+                                        "x":  962,
+                                        "y":  248,
+                                        "width":  52,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "is",
+                                        "x":  1019,
+                                        "y":  248,
+                                        "width":  11,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "designed",
+                                        "x":  1036,
+                                        "y":  248,
+                                        "width":  65,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "い",
+                                        "x":  1106,
+                                        "y":  250,
+                                        "width":  14,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "measure",
+                                        "x":  1125,
+                                        "y":  252,
+                                        "width":  61,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "your",
+                                        "x":  1191,
+                                        "y":  252,
+                                        "width":  34,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ability",
+                                        "x":  1230,
+                                        "y":  249,
+                                        "width":  46,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "い",
+                                        "x":  1281,
+                                        "y":  251,
+                                        "width":  14,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "recognize",
+                                        "x":  1300,
+                                        "y":  249,
+                                        "width":  71,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "language",
+                                        "x":  1377,
+                                        "y":  250,
+                                        "width":  65,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "thatis",
+                                        "x":  1447,
+                                        "y":  250,
+                                        "width":  44,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "叩 p 「 op ロ a に fO 「 standard written English. There are two types of questions in th1S",
+                      "words":  [
+                                    {
+                                        "text":  "叩",
+                                        "x":  924,
+                                        "y":  270,
+                                        "width":  17,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "p",
+                                        "x":  942,
+                                        "y":  271,
+                                        "width":  8,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  951,
+                                        "y":  271,
+                                        "width":  6,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "op",
+                                        "x":  957,
+                                        "y":  271,
+                                        "width":  18,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ロ",
+                                        "x":  976,
+                                        "y":  271,
+                                        "width":  10,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "a",
+                                        "x":  987,
+                                        "y":  271,
+                                        "width":  8,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "に",
+                                        "x":  995,
+                                        "y":  269,
+                                        "width":  13,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "fO",
+                                        "x":  1013,
+                                        "y":  267,
+                                        "width":  15,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  1028,
+                                        "y":  271,
+                                        "width":  7,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "standard",
+                                        "x":  1040,
+                                        "y":  267,
+                                        "width":  61,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "written",
+                                        "x":  1107,
+                                        "y":  267,
+                                        "width":  51,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "English.",
+                                        "x":  1163,
+                                        "y":  268,
+                                        "width":  60,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "There",
+                                        "x":  1228,
+                                        "y":  268,
+                                        "width":  42,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "are",
+                                        "x":  1276,
+                                        "y":  272,
+                                        "width":  22,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "two",
+                                        "x":  1303,
+                                        "y":  271,
+                                        "width":  27,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "types",
+                                        "x":  1335,
+                                        "y":  271,
+                                        "width":  38,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "of",
+                                        "x":  1379,
+                                        "y":  269,
+                                        "width":  16,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "questions",
+                                        "x":  1398,
+                                        "y":  269,
+                                        "width":  69,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "in",
+                                        "x":  1473,
+                                        "y":  270,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "th1S",
+                                        "x":  1492,
+                                        "y":  270,
+                                        "width":  26,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "section, with special dlrections for each type.",
+                      "words":  [
+                                    {
+                                        "text":  "section,",
+                                        "x":  924,
+                                        "y":  286,
+                                        "width":  57,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "with",
+                                        "x":  986,
+                                        "y":  286,
+                                        "width":  32,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "special",
+                                        "x":  1023,
+                                        "y":  286,
+                                        "width":  51,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "dlrections",
+                                        "x":  1079,
+                                        "y":  286,
+                                        "width":  72,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "for",
+                                        "x":  1156,
+                                        "y":  286,
+                                        "width":  22,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "each",
+                                        "x":  1183,
+                                        "y":  287,
+                                        "width":  33,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "type.",
+                                        "x":  1221,
+                                        "y":  289,
+                                        "width":  35,
+                                        "height":  15
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "Structure",
+                      "words":  [
+                                    {
+                                        "text":  "Structure",
+                                        "x":  1189,
+                                        "y":  315,
+                                        "width":  100,
+                                        "height":  16
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "Directions: Quesuons 1-15 are incomplete sentences. Beneath each sentence you",
+                      "words":  [
+                                    {
+                                        "text":  "Directions:",
+                                        "x":  925,
+                                        "y":  352,
+                                        "width":  94,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "Quesuons",
+                                        "x":  1029,
+                                        "y":  354,
+                                        "width":  73,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "1-15",
+                                        "x":  1109,
+                                        "y":  354,
+                                        "width":  31,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "are",
+                                        "x":  1146,
+                                        "y":  358,
+                                        "width":  22,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "incomplete",
+                                        "x":  1173,
+                                        "y":  354,
+                                        "width":  82,
+                                        "height":  18
+                                    },
+                                    {
+                                        "text":  "sentences.",
+                                        "x":  1260,
+                                        "y":  358,
+                                        "width":  74,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "Beneath",
+                                        "x":  1339,
+                                        "y":  355,
+                                        "width":  60,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "each",
+                                        "x":  1404,
+                                        "y":  356,
+                                        "width":  33,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "sentence",
+                                        "x":  1443,
+                                        "y":  358,
+                                        "width":  63,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "you",
+                                        "x":  1510,
+                                        "y":  361,
+                                        "width":  27,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "willseefourwordsorphrases, marked(A),(B), (C),and (D). Choose theoneword",
+                      "words":  [
+                                    {
+                                        "text":  "willseefourwordsorphrases,",
+                                        "x":  924,
+                                        "y":  373,
+                                        "width":  225,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "marked(A),(B),",
+                                        "x":  1155,
+                                        "y":  374,
+                                        "width":  122,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "(C),and",
+                                        "x":  1283,
+                                        "y":  374,
+                                        "width":  60,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "(D).",
+                                        "x":  1349,
+                                        "y":  375,
+                                        "width":  28,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "Choose",
+                                        "x":  1383,
+                                        "y":  375,
+                                        "width":  54,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "theoneword",
+                                        "x":  1443,
+                                        "y":  375,
+                                        "width":  96,
+                                        "height":  14
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "0 「 phrase 山 誂 best completes the sentence. Then, on your answer sheet, find the",
+                      "words":  [
+                                    {
+                                        "text":  "0",
+                                        "x":  923,
+                                        "y":  396,
+                                        "width":  9,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  933,
+                                        "y":  396,
+                                        "width":  6,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "phrase",
+                                        "x":  944,
+                                        "y":  392,
+                                        "width":  48,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "山",
+                                        "x":  997,
+                                        "y":  392,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "誂",
+                                        "x":  1011,
+                                        "y":  395,
+                                        "width":  13,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "best",
+                                        "x":  1028,
+                                        "y":  393,
+                                        "width":  30,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "completes",
+                                        "x":  1063,
+                                        "y":  393,
+                                        "width":  74,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1143,
+                                        "y":  393,
+                                        "width":  22,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "sentence.",
+                                        "x":  1170,
+                                        "y":  395,
+                                        "width":  66,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "Then,",
+                                        "x":  1241,
+                                        "y":  394,
+                                        "width":  43,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "on",
+                                        "x":  1289,
+                                        "y":  397,
+                                        "width":  18,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "your",
+                                        "x":  1312,
+                                        "y":  397,
+                                        "width":  34,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "answer",
+                                        "x":  1351,
+                                        "y":  397,
+                                        "width":  52,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "sheet,",
+                                        "x":  1407,
+                                        "y":  394,
+                                        "width":  42,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "find",
+                                        "x":  1454,
+                                        "y":  395,
+                                        "width":  29,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1488,
+                                        "y":  395,
+                                        "width":  22,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "number 0f the question and fill in the space that corresponds い the は e 「 of the",
+                      "words":  [
+                                    {
+                                        "text":  "number",
+                                        "x":  924,
+                                        "y":  411,
+                                        "width":  56,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "0f",
+                                        "x":  984,
+                                        "y":  411,
+                                        "width":  17,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1004,
+                                        "y":  411,
+                                        "width":  22,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "question",
+                                        "x":  1031,
+                                        "y":  411,
+                                        "width":  62,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "and",
+                                        "x":  1099,
+                                        "y":  412,
+                                        "width":  25,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "fill",
+                                        "x":  1130,
+                                        "y":  411,
+                                        "width":  20,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "in",
+                                        "x":  1156,
+                                        "y":  412,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1175,
+                                        "y":  412,
+                                        "width":  22,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "space",
+                                        "x":  1202,
+                                        "y":  416,
+                                        "width":  40,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "that",
+                                        "x":  1247,
+                                        "y":  412,
+                                        "width":  28,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "corresponds",
+                                        "x":  1279,
+                                        "y":  413,
+                                        "width":  89,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "い",
+                                        "x":  1374,
+                                        "y":  415,
+                                        "width":  13,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1392,
+                                        "y":  413,
+                                        "width":  22,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "は",
+                                        "x":  1433,
+                                        "y":  416,
+                                        "width":  10,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "e",
+                                        "x":  1443,
+                                        "y":  417,
+                                        "width":  8,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  1451,
+                                        "y":  418,
+                                        "width":  7,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "of",
+                                        "x":  1462,
+                                        "y":  413,
+                                        "width":  16,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1482,
+                                        "y":  414,
+                                        "width":  22,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "answer you have chosen.",
+                      "words":  [
+                                    {
+                                        "text":  "answer",
+                                        "x":  923,
+                                        "y":  433,
+                                        "width":  53,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "you",
+                                        "x":  980,
+                                        "y":  434,
+                                        "width":  27,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "have",
+                                        "x":  1012,
+                                        "y":  430,
+                                        "width":  34,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "chosen.",
+                                        "x":  1051,
+                                        "y":  431,
+                                        "width":  55,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "ExampleI",
+                      "words":  [
+                                    {
+                                        "text":  "ExampleI",
+                                        "x":  922,
+                                        "y":  487,
+                                        "width":  82,
+                                        "height":  17
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "Geysers have often been compared [ 0 Ⅷ に ano い -",
+                      "words":  [
+                                    {
+                                        "text":  "Geysers",
+                                        "x":  957,
+                                        "y":  525,
+                                        "width":  59,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "have",
+                                        "x":  1021,
+                                        "y":  525,
+                                        "width":  33,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "often",
+                                        "x":  1060,
+                                        "y":  525,
+                                        "width":  37,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "been",
+                                        "x":  1102,
+                                        "y":  526,
+                                        "width":  34,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "compared",
+                                        "x":  1141,
+                                        "y":  526,
+                                        "width":  73,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "[",
+                                        "x":  1219,
+                                        "y":  528,
+                                        "width":  4,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  1224,
+                                        "y":  530,
+                                        "width":  9,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "Ⅷ",
+                                        "x":  1238,
+                                        "y":  530,
+                                        "width":  17,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "に",
+                                        "x":  1256,
+                                        "y":  526,
+                                        "width":  12,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "ano",
+                                        "x":  1269,
+                                        "y":  530,
+                                        "width":  26,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "い",
+                                        "x":  1296,
+                                        "y":  530,
+                                        "width":  15,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "-",
+                                        "x":  1315,
+                                        "y":  534,
+                                        "width":  6,
+                                        "height":  2
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "they 山 emit hotliquids from below the Earth\u0027s surface.",
+                      "words":  [
+                                    {
+                                        "text":  "they",
+                                        "x":  957,
+                                        "y":  544,
+                                        "width":  31,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "山",
+                                        "x":  1012,
+                                        "y":  545,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "emit",
+                                        "x":  1030,
+                                        "y":  545,
+                                        "width":  33,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "hotliquids",
+                                        "x":  1068,
+                                        "y":  545,
+                                        "width":  78,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "from",
+                                        "x":  1151,
+                                        "y":  545,
+                                        "width":  36,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "below",
+                                        "x":  1192,
+                                        "y":  545,
+                                        "width":  43,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1240,
+                                        "y":  546,
+                                        "width":  22,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "Earth\u0027s",
+                                        "x":  1268,
+                                        "y":  546,
+                                        "width":  51,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "surface.",
+                                        "x":  1325,
+                                        "y":  545,
+                                        "width":  56,
+                                        "height":  14
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "(A) due to",
+                      "words":  [
+                                    {
+                                        "text":  "(A)",
+                                        "x":  957,
+                                        "y":  569,
+                                        "width":  25,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "due",
+                                        "x":  991,
+                                        "y":  569,
+                                        "width":  27,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "to",
+                                        "x":  1022,
+                                        "y":  571,
+                                        "width":  14,
+                                        "height":  12
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "(B) because",
+                      "words":  [
+                                    {
+                                        "text":  "(B)",
+                                        "x":  957,
+                                        "y":  589,
+                                        "width":  24,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "because",
+                                        "x":  991,
+                                        "y":  589,
+                                        "width":  58,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "(C) ⅲ spite of",
+                      "words":  [
+                                    {
+                                        "text":  "(C)",
+                                        "x":  957,
+                                        "y":  608,
+                                        "width":  24,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  992,
+                                        "y":  608,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "spite",
+                                        "x":  1011,
+                                        "y":  608,
+                                        "width":  34,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "of",
+                                        "x":  1050,
+                                        "y":  608,
+                                        "width":  16,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "(D) regardless Of",
+                      "words":  [
+                                    {
+                                        "text":  "(D)",
+                                        "x":  957,
+                                        "y":  626,
+                                        "width":  25,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "regardless",
+                                        "x":  991,
+                                        "y":  627,
+                                        "width":  74,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "Of",
+                                        "x":  1070,
+                                        "y":  627,
+                                        "width":  17,
+                                        "height":  14
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "The sentence should read, 、 Geysers have often been compared い volcanoes because",
+                      "words":  [
+                                    {
+                                        "text":  "The",
+                                        "x":  922,
+                                        "y":  657,
+                                        "width":  29,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "sentence",
+                                        "x":  956,
+                                        "y":  659,
+                                        "width":  63,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "should",
+                                        "x":  1024,
+                                        "y":  657,
+                                        "width":  48,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "read,",
+                                        "x":  1077,
+                                        "y":  658,
+                                        "width":  36,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "、",
+                                        "x":  1123,
+                                        "y":  658,
+                                        "width":  3,
+                                        "height":  5
+                                    },
+                                    {
+                                        "text":  "Geysers",
+                                        "x":  1127,
+                                        "y":  658,
+                                        "width":  58,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "have",
+                                        "x":  1190,
+                                        "y":  658,
+                                        "width":  34,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "often",
+                                        "x":  1229,
+                                        "y":  658,
+                                        "width":  37,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "been",
+                                        "x":  1271,
+                                        "y":  659,
+                                        "width":  35,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "compared",
+                                        "x":  1311,
+                                        "y":  659,
+                                        "width":  72,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "い",
+                                        "x":  1388,
+                                        "y":  661,
+                                        "width":  14,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "volcanoes",
+                                        "x":  1407,
+                                        "y":  659,
+                                        "width":  73,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "because",
+                                        "x":  1484,
+                                        "y":  660,
+                                        "width":  59,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "theyb0themithOtliquidsfrombelowtheEarth ssurface. \"Therefore, youshould",
+                      "words":  [
+                                    {
+                                        "text":  "theyb0themithOtliquidsfrombelowtheEarth",
+                                        "x":  922,
+                                        "y":  676,
+                                        "width":  351,
+                                        "height":  18
+                                    },
+                                    {
+                                        "text":  "ssurface.",
+                                        "x":  1279,
+                                        "y":  677,
+                                        "width":  68,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "\"Therefore,",
+                                        "x":  1347,
+                                        "y":  678,
+                                        "width":  88,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "youshould",
+                                        "x":  1441,
+                                        "y":  679,
+                                        "width":  81,
+                                        "height":  17
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "choose (B).",
+                      "words":  [
+                                    {
+                                        "text":  "choose",
+                                        "x":  922,
+                                        "y":  695,
+                                        "width":  52,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "(B).",
+                                        "x":  978,
+                                        "y":  695,
+                                        "width":  28,
+                                        "height":  17
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "五 齟 mp Ⅱ",
+                      "words":  [
+                                    {
+                                        "text":  "五",
+                                        "x":  922,
+                                        "y":  733,
+                                        "width":  12,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "齟",
+                                        "x":  935,
+                                        "y":  737,
+                                        "width":  17,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "mp",
+                                        "x":  953,
+                                        "y":  737,
+                                        "width":  25,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "Ⅱ",
+                                        "x":  996,
+                                        "y":  734,
+                                        "width":  15,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "Sample Answer",
+                      "words":  [
+                                    {
+                                        "text":  "Sample",
+                                        "x":  1427,
+                                        "y":  735,
+                                        "width":  58,
+                                        "height":  18
+                                    },
+                                    {
+                                        "text":  "Answer",
+                                        "x":  1489,
+                                        "y":  736,
+                                        "width":  60,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "Durmg the early 面 Of ocean navigation,",
+                      "words":  [
+                                    {
+                                        "text":  "Durmg",
+                                        "x":  957,
+                                        "y":  771,
+                                        "width":  52,
+                                        "height":  18
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1014,
+                                        "y":  771,
+                                        "width":  22,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "early",
+                                        "x":  1041,
+                                        "y":  772,
+                                        "width":  36,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "面",
+                                        "x":  1111,
+                                        "y":  772,
+                                        "width":  18,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "Of",
+                                        "x":  1134,
+                                        "y":  772,
+                                        "width":  16,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "ocean",
+                                        "x":  1154,
+                                        "y":  776,
+                                        "width":  42,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "navigation,",
+                                        "x":  1202,
+                                        "y":  772,
+                                        "width":  81,
+                                        "height":  18
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "any need for sophisücated instrurnents and techniques.",
+                      "words":  [
+                                    {
+                                        "text":  "any",
+                                        "x":  957,
+                                        "y":  794,
+                                        "width":  25,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "need",
+                                        "x":  988,
+                                        "y":  791,
+                                        "width":  34,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "for",
+                                        "x":  1027,
+                                        "y":  790,
+                                        "width":  22,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "sophisücated",
+                                        "x":  1053,
+                                        "y":  791,
+                                        "width":  96,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "instrurnents",
+                                        "x":  1155,
+                                        "y":  791,
+                                        "width":  85,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "and",
+                                        "x":  1245,
+                                        "y":  792,
+                                        "width":  26,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "techniques.",
+                                        "x":  1276,
+                                        "y":  792,
+                                        "width":  83,
+                                        "height":  17
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "(A) SO that hardly",
+                      "words":  [
+                                    {
+                                        "text":  "(A)",
+                                        "x":  957,
+                                        "y":  815,
+                                        "width":  24,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "SO",
+                                        "x":  991,
+                                        "y":  819,
+                                        "width":  16,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "that",
+                                        "x":  1012,
+                                        "y":  815,
+                                        "width":  28,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "hardly",
+                                        "x":  1044,
+                                        "y":  815,
+                                        "width":  47,
+                                        "height":  18
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "(B) when there hardly was",
+                      "words":  [
+                                    {
+                                        "text":  "(B)",
+                                        "x":  957,
+                                        "y":  834,
+                                        "width":  23,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "when",
+                                        "x":  991,
+                                        "y":  834,
+                                        "width":  39,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "there",
+                                        "x":  1036,
+                                        "y":  835,
+                                        "width":  36,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "hardly",
+                                        "x":  1077,
+                                        "y":  835,
+                                        "width":  46,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "was",
+                                        "x":  1129,
+                                        "y":  838,
+                                        "width":  27,
+                                        "height":  10
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "(C) 恤 「 d ツ was",
+                      "words":  [
+                                    {
+                                        "text":  "(C)",
+                                        "x":  957,
+                                        "y":  853,
+                                        "width":  23,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "恤",
+                                        "x":  991,
+                                        "y":  854,
+                                        "width":  16,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  1008,
+                                        "y":  857,
+                                        "width":  7,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "d",
+                                        "x":  1015,
+                                        "y":  854,
+                                        "width":  8,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ツ",
+                                        "x":  1024,
+                                        "y":  854,
+                                        "width":  13,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "was",
+                                        "x":  1043,
+                                        "y":  857,
+                                        "width":  28,
+                                        "height":  10
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "(D) 山 e 代 was hardly",
+                      "words":  [
+                                    {
+                                        "text":  "(D)",
+                                        "x":  957,
+                                        "y":  872,
+                                        "width":  24,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "山",
+                                        "x":  991,
+                                        "y":  873,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "e",
+                                        "x":  1005,
+                                        "y":  876,
+                                        "width":  8,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "代",
+                                        "x":  1013,
+                                        "y":  877,
+                                        "width":  14,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "was",
+                                        "x":  1033,
+                                        "y":  876,
+                                        "width":  27,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "hardly",
+                                        "x":  1065,
+                                        "y":  873,
+                                        "width":  47,
+                                        "height":  17
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "The sentence should read, \"Durmg the early period of ocean navigation, there was",
+                      "words":  [
+                                    {
+                                        "text":  "The",
+                                        "x":  921,
+                                        "y":  903,
+                                        "width":  29,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "sentence",
+                                        "x":  955,
+                                        "y":  905,
+                                        "width":  63,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "should",
+                                        "x":  1023,
+                                        "y":  903,
+                                        "width":  49,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "read,",
+                                        "x":  1077,
+                                        "y":  903,
+                                        "width":  36,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "\"Durmg",
+                                        "x":  1118,
+                                        "y":  903,
+                                        "width":  60,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1183,
+                                        "y":  904,
+                                        "width":  22,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "early",
+                                        "x":  1210,
+                                        "y":  904,
+                                        "width":  36,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "period",
+                                        "x":  1252,
+                                        "y":  904,
+                                        "width":  46,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "of",
+                                        "x":  1303,
+                                        "y":  904,
+                                        "width":  17,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ocean",
+                                        "x":  1324,
+                                        "y":  908,
+                                        "width":  42,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "navigation,",
+                                        "x":  1372,
+                                        "y":  905,
+                                        "width":  80,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "there",
+                                        "x":  1457,
+                                        "y":  905,
+                                        "width":  37,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "was",
+                                        "x":  1499,
+                                        "y":  909,
+                                        "width":  28,
+                                        "height":  9
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "わ a 「 猷 y any need fo 「 sophisticated instruments and techniques. Therefore, you should",
+                      "words":  [
+                                    {
+                                        "text":  "わ",
+                                        "x":  921,
+                                        "y":  921,
+                                        "width":  9,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "a",
+                                        "x":  931,
+                                        "y":  925,
+                                        "width":  7,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  939,
+                                        "y":  925,
+                                        "width":  7,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "猷",
+                                        "x":  945,
+                                        "y":  922,
+                                        "width":  14,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "y",
+                                        "x":  960,
+                                        "y":  925,
+                                        "width":  9,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "any",
+                                        "x":  973,
+                                        "y":  925,
+                                        "width":  26,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "need",
+                                        "x":  1005,
+                                        "y":  922,
+                                        "width":  34,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "fo",
+                                        "x":  1044,
+                                        "y":  922,
+                                        "width":  15,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  1059,
+                                        "y":  926,
+                                        "width":  7,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "sophisticated",
+                                        "x":  1070,
+                                        "y":  922,
+                                        "width":  96,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "instruments",
+                                        "x":  1171,
+                                        "y":  922,
+                                        "width":  85,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "and",
+                                        "x":  1261,
+                                        "y":  923,
+                                        "width":  27,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "techniques.",
+                                        "x":  1293,
+                                        "y":  923,
+                                        "width":  83,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "Therefore,",
+                                        "x":  1387,
+                                        "y":  923,
+                                        "width":  77,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "you",
+                                        "x":  1470,
+                                        "y":  928,
+                                        "width":  26,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "should",
+                                        "x":  1502,
+                                        "y":  924,
+                                        "width":  48,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "choose (D).",
+                      "words":  [
+                                    {
+                                        "text":  "choose",
+                                        "x":  921,
+                                        "y":  940,
+                                        "width":  52,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "(D).",
+                                        "x":  977,
+                                        "y":  940,
+                                        "width":  29,
+                                        "height":  17
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "Nowbeginworkonthequesuons.",
+                      "words":  [
+                                    {
+                                        "text":  "Nowbeginworkonthequesuons.",
+                                        "x":  921,
+                                        "y":  970,
+                                        "width":  251,
+                                        "height":  18
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "P 「 0 生 Test E",
+                      "words":  [
+                                    {
+                                        "text":  "P",
+                                        "x":  1582,
+                                        "y":  429,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  1582,
+                                        "y":  443,
+                                        "width":  14,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  1581,
+                                        "y":  451,
+                                        "width":  15,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "生",
+                                        "x":  1581,
+                                        "y":  467,
+                                        "width":  22,
+                                        "height":  24
+                                    },
+                                    {
+                                        "text":  "Test",
+                                        "x":  1581,
+                                        "y":  523,
+                                        "width":  21,
+                                        "height":  42
+                                    },
+                                    {
+                                        "text":  "E",
+                                        "x":  1581,
+                                        "y":  573,
+                                        "width":  21,
+                                        "height":  11
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "Sample Answer",
+                      "words":  [
+                                    {
+                                        "text":  "Sample",
+                                        "x":  1427,
+                                        "y":  489,
+                                        "width":  58,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "Answer",
+                                        "x":  1489,
+                                        "y":  489,
+                                        "width":  60,
+                                        "height":  14
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "GOONTOTHENEXTPAGE",
+                      "words":  [
+                                    {
+                                        "text":  "GOONTOTHENEXTPAGE",
+                                        "x":  1378,
+                                        "y":  1060,
+                                        "width":  152,
+                                        "height":  10
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "Un 6 。 239",
+                      "words":  [
+                                    {
+                                        "text":  "Un",
+                                        "x":  1178,
+                                        "y":  1092,
+                                        "width":  19,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "6",
+                                        "x":  1211,
+                                        "y":  1082,
+                                        "width":  25,
+                                        "height":  24
+                                    },
+                                    {
+                                        "text":  "。",
+                                        "x":  1267,
+                                        "y":  1096,
+                                        "width":  8,
+                                        "height":  8
+                                    },
+                                    {
+                                        "text":  "239",
+                                        "x":  1278,
+                                        "y":  1091,
+                                        "width":  31,
+                                        "height":  14
+                                    }
+                                ]
+                  }
+              ]
+}

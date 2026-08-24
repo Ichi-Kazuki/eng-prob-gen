@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "item_id": "batch1-we-003",
+      "issues": [
+        {
+          "severity": "MAJOR",
+          "category": "alternate_repair",
+          "description": "The intended correction is not uniquely forced by the sentence context.",
+          "related_check": "answer_uniqueness"
+        }
+      ],
+      "revision_requirements": [
+        "Rewrite the item so exactly one minimal correction is valid."
+      ]
+    },
+    {
+      "item_id": "batch1-we-023",
+      "issues": [
+        {
+          "severity": "MAJOR",
+          "category": "alternate_repair",
+          "description": "The intended correction is not uniquely forced by the sentence context.",
+          "related_check": "answer_uniqueness"
+        }
+      ],
+      "revision_requirements": [
+        "Rewrite the item so exactly one minimal correction is valid."
+      ]
+    }
+  ]
+}

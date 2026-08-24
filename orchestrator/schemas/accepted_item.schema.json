@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "accepted_item.schema.json",
+  "title": "TOEFL ITP Orchestrator - accepted_item (public-facing, future Question DB input)",
+  "description": "The subset of an ACCEPTED candidate that is safe and appropriate to ship to end users / the Question DB. Contains no Reviewer verdicts, Solver answers, confidence, issues, or any other internal QA signal - see qa_audit.schema.json for that. This schema is descriptive documentation of the shape orchestrator.build_accepted_item() produces; it is not (yet) enforced by a JSON Schema library at runtime, consistent with this repo's other agents (schema-shape checks are hand-written Python, see agents/*/scripts/validate_output.py).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_id", "section", "difficulty", "vocabulary_domain",
+    "spec_version", "taxonomy_version", "correct_answer", "explanation", "taxonomy"
+  ],
+  "properties": {
+    "item_id": { "type": "string", "minLength": 1 },
+    "section": { "enum": ["Structure", "Written Expression"] },
+    "difficulty": {
+      "enum": ["EASY", "MEDIUM", "HARD"],
+      "description": "This is reviewer_difficulty (the Reviewer's independently re-assessed value), not the Generator's self-declared difficulty - see spec section 8 on why the Generator's own claim is not trusted as final."
+    },
+    "vocabulary_domain": { "type": "string", "minLength": 1 },
+    "spec_version": { "type": "string", "minLength": 1 },
+    "taxonomy_version": { "type": "string", "minLength": 1 },
+    "stem": { "type": "string", "description": "Structure only" },
+    "options": {
+      "type": "object",
+      "description": "Structure only",
+      "additionalProperties": false,
+      "properties": {
+        "A": { "type": "string" }, "B": { "type": "string" },
+        "C": { "type": "string" }, "D": { "type": "string" }
+      }
+    },
+    "sentence": { "type": "string", "description": "Written Expression only" },
+    "marked_parts": {
+      "type": "object",
+      "description": "Written Expression only",
+      "additionalProperties": false,
+      "properties": {
+        "A": { "type": "string" }, "B": { "type": "string" },
+        "C": { "type": "string" }, "D": { "type": "string" }
+      }
+    },
+    "correct_answer": { "enum": ["A", "B", "C", "D"] },
+    "explanation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["answer_explanation"],
+      "properties": {
+        "answer_explanation": { "type": "string" },
+        "distractor_rationales": { "type": "object", "description": "Structure only" },
+        "minimal_correction": { "type": "string", "description": "Written Expression only" }
+      }
+    },
+    "taxonomy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_target", "subtype", "secondary_features"],
+      "properties": {
+        "primary_target": { "type": "string" },
+        "subtype": { "type": "string" },
+        "secondary_features": { "type": "array", "items": { "type": "string" } },
+        "tested_error_type": { "type": "string", "description": "Written Expression only" },
+        "error_scope": { "type": "string", "description": "Written Expression only" }
+      }
+    }
+  }
+}

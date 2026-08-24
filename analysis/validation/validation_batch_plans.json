@@ -1,0 +1,1916 @@
+{
+  "validation_version": "TOEFL ITP Grammar Pipeline v1.1 Validation Batch",
+  "batch_count": 3,
+  "batch_size": 40,
+  "counts": {
+    "Structure": 45,
+    "Written Expression": 75,
+    "Total": 120
+  },
+  "version_lock": {
+    "spec_version": "1.0.0",
+    "taxonomy_version": "1.1",
+    "generator_version": "sha256:3567f2b6e246",
+    "reviewer_version": "sha256:e4142013a3cb",
+    "solver_version": "sha256:df1200bed2b1"
+  },
+  "classification_legend": {
+    "OBSERVED": "Directly informed by the analyzed corpus/ranges; guidance only, not a quota.",
+    "DERIVED": "Closed taxonomy or mechanism label derived from observed evidence.",
+    "HEURISTIC": "Batch diversity/design choice; not an ETS standard or hard quota."
+  },
+  "batches": [
+    {
+      "batch_id": "validation_batch1",
+      "generator_version": "1.1",
+      "taxonomy_version": "1.1",
+      "purpose": "Independent validation batch generation plan",
+      "source_separation": {
+        "authoring_mode": "independent",
+        "source_text_reuse": false,
+        "fixture_reuse": false,
+        "reviewer_verdicts_included": false,
+        "solver_verdicts_included": false
+      },
+      "dimension_metadata": {
+        "primary_target": {
+          "classification": "DERIVED",
+          "note": "Uses the closed taxonomy categories defined from OBSERVED corpus counts; batch allocation is a HEURISTIC spread, not a quota."
+        },
+        "subtype": {
+          "classification": "DERIVED",
+          "note": "Names the exact construction within each closed primary_target, independently authored for this batch."
+        },
+        "tested_error_type": {
+          "classification": "DERIVED",
+          "note": "Uses the closed 15-value mechanism vocabulary defined from OBSERVED taxonomy evidence."
+        },
+        "sentence_length_target": {
+          "classification": "HEURISTIC",
+          "note": "Targets the OBSERVED section ranges and means while varying short, medium, and long items."
+        },
+        "clause_count_target": {
+          "classification": "HEURISTIC",
+          "note": "Follows the OBSERVED one-/two-/three-clause shape approximately for each section."
+        },
+        "distractor_type": {
+          "classification": "DERIVED",
+          "note": "Each Structure distractor is assigned one of the OBSERVED/closed tested_error_type mechanisms."
+        },
+        "error_span_type": {
+          "classification": "DERIVED",
+          "note": "Uses the span-type vocabulary and diversity guidance derived from the OBSERVED Written Expression distribution."
+        },
+        "error_scope": {
+          "classification": "DERIVED",
+          "note": "Uses the defined local/clause_level/sentence_level/cross_clause labels; the batch mix is HEURISTIC."
+        },
+        "error_location": {
+          "classification": "HEURISTIC",
+          "note": "Randomized with a mild late/sentence_final emphasis based on the OBSERVED distribution."
+        },
+        "difficulty": {
+          "classification": "HEURISTIC",
+          "note": "EASY/MEDIUM/HARD is assigned from syntax, dependency, span scope, and confusability; vocabulary rarity is not used."
+        },
+        "correct_answer_position": {
+          "classification": "HEURISTIC",
+          "note": "Positions are spread across A-D using the OBSERVED near-even pattern without forcing a small-batch quota."
+        },
+        "vocabulary_domain": {
+          "classification": "HEURISTIC",
+          "note": "Uses diverse academic/general-interest domains, following the OBSERVED diversity principle without reusing a source-domain roster."
+        }
+      },
+      "structure": {
+        "count": 15,
+        "items": [
+          {
+            "item_id": "batch1-struct-001",
+            "primary_target": "CLAUSE_STRUCTURE",
+            "subtype": "subject-verb agreement across an intervening prepositional phrase",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "meteorology",
+            "sentence_length_target": 18,
+            "clause_count_target": 1,
+            "distractor_type": [
+              "agreement_error",
+              "fragment",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-002",
+            "primary_target": "NOUN_CLAUSES",
+            "subtype": "embedded question with statement word order",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "cartography",
+            "sentence_length_target": 19,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "wrong_word_order",
+              "extraneous_element",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-003",
+            "primary_target": "RELATIVE_CLAUSES",
+            "subtype": "non-restrictive relative clause with passive predicate",
+            "difficulty": "HARD",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "archaeological conservation",
+            "sentence_length_target": 22,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "incorrect_relative_marker",
+              "wrong_verb_form",
+              "double_subject"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-004",
+            "primary_target": "ADVERBIAL_CLAUSES",
+            "subtype": "time clause introduced by when",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "observatory operations",
+            "sentence_length_target": 17,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "incorrect_subordinator",
+              "fragment",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-005",
+            "primary_target": "CONNECTORS_CONJUNCTIONS",
+            "subtype": "contrast connector before a noun phrase",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "materials engineering",
+            "sentence_length_target": 20,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "incorrect_subordinator",
+              "missing_required_element",
+              "extraneous_element"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-006",
+            "primary_target": "VERB_FORM_VOICE",
+            "subtype": "past perfect passive before a later past event",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "mineral surveying",
+            "sentence_length_target": 21,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "wrong_verb_form",
+              "wrong_voice",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-007",
+            "primary_target": "VERB_COMPLEMENTATION",
+            "subtype": "causative verb with object plus predicate adjective",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "environmental monitoring",
+            "sentence_length_target": 18,
+            "clause_count_target": 1,
+            "distractor_type": [
+              "wrong_complementation",
+              "incorrect_part_of_speech",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-008",
+            "primary_target": "NONFINITE_VERB_PHRASES",
+            "subtype": "reduced passive participial modifier",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "seed ecology",
+            "sentence_length_target": 19,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "wrong_verb_form",
+              "wrong_voice",
+              "fragment"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-009",
+            "primary_target": "COMPARATIVES_DEGREE",
+            "subtype": "adjective plus enough plus to-infinitive result construction",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "astronomical instrumentation",
+            "sentence_length_target": 16,
+            "clause_count_target": 1,
+            "distractor_type": [
+              "wrong_degree_form",
+              "wrong_verb_form",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-010",
+            "primary_target": "PARALLEL_STRUCTURE",
+            "subtype": "parallel bare infinitives in a three-part list",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "geological fieldwork",
+            "sentence_length_target": 18,
+            "clause_count_target": 1,
+            "distractor_type": [
+              "wrong_verb_form",
+              "incorrect_part_of_speech",
+              "wrong_word_order"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-011",
+            "primary_target": "WORD_ORDER_MODIFICATION",
+            "subtype": "adjective order inside a complex noun phrase",
+            "difficulty": "HARD",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "museum studies",
+            "sentence_length_target": 20,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "wrong_word_order",
+              "incorrect_part_of_speech",
+              "extraneous_element"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-012",
+            "primary_target": "INVERSION",
+            "subtype": "subject-auxiliary inversion after only after",
+            "difficulty": "HARD",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "glaciology",
+            "sentence_length_target": 18,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "missing_required_element",
+              "wrong_word_order",
+              "fragment"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-013",
+            "primary_target": "EXISTENTIAL_EXPLETIVE",
+            "subtype": "there plus be with a plural postposed noun phrase",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "wind erosion",
+            "sentence_length_target": 17,
+            "clause_count_target": 1,
+            "distractor_type": [
+              "agreement_error",
+              "incorrect_reference",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-014",
+            "primary_target": "REFERENCE_AND_DETERMINERS",
+            "subtype": "plural pronoun reference for a coordinated human subject",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "apprenticeship training",
+            "sentence_length_target": 16,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "incorrect_reference",
+              "agreement_error",
+              "incorrect_part_of_speech"
+            ]
+          },
+          {
+            "item_id": "batch1-struct-015",
+            "primary_target": "WORD_CLASS_FORM",
+            "subtype": "noun required as the object of a preposition",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "experimental measurement",
+            "sentence_length_target": 15,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "incorrect_part_of_speech",
+              "wrong_word_order",
+              "missing_required_element"
+            ]
+          }
+        ]
+      },
+      "written_expression": {
+        "count": 25,
+        "items": [
+          {
+            "item_id": "batch1-we-001",
+            "primary_target": "REFERENCE_AND_DETERMINERS",
+            "subtype": "singular head noun in an of-phrase subject",
+            "tested_error_type": "agreement_error",
+            "error_span_type": "noun_phrase",
+            "error_scope": "clause_level",
+            "error_location": "early",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "instrument calibration",
+            "sentence_length_target": 17
+          },
+          {
+            "item_id": "batch1-we-002",
+            "primary_target": "WORD_CLASS_FORM",
+            "subtype": "adjective required before a plural head noun",
+            "tested_error_type": "incorrect_part_of_speech",
+            "error_span_type": "adjective",
+            "error_scope": "local",
+            "error_location": "middle",
+            "difficulty": "EASY",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "mechanical engineering",
+            "sentence_length_target": 16
+          },
+          {
+            "item_id": "batch1-we-003",
+            "primary_target": "VERB_FORM_VOICE",
+            "subtype": "simple past main verb after a past perfect subordinate clause",
+            "tested_error_type": "wrong_verb_form",
+            "error_span_type": "verb_phrase",
+            "error_scope": "clause_level",
+            "error_location": "late",
+            "difficulty": "EASY",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "lighthouse preservation",
+            "sentence_length_target": 20
+          },
+          {
+            "item_id": "batch1-we-004",
+            "primary_target": "CONNECTORS_CONJUNCTIONS",
+            "subtype": "adjective-governed preposition in an interested-in phrase",
+            "tested_error_type": "wrong_preposition_collocation",
+            "error_span_type": "prepositional_phrase",
+            "error_scope": "local",
+            "error_location": "sentence_final",
+            "difficulty": "EASY",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "archival science",
+            "sentence_length_target": 18
+          },
+          {
+            "item_id": "batch1-we-005",
+            "primary_target": "PARALLEL_STRUCTURE",
+            "subtype": "gerund complements coordinated after a training preposition",
+            "tested_error_type": "wrong_verb_form",
+            "error_span_type": "gerund_phrase",
+            "error_scope": "clause_level",
+            "error_location": "early",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "craft education",
+            "sentence_length_target": 18
+          },
+          {
+            "item_id": "batch1-we-006",
+            "primary_target": "VERB_COMPLEMENTATION",
+            "subtype": "adjective complement after responsible for",
+            "tested_error_type": "wrong_preposition_collocation",
+            "error_span_type": "prepositional_phrase",
+            "error_scope": "local",
+            "error_location": "middle",
+            "difficulty": "EASY",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "mountain architecture",
+            "sentence_length_target": 17
+          },
+          {
+            "item_id": "batch1-we-007",
+            "primary_target": "RELATIVE_CLAUSES",
+            "subtype": "subject relative pronoun for a human antecedent",
+            "tested_error_type": "incorrect_relative_marker",
+            "error_span_type": "relative_marker",
+            "error_scope": "clause_level",
+            "error_location": "late",
+            "difficulty": "EASY",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "community surveying",
+            "sentence_length_target": 16
+          },
+          {
+            "item_id": "batch1-we-008",
+            "primary_target": "WORD_ORDER_MODIFICATION",
+            "subtype": "participial adjective before a material adjective in a noun phrase",
+            "tested_error_type": "wrong_word_order",
+            "error_span_type": "noun_phrase",
+            "error_scope": "local",
+            "error_location": "sentence_final",
+            "difficulty": "EASY",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "museum curation",
+            "sentence_length_target": 17
+          },
+          {
+            "item_id": "batch1-we-009",
+            "primary_target": "CLAUSE_STRUCTURE",
+            "subtype": "singular head noun with an of-phrase interrupter",
+            "tested_error_type": "agreement_error",
+            "error_span_type": "main_verb",
+            "error_scope": "clause_level",
+            "error_location": "early",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "oral history",
+            "sentence_length_target": 17
+          },
+          {
+            "item_id": "batch1-we-010",
+            "primary_target": "CONNECTORS_CONJUNCTIONS",
+            "subtype": "removal of a redundant coordinator after an although clause",
+            "tested_error_type": "extraneous_element",
+            "error_span_type": "conjunction",
+            "error_scope": "clause_level",
+            "error_location": "middle",
+            "difficulty": "EASY",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "transportation geography",
+            "sentence_length_target": 17
+          },
+          {
+            "item_id": "batch1-we-011",
+            "primary_target": "VERB_FORM_VOICE",
+            "subtype": "passive transitive verb requiring a by-agent phrase",
+            "tested_error_type": "wrong_voice",
+            "error_span_type": "verb_phrase",
+            "error_scope": "clause_level",
+            "error_location": "late",
+            "difficulty": "EASY",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "manuscript librarianship",
+            "sentence_length_target": 18
+          },
+          {
+            "item_id": "batch1-we-012",
+            "primary_target": "NONFINITE_VERB_PHRASES",
+            "subtype": "past participle after a perfect auxiliary",
+            "tested_error_type": "wrong_verb_form",
+            "error_span_type": "verb_phrase",
+            "error_scope": "clause_level",
+            "error_location": "sentence_final",
+            "difficulty": "EASY",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "laboratory procedure",
+            "sentence_length_target": 20
+          },
+          {
+            "item_id": "batch1-we-013",
+            "primary_target": "REFERENCE_AND_DETERMINERS",
+            "subtype": "pronoun without an explicit antecedent",
+            "tested_error_type": "incorrect_reference",
+            "error_span_type": "pronoun",
+            "error_scope": "sentence_level",
+            "error_location": "sentence_initial",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "research equipment",
+            "sentence_length_target": 17
+          },
+          {
+            "item_id": "batch1-we-014",
+            "primary_target": "WORD_CLASS_FORM",
+            "subtype": "adjective required as a noun modifier after an article",
+            "tested_error_type": "incorrect_part_of_speech",
+            "error_span_type": "adjective",
+            "error_scope": "local",
+            "error_location": "middle",
+            "difficulty": "EASY",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "public lectures",
+            "sentence_length_target": 16
+          },
+          {
+            "item_id": "batch1-we-015",
+            "primary_target": "COMPARATIVES_DEGREE",
+            "subtype": "comparative adjective without a redundant more marker",
+            "tested_error_type": "wrong_degree_form",
+            "error_span_type": "comparative_marker",
+            "error_scope": "local",
+            "error_location": "late",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "regional transportation",
+            "sentence_length_target": 15
+          },
+          {
+            "item_id": "batch1-we-016",
+            "primary_target": "ADVERBIAL_CLAUSES",
+            "subtype": "because clause rather than because-of before a finite clause",
+            "tested_error_type": "incorrect_subordinator",
+            "error_span_type": "conjunction",
+            "error_scope": "clause_level",
+            "error_location": "sentence_final",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "greenhouse cultivation",
+            "sentence_length_target": 17
+          },
+          {
+            "item_id": "batch1-we-017",
+            "primary_target": "EXISTENTIAL_EXPLETIVE",
+            "subtype": "there-be agreement with a plural postposed noun phrase",
+            "tested_error_type": "agreement_error",
+            "error_span_type": "verb_phrase",
+            "error_scope": "clause_level",
+            "error_location": "sentence_initial",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "theater architecture",
+            "sentence_length_target": 12
+          },
+          {
+            "item_id": "batch1-we-018",
+            "primary_target": "NOUN_CLAUSES",
+            "subtype": "embedded why-question with statement word order",
+            "tested_error_type": "wrong_word_order",
+            "error_span_type": "verb_phrase",
+            "error_scope": "cross_clause",
+            "error_location": "middle",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "data analysis",
+            "sentence_length_target": 17
+          },
+          {
+            "item_id": "batch1-we-019",
+            "primary_target": "VERB_COMPLEMENTATION",
+            "subtype": "adjective-governed dependent-on preposition",
+            "tested_error_type": "wrong_preposition_collocation",
+            "error_span_type": "prepositional_phrase",
+            "error_scope": "local",
+            "error_location": "late",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "thermal materials",
+            "sentence_length_target": 15
+          },
+          {
+            "item_id": "batch1-we-020",
+            "primary_target": "PARALLEL_STRUCTURE",
+            "subtype": "gerund coordination after recommends",
+            "tested_error_type": "wrong_verb_form",
+            "error_span_type": "infinitive_phrase",
+            "error_scope": "clause_level",
+            "error_location": "sentence_final",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "municipal planning",
+            "sentence_length_target": 17
+          },
+          {
+            "item_id": "batch1-we-021",
+            "primary_target": "WORD_CLASS_FORM",
+            "subtype": "adverb required to modify a verb",
+            "tested_error_type": "incorrect_part_of_speech",
+            "error_span_type": "adverb",
+            "error_scope": "local",
+            "error_location": "middle",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "plant physiology",
+            "sentence_length_target": 15
+          },
+          {
+            "item_id": "batch1-we-022",
+            "primary_target": "NONFINITE_VERB_PHRASES",
+            "subtype": "reduced passive modifier before a finite passive predicate",
+            "tested_error_type": "wrong_voice",
+            "error_span_type": "participial_phrase",
+            "error_scope": "clause_level",
+            "error_location": "early",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "wetland ecology",
+            "sentence_length_target": 16
+          },
+          {
+            "item_id": "batch1-we-023",
+            "primary_target": "VERB_FORM_VOICE",
+            "subtype": "simple past main verb after a past perfect passive clause",
+            "tested_error_type": "wrong_verb_form",
+            "error_span_type": "main_verb",
+            "error_scope": "cross_clause",
+            "error_location": "middle",
+            "difficulty": "HARD",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "bridge engineering",
+            "sentence_length_target": 17
+          },
+          {
+            "item_id": "batch1-we-024",
+            "primary_target": "REFERENCE_AND_DETERMINERS",
+            "subtype": "countable quantifier before a plural count noun",
+            "tested_error_type": "agreement_error",
+            "error_span_type": "quantifier",
+            "error_scope": "local",
+            "error_location": "late",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "questionnaire design",
+            "sentence_length_target": 14
+          },
+          {
+            "item_id": "batch1-we-025",
+            "primary_target": "WORD_CLASS_FORM",
+            "subtype": "adverb required to modify an adverb",
+            "tested_error_type": "incorrect_part_of_speech",
+            "error_span_type": "adverb",
+            "error_scope": "local",
+            "error_location": "middle",
+            "difficulty": "HARD",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "horticultural experiments",
+            "sentence_length_target": 15
+          }
+        ]
+      }
+    },
+    {
+      "batch_id": "validation-batch2",
+      "generator_version": "1.1",
+      "taxonomy_version": "1.1",
+      "status": "fixed_before_generation",
+      "candidate_count": 40,
+      "replacement_policy": "none",
+      "source_separation": {
+        "authoring_mode": "independent",
+        "permitted_reference_files": [
+          "specs/TOEFL_ITP_GRAMMAR_SPEC.md",
+          "specs/toefl_itp_grammar_spec.json",
+          "analysis/GRAMMAR_TAXONOMY.md",
+          "analysis/grammar_taxonomy.json"
+        ],
+        "excluded_materials": "All existing fixtures, pilot artifacts, previous smoke tests, previous pilot items, existing item JSON/CSV, raw source files, and source PDFs were not used."
+      },
+      "structure_plan": {
+        "count": 15,
+        "dimension_metadata": {
+          "primary_target": {
+            "classification": "OBSERVED",
+            "basis": "Closed 15-value taxonomy and Structure frequencies in the permitted specification."
+          },
+          "subtype": {
+            "classification": "DERIVED",
+            "basis": "Exact construction selected from taxonomy definitions and representative subtypes."
+          },
+          "difficulty": {
+            "classification": "HEURISTIC",
+            "basis": "EASY/MEDIUM/HARD assigned from syntax complexity, clause nesting, dependency distance, and distractor similarity."
+          },
+          "correct_answer_position": {
+            "classification": "HEURISTIC",
+            "basis": "Small-batch balance target informed by the observed A-D distribution."
+          },
+          "vocabulary_domain": {
+            "classification": "HEURISTIC",
+            "basis": "Broad academic/general-interest domain diversity; domain knowledge is not required."
+          },
+          "sentence_length_target": {
+            "classification": "OBSERVED",
+            "basis": "Structure observed range 10-27 words and mean near 20 in the permitted specification."
+          },
+          "clause_count_target": {
+            "classification": "OBSERVED",
+            "basis": "Structure observed shape centered on two finite clauses, with one- and three-clause items included."
+          },
+          "distractor_type": {
+            "classification": "DERIVED",
+            "basis": "Each distractor is assigned one closed tested_error_type mechanism from the permitted taxonomy."
+          }
+        },
+        "items": [
+          {
+            "item_id": "batch2-struct-001",
+            "primary_target": "CLAUSE_STRUCTURE",
+            "subtype": "subject-verb agreement across an intervening prepositional phrase",
+            "difficulty": "EASY",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "botany",
+            "sentence_length_target": 18,
+            "clause_count_target": 1,
+            "distractor_type": [
+              "agreement_error",
+              "fragment",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-002",
+            "primary_target": "NOUN_CLAUSES",
+            "subtype": "embedded question with statement word order",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "archaeology",
+            "sentence_length_target": 20,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "wrong_word_order",
+              "missing_required_element",
+              "extraneous_element"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-003",
+            "primary_target": "RELATIVE_CLAUSES",
+            "subtype": "restrictive relative clause with object relative marker",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "environmental science",
+            "sentence_length_target": 19,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "incorrect_relative_marker",
+              "double_subject",
+              "fragment"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-004",
+            "primary_target": "ADVERBIAL_CLAUSES",
+            "subtype": "conditional clause with a finite subordinate clause",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "meteorology",
+            "sentence_length_target": 21,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "incorrect_subordinator",
+              "fragment",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-005",
+            "primary_target": "CONNECTORS_CONJUNCTIONS",
+            "subtype": "contrast connector followed by a finite clause",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "public policy",
+            "sentence_length_target": 17,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "incorrect_subordinator",
+              "missing_required_element",
+              "extraneous_element"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-006",
+            "primary_target": "VERB_FORM_VOICE",
+            "subtype": "passive voice in a completed research process",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "materials science",
+            "sentence_length_target": 20,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "wrong_voice",
+              "wrong_verb_form",
+              "fragment"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-007",
+            "primary_target": "VERB_COMPLEMENTATION",
+            "subtype": "causative verb followed by object and predicate adjective",
+            "difficulty": "EASY",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "urban planning",
+            "sentence_length_target": 16,
+            "clause_count_target": 1,
+            "distractor_type": [
+              "wrong_complementation",
+              "incorrect_part_of_speech",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-008",
+            "primary_target": "NONFINITE_VERB_PHRASES",
+            "subtype": "reduced passive relative clause with a past participle",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "meteorite studies",
+            "sentence_length_target": 22,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "wrong_verb_form",
+              "fragment",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-009",
+            "primary_target": "COMPARATIVES_DEGREE",
+            "subtype": "so plus adjective licensing a result that-clause",
+            "difficulty": "HARD",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "acoustics",
+            "sentence_length_target": 24,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "wrong_degree_form",
+              "missing_required_element",
+              "incorrect_subordinator"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-010",
+            "primary_target": "PARALLEL_STRUCTURE",
+            "subtype": "not only plus coordinated parallel verb phrases",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "museum studies",
+            "sentence_length_target": 18,
+            "clause_count_target": 1,
+            "distractor_type": [
+              "missing_required_element",
+              "wrong_word_order",
+              "incorrect_part_of_speech"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-011",
+            "primary_target": "WORD_ORDER_MODIFICATION",
+            "subtype": "appositive noun phrase after a proper noun",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "linguistics",
+            "sentence_length_target": 20,
+            "clause_count_target": 1,
+            "distractor_type": [
+              "wrong_word_order",
+              "extraneous_element",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-012",
+            "primary_target": "INVERSION",
+            "subtype": "subject-auxiliary inversion after a fronted negative adverbial",
+            "difficulty": "HARD",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "constitutional history",
+            "sentence_length_target": 23,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "wrong_word_order",
+              "missing_required_element",
+              "fragment"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-013",
+            "primary_target": "EXISTENTIAL_EXPLETIVE",
+            "subtype": "there plus be with a postposed plural noun phrase",
+            "difficulty": "EASY",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "hydrology",
+            "sentence_length_target": 14,
+            "clause_count_target": 1,
+            "distractor_type": [
+              "missing_required_element",
+              "agreement_error",
+              "extraneous_element"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-014",
+            "primary_target": "REFERENCE_AND_DETERMINERS",
+            "subtype": "quantifier selected for an uncountable academic noun",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "economics",
+            "sentence_length_target": 19,
+            "clause_count_target": 2,
+            "distractor_type": [
+              "agreement_error",
+              "incorrect_part_of_speech",
+              "missing_required_element"
+            ]
+          },
+          {
+            "item_id": "batch2-struct-015",
+            "primary_target": "WORD_CLASS_FORM",
+            "subtype": "adverb required to modify a following finite verb",
+            "difficulty": "HARD",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "signal processing",
+            "sentence_length_target": 26,
+            "clause_count_target": 3,
+            "distractor_type": [
+              "incorrect_part_of_speech",
+              "wrong_word_order",
+              "missing_required_element"
+            ]
+          }
+        ]
+      },
+      "written_expression_plan": {
+        "count": 25,
+        "dimension_metadata": {
+          "primary_target": {
+            "classification": "OBSERVED",
+            "basis": "Closed 15-value taxonomy and Written Expression frequencies in the permitted specification."
+          },
+          "subtype": {
+            "classification": "DERIVED",
+            "basis": "Exact construction selected from taxonomy definitions and representative subtypes."
+          },
+          "tested_error_type": {
+            "classification": "DERIVED",
+            "basis": "Each item has one planted error using a closed tested_error_type mechanism from the permitted taxonomy."
+          },
+          "error_span_type": {
+            "classification": "OBSERVED",
+            "basis": "Span-type vocabulary and distribution are specified in the permitted Written Expression specification."
+          },
+          "error_scope": {
+            "classification": "OBSERVED",
+            "basis": "local/clause_level/sentence_level/cross_clause scope categories and observed shape are specified in the permitted specification."
+          },
+          "error_location": {
+            "classification": "OBSERVED",
+            "basis": "Five location bands and the slight late/final skew are specified in the permitted specification."
+          },
+          "difficulty": {
+            "classification": "HEURISTIC",
+            "basis": "EASY/MEDIUM/HARD assigned from scope, detectability, plausibility, and syntax complexity."
+          },
+          "correct_answer_position": {
+            "classification": "HEURISTIC",
+            "basis": "Small-batch balance target informed by the observed A-D distribution."
+          },
+          "vocabulary_domain": {
+            "classification": "HEURISTIC",
+            "basis": "Broad academic/general-interest domain diversity; domain knowledge is not required."
+          }
+        },
+        "items": [
+          {
+            "item_id": "batch2-we-001",
+            "primary_target": "REFERENCE_AND_DETERMINERS",
+            "subtype": "article before a singular count noun",
+            "tested_error_type": "incorrect_part_of_speech",
+            "error_span_type": "determiner",
+            "error_scope": "local",
+            "error_location": "sentence_initial",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "ecology"
+          },
+          {
+            "item_id": "batch2-we-002",
+            "primary_target": "VERB_FORM_VOICE",
+            "subtype": "simple past in a dated historical sequence",
+            "tested_error_type": "wrong_verb_form",
+            "error_span_type": "verb_phrase",
+            "error_scope": "local",
+            "error_location": "early",
+            "difficulty": "EASY",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "transportation history"
+          },
+          {
+            "item_id": "batch2-we-003",
+            "primary_target": "WORD_CLASS_FORM",
+            "subtype": "adjective modifying a research noun",
+            "tested_error_type": "incorrect_part_of_speech",
+            "error_span_type": "adjective",
+            "error_scope": "local",
+            "error_location": "middle",
+            "difficulty": "EASY",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "psychology"
+          },
+          {
+            "item_id": "batch2-we-004",
+            "primary_target": "REFERENCE_AND_DETERMINERS",
+            "subtype": "quantifier with a plural count noun",
+            "tested_error_type": "agreement_error",
+            "error_span_type": "quantifier",
+            "error_scope": "local",
+            "error_location": "late",
+            "difficulty": "EASY",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "agriculture"
+          },
+          {
+            "item_id": "batch2-we-005",
+            "primary_target": "PARALLEL_STRUCTURE",
+            "subtype": "parallel gerund phrases after a coordinator",
+            "tested_error_type": "incorrect_part_of_speech",
+            "error_span_type": "gerund_phrase",
+            "error_scope": "clause_level",
+            "error_location": "sentence_final",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "education"
+          },
+          {
+            "item_id": "batch2-we-006",
+            "primary_target": "VERB_COMPLEMENTATION",
+            "subtype": "adjective complement after a linking verb",
+            "tested_error_type": "wrong_complementation",
+            "error_span_type": "adjective",
+            "error_scope": "local",
+            "error_location": "early",
+            "difficulty": "EASY",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "geography"
+          },
+          {
+            "item_id": "batch2-we-007",
+            "primary_target": "NONFINITE_VERB_PHRASES",
+            "subtype": "gerund as the object of a preposition",
+            "tested_error_type": "wrong_verb_form",
+            "error_span_type": "gerund_phrase",
+            "error_scope": "local",
+            "error_location": "middle",
+            "difficulty": "EASY",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "marine conservation"
+          },
+          {
+            "item_id": "batch2-we-008",
+            "primary_target": "RELATIVE_CLAUSES",
+            "subtype": "relative pronoun as the subject of a restrictive clause",
+            "tested_error_type": "incorrect_relative_marker",
+            "error_span_type": "relative_marker",
+            "error_scope": "clause_level",
+            "error_location": "late",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "architecture"
+          },
+          {
+            "item_id": "batch2-we-009",
+            "primary_target": "WORD_CLASS_FORM",
+            "subtype": "adverb modifying a participle",
+            "tested_error_type": "incorrect_part_of_speech",
+            "error_span_type": "adverb",
+            "error_scope": "local",
+            "error_location": "sentence_final",
+            "difficulty": "EASY",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "meteorology"
+          },
+          {
+            "item_id": "batch2-we-010",
+            "primary_target": "CONNECTORS_CONJUNCTIONS",
+            "subtype": "preposition selected for a noun phrase",
+            "tested_error_type": "wrong_preposition_collocation",
+            "error_span_type": "prepositional_phrase",
+            "error_scope": "local",
+            "error_location": "early",
+            "difficulty": "EASY",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "finance"
+          },
+          {
+            "item_id": "batch2-we-011",
+            "primary_target": "REFERENCE_AND_DETERMINERS",
+            "subtype": "pronoun agreement with a singular antecedent",
+            "tested_error_type": "agreement_error",
+            "error_span_type": "pronoun",
+            "error_scope": "cross_clause",
+            "error_location": "middle",
+            "difficulty": "HARD",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "sociology"
+          },
+          {
+            "item_id": "batch2-we-012",
+            "primary_target": "PARALLEL_STRUCTURE",
+            "subtype": "parallel noun phrases after both and",
+            "tested_error_type": "incorrect_part_of_speech",
+            "error_span_type": "noun_phrase",
+            "error_scope": "clause_level",
+            "error_location": "late",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "political science"
+          },
+          {
+            "item_id": "batch2-we-013",
+            "primary_target": "VERB_FORM_VOICE",
+            "subtype": "passive voice with an object receiving an action",
+            "tested_error_type": "wrong_voice",
+            "error_span_type": "verb_phrase",
+            "error_scope": "clause_level",
+            "error_location": "sentence_final",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "public health"
+          },
+          {
+            "item_id": "batch2-we-014",
+            "primary_target": "WORD_ORDER_MODIFICATION",
+            "subtype": "adjective phrase in postmodifier position",
+            "tested_error_type": "wrong_word_order",
+            "error_span_type": "adjective",
+            "error_scope": "local",
+            "error_location": "early",
+            "difficulty": "EASY",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "literary studies"
+          },
+          {
+            "item_id": "batch2-we-015",
+            "primary_target": "NONFINITE_VERB_PHRASES",
+            "subtype": "present participle in a reduced active clause",
+            "tested_error_type": "wrong_verb_form",
+            "error_span_type": "participial_phrase",
+            "error_scope": "clause_level",
+            "error_location": "middle",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "robotics"
+          },
+          {
+            "item_id": "batch2-we-016",
+            "primary_target": "REFERENCE_AND_DETERMINERS",
+            "subtype": "definite article for a uniquely identified institution",
+            "tested_error_type": "missing_required_element",
+            "error_span_type": "determiner",
+            "error_scope": "local",
+            "error_location": "late",
+            "difficulty": "EASY",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "law"
+          },
+          {
+            "item_id": "batch2-we-017",
+            "primary_target": "COMPARATIVES_DEGREE",
+            "subtype": "comparative adjective with than",
+            "tested_error_type": "wrong_degree_form",
+            "error_span_type": "comparative_marker",
+            "error_scope": "clause_level",
+            "error_location": "sentence_final",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "statistics"
+          },
+          {
+            "item_id": "batch2-we-018",
+            "primary_target": "VERB_COMPLEMENTATION",
+            "subtype": "verb governed by an infinitive complement",
+            "tested_error_type": "missing_required_element",
+            "error_span_type": "infinitive_phrase",
+            "error_scope": "local",
+            "error_location": "early",
+            "difficulty": "EASY",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "engineering"
+          },
+          {
+            "item_id": "batch2-we-019",
+            "primary_target": "PARALLEL_STRUCTURE",
+            "subtype": "parallel finite verbs coordinated by and",
+            "tested_error_type": "wrong_verb_form",
+            "error_span_type": "verb_phrase",
+            "error_scope": "clause_level",
+            "error_location": "middle",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "music"
+          },
+          {
+            "item_id": "batch2-we-020",
+            "primary_target": "WORD_CLASS_FORM",
+            "subtype": "noun required as the object of a preposition",
+            "tested_error_type": "incorrect_part_of_speech",
+            "error_span_type": "noun_phrase",
+            "error_scope": "local",
+            "error_location": "late",
+            "difficulty": "EASY",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "anthropology"
+          },
+          {
+            "item_id": "batch2-we-021",
+            "primary_target": "RELATIVE_CLAUSES",
+            "subtype": "whose for a possessive relative relationship",
+            "tested_error_type": "incorrect_relative_marker",
+            "error_span_type": "relative_marker",
+            "error_scope": "cross_clause",
+            "error_location": "sentence_initial",
+            "difficulty": "HARD",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "astronomy"
+          },
+          {
+            "item_id": "batch2-we-022",
+            "primary_target": "CONNECTORS_CONJUNCTIONS",
+            "subtype": "although introducing a finite concessive clause",
+            "tested_error_type": "incorrect_subordinator",
+            "error_span_type": "conjunction",
+            "error_scope": "clause_level",
+            "error_location": "early",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "B",
+            "vocabulary_domain": "climate policy"
+          },
+          {
+            "item_id": "batch2-we-023",
+            "primary_target": "VERB_FORM_VOICE",
+            "subtype": "past perfect before a later past event",
+            "tested_error_type": "wrong_verb_form",
+            "error_span_type": "verb_phrase",
+            "error_scope": "cross_clause",
+            "error_location": "middle",
+            "difficulty": "HARD",
+            "correct_answer_position": "C",
+            "vocabulary_domain": "medical history"
+          },
+          {
+            "item_id": "batch2-we-024",
+            "primary_target": "REFERENCE_AND_DETERMINERS",
+            "subtype": "few with a plural count noun",
+            "tested_error_type": "agreement_error",
+            "error_span_type": "quantifier",
+            "error_scope": "local",
+            "error_location": "late",
+            "difficulty": "EASY",
+            "correct_answer_position": "D",
+            "vocabulary_domain": "demography"
+          },
+          {
+            "item_id": "batch2-we-025",
+            "primary_target": "NONFINITE_VERB_PHRASES",
+            "subtype": "infinitive of purpose before a main clause",
+            "tested_error_type": "incorrect_part_of_speech",
+            "error_span_type": "infinitive_phrase",
+            "error_scope": "sentence_level",
+            "error_location": "sentence_initial",
+            "difficulty": "MEDIUM",
+            "correct_answer_position": "A",
+            "vocabulary_domain": "renewable energy"
+          }
+        ]
+      }
+    },
+    {
+      "batch_id": "batch3",
+      "generator_version": "1.1",
+      "taxonomy_version": "1.1",
+      "plan_status": "fixed_before_generation",
+      "source_separation": "independent_authoring_from_abstract_specification_only",
+      "dimension_metadata": {
+        "structure": {
+          "primary_target": {
+            "OBSERVED": "The taxonomy defines a closed set of 15 primary_target values and reports section-level frequencies.",
+            "DERIVED": "Use one closed-taxonomy primary target per item and spread the batch across multiple categories.",
+            "HEURISTIC": "The 15-item allocation favors observed Structure categories while deliberately retaining low-frequency categories.",
+            "selected_field": "primary_target"
+          },
+          "subtype": {
+            "OBSERVED": "The taxonomy documents representative construction subtypes within each primary target.",
+            "DERIVED": "Name the exact construction being tested rather than inventing a new primary category.",
+            "HEURISTIC": "Choose independently authored constructions with no reuse of source wording or distinctive facts.",
+            "selected_field": "subtype"
+          },
+          "difficulty": {
+            "OBSERVED": "Structure difficulty estimates cluster in the low-to-mid range, with syntax and distractor similarity as relevant features.",
+            "DERIVED": "Difficulty must come from syntax, dependency distance, construction rarity, and distractor similarity, not obscure vocabulary.",
+            "HEURISTIC": "Use a 4 EASY / 8 MEDIUM / 3 HARD split for this 15-item batch.",
+            "selected_field": "difficulty"
+          },
+          "correct_answer_position": {
+            "OBSERVED": "The observed Structure correct positions are broadly balanced across A-D.",
+            "DERIVED": "Long-run generated output should trend toward even A-D coverage.",
+            "HEURISTIC": "Use A=4, B=4, C=4, D=3 in this small batch.",
+            "selected_field": "correct_answer_position"
+          },
+          "vocabulary_domain": {
+            "OBSERVED": "The observed Structure sample uses highly diverse academic and general-interest domains.",
+            "DERIVED": "Domain knowledge must not be needed to solve the grammar item.",
+            "HEURISTIC": "Use 15 distinct, plain academic/general-interest domains, one per item.",
+            "selected_field": "vocabulary_domain"
+          },
+          "sentence_length_target": {
+            "OBSERVED": "Structure sentence lengths range from 10 to 27 words with a mean near 20.",
+            "DERIVED": "Keep generated sentences within the observed range and centered on the observed band.",
+            "HEURISTIC": "Mix short, medium, and long targets with a batch mean near 20 words.",
+            "selected_field": "sentence_length_target"
+          },
+          "clause_count_target": {
+            "OBSERVED": "Structure has approximately one-third one-clause items, one-half two-clause items, and a minority of three-plus-clause items.",
+            "DERIVED": "Use finite-clause count as a batch-level diversity control.",
+            "HEURISTIC": "Target 5 one-clause, 7 two-clause, and 3 three-or-more-clause items.",
+            "selected_field": "clause_count_target"
+          },
+          "distractor_type": {
+            "OBSERVED": "The shared taxonomy defines 15 tested_error_type values; Structure most often uses missing, extra, order, and fragment mechanisms.",
+            "DERIVED": "Every distractor must map to one closed tested_error_type and remain superficially plausible.",
+            "HEURISTIC": "Favor dominant mechanisms while varying mechanisms across the 45 distractor slots.",
+            "selected_field": "distractor_type"
+          }
+        },
+        "written_expression": {
+          "primary_target": {
+            "OBSERVED": "The taxonomy defines a closed set of 15 primary_target values and reports Written Expression frequencies.",
+            "DERIVED": "Use one closed-taxonomy primary target per item and spread the batch across multiple categories.",
+            "HEURISTIC": "Favor reference/determiner, word-class, verb, complementation, nonfinite, and parallel targets while retaining broad coverage.",
+            "selected_field": "primary_target"
+          },
+          "subtype": {
+            "OBSERVED": "The taxonomy documents representative construction subtypes within each primary target.",
+            "DERIVED": "Name the exact construction containing the single planted error.",
+            "HEURISTIC": "Author every sentence and error context independently from abstract rules only.",
+            "selected_field": "subtype"
+          },
+          "tested_error_type": {
+            "OBSERVED": "Written Expression errors are distributed across the shared 15-value tested_error_type vocabulary, with part-of-speech, verb-form, agreement, and preposition mechanisms prominent.",
+            "DERIVED": "Exactly one marked portion is erroneous, and its mechanism must map to the closed vocabulary.",
+            "HEURISTIC": "Use varied mechanisms with no fragment errors and with several local, clause-level, and cross-clause examples.",
+            "selected_field": "tested_error_type"
+          },
+          "error_span_type": {
+            "OBSERVED": "Observed error spans cover noun_phrase, verb_phrase, adjective, prepositional_phrase, pronoun, relative_marker, and a long tail of additional span types.",
+            "DERIVED": "Mark a natural grammatical span that requires sentence context to diagnose.",
+            "HEURISTIC": "Distribute the 25 spans across the main span types and selected long-tail types.",
+            "selected_field": "error_span_type"
+          },
+          "error_scope": {
+            "OBSERVED": "Written Expression errors are most often local, followed by clause_level, with fewer sentence_level and cross_clause errors.",
+            "DERIVED": "Use scope to control detectability and ensure the other three marked portions remain correct.",
+            "HEURISTIC": "Target 14 local, 8 clause_level, 2 sentence_level, and 1 cross_clause item.",
+            "selected_field": "error_scope"
+          },
+          "error_location": {
+            "OBSERVED": "Observed locations are slightly skewed toward late and sentence_final, with sentence_initial least common.",
+            "DERIVED": "Randomize location rather than clustering errors in one position.",
+            "HEURISTIC": "Use a mixed 25-item pattern with 2 sentence_initial, 4 early, 6 middle, 7 late, and 6 sentence_final locations.",
+            "selected_field": "error_location"
+          },
+          "difficulty": {
+            "OBSERVED": "Written Expression difficulty is driven by error scope, detectability, syntax, and plausibility rather than rare vocabulary.",
+            "DERIVED": "Keep all three dummy spans plausible and make the single error context-dependent.",
+            "HEURISTIC": "Use a 16 EASY / 7 MEDIUM / 2 HARD split for this 25-item batch.",
+            "selected_field": "difficulty"
+          },
+          "correct_answer_position": {
+            "OBSERVED": "The observed error positions are broadly balanced, with a slight B-heavy pattern.",
+            "DERIVED": "Long-run generated output should trend toward even A-D coverage.",
+            "HEURISTIC": "Use A=7, B=6, C=6, D=6 in this small batch.",
+            "selected_field": "correct_answer_position"
+          },
+          "vocabulary_domain": {
+            "OBSERVED": "The observed Written Expression sample uses a wide range of academic and general-interest domains.",
+            "DERIVED": "Outside knowledge must not be required to locate or correct the error.",
+            "HEURISTIC": "Use 25 distinct domains, one per item, with familiar academic vocabulary.",
+            "selected_field": "vocabulary_domain"
+          }
+        }
+      },
+      "structure_plan": [
+        {
+          "item_id": "batch3-struct-001",
+          "primary_target": "CLAUSE_STRUCTURE",
+          "subtype": "subject-verb agreement across an intervening prepositional phrase",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "B",
+          "vocabulary_domain": "astronomy",
+          "sentence_length_target": 18,
+          "clause_count_target": 1,
+          "distractor_type": [
+            "agreement_error",
+            "missing_required_element",
+            "extraneous_element"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-002",
+          "primary_target": "NOUN_CLAUSES",
+          "subtype": "embedded question with noninverted word order",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "C",
+          "vocabulary_domain": "archaeology",
+          "sentence_length_target": 22,
+          "clause_count_target": 2,
+          "distractor_type": [
+            "wrong_word_order",
+            "fragment",
+            "missing_required_element"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-003",
+          "primary_target": "RELATIVE_CLAUSES",
+          "subtype": "restrictive relative pronoun as object",
+          "difficulty": "EASY",
+          "correct_answer_position": "A",
+          "vocabulary_domain": "botany",
+          "sentence_length_target": 16,
+          "clause_count_target": 2,
+          "distractor_type": [
+            "incorrect_relative_marker",
+            "double_subject",
+            "missing_required_element"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-004",
+          "primary_target": "ADVERBIAL_CLAUSES",
+          "subtype": "second conditional clause with full subordinate-clause structure",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "D",
+          "vocabulary_domain": "public policy",
+          "sentence_length_target": 20,
+          "clause_count_target": 2,
+          "distractor_type": [
+            "wrong_verb_form",
+            "fragment",
+            "wrong_verb_form"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-005",
+          "primary_target": "CONNECTORS_CONJUNCTIONS",
+          "subtype": "concessive relation requiring a prepositional connector before a noun phrase",
+          "difficulty": "EASY",
+          "correct_answer_position": "B",
+          "vocabulary_domain": "materials science",
+          "sentence_length_target": 14,
+          "clause_count_target": 2,
+          "distractor_type": [
+            "incorrect_subordinator",
+            "missing_required_element",
+            "extraneous_element"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-006",
+          "primary_target": "VERB_FORM_VOICE",
+          "subtype": "passive voice in a finite main clause",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "C",
+          "vocabulary_domain": "meteorology",
+          "sentence_length_target": 18,
+          "clause_count_target": 1,
+          "distractor_type": [
+            "wrong_voice",
+            "wrong_verb_form",
+            "fragment"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-007",
+          "primary_target": "VERB_COMPLEMENTATION",
+          "subtype": "causative make followed by object and adjective complement",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "D",
+          "vocabulary_domain": "urban planning",
+          "sentence_length_target": 21,
+          "clause_count_target": 2,
+          "distractor_type": [
+            "wrong_complementation",
+            "missing_required_element",
+            "incorrect_part_of_speech"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-008",
+          "primary_target": "NONFINITE_VERB_PHRASES",
+          "subtype": "reduced passive relative clause with a past participle",
+          "difficulty": "HARD",
+          "correct_answer_position": "A",
+          "vocabulary_domain": "textile technology",
+          "sentence_length_target": 24,
+          "clause_count_target": 2,
+          "distractor_type": [
+            "wrong_verb_form",
+            "fragment",
+            "wrong_word_order"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-009",
+          "primary_target": "COMPARATIVES_DEGREE",
+          "subtype": "so plus adjective licensing a result that-clause",
+          "difficulty": "HARD",
+          "correct_answer_position": "B",
+          "vocabulary_domain": "cognitive science",
+          "sentence_length_target": 23,
+          "clause_count_target": 3,
+          "distractor_type": [
+            "wrong_degree_form",
+            "missing_required_element",
+            "incorrect_subordinator"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-010",
+          "primary_target": "PARALLEL_STRUCTURE",
+          "subtype": "not only but also with coordinated finite verbs",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "C",
+          "vocabulary_domain": "music technology",
+          "sentence_length_target": 19,
+          "clause_count_target": 1,
+          "distractor_type": [
+            "wrong_word_order",
+            "missing_required_element",
+            "incorrect_part_of_speech"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-011",
+          "primary_target": "WORD_ORDER_MODIFICATION",
+          "subtype": "appositive noun phrase in post-subject position",
+          "difficulty": "EASY",
+          "correct_answer_position": "D",
+          "vocabulary_domain": "biography",
+          "sentence_length_target": 17,
+          "clause_count_target": 1,
+          "distractor_type": [
+            "wrong_word_order",
+            "extraneous_element",
+            "fragment"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-012",
+          "primary_target": "INVERSION",
+          "subtype": "elliptical conditional inversion with had",
+          "difficulty": "HARD",
+          "correct_answer_position": "A",
+          "vocabulary_domain": "marine conservation",
+          "sentence_length_target": 22,
+          "clause_count_target": 2,
+          "distractor_type": [
+            "wrong_word_order",
+            "missing_required_element",
+            "fragment"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-013",
+          "primary_target": "EXISTENTIAL_EXPLETIVE",
+          "subtype": "there plus be with a plural postverbal noun phrase",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "B",
+          "vocabulary_domain": "cartography",
+          "sentence_length_target": 15,
+          "clause_count_target": 1,
+          "distractor_type": [
+            "missing_required_element",
+            "agreement_error",
+            "extraneous_element"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-014",
+          "primary_target": "REFERENCE_AND_DETERMINERS",
+          "subtype": "quantifier compatible with an uncountable noun",
+          "difficulty": "EASY",
+          "correct_answer_position": "C",
+          "vocabulary_domain": "nutrition",
+          "sentence_length_target": 13,
+          "clause_count_target": 1,
+          "distractor_type": [
+            "agreement_error",
+            "incorrect_part_of_speech",
+            "missing_required_element"
+          ]
+        },
+        {
+          "item_id": "batch3-struct-015",
+          "primary_target": "WORD_CLASS_FORM",
+          "subtype": "adverb required to modify a finite verb",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "D",
+          "vocabulary_domain": "archival science",
+          "sentence_length_target": 20,
+          "clause_count_target": 2,
+          "distractor_type": [
+            "incorrect_part_of_speech",
+            "wrong_word_order",
+            "fragment"
+          ]
+        }
+      ],
+      "written_expression_plan": [
+        {
+          "item_id": "batch3-we-001",
+          "primary_target": "REFERENCE_AND_DETERMINERS",
+          "subtype": "indefinite article before a consonant-initial noun",
+          "tested_error_type": "incorrect_part_of_speech",
+          "error_span_type": "determiner",
+          "error_scope": "local",
+          "error_location": "sentence_initial",
+          "difficulty": "EASY",
+          "correct_answer_position": "A",
+          "vocabulary_domain": "architecture"
+        },
+        {
+          "item_id": "batch3-we-002",
+          "primary_target": "WORD_CLASS_FORM",
+          "subtype": "adjective required before a head noun",
+          "tested_error_type": "incorrect_part_of_speech",
+          "error_span_type": "adjective",
+          "error_scope": "local",
+          "error_location": "early",
+          "difficulty": "EASY",
+          "correct_answer_position": "B",
+          "vocabulary_domain": "climatology"
+        },
+        {
+          "item_id": "batch3-we-003",
+          "primary_target": "VERB_FORM_VOICE",
+          "subtype": "simple past finite verb in a completed historical sequence",
+          "tested_error_type": "wrong_verb_form",
+          "error_span_type": "verb_phrase",
+          "error_scope": "local",
+          "error_location": "middle",
+          "difficulty": "EASY",
+          "correct_answer_position": "C",
+          "vocabulary_domain": "public health"
+        },
+        {
+          "item_id": "batch3-we-004",
+          "primary_target": "PARALLEL_STRUCTURE",
+          "subtype": "parallel gerund complements in a coordinated list",
+          "tested_error_type": "wrong_verb_form",
+          "error_span_type": "gerund_phrase",
+          "error_scope": "clause_level",
+          "error_location": "late",
+          "difficulty": "EASY",
+          "correct_answer_position": "D",
+          "vocabulary_domain": "education"
+        },
+        {
+          "item_id": "batch3-we-005",
+          "primary_target": "VERB_COMPLEMENTATION",
+          "subtype": "adjective object complement after find",
+          "tested_error_type": "wrong_complementation",
+          "error_span_type": "predicate_adjective",
+          "error_scope": "clause_level",
+          "error_location": "early",
+          "difficulty": "EASY",
+          "correct_answer_position": "A",
+          "vocabulary_domain": "law"
+        },
+        {
+          "item_id": "batch3-we-006",
+          "primary_target": "NONFINITE_VERB_PHRASES",
+          "subtype": "present participle in a reduced active clause",
+          "tested_error_type": "wrong_verb_form",
+          "error_span_type": "participial_phrase",
+          "error_scope": "local",
+          "error_location": "late",
+          "difficulty": "EASY",
+          "correct_answer_position": "A",
+          "vocabulary_domain": "transportation"
+        },
+        {
+          "item_id": "batch3-we-007",
+          "primary_target": "CONNECTORS_CONJUNCTIONS",
+          "subtype": "although introducing a finite concessive clause",
+          "tested_error_type": "incorrect_subordinator",
+          "error_span_type": "conjunction",
+          "error_scope": "clause_level",
+          "error_location": "early",
+          "difficulty": "EASY",
+          "correct_answer_position": "B",
+          "vocabulary_domain": "economics"
+        },
+        {
+          "item_id": "batch3-we-008",
+          "primary_target": "RELATIVE_CLAUSES",
+          "subtype": "relative pronoun as the object of a preposition",
+          "tested_error_type": "incorrect_relative_marker",
+          "error_span_type": "relative_marker",
+          "error_scope": "local",
+          "error_location": "middle",
+          "difficulty": "EASY",
+          "correct_answer_position": "C",
+          "vocabulary_domain": "botany"
+        },
+        {
+          "item_id": "batch3-we-009",
+          "primary_target": "CLAUSE_STRUCTURE",
+          "subtype": "subject-verb agreement across an intervening modifier",
+          "tested_error_type": "agreement_error",
+          "error_span_type": "main_verb",
+          "error_scope": "local",
+          "error_location": "late",
+          "difficulty": "EASY",
+          "correct_answer_position": "D",
+          "vocabulary_domain": "meteorology"
+        },
+        {
+          "item_id": "batch3-we-010",
+          "primary_target": "REFERENCE_AND_DETERMINERS",
+          "subtype": "quantifier compatible with a countable plural noun",
+          "tested_error_type": "agreement_error",
+          "error_span_type": "quantifier",
+          "error_scope": "local",
+          "error_location": "early",
+          "difficulty": "EASY",
+          "correct_answer_position": "A",
+          "vocabulary_domain": "nutrition"
+        },
+        {
+          "item_id": "batch3-we-011",
+          "primary_target": "WORD_CLASS_FORM",
+          "subtype": "noun required as the head of a prepositional object",
+          "tested_error_type": "incorrect_part_of_speech",
+          "error_span_type": "noun_phrase",
+          "error_scope": "local",
+          "error_location": "middle",
+          "difficulty": "EASY",
+          "correct_answer_position": "B",
+          "vocabulary_domain": "linguistics"
+        },
+        {
+          "item_id": "batch3-we-012",
+          "primary_target": "VERB_FORM_VOICE",
+          "subtype": "passive participle after a finite form of be",
+          "tested_error_type": "wrong_voice",
+          "error_span_type": "verb_phrase",
+          "error_scope": "local",
+          "error_location": "late",
+          "difficulty": "EASY",
+          "correct_answer_position": "C",
+          "vocabulary_domain": "manufacturing"
+        },
+        {
+          "item_id": "batch3-we-013",
+          "primary_target": "PARALLEL_STRUCTURE",
+          "subtype": "parallel noun phrases after not only but also",
+          "tested_error_type": "wrong_word_order",
+          "error_span_type": "noun_phrase",
+          "error_scope": "clause_level",
+          "error_location": "sentence_final",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "D",
+          "vocabulary_domain": "civic planning"
+        },
+        {
+          "item_id": "batch3-we-014",
+          "primary_target": "NONFINITE_VERB_PHRASES",
+          "subtype": "gerund as the complement of a preposition",
+          "tested_error_type": "wrong_verb_form",
+          "error_span_type": "gerund_phrase",
+          "error_scope": "local",
+          "error_location": "middle",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "A",
+          "vocabulary_domain": "finance"
+        },
+        {
+          "item_id": "batch3-we-015",
+          "primary_target": "COMPARATIVES_DEGREE",
+          "subtype": "comparative adjective required by than",
+          "tested_error_type": "wrong_degree_form",
+          "error_span_type": "comparative_marker",
+          "error_scope": "clause_level",
+          "error_location": "late",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "B",
+          "vocabulary_domain": "geography"
+        },
+        {
+          "item_id": "batch3-we-016",
+          "primary_target": "WORD_ORDER_MODIFICATION",
+          "subtype": "adjective order inside a noun phrase",
+          "tested_error_type": "wrong_word_order",
+          "error_span_type": "noun_modifier",
+          "error_scope": "local",
+          "error_location": "middle",
+          "difficulty": "EASY",
+          "correct_answer_position": "C",
+          "vocabulary_domain": "ceramics"
+        },
+        {
+          "item_id": "batch3-we-017",
+          "primary_target": "REFERENCE_AND_DETERMINERS",
+          "subtype": "singular pronoun agreement with an indefinite antecedent",
+          "tested_error_type": "incorrect_reference",
+          "error_span_type": "pronoun",
+          "error_scope": "local",
+          "error_location": "late",
+          "difficulty": "EASY",
+          "correct_answer_position": "D",
+          "vocabulary_domain": "folklore"
+        },
+        {
+          "item_id": "batch3-we-018",
+          "primary_target": "VERB_COMPLEMENTATION",
+          "subtype": "predicate adjective after a linking verb",
+          "tested_error_type": "wrong_complementation",
+          "error_span_type": "predicate_adjective",
+          "error_scope": "clause_level",
+          "error_location": "early",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "A",
+          "vocabulary_domain": "constitutional law"
+        },
+        {
+          "item_id": "batch3-we-019",
+          "primary_target": "WORD_CLASS_FORM",
+          "subtype": "adverb required to modify a research verb",
+          "tested_error_type": "incorrect_part_of_speech",
+          "error_span_type": "adverb",
+          "error_scope": "local",
+          "error_location": "sentence_final",
+          "difficulty": "EASY",
+          "correct_answer_position": "B",
+          "vocabulary_domain": "library science"
+        },
+        {
+          "item_id": "batch3-we-020",
+          "primary_target": "NONFINITE_VERB_PHRASES",
+          "subtype": "infinitive of purpose after a finite verb",
+          "tested_error_type": "missing_required_element",
+          "error_span_type": "infinitive_phrase",
+          "error_scope": "local",
+          "error_location": "late",
+          "difficulty": "EASY",
+          "correct_answer_position": "C",
+          "vocabulary_domain": "ecology"
+        },
+        {
+          "item_id": "batch3-we-021",
+          "primary_target": "CONNECTORS_CONJUNCTIONS",
+          "subtype": "fixed preposition collocation after benefit",
+          "tested_error_type": "wrong_preposition_collocation",
+          "error_span_type": "prepositional_phrase",
+          "error_scope": "local",
+          "error_location": "middle",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "D",
+          "vocabulary_domain": "astronomy"
+        },
+        {
+          "item_id": "batch3-we-022",
+          "primary_target": "PARALLEL_STRUCTURE",
+          "subtype": "parallel finite verbs in a coordinated predicate",
+          "tested_error_type": "wrong_verb_form",
+          "error_span_type": "verb_phrase",
+          "error_scope": "clause_level",
+          "error_location": "late",
+          "difficulty": "MEDIUM",
+          "correct_answer_position": "A",
+          "vocabulary_domain": "music"
+        },
+        {
+          "item_id": "batch3-we-023",
+          "primary_target": "REFERENCE_AND_DETERMINERS",
+          "subtype": "singular agreement after each",
+          "tested_error_type": "agreement_error",
+          "error_span_type": "main_verb",
+          "error_scope": "local",
+          "error_location": "early",
+          "difficulty": "EASY",
+          "correct_answer_position": "B",
+          "vocabulary_domain": "transport history"
+        },
+        {
+          "item_id": "batch3-we-024",
+          "primary_target": "VERB_FORM_VOICE",
+          "subtype": "past perfect for the earlier of two past events",
+          "tested_error_type": "wrong_verb_form",
+          "error_span_type": "main_verb",
+          "error_scope": "cross_clause",
+          "error_location": "sentence_final",
+          "difficulty": "HARD",
+          "correct_answer_position": "B",
+          "vocabulary_domain": "geology"
+        },
+        {
+          "item_id": "batch3-we-025",
+          "primary_target": "WORD_ORDER_MODIFICATION",
+          "subtype": "postpositive adjective phrase following an indefinite pronoun",
+          "tested_error_type": "wrong_word_order",
+          "error_span_type": "adjective",
+          "error_scope": "sentence_level",
+          "error_location": "sentence_final",
+          "difficulty": "HARD",
+          "correct_answer_position": "C",
+          "vocabulary_domain": "water engineering"
+        }
+      ]
+    }
+  ]
+}

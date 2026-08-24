@@ -1,0 +1,3384 @@
+﻿{
+    "image":  "B_p4.png",
+    "width":  1684,
+    "height":  1191,
+    "lines":  [
+                  {
+                      "text":  "② ② ② ② ② ② ② ②",
+                      "words":  [
+                                    {
+                                        "text":  "②",
+                                        "x":  117,
+                                        "y":  87,
+                                        "width":  53,
+                                        "height":  50
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  195,
+                                        "y":  87,
+                                        "width":  53,
+                                        "height":  49
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  274,
+                                        "y":  87,
+                                        "width":  53,
+                                        "height":  50
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  353,
+                                        "y":  87,
+                                        "width":  53,
+                                        "height":  49
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  433,
+                                        "y":  87,
+                                        "width":  54,
+                                        "height":  49
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  514,
+                                        "y":  87,
+                                        "width":  54,
+                                        "height":  50
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  595,
+                                        "y":  87,
+                                        "width":  53,
+                                        "height":  50
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  675,
+                                        "y":  87,
+                                        "width":  54,
+                                        "height":  50
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "② ② ② ② ② ② ② ②",
+                      "words":  [
+                                    {
+                                        "text":  "②",
+                                        "x":  924,
+                                        "y":  112,
+                                        "width":  53,
+                                        "height":  50
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  1003,
+                                        "y":  112,
+                                        "width":  53,
+                                        "height":  50
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  1082,
+                                        "y":  113,
+                                        "width":  53,
+                                        "height":  50
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  1161,
+                                        "y":  114,
+                                        "width":  54,
+                                        "height":  49
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  1242,
+                                        "y":  114,
+                                        "width":  54,
+                                        "height":  50
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  1322,
+                                        "y":  115,
+                                        "width":  54,
+                                        "height":  50
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  1402,
+                                        "y":  116,
+                                        "width":  53,
+                                        "height":  50
+                                    },
+                                    {
+                                        "text":  "②",
+                                        "x":  1481,
+                                        "y":  117,
+                                        "width":  54,
+                                        "height":  50
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "26. The Moon\u0027s 既 ⅱ a ⅱ 囲 al field cannot keep atmospheric gases from escape ⅲ 【 0",
+                      "words":  [
+                                    {
+                                        "text":  "26.",
+                                        "x":  113,
+                                        "y":  187,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "The",
+                                        "x":  142,
+                                        "y":  188,
+                                        "width":  28,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "Moon\u0027s",
+                                        "x":  175,
+                                        "y":  187,
+                                        "width":  53,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "既",
+                                        "x":  233,
+                                        "y":  191,
+                                        "width":  15,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "ⅱ",
+                                        "x":  264,
+                                        "y":  187,
+                                        "width":  9,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "a",
+                                        "x":  274,
+                                        "y":  191,
+                                        "width":  7,
+                                        "height":  8
+                                    },
+                                    {
+                                        "text":  "ⅱ",
+                                        "x":  282,
+                                        "y":  187,
+                                        "width":  8,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "囲",
+                                        "x":  291,
+                                        "y":  191,
+                                        "width":  17,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "al",
+                                        "x":  309,
+                                        "y":  186,
+                                        "width":  12,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "field",
+                                        "x":  326,
+                                        "y":  186,
+                                        "width":  31,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "cannot",
+                                        "x":  362,
+                                        "y":  188,
+                                        "width":  46,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "keep",
+                                        "x":  414,
+                                        "y":  186,
+                                        "width":  33,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "atmospheric",
+                                        "x":  452,
+                                        "y":  186,
+                                        "width":  87,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "gases",
+                                        "x":  544,
+                                        "y":  190,
+                                        "width":  37,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "from",
+                                        "x":  587,
+                                        "y":  186,
+                                        "width":  33,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "escape",
+                                        "x":  625,
+                                        "y":  190,
+                                        "width":  48,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  678,
+                                        "y":  186,
+                                        "width":  13,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "【",
+                                        "x":  692,
+                                        "y":  188,
+                                        "width":  4,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  696,
+                                        "y":  190,
+                                        "width":  9,
+                                        "height":  8
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "35. George Gershwin was an American composer whose concert works ioined the",
+                      "words":  [
+                                    {
+                                        "text":  "35.",
+                                        "x":  923,
+                                        "y":  212,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "George",
+                                        "x":  953,
+                                        "y":  212,
+                                        "width":  51,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "Gershwin",
+                                        "x":  1009,
+                                        "y":  213,
+                                        "width":  68,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "was",
+                                        "x":  1083,
+                                        "y":  217,
+                                        "width":  26,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "an",
+                                        "x":  1114,
+                                        "y":  217,
+                                        "width":  16,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "American",
+                                        "x":  1134,
+                                        "y":  213,
+                                        "width":  69,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "composer",
+                                        "x":  1208,
+                                        "y":  217,
+                                        "width":  70,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "whose",
+                                        "x":  1282,
+                                        "y":  214,
+                                        "width":  45,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "concert",
+                                        "x":  1332,
+                                        "y":  216,
+                                        "width":  51,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "works",
+                                        "x":  1388,
+                                        "y":  215,
+                                        "width":  42,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "ioined",
+                                        "x":  1436,
+                                        "y":  214,
+                                        "width":  43,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1484,
+                                        "y":  215,
+                                        "width":  21,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "sounds ofjazz with them oftraditional orrhestration.",
+                      "words":  [
+                                    {
+                                        "text":  "sounds",
+                                        "x":  952,
+                                        "y":  254,
+                                        "width":  49,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ofjazz",
+                                        "x":  1006,
+                                        "y":  254,
+                                        "width":  47,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "with",
+                                        "x":  1058,
+                                        "y":  254,
+                                        "width":  30,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "them",
+                                        "x":  1094,
+                                        "y":  255,
+                                        "width":  35,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "oftraditional",
+                                        "x":  1134,
+                                        "y":  254,
+                                        "width":  91,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "orrhestration.",
+                                        "x":  1230,
+                                        "y":  255,
+                                        "width":  96,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "36 - One of the problems of United States agnculture 山 has persisted during the",
+                      "words":  [
+                                    {
+                                        "text":  "36",
+                                        "x":  923,
+                                        "y":  306,
+                                        "width":  16,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "-",
+                                        "x":  941,
+                                        "y":  316,
+                                        "width":  2,
+                                        "height":  3
+                                    },
+                                    {
+                                        "text":  "One",
+                                        "x":  952,
+                                        "y":  306,
+                                        "width":  29,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "of",
+                                        "x":  986,
+                                        "y":  306,
+                                        "width":  16,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1005,
+                                        "y":  306,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "problems",
+                                        "x":  1031,
+                                        "y":  307,
+                                        "width":  65,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "of",
+                                        "x":  1101,
+                                        "y":  307,
+                                        "width":  16,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "United",
+                                        "x":  1121,
+                                        "y":  307,
+                                        "width":  47,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "States",
+                                        "x":  1173,
+                                        "y":  307,
+                                        "width":  42,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "agnculture",
+                                        "x":  1220,
+                                        "y":  308,
+                                        "width":  77,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "山",
+                                        "x":  1302,
+                                        "y":  308,
+                                        "width":  12,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "has",
+                                        "x":  1332,
+                                        "y":  308,
+                                        "width":  23,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "persisted",
+                                        "x":  1360,
+                                        "y":  308,
+                                        "width":  62,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "during",
+                                        "x":  1427,
+                                        "y":  309,
+                                        "width":  46,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1478,
+                                        "y":  309,
+                                        "width":  21,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "1920\u0027suntilthepresentdayisthetendencY0ffarmincomet01agbehindthecostsof",
+                      "words":  [
+                                    {
+                                        "text":  "1920\u0027suntilthepresentdayisthetendencY0ffarmincomet01agbehindthecostsof",
+                                        "x":  954,
+                                        "y":  348,
+                                        "width":  584,
+                                        "height":  18
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "P 「 0 8 Test B",
+                      "words":  [
+                                    {
+                                        "text":  "P",
+                                        "x":  1573,
+                                        "y":  220,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  1573,
+                                        "y":  234,
+                                        "width":  14,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  1573,
+                                        "y":  243,
+                                        "width":  14,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "8",
+                                        "x":  1572,
+                                        "y":  283,
+                                        "width":  15,
+                                        "height":  25
+                                    },
+                                    {
+                                        "text":  "Test",
+                                        "x":  1572,
+                                        "y":  314,
+                                        "width":  21,
+                                        "height":  42
+                                    },
+                                    {
+                                        "text":  "B",
+                                        "x":  1572,
+                                        "y":  363,
+                                        "width":  20,
+                                        "height":  14
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "space.",
+                      "words":  [
+                                    {
+                                        "text":  "space.",
+                                        "x":  143,
+                                        "y":  232,
+                                        "width":  42,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "2 ス Although thc c 田 口 代 e is chiefly value f0 「 its fruit, its wood is used extensively",
+                      "words":  [
+                                    {
+                                        "text":  "2",
+                                        "x":  113,
+                                        "y":  281,
+                                        "width":  8,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ス",
+                                        "x":  122,
+                                        "y":  281,
+                                        "width":  11,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "Although",
+                                        "x":  143,
+                                        "y":  281,
+                                        "width":  65,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "thc",
+                                        "x":  214,
+                                        "y":  281,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "c",
+                                        "x":  256,
+                                        "y":  285,
+                                        "width":  7,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "田",
+                                        "x":  264,
+                                        "y":  285,
+                                        "width":  11,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "口",
+                                        "x":  276,
+                                        "y":  283,
+                                        "width":  13,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "代",
+                                        "x":  290,
+                                        "y":  285,
+                                        "width":  13,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "e",
+                                        "x":  303,
+                                        "y":  285,
+                                        "width":  8,
+                                        "height":  8
+                                    },
+                                    {
+                                        "text":  "is",
+                                        "x":  316,
+                                        "y":  281,
+                                        "width":  11,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "chiefly",
+                                        "x":  332,
+                                        "y":  280,
+                                        "width":  48,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "value",
+                                        "x":  385,
+                                        "y":  280,
+                                        "width":  37,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "f0",
+                                        "x":  428,
+                                        "y":  280,
+                                        "width":  14,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  443,
+                                        "y":  284,
+                                        "width":  6,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "its",
+                                        "x":  453,
+                                        "y":  280,
+                                        "width":  16,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "fruit,",
+                                        "x":  475,
+                                        "y":  280,
+                                        "width":  34,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "its",
+                                        "x":  515,
+                                        "y":  280,
+                                        "width":  15,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "wood",
+                                        "x":  536,
+                                        "y":  280,
+                                        "width":  38,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "is",
+                                        "x":  580,
+                                        "y":  280,
+                                        "width":  11,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "used",
+                                        "x":  596,
+                                        "y":  280,
+                                        "width":  31,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "extensively",
+                                        "x":  633,
+                                        "y":  280,
+                                        "width":  79,
+                                        "height":  16
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "for floonng, furniture, boxes, and は at 門 .",
+                      "words":  [
+                                    {
+                                        "text":  "for",
+                                        "x":  143,
+                                        "y":  323,
+                                        "width":  20,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "floonng,",
+                                        "x":  168,
+                                        "y":  322,
+                                        "width":  60,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "furniture,",
+                                        "x":  233,
+                                        "y":  322,
+                                        "width":  65,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "boxes,",
+                                        "x":  303,
+                                        "y":  322,
+                                        "width":  45,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "and",
+                                        "x":  353,
+                                        "y":  322,
+                                        "width":  24,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "は",
+                                        "x":  383,
+                                        "y":  326,
+                                        "width":  13,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "at",
+                                        "x":  396,
+                                        "y":  324,
+                                        "width":  13,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "門",
+                                        "x":  409,
+                                        "y":  325,
+                                        "width":  15,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  ".",
+                                        "x":  425,
+                                        "y":  332,
+                                        "width":  2,
+                                        "height":  2
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "2 \u0026 Born ⅲ Texas ⅲ 慴 叩 , Katherine Anne PO ロ e 「 produced 山 「 ee collection 0f 曲 0 れ",
+                      "words":  [
+                                    {
+                                        "text":  "2",
+                                        "x":  112,
+                                        "y":  376,
+                                        "width":  9,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "\u0026",
+                                        "x":  122,
+                                        "y":  376,
+                                        "width":  11,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "Born",
+                                        "x":  142,
+                                        "y":  376,
+                                        "width":  35,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  183,
+                                        "y":  376,
+                                        "width":  12,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "Texas",
+                                        "x":  199,
+                                        "y":  376,
+                                        "width":  41,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  245,
+                                        "y":  375,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "慴",
+                                        "x":  265,
+                                        "y":  375,
+                                        "width":  15,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "叩",
+                                        "x":  281,
+                                        "y":  375,
+                                        "width":  17,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  ",",
+                                        "x":  299,
+                                        "y":  386,
+                                        "width":  3,
+                                        "height":  4
+                                    },
+                                    {
+                                        "text":  "Katherine",
+                                        "x":  308,
+                                        "y":  375,
+                                        "width":  68,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "Anne",
+                                        "x":  380,
+                                        "y":  375,
+                                        "width":  38,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "PO",
+                                        "x":  423,
+                                        "y":  374,
+                                        "width":  18,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "ロ",
+                                        "x":  442,
+                                        "y":  377,
+                                        "width":  10,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "e",
+                                        "x":  453,
+                                        "y":  378,
+                                        "width":  7,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  461,
+                                        "y":  378,
+                                        "width":  6,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "produced",
+                                        "x":  471,
+                                        "y":  374,
+                                        "width":  66,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "山",
+                                        "x":  542,
+                                        "y":  374,
+                                        "width":  13,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  556,
+                                        "y":  378,
+                                        "width":  6,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "ee",
+                                        "x":  561,
+                                        "y":  378,
+                                        "width":  16,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "collection",
+                                        "x":  582,
+                                        "y":  374,
+                                        "width":  70,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "0f",
+                                        "x":  657,
+                                        "y":  374,
+                                        "width":  16,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "曲",
+                                        "x":  676,
+                                        "y":  374,
+                                        "width":  15,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  692,
+                                        "y":  378,
+                                        "width":  9,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "れ",
+                                        "x":  701,
+                                        "y":  376,
+                                        "width":  11,
+                                        "height":  11
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "stories before publishing her well-known novel S 桶 〃 可 F001s ⅲ 1962.",
+                      "words":  [
+                                    {
+                                        "text":  "stories",
+                                        "x":  142,
+                                        "y":  417,
+                                        "width":  46,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "before",
+                                        "x":  193,
+                                        "y":  417,
+                                        "width":  44,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "publishing",
+                                        "x":  242,
+                                        "y":  417,
+                                        "width":  74,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "her",
+                                        "x":  321,
+                                        "y":  416,
+                                        "width":  23,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "well-known",
+                                        "x":  348,
+                                        "y":  416,
+                                        "width":  83,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "novel",
+                                        "x":  437,
+                                        "y":  416,
+                                        "width":  38,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "S",
+                                        "x":  480,
+                                        "y":  416,
+                                        "width":  9,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "桶",
+                                        "x":  489,
+                                        "y":  416,
+                                        "width":  14,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "〃",
+                                        "x":  502,
+                                        "y":  420,
+                                        "width":  10,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "可",
+                                        "x":  516,
+                                        "y":  415,
+                                        "width":  17,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "F001s",
+                                        "x":  535,
+                                        "y":  416,
+                                        "width":  38,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  578,
+                                        "y":  415,
+                                        "width":  13,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "1962.",
+                                        "x":  598,
+                                        "y":  415,
+                                        "width":  37,
+                                        "height":  14
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "29. lnsulation 行 om cold, protect against dust and sand, and camouflage 壘 匹 amOng the",
+                      "words":  [
+                                    {
+                                        "text":  "29.",
+                                        "x":  113,
+                                        "y":  470,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "lnsulation",
+                                        "x":  142,
+                                        "y":  469,
+                                        "width":  70,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "行",
+                                        "x":  217,
+                                        "y":  469,
+                                        "width":  12,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "om",
+                                        "x":  229,
+                                        "y":  473,
+                                        "width":  22,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "cold,",
+                                        "x":  256,
+                                        "y":  469,
+                                        "width":  34,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "protect",
+                                        "x":  295,
+                                        "y":  471,
+                                        "width":  49,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "against",
+                                        "x":  348,
+                                        "y":  468,
+                                        "width":  50,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "dust",
+                                        "x":  402,
+                                        "y":  469,
+                                        "width":  30,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "and",
+                                        "x":  437,
+                                        "y":  468,
+                                        "width":  25,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "sand,",
+                                        "x":  467,
+                                        "y":  468,
+                                        "width":  37,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "and",
+                                        "x":  509,
+                                        "y":  468,
+                                        "width":  25,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "camouflage",
+                                        "x":  539,
+                                        "y":  468,
+                                        "width":  83,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "壘",
+                                        "x":  626,
+                                        "y":  472,
+                                        "width":  8,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "匹",
+                                        "x":  635,
+                                        "y":  472,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "amOng",
+                                        "x":  653,
+                                        "y":  471,
+                                        "width":  49,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  707,
+                                        "y":  468,
+                                        "width":  21,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "ん 眠 朝 ons Of hair for animals.",
+                      "words":  [
+                                    {
+                                        "text":  "ん",
+                                        "x":  143,
+                                        "y":  511,
+                                        "width":  14,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "眠",
+                                        "x":  158,
+                                        "y":  515,
+                                        "width":  15,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "朝",
+                                        "x":  174,
+                                        "y":  511,
+                                        "width":  9,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ons",
+                                        "x":  184,
+                                        "y":  515,
+                                        "width":  24,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "Of",
+                                        "x":  213,
+                                        "y":  510,
+                                        "width":  15,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "hair",
+                                        "x":  232,
+                                        "y":  510,
+                                        "width":  27,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "for",
+                                        "x":  263,
+                                        "y":  510,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "animals.",
+                                        "x":  288,
+                                        "y":  510,
+                                        "width":  58,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "30. notion 山 students are れ 0 【 sufficiently involved ⅲ 山 e に education iS one 「 C350n",
+                      "words":  [
+                                    {
+                                        "text":  "30.",
+                                        "x":  114,
+                                        "y":  563,
+                                        "width":  20,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "notion",
+                                        "x":  175,
+                                        "y":  563,
+                                        "width":  43,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "山",
+                                        "x":  224,
+                                        "y":  562,
+                                        "width":  12,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "students",
+                                        "x":  254,
+                                        "y":  562,
+                                        "width":  56,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "are",
+                                        "x":  315,
+                                        "y":  566,
+                                        "width":  21,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "れ",
+                                        "x":  340,
+                                        "y":  566,
+                                        "width":  8,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  349,
+                                        "y":  566,
+                                        "width":  8,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "【",
+                                        "x":  358,
+                                        "y":  564,
+                                        "width":  4,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "sufficiently",
+                                        "x":  367,
+                                        "y":  562,
+                                        "width":  78,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "involved",
+                                        "x":  451,
+                                        "y":  561,
+                                        "width":  60,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  516,
+                                        "y":  561,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "山",
+                                        "x":  534,
+                                        "y":  562,
+                                        "width":  13,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "e",
+                                        "x":  548,
+                                        "y":  566,
+                                        "width":  7,
+                                        "height":  8
+                                    },
+                                    {
+                                        "text":  "に",
+                                        "x":  556,
+                                        "y":  565,
+                                        "width":  11,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "education",
+                                        "x":  571,
+                                        "y":  561,
+                                        "width":  68,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "iS",
+                                        "x":  644,
+                                        "y":  561,
+                                        "width":  11,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "one",
+                                        "x":  660,
+                                        "y":  565,
+                                        "width":  26,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  690,
+                                        "y":  565,
+                                        "width":  6,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "C350n",
+                                        "x":  696,
+                                        "y":  564,
+                                        "width":  40,
+                                        "height":  10
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "f ( ) ロ he 匹 ! ! 山 \u0027 surgeofsupportforundergraduateresearch.",
+                      "words":  [
+                                    {
+                                        "text":  "f",
+                                        "x":  143,
+                                        "y":  604,
+                                        "width":  7,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "(",
+                                        "x":  149,
+                                        "y":  608,
+                                        "width":  5,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  ")",
+                                        "x":  154,
+                                        "y":  608,
+                                        "width":  4,
+                                        "height":  8
+                                    },
+                                    {
+                                        "text":  "ロ",
+                                        "x":  158,
+                                        "y":  606,
+                                        "width":  14,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "he",
+                                        "x":  173,
+                                        "y":  604,
+                                        "width":  16,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "匹",
+                                        "x":  194,
+                                        "y":  607,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "!",
+                                        "x":  223,
+                                        "y":  607,
+                                        "width":  4,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "!",
+                                        "x":  228,
+                                        "y":  607,
+                                        "width":  3,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "山",
+                                        "x":  232,
+                                        "y":  604,
+                                        "width":  15,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "\u0027",
+                                        "x":  247,
+                                        "y":  607,
+                                        "width":  2,
+                                        "height":  5
+                                    },
+                                    {
+                                        "text":  "surgeofsupportforundergraduateresearch.",
+                                        "x":  255,
+                                        "y":  602,
+                                        "width":  312,
+                                        "height":  17
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "引 . △ 当 secretary 0 「 田 nsporta い on from 円 75 【 0 円 77 , William C01eman worked 上 三 ! p",
+                      "words":  [
+                                    {
+                                        "text":  "引",
+                                        "x":  113,
+                                        "y":  656,
+                                        "width":  15,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  ".",
+                                        "x":  131,
+                                        "y":  666,
+                                        "width":  3,
+                                        "height":  3
+                                    },
+                                    {
+                                        "text":  "△",
+                                        "x":  142,
+                                        "y":  656,
+                                        "width":  13,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "当",
+                                        "x":  156,
+                                        "y":  659,
+                                        "width":  6,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "secretary",
+                                        "x":  167,
+                                        "y":  658,
+                                        "width":  62,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  234,
+                                        "y":  659,
+                                        "width":  9,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  244,
+                                        "y":  655,
+                                        "width":  6,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "田",
+                                        "x":  264,
+                                        "y":  659,
+                                        "width":  12,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "nsporta",
+                                        "x":  276,
+                                        "y":  657,
+                                        "width":  47,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "い",
+                                        "x":  324,
+                                        "y":  657,
+                                        "width":  9,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "on",
+                                        "x":  334,
+                                        "y":  659,
+                                        "width":  17,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "from",
+                                        "x":  356,
+                                        "y":  655,
+                                        "width":  34,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "円",
+                                        "x":  396,
+                                        "y":  655,
+                                        "width":  15,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "75",
+                                        "x":  412,
+                                        "y":  655,
+                                        "width":  17,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "【",
+                                        "x":  435,
+                                        "y":  657,
+                                        "width":  4,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  439,
+                                        "y":  659,
+                                        "width":  9,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "円",
+                                        "x":  455,
+                                        "y":  654,
+                                        "width":  15,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "77",
+                                        "x":  471,
+                                        "y":  654,
+                                        "width":  17,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  ",",
+                                        "x":  489,
+                                        "y":  665,
+                                        "width":  4,
+                                        "height":  5
+                                    },
+                                    {
+                                        "text":  "William",
+                                        "x":  497,
+                                        "y":  654,
+                                        "width":  58,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "C01eman",
+                                        "x":  559,
+                                        "y":  654,
+                                        "width":  64,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "worked",
+                                        "x":  629,
+                                        "y":  654,
+                                        "width":  52,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "上",
+                                        "x":  700,
+                                        "y":  654,
+                                        "width":  13,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "三",
+                                        "x":  713,
+                                        "y":  658,
+                                        "width":  8,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "!",
+                                        "x":  722,
+                                        "y":  654,
+                                        "width":  4,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "p",
+                                        "x":  727,
+                                        "y":  657,
+                                        "width":  8,
+                                        "height":  14
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "the bankrupt 翩 lro 記 s ⅲ the n 山 聞 5 に rn United States solved their financial",
+                      "words":  [
+                                    {
+                                        "text":  "the",
+                                        "x":  142,
+                                        "y":  697,
+                                        "width":  22,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "bankrupt",
+                                        "x":  168,
+                                        "y":  697,
+                                        "width":  63,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "翩",
+                                        "x":  235,
+                                        "y":  700,
+                                        "width":  18,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "lro",
+                                        "x":  254,
+                                        "y":  697,
+                                        "width":  19,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "記",
+                                        "x":  273,
+                                        "y":  696,
+                                        "width":  16,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "s",
+                                        "x":  290,
+                                        "y":  700,
+                                        "width":  6,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  301,
+                                        "y":  696,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  320,
+                                        "y":  696,
+                                        "width":  20,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "n",
+                                        "x":  345,
+                                        "y":  700,
+                                        "width":  8,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "山",
+                                        "x":  369,
+                                        "y":  696,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "聞",
+                                        "x":  382,
+                                        "y":  700,
+                                        "width":  15,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "5",
+                                        "x":  398,
+                                        "y":  700,
+                                        "width":  6,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "に",
+                                        "x":  405,
+                                        "y":  698,
+                                        "width":  12,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "rn",
+                                        "x":  418,
+                                        "y":  699,
+                                        "width":  14,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "United",
+                                        "x":  438,
+                                        "y":  695,
+                                        "width":  48,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "States",
+                                        "x":  491,
+                                        "y":  695,
+                                        "width":  42,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "solved",
+                                        "x":  538,
+                                        "y":  695,
+                                        "width":  45,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "their",
+                                        "x":  589,
+                                        "y":  695,
+                                        "width":  32,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "financial",
+                                        "x":  626,
+                                        "y":  695,
+                                        "width":  61,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "problems.",
+                      "words":  [
+                                    {
+                                        "text":  "problems.",
+                                        "x":  142,
+                                        "y":  738,
+                                        "width":  69,
+                                        "height":  16
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "32. Faults ⅲ the Ea1th\u0027s crust are mo y 竺 リ ! ! y ⅲ sedimentary formations, where they",
+                      "words":  [
+                                    {
+                                        "text":  "32.",
+                                        "x":  112,
+                                        "y":  767,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "Faults",
+                                        "x":  142,
+                                        "y":  767,
+                                        "width":  42,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  190,
+                                        "y":  767,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  208,
+                                        "y":  767,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "Ea1th\u0027s",
+                                        "x":  234,
+                                        "y":  767,
+                                        "width":  48,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "crust",
+                                        "x":  287,
+                                        "y":  769,
+                                        "width":  35,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "are",
+                                        "x":  326,
+                                        "y":  770,
+                                        "width":  21,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "mo",
+                                        "x":  352,
+                                        "y":  770,
+                                        "width":  22,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "y",
+                                        "x":  398,
+                                        "y":  770,
+                                        "width":  8,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "竺",
+                                        "x":  421,
+                                        "y":  770,
+                                        "width":  9,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "リ",
+                                        "x":  429,
+                                        "y":  770,
+                                        "width":  8,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "!",
+                                        "x":  438,
+                                        "y":  768,
+                                        "width":  4,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "!",
+                                        "x":  443,
+                                        "y":  766,
+                                        "width":  4,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "y",
+                                        "x":  448,
+                                        "y":  770,
+                                        "width":  8,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  462,
+                                        "y":  766,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "sedimentary",
+                                        "x":  480,
+                                        "y":  766,
+                                        "width":  87,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "formations,",
+                                        "x":  572,
+                                        "y":  766,
+                                        "width":  81,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "where",
+                                        "x":  659,
+                                        "y":  766,
+                                        "width":  43,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "they",
+                                        "x":  706,
+                                        "y":  765,
+                                        "width":  30,
+                                        "height":  17
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "B",
+                      "words":  [
+                                    {
+                                        "text":  "B",
+                                        "x":  605,
+                                        "y":  788,
+                                        "width":  11,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "C",
+                      "words":  [
+                                    {
+                                        "text":  "C",
+                                        "x":  674,
+                                        "y":  788,
+                                        "width":  12,
+                                        "height":  12
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "interrupt previously continuous layers.",
+                      "words":  [
+                                    {
+                                        "text":  "interrupt",
+                                        "x":  142,
+                                        "y":  808,
+                                        "width":  60,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "previously",
+                                        "x":  207,
+                                        "y":  808,
+                                        "width":  73,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "continuous",
+                                        "x":  285,
+                                        "y":  808,
+                                        "width":  77,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "layers.",
+                                        "x":  367,
+                                        "y":  808,
+                                        "width":  46,
+                                        "height":  16
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "33. Many flowering plants benefit 0 「 pollination by adult butterflies and moths.",
+                      "words":  [
+                                    {
+                                        "text":  "33.",
+                                        "x":  112,
+                                        "y":  860,
+                                        "width":  21,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "Many",
+                                        "x":  142,
+                                        "y":  861,
+                                        "width":  40,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "flowering",
+                                        "x":  188,
+                                        "y":  860,
+                                        "width":  67,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "plants",
+                                        "x":  260,
+                                        "y":  860,
+                                        "width":  41,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "benefit",
+                                        "x":  306,
+                                        "y":  860,
+                                        "width":  48,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  359,
+                                        "y":  863,
+                                        "width":  8,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  368,
+                                        "y":  859,
+                                        "width":  7,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "pollination",
+                                        "x":  378,
+                                        "y":  859,
+                                        "width":  77,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "by",
+                                        "x":  460,
+                                        "y":  859,
+                                        "width":  17,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "adult",
+                                        "x":  483,
+                                        "y":  859,
+                                        "width":  35,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "butterflies",
+                                        "x":  523,
+                                        "y":  859,
+                                        "width":  71,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "and",
+                                        "x":  600,
+                                        "y":  859,
+                                        "width":  25,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "moths.",
+                                        "x":  630,
+                                        "y":  858,
+                                        "width":  47,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "34. A number ofthe American lndian languages 聖 9 竺 リ atthe time 0f 0 に E 町 0 聞",
+                      "words":  [
+                                    {
+                                        "text":  "34.",
+                                        "x":  112,
+                                        "y":  913,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "A",
+                                        "x":  142,
+                                        "y":  913,
+                                        "width":  12,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "number",
+                                        "x":  159,
+                                        "y":  912,
+                                        "width":  54,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ofthe",
+                                        "x":  217,
+                                        "y":  912,
+                                        "width":  41,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "American",
+                                        "x":  262,
+                                        "y":  912,
+                                        "width":  69,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "lndian",
+                                        "x":  335,
+                                        "y":  911,
+                                        "width":  44,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "languages",
+                                        "x":  385,
+                                        "y":  912,
+                                        "width":  70,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "聖",
+                                        "x":  461,
+                                        "y":  915,
+                                        "width":  15,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "9",
+                                        "x":  477,
+                                        "y":  915,
+                                        "width":  8,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "竺",
+                                        "x":  494,
+                                        "y":  915,
+                                        "width":  8,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "リ",
+                                        "x":  503,
+                                        "y":  915,
+                                        "width":  8,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "atthe",
+                                        "x":  516,
+                                        "y":  911,
+                                        "width":  38,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "time",
+                                        "x":  560,
+                                        "y":  911,
+                                        "width":  31,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "0f",
+                                        "x":  596,
+                                        "y":  911,
+                                        "width":  15,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  615,
+                                        "y":  911,
+                                        "width":  9,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "に",
+                                        "x":  625,
+                                        "y":  914,
+                                        "width":  12,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "E",
+                                        "x":  642,
+                                        "y":  911,
+                                        "width":  10,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "町",
+                                        "x":  653,
+                                        "y":  914,
+                                        "width":  14,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  667,
+                                        "y":  914,
+                                        "width":  9,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "聞",
+                                        "x":  693,
+                                        "y":  914,
+                                        "width":  16,
+                                        "height":  9
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "田 T ⅳ 引 ln theNewWor1d inthe latefifteencentury havebecomeextinct.",
+                      "words":  [
+                                    {
+                                        "text":  "田",
+                                        "x":  142,
+                                        "y":  957,
+                                        "width":  11,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "T",
+                                        "x":  154,
+                                        "y":  957,
+                                        "width":  7,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "ⅳ",
+                                        "x":  162,
+                                        "y":  953,
+                                        "width":  12,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "引",
+                                        "x":  175,
+                                        "y":  953,
+                                        "width":  11,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ln",
+                                        "x":  192,
+                                        "y":  957,
+                                        "width":  12,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "theNewWor1d",
+                                        "x":  210,
+                                        "y":  953,
+                                        "width":  105,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "inthe",
+                                        "x":  321,
+                                        "y":  953,
+                                        "width":  38,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "latefifteencentury",
+                                        "x":  365,
+                                        "y":  952,
+                                        "width":  133,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "havebecomeextinct.",
+                                        "x":  504,
+                                        "y":  951,
+                                        "width":  149,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "ucuon.",
+                      "words":  [
+                                    {
+                                        "text":  "ucuon.",
+                                        "x":  984,
+                                        "y":  392,
+                                        "width":  47,
+                                        "height":  10
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "37. Volcanism occurs on Earth ⅲ several geologicalsetting, mo 望 可 which are",
+                      "words":  [
+                                    {
+                                        "text":  "37.",
+                                        "x":  921,
+                                        "y":  442,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "Volcanism",
+                                        "x":  951,
+                                        "y":  442,
+                                        "width":  73,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "occurs",
+                                        "x":  1029,
+                                        "y":  446,
+                                        "width":  46,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "on",
+                                        "x":  1080,
+                                        "y":  446,
+                                        "width":  17,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "Earth",
+                                        "x":  1102,
+                                        "y":  442,
+                                        "width":  38,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  1145,
+                                        "y":  443,
+                                        "width":  13,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "several",
+                                        "x":  1163,
+                                        "y":  443,
+                                        "width":  48,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "geologicalsetting,",
+                                        "x":  1217,
+                                        "y":  443,
+                                        "width":  130,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "mo",
+                                        "x":  1352,
+                                        "y":  448,
+                                        "width":  22,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "望",
+                                        "x":  1374,
+                                        "y":  446,
+                                        "width":  11,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "可",
+                                        "x":  1390,
+                                        "y":  444,
+                                        "width":  16,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "which",
+                                        "x":  1410,
+                                        "y":  444,
+                                        "width":  41,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "are",
+                                        "x":  1457,
+                                        "y":  448,
+                                        "width":  21,
+                                        "height":  9
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "as に d W1ththe boundaries 0f the enormous. rigid plates 山 諏 make up ⅲ に",
+                      "words":  [
+                                    {
+                                        "text":  "as",
+                                        "x":  951,
+                                        "y":  487,
+                                        "width":  14,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "に",
+                                        "x":  1002,
+                                        "y":  485,
+                                        "width":  12,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "d",
+                                        "x":  1015,
+                                        "y":  484,
+                                        "width":  8,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "W1ththe",
+                                        "x":  1028,
+                                        "y":  484,
+                                        "width":  57,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "boundaries",
+                                        "x":  1090,
+                                        "y":  484,
+                                        "width":  77,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "0f",
+                                        "x":  1172,
+                                        "y":  484,
+                                        "width":  15,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1191,
+                                        "y":  484,
+                                        "width":  21,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "enormous.",
+                                        "x":  1217,
+                                        "y":  488,
+                                        "width":  74,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "rigid",
+                                        "x":  1296,
+                                        "y":  484,
+                                        "width":  33,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "plates",
+                                        "x":  1334,
+                                        "y":  485,
+                                        "width":  41,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "山",
+                                        "x":  1380,
+                                        "y":  485,
+                                        "width":  12,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "諏",
+                                        "x":  1393,
+                                        "y":  487,
+                                        "width":  12,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "make",
+                                        "x":  1410,
+                                        "y":  485,
+                                        "width":  37,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "up",
+                                        "x":  1453,
+                                        "y":  489,
+                                        "width":  17,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  1475,
+                                        "y":  486,
+                                        "width":  12,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "に",
+                                        "x":  1488,
+                                        "y":  489,
+                                        "width":  7,
+                                        "height":  9
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "lithosphere.",
+                      "words":  [
+                                    {
+                                        "text":  "lithosphere.",
+                                        "x":  951,
+                                        "y":  524,
+                                        "width":  82,
+                                        "height":  17
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "3 \u0026 Early Europeansettlers ⅲ N01th America used medicines ! り made from",
+                      "words":  [
+                                    {
+                                        "text":  "3",
+                                        "x":  921,
+                                        "y":  554,
+                                        "width":  7,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "\u0026",
+                                        "x":  930,
+                                        "y":  554,
+                                        "width":  11,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "Early",
+                                        "x":  951,
+                                        "y":  554,
+                                        "width":  37,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "Europeansettlers",
+                                        "x":  993,
+                                        "y":  554,
+                                        "width":  122,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  1120,
+                                        "y":  554,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "N01th",
+                                        "x":  1138,
+                                        "y":  554,
+                                        "width":  40,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "America",
+                                        "x":  1182,
+                                        "y":  555,
+                                        "width":  61,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "used",
+                                        "x":  1248,
+                                        "y":  555,
+                                        "width":  32,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "medicines",
+                                        "x":  1286,
+                                        "y":  555,
+                                        "width":  70,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "!",
+                                        "x":  1361,
+                                        "y":  558,
+                                        "width":  4,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "り",
+                                        "x":  1366,
+                                        "y":  556,
+                                        "width":  8,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "made",
+                                        "x":  1396,
+                                        "y":  556,
+                                        "width":  37,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "from",
+                                        "x":  1438,
+                                        "y":  556,
+                                        "width":  34,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "plants native い は e ( 0 旧 S , pneumonia, and ague, 旦 illness similar い malarta.",
+                      "words":  [
+                                    {
+                                        "text":  "plants",
+                                        "x":  951,
+                                        "y":  595,
+                                        "width":  41,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "native",
+                                        "x":  997,
+                                        "y":  595,
+                                        "width":  42,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "い",
+                                        "x":  1044,
+                                        "y":  597,
+                                        "width":  13,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "は",
+                                        "x":  1062,
+                                        "y":  597,
+                                        "width":  10,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "e",
+                                        "x":  1072,
+                                        "y":  599,
+                                        "width":  8,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "(",
+                                        "x":  1097,
+                                        "y":  599,
+                                        "width":  7,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  1105,
+                                        "y":  599,
+                                        "width":  8,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "旧",
+                                        "x":  1114,
+                                        "y":  595,
+                                        "width":  13,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "S",
+                                        "x":  1128,
+                                        "y":  599,
+                                        "width":  6,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  ",",
+                                        "x":  1135,
+                                        "y":  605,
+                                        "width":  3,
+                                        "height":  5
+                                    },
+                                    {
+                                        "text":  "pneumonia,",
+                                        "x":  1144,
+                                        "y":  596,
+                                        "width":  82,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "and",
+                                        "x":  1231,
+                                        "y":  596,
+                                        "width":  26,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "ague,",
+                                        "x":  1262,
+                                        "y":  600,
+                                        "width":  37,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "旦",
+                                        "x":  1312,
+                                        "y":  600,
+                                        "width":  10,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "illness",
+                                        "x":  1325,
+                                        "y":  596,
+                                        "width":  45,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "similar",
+                                        "x":  1374,
+                                        "y":  597,
+                                        "width":  49,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "い",
+                                        "x":  1428,
+                                        "y":  599,
+                                        "width":  13,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "malarta.",
+                                        "x":  1446,
+                                        "y":  597,
+                                        "width":  56,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "39. Some insects 第 a remarkable resemblance い dead twigs, being long, slenderness",
+                      "words":  [
+                                    {
+                                        "text":  "39.",
+                                        "x":  920,
+                                        "y":  646,
+                                        "width":  21,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "Some",
+                                        "x":  950,
+                                        "y":  647,
+                                        "width":  40,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "insects",
+                                        "x":  995,
+                                        "y":  647,
+                                        "width":  47,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "第",
+                                        "x":  1064,
+                                        "y":  651,
+                                        "width":  13,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "a",
+                                        "x":  1082,
+                                        "y":  651,
+                                        "width":  7,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "remarkable",
+                                        "x":  1094,
+                                        "y":  647,
+                                        "width":  79,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "resemblance",
+                                        "x":  1178,
+                                        "y":  648,
+                                        "width":  88,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "い",
+                                        "x":  1271,
+                                        "y":  650,
+                                        "width":  14,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "dead",
+                                        "x":  1289,
+                                        "y":  648,
+                                        "width":  34,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "twigs,",
+                                        "x":  1327,
+                                        "y":  648,
+                                        "width":  42,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "being",
+                                        "x":  1374,
+                                        "y":  648,
+                                        "width":  38,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "long,",
+                                        "x":  1418,
+                                        "y":  648,
+                                        "width":  34,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "slenderness",
+                                        "x":  1458,
+                                        "y":  649,
+                                        "width":  81,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "wingless,andbrownishincolor.",
+                      "words":  [
+                                    {
+                                        "text":  "wingless,andbrownishincolor.",
+                                        "x":  950,
+                                        "y":  688,
+                                        "width":  226,
+                                        "height":  16
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "40.",
+                      "words":  [
+                                    {
+                                        "text":  "40.",
+                                        "x":  919,
+                                        "y":  740,
+                                        "width":  21,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "A れ バ additive iS anv chemical 山 3 ー f00d manufacturers inten!ional add to their",
+                      "words":  [
+                                    {
+                                        "text":  "A",
+                                        "x":  950,
+                                        "y":  740,
+                                        "width":  11,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "れ",
+                                        "x":  967,
+                                        "y":  740,
+                                        "width":  9,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "バ",
+                                        "x":  977,
+                                        "y":  744,
+                                        "width":  8,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "additive",
+                                        "x":  1003,
+                                        "y":  740,
+                                        "width":  56,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "iS",
+                                        "x":  1064,
+                                        "y":  740,
+                                        "width":  11,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "anv",
+                                        "x":  1080,
+                                        "y":  744,
+                                        "width":  24,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "chemical",
+                                        "x":  1110,
+                                        "y":  740,
+                                        "width":  62,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "山",
+                                        "x":  1178,
+                                        "y":  741,
+                                        "width":  12,
+                                        "height":  12
+                                    },
+                                    {
+                                        "text":  "3",
+                                        "x":  1191,
+                                        "y":  744,
+                                        "width":  8,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "ー",
+                                        "x":  1200,
+                                        "y":  743,
+                                        "width":  4,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "f00d",
+                                        "x":  1209,
+                                        "y":  741,
+                                        "width":  32,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "manufacturers",
+                                        "x":  1246,
+                                        "y":  741,
+                                        "width":  100,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "inten!ional",
+                                        "x":  1352,
+                                        "y":  741,
+                                        "width":  73,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "add",
+                                        "x":  1430,
+                                        "y":  741,
+                                        "width":  25,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "to",
+                                        "x":  1461,
+                                        "y":  744,
+                                        "width":  13,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "their",
+                                        "x":  1479,
+                                        "y":  741,
+                                        "width":  32,
+                                        "height":  14
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "ucts.",
+                      "words":  [
+                                    {
+                                        "text":  "ucts.",
+                                        "x":  982,
+                                        "y":  783,
+                                        "width":  31,
+                                        "height":  11
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "This is the end Of Section 2.",
+                      "words":  [
+                                    {
+                                        "text":  "This",
+                                        "x":  1077,
+                                        "y":  859,
+                                        "width":  46,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "is",
+                                        "x":  1131,
+                                        "y":  859,
+                                        "width":  16,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1154,
+                                        "y":  859,
+                                        "width":  33,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "end",
+                                        "x":  1194,
+                                        "y":  859,
+                                        "width":  39,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "Of",
+                                        "x":  1240,
+                                        "y":  859,
+                                        "width":  21,
+                                        "height":  17
+                                    },
+                                    {
+                                        "text":  "Section",
+                                        "x":  1268,
+                                        "y":  859,
+                                        "width":  79,
+                                        "height":  18
+                                    },
+                                    {
+                                        "text":  "2.",
+                                        "x":  1355,
+                                        "y":  860,
+                                        "width":  17,
+                                        "height":  17
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "け you finish in less than 25 minutes, check your work on Section 2 0 ⅲ y.",
+                      "words":  [
+                                    {
+                                        "text":  "け",
+                                        "x":  926,
+                                        "y":  903,
+                                        "width":  10,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "you",
+                                        "x":  941,
+                                        "y":  906,
+                                        "width":  30,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "finish",
+                                        "x":  977,
+                                        "y":  903,
+                                        "width":  46,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "in",
+                                        "x":  1029,
+                                        "y":  903,
+                                        "width":  15,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "less",
+                                        "x":  1050,
+                                        "y":  903,
+                                        "width":  33,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "than",
+                                        "x":  1089,
+                                        "y":  903,
+                                        "width":  36,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "25",
+                                        "x":  1131,
+                                        "y":  903,
+                                        "width":  19,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "minutes,",
+                                        "x":  1156,
+                                        "y":  903,
+                                        "width":  71,
+                                        "height":  16
+                                    },
+                                    {
+                                        "text":  "check",
+                                        "x":  1232,
+                                        "y":  903,
+                                        "width":  50,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "your",
+                                        "x":  1287,
+                                        "y":  907,
+                                        "width":  38,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "work",
+                                        "x":  1330,
+                                        "y":  904,
+                                        "width":  40,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "on",
+                                        "x":  1375,
+                                        "y":  907,
+                                        "width":  21,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "Section",
+                                        "x":  1402,
+                                        "y":  904,
+                                        "width":  62,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "2",
+                                        "x":  1470,
+                                        "y":  904,
+                                        "width":  9,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  1484,
+                                        "y":  907,
+                                        "width":  11,
+                                        "height":  11
+                                    },
+                                    {
+                                        "text":  "ⅲ",
+                                        "x":  1496,
+                                        "y":  904,
+                                        "width":  14,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "y.",
+                                        "x":  1511,
+                                        "y":  908,
+                                        "width":  12,
+                                        "height":  13
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "DO NOT read 0 「 work on any other section of the test.",
+                      "words":  [
+                                    {
+                                        "text":  "DO",
+                                        "x":  1002,
+                                        "y":  922,
+                                        "width":  23,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "NOT",
+                                        "x":  1031,
+                                        "y":  921,
+                                        "width":  35,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "read",
+                                        "x":  1072,
+                                        "y":  922,
+                                        "width":  36,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "0",
+                                        "x":  1114,
+                                        "y":  925,
+                                        "width":  9,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "「",
+                                        "x":  1125,
+                                        "y":  925,
+                                        "width":  6,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "work",
+                                        "x":  1136,
+                                        "y":  922,
+                                        "width":  41,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "on",
+                                        "x":  1182,
+                                        "y":  925,
+                                        "width":  20,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "any",
+                                        "x":  1208,
+                                        "y":  925,
+                                        "width":  30,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "other",
+                                        "x":  1243,
+                                        "y":  923,
+                                        "width":  45,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "section",
+                                        "x":  1294,
+                                        "y":  922,
+                                        "width":  60,
+                                        "height":  14
+                                    },
+                                    {
+                                        "text":  "of",
+                                        "x":  1360,
+                                        "y":  923,
+                                        "width":  16,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "the",
+                                        "x":  1381,
+                                        "y":  923,
+                                        "width":  25,
+                                        "height":  13
+                                    },
+                                    {
+                                        "text":  "test.",
+                                        "x":  1412,
+                                        "y":  924,
+                                        "width":  35,
+                                        "height":  12
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "00 ON TO THE NEXT PAGE",
+                      "words":  [
+                                    {
+                                        "text":  "00",
+                                        "x":  557,
+                                        "y":  1084,
+                                        "width":  18,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "ON",
+                                        "x":  578,
+                                        "y":  1084,
+                                        "width":  17,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "TO",
+                                        "x":  598,
+                                        "y":  1084,
+                                        "width":  16,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "THE",
+                                        "x":  617,
+                                        "y":  1084,
+                                        "width":  23,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "NEXT",
+                                        "x":  643,
+                                        "y":  1083,
+                                        "width":  31,
+                                        "height":  10
+                                    },
+                                    {
+                                        "text":  "PAGE",
+                                        "x":  677,
+                                        "y":  1083,
+                                        "width":  31,
+                                        "height":  10
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "ア ど わ",
+                      "words":  [
+                                    {
+                                        "text":  "ア",
+                                        "x":  417,
+                                        "y":  1115,
+                                        "width":  10,
+                                        "height":  15
+                                    },
+                                    {
+                                        "text":  "ど",
+                                        "x":  443,
+                                        "y":  1116,
+                                        "width":  7,
+                                        "height":  9
+                                    },
+                                    {
+                                        "text":  "わ",
+                                        "x":  456,
+                                        "y":  1112,
+                                        "width":  17,
+                                        "height":  14
+                                    }
+                                ]
+                  },
+                  {
+                      "text":  "Unit",
+                      "words":  [
+                                    {
+                                        "text":  "Unit",
+                                        "x":  358,
+                                        "y":  1114,
+                                        "width":  29,
+                                        "height":  11
+                                    }
+                                ]
+                  }
+              ]
+}
