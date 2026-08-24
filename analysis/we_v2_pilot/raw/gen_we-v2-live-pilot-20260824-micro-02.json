@@ -1,0 +1,367 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-004",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "demonstrative determiner number agreement with head noun",
+      "secondary_features": [
+        "non-restrictive relative clause",
+        "infinitive of purpose",
+        "predicate adjective after a linking verb"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "EASY",
+      "vocabulary_domain": "observational astronomy",
+      "sentence": "Modern observatories depend on this delicate instruments, which require frequent calibration to remain accurate during long exposures.",
+      "marked_parts": {
+        "A": "this",
+        "B": "which",
+        "C": "calibration",
+        "D": "accurate"
+      },
+      "correct_answer": "A",
+      "error_explanation": "The demonstrative determiner at A modifies the plural head noun ‘instruments’, and the plural verb ‘require’ in the following relative clause confirms that the noun must stay plural. A demonstrative determiner must agree in number with its head noun, so the singular ‘this’ is ungrammatical and the plural ‘these’ is required. B is the correct relative pronoun for an inanimate antecedent in a non-restrictive clause introduced by a comma; C is the correct nominal object of ‘require’; D is the predicate adjective required after the linking verb ‘remain’.",
+      "minimal_correction": "this -> these",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "four single-word spans",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 17,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.2353,
+          "unmarked_word_count": 13,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 2,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.7015,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.268,
+            "marked_coverage_ratio": 0.36,
+            "unmarked_word_count": 0.396,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.1
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              4
+            ],
+            "B": [
+              7
+            ],
+            "C": [
+              10
+            ],
+            "D": [
+              13
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+        "item_generation_order": 4,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "Modern observatories depend on these delicate instruments, which require frequent calibration to remain accurate during long exposures.",
+        "error_form": "Modern observatories depend on this delicate instruments, which require frequent calibration to remain accurate during long exposures.",
+        "minimal_correction": "this -> these",
+        "mutation_type": "determiner_number_substitution: plural demonstrative replaced by singular demonstrative before a plural head noun",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-005",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "missing article before a singular count noun",
+      "secondary_features": [
+        "adverbial clause of reason",
+        "restrictive relative clause",
+        "infinitive complement after allow"
+      ],
+      "tested_error_type": "missing_required_element",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "agricultural economics",
+      "sentence": "Because credit was scarce, the cooperative built warehouse that allowed members to store grain until prices recovered in the spring.",
+      "marked_parts": {
+        "A": "scarce",
+        "B": "warehouse",
+        "C": "store",
+        "D": "recovered"
+      },
+      "correct_answer": "B",
+      "error_explanation": "‘Warehouse’ at B is a singular count noun serving as the direct object of ‘built’, but it appears with no determiner at all. A singular count noun in English requires an article or another determiner, so a required element is missing and the phrase must read ‘built a warehouse’. A is a correct predicate adjective after ‘was’; C is the correct base form inside the infinitive complement licensed by ‘allowed members to’; D is the correct simple past form matching the past time frame established by ‘was’ and ‘built’.",
+      "minimal_correction": "built warehouse -> built a warehouse",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "four single-word spans",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.2,
+          "unmarked_word_count": 16,
+          "gap_A_B": 3,
+          "gap_B_C": 4,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.6869,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.492,
+            "marked_coverage_ratio": 0.232,
+            "unmarked_word_count": 0.588,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.312,
+            "gap_B_C": 0.54,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              3
+            ],
+            "B": [
+              7
+            ],
+            "C": [
+              12
+            ],
+            "D": [
+              16
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+        "item_generation_order": 5,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "Because credit was scarce, the cooperative built a warehouse that allowed members to store grain until prices recovered in the spring.",
+        "error_form": "Because credit was scarce, the cooperative built warehouse that allowed members to store grain until prices recovered in the spring.",
+        "minimal_correction": "insert the indefinite article a before warehouse",
+        "mutation_type": "required_determiner_deletion: indefinite article removed from a singular count-noun direct object",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-006",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "gerund required after a preposition-taking verb",
+      "secondary_features": [
+        "concessive adverbial clause",
+        "past perfect background tense",
+        "restrictive relative clause with object gap"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "art history",
+      "sentence": "Although he had trained as a sculptor, the artist soon concentrated on depict crowded market scenes that later collectors valued far more highly.",
+      "marked_parts": {
+        "A": "had trained",
+        "B": "sculptor",
+        "C": "depict",
+        "D": "that"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The verb ‘concentrate’ selects the preposition ‘on’, and a preposition must be followed by a noun phrase or a gerund, never by a bare verb stem. C must therefore be the gerund ‘depicting’. ‘Depict’ is not a noun and cannot be reanalyzed as an infinitive here because ‘on’ is a preposition, so ‘on depict’ is unambiguously ungrammatical. A is a correct past perfect verb phrase marking earlier training; B is a correct singular count noun after ‘as a’; D is the correct restrictive relative pronoun filling the object gap of ‘valued’.",
+      "minimal_correction": "depict -> depicting",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 23,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2174,
+          "unmarked_word_count": 18,
+          "gap_A_B": 2,
+          "gap_B_C": 5,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "VERB_FRAME",
+          "format_distribution_distance": 0.5951,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.74,
+            "marked_coverage_ratio": 0.296,
+            "unmarked_word_count": 0.748,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.78,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              2,
+              3
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              12
+            ],
+            "D": [
+              16
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+        "item_generation_order": 6,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "Although he had trained as a sculptor, the artist soon concentrated on depicting crowded market scenes that later collectors valued far more highly.",
+        "error_form": "Although he had trained as a sculptor, the artist soon concentrated on depict crowded market scenes that later collectors valued far more highly.",
+        "minimal_correction": "depict -> depicting",
+        "mutation_type": "gerund_to_bare_verb_substitution: gerund complement of a preposition-taking verb replaced by the bare verb stem",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    }
+  ]
+}

@@ -1,0 +1,295 @@
+{
+  "run": {
+    "run_id": "we-v2-live-pilot-20260824",
+    "count": 3,
+    "reason_vocabulary": [
+      "no_genuine_error",
+      "multiple_genuine_errors",
+      "wrong_answer_key",
+      "marked_span_mismatch",
+      "alternate_parse",
+      "semantic_only_error",
+      "reference_dependency",
+      "tense_optionality",
+      "connector_ambiguity",
+      "unnatural_sentence",
+      "format_extreme",
+      "format_warning_only",
+      "solver_disagreement",
+      "solver_ambiguous",
+      "solver_none",
+      "revision_failure",
+      "other"
+    ]
+  },
+  "items": [
+    {
+      "item_id": "we-v2-pilot-013",
+      "final_state": "MANUAL_REVIEW",
+      "primary_failure_reason": "other",
+      "failure_reasons": [
+        "other"
+      ],
+      "reviewer_verdict": "PASS",
+      "reviewer_independent_answer": "C",
+      "grammar_validity": "PASS",
+      "format_validity": "PASS",
+      "reviewer_issues": [],
+      "revision_requirements": [],
+      "solver_result": {
+        "item_id": "we-v2-pilot-013",
+        "section": "Written Expression",
+        "solver_answer": "C",
+        "confidence": "HIGH",
+        "reason": "The marked word should be the adjective productive modifying nesting habitat; the other marked parts are acceptable.",
+        "suggested_correction": "productive",
+        "ambiguity_detected": false
+      },
+      "consensus": null,
+      "item": {
+        "item_id": "we-v2-pilot-013",
+        "section": "Written Expression",
+        "agent_version": "Written Expression Generator v2.0",
+        "primary_target": "WORD_CLASS_FORM",
+        "subtype": "noun used where an adjective is required",
+        "secondary_features": [
+          "that-clause complement of a factive verb",
+          "adverb premodifying an attributive adjective",
+          "plural subject-verb agreement inside the that-clause"
+        ],
+        "tested_error_type": "incorrect_part_of_speech",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "ornithology",
+        "sentence": "Field ornithologists have long known that the coastal marshes provide unusually production nesting habitat for migratory shorebirds.",
+        "marked_parts": {
+          "A": "known",
+          "B": "marshes",
+          "C": "production",
+          "D": "for"
+        },
+        "correct_answer": "C",
+        "error_explanation": "The adverb \"unusually\" premodifies the attributive slot in front of the noun phrase \"nesting habitat,\" and that slot must be filled by an adjective. \"Production\" is a noun, and an adverb cannot premodify a noun, so the derivational adjective \"productive\" is required. A is the correct past participle after \"have long\"; B is the plural noun that licenses the plural verb \"provide\"; D is the preposition standardly governed by \"habitat.\"",
+        "minimal_correction": "Replace \"production\" with \"productive.\"",
+        "grammar_metadata": {
+          "error_scope": "local",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "MORPHOLOGY",
+          "intended_error_position": "C",
+          "correct_span_type": "SINGLE_WORD"
+        },
+        "format_metadata": {
+          "target_sentence_length_region": "16-20 words",
+          "expected_span_profile": "four single-word spans",
+          "coverage_profile": "20-29% marked coverage",
+          "approximate_context_profile": "four unmarked words before A, unmarked context between each pair of spans, and two unmarked words after D",
+          "span_types": {
+            "A": "SINGLE_WORD",
+            "B": "SINGLE_WORD",
+            "C": "SINGLE_WORD",
+            "D": "SINGLE_WORD"
+          },
+          "diagnostics": {}
+        },
+        "provenance": {
+          "agent_version": "Written Expression Generator v2.0",
+          "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+          "spec_version": "1.0.0",
+          "format_spec_version": "1.0.0",
+          "generation_batch_id": "we-v2-live-pilot-20260824",
+          "microbatch_id": "we-v2-live-pilot-20260824-micro-05",
+          "item_generation_order": 13,
+          "invocation_id": null,
+          "runtime_model": null
+        },
+        "qa_metadata": {
+          "clean_form": "Field ornithologists have long known that the coastal marshes provide unusually productive nesting habitat for migratory shorebirds.",
+          "error_form": "Field ornithologists have long known that the coastal marshes provide unusually production nesting habitat for migratory shorebirds.",
+          "minimal_correction": "production -> productive",
+          "mutation_type": "derivational_form_substitution_adjective_to_deverbal_noun",
+          "clean_sentence_validated": true,
+          "grammar_check_status": "PASS",
+          "format_check_status": "PASS"
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-014",
+      "final_state": "MANUAL_REVIEW",
+      "primary_failure_reason": "other",
+      "failure_reasons": [
+        "other"
+      ],
+      "reviewer_verdict": "PASS",
+      "reviewer_independent_answer": "D",
+      "grammar_validity": "PASS",
+      "format_validity": "PASS",
+      "reviewer_issues": [],
+      "revision_requirements": [],
+      "solver_result": {
+        "item_id": "we-v2-pilot-014",
+        "section": "Written Expression",
+        "solver_answer": "D",
+        "confidence": "HIGH",
+        "reason": "The noun phrase requires expansion, not the verb expand, after the adjective steady; the other marked parts are acceptable.",
+        "suggested_correction": "expansion",
+        "ambiguity_detected": false
+      },
+      "consensus": null,
+      "item": {
+        "item_id": "we-v2-pilot-014",
+        "section": "Written Expression",
+        "agent_version": "Written Expression Generator v2.0",
+        "primary_target": "WORD_CLASS_FORM",
+        "subtype": "verb form used where a nominal is required",
+        "secondary_features": [
+          "that-clause complement",
+          "comparative correlative less ... than",
+          "coordinated prepositional phrases governed by depend on"
+        ],
+        "tested_error_type": "incorrect_part_of_speech",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "urban sociology",
+        "sentence": "Urban sociologists have argued that neighborhood stability depends less on average income than on the steady expand of local civic institutions.",
+        "marked_parts": {
+          "A": "argued",
+          "B": "depends",
+          "C": "than",
+          "D": "expand"
+        },
+        "correct_answer": "D",
+        "error_explanation": "The determiner \"the\" and the attributive adjective \"steady\" open a noun phrase that serves as the object of the preposition \"on,\" so the head of that phrase must be a noun. \"Expand\" is a base-form verb and cannot head a noun phrase, so the deverbal noun \"expansion\" is required. A is the correct past participle after \"have\"; B agrees with the singular subject \"stability\"; C is the correlative standardly required by \"less.\"",
+        "minimal_correction": "Replace \"expand\" with \"expansion.\"",
+        "grammar_metadata": {
+          "error_scope": "local",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "MORPHOLOGY",
+          "intended_error_position": "D",
+          "correct_span_type": "SINGLE_WORD"
+        },
+        "format_metadata": {
+          "target_sentence_length_region": "21-25 words",
+          "expected_span_profile": "four single-word spans",
+          "coverage_profile": "16-25% marked coverage",
+          "approximate_context_profile": "three unmarked words before A, unmarked context between each pair of spans, and four unmarked words after D",
+          "span_types": {
+            "A": "SINGLE_WORD",
+            "B": "SINGLE_WORD",
+            "C": "SINGLE_WORD",
+            "D": "SINGLE_WORD"
+          },
+          "diagnostics": {}
+        },
+        "provenance": {
+          "agent_version": "Written Expression Generator v2.0",
+          "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+          "spec_version": "1.0.0",
+          "format_spec_version": "1.0.0",
+          "generation_batch_id": "we-v2-live-pilot-20260824",
+          "microbatch_id": "we-v2-live-pilot-20260824-micro-05",
+          "item_generation_order": 14,
+          "invocation_id": null,
+          "runtime_model": null
+        },
+        "qa_metadata": {
+          "clean_form": "Urban sociologists have argued that neighborhood stability depends less on average income than on the steady expansion of local civic institutions.",
+          "error_form": "Urban sociologists have argued that neighborhood stability depends less on average income than on the steady expand of local civic institutions.",
+          "minimal_correction": "expand -> expansion",
+          "mutation_type": "derivational_form_substitution_deverbal_noun_to_base_verb",
+          "clean_sentence_validated": true,
+          "grammar_check_status": "PASS",
+          "format_check_status": "PASS"
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-015",
+      "final_state": "MANUAL_REVIEW",
+      "primary_failure_reason": "other",
+      "failure_reasons": [
+        "other"
+      ],
+      "reviewer_verdict": "PASS",
+      "reviewer_independent_answer": "A",
+      "grammar_validity": "PASS",
+      "format_validity": "PASS",
+      "reviewer_issues": [],
+      "revision_requirements": [],
+      "solver_result": {
+        "item_id": "we-v2-pilot-015",
+        "section": "Written Expression",
+        "solver_answer": "A",
+        "confidence": "HIGH",
+        "reason": "The fossil trackways are excavated from the quarry, so the participle must be passive; the other marked parts are acceptable.",
+        "suggested_correction": "excavated from",
+        "ambiguity_detected": false
+      },
+      "consensus": null,
+      "item": {
+        "item_id": "we-v2-pilot-015",
+        "section": "Written Expression",
+        "agent_version": "Written Expression Generator v2.0",
+        "primary_target": "NONFINITE_VERB_PHRASES",
+        "subtype": "past participle required in a reduced relative clause",
+        "secondary_features": [
+          "reduced from relative clause",
+          "passive voice",
+          "that-clause complement after persuade",
+          "present perfect main verb"
+        ],
+        "tested_error_type": "wrong_verb_form",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "paleontology",
+        "sentence": "Fossil trackways excavating from a limestone quarry in southern Utah have persuaded many paleontologists that several large theropods hunted in coordinated groups.",
+        "marked_parts": {
+          "A": "excavating from",
+          "B": "southern",
+          "C": "persuaded",
+          "D": "several large theropods"
+        },
+        "correct_answer": "A",
+        "error_explanation": "The postmodifier attached to \"Fossil trackways\" is a relative clause reduced from \"that were excavated from a limestone quarry,\" so it requires the past participle of the transitive verb. The present participle \"excavating\" makes the inanimate trackways the agent and leaves the transitive verb \"excavate\" with no object, which is not well formed; only the passive past participle \"excavated\" is possible in this slot. B is a correct attributive adjective, C is the correct past participle inside the present perfect \"have persuaded,\" and D is a correct plural quantified noun phrase.",
+        "minimal_correction": "Replace \"excavating from\" with \"excavated from.\"",
+        "grammar_metadata": {
+          "error_scope": "clause_level",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "VERB_FRAME",
+          "intended_error_position": "A",
+          "correct_span_type": "SHORT_PHRASE"
+        },
+        "format_metadata": {
+          "target_sentence_length_region": "21-25 words",
+          "expected_span_profile": "two single-word spans and two short phrases",
+          "coverage_profile": "26-35% marked coverage",
+          "approximate_context_profile": "two unmarked words before A, unmarked context between each pair of spans, and four unmarked words after D",
+          "span_types": {
+            "A": "SHORT_PHRASE",
+            "B": "SINGLE_WORD",
+            "C": "SINGLE_WORD",
+            "D": "SHORT_PHRASE"
+          },
+          "diagnostics": {}
+        },
+        "provenance": {
+          "agent_version": "Written Expression Generator v2.0",
+          "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+          "spec_version": "1.0.0",
+          "format_spec_version": "1.0.0",
+          "generation_batch_id": "we-v2-live-pilot-20260824",
+          "microbatch_id": "we-v2-live-pilot-20260824-micro-05",
+          "item_generation_order": 15,
+          "invocation_id": null,
+          "runtime_model": null
+        },
+        "qa_metadata": {
+          "clean_form": "Fossil trackways excavated from a limestone quarry in southern Utah have persuaded many paleontologists that several large theropods hunted in coordinated groups.",
+          "error_form": "Fossil trackways excavating from a limestone quarry in southern Utah have persuaded many paleontologists that several large theropods hunted in coordinated groups.",
+          "minimal_correction": "excavating from -> excavated from",
+          "mutation_type": "participle_form_substitution_past_participle_to_present_participle",
+          "clean_sentence_validated": true,
+          "grammar_check_status": "PASS",
+          "format_check_status": "PASS"
+        }
+      }
+    }
+  ]
+}

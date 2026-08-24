@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2-pilot-004",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The demonstrative must agree with the plural noun instruments; this should be these.",
+      "suggested_correction": "these",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-005",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "Warehouse is a singular count noun and needs the indefinite article a in this context.",
+      "suggested_correction": "a warehouse",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-006",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "After the preposition on, the verb must be a gerund; depict should be depicting.",
+      "suggested_correction": "depicting",
+      "ambiguity_detected": false
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "blinding": "allowlist: item_id, section, sentence, marked_parts",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-007",
+      "section": "Written Expression",
+      "sentence": "During prolonged drought, many desert plants store water in fleshy stems and depend for deep roots to survive.",
+      "marked_parts": {
+        "A": "prolonged",
+        "B": "store",
+        "C": "fleshy",
+        "D": "for"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-008",
+      "section": "Written Expression",
+      "sentence": "As the atmosphere warms, stronger convection makes water vapor rises rapidly, and meteorologists observe that high-altitude winds redistribute clouds across the upper troposphere.",
+      "marked_parts": {
+        "A": "warms",
+        "B": "rises",
+        "C": "observe",
+        "D": "winds redistribute clouds"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-009",
+      "section": "Written Expression",
+      "sentence": "Cultural anthropologists examine the migration of families, the exchange of local goods, and the ritually practices that connect villages across generations in remote regions.",
+      "marked_parts": {
+        "A": "the migration",
+        "B": "the exchange",
+        "C": "goods",
+        "D": "ritually"
+      }
+    }
+  ]
+}

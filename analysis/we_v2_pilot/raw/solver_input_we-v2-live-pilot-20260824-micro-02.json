@@ -1,0 +1,40 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "blinding": "allowlist: item_id, section, sentence, marked_parts",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-004",
+      "section": "Written Expression",
+      "sentence": "Modern observatories depend on this delicate instruments, which require frequent calibration to remain accurate during long exposures.",
+      "marked_parts": {
+        "A": "this",
+        "B": "which",
+        "C": "calibration",
+        "D": "accurate"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-005",
+      "section": "Written Expression",
+      "sentence": "Because credit was scarce, the cooperative built warehouse that allowed members to store grain until prices recovered in the spring.",
+      "marked_parts": {
+        "A": "scarce",
+        "B": "warehouse",
+        "C": "store",
+        "D": "recovered"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-006",
+      "section": "Written Expression",
+      "sentence": "Although he had trained as a sculptor, the artist soon concentrated on depict crowded market scenes that later collectors valued far more highly.",
+      "marked_parts": {
+        "A": "had trained",
+        "B": "sculptor",
+        "C": "depict",
+        "D": "that"
+      }
+    }
+  ]
+}

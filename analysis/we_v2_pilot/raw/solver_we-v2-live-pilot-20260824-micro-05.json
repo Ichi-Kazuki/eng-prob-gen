@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2-pilot-013",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The marked word should be the adjective productive modifying nesting habitat; the other marked parts are acceptable.",
+      "suggested_correction": "productive",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-014",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The noun phrase requires expansion, not the verb expand, after the adjective steady; the other marked parts are acceptable.",
+      "suggested_correction": "expansion",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-015",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The fossil trackways are excavated from the quarry, so the participle must be passive; the other marked parts are acceptable.",
+      "suggested_correction": "excavated from",
+      "ambiguity_detected": false
+    }
+  ]
+}

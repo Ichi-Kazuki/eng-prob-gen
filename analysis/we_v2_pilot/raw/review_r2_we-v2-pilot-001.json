@@ -1,0 +1,116 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2-pilot-001",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "B",
+      "generator_answer": "B",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "PASS",
+      "detected_error_count": 1,
+      "detected_error_position": "B",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ERROR",
+        "C": "ACCEPTABLE",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "PASS",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "validator": "TOEFL ITP WE deterministic format validator v2.0",
+        "config": "TOEFL_ITP_WE_V2_FORMAT_CONFIG",
+        "item_count": 1,
+        "valid_count": 1,
+        "invalid_count": 0,
+        "item": {
+          "item_id": "we-v2-pilot-001",
+          "valid": true,
+          "errors": [],
+          "diagnostics": {
+            "sentence_word_count": 21,
+            "span_word_counts": {
+              "A": 1,
+              "B": 1,
+              "C": 1,
+              "D": 1
+            },
+            "mean_span_length": 1.0,
+            "max_span_length": 1,
+            "marked_coverage_ratio": 0.1905,
+            "unmarked_word_count": 17,
+            "gap_A_B": 4,
+            "gap_B_C": 2,
+            "gap_C_D": 2,
+            "correct_span_word_count": 1,
+            "correct_span_type": "SINGLE_WORD",
+            "correction_locality": "DEPENDENCY_BASED",
+            "decision_granularity": "AGREEMENT_DEPENDENCY",
+            "format_distribution_distance": 0.7605,
+            "format_percentile_profile": {
+              "sentence_word_count": 0.576,
+              "marked_coverage_ratio": 0.16,
+              "unmarked_word_count": 0.66,
+              "mean_span_length": 0.156,
+              "max_span_length": 0.156,
+              "gap_A_B": 0.608,
+              "gap_B_C": 0.088,
+              "gap_C_D": 0.1
+            },
+            "format_band_status": "PREFERRED",
+            "metric_band_status": {
+              "sentence_word_count": "PREFERRED",
+              "marked_coverage_ratio": "PREFERRED",
+              "unmarked_word_count": "PREFERRED",
+              "mean_span_length": "PREFERRED",
+              "max_span_length": "PREFERRED",
+              "gap_A_B": "PREFERRED",
+              "gap_B_C": "PREFERRED",
+              "gap_C_D": "PREFERRED"
+            },
+            "span_token_indices": {
+              "A": [
+                7
+              ],
+              "B": [
+                12
+              ],
+              "C": [
+                15
+              ],
+              "D": [
+                18
+              ]
+            }
+          }
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-live-pilot-20260824",
+        "item_review_order": 1,
+        "invocation_id": null,
+        "runtime_model": null
+      }
+    }
+  ]
+}

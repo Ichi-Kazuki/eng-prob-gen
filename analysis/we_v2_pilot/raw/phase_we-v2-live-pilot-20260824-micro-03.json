@@ -1,0 +1,157 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "trace_source": "generator_output_qa_metadata",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-007",
+      "item_generation_order": 7,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+      "invocation_id": "01a03235-7706-7951-88d0-d4dc0c5c20f0",
+      "trace_source": "generator_output_qa_metadata",
+      "trace_note": "Phase evidence is reconstructed from the Generator v2 QA metadata; no grammar judgement is added here.",
+      "recorded_at_utc": "2026-08-24T05:29:46.882608+00:00",
+      "phases": {
+        "item_design_plan": {
+          "status": "PRESENT",
+          "fields": [
+            "primary_target",
+            "subtype",
+            "tested_error_type",
+            "difficulty",
+            "vocabulary_domain",
+            "correction_locality",
+            "decision_granularity",
+            "intended_error_position",
+            "correct_span_type"
+          ]
+        },
+        "clean_sentence": {
+          "status": "PRESENT",
+          "clean_form": "During prolonged drought, many desert plants store water in fleshy stems and depend on deep roots to survive."
+        },
+        "clean_sentence_validation": {
+          "status": "PASS"
+        },
+        "one_error_mutation": {
+          "status": "PRESENT",
+          "error_form": "During prolonged drought, many desert plants store water in fleshy stems and depend for deep roots to survive.",
+          "mutation_type": "preposition substitution in a verb-governed collocation",
+          "minimal_correction": "Replace \"for\" with \"on\"."
+        },
+        "uniqueness_audit": {
+          "status": "PASS"
+        },
+        "four_local_span_selection": {
+          "status": "PRESENT"
+        },
+        "deterministic_format_validation": {
+          "status": "PASS"
+        },
+        "final_grammar_audit": {
+          "status": "PASS"
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-008",
+      "item_generation_order": 8,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+      "invocation_id": "01a03235-7706-7951-88d0-d4dc0c5c20f0",
+      "trace_source": "generator_output_qa_metadata",
+      "trace_note": "Phase evidence is reconstructed from the Generator v2 QA metadata; no grammar judgement is added here.",
+      "recorded_at_utc": "2026-08-24T05:29:46.882608+00:00",
+      "phases": {
+        "item_design_plan": {
+          "status": "PRESENT",
+          "fields": [
+            "primary_target",
+            "subtype",
+            "tested_error_type",
+            "difficulty",
+            "vocabulary_domain",
+            "correction_locality",
+            "decision_granularity",
+            "intended_error_position",
+            "correct_span_type"
+          ]
+        },
+        "clean_sentence": {
+          "status": "PRESENT",
+          "clean_form": "As the atmosphere warms, stronger convection makes water vapor rise rapidly, and meteorologists observe that high-altitude winds redistribute clouds across the upper troposphere."
+        },
+        "clean_sentence_validation": {
+          "status": "PASS"
+        },
+        "one_error_mutation": {
+          "status": "PRESENT",
+          "error_form": "As the atmosphere warms, stronger convection makes water vapor rises rapidly, and meteorologists observe that high-altitude winds redistribute clouds across the upper troposphere.",
+          "mutation_type": "finite-form substitution after causative make plus object",
+          "minimal_correction": "Replace \"rises\" with \"rise\"."
+        },
+        "uniqueness_audit": {
+          "status": "PASS"
+        },
+        "four_local_span_selection": {
+          "status": "PRESENT"
+        },
+        "deterministic_format_validation": {
+          "status": "PASS"
+        },
+        "final_grammar_audit": {
+          "status": "PASS"
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-009",
+      "item_generation_order": 9,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+      "invocation_id": "01a03235-7706-7951-88d0-d4dc0c5c20f0",
+      "trace_source": "generator_output_qa_metadata",
+      "trace_note": "Phase evidence is reconstructed from the Generator v2 QA metadata; no grammar judgement is added here.",
+      "recorded_at_utc": "2026-08-24T05:29:46.882608+00:00",
+      "phases": {
+        "item_design_plan": {
+          "status": "PRESENT",
+          "fields": [
+            "primary_target",
+            "subtype",
+            "tested_error_type",
+            "difficulty",
+            "vocabulary_domain",
+            "correction_locality",
+            "decision_granularity",
+            "intended_error_position",
+            "correct_span_type"
+          ]
+        },
+        "clean_sentence": {
+          "status": "PRESENT",
+          "clean_form": "Cultural anthropologists examine the migration of families, the exchange of local goods, and the ritual practices that connect villages across generations in remote regions."
+        },
+        "clean_sentence_validation": {
+          "status": "PASS"
+        },
+        "one_error_mutation": {
+          "status": "PRESENT",
+          "error_form": "Cultural anthropologists examine the migration of families, the exchange of local goods, and the ritually practices that connect villages across generations in remote regions.",
+          "mutation_type": "adverb substitution for an adjective in a coordinated noun phrase",
+          "minimal_correction": "Replace \"ritually\" with \"ritual\"."
+        },
+        "uniqueness_audit": {
+          "status": "PASS"
+        },
+        "four_local_span_selection": {
+          "status": "PRESENT"
+        },
+        "deterministic_format_validation": {
+          "status": "PASS"
+        },
+        "final_grammar_audit": {
+          "status": "PASS"
+        }
+      }
+    }
+  ]
+}

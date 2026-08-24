@@ -1,0 +1,297 @@
+{
+  "run": {
+    "run_id": "we-v2-live-pilot-20260824",
+    "solver_version": "existing blind Solver (unchanged)",
+    "live_solver": true,
+    "blind_input_source": "analysis/we_v2_pilot/we_v2_pilot_solver_input.json",
+    "allowlist": [
+      "item_id",
+      "section",
+      "sentence",
+      "marked_parts"
+    ],
+    "microbatches": [
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+        "solver_file": "analysis/we_v2_pilot/raw/solver_we-v2-live-pilot-20260824-micro-01.json",
+        "invocation_id": "01a03253-4017-72d3-a99c-a71f82633d53",
+        "item_count": 3
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+        "solver_file": "analysis/we_v2_pilot/raw/solver_we-v2-live-pilot-20260824-micro-02.json",
+        "invocation_id": "01a03253-41eb-7f70-b405-84a24e87c5bf",
+        "item_count": 3
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+        "solver_file": "analysis/we_v2_pilot/raw/solver_we-v2-live-pilot-20260824-micro-03.json",
+        "invocation_id": "01a03253-4474-7621-ab39-5c1c1bc51c1a",
+        "item_count": 3
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+        "solver_file": "analysis/we_v2_pilot/raw/solver_we-v2-live-pilot-20260824-micro-04.json",
+        "invocation_id": "01a03253-46d2-7812-a1bb-cc133288221f",
+        "item_count": 3
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-05",
+        "solver_file": "analysis/we_v2_pilot/raw/solver_we-v2-live-pilot-20260824-micro-05.json",
+        "invocation_id": "01a03253-4a60-7272-a6c7-fc9c8fe408d3",
+        "item_count": 3
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-06",
+        "solver_file": "analysis/we_v2_pilot/raw/solver_we-v2-live-pilot-20260824-micro-06.json",
+        "invocation_id": "01a03253-4e0a-7030-9aac-6e384762dfa7",
+        "item_count": 3
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+        "solver_file": "analysis/we_v2_pilot/raw/solver_we-v2-live-pilot-20260824-micro-07.json",
+        "invocation_id": "01a03254-86ed-7911-8e88-2f77cff53aa8",
+        "item_count": 3
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-08",
+        "solver_file": "analysis/we_v2_pilot/raw/solver_we-v2-live-pilot-20260824-micro-08.json",
+        "invocation_id": "01a03254-8815-71a0-a9ad-35d4b2babab1",
+        "item_count": 3
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-09",
+        "solver_file": "analysis/we_v2_pilot/raw/solver_we-v2-live-pilot-20260824-micro-09.json",
+        "invocation_id": "01a03254-89b6-72e1-a416-6bf1944c1e30",
+        "item_count": 1
+      }
+    ]
+  },
+  "items": [
+    {
+      "item_id": "we-v2-pilot-001",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The subject head is the singular noun retreat, so the verb must be has, not have.",
+      "suggested_correction": "The retreat of the continental ice sheets that once covered northern Europe has left behind thick deposits of gravel and clay.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-002",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The plural subject humpback whales requires the plural possessive pronoun their, not its.",
+      "suggested_correction": "During the coldest months, humpback whales migrate toward the tropics in order to raise their calves in warm coastal water.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-003",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The quantifier should be most of the colonial merchants; the combination the most of is incorrect here.",
+      "suggested_correction": "Even after the British Parliament imposed duties on imported goods, most of the colonial merchants continued to trade abroad.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-004",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The demonstrative must agree with the plural noun instruments; this should be these.",
+      "suggested_correction": "these",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-005",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "Warehouse is a singular count noun and needs the indefinite article a in this context.",
+      "suggested_correction": "a warehouse",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-006",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "After the preposition on, the verb must be a gerund; depict should be depicting.",
+      "suggested_correction": "depicting",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-007",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The verb depend requires the preposition on; for is incorrect in this sentence.",
+      "suggested_correction": "on",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-008",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "After the causative verb makes, the following verb must be in the bare infinitive form rise, not rises.",
+      "suggested_correction": "rise",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-009",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The noun practices requires the adjective ritual; the adverb ritually cannot modify it in this phrase.",
+      "suggested_correction": "ritual",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-010",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The predicate after 'not only ... but also' must remain parallel with the coordinated present-tense verbs 'measures' and 'compares'; 'recording' should be the finite third-person singular form 'records'.",
+      "suggested_correction": "records the color change",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-011",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "After 'she also,' the sentence requires the past-tense verb 'exposed'; 'exposure' is a noun and cannot function as the predicate here.",
+      "suggested_correction": "but she also exposed",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-012",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The verb 'responded' requires the adverb 'rapidly,' not the adjective 'rapid'; the corrected sentence then has parallel past-tense predicates 'responded,' 'absorbed,' and 'remained'.",
+      "suggested_correction": "rapidly",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-013",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The marked word should be the adjective productive modifying nesting habitat; the other marked parts are acceptable.",
+      "suggested_correction": "productive",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-014",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The noun phrase requires expansion, not the verb expand, after the adjective steady; the other marked parts are acceptable.",
+      "suggested_correction": "expansion",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-015",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The fossil trackways are excavated from the quarry, so the participle must be passive; the other marked parts are acceptable.",
+      "suggested_correction": "excavated from",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-016",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "After expanded mobile clinics to express purpose, the verb should be the infinitive reach, not reaching.",
+      "ambiguity_detected": false,
+      "suggested_correction": "reach"
+    },
+    {
+      "item_id": "we-v2-pilot-017",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The solvent is being described as still present, so the adjective should be remaining, not remained.",
+      "ambiguity_detected": false,
+      "suggested_correction": "remaining"
+    },
+    {
+      "item_id": "we-v2-pilot-018",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The fragments are the object of the action in a passive construction, so were cataloged by is required instead of were cataloging by.",
+      "ambiguity_detected": false,
+      "suggested_correction": "cataloged by"
+    },
+    {
+      "item_id": "we-v2-pilot-019",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The passive construction after 'had been' requires a past participle: 'had been written about.' The marked word 'wrote' is a simple past form and is incorrect here.",
+      "suggested_correction": "written",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-020",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "'Due to' must be followed by a noun phrase, but it is followed by the finite clause 'the city expanded its recycling program.' A clause requires a conjunction such as 'because.'",
+      "suggested_correction": "Because",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-021",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The relative pronoun refers to the nonhuman noun 'maps,' so 'who' is incorrect. The sentence requires 'which' or 'that' in 'maps which merchants used.'",
+      "suggested_correction": "which",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-022",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The relative pronoun who refers to the singular noun young adult, so the verb must be receives rather than receive.",
+      "suggested_correction": "receives",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-023",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The noun phrase the antibodies produced by vaccinated patients already supplies the subject of bind; the additional pronoun they creates an ungrammatical redundant subject.",
+      "suggested_correction": "bind specifically",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-024",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "MEDIUM",
+      "reason": "The adverb automatically is awkwardly placed between the verb and its direct object; the standard placement here is before the verb in automatically optimized complex algorithms.",
+      "suggested_correction": "automatically optimized",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-025",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "Part A is incorrect because six suffixes are being compared, so the superlative form is required: \"the most frequent.\"",
+      "suggested_correction": "the most frequent",
+      "ambiguity_detected": false
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2-pilot-016",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "After expanded mobile clinics to express purpose, the verb should be the infinitive reach, not reaching.",
+      "ambiguity_detected": false,
+      "suggested_correction": "reach"
+    },
+    {
+      "item_id": "we-v2-pilot-017",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The solvent is being described as still present, so the adjective should be remaining, not remained.",
+      "ambiguity_detected": false,
+      "suggested_correction": "remaining"
+    },
+    {
+      "item_id": "we-v2-pilot-018",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The fragments are the object of the action in a passive construction, so were cataloged by is required instead of were cataloging by.",
+      "ambiguity_detected": false,
+      "suggested_correction": "cataloged by"
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "trace_source": "generator_output_qa_metadata",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-004",
+      "item_generation_order": 4,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+      "invocation_id": null,
+      "trace_source": "generator_output_qa_metadata",
+      "trace_note": "Phase evidence is reconstructed from the Generator v2 QA metadata; no grammar judgement is added here.",
+      "recorded_at_utc": "2026-08-24T05:29:46.882608+00:00",
+      "phases": {
+        "item_design_plan": {
+          "status": "PRESENT",
+          "fields": [
+            "primary_target",
+            "subtype",
+            "tested_error_type",
+            "difficulty",
+            "vocabulary_domain",
+            "correction_locality",
+            "decision_granularity",
+            "intended_error_position",
+            "correct_span_type"
+          ]
+        },
+        "clean_sentence": {
+          "status": "PRESENT",
+          "clean_form": "Modern observatories depend on these delicate instruments, which require frequent calibration to remain accurate during long exposures."
+        },
+        "clean_sentence_validation": {
+          "status": "PASS"
+        },
+        "one_error_mutation": {
+          "status": "PRESENT",
+          "error_form": "Modern observatories depend on this delicate instruments, which require frequent calibration to remain accurate during long exposures.",
+          "mutation_type": "determiner_number_substitution: plural demonstrative replaced by singular demonstrative before a plural head noun",
+          "minimal_correction": "this -> these"
+        },
+        "uniqueness_audit": {
+          "status": "PASS"
+        },
+        "four_local_span_selection": {
+          "status": "PRESENT"
+        },
+        "deterministic_format_validation": {
+          "status": "PASS"
+        },
+        "final_grammar_audit": {
+          "status": "PASS"
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-005",
+      "item_generation_order": 5,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+      "invocation_id": null,
+      "trace_source": "generator_output_qa_metadata",
+      "trace_note": "Phase evidence is reconstructed from the Generator v2 QA metadata; no grammar judgement is added here.",
+      "recorded_at_utc": "2026-08-24T05:29:46.882608+00:00",
+      "phases": {
+        "item_design_plan": {
+          "status": "PRESENT",
+          "fields": [
+            "primary_target",
+            "subtype",
+            "tested_error_type",
+            "difficulty",
+            "vocabulary_domain",
+            "correction_locality",
+            "decision_granularity",
+            "intended_error_position",
+            "correct_span_type"
+          ]
+        },
+        "clean_sentence": {
+          "status": "PRESENT",
+          "clean_form": "Because credit was scarce, the cooperative built a warehouse that allowed members to store grain until prices recovered in the spring."
+        },
+        "clean_sentence_validation": {
+          "status": "PASS"
+        },
+        "one_error_mutation": {
+          "status": "PRESENT",
+          "error_form": "Because credit was scarce, the cooperative built warehouse that allowed members to store grain until prices recovered in the spring.",
+          "mutation_type": "required_determiner_deletion: indefinite article removed from a singular count-noun direct object",
+          "minimal_correction": "insert the indefinite article a before warehouse"
+        },
+        "uniqueness_audit": {
+          "status": "PASS"
+        },
+        "four_local_span_selection": {
+          "status": "PRESENT"
+        },
+        "deterministic_format_validation": {
+          "status": "PASS"
+        },
+        "final_grammar_audit": {
+          "status": "PASS"
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-006",
+      "item_generation_order": 6,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+      "invocation_id": null,
+      "trace_source": "generator_output_qa_metadata",
+      "trace_note": "Phase evidence is reconstructed from the Generator v2 QA metadata; no grammar judgement is added here.",
+      "recorded_at_utc": "2026-08-24T05:29:46.882608+00:00",
+      "phases": {
+        "item_design_plan": {
+          "status": "PRESENT",
+          "fields": [
+            "primary_target",
+            "subtype",
+            "tested_error_type",
+            "difficulty",
+            "vocabulary_domain",
+            "correction_locality",
+            "decision_granularity",
+            "intended_error_position",
+            "correct_span_type"
+          ]
+        },
+        "clean_sentence": {
+          "status": "PRESENT",
+          "clean_form": "Although he had trained as a sculptor, the artist soon concentrated on depicting crowded market scenes that later collectors valued far more highly."
+        },
+        "clean_sentence_validation": {
+          "status": "PASS"
+        },
+        "one_error_mutation": {
+          "status": "PRESENT",
+          "error_form": "Although he had trained as a sculptor, the artist soon concentrated on depict crowded market scenes that later collectors valued far more highly.",
+          "mutation_type": "gerund_to_bare_verb_substitution: gerund complement of a preposition-taking verb replaced by the bare verb stem",
+          "minimal_correction": "depict -> depicting"
+        },
+        "uniqueness_audit": {
+          "status": "PASS"
+        },
+        "four_local_span_selection": {
+          "status": "PRESENT"
+        },
+        "deterministic_format_validation": {
+          "status": "PASS"
+        },
+        "final_grammar_audit": {
+          "status": "PASS"
+        }
+      }
+    }
+  ]
+}

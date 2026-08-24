@@ -1,0 +1,2940 @@
+{
+  "run": {
+    "run_id": "we-v2-live-pilot-20260824",
+    "run_type": "LIVE_PILOT",
+    "section": "Written Expression",
+    "generator_version": "Written Expression Generator v2.0",
+    "reviewer_version": "Written Expression Reviewer v2.0",
+    "solver_version": "existing blind Solver (unchanged)",
+    "orchestrator_policy": "existing consensus policy (unchanged)",
+    "live_generation": true,
+    "reused_smoke_artifacts": false,
+    "handwritten_items": false,
+    "aggregated_at_utc": "2026-08-24T06:41:18.413048+00:00",
+    "microbatches": [
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+        "items_file": "analysis/we_v2_pilot/raw/gen_we-v2-live-pilot-20260824-micro-01.json",
+        "phase_trace_file": "analysis/we_v2_pilot/raw/phase_we-v2-live-pilot-20260824-micro-01.json",
+        "item_count": 3,
+        "file_mtime_utc": "2026-08-24T05:29:46.880577+00:00"
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+        "items_file": "analysis/we_v2_pilot/raw/gen_we-v2-live-pilot-20260824-micro-02.json",
+        "phase_trace_file": "analysis/we_v2_pilot/raw/phase_we-v2-live-pilot-20260824-micro-02.json",
+        "item_count": 3,
+        "file_mtime_utc": "2026-08-24T05:29:46.890721+00:00"
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+        "items_file": "analysis/we_v2_pilot/raw/gen_we-v2-live-pilot-20260824-micro-03.json",
+        "phase_trace_file": "analysis/we_v2_pilot/raw/phase_we-v2-live-pilot-20260824-micro-03.json",
+        "item_count": 3,
+        "file_mtime_utc": "2026-08-24T05:29:46.893908+00:00"
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+        "items_file": "analysis/we_v2_pilot/raw/gen_we-v2-live-pilot-20260824-micro-04.json",
+        "phase_trace_file": "analysis/we_v2_pilot/raw/phase_we-v2-live-pilot-20260824-micro-04.json",
+        "item_count": 3,
+        "file_mtime_utc": "2026-08-24T05:29:46.897588+00:00"
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-05",
+        "items_file": "analysis/we_v2_pilot/raw/gen_we-v2-live-pilot-20260824-micro-05.json",
+        "phase_trace_file": "analysis/we_v2_pilot/raw/phase_we-v2-live-pilot-20260824-micro-05.json",
+        "item_count": 3,
+        "file_mtime_utc": "2026-08-24T05:29:46.913045+00:00"
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-06",
+        "items_file": "analysis/we_v2_pilot/raw/gen_we-v2-live-pilot-20260824-micro-06.json",
+        "phase_trace_file": "analysis/we_v2_pilot/raw/phase_we-v2-live-pilot-20260824-micro-06.json",
+        "item_count": 3,
+        "file_mtime_utc": "2026-08-24T05:29:46.921551+00:00"
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+        "items_file": "analysis/we_v2_pilot/raw/gen_we-v2-live-pilot-20260824-micro-07.json",
+        "phase_trace_file": "analysis/we_v2_pilot/raw/phase_we-v2-live-pilot-20260824-micro-07.json",
+        "item_count": 3,
+        "file_mtime_utc": "2026-08-24T05:29:46.926812+00:00"
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-08",
+        "items_file": "analysis/we_v2_pilot/raw/gen_we-v2-live-pilot-20260824-micro-08.json",
+        "phase_trace_file": "analysis/we_v2_pilot/raw/phase_we-v2-live-pilot-20260824-micro-08.json",
+        "item_count": 3,
+        "file_mtime_utc": "2026-08-24T05:29:46.929587+00:00"
+      },
+      {
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-09",
+        "items_file": "analysis/we_v2_pilot/raw/gen_we-v2-live-pilot-20260824-micro-09.json",
+        "phase_trace_file": "analysis/we_v2_pilot/raw/phase_we-v2-live-pilot-20260824-micro-09.json",
+        "item_count": 1,
+        "file_mtime_utc": "2026-08-24T05:29:46.929587+00:00"
+      }
+    ],
+    "aggregation_problems": []
+  },
+  "items": [
+    {
+      "item_id": "we-v2-pilot-001",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "subject-verb agreement across an intervening of-phrase",
+      "secondary_features": [
+        "subject-verb agreement across an intervening prepositional phrase",
+        "restrictive relative clause",
+        "present perfect"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "glacial geology",
+      "sentence": "The retreat of the continental ice sheets that once covered northern Europe have left behind thick deposits of gravel and clay.",
+      "marked_parts": {
+        "A": "that",
+        "B": "have",
+        "C": "thick",
+        "D": "gravel"
+      },
+      "correct_answer": "B",
+      "error_explanation": "The head of the subject noun phrase is the singular noun 'retreat'; the of-phrase 'of the continental ice sheets' and the relative clause 'that once covered northern Europe' only modify it and cannot supply the subject. A singular head requires the singular auxiliary 'has', so the plural 'have' is an agreement failure produced by attraction to the nearer plural noun. The relative clause already contains its own finite verb 'covered', so 'have left' cannot be construed inside it. 'that' correctly introduces a restrictive relative clause whose antecedent is 'ice sheets', 'thick' is an adjective correctly modifying 'deposits', and 'gravel' is a mass noun correctly used after 'deposits of'.",
+      "minimal_correction": "have -> has",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "four single-word spans; realized A=1, B=1, C=1, D=1, mean 1.0",
+        "coverage_profile": "planned 20-29%; realized 19.05% (4 marked tokens of 21). Four single-word spans in a 21-word sentence cannot reach 20%, so the planned 21-25 sentence region and the planned single-word span profile were kept and coverage landed in the official '<20%' bin, which is still inside the PREFERRED empirical band.",
+        "approximate_context_profile": "unmarked context before A (7 words), between A-B (4), B-C (2), C-D (2), and after D (2); 17 unmarked words in total",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 21,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.1905,
+          "unmarked_word_count": 17,
+          "gap_A_B": 4,
+          "gap_B_C": 2,
+          "gap_C_D": 2,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.7605,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.576,
+            "marked_coverage_ratio": 0.16,
+            "unmarked_word_count": 0.66,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.608,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.1
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              7
+            ],
+            "B": [
+              12
+            ],
+            "C": [
+              15
+            ],
+            "D": [
+              18
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+        "item_generation_order": 1,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "The retreat of the continental ice sheets that once covered northern Europe has left behind thick deposits of gravel and clay.",
+        "error_form": "The retreat of the continental ice sheets that once covered northern Europe have left behind thick deposits of gravel and clay.",
+        "minimal_correction": "have -> has",
+        "mutation_type": "finite auxiliary number inflection changed from singular 'has' to plural 'have', breaking agreement with the singular head noun 'retreat'",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-002",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "possessive determiner number agreement with its antecedent",
+      "secondary_features": [
+        "possessive determiner agreement with a plural antecedent",
+        "infinitive of purpose",
+        "superlative degree form"
+      ],
+      "tested_error_type": "incorrect_reference",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "marine biology",
+      "sentence": "During the coldest months, humpback whales migrate toward the tropics in order to raise its calves in warm coastal water.",
+      "marked_parts": {
+        "A": "coldest months",
+        "B": "migrate",
+        "C": "tropics",
+        "D": "its"
+      },
+      "correct_answer": "D",
+      "error_explanation": "The understood subject of the purpose infinitive 'to raise ... calves' is the matrix subject 'humpback whales', which is plural, so the possessive determiner must be the plural 'their'. The singular 'its' has no number-compatible antecedent anywhere in the sentence, since every other nominal ('the coldest months', 'the tropics', 'calves') is plural; the defect is therefore a formal number-agreement failure rather than a matter of preferred interpretation. 'coldest months' is a correctly formed superlative after 'the', 'migrate' correctly agrees with the plural subject 'whales', and 'the tropics' is a correctly used plural-only noun.",
+      "minimal_correction": "its -> their",
+      "grammar_metadata": {
+        "error_scope": "cross_clause",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "three single-word spans and one two-word span; realized A=2, B=1, C=1, D=1, mean 1.25",
+        "coverage_profile": "planned 20-29%; realized 25.0% (5 marked tokens of 20), inside the planned bin and inside the PREFERRED empirical band",
+        "approximate_context_profile": "unmarked context before A (2 words), between A-B (2), B-C (2), C-D (4), and after D (5); 15 unmarked words in total, equal to the official median",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.25,
+          "unmarked_word_count": 15,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 4,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.1472,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.492,
+            "marked_coverage_ratio": 0.456,
+            "unmarked_word_count": 0.528,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.568
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              2,
+              3
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              9
+            ],
+            "D": [
+              14
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+        "item_generation_order": 2,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "During the coldest months, humpback whales migrate toward the tropics in order to raise their calves in warm coastal water.",
+        "error_form": "During the coldest months, humpback whales migrate toward the tropics in order to raise its calves in warm coastal water.",
+        "minimal_correction": "its -> their",
+        "mutation_type": "possessive determiner number substitution: plural 'their' replaced by singular 'its', leaving the determiner without any number-compatible antecedent",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-003",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "redundant determiner after a quantifier phrase",
+      "secondary_features": [
+        "partitive quantifier phrase",
+        "article usage",
+        "adverbial clause introduced by 'after'"
+      ],
+      "tested_error_type": "extraneous_element",
+      "difficulty": "EASY",
+      "vocabulary_domain": "American colonial history",
+      "sentence": "Even after the British Parliament imposed duties on imported goods, the most of the colonial merchants continued to trade abroad.",
+      "marked_parts": {
+        "A": "after",
+        "B": "imposed duties",
+        "C": "the most",
+        "D": "merchants"
+      },
+      "correct_answer": "C",
+      "error_explanation": "In the partitive quantifier phrase 'most of the colonial merchants', the quantifier 'most' takes no preceding article, so the definite article in 'the most of' is an extraneous determiner and must be deleted. Standard written English licenses 'the most' only as a superlative marker before an adjective or adverb, not as the head of a partitive of-phrase functioning as a clause subject. 'after' correctly subordinates the finite clause that follows, 'imposed duties' is a correctly formed past-tense verb plus object, and 'merchants' is a correctly formed plural count noun.",
+      "minimal_correction": "the most -> most (delete the extraneous article 'the')",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "C",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "two single-word spans and two two-word spans; realized A=1, B=2, C=2, D=1, mean 1.5",
+        "coverage_profile": "planned 20-29%; realized 30.0% (6 marked tokens of 20). Six marked tokens in a 20-word sentence cannot fall below 30%, so the planned 16-20 sentence region and the planned span profile were kept and coverage landed in the official '30-39%' bin, which is still inside the PREFERRED empirical band.",
+        "approximate_context_profile": "unmarked context before A (1 word), between A-B (3), B-C (3), C-D (3), and after D (4); 14 unmarked words in total",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SHORT_PHRASE",
+          "C": "SHORT_PHRASE",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 1,
+            "B": 2,
+            "C": 2,
+            "D": 1
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.3,
+          "unmarked_word_count": 14,
+          "gap_A_B": 3,
+          "gap_B_C": 3,
+          "gap_C_D": 3,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.4199,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.492,
+            "marked_coverage_ratio": 0.664,
+            "unmarked_word_count": 0.464,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.312,
+            "gap_B_C": 0.292,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              5,
+              6
+            ],
+            "C": [
+              10,
+              11
+            ],
+            "D": [
+              15
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+        "item_generation_order": 3,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "Even after the British Parliament imposed duties on imported goods, most of the colonial merchants continued to trade abroad.",
+        "error_form": "Even after the British Parliament imposed duties on imported goods, the most of the colonial merchants continued to trade abroad.",
+        "minimal_correction": "the most -> most (delete the extraneous article 'the')",
+        "mutation_type": "insertion of an extraneous definite article before the partitive quantifier 'most'",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-004",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "demonstrative determiner number agreement with head noun",
+      "secondary_features": [
+        "non-restrictive relative clause",
+        "infinitive of purpose",
+        "predicate adjective after a linking verb"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "EASY",
+      "vocabulary_domain": "observational astronomy",
+      "sentence": "Modern observatories depend on this delicate instruments, which require frequent calibration to remain accurate during long exposures.",
+      "marked_parts": {
+        "A": "this",
+        "B": "which",
+        "C": "calibration",
+        "D": "accurate"
+      },
+      "correct_answer": "A",
+      "error_explanation": "The demonstrative determiner at A modifies the plural head noun ‘instruments’, and the plural verb ‘require’ in the following relative clause confirms that the noun must stay plural. A demonstrative determiner must agree in number with its head noun, so the singular ‘this’ is ungrammatical and the plural ‘these’ is required. B is the correct relative pronoun for an inanimate antecedent in a non-restrictive clause introduced by a comma; C is the correct nominal object of ‘require’; D is the predicate adjective required after the linking verb ‘remain’.",
+      "minimal_correction": "this -> these",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "four single-word spans",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 17,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.2353,
+          "unmarked_word_count": 13,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 2,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.7015,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.268,
+            "marked_coverage_ratio": 0.36,
+            "unmarked_word_count": 0.396,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.1
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              4
+            ],
+            "B": [
+              7
+            ],
+            "C": [
+              10
+            ],
+            "D": [
+              13
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+        "item_generation_order": 4,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "Modern observatories depend on these delicate instruments, which require frequent calibration to remain accurate during long exposures.",
+        "error_form": "Modern observatories depend on this delicate instruments, which require frequent calibration to remain accurate during long exposures.",
+        "minimal_correction": "this -> these",
+        "mutation_type": "determiner_number_substitution: plural demonstrative replaced by singular demonstrative before a plural head noun",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-005",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "missing article before a singular count noun",
+      "secondary_features": [
+        "adverbial clause of reason",
+        "restrictive relative clause",
+        "infinitive complement after allow"
+      ],
+      "tested_error_type": "missing_required_element",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "agricultural economics",
+      "sentence": "Because credit was scarce, the cooperative built warehouse that allowed members to store grain until prices recovered in the spring.",
+      "marked_parts": {
+        "A": "scarce",
+        "B": "warehouse",
+        "C": "store",
+        "D": "recovered"
+      },
+      "correct_answer": "B",
+      "error_explanation": "‘Warehouse’ at B is a singular count noun serving as the direct object of ‘built’, but it appears with no determiner at all. A singular count noun in English requires an article or another determiner, so a required element is missing and the phrase must read ‘built a warehouse’. A is a correct predicate adjective after ‘was’; C is the correct base form inside the infinitive complement licensed by ‘allowed members to’; D is the correct simple past form matching the past time frame established by ‘was’ and ‘built’.",
+      "minimal_correction": "built warehouse -> built a warehouse",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "four single-word spans",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.2,
+          "unmarked_word_count": 16,
+          "gap_A_B": 3,
+          "gap_B_C": 4,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.6869,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.492,
+            "marked_coverage_ratio": 0.232,
+            "unmarked_word_count": 0.588,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.312,
+            "gap_B_C": 0.54,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              3
+            ],
+            "B": [
+              7
+            ],
+            "C": [
+              12
+            ],
+            "D": [
+              16
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+        "item_generation_order": 5,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "Because credit was scarce, the cooperative built a warehouse that allowed members to store grain until prices recovered in the spring.",
+        "error_form": "Because credit was scarce, the cooperative built warehouse that allowed members to store grain until prices recovered in the spring.",
+        "minimal_correction": "insert the indefinite article a before warehouse",
+        "mutation_type": "required_determiner_deletion: indefinite article removed from a singular count-noun direct object",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-006",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "gerund required after a preposition-taking verb",
+      "secondary_features": [
+        "concessive adverbial clause",
+        "past perfect background tense",
+        "restrictive relative clause with object gap"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "art history",
+      "sentence": "Although he had trained as a sculptor, the artist soon concentrated on depict crowded market scenes that later collectors valued far more highly.",
+      "marked_parts": {
+        "A": "had trained",
+        "B": "sculptor",
+        "C": "depict",
+        "D": "that"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The verb ‘concentrate’ selects the preposition ‘on’, and a preposition must be followed by a noun phrase or a gerund, never by a bare verb stem. C must therefore be the gerund ‘depicting’. ‘Depict’ is not a noun and cannot be reanalyzed as an infinitive here because ‘on’ is a preposition, so ‘on depict’ is unambiguously ungrammatical. A is a correct past perfect verb phrase marking earlier training; B is a correct singular count noun after ‘as a’; D is the correct restrictive relative pronoun filling the object gap of ‘valued’.",
+      "minimal_correction": "depict -> depicting",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 23,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2174,
+          "unmarked_word_count": 18,
+          "gap_A_B": 2,
+          "gap_B_C": 5,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "VERB_FRAME",
+          "format_distribution_distance": 0.5951,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.74,
+            "marked_coverage_ratio": 0.296,
+            "unmarked_word_count": 0.748,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.78,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              2,
+              3
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              12
+            ],
+            "D": [
+              16
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+        "item_generation_order": 6,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "Although he had trained as a sculptor, the artist soon concentrated on depicting crowded market scenes that later collectors valued far more highly.",
+        "error_form": "Although he had trained as a sculptor, the artist soon concentrated on depict crowded market scenes that later collectors valued far more highly.",
+        "minimal_correction": "depict -> depicting",
+        "mutation_type": "gerund_to_bare_verb_substitution: gerund complement of a preposition-taking verb replaced by the bare verb stem",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-007",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "verb plus required preposition collocation",
+      "secondary_features": [
+        "plant adaptation",
+        "prepositional complement",
+        "coordinated predicate"
+      ],
+      "tested_error_type": "wrong_preposition_collocation",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "plant physiology",
+      "sentence": "During prolonged drought, many desert plants store water in fleshy stems and depend for deep roots to survive.",
+      "marked_parts": {
+        "A": "prolonged",
+        "B": "store",
+        "C": "fleshy",
+        "D": "for"
+      },
+      "correct_answer": "D",
+      "error_explanation": "The verb depend requires the preposition on before its complement; depend for deep roots is not standard written English.",
+      "minimal_correction": "Replace \"for\" with \"on\".",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "four single-word spans",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 18,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.2222,
+          "unmarked_word_count": 14,
+          "gap_A_B": 4,
+          "gap_B_C": 2,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.6532,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.36,
+            "marked_coverage_ratio": 0.336,
+            "unmarked_word_count": 0.464,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.608,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              9
+            ],
+            "D": [
+              13
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+        "item_generation_order": 7,
+        "invocation_id": "01a03235-7706-7951-88d0-d4dc0c5c20f0",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "During prolonged drought, many desert plants store water in fleshy stems and depend on deep roots to survive.",
+        "error_form": "During prolonged drought, many desert plants store water in fleshy stems and depend for deep roots to survive.",
+        "minimal_correction": "Replace \"for\" with \"on\".",
+        "mutation_type": "preposition substitution in a verb-governed collocation",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-008",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "bare infinitive required in a causative complement",
+      "secondary_features": [
+        "atmospheric convection",
+        "embedded that-clause",
+        "causative verb frame"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "HARD",
+      "vocabulary_domain": "atmospheric science",
+      "sentence": "As the atmosphere warms, stronger convection makes water vapor rises rapidly, and meteorologists observe that high-altitude winds redistribute clouds across the upper troposphere.",
+      "marked_parts": {
+        "A": "warms",
+        "B": "rises",
+        "C": "observe",
+        "D": "winds redistribute clouds"
+      },
+      "correct_answer": "B",
+      "error_explanation": "The causative verb makes takes an object followed by a bare infinitive, so water vapor must rise rather than rises.",
+      "minimal_correction": "Replace \"rises\" with \"rise\".",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "three single-word spans and one clause-like span",
+        "coverage_profile": "26-35%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "CLAUSE_OR_CLAUSE_LIKE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 23,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 3
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 3,
+          "marked_coverage_ratio": 0.2609,
+          "unmarked_word_count": 17,
+          "gap_A_B": 5,
+          "gap_B_C": 3,
+          "gap_C_D": 2,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "VERB_FRAME",
+          "format_distribution_distance": 0.562,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.74,
+            "marked_coverage_ratio": 0.496,
+            "unmarked_word_count": 0.66,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.92,
+            "gap_A_B": 0.884,
+            "gap_B_C": 0.292,
+            "gap_C_D": 0.1
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              3
+            ],
+            "B": [
+              9
+            ],
+            "C": [
+              13
+            ],
+            "D": [
+              16,
+              17,
+              18
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+        "item_generation_order": 8,
+        "invocation_id": "01a03235-7706-7951-88d0-d4dc0c5c20f0",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "As the atmosphere warms, stronger convection makes water vapor rise rapidly, and meteorologists observe that high-altitude winds redistribute clouds across the upper troposphere.",
+        "error_form": "As the atmosphere warms, stronger convection makes water vapor rises rapidly, and meteorologists observe that high-altitude winds redistribute clouds across the upper troposphere.",
+        "minimal_correction": "Replace \"rises\" with \"rise\".",
+        "mutation_type": "finite-form substitution after causative make plus object",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-009",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "coordinated noun phrases requiring the same word class",
+      "secondary_features": [
+        "cultural anthropology",
+        "coordinated noun phrases",
+        "restrictive relative clause"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "cultural anthropology",
+      "sentence": "Cultural anthropologists examine the migration of families, the exchange of local goods, and the ritually practices that connect villages across generations in remote regions.",
+      "marked_parts": {
+        "A": "the migration",
+        "B": "the exchange",
+        "C": "goods",
+        "D": "ritually"
+      },
+      "correct_answer": "D",
+      "error_explanation": "The coordinated phrase requires an adjective to modify the noun practices; ritually is an adverb, whereas ritual practices is the grammatical form.",
+      "minimal_correction": "Replace \"ritually\" with \"ritual\".",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "WORD_CLASS",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "two single-word spans and two two-word spans",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SHORT_PHRASE",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 24,
+          "span_word_counts": {
+            "A": 2,
+            "B": 2,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.25,
+          "unmarked_word_count": 18,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 2,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "decision_granularity": "WORD_CLASS",
+          "format_distribution_distance": 0.7001,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.824,
+            "marked_coverage_ratio": 0.456,
+            "unmarked_word_count": 0.748,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.1
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              3,
+              4
+            ],
+            "B": [
+              7,
+              8
+            ],
+            "C": [
+              11
+            ],
+            "D": [
+              14
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+        "item_generation_order": 9,
+        "invocation_id": "01a03235-7706-7951-88d0-d4dc0c5c20f0",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Cultural anthropologists examine the migration of families, the exchange of local goods, and the ritual practices that connect villages across generations in remote regions.",
+        "error_form": "Cultural anthropologists examine the migration of families, the exchange of local goods, and the ritually practices that connect villages across generations in remote regions.",
+        "minimal_correction": "Replace \"ritually\" with \"ritual\".",
+        "mutation_type": "adverb substitution for an adjective in a coordinated noun phrase",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-010",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "coordinated verb phrases requiring the same verb form",
+      "secondary_features": [
+        "not_only_but_also_coordination",
+        "finite_verb_parallelism"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "analytical chemistry",
+      "sentence": "The analytical team not only measures the solution's acidity but also recording the color change and compares the results with a calibrated standard.",
+      "marked_parts": {
+        "A": "measures",
+        "B": "solution's acidity",
+        "C": "recording the color change",
+        "D": "compares"
+      },
+      "correct_answer": "C",
+      "error_explanation": "After not only measures, the coordinated verb phrase after but also must use the same finite form; recording should be records.",
+      "minimal_correction": "records the color change",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "C",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "two single-word spans and two short phrases",
+        "coverage_profile": "26-35%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SHORT_PHRASE",
+          "C": "SHORT_PHRASE",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 23,
+          "span_word_counts": {
+            "A": 1,
+            "B": 2,
+            "C": 4,
+            "D": 1
+          },
+          "mean_span_length": 2.0,
+          "max_span_length": 4,
+          "marked_coverage_ratio": 0.3478,
+          "unmarked_word_count": 15,
+          "gap_A_B": 1,
+          "gap_B_C": 2,
+          "gap_C_D": 1,
+          "correct_span_word_count": 4,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "VERB_FRAME",
+          "format_distribution_distance": 1.3859,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.74,
+            "marked_coverage_ratio": 0.832,
+            "unmarked_word_count": 0.528,
+            "mean_span_length": 0.972,
+            "max_span_length": 0.988,
+            "gap_A_B": 0.036,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.024
+          },
+          "format_band_status": "EXTREME",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "EXTREME",
+            "max_span_length": "EXTREME",
+            "gap_A_B": "WARNING",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "EXTREME"
+          },
+          "span_token_indices": {
+            "A": [
+              5
+            ],
+            "B": [
+              7,
+              8
+            ],
+            "C": [
+              11,
+              12,
+              13,
+              14
+            ],
+            "D": [
+              16
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+        "item_generation_order": 10,
+        "invocation_id": "01a03235-7893-7ac0-abf7-05f0b02a80bc",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "The analytical team not only measures the solution's acidity but also records the color change and compares the results with a calibrated standard.",
+        "error_form": "The analytical team not only measures the solution's acidity but also recording the color change and compares the results with a calibrated standard.",
+        "minimal_correction": "records the color change",
+        "mutation_type": "finite-verb-to-present-participle substitution in a coordinated verb phrase",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "WARN"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-011",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "correlative not only ... but also parallelism",
+      "secondary_features": [
+        "fronted_not_only_inversion",
+        "finite_clause_parallelism"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "HARD",
+      "vocabulary_domain": "nineteenth-century American literature",
+      "sentence": "Not only did Edith Wharton challenge the conventions of nineteenth-century fiction, but she also exposure the social anxieties that shaped its most celebrated narratives and influenced later American writers.",
+      "marked_parts": {
+        "A": "challenge",
+        "B": "but she also exposure",
+        "C": "shaped",
+        "D": "influenced"
+      },
+      "correct_answer": "B",
+      "error_explanation": "The second coordinated clause requires the finite past-tense verb exposed, but exposure is a noun and therefore the wrong part of speech in that predicate.",
+      "minimal_correction": "but she also exposed",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "WORD_CLASS",
+        "intended_error_position": "B",
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "26-30",
+        "expected_span_profile": "three single-word spans and one clause-like span",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "CLAUSE_OR_CLAUSE_LIKE",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 29,
+          "span_word_counts": {
+            "A": 1,
+            "B": 4,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.75,
+          "max_span_length": 4,
+          "marked_coverage_ratio": 0.2414,
+          "unmarked_word_count": 22,
+          "gap_A_B": 5,
+          "gap_B_C": 4,
+          "gap_C_D": 5,
+          "correct_span_word_count": 4,
+          "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "WORD_CLASS",
+          "format_distribution_distance": 1.5632,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.984,
+            "marked_coverage_ratio": 0.424,
+            "unmarked_word_count": 0.936,
+            "mean_span_length": 0.916,
+            "max_span_length": 0.988,
+            "gap_A_B": 0.884,
+            "gap_B_C": 0.54,
+            "gap_C_D": 0.832
+          },
+          "format_band_status": "EXTREME",
+          "metric_band_status": {
+            "sentence_word_count": "EXTREME",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "WARNING",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "EXTREME",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              5
+            ],
+            "B": [
+              11,
+              12,
+              13,
+              14
+            ],
+            "C": [
+              19
+            ],
+            "D": [
+              25
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+        "item_generation_order": 11,
+        "invocation_id": "01a03235-7893-7ac0-abf7-05f0b02a80bc",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Not only did Edith Wharton challenge the conventions of nineteenth-century fiction, but she also exposed the social anxieties that shaped its most celebrated narratives and influenced later American writers.",
+        "error_form": "Not only did Edith Wharton challenge the conventions of nineteenth-century fiction, but she also exposure the social anxieties that shaped its most celebrated narratives and influenced later American writers.",
+        "minimal_correction": "but she also exposed",
+        "mutation_type": "finite verb to noun substitution in the second correlative clause",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "WARN"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-012",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adjective used where an adverb is required",
+      "secondary_features": [
+        "derived_adverb",
+        "coordinated_finite_verbs"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "EASY",
+      "vocabulary_domain": "structural engineering",
+      "sentence": "During the load test, the reinforced beam responded rapid, absorbed vibration effectively, and remained structurally sound throughout the experiment.",
+      "marked_parts": {
+        "A": "rapid",
+        "B": "vibration",
+        "C": "remained",
+        "D": "sound"
+      },
+      "correct_answer": "A",
+      "error_explanation": "The adjective rapid is used to modify the verb responded; the adverb rapidly is required.",
+      "minimal_correction": "rapidly",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "four single-word spans",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 19,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.2105,
+          "unmarked_word_count": 15,
+          "gap_A_B": 1,
+          "gap_B_C": 2,
+          "gap_C_D": 1,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "MORPHOLOGY",
+          "format_distribution_distance": 0.6486,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.428,
+            "marked_coverage_ratio": 0.288,
+            "unmarked_word_count": 0.528,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.036,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.024
+          },
+          "format_band_status": "EXTREME",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "WARNING",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "EXTREME"
+          },
+          "span_token_indices": {
+            "A": [
+              8
+            ],
+            "B": [
+              10
+            ],
+            "C": [
+              13
+            ],
+            "D": [
+              15
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+        "item_generation_order": 12,
+        "invocation_id": "01a03235-7893-7ac0-abf7-05f0b02a80bc",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "During the load test, the reinforced beam responded rapidly, absorbed vibration effectively, and remained structurally sound throughout the experiment.",
+        "error_form": "During the load test, the reinforced beam responded rapid, absorbed vibration effectively, and remained structurally sound throughout the experiment.",
+        "minimal_correction": "rapidly",
+        "mutation_type": "adjective-to-adverb substitution",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "WARN"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-013",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "noun used where an adjective is required",
+      "secondary_features": [
+        "that-clause complement of a factive verb",
+        "adverb premodifying an attributive adjective",
+        "plural subject-verb agreement inside the that-clause"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "ornithology",
+      "sentence": "Field ornithologists have long known that the coastal marshes provide unusually production nesting habitat for migratory shorebirds.",
+      "marked_parts": {
+        "A": "known",
+        "B": "marshes",
+        "C": "production",
+        "D": "for"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The adverb \"unusually\" premodifies the attributive slot in front of the noun phrase \"nesting habitat,\" and that slot must be filled by an adjective. \"Production\" is a noun, and an adverb cannot premodify a noun, so the derivational adjective \"productive\" is required. A is the correct past participle after \"have long\"; B is the plural noun that licenses the plural verb \"provide\"; D is the preposition standardly governed by \"habitat.\"",
+      "minimal_correction": "Replace \"production\" with \"productive.\"",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20 words",
+        "expected_span_profile": "four single-word spans",
+        "coverage_profile": "20-29% marked coverage",
+        "approximate_context_profile": "four unmarked words before A, unmarked context between each pair of spans, and two unmarked words after D",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {}
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-05",
+        "item_generation_order": 13,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Field ornithologists have long known that the coastal marshes provide unusually productive nesting habitat for migratory shorebirds.",
+        "error_form": "Field ornithologists have long known that the coastal marshes provide unusually production nesting habitat for migratory shorebirds.",
+        "minimal_correction": "production -> productive",
+        "mutation_type": "derivational_form_substitution_adjective_to_deverbal_noun",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-014",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "verb form used where a nominal is required",
+      "secondary_features": [
+        "that-clause complement",
+        "comparative correlative less ... than",
+        "coordinated prepositional phrases governed by depend on"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "urban sociology",
+      "sentence": "Urban sociologists have argued that neighborhood stability depends less on average income than on the steady expand of local civic institutions.",
+      "marked_parts": {
+        "A": "argued",
+        "B": "depends",
+        "C": "than",
+        "D": "expand"
+      },
+      "correct_answer": "D",
+      "error_explanation": "The determiner \"the\" and the attributive adjective \"steady\" open a noun phrase that serves as the object of the preposition \"on,\" so the head of that phrase must be a noun. \"Expand\" is a base-form verb and cannot head a noun phrase, so the deverbal noun \"expansion\" is required. A is the correct past participle after \"have\"; B agrees with the singular subject \"stability\"; C is the correlative standardly required by \"less.\"",
+      "minimal_correction": "Replace \"expand\" with \"expansion.\"",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25 words",
+        "expected_span_profile": "four single-word spans",
+        "coverage_profile": "16-25% marked coverage",
+        "approximate_context_profile": "three unmarked words before A, unmarked context between each pair of spans, and four unmarked words after D",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {}
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-05",
+        "item_generation_order": 14,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Urban sociologists have argued that neighborhood stability depends less on average income than on the steady expansion of local civic institutions.",
+        "error_form": "Urban sociologists have argued that neighborhood stability depends less on average income than on the steady expand of local civic institutions.",
+        "minimal_correction": "expand -> expansion",
+        "mutation_type": "derivational_form_substitution_deverbal_noun_to_base_verb",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-015",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "past participle required in a reduced relative clause",
+      "secondary_features": [
+        "reduced from relative clause",
+        "passive voice",
+        "that-clause complement after persuade",
+        "present perfect main verb"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "paleontology",
+      "sentence": "Fossil trackways excavating from a limestone quarry in southern Utah have persuaded many paleontologists that several large theropods hunted in coordinated groups.",
+      "marked_parts": {
+        "A": "excavating from",
+        "B": "southern",
+        "C": "persuaded",
+        "D": "several large theropods"
+      },
+      "correct_answer": "A",
+      "error_explanation": "The postmodifier attached to \"Fossil trackways\" is a relative clause reduced from \"that were excavated from a limestone quarry,\" so it requires the past participle of the transitive verb. The present participle \"excavating\" makes the inanimate trackways the agent and leaves the transitive verb \"excavate\" with no object, which is not well formed; only the passive past participle \"excavated\" is possible in this slot. B is a correct attributive adjective, C is the correct past participle inside the present perfect \"have persuaded,\" and D is a correct plural quantified noun phrase.",
+      "minimal_correction": "Replace \"excavating from\" with \"excavated from.\"",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25 words",
+        "expected_span_profile": "two single-word spans and two short phrases",
+        "coverage_profile": "26-35% marked coverage",
+        "approximate_context_profile": "two unmarked words before A, unmarked context between each pair of spans, and four unmarked words after D",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {}
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-05",
+        "item_generation_order": 15,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Fossil trackways excavated from a limestone quarry in southern Utah have persuaded many paleontologists that several large theropods hunted in coordinated groups.",
+        "error_form": "Fossil trackways excavating from a limestone quarry in southern Utah have persuaded many paleontologists that several large theropods hunted in coordinated groups.",
+        "minimal_correction": "excavating from -> excavated from",
+        "mutation_type": "participle_form_substitution_past_participle_to_present_participle",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-016",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "infinitive of purpose in the wrong nonfinite form",
+      "secondary_features": [
+        "purpose infinitive",
+        "gerund-versus-infinitive form contrast"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "public health",
+      "sentence": "Public health agencies expanded mobile clinics to reaching residents in remote villages during the annual nationwide vaccination campaign.",
+      "marked_parts": {
+        "A": "agencies",
+        "B": "reaching",
+        "C": "remote",
+        "D": "vaccination campaign"
+      },
+      "correct_answer": "B",
+      "error_explanation": "The purpose infinitive marker to must be followed by the base form reach, not the -ing form reaching.",
+      "minimal_correction": "reaching -> reach",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20 words",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "coverage_profile": "20-29% marked coverage",
+        "approximate_context_profile": "three unmarked words before A, unmarked context between each pair of spans, and no fewer than two unmarked words after D",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 18,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 2
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2778,
+          "unmarked_word_count": 13,
+          "gap_A_B": 4,
+          "gap_B_C": 2,
+          "gap_C_D": 5,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "VERB_FRAME",
+          "format_distribution_distance": 0.3327,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.36,
+            "marked_coverage_ratio": 0.544,
+            "unmarked_word_count": 0.396,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.608,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.832
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              2
+            ],
+            "B": [
+              7
+            ],
+            "C": [
+              10
+            ],
+            "D": [
+              16,
+              17
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-06",
+        "item_generation_order": 16,
+        "invocation_id": "01a03235-7a77-7c10-be7a-0965b702316d",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Public health agencies expanded mobile clinics to reach residents in remote villages during the annual nationwide vaccination campaign.",
+        "error_form": "Public health agencies expanded mobile clinics to reaching residents in remote villages during the annual nationwide vaccination campaign.",
+        "minimal_correction": "reaching -> reach",
+        "mutation_type": "purpose_infinitive_base_form_to_present_participle_substitution",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-017",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "present versus past participle as a prenominal modifier",
+      "secondary_features": [
+        "attributive participle",
+        "intransitive participle modifier"
+      ],
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "HARD",
+      "vocabulary_domain": "materials science",
+      "sentence": "The materials scientists measured the remained solvent after the porous membrane had undergone repeated heating and cooling cycles under controlled laboratory conditions.",
+      "marked_parts": {
+        "A": "The",
+        "B": "scientists",
+        "C": "remained",
+        "D": "porous"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The prenominal modifier before solvent must use the present participle remaining; remained is not a valid attributive form of the intransitive verb remain in this position.",
+      "minimal_correction": "remained -> remaining",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25 words",
+        "expected_span_profile": "four single-word spans",
+        "coverage_profile": "16-25% marked coverage",
+        "approximate_context_profile": "sentence-initial determiner A, unmarked context between each pair of spans, and twelve unmarked words after D",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 22,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.1818,
+          "unmarked_word_count": 18,
+          "gap_A_B": 1,
+          "gap_B_C": 2,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "MORPHOLOGY",
+          "format_distribution_distance": 0.8596,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.664,
+            "marked_coverage_ratio": 0.152,
+            "unmarked_word_count": 0.748,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.036,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "WARNING",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "WARNING",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              0
+            ],
+            "B": [
+              2
+            ],
+            "C": [
+              5
+            ],
+            "D": [
+              9
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-06",
+        "item_generation_order": 17,
+        "invocation_id": "01a03235-7a77-7c10-be7a-0965b702316d",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "The materials scientists measured the remaining solvent after the porous membrane had undergone repeated heating and cooling cycles under controlled laboratory conditions.",
+        "error_form": "The materials scientists measured the remained solvent after the porous membrane had undergone repeated heating and cooling cycles under controlled laboratory conditions.",
+        "minimal_correction": "remained -> remaining",
+        "mutation_type": "prenominal_present_participle_to_past_participle_substitution",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "WARN"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-018",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "passive voice required by an inanimate patient subject",
+      "secondary_features": [
+        "agentive by-phrase",
+        "passive participle selection"
+      ],
+      "tested_error_type": "wrong_voice",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "archaeology",
+      "sentence": "The pottery fragments were carefully cataloging by the archaeological team before the site was reopened to visitors after extensive preservation work in spring.",
+      "marked_parts": {
+        "A": "The",
+        "B": "cataloging by",
+        "C": "site",
+        "D": "extensive preservation"
+      },
+      "correct_answer": "B",
+      "error_explanation": "The agentive by-phrase requires the passive past participle cataloged; the active progressive form cataloging cannot occupy this passive construction.",
+      "minimal_correction": "cataloging by -> cataloged by",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "B",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25 words",
+        "expected_span_profile": "two single-word spans and two short phrases",
+        "coverage_profile": "26-35% marked coverage",
+        "approximate_context_profile": "sentence-initial determiner A, unmarked context between each pair of spans, and four unmarked words after D",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SHORT_PHRASE",
+          "C": "SINGLE_WORD",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 23,
+          "span_word_counts": {
+            "A": 1,
+            "B": 2,
+            "C": 1,
+            "D": 2
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2609,
+          "unmarked_word_count": 17,
+          "gap_A_B": 4,
+          "gap_B_C": 5,
+          "gap_C_D": 5,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "VERB_FRAME",
+          "format_distribution_distance": 0.562,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.74,
+            "marked_coverage_ratio": 0.496,
+            "unmarked_word_count": 0.66,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.608,
+            "gap_B_C": 0.78,
+            "gap_C_D": 0.832
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              0
+            ],
+            "B": [
+              5,
+              6
+            ],
+            "C": [
+              12
+            ],
+            "D": [
+              18,
+              19
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-06",
+        "item_generation_order": 18,
+        "invocation_id": "01a03235-7a77-7c10-be7a-0965b702316d",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "The pottery fragments were carefully cataloged by the archaeological team before the site was reopened to visitors after extensive preservation work in spring.",
+        "error_form": "The pottery fragments were carefully cataloging by the archaeological team before the site was reopened to visitors after extensive preservation work in spring.",
+        "minimal_correction": "cataloging by -> cataloged by",
+        "mutation_type": "passive_past_participle_to_active_progressive_form_substitution",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-019",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "perfect auxiliary followed by the wrong participle form",
+      "secondary_features": [
+        "past perfect",
+        "passive voice",
+        "music history context"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "music history",
+      "sentence": "By the late nineteenth century, several composers had been widely and frequently wrote about by critics, influencing modern concert traditions.",
+      "marked_parts": {
+        "A": "the late",
+        "B": "several",
+        "C": "been",
+        "D": "wrote"
+      },
+      "correct_answer": "D",
+      "error_explanation": "After the passive perfect auxiliary sequence \"had been,\" the past participle \"written\" is required; \"wrote\" is a finite past-tense form.",
+      "minimal_correction": "By the late nineteenth century, several composers had been widely and frequently written about by critics, influencing modern concert traditions.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.25,
+          "unmarked_word_count": 15,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "VERB_FRAME",
+          "format_distribution_distance": 0.1472,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.492,
+            "marked_coverage_ratio": 0.456,
+            "unmarked_word_count": 0.528,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1,
+              2
+            ],
+            "B": [
+              5
+            ],
+            "C": [
+              8
+            ],
+            "D": [
+              12
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+        "item_generation_order": 19,
+        "invocation_id": "01a03235-7cb0-7eb1-883f-da77fe9f1212",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "By the late nineteenth century, several composers had been widely and frequently written about by critics, influencing modern concert traditions.",
+        "error_form": "By the late nineteenth century, several composers had been widely and frequently wrote about by critics, influencing modern concert traditions.",
+        "minimal_correction": "By the late nineteenth century, several composers had been widely and frequently written about by critics, influencing modern concert traditions.",
+        "mutation_type": "wrong_verb_form: replaced passive past participle written with finite past-tense wrote",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-020",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "clausal subordinator required where a prepositional connector appears",
+      "secondary_features": [
+        "cause relationship",
+        "finite subordinate clause",
+        "environmental policy context"
+      ],
+      "tested_error_type": "incorrect_subordinator",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "environmental policy",
+      "sentence": "Due to the city expanded its recycling program, household waste declined substantially, and residents began sorting more materials at home during the following year.",
+      "marked_parts": {
+        "A": "Due to",
+        "B": "recycling program",
+        "C": "declined",
+        "D": "began"
+      },
+      "correct_answer": "A",
+      "error_explanation": "\"Due to\" is a prepositional connector that cannot introduce the following subject-and-finite-verb clause; the clause requires the subordinating conjunction \"Because.\"",
+      "minimal_correction": "Because the city expanded its recycling program, household waste declined substantially, and residents began sorting more materials at home during the following year.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "CLAUSE_RELATION",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "two short phrases and two single-word spans",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SHORT_PHRASE",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 24,
+          "span_word_counts": {
+            "A": 2,
+            "B": 2,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.25,
+          "unmarked_word_count": 18,
+          "gap_A_B": 4,
+          "gap_B_C": 2,
+          "gap_C_D": 3,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "CLAUSE_RELATION",
+          "format_distribution_distance": 0.7001,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.824,
+            "marked_coverage_ratio": 0.456,
+            "unmarked_word_count": 0.748,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.608,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              0,
+              1
+            ],
+            "B": [
+              6,
+              7
+            ],
+            "C": [
+              10
+            ],
+            "D": [
+              14
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+        "item_generation_order": 20,
+        "invocation_id": "01a03235-7cb0-7eb1-883f-da77fe9f1212",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Because the city expanded its recycling program, household waste declined substantially, and residents began sorting more materials at home during the following year.",
+        "error_form": "Due to the city expanded its recycling program, household waste declined substantially, and residents began sorting more materials at home during the following year.",
+        "minimal_correction": "Because the city expanded its recycling program, household waste declined substantially, and residents began sorting more materials at home during the following year.",
+        "mutation_type": "incorrect_subordinator: replaced subordinating conjunction Because with prepositional connector Due to",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-021",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative marker selection determined by the antecedent",
+      "secondary_features": [
+        "restrictive relative clause",
+        "inanimate antecedent",
+        "historical geography context"
+      ],
+      "tested_error_type": "incorrect_relative_marker",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "historical geography",
+      "sentence": "Historical geographers carefully studied old coastal maps who merchants used to trace river routes across the interior before modern borders were established.",
+      "marked_parts": {
+        "A": "geographers",
+        "B": "old",
+        "C": "who",
+        "D": "trace"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The antecedent \"maps\" is inanimate, so the restrictive relative clause requires \"that\" rather than the person-oriented marker \"who.\"",
+      "minimal_correction": "Historical geographers carefully studied old coastal maps that merchants used to trace river routes across the interior before modern borders were established.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "four single-word spans",
+        "coverage_profile": "16-25%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 22,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.1818,
+          "unmarked_word_count": 18,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.8596,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.664,
+            "marked_coverage_ratio": 0.152,
+            "unmarked_word_count": 0.748,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              4
+            ],
+            "C": [
+              7
+            ],
+            "D": [
+              11
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+        "item_generation_order": 21,
+        "invocation_id": "01a03235-7cb0-7eb1-883f-da77fe9f1212",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Historical geographers carefully studied old coastal maps that merchants used to trace river routes across the interior before modern borders were established.",
+        "error_form": "Historical geographers carefully studied old coastal maps who merchants used to trace river routes across the interior before modern borders were established.",
+        "minimal_correction": "Historical geographers carefully studied old coastal maps that merchants used to trace river routes across the interior before modern borders were established.",
+        "mutation_type": "incorrect_relative_marker: replaced relative marker that with person-oriented who",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-022",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative clause verb agreeing with the antecedent head",
+      "secondary_features": [
+        "restrictive relative clause",
+        "intervening prepositional phrase",
+        "agreement dependency"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "HARD",
+      "vocabulary_domain": "developmental psychology",
+      "sentence": "Developmental psychologists observed that a young adult with several coping strategies who receive supportive counseling eventually adapts during stressful academic transitions.",
+      "marked_parts": {
+        "A": "observed",
+        "B": "young adult",
+        "C": "coping",
+        "D": "receive"
+      },
+      "correct_answer": "D",
+      "error_explanation": "The restrictive relative pronoun who refers to the singular human antecedent young adult, not to the intervening plural noun strategies. The relative-clause verb therefore must be singular receives; the plural receive is the one subject-verb agreement error. The matrix verb observed correctly agrees with psychologists, eventually adapts correctly agrees with young adult, and the prepositional phrase with several coping strategies does not create another agreement relation.",
+      "minimal_correction": "receive -> receives",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "coverage_profile": "planned 20-29%; realized 23.81% (5 marked tokens of 21), inside the planned bin and the PREFERRED empirical band",
+        "approximate_context_profile": "unmarked context before A (2 words), between A-B (2), B-C (2), C-D (2), and after D (8); 16 unmarked words in total",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SHORT_PHRASE",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 21,
+          "span_word_counts": {
+            "A": 1,
+            "B": 2,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2381,
+          "unmarked_word_count": 16,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 2,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.2705,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.576,
+            "marked_coverage_ratio": 0.392,
+            "unmarked_word_count": 0.588,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.1
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              2
+            ],
+            "B": [
+              5,
+              6
+            ],
+            "C": [
+              9
+            ],
+            "D": [
+              12
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-08",
+        "item_generation_order": 22,
+        "invocation_id": "01a03235-7f17-78f2-b427-03f4f33d0499",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Developmental psychologists observed that a young adult with several coping strategies who receives supportive counseling eventually adapts during stressful academic transitions.",
+        "error_form": "Developmental psychologists observed that a young adult with several coping strategies who receive supportive counseling eventually adapts during stressful academic transitions.",
+        "minimal_correction": "receive -> receives",
+        "mutation_type": "singular-to-plural finite verb mutation inside a restrictive relative clause",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-023",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "resumptive subject pronoun after a full subject noun phrase",
+      "secondary_features": [
+        "resumptive pronoun error",
+        "participial modifier",
+        "transitive verb clause"
+      ],
+      "tested_error_type": "double_subject",
+      "difficulty": "EASY",
+      "vocabulary_domain": "immunology",
+      "sentence": "During immunological studies, the antibodies produced by vaccinated patients they bind specifically to viral proteins in carefully controlled laboratory assays.",
+      "marked_parts": {
+        "A": "antibodies",
+        "B": "they bind specifically",
+        "C": "proteins",
+        "D": "assays"
+      },
+      "correct_answer": "B",
+      "error_explanation": "The clause already has the complete subject noun phrase the antibodies produced by vaccinated patients. The pronoun they redundantly repeats that subject before the finite verb bind, creating a double-subject error; deleting they leaves the grammatical clause the antibodies produced by vaccinated patients bind specifically to viral proteins. The participial modifier produced by vaccinated patients, the plural verb bind, and the object phrase viral proteins are otherwise well formed.",
+      "minimal_correction": "Remove the resumptive pronoun they: ...patients bind specifically...",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "CLAUSE_RELATION",
+        "intended_error_position": "B",
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "three single-word spans and one clause-like span",
+        "coverage_profile": "planned 26-35%; realized 30.0% (6 marked tokens of 20), inside the planned bin and the PREFERRED empirical band",
+        "approximate_context_profile": "unmarked context before A (4 words), between A-B (4), B-C (2), C-D (4), and after D (0); 14 unmarked words in total",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "CLAUSE_OR_CLAUSE_LIKE",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 1,
+            "B": 3,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 3,
+          "marked_coverage_ratio": 0.3,
+          "unmarked_word_count": 14,
+          "gap_A_B": 4,
+          "gap_B_C": 2,
+          "gap_C_D": 4,
+          "correct_span_word_count": 3,
+          "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "CLAUSE_RELATION",
+          "format_distribution_distance": 0.4199,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.492,
+            "marked_coverage_ratio": 0.664,
+            "unmarked_word_count": 0.464,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.92,
+            "gap_A_B": 0.608,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.568
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              4
+            ],
+            "B": [
+              9,
+              10,
+              11
+            ],
+            "C": [
+              14
+            ],
+            "D": [
+              19
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-08",
+        "item_generation_order": 23,
+        "invocation_id": "01a03235-7f17-78f2-b427-03f4f33d0499",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "During immunological studies, the antibodies produced by vaccinated patients bind specifically to viral proteins in carefully controlled laboratory assays.",
+        "error_form": "During immunological studies, the antibodies produced by vaccinated patients they bind specifically to viral proteins in carefully controlled laboratory assays.",
+        "minimal_correction": "Remove the resumptive pronoun they: ...patients bind specifically...",
+        "mutation_type": "resumptive subject pronoun insertion before the finite verb",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-024",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "adverb misplaced between verb and its direct object",
+      "secondary_features": [
+        "transitive verb with direct object",
+        "adverb placement",
+        "subordinate clause"
+      ],
+      "tested_error_type": "wrong_word_order",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "computer engineering",
+      "sentence": "Computer engineers tested the compiler before it optimized automatically complex algorithms for the embedded system during overnight stress tests.",
+      "marked_parts": {
+        "A": "engineers",
+        "B": "compiler",
+        "C": "optimized automatically",
+        "D": "embedded system"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The transitive verb optimized is followed by its direct object complex algorithms, so the manner adverb automatically should precede the verb or follow the complete object phrase. In optimized automatically complex algorithms, the adverb is misplaced between the verb and its direct object; moving it before optimized gives the grammatical sequence automatically optimized complex algorithms. The subject engineers, the object compiler of tested, and the noun phrase embedded system are correctly formed.",
+      "minimal_correction": "Move automatically before optimized: automatically optimized",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "WORD_ORDER",
+        "intended_error_position": "C",
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "two single-word spans and two short phrases by surface length; C is clause-like by syntactic role",
+        "coverage_profile": "planned 26-35%; realized 31.58% (6 marked tokens of 19), inside the planned bin and the PREFERRED empirical band",
+        "approximate_context_profile": "unmarked context before A (1 word), between A-B (2), B-C (2), C-D (4), and after D (4); 13 unmarked words in total",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "CLAUSE_OR_CLAUSE_LIKE",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 19,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 2,
+            "D": 2
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.3158,
+          "unmarked_word_count": 13,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 4,
+          "correct_span_word_count": 2,
+          "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "decision_granularity": "WORD_ORDER",
+          "format_distribution_distance": 0.5193,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.428,
+            "marked_coverage_ratio": 0.736,
+            "unmarked_word_count": 0.396,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.568
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              4
+            ],
+            "C": [
+              7,
+              8
+            ],
+            "D": [
+              13,
+              14
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-08",
+        "item_generation_order": 24,
+        "invocation_id": "01a03235-7f17-78f2-b427-03f4f33d0499",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Computer engineers tested the compiler before it automatically optimized complex algorithms for the embedded system during overnight stress tests.",
+        "error_form": "Computer engineers tested the compiler before it optimized automatically complex algorithms for the embedded system during overnight stress tests.",
+        "minimal_correction": "Move automatically before optimized: automatically optimized",
+        "mutation_type": "adverb transposition from pre-object position to pre-verbal position",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-025",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "comparative form used where the superlative is required",
+      "secondary_features": [
+        "superlative degree",
+        "of-phrase comparison set",
+        "academic linguistic context"
+      ],
+      "tested_error_type": "wrong_degree_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "descriptive linguistics",
+      "sentence": "In dialectal speech, the more frequent of the six suffixes marks plural nouns in discourse.",
+      "marked_parts": {
+        "A": "more frequent",
+        "B": "six",
+        "C": "plural",
+        "D": "discourse"
+      },
+      "correct_answer": "A",
+      "error_explanation": "Because the phrase selects one suffix from a set of six, the superlative most frequent is required; more frequent is comparative.",
+      "minimal_correction": "most frequent",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "OTHER",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "11-15",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "coverage_profile": "26-35%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 15,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.3333333333,
+          "unmarked_word_count": 10,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 2,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "OTHER",
+          "format_distribution_distance": 0.897,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.108,
+            "marked_coverage_ratio": 0.824,
+            "unmarked_word_count": 0.124,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.1
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              4,
+              5
+            ],
+            "B": [
+              8
+            ],
+            "C": [
+              11
+            ],
+            "D": [
+              14
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.1",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-09",
+        "item_generation_order": 25,
+        "invocation_id": "01a03235-8209-7d11-8a03-87f144c5f8dc",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "In dialectal speech, the most frequent of the six suffixes marks plural nouns in discourse.",
+        "error_form": "In dialectal speech, the more frequent of the six suffixes marks plural nouns in discourse.",
+        "minimal_correction": "most frequent",
+        "mutation_type": "comparative_to_superlative",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    }
+  ]
+}

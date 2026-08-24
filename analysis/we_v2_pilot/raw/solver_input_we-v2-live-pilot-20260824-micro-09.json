@@ -1,0 +1,18 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-09",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "blinding": "allowlist: item_id, section, sentence, marked_parts",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-025",
+      "section": "Written Expression",
+      "sentence": "In dialectal speech, the more frequent of the six suffixes marks plural nouns in discourse.",
+      "marked_parts": {
+        "A": "more frequent",
+        "B": "six",
+        "C": "plural",
+        "D": "discourse"
+      }
+    }
+  ]
+}

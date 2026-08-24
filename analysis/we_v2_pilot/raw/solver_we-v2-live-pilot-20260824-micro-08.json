@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2-pilot-022",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The relative pronoun who refers to the singular noun young adult, so the verb must be receives rather than receive.",
+      "suggested_correction": "receives",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-023",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The noun phrase the antibodies produced by vaccinated patients already supplies the subject of bind; the additional pronoun they creates an ungrammatical redundant subject.",
+      "suggested_correction": "bind specifically",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-024",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "MEDIUM",
+      "reason": "The adverb automatically is awkwardly placed between the verb and its direct object; the standard placement here is before the verb in automatically optimized complex algorithms.",
+      "suggested_correction": "automatically optimized",
+      "ambiguity_detected": false
+    }
+  ]
+}

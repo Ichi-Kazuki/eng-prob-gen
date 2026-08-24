@@ -1,0 +1,13 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2-pilot-025",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "Part A is incorrect because six suffixes are being compared, so the superlative form is required: \"the most frequent.\"",
+      "suggested_correction": "the most frequent",
+      "ambiguity_detected": false
+    }
+  ]
+}

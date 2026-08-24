@@ -1,0 +1,125 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2-pilot-006",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "gerund required after a preposition-taking verb",
+      "secondary_features": [
+        "concessive adverbial clause",
+        "past perfect background tense",
+        "restrictive relative clause with object gap"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "art history",
+      "sentence": "Although he had trained as a sculptor, the artist soon concentrated on depict crowded market scenes that later collectors valued far more highly.",
+      "marked_parts": {
+        "A": "had trained",
+        "B": "sculptor",
+        "C": "depict",
+        "D": "that"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The verb \u2018concentrate\u2019 selects the preposition \u2018on\u2019, and a preposition must be followed by a noun phrase or a gerund, never by a bare verb stem. C must therefore be the gerund \u2018depicting\u2019. \u2018Depict\u2019 is not a noun and cannot be reanalyzed as an infinitive here because \u2018on\u2019 is a preposition, so \u2018on depict\u2019 is unambiguously ungrammatical. A is a correct past perfect verb phrase marking earlier training; B is a correct singular count noun after \u2018as a\u2019; D is the correct restrictive relative pronoun filling the object gap of \u2018valued\u2019.",
+      "minimal_correction": "depict -> depicting",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 23,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2174,
+          "unmarked_word_count": 18,
+          "gap_A_B": 2,
+          "gap_B_C": 5,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "VERB_FRAME",
+          "format_distribution_distance": 0.5951,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.74,
+            "marked_coverage_ratio": 0.296,
+            "unmarked_word_count": 0.748,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.78,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              2,
+              3
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              12
+            ],
+            "D": [
+              16
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+        "item_generation_order": 6,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "Although he had trained as a sculptor, the artist soon concentrated on depicting crowded market scenes that later collectors valued far more highly.",
+        "error_form": "Although he had trained as a sculptor, the artist soon concentrated on depict crowded market scenes that later collectors valued far more highly.",
+        "minimal_correction": "depict -> depicting",
+        "mutation_type": "gerund_to_bare_verb_substitution: gerund complement of a preposition-taking verb replaced by the bare verb stem",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    }
+  ]
+}

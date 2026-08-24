@@ -1,0 +1,40 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "blinding": "allowlist: item_id, section, sentence, marked_parts",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-001",
+      "section": "Written Expression",
+      "sentence": "The retreat of the continental ice sheets that once covered northern Europe have left behind thick deposits of gravel and clay.",
+      "marked_parts": {
+        "A": "that",
+        "B": "have",
+        "C": "thick",
+        "D": "gravel"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-002",
+      "section": "Written Expression",
+      "sentence": "During the coldest months, humpback whales migrate toward the tropics in order to raise its calves in warm coastal water.",
+      "marked_parts": {
+        "A": "coldest months",
+        "B": "migrate",
+        "C": "tropics",
+        "D": "its"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-003",
+      "section": "Written Expression",
+      "sentence": "Even after the British Parliament imposed duties on imported goods, the most of the colonial merchants continued to trade abroad.",
+      "marked_parts": {
+        "A": "after",
+        "B": "imposed duties",
+        "C": "the most",
+        "D": "merchants"
+      }
+    }
+  ]
+}

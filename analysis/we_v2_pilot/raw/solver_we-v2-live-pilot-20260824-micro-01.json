@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2-pilot-001",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The subject head is the singular noun retreat, so the verb must be has, not have.",
+      "suggested_correction": "The retreat of the continental ice sheets that once covered northern Europe has left behind thick deposits of gravel and clay.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-002",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The plural subject humpback whales requires the plural possessive pronoun their, not its.",
+      "suggested_correction": "During the coldest months, humpback whales migrate toward the tropics in order to raise their calves in warm coastal water.",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-003",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The quantifier should be most of the colonial merchants; the combination the most of is incorrect here.",
+      "suggested_correction": "Even after the British Parliament imposed duties on imported goods, most of the colonial merchants continued to trade abroad.",
+      "ambiguity_detected": false
+    }
+  ]
+}

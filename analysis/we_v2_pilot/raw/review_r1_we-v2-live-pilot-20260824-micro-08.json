@@ -1,0 +1,310 @@
+{
+  "review_batch_id": "we-v2-live-pilot-20260824",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-022",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "D",
+      "generator_answer": "D",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "PASS",
+      "detected_error_count": 1,
+      "detected_error_position": "D",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ACCEPTABLE",
+        "C": "ACCEPTABLE",
+        "D": "ERROR"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "PASS",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 21,
+        "span_word_counts": {
+          "A": 1,
+          "B": 2,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2381,
+        "unmarked_word_count": 16,
+        "gap_A_B": 2,
+        "gap_B_C": 2,
+        "gap_C_D": 2,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "format_distribution_distance": 0.2705,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.576,
+          "marked_coverage_ratio": 0.392,
+          "unmarked_word_count": 0.588,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.088,
+          "gap_C_D": 0.1
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            2
+          ],
+          "B": [
+            5,
+            6
+          ],
+          "C": [
+            9
+          ],
+          "D": [
+            12
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": "sha256:1a2516739e83de8db8c0a58dddaac973b9960966f94a5554f42cd577d086767b",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-live-pilot-20260824",
+        "item_review_order": 1,
+        "invocation_id": "01a03244-8092-7d51-83ca-b59c55cb5b95",
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-023",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "B",
+      "generator_answer": "B",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "PASS",
+      "detected_error_count": 1,
+      "detected_error_position": "B",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ERROR",
+        "C": "ACCEPTABLE",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "PASS",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 20,
+        "span_word_counts": {
+          "A": 1,
+          "B": 3,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 3,
+        "marked_coverage_ratio": 0.3,
+        "unmarked_word_count": 14,
+        "gap_A_B": 4,
+        "gap_B_C": 2,
+        "gap_C_D": 4,
+        "correct_span_word_count": 3,
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "CLAUSE_RELATION",
+        "format_distribution_distance": 0.4199,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.492,
+          "marked_coverage_ratio": 0.664,
+          "unmarked_word_count": 0.464,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.92,
+          "gap_A_B": 0.608,
+          "gap_B_C": 0.088,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            4
+          ],
+          "B": [
+            9,
+            10,
+            11
+          ],
+          "C": [
+            14
+          ],
+          "D": [
+            19
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": "sha256:1a2516739e83de8db8c0a58dddaac973b9960966f94a5554f42cd577d086767b",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-live-pilot-20260824",
+        "item_review_order": 2,
+        "invocation_id": "01a03244-8092-7d51-83ca-b59c55cb5b95",
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-024",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "PASS",
+      "detected_error_count": 1,
+      "detected_error_position": "C",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ACCEPTABLE",
+        "C": "ERROR",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "PASS",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 2,
+          "D": 2
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.3158,
+        "unmarked_word_count": 13,
+        "gap_A_B": 2,
+        "gap_B_C": 2,
+        "gap_C_D": 4,
+        "correct_span_word_count": 2,
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "WORD_ORDER",
+        "format_distribution_distance": 0.5193,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.736,
+          "unmarked_word_count": 0.396,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.088,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            1
+          ],
+          "B": [
+            4
+          ],
+          "C": [
+            7,
+            8
+          ],
+          "D": [
+            13,
+            14
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": "sha256:1a2516739e83de8db8c0a58dddaac973b9960966f94a5554f42cd577d086767b",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-live-pilot-20260824",
+        "item_review_order": 3,
+        "invocation_id": "01a03244-8092-7d51-83ca-b59c55cb5b95",
+        "runtime_model": null
+      }
+    }
+  ]
+}

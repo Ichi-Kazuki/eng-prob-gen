@@ -1,0 +1,40 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-08",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "blinding": "allowlist: item_id, section, sentence, marked_parts",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-022",
+      "section": "Written Expression",
+      "sentence": "Developmental psychologists observed that a young adult with several coping strategies who receive supportive counseling eventually adapts during stressful academic transitions.",
+      "marked_parts": {
+        "A": "observed",
+        "B": "young adult",
+        "C": "coping",
+        "D": "receive"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-023",
+      "section": "Written Expression",
+      "sentence": "During immunological studies, the antibodies produced by vaccinated patients they bind specifically to viral proteins in carefully controlled laboratory assays.",
+      "marked_parts": {
+        "A": "antibodies",
+        "B": "they bind specifically",
+        "C": "proteins",
+        "D": "assays"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-024",
+      "section": "Written Expression",
+      "sentence": "Computer engineers tested the compiler before it optimized automatically complex algorithms for the embedded system during overnight stress tests.",
+      "marked_parts": {
+        "A": "engineers",
+        "B": "compiler",
+        "C": "optimized automatically",
+        "D": "embedded system"
+      }
+    }
+  ]
+}

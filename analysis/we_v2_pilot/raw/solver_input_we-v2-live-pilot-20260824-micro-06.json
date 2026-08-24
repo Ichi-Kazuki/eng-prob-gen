@@ -1,0 +1,40 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-06",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "blinding": "allowlist: item_id, section, sentence, marked_parts",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-016",
+      "section": "Written Expression",
+      "sentence": "Public health agencies expanded mobile clinics to reaching residents in remote villages during the annual nationwide vaccination campaign.",
+      "marked_parts": {
+        "A": "agencies",
+        "B": "reaching",
+        "C": "remote",
+        "D": "vaccination campaign"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-017",
+      "section": "Written Expression",
+      "sentence": "The materials scientists measured the remained solvent after the porous membrane had undergone repeated heating and cooling cycles under controlled laboratory conditions.",
+      "marked_parts": {
+        "A": "The",
+        "B": "scientists",
+        "C": "remained",
+        "D": "porous"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-018",
+      "section": "Written Expression",
+      "sentence": "The pottery fragments were carefully cataloging by the archaeological team before the site was reopened to visitors after extensive preservation work in spring.",
+      "marked_parts": {
+        "A": "The",
+        "B": "cataloging by",
+        "C": "site",
+        "D": "extensive preservation"
+      }
+    }
+  ]
+}

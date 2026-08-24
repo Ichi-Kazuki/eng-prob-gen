@@ -1,0 +1,158 @@
+{
+  "run": {
+    "run_id": "we-v2-live-pilot-20260824",
+    "purpose": "blind human review of AUTO_ACCEPT candidates",
+    "blinding": "no pipeline answer, no Reviewer verdict, no Solver result, no grammar or format metadata",
+    "count": 12
+  },
+  "rubric": [
+    "Is exactly one of A/B/C/D genuinely wrong in standard written English (answer uniqueness)?",
+    "Is the English natural for academic prose?",
+    "Does this read like a real TOEFL ITP Written Expression item?",
+    "Are the four marked spans natural inspection targets?",
+    "Does anything feel like a question TOEFL ITP would never ask?"
+  ],
+  "response_fields": {
+    "human_answer": "A|B|C|D|NONE|AMBIGUOUS",
+    "answer_uniqueness": "OK|WEAK|BROKEN",
+    "naturalness": "OK|WEAK|BROKEN",
+    "itp_likeness": "OK|WEAK|BROKEN",
+    "marked_span_naturalness": "OK|WEAK|BROKEN",
+    "would_never_be_asked": "true|false",
+    "comment": "free text"
+  },
+  "items": [
+    {
+      "item_id": "we-v2-pilot-001",
+      "section": "Written Expression",
+      "sentence": "The retreat of the continental ice sheets that once covered northern Europe have left behind thick deposits of gravel and clay.",
+      "marked_parts": {
+        "A": "that",
+        "B": "have",
+        "C": "thick",
+        "D": "gravel"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-002",
+      "section": "Written Expression",
+      "sentence": "During the coldest months, humpback whales migrate toward the tropics in order to raise its calves in warm coastal water.",
+      "marked_parts": {
+        "A": "coldest months",
+        "B": "migrate",
+        "C": "tropics",
+        "D": "its"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-003",
+      "section": "Written Expression",
+      "sentence": "Even after the British Parliament imposed duties on imported goods, the most of the colonial merchants continued to trade abroad.",
+      "marked_parts": {
+        "A": "after",
+        "B": "imposed duties",
+        "C": "the most",
+        "D": "merchants"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-004",
+      "section": "Written Expression",
+      "sentence": "Modern observatories depend on this delicate instruments, which require frequent calibration to remain accurate during long exposures.",
+      "marked_parts": {
+        "A": "this",
+        "B": "which",
+        "C": "calibration",
+        "D": "accurate"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-005",
+      "section": "Written Expression",
+      "sentence": "Because credit was scarce, the cooperative built warehouse that allowed members to store grain until prices recovered in the spring.",
+      "marked_parts": {
+        "A": "scarce",
+        "B": "warehouse",
+        "C": "store",
+        "D": "recovered"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-006",
+      "section": "Written Expression",
+      "sentence": "Although he had trained as a sculptor, the artist soon concentrated on depict crowded market scenes that later collectors valued far more highly.",
+      "marked_parts": {
+        "A": "had trained",
+        "B": "sculptor",
+        "C": "depict",
+        "D": "that"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-007",
+      "section": "Written Expression",
+      "sentence": "During prolonged drought, many desert plants store water in fleshy stems and depend for deep roots to survive.",
+      "marked_parts": {
+        "A": "prolonged",
+        "B": "store",
+        "C": "fleshy",
+        "D": "for"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-008",
+      "section": "Written Expression",
+      "sentence": "As the atmosphere warms, stronger convection makes water vapor rises rapidly, and meteorologists observe that high-altitude winds redistribute clouds across the upper troposphere.",
+      "marked_parts": {
+        "A": "warms",
+        "B": "rises",
+        "C": "observe",
+        "D": "winds redistribute clouds"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-009",
+      "section": "Written Expression",
+      "sentence": "Cultural anthropologists examine the migration of families, the exchange of local goods, and the ritually practices that connect villages across generations in remote regions.",
+      "marked_parts": {
+        "A": "the migration",
+        "B": "the exchange",
+        "C": "goods",
+        "D": "ritually"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-010",
+      "section": "Written Expression",
+      "sentence": "The analytical team not only measures the solution's acidity but also recording the color change and compares the results with a calibrated standard.",
+      "marked_parts": {
+        "A": "measures",
+        "B": "solution's acidity",
+        "C": "recording the color change",
+        "D": "compares"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-011",
+      "section": "Written Expression",
+      "sentence": "Not only did Edith Wharton challenge the conventions of nineteenth-century fiction, but she also exposure the social anxieties that shaped its most celebrated narratives and influenced later American writers.",
+      "marked_parts": {
+        "A": "challenge",
+        "B": "but she also exposure",
+        "C": "shaped",
+        "D": "influenced"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-012",
+      "section": "Written Expression",
+      "sentence": "During the load test, the reinforced beam responded rapid, absorbed vibration effectively, and remained structurally sound throughout the experiment.",
+      "marked_parts": {
+        "A": "rapid",
+        "B": "vibration",
+        "C": "remained",
+        "D": "sound"
+      }
+    }
+  ]
+}

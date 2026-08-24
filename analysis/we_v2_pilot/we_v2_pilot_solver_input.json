@@ -1,0 +1,319 @@
+{
+  "run": {
+    "run_id": "we-v2-live-pilot-20260824",
+    "blinding": "allowlist: item_id, section, sentence, marked_parts",
+    "source": "contract-valid Reviewer grammar_validity == PASS plus final Generator schema/format gates",
+    "cohort_source": "analysis/we_v2_pilot/we_v2_pilot_final_items.json",
+    "eligible_count": 22,
+    "generator_validation": {
+      "schema_pass": 22,
+      "format_pass": 25,
+      "invalid_items": {
+        "we-v2-pilot-013": [
+          "<root>.format_metadata.diagnostics: missing required property 'sentence_word_count'",
+          "<root>.format_metadata.diagnostics: missing required property 'span_word_counts'",
+          "<root>.format_metadata.diagnostics: missing required property 'mean_span_length'",
+          "<root>.format_metadata.diagnostics: missing required property 'max_span_length'",
+          "<root>.format_metadata.diagnostics: missing required property 'marked_coverage_ratio'",
+          "<root>.format_metadata.diagnostics: missing required property 'unmarked_word_count'",
+          "<root>.format_metadata.diagnostics: missing required property 'gap_A_B'",
+          "<root>.format_metadata.diagnostics: missing required property 'gap_B_C'",
+          "<root>.format_metadata.diagnostics: missing required property 'gap_C_D'",
+          "<root>.format_metadata.diagnostics: missing required property 'correct_span_word_count'",
+          "<root>.format_metadata.diagnostics: missing required property 'correct_span_type'",
+          "<root>.format_metadata.diagnostics: missing required property 'correction_locality'",
+          "<root>.format_metadata.diagnostics: missing required property 'decision_granularity'",
+          "<root>.format_metadata.diagnostics: missing required property 'format_distribution_distance'",
+          "<root>.format_metadata.diagnostics: missing required property 'format_percentile_profile'",
+          "<root>.format_metadata.diagnostics: missing required property 'format_band_status'",
+          "<root>.format_metadata.diagnostics: missing required property 'metric_band_status'",
+          "<root>.format_metadata.diagnostics: missing required property 'span_token_indices'"
+        ],
+        "we-v2-pilot-014": [
+          "<root>.format_metadata.diagnostics: missing required property 'sentence_word_count'",
+          "<root>.format_metadata.diagnostics: missing required property 'span_word_counts'",
+          "<root>.format_metadata.diagnostics: missing required property 'mean_span_length'",
+          "<root>.format_metadata.diagnostics: missing required property 'max_span_length'",
+          "<root>.format_metadata.diagnostics: missing required property 'marked_coverage_ratio'",
+          "<root>.format_metadata.diagnostics: missing required property 'unmarked_word_count'",
+          "<root>.format_metadata.diagnostics: missing required property 'gap_A_B'",
+          "<root>.format_metadata.diagnostics: missing required property 'gap_B_C'",
+          "<root>.format_metadata.diagnostics: missing required property 'gap_C_D'",
+          "<root>.format_metadata.diagnostics: missing required property 'correct_span_word_count'",
+          "<root>.format_metadata.diagnostics: missing required property 'correct_span_type'",
+          "<root>.format_metadata.diagnostics: missing required property 'correction_locality'",
+          "<root>.format_metadata.diagnostics: missing required property 'decision_granularity'",
+          "<root>.format_metadata.diagnostics: missing required property 'format_distribution_distance'",
+          "<root>.format_metadata.diagnostics: missing required property 'format_percentile_profile'",
+          "<root>.format_metadata.diagnostics: missing required property 'format_band_status'",
+          "<root>.format_metadata.diagnostics: missing required property 'metric_band_status'",
+          "<root>.format_metadata.diagnostics: missing required property 'span_token_indices'"
+        ],
+        "we-v2-pilot-015": [
+          "<root>.format_metadata.diagnostics: missing required property 'sentence_word_count'",
+          "<root>.format_metadata.diagnostics: missing required property 'span_word_counts'",
+          "<root>.format_metadata.diagnostics: missing required property 'mean_span_length'",
+          "<root>.format_metadata.diagnostics: missing required property 'max_span_length'",
+          "<root>.format_metadata.diagnostics: missing required property 'marked_coverage_ratio'",
+          "<root>.format_metadata.diagnostics: missing required property 'unmarked_word_count'",
+          "<root>.format_metadata.diagnostics: missing required property 'gap_A_B'",
+          "<root>.format_metadata.diagnostics: missing required property 'gap_B_C'",
+          "<root>.format_metadata.diagnostics: missing required property 'gap_C_D'",
+          "<root>.format_metadata.diagnostics: missing required property 'correct_span_word_count'",
+          "<root>.format_metadata.diagnostics: missing required property 'correct_span_type'",
+          "<root>.format_metadata.diagnostics: missing required property 'correction_locality'",
+          "<root>.format_metadata.diagnostics: missing required property 'decision_granularity'",
+          "<root>.format_metadata.diagnostics: missing required property 'format_distribution_distance'",
+          "<root>.format_metadata.diagnostics: missing required property 'format_percentile_profile'",
+          "<root>.format_metadata.diagnostics: missing required property 'format_band_status'",
+          "<root>.format_metadata.diagnostics: missing required property 'metric_band_status'",
+          "<root>.format_metadata.diagnostics: missing required property 'span_token_indices'"
+        ]
+      }
+    }
+  },
+  "items": [
+    {
+      "item_id": "we-v2-pilot-001",
+      "section": "Written Expression",
+      "sentence": "The retreat of the continental ice sheets that once covered northern Europe have left behind thick deposits of gravel and clay.",
+      "marked_parts": {
+        "A": "that",
+        "B": "have",
+        "C": "thick",
+        "D": "gravel"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-002",
+      "section": "Written Expression",
+      "sentence": "During the coldest months, humpback whales migrate toward the tropics in order to raise its calves in warm coastal water.",
+      "marked_parts": {
+        "A": "coldest months",
+        "B": "migrate",
+        "C": "tropics",
+        "D": "its"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-003",
+      "section": "Written Expression",
+      "sentence": "Even after the British Parliament imposed duties on imported goods, the most of the colonial merchants continued to trade abroad.",
+      "marked_parts": {
+        "A": "after",
+        "B": "imposed duties",
+        "C": "the most",
+        "D": "merchants"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-004",
+      "section": "Written Expression",
+      "sentence": "Modern observatories depend on this delicate instruments, which require frequent calibration to remain accurate during long exposures.",
+      "marked_parts": {
+        "A": "this",
+        "B": "which",
+        "C": "calibration",
+        "D": "accurate"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-005",
+      "section": "Written Expression",
+      "sentence": "Because credit was scarce, the cooperative built warehouse that allowed members to store grain until prices recovered in the spring.",
+      "marked_parts": {
+        "A": "scarce",
+        "B": "warehouse",
+        "C": "store",
+        "D": "recovered"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-006",
+      "section": "Written Expression",
+      "sentence": "Although he had trained as a sculptor, the artist soon concentrated on depict crowded market scenes that later collectors valued far more highly.",
+      "marked_parts": {
+        "A": "had trained",
+        "B": "sculptor",
+        "C": "depict",
+        "D": "that"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-007",
+      "section": "Written Expression",
+      "sentence": "During prolonged drought, many desert plants store water in fleshy stems and depend for deep roots to survive.",
+      "marked_parts": {
+        "A": "prolonged",
+        "B": "store",
+        "C": "fleshy",
+        "D": "for"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-008",
+      "section": "Written Expression",
+      "sentence": "As the atmosphere warms, stronger convection makes water vapor rises rapidly, and meteorologists observe that high-altitude winds redistribute clouds across the upper troposphere.",
+      "marked_parts": {
+        "A": "warms",
+        "B": "rises",
+        "C": "observe",
+        "D": "winds redistribute clouds"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-009",
+      "section": "Written Expression",
+      "sentence": "Cultural anthropologists examine the migration of families, the exchange of local goods, and the ritually practices that connect villages across generations in remote regions.",
+      "marked_parts": {
+        "A": "the migration",
+        "B": "the exchange",
+        "C": "goods",
+        "D": "ritually"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-010",
+      "section": "Written Expression",
+      "sentence": "The analytical team not only measures the solution's acidity but also recording the color change and compares the results with a calibrated standard.",
+      "marked_parts": {
+        "A": "measures",
+        "B": "solution's acidity",
+        "C": "recording the color change",
+        "D": "compares"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-011",
+      "section": "Written Expression",
+      "sentence": "Not only did Edith Wharton challenge the conventions of nineteenth-century fiction, but she also exposure the social anxieties that shaped its most celebrated narratives and influenced later American writers.",
+      "marked_parts": {
+        "A": "challenge",
+        "B": "but she also exposure",
+        "C": "shaped",
+        "D": "influenced"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-012",
+      "section": "Written Expression",
+      "sentence": "During the load test, the reinforced beam responded rapid, absorbed vibration effectively, and remained structurally sound throughout the experiment.",
+      "marked_parts": {
+        "A": "rapid",
+        "B": "vibration",
+        "C": "remained",
+        "D": "sound"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-016",
+      "section": "Written Expression",
+      "sentence": "Public health agencies expanded mobile clinics to reaching residents in remote villages during the annual nationwide vaccination campaign.",
+      "marked_parts": {
+        "A": "agencies",
+        "B": "reaching",
+        "C": "remote",
+        "D": "vaccination campaign"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-017",
+      "section": "Written Expression",
+      "sentence": "The materials scientists measured the remained solvent after the porous membrane had undergone repeated heating and cooling cycles under controlled laboratory conditions.",
+      "marked_parts": {
+        "A": "The",
+        "B": "scientists",
+        "C": "remained",
+        "D": "porous"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-018",
+      "section": "Written Expression",
+      "sentence": "The pottery fragments were carefully cataloging by the archaeological team before the site was reopened to visitors after extensive preservation work in spring.",
+      "marked_parts": {
+        "A": "The",
+        "B": "cataloging by",
+        "C": "site",
+        "D": "extensive preservation"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-019",
+      "section": "Written Expression",
+      "sentence": "By the late nineteenth century, several composers had been widely and frequently wrote about by critics, influencing modern concert traditions.",
+      "marked_parts": {
+        "A": "the late",
+        "B": "several",
+        "C": "been",
+        "D": "wrote"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-020",
+      "section": "Written Expression",
+      "sentence": "Due to the city expanded its recycling program, household waste declined substantially, and residents began sorting more materials at home during the following year.",
+      "marked_parts": {
+        "A": "Due to",
+        "B": "recycling program",
+        "C": "declined",
+        "D": "began"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-021",
+      "section": "Written Expression",
+      "sentence": "Historical geographers carefully studied old coastal maps who merchants used to trace river routes across the interior before modern borders were established.",
+      "marked_parts": {
+        "A": "geographers",
+        "B": "old",
+        "C": "who",
+        "D": "trace"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-022",
+      "section": "Written Expression",
+      "sentence": "Developmental psychologists observed that a young adult with several coping strategies who receive supportive counseling eventually adapts during stressful academic transitions.",
+      "marked_parts": {
+        "A": "observed",
+        "B": "young adult",
+        "C": "coping",
+        "D": "receive"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-023",
+      "section": "Written Expression",
+      "sentence": "During immunological studies, the antibodies produced by vaccinated patients they bind specifically to viral proteins in carefully controlled laboratory assays.",
+      "marked_parts": {
+        "A": "antibodies",
+        "B": "they bind specifically",
+        "C": "proteins",
+        "D": "assays"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-024",
+      "section": "Written Expression",
+      "sentence": "Computer engineers tested the compiler before it optimized automatically complex algorithms for the embedded system during overnight stress tests.",
+      "marked_parts": {
+        "A": "engineers",
+        "B": "compiler",
+        "C": "optimized automatically",
+        "D": "embedded system"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-025",
+      "section": "Written Expression",
+      "sentence": "In dialectal speech, the more frequent of the six suffixes marks plural nouns in discourse.",
+      "marked_parts": {
+        "A": "more frequent",
+        "B": "six",
+        "C": "plural",
+        "D": "discourse"
+      }
+    }
+  ]
+}

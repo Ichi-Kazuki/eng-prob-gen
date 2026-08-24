@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2-pilot-010",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The predicate after 'not only ... but also' must remain parallel with the coordinated present-tense verbs 'measures' and 'compares'; 'recording' should be the finite third-person singular form 'records'.",
+      "suggested_correction": "records the color change",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-011",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "After 'she also,' the sentence requires the past-tense verb 'exposed'; 'exposure' is a noun and cannot function as the predicate here.",
+      "suggested_correction": "but she also exposed",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-012",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The verb 'responded' requires the adverb 'rapidly,' not the adjective 'rapid'; the corrected sentence then has parallel past-tense predicates 'responded,' 'absorbed,' and 'remained'.",
+      "suggested_correction": "rapidly",
+      "ambiguity_detected": false
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "blinding": "allowlist: item_id, section, sentence, marked_parts",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-019",
+      "section": "Written Expression",
+      "sentence": "By the late nineteenth century, several composers had been widely and frequently wrote about by critics, influencing modern concert traditions.",
+      "marked_parts": {
+        "A": "the late",
+        "B": "several",
+        "C": "been",
+        "D": "wrote"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-020",
+      "section": "Written Expression",
+      "sentence": "Due to the city expanded its recycling program, household waste declined substantially, and residents began sorting more materials at home during the following year.",
+      "marked_parts": {
+        "A": "Due to",
+        "B": "recycling program",
+        "C": "declined",
+        "D": "began"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-021",
+      "section": "Written Expression",
+      "sentence": "Historical geographers carefully studied old coastal maps who merchants used to trace river routes across the interior before modern borders were established.",
+      "marked_parts": {
+        "A": "geographers",
+        "B": "old",
+        "C": "who",
+        "D": "trace"
+      }
+    }
+  ]
+}

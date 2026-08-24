@@ -1,0 +1,369 @@
+{
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-019",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "perfect auxiliary followed by the wrong participle form",
+      "secondary_features": [
+        "past perfect",
+        "passive voice",
+        "music history context"
+      ],
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "music history",
+      "sentence": "By the late nineteenth century, several composers had been widely and frequently wrote about by critics, influencing modern concert traditions.",
+      "marked_parts": {
+        "A": "the late",
+        "B": "several",
+        "C": "been",
+        "D": "wrote"
+      },
+      "correct_answer": "D",
+      "error_explanation": "After the passive perfect auxiliary sequence \"had been,\" the past participle \"written\" is required; \"wrote\" is a finite past-tense form.",
+      "minimal_correction": "By the late nineteenth century, several composers had been widely and frequently written about by critics, influencing modern concert traditions.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.25,
+          "unmarked_word_count": 15,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "VERB_FRAME",
+          "format_distribution_distance": 0.1472,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.492,
+            "marked_coverage_ratio": 0.456,
+            "unmarked_word_count": 0.528,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1,
+              2
+            ],
+            "B": [
+              5
+            ],
+            "C": [
+              8
+            ],
+            "D": [
+              12
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+        "item_generation_order": 19,
+        "invocation_id": "01a03235-7cb0-7eb1-883f-da77fe9f1212",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "By the late nineteenth century, several composers had been widely and frequently written about by critics, influencing modern concert traditions.",
+        "error_form": "By the late nineteenth century, several composers had been widely and frequently wrote about by critics, influencing modern concert traditions.",
+        "minimal_correction": "By the late nineteenth century, several composers had been widely and frequently written about by critics, influencing modern concert traditions.",
+        "mutation_type": "wrong_verb_form: replaced passive past participle written with finite past-tense wrote",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-020",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "clausal subordinator required where a prepositional connector appears",
+      "secondary_features": [
+        "cause relationship",
+        "finite subordinate clause",
+        "environmental policy context"
+      ],
+      "tested_error_type": "incorrect_subordinator",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "environmental policy",
+      "sentence": "Due to the city expanded its recycling program, household waste declined substantially, and residents began sorting more materials at home during the following year.",
+      "marked_parts": {
+        "A": "Due to",
+        "B": "recycling program",
+        "C": "declined",
+        "D": "began"
+      },
+      "correct_answer": "A",
+      "error_explanation": "\"Due to\" is a prepositional connector that cannot introduce the following subject-and-finite-verb clause; the clause requires the subordinating conjunction \"Because.\"",
+      "minimal_correction": "Because the city expanded its recycling program, household waste declined substantially, and residents began sorting more materials at home during the following year.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "CLAUSE_RELATION",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "two short phrases and two single-word spans",
+        "coverage_profile": "20-29%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SHORT_PHRASE",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 24,
+          "span_word_counts": {
+            "A": 2,
+            "B": 2,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.25,
+          "unmarked_word_count": 18,
+          "gap_A_B": 4,
+          "gap_B_C": 2,
+          "gap_C_D": 3,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "CLAUSE_LEVEL",
+          "decision_granularity": "CLAUSE_RELATION",
+          "format_distribution_distance": 0.7001,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.824,
+            "marked_coverage_ratio": 0.456,
+            "unmarked_word_count": 0.748,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.608,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              0,
+              1
+            ],
+            "B": [
+              6,
+              7
+            ],
+            "C": [
+              10
+            ],
+            "D": [
+              14
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+        "item_generation_order": 20,
+        "invocation_id": "01a03235-7cb0-7eb1-883f-da77fe9f1212",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Because the city expanded its recycling program, household waste declined substantially, and residents began sorting more materials at home during the following year.",
+        "error_form": "Due to the city expanded its recycling program, household waste declined substantially, and residents began sorting more materials at home during the following year.",
+        "minimal_correction": "Because the city expanded its recycling program, household waste declined substantially, and residents began sorting more materials at home during the following year.",
+        "mutation_type": "incorrect_subordinator: replaced subordinating conjunction Because with prepositional connector Due to",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-021",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative marker selection determined by the antecedent",
+      "secondary_features": [
+        "restrictive relative clause",
+        "inanimate antecedent",
+        "historical geography context"
+      ],
+      "tested_error_type": "incorrect_relative_marker",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "historical geography",
+      "sentence": "Historical geographers carefully studied old coastal maps who merchants used to trace river routes across the interior before modern borders were established.",
+      "marked_parts": {
+        "A": "geographers",
+        "B": "old",
+        "C": "who",
+        "D": "trace"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The antecedent \"maps\" is inanimate, so the restrictive relative clause requires \"that\" rather than the person-oriented marker \"who.\"",
+      "minimal_correction": "Historical geographers carefully studied old coastal maps that merchants used to trace river routes across the interior before modern borders were established.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "four single-word spans",
+        "coverage_profile": "16-25%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 22,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.1818,
+          "unmarked_word_count": 18,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.8596,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.664,
+            "marked_coverage_ratio": 0.152,
+            "unmarked_word_count": 0.748,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              4
+            ],
+            "C": [
+              7
+            ],
+            "D": [
+              11
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+        "item_generation_order": 21,
+        "invocation_id": "01a03235-7cb0-7eb1-883f-da77fe9f1212",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Historical geographers carefully studied old coastal maps that merchants used to trace river routes across the interior before modern borders were established.",
+        "error_form": "Historical geographers carefully studied old coastal maps who merchants used to trace river routes across the interior before modern borders were established.",
+        "minimal_correction": "Historical geographers carefully studied old coastal maps that merchants used to trace river routes across the interior before modern borders were established.",
+        "mutation_type": "incorrect_relative_marker: replaced relative marker that with person-oriented who",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    }
+  ]
+}

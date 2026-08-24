@@ -1,0 +1,369 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-001",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "subject-verb agreement across an intervening of-phrase",
+      "secondary_features": [
+        "subject-verb agreement across an intervening prepositional phrase",
+        "restrictive relative clause",
+        "present perfect"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "glacial geology",
+      "sentence": "The retreat of the continental ice sheets that once covered northern Europe have left behind thick deposits of gravel and clay.",
+      "marked_parts": {
+        "A": "that",
+        "B": "have",
+        "C": "thick",
+        "D": "gravel"
+      },
+      "correct_answer": "B",
+      "error_explanation": "The head of the subject noun phrase is the singular noun 'retreat'; the of-phrase 'of the continental ice sheets' and the relative clause 'that once covered northern Europe' only modify it and cannot supply the subject. A singular head requires the singular auxiliary 'has', so the plural 'have' is an agreement failure produced by attraction to the nearer plural noun. The relative clause already contains its own finite verb 'covered', so 'have left' cannot be construed inside it. 'that' correctly introduces a restrictive relative clause whose antecedent is 'ice sheets', 'thick' is an adjective correctly modifying 'deposits', and 'gravel' is a mass noun correctly used after 'deposits of'.",
+      "minimal_correction": "have -> has",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "four single-word spans; realized A=1, B=1, C=1, D=1, mean 1.0",
+        "coverage_profile": "planned 20-29%; realized 19.05% (4 marked tokens of 21). Four single-word spans in a 21-word sentence cannot reach 20%, so the planned 21-25 sentence region and the planned single-word span profile were kept and coverage landed in the official '<20%' bin, which is still inside the PREFERRED empirical band.",
+        "approximate_context_profile": "unmarked context before A (7 words), between A-B (4), B-C (2), C-D (2), and after D (2); 17 unmarked words in total",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 21,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.1905,
+          "unmarked_word_count": 17,
+          "gap_A_B": 4,
+          "gap_B_C": 2,
+          "gap_C_D": 2,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.7605,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.576,
+            "marked_coverage_ratio": 0.16,
+            "unmarked_word_count": 0.66,
+            "mean_span_length": 0.156,
+            "max_span_length": 0.156,
+            "gap_A_B": 0.608,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.1
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              7
+            ],
+            "B": [
+              12
+            ],
+            "C": [
+              15
+            ],
+            "D": [
+              18
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+        "item_generation_order": 1,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "The retreat of the continental ice sheets that once covered northern Europe has left behind thick deposits of gravel and clay.",
+        "error_form": "The retreat of the continental ice sheets that once covered northern Europe have left behind thick deposits of gravel and clay.",
+        "minimal_correction": "have -> has",
+        "mutation_type": "finite auxiliary number inflection changed from singular 'has' to plural 'have', breaking agreement with the singular head noun 'retreat'",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-002",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "possessive determiner number agreement with its antecedent",
+      "secondary_features": [
+        "possessive determiner agreement with a plural antecedent",
+        "infinitive of purpose",
+        "superlative degree form"
+      ],
+      "tested_error_type": "incorrect_reference",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "marine biology",
+      "sentence": "During the coldest months, humpback whales migrate toward the tropics in order to raise its calves in warm coastal water.",
+      "marked_parts": {
+        "A": "coldest months",
+        "B": "migrate",
+        "C": "tropics",
+        "D": "its"
+      },
+      "correct_answer": "D",
+      "error_explanation": "The understood subject of the purpose infinitive 'to raise ... calves' is the matrix subject 'humpback whales', which is plural, so the possessive determiner must be the plural 'their'. The singular 'its' has no number-compatible antecedent anywhere in the sentence, since every other nominal ('the coldest months', 'the tropics', 'calves') is plural; the defect is therefore a formal number-agreement failure rather than a matter of preferred interpretation. 'coldest months' is a correctly formed superlative after 'the', 'migrate' correctly agrees with the plural subject 'whales', and 'the tropics' is a correctly used plural-only noun.",
+      "minimal_correction": "its -> their",
+      "grammar_metadata": {
+        "error_scope": "cross_clause",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "three single-word spans and one two-word span; realized A=2, B=1, C=1, D=1, mean 1.25",
+        "coverage_profile": "planned 20-29%; realized 25.0% (5 marked tokens of 20), inside the planned bin and inside the PREFERRED empirical band",
+        "approximate_context_profile": "unmarked context before A (2 words), between A-B (2), B-C (2), C-D (4), and after D (5); 15 unmarked words in total, equal to the official median",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.25,
+          "unmarked_word_count": 15,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 4,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.1472,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.492,
+            "marked_coverage_ratio": 0.456,
+            "unmarked_word_count": 0.528,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.568
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              2,
+              3
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              9
+            ],
+            "D": [
+              14
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+        "item_generation_order": 2,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "During the coldest months, humpback whales migrate toward the tropics in order to raise their calves in warm coastal water.",
+        "error_form": "During the coldest months, humpback whales migrate toward the tropics in order to raise its calves in warm coastal water.",
+        "minimal_correction": "its -> their",
+        "mutation_type": "possessive determiner number substitution: plural 'their' replaced by singular 'its', leaving the determiner without any number-compatible antecedent",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-003",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "redundant determiner after a quantifier phrase",
+      "secondary_features": [
+        "partitive quantifier phrase",
+        "article usage",
+        "adverbial clause introduced by 'after'"
+      ],
+      "tested_error_type": "extraneous_element",
+      "difficulty": "EASY",
+      "vocabulary_domain": "American colonial history",
+      "sentence": "Even after the British Parliament imposed duties on imported goods, the most of the colonial merchants continued to trade abroad.",
+      "marked_parts": {
+        "A": "after",
+        "B": "imposed duties",
+        "C": "the most",
+        "D": "merchants"
+      },
+      "correct_answer": "C",
+      "error_explanation": "In the partitive quantifier phrase 'most of the colonial merchants', the quantifier 'most' takes no preceding article, so the definite article in 'the most of' is an extraneous determiner and must be deleted. Standard written English licenses 'the most' only as a superlative marker before an adjective or adverb, not as the head of a partitive of-phrase functioning as a clause subject. 'after' correctly subordinates the finite clause that follows, 'imposed duties' is a correctly formed past-tense verb plus object, and 'merchants' is a correctly formed plural count noun.",
+      "minimal_correction": "the most -> most (delete the extraneous article 'the')",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "C",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20",
+        "expected_span_profile": "two single-word spans and two two-word spans; realized A=1, B=2, C=2, D=1, mean 1.5",
+        "coverage_profile": "planned 20-29%; realized 30.0% (6 marked tokens of 20). Six marked tokens in a 20-word sentence cannot fall below 30%, so the planned 16-20 sentence region and the planned span profile were kept and coverage landed in the official '30-39%' bin, which is still inside the PREFERRED empirical band.",
+        "approximate_context_profile": "unmarked context before A (1 word), between A-B (3), B-C (3), C-D (3), and after D (4); 14 unmarked words in total",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SHORT_PHRASE",
+          "C": "SHORT_PHRASE",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 1,
+            "B": 2,
+            "C": 2,
+            "D": 1
+          },
+          "mean_span_length": 1.5,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.3,
+          "unmarked_word_count": 14,
+          "gap_A_B": 3,
+          "gap_B_C": 3,
+          "gap_C_D": 3,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.4199,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.492,
+            "marked_coverage_ratio": 0.664,
+            "unmarked_word_count": 0.464,
+            "mean_span_length": 0.784,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.312,
+            "gap_B_C": 0.292,
+            "gap_C_D": 0.268
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              5,
+              6
+            ],
+            "C": [
+              10,
+              11
+            ],
+            "D": [
+              15
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+        "item_generation_order": 3,
+        "invocation_id": null,
+        "runtime_model": "claude-opus-5"
+      },
+      "qa_metadata": {
+        "clean_form": "Even after the British Parliament imposed duties on imported goods, most of the colonial merchants continued to trade abroad.",
+        "error_form": "Even after the British Parliament imposed duties on imported goods, the most of the colonial merchants continued to trade abroad.",
+        "minimal_correction": "the most -> most (delete the extraneous article 'the')",
+        "mutation_type": "insertion of an extraneous definite article before the partitive quantifier 'most'",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    }
+  ]
+}

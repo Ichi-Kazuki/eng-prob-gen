@@ -1,0 +1,40 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "blinding": "allowlist: item_id, section, sentence, marked_parts",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-010",
+      "section": "Written Expression",
+      "sentence": "The analytical team not only measures the solution's acidity but also recording the color change and compares the results with a calibrated standard.",
+      "marked_parts": {
+        "A": "measures",
+        "B": "solution's acidity",
+        "C": "recording the color change",
+        "D": "compares"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-011",
+      "section": "Written Expression",
+      "sentence": "Not only did Edith Wharton challenge the conventions of nineteenth-century fiction, but she also exposure the social anxieties that shaped its most celebrated narratives and influenced later American writers.",
+      "marked_parts": {
+        "A": "challenge",
+        "B": "but she also exposure",
+        "C": "shaped",
+        "D": "influenced"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-012",
+      "section": "Written Expression",
+      "sentence": "During the load test, the reinforced beam responded rapid, absorbed vibration effectively, and remained structurally sound throughout the experiment.",
+      "marked_parts": {
+        "A": "rapid",
+        "B": "vibration",
+        "C": "remained",
+        "D": "sound"
+      }
+    }
+  ]
+}

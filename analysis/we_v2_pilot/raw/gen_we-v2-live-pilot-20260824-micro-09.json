@@ -1,0 +1,127 @@
+{
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-09",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-025",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.0",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "comparative form used where the superlative is required",
+      "secondary_features": [
+        "superlative degree",
+        "of-phrase comparison set",
+        "academic linguistic context"
+      ],
+      "tested_error_type": "wrong_degree_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "descriptive linguistics",
+      "sentence": "In dialectal speech, the more frequent of the six suffixes marks plural nouns in discourse.",
+      "marked_parts": {
+        "A": "more frequent",
+        "B": "six",
+        "C": "plural",
+        "D": "discourse"
+      },
+      "correct_answer": "A",
+      "error_explanation": "Because the phrase selects one suffix from a set of six, the superlative most frequent is required; more frequent is comparative.",
+      "minimal_correction": "most frequent",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "OTHER",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "11-15",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "coverage_profile": "26-35%",
+        "approximate_context_profile": "natural unmarked context before, between, and after the four spans",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 15,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.3333333333,
+          "unmarked_word_count": 10,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 2,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "OTHER",
+          "format_distribution_distance": 0.897,
+          "format_percentile_profile": {
+            "sentence_word_count": 0.108,
+            "marked_coverage_ratio": 0.824,
+            "unmarked_word_count": 0.124,
+            "mean_span_length": 0.5,
+            "max_span_length": 0.588,
+            "gap_A_B": 0.132,
+            "gap_B_C": 0.088,
+            "gap_C_D": 0.1
+          },
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {
+            "sentence_word_count": "PREFERRED",
+            "marked_coverage_ratio": "PREFERRED",
+            "unmarked_word_count": "PREFERRED",
+            "mean_span_length": "PREFERRED",
+            "max_span_length": "PREFERRED",
+            "gap_A_B": "PREFERRED",
+            "gap_B_C": "PREFERRED",
+            "gap_C_D": "PREFERRED"
+          },
+          "span_token_indices": {
+            "A": [
+              4,
+              5
+            ],
+            "B": [
+              8
+            ],
+            "C": [
+              11
+            ],
+            "D": [
+              14
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.0",
+        "prompt_hash": "sha256:cf6e11db022eea60ae91daadeaed2b0bf7fbe317d80d6661fe08fbd62b06515a",
+        "spec_version": "1.1",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2-live-pilot-20260824",
+        "microbatch_id": "we-v2-live-pilot-20260824-micro-09",
+        "item_generation_order": 25,
+        "invocation_id": "01a03235-8209-7d11-8a03-87f144c5f8dc",
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "In dialectal speech, the most frequent of the six suffixes marks plural nouns in discourse.",
+        "error_form": "In dialectal speech, the more frequent of the six suffixes marks plural nouns in discourse.",
+        "minimal_correction": "most frequent",
+        "mutation_type": "comparative_to_superlative",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    }
+  ]
+}

@@ -1,0 +1,616 @@
+{
+  "plan_version": "WE_V2_LIVE_PILOT_PLAN_1.0",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "section": "Written Expression",
+  "generator_version": "Written Expression Generator v2.0",
+  "reviewer_version": "Written Expression Reviewer v2.0",
+  "spec_sources": [
+    "specs/TOEFL_ITP_GRAMMAR_SPEC.md",
+    "specs/toefl_itp_grammar_spec.json",
+    "specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md",
+    "specs/toefl_itp_we_format_spec_addendum.json",
+    "analysis/GRAMMAR_TAXONOMY.md",
+    "analysis/grammar_taxonomy.json"
+  ],
+  "scope": {
+    "initial_candidates": 25,
+    "structure_items": 0,
+    "replacement_generation": false,
+    "evaluation_unit": "exactly 25 initial candidates"
+  },
+  "distribution_policy": "Official 125-item distributions are soft targets only; they are not quotas and are not copied mechanically per microbatch.",
+  "microbatch_sizes": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    1
+  ],
+  "planned_distributions": {
+    "primary_target": {
+      "REFERENCE_AND_DETERMINERS": 5,
+      "NONFINITE_VERB_PHRASES": 3,
+      "PARALLEL_STRUCTURE": 3,
+      "VERB_COMPLEMENTATION": 3,
+      "WORD_CLASS_FORM": 3,
+      "RELATIVE_CLAUSES": 2,
+      "VERB_FORM_VOICE": 2,
+      "CLAUSE_STRUCTURE": 1,
+      "COMPARATIVES_DEGREE": 1,
+      "CONNECTORS_CONJUNCTIONS": 1,
+      "WORD_ORDER_MODIFICATION": 1
+    },
+    "tested_error_type": {
+      "incorrect_part_of_speech": 6,
+      "wrong_verb_form": 6,
+      "agreement_error": 3,
+      "double_subject": 1,
+      "extraneous_element": 1,
+      "incorrect_reference": 1,
+      "incorrect_relative_marker": 1,
+      "incorrect_subordinator": 1,
+      "missing_required_element": 1,
+      "wrong_degree_form": 1,
+      "wrong_preposition_collocation": 1,
+      "wrong_voice": 1,
+      "wrong_word_order": 1
+    },
+    "difficulty": {
+      "MEDIUM": 17,
+      "EASY": 4,
+      "HARD": 4
+    },
+    "planned_correct_position": {
+      "B": 7,
+      "C": 7,
+      "D": 6,
+      "A": 5
+    },
+    "correction_locality": {
+      "CLAUSE_LEVEL": 10,
+      "LOCAL_SINGLE_TOKEN": 9,
+      "DEPENDENCY_BASED": 3,
+      "LOCAL_SHORT_SPAN": 3
+    },
+    "decision_granularity": {
+      "VERB_FRAME": 7,
+      "FUNCTION_WORD": 6,
+      "MORPHOLOGY": 4,
+      "AGREEMENT_DEPENDENCY": 2,
+      "CLAUSE_RELATION": 2,
+      "WORD_CLASS": 2,
+      "OTHER": 1,
+      "WORD_ORDER": 1
+    },
+    "sentence_length_region": {
+      "21-25": 12,
+      "16-20": 11,
+      "11-15": 1,
+      "26-30": 1
+    },
+    "expected_correct_span_type": {
+      "SINGLE_WORD": 16,
+      "SHORT_PHRASE": 6,
+      "CLAUSE_OR_CLAUSE_LIKE": 3
+    }
+  },
+  "official_soft_reference": {
+    "source": "analysis/we_format/written_expression_format_official.json",
+    "item_count": 125,
+    "sentence_median": 20,
+    "span_median": 1,
+    "coverage_median": 0.2632,
+    "unmarked_context_median": 15,
+    "gap_medians": {
+      "gap_A_B": 4,
+      "gap_B_C": 4,
+      "gap_C_D": 4
+    }
+  },
+  "slots": [
+    {
+      "item_id": "we-v2-pilot-001",
+      "item_generation_order": 1,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "subject-verb agreement across an intervening of-phrase",
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "glacial geology",
+      "correction_locality": "DEPENDENCY_BASED",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "planned_correct_position": "B",
+      "format_plan": {
+        "sentence_length_region": "21-25",
+        "expected_span_profile": "four single-word spans",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-002",
+      "item_generation_order": 2,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "possessive determiner number agreement with its antecedent",
+      "tested_error_type": "incorrect_reference",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "marine biology",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "FUNCTION_WORD",
+      "planned_correct_position": "D",
+      "format_plan": {
+        "sentence_length_region": "16-20",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-003",
+      "item_generation_order": 3,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "redundant determiner after a quantifier phrase",
+      "tested_error_type": "extraneous_element",
+      "difficulty": "EASY",
+      "vocabulary_domain": "American colonial history",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "decision_granularity": "FUNCTION_WORD",
+      "planned_correct_position": "C",
+      "format_plan": {
+        "sentence_length_region": "16-20",
+        "expected_span_profile": "two single-word spans and two two-word spans",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SHORT_PHRASE",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-004",
+      "item_generation_order": 4,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "demonstrative determiner number agreement with head noun",
+      "tested_error_type": "agreement_error",
+      "difficulty": "EASY",
+      "vocabulary_domain": "observational astronomy",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "FUNCTION_WORD",
+      "planned_correct_position": "A",
+      "format_plan": {
+        "sentence_length_region": "16-20",
+        "expected_span_profile": "four single-word spans",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-005",
+      "item_generation_order": 5,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "missing article before a singular count noun",
+      "tested_error_type": "missing_required_element",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "agricultural economics",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "FUNCTION_WORD",
+      "planned_correct_position": "B",
+      "format_plan": {
+        "sentence_length_region": "16-20",
+        "expected_span_profile": "four single-word spans",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-006",
+      "item_generation_order": 6,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-02",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "gerund required after a preposition-taking verb",
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "art history",
+      "correction_locality": "CLAUSE_LEVEL",
+      "decision_granularity": "VERB_FRAME",
+      "planned_correct_position": "C",
+      "format_plan": {
+        "sentence_length_region": "21-25",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-007",
+      "item_generation_order": 7,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "verb plus required preposition collocation",
+      "tested_error_type": "wrong_preposition_collocation",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "plant physiology",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "FUNCTION_WORD",
+      "planned_correct_position": "D",
+      "format_plan": {
+        "sentence_length_region": "16-20",
+        "expected_span_profile": "four single-word spans",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-008",
+      "item_generation_order": 8,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "bare infinitive required in a causative complement",
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "HARD",
+      "vocabulary_domain": "atmospheric science",
+      "correction_locality": "CLAUSE_LEVEL",
+      "decision_granularity": "VERB_FRAME",
+      "planned_correct_position": "B",
+      "format_plan": {
+        "sentence_length_region": "21-25",
+        "expected_span_profile": "three single-word spans and one clause-like span",
+        "expected_coverage_profile": "26-35%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-009",
+      "item_generation_order": 9,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-03",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "coordinated noun phrases requiring the same word class",
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "cultural anthropology",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "decision_granularity": "WORD_CLASS",
+      "planned_correct_position": "D",
+      "format_plan": {
+        "sentence_length_region": "21-25",
+        "expected_span_profile": "two single-word spans and two two-word spans",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-010",
+      "item_generation_order": 10,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "coordinated verb phrases requiring the same verb form",
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "analytical chemistry",
+      "correction_locality": "CLAUSE_LEVEL",
+      "decision_granularity": "VERB_FRAME",
+      "planned_correct_position": "C",
+      "format_plan": {
+        "sentence_length_region": "21-25",
+        "expected_span_profile": "two single-word spans and two short phrases",
+        "expected_coverage_profile": "26-35%",
+        "expected_correct_span_type": "SHORT_PHRASE",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-011",
+      "item_generation_order": 11,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "correlative not only ... but also parallelism",
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "HARD",
+      "vocabulary_domain": "nineteenth-century American literature",
+      "correction_locality": "CLAUSE_LEVEL",
+      "decision_granularity": "WORD_CLASS",
+      "planned_correct_position": "B",
+      "format_plan": {
+        "sentence_length_region": "26-30",
+        "expected_span_profile": "three single-word spans and one clause-like span",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-012",
+      "item_generation_order": 12,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adjective used where an adverb is required",
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "EASY",
+      "vocabulary_domain": "structural engineering",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "MORPHOLOGY",
+      "planned_correct_position": "A",
+      "format_plan": {
+        "sentence_length_region": "16-20",
+        "expected_span_profile": "four single-word spans",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-013",
+      "item_generation_order": 13,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-05",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "noun used where an adjective is required",
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "ornithology",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "MORPHOLOGY",
+      "planned_correct_position": "C",
+      "format_plan": {
+        "sentence_length_region": "16-20",
+        "expected_span_profile": "four single-word spans",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-014",
+      "item_generation_order": 14,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-05",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "verb form used where a nominal is required",
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "urban sociology",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "MORPHOLOGY",
+      "planned_correct_position": "D",
+      "format_plan": {
+        "sentence_length_region": "21-25",
+        "expected_span_profile": "four single-word spans",
+        "expected_coverage_profile": "16-25%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-015",
+      "item_generation_order": 15,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-05",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "past participle required in a reduced relative clause",
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "paleontology",
+      "correction_locality": "CLAUSE_LEVEL",
+      "decision_granularity": "VERB_FRAME",
+      "planned_correct_position": "A",
+      "format_plan": {
+        "sentence_length_region": "21-25",
+        "expected_span_profile": "two single-word spans and two short phrases",
+        "expected_coverage_profile": "26-35%",
+        "expected_correct_span_type": "SHORT_PHRASE",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-016",
+      "item_generation_order": 16,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-06",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "infinitive of purpose in the wrong nonfinite form",
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "public health",
+      "correction_locality": "CLAUSE_LEVEL",
+      "decision_granularity": "VERB_FRAME",
+      "planned_correct_position": "B",
+      "format_plan": {
+        "sentence_length_region": "16-20",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-017",
+      "item_generation_order": 17,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-06",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "present versus past participle as a prenominal modifier",
+      "tested_error_type": "incorrect_part_of_speech",
+      "difficulty": "HARD",
+      "vocabulary_domain": "materials science",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "MORPHOLOGY",
+      "planned_correct_position": "C",
+      "format_plan": {
+        "sentence_length_region": "21-25",
+        "expected_span_profile": "four single-word spans",
+        "expected_coverage_profile": "16-25%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-018",
+      "item_generation_order": 18,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-06",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "passive voice required by an inanimate patient subject",
+      "tested_error_type": "wrong_voice",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "archaeology",
+      "correction_locality": "CLAUSE_LEVEL",
+      "decision_granularity": "VERB_FRAME",
+      "planned_correct_position": "B",
+      "format_plan": {
+        "sentence_length_region": "21-25",
+        "expected_span_profile": "two single-word spans and two short phrases",
+        "expected_coverage_profile": "26-35%",
+        "expected_correct_span_type": "SHORT_PHRASE",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-019",
+      "item_generation_order": 19,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "perfect auxiliary followed by the wrong participle form",
+      "tested_error_type": "wrong_verb_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "music history",
+      "correction_locality": "CLAUSE_LEVEL",
+      "decision_granularity": "VERB_FRAME",
+      "planned_correct_position": "D",
+      "format_plan": {
+        "sentence_length_region": "16-20",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-020",
+      "item_generation_order": 20,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "clausal subordinator required where a prepositional connector appears",
+      "tested_error_type": "incorrect_subordinator",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "environmental policy",
+      "correction_locality": "CLAUSE_LEVEL",
+      "decision_granularity": "CLAUSE_RELATION",
+      "planned_correct_position": "A",
+      "format_plan": {
+        "sentence_length_region": "21-25",
+        "expected_span_profile": "two short phrases and two single-word spans",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SHORT_PHRASE",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-021",
+      "item_generation_order": 21,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative marker selection determined by the antecedent",
+      "tested_error_type": "incorrect_relative_marker",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "historical geography",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "FUNCTION_WORD",
+      "planned_correct_position": "C",
+      "format_plan": {
+        "sentence_length_region": "21-25",
+        "expected_span_profile": "four single-word spans",
+        "expected_coverage_profile": "16-25%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-022",
+      "item_generation_order": 22,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-08",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative clause verb agreeing with the antecedent head",
+      "tested_error_type": "agreement_error",
+      "difficulty": "HARD",
+      "vocabulary_domain": "developmental psychology",
+      "correction_locality": "DEPENDENCY_BASED",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "planned_correct_position": "D",
+      "format_plan": {
+        "sentence_length_region": "21-25",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "expected_coverage_profile": "20-29%",
+        "expected_correct_span_type": "SINGLE_WORD",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-023",
+      "item_generation_order": 23,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-08",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "resumptive subject pronoun after a full subject noun phrase",
+      "tested_error_type": "double_subject",
+      "difficulty": "EASY",
+      "vocabulary_domain": "immunology",
+      "correction_locality": "CLAUSE_LEVEL",
+      "decision_granularity": "CLAUSE_RELATION",
+      "planned_correct_position": "B",
+      "format_plan": {
+        "sentence_length_region": "16-20",
+        "expected_span_profile": "three single-word spans and one clause-like span",
+        "expected_coverage_profile": "26-35%",
+        "expected_correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-024",
+      "item_generation_order": 24,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-08",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "subtype": "adverb misplaced between verb and its direct object",
+      "tested_error_type": "wrong_word_order",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "computer engineering",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "decision_granularity": "WORD_ORDER",
+      "planned_correct_position": "C",
+      "format_plan": {
+        "sentence_length_region": "16-20",
+        "expected_span_profile": "two single-word spans and two short phrases",
+        "expected_coverage_profile": "26-35%",
+        "expected_correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-025",
+      "item_generation_order": 25,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-09",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "subtype": "comparative form used where the superlative is required",
+      "tested_error_type": "wrong_degree_form",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "descriptive linguistics",
+      "correction_locality": "DEPENDENCY_BASED",
+      "decision_granularity": "OTHER",
+      "planned_correct_position": "A",
+      "format_plan": {
+        "sentence_length_region": "11-15",
+        "expected_span_profile": "three single-word spans and one two-word span",
+        "expected_coverage_profile": "26-35%",
+        "expected_correct_span_type": "SHORT_PHRASE",
+        "expected_context_profile": "natural unmarked context before, between, and after the four spans"
+      }
+    }
+  ]
+}

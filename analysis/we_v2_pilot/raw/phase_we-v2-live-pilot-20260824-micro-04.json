@@ -1,0 +1,157 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "trace_source": "generator_output_qa_metadata",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-010",
+      "item_generation_order": 10,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+      "invocation_id": "01a03235-7893-7ac0-abf7-05f0b02a80bc",
+      "trace_source": "generator_output_qa_metadata",
+      "trace_note": "Phase evidence is reconstructed from the Generator v2 QA metadata; no grammar judgement is added here.",
+      "recorded_at_utc": "2026-08-24T05:29:46.882608+00:00",
+      "phases": {
+        "item_design_plan": {
+          "status": "PRESENT",
+          "fields": [
+            "primary_target",
+            "subtype",
+            "tested_error_type",
+            "difficulty",
+            "vocabulary_domain",
+            "correction_locality",
+            "decision_granularity",
+            "intended_error_position",
+            "correct_span_type"
+          ]
+        },
+        "clean_sentence": {
+          "status": "PRESENT",
+          "clean_form": "The analytical team not only measures the solution's acidity but also records the color change and compares the results with a calibrated standard."
+        },
+        "clean_sentence_validation": {
+          "status": "PASS"
+        },
+        "one_error_mutation": {
+          "status": "PRESENT",
+          "error_form": "The analytical team not only measures the solution's acidity but also recording the color change and compares the results with a calibrated standard.",
+          "mutation_type": "finite-verb-to-present-participle substitution in a coordinated verb phrase",
+          "minimal_correction": "records the color change"
+        },
+        "uniqueness_audit": {
+          "status": "PASS"
+        },
+        "four_local_span_selection": {
+          "status": "PRESENT"
+        },
+        "deterministic_format_validation": {
+          "status": "WARN"
+        },
+        "final_grammar_audit": {
+          "status": "PASS"
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-011",
+      "item_generation_order": 11,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+      "invocation_id": "01a03235-7893-7ac0-abf7-05f0b02a80bc",
+      "trace_source": "generator_output_qa_metadata",
+      "trace_note": "Phase evidence is reconstructed from the Generator v2 QA metadata; no grammar judgement is added here.",
+      "recorded_at_utc": "2026-08-24T05:29:46.882608+00:00",
+      "phases": {
+        "item_design_plan": {
+          "status": "PRESENT",
+          "fields": [
+            "primary_target",
+            "subtype",
+            "tested_error_type",
+            "difficulty",
+            "vocabulary_domain",
+            "correction_locality",
+            "decision_granularity",
+            "intended_error_position",
+            "correct_span_type"
+          ]
+        },
+        "clean_sentence": {
+          "status": "PRESENT",
+          "clean_form": "Not only did Edith Wharton challenge the conventions of nineteenth-century fiction, but she also exposed the social anxieties that shaped its most celebrated narratives and influenced later American writers."
+        },
+        "clean_sentence_validation": {
+          "status": "PASS"
+        },
+        "one_error_mutation": {
+          "status": "PRESENT",
+          "error_form": "Not only did Edith Wharton challenge the conventions of nineteenth-century fiction, but she also exposure the social anxieties that shaped its most celebrated narratives and influenced later American writers.",
+          "mutation_type": "finite verb to noun substitution in the second correlative clause",
+          "minimal_correction": "but she also exposed"
+        },
+        "uniqueness_audit": {
+          "status": "PASS"
+        },
+        "four_local_span_selection": {
+          "status": "PRESENT"
+        },
+        "deterministic_format_validation": {
+          "status": "WARN"
+        },
+        "final_grammar_audit": {
+          "status": "PASS"
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-012",
+      "item_generation_order": 12,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-04",
+      "invocation_id": "01a03235-7893-7ac0-abf7-05f0b02a80bc",
+      "trace_source": "generator_output_qa_metadata",
+      "trace_note": "Phase evidence is reconstructed from the Generator v2 QA metadata; no grammar judgement is added here.",
+      "recorded_at_utc": "2026-08-24T05:29:46.882608+00:00",
+      "phases": {
+        "item_design_plan": {
+          "status": "PRESENT",
+          "fields": [
+            "primary_target",
+            "subtype",
+            "tested_error_type",
+            "difficulty",
+            "vocabulary_domain",
+            "correction_locality",
+            "decision_granularity",
+            "intended_error_position",
+            "correct_span_type"
+          ]
+        },
+        "clean_sentence": {
+          "status": "PRESENT",
+          "clean_form": "During the load test, the reinforced beam responded rapidly, absorbed vibration effectively, and remained structurally sound throughout the experiment."
+        },
+        "clean_sentence_validation": {
+          "status": "PASS"
+        },
+        "one_error_mutation": {
+          "status": "PRESENT",
+          "error_form": "During the load test, the reinforced beam responded rapid, absorbed vibration effectively, and remained structurally sound throughout the experiment.",
+          "mutation_type": "adjective-to-adverb substitution",
+          "minimal_correction": "rapidly"
+        },
+        "uniqueness_audit": {
+          "status": "PASS"
+        },
+        "four_local_span_selection": {
+          "status": "PRESENT"
+        },
+        "deterministic_format_validation": {
+          "status": "WARN"
+        },
+        "final_grammar_audit": {
+          "status": "PASS"
+        }
+      }
+    }
+  ]
+}

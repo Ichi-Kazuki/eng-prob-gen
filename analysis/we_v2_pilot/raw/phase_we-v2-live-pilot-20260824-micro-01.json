@@ -1,0 +1,157 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "trace_source": "generator_output_qa_metadata",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-001",
+      "item_generation_order": 1,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+      "invocation_id": null,
+      "trace_source": "generator_output_qa_metadata",
+      "trace_note": "Phase evidence is reconstructed from the Generator v2 QA metadata; no grammar judgement is added here.",
+      "recorded_at_utc": "2026-08-24T05:29:46.882608+00:00",
+      "phases": {
+        "item_design_plan": {
+          "status": "PRESENT",
+          "fields": [
+            "primary_target",
+            "subtype",
+            "tested_error_type",
+            "difficulty",
+            "vocabulary_domain",
+            "correction_locality",
+            "decision_granularity",
+            "intended_error_position",
+            "correct_span_type"
+          ]
+        },
+        "clean_sentence": {
+          "status": "PRESENT",
+          "clean_form": "The retreat of the continental ice sheets that once covered northern Europe has left behind thick deposits of gravel and clay."
+        },
+        "clean_sentence_validation": {
+          "status": "PASS"
+        },
+        "one_error_mutation": {
+          "status": "PRESENT",
+          "error_form": "The retreat of the continental ice sheets that once covered northern Europe have left behind thick deposits of gravel and clay.",
+          "mutation_type": "finite auxiliary number inflection changed from singular 'has' to plural 'have', breaking agreement with the singular head noun 'retreat'",
+          "minimal_correction": "have -> has"
+        },
+        "uniqueness_audit": {
+          "status": "PASS"
+        },
+        "four_local_span_selection": {
+          "status": "PRESENT"
+        },
+        "deterministic_format_validation": {
+          "status": "PASS"
+        },
+        "final_grammar_audit": {
+          "status": "PASS"
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-002",
+      "item_generation_order": 2,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+      "invocation_id": null,
+      "trace_source": "generator_output_qa_metadata",
+      "trace_note": "Phase evidence is reconstructed from the Generator v2 QA metadata; no grammar judgement is added here.",
+      "recorded_at_utc": "2026-08-24T05:29:46.882608+00:00",
+      "phases": {
+        "item_design_plan": {
+          "status": "PRESENT",
+          "fields": [
+            "primary_target",
+            "subtype",
+            "tested_error_type",
+            "difficulty",
+            "vocabulary_domain",
+            "correction_locality",
+            "decision_granularity",
+            "intended_error_position",
+            "correct_span_type"
+          ]
+        },
+        "clean_sentence": {
+          "status": "PRESENT",
+          "clean_form": "During the coldest months, humpback whales migrate toward the tropics in order to raise their calves in warm coastal water."
+        },
+        "clean_sentence_validation": {
+          "status": "PASS"
+        },
+        "one_error_mutation": {
+          "status": "PRESENT",
+          "error_form": "During the coldest months, humpback whales migrate toward the tropics in order to raise its calves in warm coastal water.",
+          "mutation_type": "possessive determiner number substitution: plural 'their' replaced by singular 'its', leaving the determiner without any number-compatible antecedent",
+          "minimal_correction": "its -> their"
+        },
+        "uniqueness_audit": {
+          "status": "PASS"
+        },
+        "four_local_span_selection": {
+          "status": "PRESENT"
+        },
+        "deterministic_format_validation": {
+          "status": "PASS"
+        },
+        "final_grammar_audit": {
+          "status": "PASS"
+        }
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-003",
+      "item_generation_order": 3,
+      "microbatch_id": "we-v2-live-pilot-20260824-micro-01",
+      "invocation_id": null,
+      "trace_source": "generator_output_qa_metadata",
+      "trace_note": "Phase evidence is reconstructed from the Generator v2 QA metadata; no grammar judgement is added here.",
+      "recorded_at_utc": "2026-08-24T05:29:46.882608+00:00",
+      "phases": {
+        "item_design_plan": {
+          "status": "PRESENT",
+          "fields": [
+            "primary_target",
+            "subtype",
+            "tested_error_type",
+            "difficulty",
+            "vocabulary_domain",
+            "correction_locality",
+            "decision_granularity",
+            "intended_error_position",
+            "correct_span_type"
+          ]
+        },
+        "clean_sentence": {
+          "status": "PRESENT",
+          "clean_form": "Even after the British Parliament imposed duties on imported goods, most of the colonial merchants continued to trade abroad."
+        },
+        "clean_sentence_validation": {
+          "status": "PASS"
+        },
+        "one_error_mutation": {
+          "status": "PRESENT",
+          "error_form": "Even after the British Parliament imposed duties on imported goods, the most of the colonial merchants continued to trade abroad.",
+          "mutation_type": "insertion of an extraneous definite article before the partitive quantifier 'most'",
+          "minimal_correction": "the most -> most (delete the extraneous article 'the')"
+        },
+        "uniqueness_audit": {
+          "status": "PASS"
+        },
+        "four_local_span_selection": {
+          "status": "PRESENT"
+        },
+        "deterministic_format_validation": {
+          "status": "PASS"
+        },
+        "final_grammar_audit": {
+          "status": "PASS"
+        }
+      }
+    }
+  ]
+}

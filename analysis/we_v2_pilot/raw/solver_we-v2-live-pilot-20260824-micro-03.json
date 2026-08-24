@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2-pilot-007",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The verb depend requires the preposition on; for is incorrect in this sentence.",
+      "suggested_correction": "on",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-008",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "After the causative verb makes, the following verb must be in the bare infinitive form rise, not rises.",
+      "suggested_correction": "rise",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-009",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The noun practices requires the adjective ritual; the adverb ritually cannot modify it in this phrase.",
+      "suggested_correction": "ritual",
+      "ambiguity_detected": false
+    }
+  ]
+}

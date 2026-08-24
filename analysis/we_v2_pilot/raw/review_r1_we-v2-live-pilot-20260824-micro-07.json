@@ -1,0 +1,322 @@
+{
+  "review_batch_id": "we-v2-live-pilot-20260824",
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-07",
+  "item_generation_order": [
+    19,
+    20,
+    21
+  ],
+  "items": [
+    {
+      "item_id": "we-v2-pilot-019",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "REVISE",
+      "critical_failure": false,
+      "independent_answer": "D",
+      "generator_answer": "D",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "PASS",
+      "detected_error_count": 1,
+      "detected_error_position": "D",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ACCEPTABLE",
+        "C": "ACCEPTABLE",
+        "D": "ERROR"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "PASS",
+        "target_metadata": "FAIL",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 20,
+        "span_word_counts": {
+          "A": 2,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.25,
+        "unmarked_word_count": 15,
+        "gap_A_B": 2,
+        "gap_B_C": 2,
+        "gap_C_D": 3,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "VERB_FRAME",
+        "format_distribution_distance": 0.1472,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.492,
+          "marked_coverage_ratio": 0.456,
+          "unmarked_word_count": 0.528,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.088,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            1,
+            2
+          ],
+          "B": [
+            5
+          ],
+          "C": [
+            8
+          ],
+          "D": [
+            12
+          ]
+        }
+      },
+      "issues": [
+        {
+          "severity": "MAJOR",
+          "category": "target_metadata_mismatch",
+          "description": "The error is a past-participle form selection after the perfect passive auxiliary sequence 'had been'; the authoritative taxonomy routes participle-form selection to NONFINITE_VERB_PHRASES, not VERB_FORM_VOICE, which is reserved for finite main-verb tense/aspect/voice selection."
+        }
+      ],
+      "revision_requirements": [
+        "Change primary_target from VERB_FORM_VOICE to NONFINITE_VERB_PHRASES; retain the D error, sentence, marked spans, correction, and wrong_verb_form classification."
+      ],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": "sha256:1a2516739e83de8db8c0a58dddaac973b9960966f94a5554f42cd577d086767b",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-live-pilot-20260824",
+        "item_review_order": 1,
+        "invocation_id": "01a03244-7e8c-7c72-a775-df7e370cbba1",
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-020",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "A",
+      "generator_answer": "A",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "PASS",
+      "detected_error_count": 1,
+      "detected_error_position": "A",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ERROR",
+        "B": "ACCEPTABLE",
+        "C": "ACCEPTABLE",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "PASS",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 24,
+        "span_word_counts": {
+          "A": 2,
+          "B": 2,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.25,
+        "unmarked_word_count": 18,
+        "gap_A_B": 4,
+        "gap_B_C": 2,
+        "gap_C_D": 3,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "CLAUSE_RELATION",
+        "format_distribution_distance": 0.7001,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.824,
+          "marked_coverage_ratio": 0.456,
+          "unmarked_word_count": 0.748,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.608,
+          "gap_B_C": 0.088,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            0,
+            1
+          ],
+          "B": [
+            6,
+            7
+          ],
+          "C": [
+            10
+          ],
+          "D": [
+            14
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": "sha256:1a2516739e83de8db8c0a58dddaac973b9960966f94a5554f42cd577d086767b",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-live-pilot-20260824",
+        "item_review_order": 2,
+        "invocation_id": "01a03244-7e8c-7c72-a775-df7e370cbba1",
+        "runtime_model": null
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-021",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "C",
+      "generator_answer": "C",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "PASS",
+      "detected_error_count": 1,
+      "detected_error_position": "C",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ACCEPTABLE",
+        "C": "ERROR",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "PASS",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 22,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.0,
+        "max_span_length": 1,
+        "marked_coverage_ratio": 0.1818,
+        "unmarked_word_count": 18,
+        "gap_A_B": 2,
+        "gap_B_C": 2,
+        "gap_C_D": 3,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "format_distribution_distance": 0.8596,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.664,
+          "marked_coverage_ratio": 0.152,
+          "unmarked_word_count": 0.748,
+          "mean_span_length": 0.156,
+          "max_span_length": 0.156,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.088,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            1
+          ],
+          "B": [
+            4
+          ],
+          "C": [
+            7
+          ],
+          "D": [
+            11
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": "sha256:1a2516739e83de8db8c0a58dddaac973b9960966f94a5554f42cd577d086767b",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-live-pilot-20260824",
+        "item_review_order": 3,
+        "invocation_id": "01a03244-7e8c-7c72-a775-df7e370cbba1",
+        "runtime_model": null
+      }
+    }
+  ]
+}

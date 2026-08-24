@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2-pilot-019",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The passive construction after 'had been' requires a past participle: 'had been written about.' The marked word 'wrote' is a simple past form and is incorrect here.",
+      "suggested_correction": "written",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-020",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "'Due to' must be followed by a noun phrase, but it is followed by the finite clause 'the city expanded its recycling program.' A clause requires a conjunction such as 'because.'",
+      "suggested_correction": "Because",
+      "ambiguity_detected": false
+    },
+    {
+      "item_id": "we-v2-pilot-021",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The relative pronoun refers to the nonhuman noun 'maps,' so 'who' is incorrect. The sentence requires 'which' or 'that' in 'maps which merchants used.'",
+      "suggested_correction": "which",
+      "ambiguity_detected": false
+    }
+  ]
+}

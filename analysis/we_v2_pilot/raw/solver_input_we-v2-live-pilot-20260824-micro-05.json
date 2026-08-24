@@ -1,0 +1,40 @@
+{
+  "microbatch_id": "we-v2-live-pilot-20260824-micro-05",
+  "generation_batch_id": "we-v2-live-pilot-20260824",
+  "blinding": "allowlist: item_id, section, sentence, marked_parts",
+  "items": [
+    {
+      "item_id": "we-v2-pilot-013",
+      "section": "Written Expression",
+      "sentence": "Field ornithologists have long known that the coastal marshes provide unusually production nesting habitat for migratory shorebirds.",
+      "marked_parts": {
+        "A": "known",
+        "B": "marshes",
+        "C": "production",
+        "D": "for"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-014",
+      "section": "Written Expression",
+      "sentence": "Urban sociologists have argued that neighborhood stability depends less on average income than on the steady expand of local civic institutions.",
+      "marked_parts": {
+        "A": "argued",
+        "B": "depends",
+        "C": "than",
+        "D": "expand"
+      }
+    },
+    {
+      "item_id": "we-v2-pilot-015",
+      "section": "Written Expression",
+      "sentence": "Fossil trackways excavating from a limestone quarry in southern Utah have persuaded many paleontologists that several large theropods hunted in coordinated groups.",
+      "marked_parts": {
+        "A": "excavating from",
+        "B": "southern",
+        "C": "persuaded",
+        "D": "several large theropods"
+      }
+    }
+  ]
+}
