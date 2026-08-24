@@ -1,0 +1,623 @@
+{
+  "report_version": "WE_V2_EXTREME_AUDIT_1.1",
+  "audit_scope": {
+    "run_id": "we-v2-live-resmoke-20260824-patch-01",
+    "run_type": "LIVE_REGRESSION_SMOKE",
+    "item_count": 10,
+    "extreme_count": 6,
+    "warning_count": 2,
+    "preferred_count": 2,
+    "generator_reviewer_solver_orchestrator_changed": true,
+    "generator_code_changed": true,
+    "generation_policy_changed": false,
+    "reviewer_code_changed": false,
+    "solver_code_changed": false,
+    "orchestrator_code_changed": false,
+    "audited_commit": "9620834",
+    "scope_note": "The audited commit changes Generator code (canonical diagnostics emission and validation) but does not change generation policy, Reviewer, Solver, Orchestrator, Specification, Taxonomy, or band thresholds."
+  },
+  "sources": {
+    "live_items": "analysis/we_v2_patch/live_resmoke_items.json",
+    "live_metrics": "analysis/we_v2_patch/live_resmoke_metrics.json",
+    "live_review": "analysis/we_v2_patch/live_resmoke_review.json",
+    "live_solver": "analysis/we_v2_patch/live_resmoke_solver.json",
+    "pilot_format_validation": "analysis/we_v2_pilot/we_v2_pilot_format_validation.json",
+    "pilot_metrics": "analysis/we_v2_pilot/we_v2_pilot_metrics.json",
+    "official_distribution": "analysis/we_format/written_expression_format_official.json",
+    "format_config": "agents/toefl_itp_we_generator_v2/config/we_v2_format_config.json",
+    "validator": "agents/toefl_itp_we_generator_v2/scripts/validate_format.py",
+    "emission_adapter": "agents/toefl_itp_we_generator_v2/scripts/emit_output.py",
+    "human_public_sample": "analysis/we_v2_patch/human_targeted_sample.json",
+    "human_private_key": "analysis/we_v2_patch/human_targeted_sample_key.json"
+  },
+  "method": {
+    "official_n": 125,
+    "percentile_method": "nearest_rank_empirical_cdf_with_mid_rank_for_ties",
+    "percentile_formula": "(count(x < value) + 0.5 * count(x == value)) / n",
+    "band_logic": "PREFERRED if q10 <= value <= q90; WARNING if outside PREFERRED but q05 <= value <= q95; EXTREME if value < q05 or value > q95",
+    "banded_dimensions": [
+      "sentence_word_count",
+      "marked_coverage_ratio",
+      "unmarked_word_count",
+      "mean_span_length",
+      "max_span_length",
+      "gap_A_B",
+      "gap_B_C",
+      "gap_C_D"
+    ],
+    "categorical_percentile_policy": "No ordered percentile for correct_span_type, correction_locality, or decision_granularity; report official category count/share and percentile=null.",
+    "distance_method": "root_mean_square_standardized_distance",
+    "distance_metrics": [
+      "sentence_word_count",
+      "marked_coverage_ratio",
+      "unmarked_word_count",
+      "mean_span_length",
+      "max_span_length"
+    ],
+    "distance_exclusions": [
+      "gap_A_B, gap_B_C, and gap_C_D are not included in numeric distance"
+    ],
+    "official_item_level_statistics_basis": {
+      "max_span_length": {"mean": 1.848, "stdev": 0.7077, "observed_values": "1..4", "sample_stdev": true}
+    },
+    "distance_recompute_policy": "Recompute from observed item metrics and the official source distribution; do not rely on a stored distance field produced under an invalid zero-stdev assumption.",
+    "distance_band_relationship": "format_distribution_distance is diagnostic only and is not a direct band assignment input."
+  },
+  "thresholds": {
+    "sentence_word_count": {"q05": 13, "q10": 15, "q90": 25, "q95": 27},
+    "marked_coverage_ratio": {"q05": 0.16, "q10": 0.1739, "q90": 0.381, "q95": 0.4167},
+    "unmarked_word_count": {"q05": 9, "q10": 10, "q90": 20, "q95": 22},
+    "mean_span_length": {"q05": 1, "q10": 1, "q90": 1.75, "q95": 1.75},
+    "max_span_length": {"q05": 1, "q10": 1, "q90": 3, "q95": 3},
+    "gap_A_B": {"q05": 1, "q10": 2, "q90": 5, "q95": 5},
+    "gap_B_C": {"q05": 2, "q10": 2, "q90": 5, "q95": 6},
+    "gap_C_D": {"q05": 2, "q10": 2, "q90": 5, "q95": 6}
+  },
+  "official_category_distributions": {
+    "correct_span_type": {
+      "SINGLE_WORD": {"count": 98, "share": 0.784},
+      "SHORT_PHRASE": {"count": 12, "share": 0.096},
+      "CLAUSE_OR_CLAUSE_LIKE": {"count": 15, "share": 0.12}
+    },
+    "correction_locality": {
+      "DEPENDENCY_BASED": {"count": 19, "share": 0.152},
+      "LOCAL_SHORT_SPAN": {"count": 13, "share": 0.104},
+      "SEMANTIC_OR_CONTEXT_DEPENDENT": {"count": 11, "share": 0.088},
+      "LOCAL_SINGLE_TOKEN": {"count": 28, "share": 0.224},
+      "CLAUSE_LEVEL": {"count": 54, "share": 0.432}
+    },
+    "decision_granularity": {
+      "FUNCTION_WORD": {"count": 26, "share": 0.208},
+      "WORD_ORDER": {"count": 6, "share": 0.048},
+      "CLAUSE_RELATION": {"count": 8, "share": 0.064},
+      "VERB_FRAME": {"count": 44, "share": 0.352},
+      "OTHER": {"count": 7, "share": 0.056},
+      "MORPHOLOGY": {"count": 15, "share": 0.12},
+      "WORD_CLASS": {"count": 4, "share": 0.032},
+      "AGREEMENT_DEPENDENCY": {"count": 14, "share": 0.112},
+      "LOCAL_PHRASE": {"count": 1, "share": 0.008}
+    }
+  },
+  "live_dimension_extreme_summary": {
+    "extreme_flag_count": 10,
+    "extreme_flags_denominator": 80,
+    "extreme_flag_rate": 0.125,
+    "items_with_extreme": 6,
+    "items_with_extreme_rate": 0.6,
+    "by_dimension": {
+      "sentence_word_count": {"EXTREME": 0, "WARNING": 0, "PREFERRED": 10},
+      "marked_coverage_ratio": {"EXTREME": 1, "WARNING": 0, "PREFERRED": 9},
+      "unmarked_word_count": {"EXTREME": 0, "WARNING": 0, "PREFERRED": 10},
+      "mean_span_length": {"EXTREME": 1, "WARNING": 0, "PREFERRED": 9},
+      "max_span_length": {"EXTREME": 0, "WARNING": 0, "PREFERRED": 10},
+      "gap_A_B": {"EXTREME": 2, "WARNING": 2, "PREFERRED": 6},
+      "gap_B_C": {"EXTREME": 4, "WARNING": 0, "PREFERRED": 6},
+      "gap_C_D": {"EXTREME": 2, "WARNING": 2, "PREFERRED": 6}
+    },
+    "most_frequent_extreme_dimension": "gap_B_C"
+  },
+  "items": [
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-001",
+      "item_generation_order": 1,
+      "microbatch_id": "we-v2-live-resmoke-20260824-patch-01-micro-01",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "singular head across an intervening of-phrase",
+      "difficulty": "EASY",
+      "sentence": "The sequence of volcanic eruptions recorded in the archive reveal important changes in regional climate patterns over several centuries.",
+      "marked_parts": {"A": "The", "B": "reveal", "C": "regional", "D": "centuries"},
+      "correct_answer": "B",
+      "format_band_status": "EXTREME",
+      "dimension_values": {
+        "sentence_word_count": {"value": 19, "official_percentile": 0.428, "metric_band": "PREFERRED"},
+        "span_word_counts": {
+          "A": {"value": 1, "official_percentile": 0.412},
+          "B": {"value": 1, "official_percentile": 0.356},
+          "C": {"value": 1, "official_percentile": 0.392},
+          "D": {"value": 1, "official_percentile": 0.34},
+          "banding": "not independently banded; contributes to mean/max/coverage"
+        },
+        "mean_span_length": {"value": 1, "official_percentile": 0.156, "metric_band": "PREFERRED"},
+        "max_span_length": {"value": 1, "official_percentile": 0.156, "metric_band": "PREFERRED"},
+        "marked_coverage_ratio": {"value": 0.2105, "official_percentile": 0.288, "metric_band": "PREFERRED"},
+        "unmarked_word_count": {"value": 15, "official_percentile": 0.528, "metric_band": "PREFERRED"},
+        "gap_A_B": {"value": 8, "official_percentile": 1.0, "metric_band": "EXTREME"},
+        "gap_B_C": {"value": 3, "official_percentile": 0.292, "metric_band": "PREFERRED"},
+        "gap_C_D": {"value": 4, "official_percentile": 0.568, "metric_band": "PREFERRED"},
+        "correct_span_word_count": {"value": 1, "official_percentile": 0.392},
+        "correct_span_type": {"value": "SINGLE_WORD", "official_count": 98, "official_share": 0.784, "official_percentile": null},
+        "correction_locality": {"value": "DEPENDENCY_BASED", "official_count": 19, "official_share": 0.152, "official_percentile": null},
+        "decision_granularity": {"value": "AGREEMENT_DEPENDENCY", "official_count": 14, "official_share": 0.112, "official_percentile": null},
+        "format_distribution_distance": {
+          "value": 0.7898,
+          "official_distance_percentile": 0.376,
+          "band_trigger": false,
+          "squared_standardized_contributions": {"sentence_word_count": 0.0602, "marked_coverage_ratio": 0.5238, "unmarked_word_count": 0.0008, "mean_span_length": 1.0986, "max_span_length": 1.4358},
+          "distance_driver_ranked": ["max_span_length", "mean_span_length", "marked_coverage_ratio", "sentence_word_count", "unmarked_word_count"]
+        }
+      },
+      "band_assignment_decomposition": {
+        "metric_band_status": {"sentence_word_count": "PREFERRED", "marked_coverage_ratio": "PREFERRED", "unmarked_word_count": "PREFERRED", "mean_span_length": "PREFERRED", "max_span_length": "PREFERRED", "gap_A_B": "EXTREME", "gap_B_C": "PREFERRED", "gap_C_D": "PREFERRED"},
+        "extreme_causes": [{"dimension": "gap_A_B", "relation": "above", "value": 8, "boundary": "q95", "boundary_value": 5}],
+        "warning_causes": [],
+        "direct_reason": "EXTREME because gap_A_B is above q95; all other banded metrics are PREFERRED.",
+        "distance_is_not_direct_cause": true
+      },
+      "human_visible_assessment": {"classification": "LIKELY_INVISIBLE", "ai_provisional": true, "rationale": "One long A-B interval, but four single-word marks and a complete natural sentence.", "human_review_required": true}
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-002",
+      "item_generation_order": 2,
+      "microbatch_id": "we-v2-live-resmoke-20260824-patch-01-micro-02",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "subtype": "pronoun agreement with a plural antecedent",
+      "difficulty": "EASY",
+      "sentence": "The marine biologists observed the nesting cranes until it crossed the shallow channel near the protected island during the autumn migration.",
+      "marked_parts": {"A": "marine", "B": "observed", "C": "nesting cranes", "D": "it"},
+      "correct_answer": "D",
+      "format_band_status": "EXTREME",
+      "dimension_values": {
+        "sentence_word_count": {"value": 21, "official_percentile": 0.576, "metric_band": "PREFERRED"},
+        "span_word_counts": {"A": {"value": 1, "official_percentile": 0.412}, "B": {"value": 1, "official_percentile": 0.356}, "C": {"value": 2, "official_percentile": 0.872}, "D": {"value": 1, "official_percentile": 0.34}, "banding": "not independently banded; contributes to mean/max/coverage"},
+        "mean_span_length": {"value": 1.25, "official_percentile": 0.5, "metric_band": "PREFERRED"},
+        "max_span_length": {"value": 2, "official_percentile": 0.588, "metric_band": "PREFERRED"},
+        "marked_coverage_ratio": {"value": 0.2381, "official_percentile": 0.392, "metric_band": "PREFERRED"},
+        "unmarked_word_count": {"value": 16, "official_percentile": 0.588, "metric_band": "PREFERRED"},
+        "gap_A_B": {"value": 1, "official_percentile": 0.036, "metric_band": "WARNING"},
+        "gap_B_C": {"value": 1, "official_percentile": 0.02, "metric_band": "EXTREME"},
+        "gap_C_D": {"value": 1, "official_percentile": 0.024, "metric_band": "EXTREME"},
+        "correct_span_word_count": {"value": 1, "official_percentile": 0.392},
+        "correct_span_type": {"value": "SINGLE_WORD", "official_count": 98, "official_share": 0.784, "official_percentile": null},
+        "correction_locality": {"value": "DEPENDENCY_BASED", "official_count": 19, "official_share": 0.152, "official_percentile": null},
+        "decision_granularity": {"value": "AGREEMENT_DEPENDENCY", "official_count": 14, "official_share": 0.112, "official_percentile": null},
+        "format_distribution_distance": {"value": 0.2603, "official_distance_percentile": 0.052, "band_trigger": false, "squared_standardized_contributions": {"sentence_word_count": 0.0496, "marked_coverage_ratio": 0.1527, "unmarked_word_count": 0.0656, "mean_span_length": 0.0246, "max_span_length": 0.0461}, "distance_driver_ranked": ["marked_coverage_ratio", "unmarked_word_count", "sentence_word_count", "max_span_length", "mean_span_length"]}
+      },
+      "band_assignment_decomposition": {
+        "metric_band_status": {"sentence_word_count": "PREFERRED", "marked_coverage_ratio": "PREFERRED", "unmarked_word_count": "PREFERRED", "mean_span_length": "PREFERRED", "max_span_length": "PREFERRED", "gap_A_B": "WARNING", "gap_B_C": "EXTREME", "gap_C_D": "EXTREME"},
+        "extreme_causes": [{"dimension": "gap_B_C", "relation": "below", "value": 1, "boundary": "q05", "boundary_value": 2}, {"dimension": "gap_C_D", "relation": "below", "value": 1, "boundary": "q05", "boundary_value": 2}],
+        "warning_causes": [{"dimension": "gap_A_B", "relation": "below", "value": 1, "boundary": "q10", "boundary_value": 2, "note": "equal to q05; therefore WARNING, not EXTREME"}],
+        "direct_reason": "EXTREME because gap_B_C and gap_C_D are below q05; gap_A_B is warning-only at the q05 boundary.",
+        "distance_is_not_direct_cause": true
+      },
+      "human_visible_assessment": {"classification": "POSSIBLY_VISIBLE", "ai_provisional": true, "rationale": "A-D are packed into the first nine tokens, leaving a long unmarked tail.", "human_review_required": true}
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-003",
+      "item_generation_order": 3,
+      "microbatch_id": "we-v2-live-resmoke-20260824-patch-01-micro-03",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "finite concessive clause subordinator",
+      "difficulty": "MEDIUM",
+      "sentence": "Despite the reservoir levels declined sharply, engineers maintained emergency pumps throughout the summer drought to protect nearby farms.",
+      "marked_parts": {"A": "Despite", "B": "levels", "C": "maintained", "D": "nearby farms"},
+      "correct_answer": "A",
+      "format_band_status": "EXTREME",
+      "dimension_values": {
+        "sentence_word_count": {"value": 18, "official_percentile": 0.36, "metric_band": "PREFERRED"},
+        "span_word_counts": {"A": {"value": 1, "official_percentile": 0.412}, "B": {"value": 1, "official_percentile": 0.356}, "C": {"value": 1, "official_percentile": 0.392}, "D": {"value": 2, "official_percentile": 0.812}, "banding": "not independently banded; contributes to mean/max/coverage"},
+        "mean_span_length": {"value": 1.25, "official_percentile": 0.5, "metric_band": "PREFERRED"},
+        "max_span_length": {"value": 2, "official_percentile": 0.588, "metric_band": "PREFERRED"},
+        "marked_coverage_ratio": {"value": 0.2778, "official_percentile": 0.544, "metric_band": "PREFERRED"},
+        "unmarked_word_count": {"value": 13, "official_percentile": 0.396, "metric_band": "PREFERRED"},
+        "gap_A_B": {"value": 2, "official_percentile": 0.132, "metric_band": "PREFERRED"},
+        "gap_B_C": {"value": 3, "official_percentile": 0.292, "metric_band": "PREFERRED"},
+        "gap_C_D": {"value": 8, "official_percentile": 1.0, "metric_band": "EXTREME"},
+        "correct_span_word_count": {"value": 1, "official_percentile": 0.392},
+        "correct_span_type": {"value": "SINGLE_WORD", "official_count": 98, "official_share": 0.784, "official_percentile": null},
+        "correction_locality": {"value": "CLAUSE_LEVEL", "official_count": 54, "official_share": 0.432, "official_percentile": null},
+        "decision_granularity": {"value": "CLAUSE_RELATION", "official_count": 8, "official_share": 0.064, "official_percentile": null},
+        "format_distribution_distance": {"value": 0.3127, "official_distance_percentile": 0.072, "band_trigger": false, "squared_standardized_contributions": {"sentence_word_count": 0.2297, "marked_coverage_ratio": 0.0078, "unmarked_word_count": 0.1806, "mean_span_length": 0.0246, "max_span_length": 0.0461}, "distance_driver_ranked": ["sentence_word_count", "unmarked_word_count", "max_span_length", "mean_span_length", "marked_coverage_ratio"]}
+      },
+      "band_assignment_decomposition": {
+        "metric_band_status": {"sentence_word_count": "PREFERRED", "marked_coverage_ratio": "PREFERRED", "unmarked_word_count": "PREFERRED", "mean_span_length": "PREFERRED", "max_span_length": "PREFERRED", "gap_A_B": "PREFERRED", "gap_B_C": "PREFERRED", "gap_C_D": "EXTREME"},
+        "extreme_causes": [{"dimension": "gap_C_D", "relation": "above", "value": 8, "boundary": "q95", "boundary_value": 6}],
+        "warning_causes": [],
+        "direct_reason": "EXTREME because gap_C_D is above q95; all other banded metrics are PREFERRED.",
+        "distance_is_not_direct_cause": true
+      },
+      "human_visible_assessment": {"classification": "POSSIBLY_VISIBLE", "ai_provisional": true, "rationale": "D is isolated at the sentence end by a long context interval, but marks remain ordered and local.", "human_review_required": true}
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-004",
+      "item_generation_order": 4,
+      "microbatch_id": "we-v2-live-resmoke-20260824-patch-01-micro-04",
+      "primary_target": "RELATIVE_CLAUSES",
+      "subtype": "relative marker after an explicit antecedent",
+      "difficulty": "MEDIUM",
+      "sentence": "Researchers analyzed a sediment layer what earlier surveys had overlooked beneath the ancient lakebed during a decade of fieldwork.",
+      "marked_parts": {"A": "analyzed", "B": "sediment layer", "C": "what earlier surveys", "D": "ancient lakebed"},
+      "correct_answer": "C",
+      "format_band_status": "EXTREME",
+      "dimension_values": {
+        "sentence_word_count": {"value": 19, "official_percentile": 0.428, "metric_band": "PREFERRED"},
+        "span_word_counts": {"A": {"value": 1, "official_percentile": 0.412}, "B": {"value": 2, "official_percentile": 0.84}, "C": {"value": 3, "official_percentile": 0.976}, "D": {"value": 2, "official_percentile": 0.812}, "banding": "not independently banded; contributes to mean/max/coverage"},
+        "mean_span_length": {"value": 2, "official_percentile": 0.972, "metric_band": "EXTREME"},
+        "max_span_length": {"value": 3, "official_percentile": 0.92, "metric_band": "PREFERRED"},
+        "marked_coverage_ratio": {"value": 0.4211, "official_percentile": 0.952, "metric_band": "EXTREME"},
+        "unmarked_word_count": {"value": 11, "official_percentile": 0.196, "metric_band": "PREFERRED"},
+        "gap_A_B": {"value": 1, "official_percentile": 0.036, "metric_band": "WARNING"},
+        "gap_B_C": {"value": 0, "official_percentile": 0.0, "metric_band": "EXTREME"},
+        "gap_C_D": {"value": 4, "official_percentile": 0.568, "metric_band": "PREFERRED"},
+        "correct_span_word_count": {"value": 3, "official_percentile": 0.972},
+        "correct_span_type": {"value": "SHORT_PHRASE", "official_count": 12, "official_share": 0.096, "official_percentile": null},
+        "correction_locality": {"value": "DEPENDENCY_BASED", "official_count": 19, "official_share": 0.152, "official_percentile": null},
+        "decision_granularity": {"value": "FUNCTION_WORD", "official_count": 26, "official_share": 0.208, "official_percentile": null},
+        "format_distribution_distance": {"value": 1.6196, "official_distance_percentile": 0.928, "band_trigger": false, "squared_standardized_contributions": {"sentence_word_count": 0.0602, "marked_coverage_ratio": 3.3002, "unmarked_word_count": 0.7727, "mean_span_length": 6.335, "max_span_length": 2.6498}, "distance_driver_ranked": ["mean_span_length", "marked_coverage_ratio", "max_span_length", "unmarked_word_count", "sentence_word_count"]}
+      },
+      "band_assignment_decomposition": {
+        "metric_band_status": {"sentence_word_count": "PREFERRED", "marked_coverage_ratio": "EXTREME", "unmarked_word_count": "PREFERRED", "mean_span_length": "EXTREME", "max_span_length": "PREFERRED", "gap_A_B": "WARNING", "gap_B_C": "EXTREME", "gap_C_D": "PREFERRED"},
+        "extreme_causes": [{"dimension": "marked_coverage_ratio", "relation": "above", "value": 0.4211, "boundary": "q95", "boundary_value": 0.4167}, {"dimension": "mean_span_length", "relation": "above", "value": 2, "boundary": "q95", "boundary_value": 1.75}, {"dimension": "gap_B_C", "relation": "below", "value": 0, "boundary": "q05", "boundary_value": 2}],
+        "warning_causes": [{"dimension": "gap_A_B", "relation": "below", "value": 1, "boundary": "q10", "boundary_value": 2, "note": "equal to q05; therefore WARNING, not EXTREME"}],
+        "direct_reason": "EXTREME because coverage and mean span exceed q95 and gap_B_C is below q05.",
+        "distance_is_not_direct_cause": true
+      },
+      "human_visible_assessment": {"classification": "LIKELY_VISIBLE", "ai_provisional": true, "rationale": "Coverage is 42.11%, B-C is contiguous, and C is a three-word marked phrase; this is the densest geometry.", "human_review_required": true}
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-005",
+      "item_generation_order": 5,
+      "microbatch_id": "we-v2-live-resmoke-20260824-patch-01-micro-05",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "subtype": "base verb after infinitival to",
+      "difficulty": "EASY",
+      "sentence": "To preserve fragile manuscripts, the archivists installed filters designed to reducing airborne particles during renovation of the historic library.",
+      "marked_parts": {"A": "fragile manuscripts", "B": "installed", "C": "to reducing", "D": "historic library"},
+      "correct_answer": "C",
+      "format_band_status": "WARNING",
+      "dimension_values": {
+        "sentence_word_count": {"value": 19, "official_percentile": 0.428, "metric_band": "PREFERRED"},
+        "span_word_counts": {"A": {"value": 2, "official_percentile": 0.9}, "B": {"value": 1, "official_percentile": 0.356}, "C": {"value": 2, "official_percentile": 0.872}, "D": {"value": 2, "official_percentile": 0.812}, "banding": "not independently banded; contributes to mean/max/coverage"},
+        "mean_span_length": {"value": 1.75, "official_percentile": 0.916, "metric_band": "PREFERRED"},
+        "max_span_length": {"value": 2, "official_percentile": 0.588, "metric_band": "PREFERRED"},
+        "marked_coverage_ratio": {"value": 0.3684, "official_percentile": 0.896, "metric_band": "PREFERRED"},
+        "unmarked_word_count": {"value": 12, "official_percentile": 0.3, "metric_band": "PREFERRED"},
+        "gap_A_B": {"value": 2, "official_percentile": 0.132, "metric_band": "PREFERRED"},
+        "gap_B_C": {"value": 2, "official_percentile": 0.088, "metric_band": "PREFERRED"},
+        "gap_C_D": {"value": 6, "official_percentile": 0.948, "metric_band": "WARNING"},
+        "correct_span_word_count": {"value": 2, "official_percentile": 0.868},
+        "correct_span_type": {"value": "SHORT_PHRASE", "official_count": 12, "official_share": 0.096, "official_percentile": null},
+        "correction_locality": {"value": "LOCAL_SHORT_SPAN", "official_count": 13, "official_share": 0.104, "official_percentile": null},
+        "decision_granularity": {"value": "MORPHOLOGY", "official_count": 15, "official_share": 0.12, "official_percentile": null},
+        "format_distribution_distance": {"value": 0.956, "official_distance_percentile": 0.616, "band_trigger": false, "squared_standardized_contributions": {"sentence_word_count": 0.0602, "marked_coverage_ratio": 1.3946, "unmarked_word_count": 0.4251, "mean_span_length": 2.6428, "max_span_length": 0.0461}, "distance_driver_ranked": ["mean_span_length", "marked_coverage_ratio", "unmarked_word_count", "sentence_word_count", "max_span_length"]}
+      },
+      "band_assignment_decomposition": {
+        "metric_band_status": {"sentence_word_count": "PREFERRED", "marked_coverage_ratio": "PREFERRED", "unmarked_word_count": "PREFERRED", "mean_span_length": "PREFERRED", "max_span_length": "PREFERRED", "gap_A_B": "PREFERRED", "gap_B_C": "PREFERRED", "gap_C_D": "WARNING"},
+        "extreme_causes": [],
+        "warning_causes": [{"dimension": "gap_C_D", "relation": "above", "value": 6, "boundary": "q90", "boundary_value": 5, "upper_limit": "q95", "upper_limit_value": 6}],
+        "direct_reason": "WARNING because gap_C_D is above q90 but equal to q95; no metric is EXTREME.",
+        "distance_is_not_direct_cause": true
+      },
+      "human_visible_assessment": null
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-006",
+      "item_generation_order": 6,
+      "microbatch_id": "we-v2-live-resmoke-20260824-patch-01-micro-06",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "preposition selected by the verb rely",
+      "difficulty": "MEDIUM",
+      "sentence": "Researchers compared the mineral samples with archived records and relied in detailed maps to identify the source of the deposit.",
+      "marked_parts": {"A": "compared", "B": "archived records", "C": "relied in", "D": "source"},
+      "correct_answer": "C",
+      "format_band_status": "EXTREME",
+      "dimension_values": {
+        "sentence_word_count": {"value": 20, "official_percentile": 0.492, "metric_band": "PREFERRED"},
+        "span_word_counts": {"A": {"value": 1, "official_percentile": 0.412}, "B": {"value": 2, "official_percentile": 0.84}, "C": {"value": 2, "official_percentile": 0.872}, "D": {"value": 1, "official_percentile": 0.34}, "banding": "not independently banded; contributes to mean/max/coverage"},
+        "mean_span_length": {"value": 1.5, "official_percentile": 0.784, "metric_band": "PREFERRED"},
+        "max_span_length": {"value": 2, "official_percentile": 0.588, "metric_band": "PREFERRED"},
+        "marked_coverage_ratio": {"value": 0.3, "official_percentile": 0.664, "metric_band": "PREFERRED"},
+        "unmarked_word_count": {"value": 14, "official_percentile": 0.464, "metric_band": "PREFERRED"},
+        "gap_A_B": {"value": 4, "official_percentile": 0.608, "metric_band": "PREFERRED"},
+        "gap_B_C": {"value": 1, "official_percentile": 0.02, "metric_band": "EXTREME"},
+        "gap_C_D": {"value": 5, "official_percentile": 0.832, "metric_band": "PREFERRED"},
+        "correct_span_word_count": {"value": 2, "official_percentile": 0.868},
+        "correct_span_type": {"value": "SHORT_PHRASE", "official_count": 12, "official_share": 0.096, "official_percentile": null},
+        "correction_locality": {"value": "LOCAL_SHORT_SPAN", "official_count": 13, "official_share": 0.104, "official_percentile": null},
+        "decision_granularity": {"value": "VERB_FRAME", "official_count": 44, "official_share": 0.352, "official_percentile": null},
+        "format_distribution_distance": {"value": 0.3877, "official_distance_percentile": 0.108, "band_trigger": false, "squared_standardized_contributions": {"sentence_word_count": 0.0001, "marked_coverage_ratio": 0.1266, "unmarked_word_count": 0.0392, "mean_span_length": 0.5393, "max_span_length": 0.0461}, "distance_driver_ranked": ["mean_span_length", "marked_coverage_ratio", "max_span_length", "unmarked_word_count", "sentence_word_count"]}
+      },
+      "band_assignment_decomposition": {
+        "metric_band_status": {"sentence_word_count": "PREFERRED", "marked_coverage_ratio": "PREFERRED", "unmarked_word_count": "PREFERRED", "mean_span_length": "PREFERRED", "max_span_length": "PREFERRED", "gap_A_B": "PREFERRED", "gap_B_C": "EXTREME", "gap_C_D": "PREFERRED"},
+        "extreme_causes": [{"dimension": "gap_B_C", "relation": "below", "value": 1, "boundary": "q05", "boundary_value": 2}],
+        "warning_causes": [],
+        "direct_reason": "EXTREME because gap_B_C is below q05; all other banded metrics are PREFERRED.",
+        "distance_is_not_direct_cause": true
+      },
+      "human_visible_assessment": {"classification": "LIKELY_INVISIBLE", "ai_provisional": true, "rationale": "Only one gap is one token below q05; short phrase marks remain locally inspectable.", "human_review_required": true}
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-007",
+      "item_generation_order": 7,
+      "microbatch_id": "we-v2-live-resmoke-20260824-patch-01-micro-07",
+      "primary_target": "WORD_CLASS_FORM",
+      "subtype": "adjective modifier before a noun",
+      "difficulty": "EASY",
+      "sentence": "The new telescope produced an exceptionally clarity image of the distant galaxy after several nights of careful alignment.",
+      "marked_parts": {"A": "telescope", "B": "produced", "C": "exceptionally clarity", "D": "distant galaxy"},
+      "correct_answer": "C",
+      "format_band_status": "EXTREME",
+      "dimension_values": {
+        "sentence_word_count": {"value": 18, "official_percentile": 0.36, "metric_band": "PREFERRED"},
+        "span_word_counts": {"A": {"value": 1, "official_percentile": 0.412}, "B": {"value": 1, "official_percentile": 0.356}, "C": {"value": 2, "official_percentile": 0.872}, "D": {"value": 2, "official_percentile": 0.812}, "banding": "not independently banded; contributes to mean/max/coverage"},
+        "mean_span_length": {"value": 1.5, "official_percentile": 0.784, "metric_band": "PREFERRED"},
+        "max_span_length": {"value": 2, "official_percentile": 0.588, "metric_band": "PREFERRED"},
+        "marked_coverage_ratio": {"value": 0.3333, "official_percentile": 0.824, "metric_band": "PREFERRED"},
+        "unmarked_word_count": {"value": 12, "official_percentile": 0.3, "metric_band": "PREFERRED"},
+        "gap_A_B": {"value": 0, "official_percentile": 0.0, "metric_band": "EXTREME"},
+        "gap_B_C": {"value": 1, "official_percentile": 0.02, "metric_band": "EXTREME"},
+        "gap_C_D": {"value": 3, "official_percentile": 0.268, "metric_band": "PREFERRED"},
+        "correct_span_word_count": {"value": 2, "official_percentile": 0.868},
+        "correct_span_type": {"value": "SHORT_PHRASE", "official_count": 12, "official_share": 0.096, "official_percentile": null},
+        "correction_locality": {"value": "LOCAL_SHORT_SPAN", "official_count": 13, "official_share": 0.104, "official_percentile": null},
+        "decision_granularity": {"value": "WORD_CLASS", "official_count": 4, "official_share": 0.032, "official_percentile": null},
+        "format_distribution_distance": {"value": 0.6025, "official_distance_percentile": 0.256, "band_trigger": false, "squared_standardized_contributions": {"sentence_word_count": 0.2297, "marked_coverage_ratio": 0.5739, "unmarked_word_count": 0.4251, "mean_span_length": 0.5393, "max_span_length": 0.0461}, "distance_driver_ranked": ["marked_coverage_ratio", "mean_span_length", "unmarked_word_count", "sentence_word_count", "max_span_length"]}
+      },
+      "band_assignment_decomposition": {
+        "metric_band_status": {"sentence_word_count": "PREFERRED", "marked_coverage_ratio": "PREFERRED", "unmarked_word_count": "PREFERRED", "mean_span_length": "PREFERRED", "max_span_length": "PREFERRED", "gap_A_B": "EXTREME", "gap_B_C": "EXTREME", "gap_C_D": "PREFERRED"},
+        "extreme_causes": [{"dimension": "gap_A_B", "relation": "below", "value": 0, "boundary": "q05", "boundary_value": 1}, {"dimension": "gap_B_C", "relation": "below", "value": 1, "boundary": "q05", "boundary_value": 2}],
+        "warning_causes": [],
+        "direct_reason": "EXTREME because gap_A_B and gap_B_C are below q05.",
+        "distance_is_not_direct_cause": true
+      },
+      "human_visible_assessment": {"classification": "POSSIBLY_VISIBLE", "ai_provisional": true, "rationale": "A and B are immediately adjacent; the remaining geometry is within the band.", "human_review_required": true}
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-008",
+      "item_generation_order": 8,
+      "microbatch_id": "we-v2-live-resmoke-20260824-patch-01-micro-08",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "subtype": "parallel base forms in a coordinated list",
+      "difficulty": "MEDIUM",
+      "sentence": "The training program requires interns to record observations, summarize findings, and presenting recommendations to supervisors after each field visit.",
+      "marked_parts": {"A": "training program", "B": "record", "C": "presenting", "D": "field visit"},
+      "correct_answer": "C",
+      "format_band_status": "PREFERRED",
+      "dimension_values": {
+        "sentence_word_count": {"value": 19, "official_percentile": 0.428, "metric_band": "PREFERRED"},
+        "span_word_counts": {"A": {"value": 2, "official_percentile": 0.9}, "B": {"value": 1, "official_percentile": 0.356}, "C": {"value": 1, "official_percentile": 0.392}, "D": {"value": 2, "official_percentile": 0.812}, "banding": "not independently banded; contributes to mean/max/coverage"},
+        "mean_span_length": {"value": 1.5, "official_percentile": 0.784, "metric_band": "PREFERRED"},
+        "max_span_length": {"value": 2, "official_percentile": 0.588, "metric_band": "PREFERRED"},
+        "marked_coverage_ratio": {"value": 0.3158, "official_percentile": 0.736, "metric_band": "PREFERRED"},
+        "unmarked_word_count": {"value": 13, "official_percentile": 0.396, "metric_band": "PREFERRED"},
+        "gap_A_B": {"value": 3, "official_percentile": 0.312, "metric_band": "PREFERRED"},
+        "gap_B_C": {"value": 4, "official_percentile": 0.54, "metric_band": "PREFERRED"},
+        "gap_C_D": {"value": 5, "official_percentile": 0.832, "metric_band": "PREFERRED"},
+        "correct_span_word_count": {"value": 1, "official_percentile": 0.392},
+        "correct_span_type": {"value": "SINGLE_WORD", "official_count": 98, "official_share": 0.784, "official_percentile": null},
+        "correction_locality": {"value": "CLAUSE_LEVEL", "official_count": 54, "official_share": 0.432, "official_percentile": null},
+        "decision_granularity": {"value": "MORPHOLOGY", "official_count": 15, "official_share": 0.12, "official_percentile": null},
+        "format_distribution_distance": {"value": 0.4743, "official_distance_percentile": 0.2, "band_trigger": false, "squared_standardized_contributions": {"sentence_word_count": 0.0602, "marked_coverage_ratio": 0.2986, "unmarked_word_count": 0.1806, "mean_span_length": 0.5393, "max_span_length": 0.0461}, "distance_driver_ranked": ["mean_span_length", "marked_coverage_ratio", "unmarked_word_count", "sentence_word_count", "max_span_length"]}
+      },
+      "band_assignment_decomposition": {
+        "metric_band_status": {"sentence_word_count": "PREFERRED", "marked_coverage_ratio": "PREFERRED", "unmarked_word_count": "PREFERRED", "mean_span_length": "PREFERRED", "max_span_length": "PREFERRED", "gap_A_B": "PREFERRED", "gap_B_C": "PREFERRED", "gap_C_D": "PREFERRED"},
+        "extreme_causes": [],
+        "warning_causes": [],
+        "direct_reason": "PREFERRED because all 8 banded metrics are PREFERRED.",
+        "distance_is_not_direct_cause": true
+      },
+      "human_visible_assessment": null
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-009",
+      "item_generation_order": 9,
+      "microbatch_id": "we-v2-live-resmoke-20260824-patch-01-micro-09",
+      "primary_target": "VERB_FORM_VOICE",
+      "subtype": "past participle in a passive construction",
+      "difficulty": "EASY",
+      "sentence": "Ancient seeds were carefully preserving by the research team before the samples were transferred to a climate-controlled laboratory for analysis.",
+      "marked_parts": {"A": "Ancient seeds", "B": "preserving by", "C": "samples", "D": "laboratory"},
+      "correct_answer": "B",
+      "format_band_status": "PREFERRED",
+      "dimension_values": {
+        "sentence_word_count": {"value": 20, "official_percentile": 0.492, "metric_band": "PREFERRED"},
+        "span_word_counts": {"A": {"value": 2, "official_percentile": 0.9}, "B": {"value": 2, "official_percentile": 0.84}, "C": {"value": 1, "official_percentile": 0.392}, "D": {"value": 1, "official_percentile": 0.34}, "banding": "not independently banded; contributes to mean/max/coverage"},
+        "mean_span_length": {"value": 1.5, "official_percentile": 0.784, "metric_band": "PREFERRED"},
+        "max_span_length": {"value": 2, "official_percentile": 0.588, "metric_band": "PREFERRED"},
+        "marked_coverage_ratio": {"value": 0.3, "official_percentile": 0.664, "metric_band": "PREFERRED"},
+        "unmarked_word_count": {"value": 14, "official_percentile": 0.464, "metric_band": "PREFERRED"},
+        "gap_A_B": {"value": 2, "official_percentile": 0.132, "metric_band": "PREFERRED"},
+        "gap_B_C": {"value": 5, "official_percentile": 0.78, "metric_band": "PREFERRED"},
+        "gap_C_D": {"value": 5, "official_percentile": 0.832, "metric_band": "PREFERRED"},
+        "correct_span_word_count": {"value": 2, "official_percentile": 0.868},
+        "correct_span_type": {"value": "SHORT_PHRASE", "official_count": 12, "official_share": 0.096, "official_percentile": null},
+        "correction_locality": {"value": "LOCAL_SHORT_SPAN", "official_count": 13, "official_share": 0.104, "official_percentile": null},
+        "decision_granularity": {"value": "MORPHOLOGY", "official_count": 15, "official_share": 0.12, "official_percentile": null},
+        "format_distribution_distance": {"value": 0.3877, "official_distance_percentile": 0.108, "band_trigger": false, "squared_standardized_contributions": {"sentence_word_count": 0.0001, "marked_coverage_ratio": 0.1266, "unmarked_word_count": 0.0392, "mean_span_length": 0.5393, "max_span_length": 0.0461}, "distance_driver_ranked": ["mean_span_length", "marked_coverage_ratio", "max_span_length", "unmarked_word_count", "sentence_word_count"]}
+      },
+      "band_assignment_decomposition": {
+        "metric_band_status": {"sentence_word_count": "PREFERRED", "marked_coverage_ratio": "PREFERRED", "unmarked_word_count": "PREFERRED", "mean_span_length": "PREFERRED", "max_span_length": "PREFERRED", "gap_A_B": "PREFERRED", "gap_B_C": "PREFERRED", "gap_C_D": "PREFERRED"},
+        "extreme_causes": [],
+        "warning_causes": [],
+        "direct_reason": "PREFERRED because all 8 banded metrics are PREFERRED.",
+        "distance_is_not_direct_cause": true
+      },
+      "human_visible_assessment": null
+    },
+    {
+      "item_id": "we-v2-live-resmoke-20260824-patch-01-010",
+      "item_generation_order": 10,
+      "microbatch_id": "we-v2-live-resmoke-20260824-patch-01-micro-10",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "subtype": "there-be agreement with a plural postposed subject",
+      "difficulty": "MEDIUM",
+      "sentence": "There is several independent readings in the report, although the calibration method remains difficult to reproduce under field conditions.",
+      "marked_parts": {"A": "There is", "B": "readings", "C": "calibration", "D": "field conditions"},
+      "correct_answer": "A",
+      "format_band_status": "WARNING",
+      "dimension_values": {
+        "sentence_word_count": {"value": 19, "official_percentile": 0.428, "metric_band": "PREFERRED"},
+        "span_word_counts": {"A": {"value": 2, "official_percentile": 0.9}, "B": {"value": 1, "official_percentile": 0.356}, "C": {"value": 1, "official_percentile": 0.392}, "D": {"value": 2, "official_percentile": 0.812}, "banding": "not independently banded; contributes to mean/max/coverage"},
+        "mean_span_length": {"value": 1.5, "official_percentile": 0.784, "metric_band": "PREFERRED"},
+        "max_span_length": {"value": 2, "official_percentile": 0.588, "metric_band": "PREFERRED"},
+        "marked_coverage_ratio": {"value": 0.3158, "official_percentile": 0.736, "metric_band": "PREFERRED"},
+        "unmarked_word_count": {"value": 13, "official_percentile": 0.396, "metric_band": "PREFERRED"},
+        "gap_A_B": {"value": 2, "official_percentile": 0.132, "metric_band": "PREFERRED"},
+        "gap_B_C": {"value": 5, "official_percentile": 0.78, "metric_band": "PREFERRED"},
+        "gap_C_D": {"value": 6, "official_percentile": 0.948, "metric_band": "WARNING"},
+        "correct_span_word_count": {"value": 2, "official_percentile": 0.868},
+        "correct_span_type": {"value": "SHORT_PHRASE", "official_count": 12, "official_share": 0.096, "official_percentile": null},
+        "correction_locality": {"value": "DEPENDENCY_BASED", "official_count": 19, "official_share": 0.152, "official_percentile": null},
+        "decision_granularity": {"value": "AGREEMENT_DEPENDENCY", "official_count": 14, "official_share": 0.112, "official_percentile": null},
+        "format_distribution_distance": {"value": 0.4743, "official_distance_percentile": 0.2, "band_trigger": false, "squared_standardized_contributions": {"sentence_word_count": 0.0602, "marked_coverage_ratio": 0.2986, "unmarked_word_count": 0.1806, "mean_span_length": 0.5393, "max_span_length": 0.0461}, "distance_driver_ranked": ["mean_span_length", "marked_coverage_ratio", "unmarked_word_count", "sentence_word_count", "max_span_length"]}
+      },
+      "band_assignment_decomposition": {
+        "metric_band_status": {"sentence_word_count": "PREFERRED", "marked_coverage_ratio": "PREFERRED", "unmarked_word_count": "PREFERRED", "mean_span_length": "PREFERRED", "max_span_length": "PREFERRED", "gap_A_B": "PREFERRED", "gap_B_C": "PREFERRED", "gap_C_D": "WARNING"},
+        "extreme_causes": [],
+        "warning_causes": [{"dimension": "gap_C_D", "relation": "above", "value": 6, "boundary": "q90", "boundary_value": 5, "upper_limit": "q95", "upper_limit_value": 6}],
+        "direct_reason": "WARNING because gap_C_D is above q90 but equal to q95; no metric is EXTREME.",
+        "distance_is_not_direct_cause": true
+      },
+      "human_visible_assessment": null
+    }
+  ],
+  "multiple_comparison_audit": {
+    "banded_dimension_count": 8,
+    "nominal_independent_tail_probability_per_dimension": 0.1,
+    "nominal_independent_any_extreme_probability": 0.5695,
+    "official_recomputed": {"n": 125, "any_extreme_count": 24, "any_extreme_rate": 0.192, "extreme_flags": 58},
+    "pilot": {"n": 25, "any_extreme_count": 3, "any_extreme_rate": 0.12, "extreme_flags": 6},
+    "live": {"n": 10, "any_extreme_count": 6, "any_extreme_rate": 0.6, "extreme_flags": 10},
+    "live_flags_per_extreme_item": 1.6667,
+    "binomial_descriptive_probability_at_least_6_of_10_if_p_0192": 0.0052,
+    "interpretation": "The current worst-of-eight rule can turn a single mild gap tail into EXTREME. Multiple-comparison effect is plausible and is close to the nominal independent 8-dimension rate, but official discrete/correlated empirical behavior and non-iid Generator sampling prevent treating the approximation as a formal test.",
+    "thresholds_changed": false
+  },
+  "pilot_comparison": {
+    "pilot_25": {"PREFERRED": 21, "WARNING": 1, "EXTREME": 3, "extreme_rate": 0.12},
+    "live_10": {"PREFERRED": 2, "WARNING": 2, "EXTREME": 6, "extreme_rate": 0.6},
+    "pilot_extreme_items": [
+      {"item_id": "we-v2-pilot-010", "microbatch_id": "we-v2-live-pilot-20260824-micro-04", "causes": ["mean_span_length above q95", "max_span_length above q95", "gap_C_D above q95"], "difficulty": "MEDIUM", "primary_target": "PARALLEL_STRUCTURE"},
+      {"item_id": "we-v2-pilot-011", "microbatch_id": "we-v2-live-pilot-20260824-micro-04", "causes": ["sentence_word_count above q95", "max_span_length above q95"], "difficulty": "HARD", "primary_target": "PARALLEL_STRUCTURE"},
+      {"item_id": "we-v2-pilot-012", "microbatch_id": "we-v2-live-pilot-20260824-micro-04", "causes": ["gap_C_D below q05"], "difficulty": "EASY", "primary_target": "WORD_CLASS_FORM"}
+    ],
+    "composition": {
+      "live_difficulty": {"EASY": 5, "MEDIUM": 5, "HARD": 0},
+      "pilot_difficulty": {"EASY": 4, "MEDIUM": 17, "HARD": 4},
+      "live_correct_span_type": {"SINGLE_WORD": 4, "SHORT_PHRASE": 6, "CLAUSE_OR_CLAUSE_LIKE": 0},
+      "pilot_correct_span_type": {"SINGLE_WORD": 16, "SHORT_PHRASE": 6, "CLAUSE_OR_CLAUSE_LIKE": 3},
+      "live_sorted_span_profile": {"1/1/1/1": 1, "1/1/1/2": 2, "1/1/2/2": 5, "1/2/2/3": 1, "1/2/2/2": 1},
+      "pilot_sorted_span_profile": {"1/1/1/1": 9, "1/1/1/2": 6, "1/1/2/2": 5, "1/1/1/3": 2, "1/1/2/4": 1, "1/1/1/4": 1, "1/1/2/3": 1},
+      "official_sorted_span_profile_reference": {"1/1/1/1": 39, "1/1/1/2": 47, "1/1/2/2": 17, "1/2/2/2": 5, "1/1/1/3": 7, "1/1/2/4": 2}
+    },
+    "cause_assessment": {
+      "generation_randomness": "possible_but_unproven",
+      "target_composition": "plausible_contributor; live uses ten distinct targets while pilot repeats targets",
+      "difficulty_composition": "not_primary; live has no HARD items and still has higher EXTREME rate",
+      "decision_granularity": "composition differs but is not a band input; indirect geometry correlation cannot be excluded",
+      "correction_locality": "composition differs but is not a band input; indirect geometry correlation cannot be excluded",
+      "particular_microbatch": "pilot EXTREME 010-012 cluster in micro-04; live has one item per distinct microbatch and no shared-context cluster",
+      "format_band_implementation_change": "no_evidence",
+      "canonical_diagnostics_injection_effect": "no classification semantics change; patch made diagnostics canonical and fail-closed"
+    },
+    "overall_explanation": "The most plausible explanation is small-sample geometry composition plus randomness, with pilot microbatch-04 clustering as a separate pilot-specific factor. Evidence is insufficient to call a persistent Generator geometry bug."
+  },
+  "canonical_injection_audit": {
+    "before_commit": "768d4f1",
+    "after_commit": "9620834",
+    "diagnostics_formula": {"same": true, "finding": "Valid-item format_diagnostics computation unchanged; patch adds canonical injection around it."},
+    "empirical_distributions": {"same": true, "finding": "Same official 125-item source JSON."},
+    "quantile_method": {"same": true, "finding": "nearest_rank_percentile with deterministic mid-rank for ties."},
+    "band_thresholds": {"same": true, "finding": "Config thresholds q05/q10/q90/q95 unchanged."},
+    "band_assignment": {"same": true, "finding": "worst_band over the same eight metric bands."},
+    "format_distribution_distance": {"same": false, "finding": "The audited Generator patch preserved the five-metric RMS formula, but the audit corrected the official max-span basis from an erroneous zero-stdev omission to the observed 1.848 mean and 0.7077 sample stdev; this changes diagnostic distances only, not band assignment."},
+    "patch_only_behavior": [
+      "inject_canonical_diagnostics() writes validator-owned diagnostics from sentence/spans/metadata",
+      "emit_output.py runs canonicalization before schema validation",
+      "missing or unmeasurable diagnostics fail closed instead of being guessed",
+      "required diagnostics completeness is enforced"
+    ],
+    "regression_evidence": {
+      "missing_diagnostics_fixtures": "3/3 reject before injection; 3/3 pass after canonical injection",
+      "malformed_candidate": "fail-closed PASS",
+      "live_diagnostics_completeness": "10/10",
+      "live_diagnostics_consistency": "10/10",
+      "classification_drift_observed": false
+    },
+    "classification_semantics_changed": false,
+    "conclusion": "The 6/10 live EXTREME result is not explained by the diagnostics emission patch changing band semantics. It is the unchanged band logic applied canonically to fresh live geometry."
+  },
+  "human_targeted_sample_audit": {
+    "public_file": "analysis/we_v2_patch/human_targeted_sample.json",
+    "private_key_file": "analysis/we_v2_patch/human_targeted_sample_key.json",
+    "item_count": 8,
+    "blind": true,
+    "public_display_fields": ["sentence", "marked_parts"],
+    "public_leakage_check": {"band": false, "answer": false, "reviewer": false, "solver": false, "pipeline_state": false},
+    "strata": {"EXTREME": 3, "WARNING": 1, "PREFERRED": 4},
+    "human_review_record_schema": {
+      "TOEFL-likeness": ["GOOD", "QUESTIONABLE", "POOR"],
+      "marked-span design": ["GOOD", "QUESTIONABLE", "POOR"],
+      "sentence naturalness": ["GOOD", "QUESTIONABLE", "POOR"]
+    },
+    "pipeline_band_displayed_to_human": false,
+    "live_extreme_review_required": 6,
+    "live_extreme_review_completed": 0,
+    "live_extreme_item_ids": [
+      "we-v2-live-resmoke-20260824-patch-01-001",
+      "we-v2-live-resmoke-20260824-patch-01-002",
+      "we-v2-live-resmoke-20260824-patch-01-003",
+      "we-v2-live-resmoke-20260824-patch-01-004",
+      "we-v2-live-resmoke-20260824-patch-01-006",
+      "we-v2-live-resmoke-20260824-patch-01-007"
+    ],
+    "pilot_sample_is_not_live_extreme_review": true,
+    "note": "The three human-visible classifications in this audit are AI provisional only; human review remains authoritative."
+  },
+  "decision": {
+    "option": "A_CONDITIONAL",
+    "recommendation": "Do not proceed to 75-item Validation until all six live EXTREME items have completed human review and all required ratings are recorded; proceed only if no blocking human-review finding remains.",
+    "rationale": [
+      "Most live EXTREME direct causes are gap tail deviations, not sentence length, coverage, or unmarked-context collapse.",
+      "Several EXTREME items have low official distance percentiles, confirming that a mild gap tail alone can trigger EXTREME.",
+      "All six live EXTREME items have format_validity: FAIL and human_review_required: true; reviewing item 004 alone is insufficient.",
+      "Pilot/live composition and microbatch differences plausibly explain part of the rate difference.",
+      "Canonical injection did not change format classification semantics."
+    ],
+    "required_next_stage_controls": [
+      "retain current Generator, Reviewer, Solver, Orchestrator, and band thresholds",
+      "report dimension-level tail flags, not only aggregate format band",
+      "complete human review for every live EXTREME item before 75-item Validation",
+      "block progression if any required live EXTREME review is missing or records a blocking finding",
+      "preserve blind human sample fields and record only the three requested human ratings",
+      "monitor span profile, gap clustering, and human-visible risk across 75 items"
+    ],
+    "generator_change": false,
+    "generator_code_changed_in_audited_commit": true,
+    "generation_policy_change_recommended": false,
+    "reviewer_change": false,
+    "format_band_change": false,
+    "live_extreme_human_review_gate": {
+      "required": true,
+      "item_count": 6,
+      "completed_count": 0,
+      "item_ids": [
+        "we-v2-live-resmoke-20260824-patch-01-001",
+        "we-v2-live-resmoke-20260824-patch-01-002",
+        "we-v2-live-resmoke-20260824-patch-01-003",
+        "we-v2-live-resmoke-20260824-patch-01-004",
+        "we-v2-live-resmoke-20260824-patch-01-006",
+        "we-v2-live-resmoke-20260824-patch-01-007"
+      ]
+    }
+  }
+}
