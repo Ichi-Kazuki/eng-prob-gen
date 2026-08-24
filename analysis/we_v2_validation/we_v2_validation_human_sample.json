@@ -1,0 +1,172 @@
+{
+  "run_id": "we-v2-validation-20260824",
+  "blind": true,
+  "selection_policy": {
+    "PREFERRED": 5,
+    "WARNING": 2,
+    "SINGLE_TAIL_EXTREME": 3,
+    "MULTI_TAIL_OR_HIGH_DISTANCE_EXTREME": 2
+  },
+  "actual_selection_mix": {
+    "bands": {
+      "WARNING": 2,
+      "EXTREME": 10
+    },
+    "extreme_severity": {
+      "SINGLE_TAIL": 4,
+      "MULTI_TAIL": 6
+    }
+  },
+  "rubric": {
+    "TOEFL-likeness": [
+      "GOOD",
+      "QUESTIONABLE",
+      "POOR"
+    ],
+    "marked-span design": [
+      "GOOD",
+      "QUESTIONABLE",
+      "POOR"
+    ],
+    "sentence naturalness": [
+      "GOOD",
+      "QUESTIONABLE",
+      "POOR"
+    ]
+  },
+  "reviewer_instructions": "Judge only the sentence and four marked parts. Do not infer or request the answer key, format band, Reviewer, Solver, or pipeline state.",
+  "items": [
+    {
+      "item_id": "we-v2-validation-010",
+      "section": "Written Expression",
+      "sentence": "The new program helps students analyze data, interpret graphs, and presenting conclusions to their classmates.",
+      "marked_parts": {
+        "A": "program",
+        "B": "analyze data",
+        "C": "presenting conclusions",
+        "D": "classmates"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-056",
+      "section": "Written Expression",
+      "sentence": "The new sensor is capable for detecting brief changes in pressure beneath the ice shelf.",
+      "marked_parts": {
+        "A": "sensor",
+        "B": "capable for",
+        "C": "pressure",
+        "D": "shelf"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-001",
+      "section": "Written Expression",
+      "sentence": "The gradual erosion of riverbanks near the mountain villages have exposed layers of ancient sediment to researchers.",
+      "marked_parts": {
+        "A": "erosion",
+        "B": "have",
+        "C": "ancient",
+        "D": "researchers"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-003",
+      "section": "Written Expression",
+      "sentence": "The most of the sediment collected near the estuary was preserved in labeled containers for later chemical analysis by the laboratory team.",
+      "marked_parts": {
+        "A": "The most",
+        "B": "sediment collected",
+        "C": "labeled containers",
+        "D": "laboratory team"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-004",
+      "section": "Written Expression",
+      "sentence": "The survey team, after crossing several ridges and documenting nearby ruins, recorded ancient inscription beside the northern observatory for future comparison by regional researchers.",
+      "marked_parts": {
+        "A": "survey team",
+        "B": "ancient inscription",
+        "C": "northern observatory",
+        "D": "researchers"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-002",
+      "section": "Written Expression",
+      "sentence": "Because desert tortoises store water efficiently, the animals protect its bodies during prolonged droughts.",
+      "marked_parts": {
+        "A": "desert tortoises",
+        "B": "store",
+        "C": "protect",
+        "D": "its"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-005",
+      "section": "Written Expression",
+      "sentence": "To reduce contamination, laboratory technicians avoid touch the cultures after sterilizing their instruments.",
+      "marked_parts": {
+        "A": "reduce",
+        "B": "laboratory technicians",
+        "C": "avoid",
+        "D": "touch"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-006",
+      "section": "Written Expression",
+      "sentence": "The effectiveness of the treatment depends in careful monitoring throughout the recovery period.",
+      "marked_parts": {
+        "A": "effectiveness",
+        "B": "depends in",
+        "C": "monitoring",
+        "D": "recovery"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-007",
+      "section": "Written Expression",
+      "sentence": "The instructor had the students to examine the mineral specimens under a microscope.",
+      "marked_parts": {
+        "A": "instructor",
+        "B": "students",
+        "C": "to examine",
+        "D": "specimens"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-008",
+      "section": "Written Expression",
+      "sentence": "The researchers were analyzed the sediment samples before storing them in sealed containers.",
+      "marked_parts": {
+        "A": "researchers",
+        "B": "were analyzed",
+        "C": "sediment",
+        "D": "containers"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-009",
+      "section": "Written Expression",
+      "sentence": "By the time the expedition reached the valley, local guides mapped the safest route through the passes.",
+      "marked_parts": {
+        "A": "expedition",
+        "B": "reached",
+        "C": "mapped",
+        "D": "passes"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-011",
+      "section": "Written Expression",
+      "sentence": "The observatory not only records solar activity but also predicting magnetic disturbances during storms.",
+      "marked_parts": {
+        "A": "observatory",
+        "B": "records solar",
+        "C": "predicting magnetic disturbances",
+        "D": "storms"
+      }
+    }
+  ]
+}

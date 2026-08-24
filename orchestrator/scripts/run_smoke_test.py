@@ -64,7 +64,8 @@ EXPECTED_LABEL = {
 }
 
 
-def main() -> int:
+def main(output_path: Path | None = None) -> int:
+    output_path = output_path or OUTPUT_PATH
     config = load_config()
     versions = load_versions(config)
 
@@ -131,9 +132,10 @@ def main() -> int:
         "batch_summary": tracker.summary(),
         "solver_skip_log": solver_skip_log,
     }
-    OUTPUT_PATH.write_text(json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    print(f"Wrote {len(records)} provenance record(s) to {OUTPUT_PATH}")
+    print(f"Wrote {len(records)} provenance record(s) to {output_path}")
     print()
     print(f"{'item_id':<16} {'reviewer_verdict':<18} {'solver_answer':<15} {'final_state':<16} {'expected':<16} match")
     all_ok = True
@@ -186,4 +188,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    output = Path(sys.argv[1]) if len(sys.argv) == 2 else None
+    if len(sys.argv) > 2:
+        raise SystemExit("Usage: python run_smoke_test.py [output-path]")
+    raise SystemExit(main(output))

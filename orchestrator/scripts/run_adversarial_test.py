@@ -49,7 +49,8 @@ def load_items(path: Path) -> dict:
     return {item["item_id"]: item for item in data["items"]}
 
 
-def main() -> int:
+def main(output_path: Path | None = None) -> int:
+    output_path = output_path or OUTPUT_PATH
     config = load_config()
     versions = load_versions(config)
 
@@ -96,9 +97,10 @@ def main() -> int:
         "accept_rate": len(accepted) / len(records) if records else None,
         "solver_skip_log": solver_skip_log,
     }
-    OUTPUT_PATH.write_text(json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    print(f"Wrote {len(records)} provenance record(s) to {OUTPUT_PATH}")
+    print(f"Wrote {len(records)} provenance record(s) to {output_path}")
     print()
     for item_id, candidate, _rec in records:
         print(f"{item_id:<28} final_state={candidate.state:<16} entered_SOLVING={'yes' if item_id in solved else 'no'}")
@@ -115,4 +117,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    output = Path(sys.argv[1]) if len(sys.argv) == 2 else None
+    if len(sys.argv) > 2:
+        raise SystemExit("Usage: python run_adversarial_test.py [output-path]")
+    raise SystemExit(main(output))

@@ -53,9 +53,19 @@ def check(n: int, desc: str, condition: bool, detail: str = "") -> None:
     print(f"[{status}] #{n} {desc}" + (f" -- {detail}" if detail else ""))
 
 
-def run_script(relpath: str) -> subprocess.CompletedProcess:
+def run_script(relpath: str, output_dir: Path | None = None) -> subprocess.CompletedProcess:
+    command = [sys.executable, str(REPO_ROOT / relpath)]
+    if output_dir is not None:
+        output_names = {
+            "orchestrator/scripts/run_smoke_test.py": "orchestrator_smoke_test.json",
+            "orchestrator/scripts/run_adversarial_test.py": "orchestrator_adversarial_test.json",
+            "orchestrator/scripts/run_reject_path_test.py": "orchestrator_reject_path_test.json",
+        }
+        output_name = output_names.get(relpath)
+        if output_name is not None:
+            command.append(str(output_dir / output_name))
     return subprocess.run(
-        [sys.executable, str(REPO_ROOT / relpath)],
+        command,
         capture_output=True, text=True, cwd=REPO_ROOT,
     )
 
@@ -132,35 +142,41 @@ def base_solver_item(answer: str = "C", **overrides) -> dict:
     return item
 
 
-def main() -> int:
+def main(output_dir: Path | None = None) -> int:
+    if output_dir is not None:
+        output_dir.mkdir(parents=True, exist_ok=True)
     config = load_config()
     versions = load_versions(config)
 
     # -- #12 schema validation PASS, plus drives #1/#2/#9/#10/#4/#13 -------
-    smoke = run_script("orchestrator/scripts/run_smoke_test.py")
-    adversarial = run_script("orchestrator/scripts/run_adversarial_test.py")
-    reject_path = run_script("orchestrator/scripts/run_reject_path_test.py")
+    smoke = run_script("orchestrator/scripts/run_smoke_test.py", output_dir)
+    adversarial = run_script("orchestrator/scripts/run_adversarial_test.py", output_dir)
+    reject_path = run_script("orchestrator/scripts/run_reject_path_test.py", output_dir)
 
     check(12, "schema validation PASS for all valid fixtures (replay scripts exit 0)",
           smoke.returncode == 0 and adversarial.returncode == 0 and reject_path.returncode == 0,
           f"smoke_rc={smoke.returncode} adversarial_rc={adversarial.returncode} reject_rc={reject_path.returncode}")
 
+    output_paths = {
+        "orchestrator_smoke_test.json": (output_dir or REPO_ROOT / "analysis") / "orchestrator_smoke_test.json",
+        "orchestrator_adversarial_test.json": (output_dir or REPO_ROOT / "analysis") / "orchestrator_adversarial_test.json",
+        "orchestrator_reject_path_test.json": (output_dir or REPO_ROOT / "analysis") / "orchestrator_reject_path_test.json",
+    }
     prov_checks = [
         subprocess.run(
             [sys.executable, str(REPO_ROOT / "orchestrator" / "scripts" / "validate_provenance.py"),
-             str(REPO_ROOT / "analysis" / fname)],
+             str(output_paths[fname])],
             capture_output=True, text=True, cwd=REPO_ROOT,
         )
-        for fname in ["orchestrator_smoke_test.json", "orchestrator_adversarial_test.json",
-                      "orchestrator_reject_path_test.json"]
+        for fname in output_paths
     ]
     check("12b", "Orchestrator's own provenance output passes its shape validator (validate_provenance.py)",
           all(p.returncode == 0 for p in prov_checks),
           f"returncodes={[p.returncode for p in prov_checks]}")
 
-    smoke_data = json.loads((REPO_ROOT / "analysis" / "orchestrator_smoke_test.json").read_text(encoding="utf-8"))
-    adversarial_data = json.loads((REPO_ROOT / "analysis" / "orchestrator_adversarial_test.json").read_text(encoding="utf-8"))
-    reject_data = json.loads((REPO_ROOT / "analysis" / "orchestrator_reject_path_test.json").read_text(encoding="utf-8"))
+    smoke_data = json.loads(output_paths["orchestrator_smoke_test.json"].read_text(encoding="utf-8"))
+    adversarial_data = json.loads(output_paths["orchestrator_adversarial_test.json"].read_text(encoding="utf-8"))
+    reject_data = json.loads(output_paths["orchestrator_reject_path_test.json"].read_text(encoding="utf-8"))
 
     smoke_by_id = {i["item_id"]: i for i in smoke_data["items"]}
 
@@ -332,4 +348,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    output_dir = Path(sys.argv[1]) if len(sys.argv) == 2 else None
+    if len(sys.argv) > 2:
+        raise SystemExit("Usage: python run_acceptance_tests.py [output-dir]")
+    raise SystemExit(main(output_dir))

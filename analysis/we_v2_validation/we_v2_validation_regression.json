@@ -1,0 +1,123 @@
+{
+  "we_v2_regression": {
+    "command": [
+      "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "analysis/we_v2/run_regression_contract.py",
+      "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90\\we_v2_regression_results.json"
+    ],
+    "returncode": 0,
+    "status": "PASS",
+    "stdout": "WE v2 regression contract: PASS (6 cases, 0 PASS)\n",
+    "stderr": ""
+  },
+  "p0_regression": {
+    "command": [
+      "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "agents/toefl_itp_grammar_reviewer/scripts/run_p0_hardening_regression.py",
+      "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90\\pilot_p0_hardening_regression_results.json"
+    ],
+    "returncode": 0,
+    "status": "PASS",
+    "stdout": "P0 hardening regression: PASS (7 fixture contracts, 0 failures)\nWrote C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90\\pilot_p0_hardening_regression_results.json\n",
+    "stderr": ""
+  },
+  "diagnostics_contract_unittest": {
+    "command": [
+      "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_we_v2_contract_boundaries.py",
+      "-v"
+    ],
+    "returncode": 0,
+    "status": "PASS",
+    "stdout": "aggregated 2 live items from 1 microbatches\ngenerator_schema_pass  0/2\nformat_validator_pass  0/2\nplan_conformance_pass  1/2\n  [?] schema=[\"<root>: expected type ['object'], got NoneType\"] format=['item must be an object'] plan=[]\n  [we-v2-pilot-001] schema=[\"<root>: missing required property 'provenance'\", \"<root>.marked_parts: missing required property 'D'\"] format=['missing required field: provenance', 'provenance must be an object', 'marked_parts must have exactly A/B/C/D'] plan=[\"primary_target: plan='REFERENCE_AND_DETERMINERS' item='CLAUSE_STRUCTURE'\"]\n  PROBLEM: diagnostics emission failed for ?: candidate must be an object\n  PROBLEM: diagnostics emission failed for we-v2-pilot-001: marked_parts must have exactly A/B/C/D\n  PROBLEM: missing phase trace: phase_we-v2-live-pilot-20260824-micro-01.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-02.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-03.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-04.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-05.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-06.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-07.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-08.json\n  PROBLEM: missing live generator output: gen_we-v2-live-pilot-20260824-micro-09.json\n  PROBLEM: expected exactly 25 initial candidates, found 2\n  PROBLEM: item_ids outside the batch plan: ['?']\n  PROBLEM: candidate validation failed for ?: schema=[\"<root>: expected type ['object'], got NoneType\"] format=['item must be an object'] plan=[]\n  PROBLEM: candidate validation failed for we-v2-pilot-001: schema=[\"<root>: missing required property 'provenance'\", \"<root>.marked_parts: missing required property 'D'\"] format=['missing required field: provenance', 'provenance must be an object', 'marked_parts must have exactly A/B/C/D'] plan=[\"primary_target: plan='REFERENCE_AND_DETERMINERS' item='CLAUSE_STRUCTURE'\"]\n",
+    "stderr": "test_aggregate_records_malformed_candidates_without_indexing_them (test_we_v2_contract_boundaries.GeneratorContractBoundaryTests.test_aggregate_records_malformed_candidates_without_indexing_them) ... ok\ntest_emitter_runs_schema_gate_after_injection (test_we_v2_contract_boundaries.GeneratorContractBoundaryTests.test_emitter_runs_schema_gate_after_injection) ... ok\ntest_fixture_smoke_is_not_labeled_live (test_we_v2_contract_boundaries.GeneratorContractBoundaryTests.test_fixture_smoke_is_not_labeled_live) ... ok\ntest_malformed_geometry_and_metadata_fail_closed (test_we_v2_contract_boundaries.GeneratorContractBoundaryTests.test_malformed_geometry_and_metadata_fail_closed) ... ok\ntest_non_object_candidate_has_a_recordable_validation_result (test_we_v2_contract_boundaries.GeneratorContractBoundaryTests.test_non_object_candidate_has_a_recordable_validation_result) ... ok\ntest_revision_reuses_canonical_diagnostics_boundary (test_we_v2_contract_boundaries.GeneratorContractBoundaryTests.test_revision_reuses_canonical_diagnostics_boundary) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 4.043s\n\nOK\n"
+  },
+  "we_v2_smoke_acceptance": {
+    "command": [
+      "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "analysis/we_v2/run_smoke_acceptance.py",
+      "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90\\we_v2_smoke_acceptance.json"
+    ],
+    "returncode": 0,
+    "status": "PASS",
+    "stdout": "[PASS] A schema/contract and deterministic geometry valid -- 10/10\n[PASS] B exactly four aligned spans -- all items have A/B/C/D and no EXTREME band\n[PASS] C exactly one genuine error recorded by independent review -- 10/10; complete IDs and reviewer contract required\n[PASS] D Reviewer independent answer matches Generator -- 10/10; exact reviewer ID set and contract required\n[PASS] E existing blind Solver consensus -- 10/10; exact solver ID set and contract required\n[PASS] F geometry remains within official observed item-level ranges -- no EXTREME band; sentence and coverage medians within official min/max\n[PASS] G 100% marked coverage is absent -- count=0\n[PASS] H zero unmarked context is absent -- count=0\nSmoke acceptance: 8/8\n",
+    "stderr": ""
+  },
+  "orchestrator_acceptance": {
+    "command": [
+      "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "orchestrator/scripts/run_acceptance_tests.py",
+      "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90"
+    ],
+    "returncode": 0,
+    "status": "PASS",
+    "stdout": "[PASS] #12 schema validation PASS for all valid fixtures (replay scripts exit 0) -- smoke_rc=0 adversarial_rc=0 reject_rc=0\n[PASS] #12b Orchestrator's own provenance output passes its shape validator (validate_provenance.py) -- returncodes=[0, 0, 0]\n[PASS] #1 Reviewer PASS-only items reach SOLVING\n[PASS] #2 REVISE item (gen-struct-003) never sent directly to Solver\n[PASS] #3 REJECT items never sent into the revision loop\n[PASS] #4 Solver input contains only the allowlisted fields (real create_solver_input.py, real leakage guard) -- blinded_keys=['item_id', 'options', 'section', 'stem'] problems=[]\n[PASS] #5 AUTO_ACCEPT only when generator/reviewer/solver all agree; a single mismatch blocks it -- good=ACCEPTED mismatched=MANUAL_REVIEW reasons=['solver_generator_mismatch', 'solver_reviewer_mismatch']\n[PASS] #6 Solver AMBIGUOUS is never AUTO_ACCEPTed -- routing=MANUAL_REVIEW\n[PASS] #7 Solver NONE is never AUTO_ACCEPTed -- routing=DISCARDED\n[PASS] #8 Solver confidence LOW is never AUTO_ACCEPTed even if the answer matches -- routing=MANUAL_REVIEW reasons=['solver_confidence_low']\n[PASS] #8b Reviewer source_similarity_risk=HIGH is never AUTO_ACCEPTed -- routing=MANUAL_REVIEW reasons=['source_similarity_high']\n[PASS] #9 gen-struct-003 is never AUTO_ACCEPTed (regression case, real Reviewer REVISE data) -- final_state=REVISE_REQUIRED\n[PASS] #10 Adversarial item ACCEPT rate is 0% -- accept_count=0/5\n[PASS] #11 retry limit (max_revision_cycles) is enforced: 3rd consecutive REVISE -> DISCARDED -- revision_count=3 state=DISCARDED max_revision_cycles=2\n[PASS] #5c Generator-revision feedback (real gen-struct-003 REVISE data) exposes only issues/revision_requirements, never independent_answer/verdict/checks -- feedback_keys=['issues', 'item_id', 'revision_requirements']\n[PASS] #13 provenance records carry full state_history and revision_count\n[PASS] #14 system failures (missing script, unparsable JSON) are classified separately from content/schema failures (missing required field) -- missing_script->SystemCallError=True bad_json->SystemCallError=True missing_field->schema_ok=False\n[PASS] #15 MANUAL_REVIEW items are queued to analysis/manual_review_queue.json with actionable fields -- queue_path=C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\manual_review_queue.json\n\nAcceptance tests: 18/18 passed\n",
+    "stderr": ""
+  },
+  "orchestrator_smoke": {
+    "command": [
+      "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "orchestrator/scripts/run_smoke_test.py",
+      "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90\\orchestrator_smoke_test.json"
+    ],
+    "returncode": 0,
+    "status": "PASS",
+    "stdout": "Join key: item_id (dict lookup, not list position).\nGenerator items: ['gen-struct-001', 'gen-struct-002', 'gen-struct-003', 'gen-we-001', 'gen-we-002', 'gen-we-003']\nReviewer items:  ['gen-struct-001', 'gen-struct-002', 'gen-struct-003', 'gen-we-001', 'gen-we-002', 'gen-we-003']\nSolver items:    ['gen-struct-001', 'gen-struct-002', 'gen-struct-003', 'gen-we-001', 'gen-we-002', 'gen-we-003']\nReviewer verdicts (read from analysis/reviewer_smoke_test.json, not hardcoded):\n  gen-struct-001: verdict=PASS\n  gen-struct-002: verdict=PASS\n  gen-struct-003: verdict=REVISE\n  gen-we-001: verdict=PASS\n  gen-we-002: verdict=PASS\n  gen-we-003: verdict=PASS\n\nWrote 6 provenance record(s) to C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90\\orchestrator_smoke_test.json\n\nitem_id          reviewer_verdict   solver_answer   final_state      expected         match\ngen-struct-001   PASS               C               ACCEPTED         ACCEPT-eligible  OK\ngen-struct-002   PASS               A               ACCEPTED         ACCEPT-eligible  OK\ngen-struct-003   REVISE             n/a (Solver not called) REVISE_REQUIRED  ACCEPT-blocked   OK\ngen-we-001       PASS               B               ACCEPTED         ACCEPT-eligible  OK\ngen-we-002       PASS               A               ACCEPTED         ACCEPT-eligible  OK\ngen-we-003       PASS               D               ACCEPTED         ACCEPT-eligible  OK\n\nstate_history per item:\n  gen-struct-001: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n  gen-struct-002: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n  gen-struct-003: ['GENERATED', 'REVIEWING', 'REVISE_REQUIRED']\n  gen-we-001: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n  gen-we-002: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n  gen-we-003: ['GENERATED', 'REVIEWING', 'SOLVING', 'ACCEPTED']\n\n[regression check] gen-struct-003: solver fixture data exists but was NOT sent to Solver (reviewer verdict != PASS; candidate state=REVISE_REQUIRED)\n\nAUTO_ACCEPT 9-condition check (per item that reached SOLVING):\n  gen-struct-001: ALL 9 SATISFIED -> ACCEPTED\n  gen-struct-002: ALL 9 SATISFIED -> ACCEPTED\n  gen-we-001: ALL 9 SATISFIED -> ACCEPTED\n  gen-we-002: ALL 9 SATISFIED -> ACCEPTED\n  gen-we-003: ALL 9 SATISFIED -> ACCEPTED\n\nFinal state tally: {'ACCEPTED': 5, 'REVISE_REQUIRED': 1}\n\ngen-struct-003 regression guard OK: final state = REVISE_REQUIRED, never entered SOLVING\n",
+    "stderr": ""
+  },
+  "orchestrator_adversarial": {
+    "command": [
+      "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "orchestrator/scripts/run_adversarial_test.py",
+      "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90\\orchestrator_adversarial_test.json"
+    ],
+    "returncode": 0,
+    "status": "PASS",
+    "stdout": "Wrote 5 provenance record(s) to C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90\\orchestrator_adversarial_test.json\n\nadv-struct-multi-001         final_state=REVISE_REQUIRED  entered_SOLVING=no\nadv-struct-zero-002          final_state=REVISE_REQUIRED  entered_SOLVING=no\nadv-we-double-003            final_state=REVISE_REQUIRED  entered_SOLVING=no\nadv-we-zero-004              final_state=REVISE_REQUIRED  entered_SOLVING=no\nadv-we-metamismatch-005      final_state=REVISE_REQUIRED  entered_SOLVING=no\n\n[regression check] adv-struct-multi-001: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n[regression check] adv-struct-zero-002: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n[regression check] adv-we-double-003: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n[regression check] adv-we-zero-004: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n[regression check] adv-we-metamismatch-005: solver fixture data exists but was NOT sent to Solver (reviewer verdict=REVISE; candidate state=REVISE_REQUIRED)\n\nACCEPT rate: 0/5\nAdversarial regression checks OK: 0% ACCEPT rate, 0 items reached Solver.\n",
+    "stderr": ""
+  },
+  "orchestrator_reject_path": {
+    "command": [
+      "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "orchestrator/scripts/run_reject_path_test.py",
+      "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90\\orchestrator_reject_path_test.json"
+    ],
+    "returncode": 0,
+    "status": "PASS",
+    "stdout": "Wrote 2 provenance record(s) to C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90\\orchestrator_reject_path_test.json\n\nreject-struct-001    state=REJECTED   rejected=True never_revised=True never_solved=True single_generation=True -> OK\n    state_history: ['GENERATED', 'REVIEWING', 'REJECTED']\nreject-we-002        state=REJECTED   rejected=True never_revised=True never_solved=True single_generation=True -> OK\n    state_history: ['GENERATED', 'REVIEWING', 'REJECTED']\n\nREJECT-path regression checks OK.\n",
+    "stderr": ""
+  },
+  "solver_blinding": {
+    "command": [
+      "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_grammar_solver\\scripts\\create_solver_input.py",
+      "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\generator_smoke_test.json",
+      "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90\\solver_blind_regression.json"
+    ],
+    "returncode": 0,
+    "status": "PASS",
+    "stdout": "Wrote 6 blinded item(s) to C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_validation\\.regression-blvv1q90\\solver_blind_regression.json\n",
+    "stderr": "",
+    "leakage_free": true,
+    "item_count": 6
+  },
+  "we_v2_regression_artifact": {
+    "path": "analysis/we_v2_validation/.regression-blvv1q90/we_v2_regression_results.json",
+    "exists": true,
+    "temporary": true,
+    "status": "PASS"
+  },
+  "p0_regression_artifact": {
+    "path": "analysis/we_v2_validation/.regression-blvv1q90/pilot_p0_hardening_regression_results.json",
+    "exists": true,
+    "temporary": true,
+    "status": "PASS"
+  },
+  "all_required_pass": true
+}

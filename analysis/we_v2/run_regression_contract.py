@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -151,7 +152,8 @@ def expected_v2_review(case: dict, source_item: dict) -> dict:
     }
 
 
-def main() -> int:
+def main(output_path: Path | None = None) -> int:
+    output_path = output_path or OUTPUT_PATH
     manifest = read_json(MANIFEST_PATH)
     failures: list[str] = []
     cases = manifest.get("cases") if isinstance(manifest, dict) else None
@@ -261,7 +263,8 @@ def main() -> int:
         "failures": failures,
         "results": results,
     }
-    OUTPUT_PATH.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"WE v2 regression contract: {result['status']} ({result['case_count']} cases, {result['known_failure_pass_count']} PASS)")
     for failure in failures:
         print(f"- {failure}")
@@ -269,4 +272,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    output = Path(sys.argv[1]) if len(sys.argv) == 2 else None
+    if len(sys.argv) > 2:
+        raise SystemExit("Usage: python run_regression_contract.py [output-path]")
+    raise SystemExit(main(output))

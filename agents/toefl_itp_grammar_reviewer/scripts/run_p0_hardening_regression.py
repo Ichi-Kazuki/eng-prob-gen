@@ -50,7 +50,8 @@ def content_version(path: Path) -> str:
     return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()[:12]
 
 
-def main() -> int:
+def main(output_path: Path | None = None) -> int:
+    output_path = output_path or OUTPUT_PATH
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     provenance = json.loads(PROVENANCE_PATH.read_text(encoding="utf-8"))
     by_id = {item["item_id"]: item for item in provenance["items"]}
@@ -150,7 +151,8 @@ def main() -> int:
         },
         "failures": failures,
     }
-    OUTPUT_PATH.write_text(json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     if failures:
         print(f"P0 hardening regression: FAIL ({len(failures)} failure(s))")
@@ -159,9 +161,12 @@ def main() -> int:
         return 1
 
     print(f"P0 hardening regression: PASS ({len(results)} fixture contracts, 0 failures)")
-    print(f"Wrote {OUTPUT_PATH}")
+    print(f"Wrote {output_path}")
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    output = Path(sys.argv[1]) if len(sys.argv) == 2 else None
+    if len(sys.argv) > 2:
+        raise SystemExit("Usage: python run_p0_hardening_regression.py [output-path]")
+    raise SystemExit(main(output))

@@ -32,7 +32,8 @@ SOLVER_VALIDATOR = load_module(
 )
 
 
-def main() -> int:
+def main(output_path: Path | None = None) -> int:
+    output_path = output_path or ROOT / "analysis" / "we_v2" / "we_v2_smoke_acceptance.json"
     items_path = ROOT / "analysis" / "we_v2" / "we_v2_smoke_items.json"
     review_path = ROOT / "analysis" / "we_v2" / "we_v2_smoke_review.json"
     solver_path = ROOT / "analysis" / "we_v2" / "we_v2_smoke_solver.json"
@@ -139,7 +140,7 @@ def main() -> int:
     check("H", "zero unmarked context is absent", all(d["unmarked_word_count"] > 0 for d in diagnostics), f"count={sum(d['unmarked_word_count'] == 0 for d in diagnostics)}")
 
     report = {"suite": "WE v2 smoke acceptance A-H", "item_count": len(items), "passed": all(c["passed"] for c in checks), "checks": checks}
-    output_path = ROOT / "analysis" / "we_v2" / "we_v2_smoke_acceptance.json"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     for result in checks:
         print(f"[{ 'PASS' if result['passed'] else 'FAIL' }] {result['id']} {result['description']} -- {result['detail']}")
@@ -156,4 +157,7 @@ def statistics_median(values: list[float]) -> float:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    output = Path(sys.argv[1]) if len(sys.argv) == 2 else None
+    if len(sys.argv) > 2:
+        raise SystemExit("Usage: python run_smoke_acceptance.py [output-path]")
+    raise SystemExit(main(output))

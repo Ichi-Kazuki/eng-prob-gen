@@ -1,0 +1,430 @@
+{
+  "run_id": "we-v2-validation-20260824",
+  "version_lock": {
+    "generator": "Written Expression Generator v2.0.1",
+    "reviewer": "Written Expression Reviewer v2.0",
+    "solver": "existing blind Solver unchanged",
+    "orchestrator": "existing consensus policy unchanged",
+    "grammar_spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "taxonomy_version": "1.1",
+    "format_config_id": "TOEFL_ITP_WE_V2_FORMAT_CONFIG",
+    "prompt_hashes": {
+      "generator": "sha256:da6510555710ab6e310524fd8ba0828c7f109da6c7891c25386be6d2c77b4f31",
+      "reviewer": "sha256:1a2516739e83de8db8c0a58dddaac973b9960966f94a5554f42cd577d086767b",
+      "solver": "sha256:df1200bed2b158dbe3151dc67b50ed5ec2359645ffa22c9a9d350a74ece22b2a"
+    }
+  },
+  "scope": {
+    "initial_candidates": 75,
+    "batches": {
+      "A": 25,
+      "B": 25,
+      "C": 25
+    },
+    "structure_items": 0,
+    "replacement_generation": false,
+    "evaluation_unit": "exactly 75 initial candidates"
+  },
+  "core_metrics": {
+    "initial_generated": 75,
+    "generator_schema_pass": 75,
+    "format_validator_pass": 75,
+    "diagnostics_complete": 75,
+    "diagnostics_consistent": 75,
+    "plan_conformance_initial": 72,
+    "plan_conformance_final": 75,
+    "reviewer_round1_PASS": 72,
+    "reviewer_round1_REVISE": 3,
+    "reviewer_round1_REJECT": 0,
+    "reviewer_round1_grammar_PASS": 75,
+    "reviewer_round1_grammar_FAIL": 0,
+    "reviewer_round1_grammar_AMBIGUOUS": 0,
+    "reviewer_round1_format_PASS": 3,
+    "reviewer_round1_format_WARN": 72,
+    "reviewer_round1_format_FAIL": 0,
+    "reviewer_eventual_PASS": 75,
+    "solver_reached": 75,
+    "solver_consensus": 75,
+    "solver_disagreement": 0,
+    "solver_ambiguous": 0,
+    "solver_none": 0,
+    "solver_low": 0,
+    "AUTO_ACCEPT": 75,
+    "MANUAL_REVIEW": 0,
+    "DISCARDED": 0,
+    "REJECTED": 0,
+    "VALIDATION_FAILED": 0,
+    "generator_schema_pass_rate": 1.0,
+    "format_validator_pass_rate": 1.0,
+    "diagnostics_complete_rate": 1.0,
+    "diagnostics_consistent_rate": 1.0,
+    "reviewer_eventual_pass_rate": 1.0
+  },
+  "defect_monitoring": {
+    "no_genuine_error": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "multiple_genuine_errors": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "wrong_answer_key": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "marked_span_mismatch": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "alternate_parse": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "alternate_repair": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "semantic_only_error": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "reference_dependency": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "connector_ambiguity": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "tense_optionality": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "unnatural_sentence": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "metadata_mismatch": {
+      "initial": 3,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "solver_disagreement": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "solver_ambiguous": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "solver_none": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "revision_failure": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    },
+    "other": {
+      "initial": 0,
+      "final": 0,
+      "auto_accepted": 0
+    }
+  },
+  "revision": {
+    "attempted": 3,
+    "successful": 3,
+    "failed": 0,
+    "new_defect_introduced": 0
+  },
+  "judgment_quality": {
+    "mode": "contract_only_replay",
+    "grammar_quality_evaluable": false,
+    "reason": "Reviewer and Solver outputs are schema fixtures because no callable live runtime is available; their agreement is excluded from grammar-quality conclusions."
+  },
+  "geometry_gate": {
+    "pass": false,
+    "axes": {
+      "sentence_word_count": false,
+      "marked_coverage_ratio": false,
+      "unmarked_word_count": false,
+      "gap_A_B": false,
+      "gap_B_C": true,
+      "gap_C_D": true,
+      "worst_band_status": false
+    },
+    "actual": {
+      "sentence_word_count": 14.0,
+      "marked_coverage_ratio": 0.4,
+      "unmarked_word_count": 8.0,
+      "gap_A_B": 1.0,
+      "gap_B_C": 2.0,
+      "gap_C_D": 3.0,
+      "worst_band_classification": {
+        "PREFERRED": 0,
+        "WARNING": 3,
+        "EXTREME": 72
+      },
+      "extreme_band_share": 0.96
+    },
+    "reference": {
+      "sentence_word_count": 20,
+      "marked_coverage_ratio": 0.2632,
+      "unmarked_word_count": 15,
+      "gap_A_B": 4,
+      "gap_B_C": 4,
+      "gap_C_D": 4,
+      "max_extreme_band_share": 0.25
+    },
+    "tolerances": {
+      "sentence_word_count": 3.0,
+      "marked_coverage_ratio": 0.12,
+      "unmarked_word_count": 3.0,
+      "gap_A_B": 2.0,
+      "gap_B_C": 2.0,
+      "gap_C_D": 2.0
+    }
+  },
+  "batch_and_order": {
+    "batches": [
+      {
+        "label": "Batch A",
+        "n": 25,
+        "schema_pass": 25,
+        "reviewer_first_pass": 24,
+        "auto_accept": 25,
+        "solver_anomalies": 0,
+        "PREFERRED_WARNING_EXTREME": {
+          "PREFERRED": 0,
+          "WARNING": 1,
+          "EXTREME": 24
+        },
+        "format_distance_median": 1.3299,
+        "sentence_median": 14.0,
+        "coverage_median": 0.3889,
+        "unmarked_median": 8.0
+      },
+      {
+        "label": "Batch B",
+        "n": 25,
+        "schema_pass": 25,
+        "reviewer_first_pass": 24,
+        "auto_accept": 25,
+        "solver_anomalies": 0,
+        "PREFERRED_WARNING_EXTREME": {
+          "PREFERRED": 0,
+          "WARNING": 0,
+          "EXTREME": 25
+        },
+        "format_distance_median": 1.4674,
+        "sentence_median": 14.0,
+        "coverage_median": 0.4,
+        "unmarked_median": 8.0
+      },
+      {
+        "label": "Batch C",
+        "n": 25,
+        "schema_pass": 25,
+        "reviewer_first_pass": 24,
+        "auto_accept": 25,
+        "solver_anomalies": 0,
+        "PREFERRED_WARNING_EXTREME": {
+          "PREFERRED": 0,
+          "WARNING": 2,
+          "EXTREME": 23
+        },
+        "format_distance_median": 1.5712,
+        "sentence_median": 13.0,
+        "coverage_median": 0.4167,
+        "unmarked_median": 7.0
+      }
+    ],
+    "generation_order_windows": [
+      {
+        "label": "1-10",
+        "n": 10,
+        "schema_pass": 10,
+        "reviewer_first_pass": 10,
+        "auto_accept": 10,
+        "solver_anomalies": 0,
+        "PREFERRED_WARNING_EXTREME": {
+          "PREFERRED": 0,
+          "WARNING": 1,
+          "EXTREME": 9
+        },
+        "format_distance_median": 1.2851,
+        "sentence_median": 14.5,
+        "coverage_median": 0.3741,
+        "unmarked_median": 9.0
+      },
+      {
+        "label": "11-20",
+        "n": 10,
+        "schema_pass": 10,
+        "reviewer_first_pass": 9,
+        "auto_accept": 10,
+        "solver_anomalies": 0,
+        "PREFERRED_WARNING_EXTREME": {
+          "PREFERRED": 0,
+          "WARNING": 0,
+          "EXTREME": 10
+        },
+        "format_distance_median": 1.5193,
+        "sentence_median": 14.0,
+        "coverage_median": 0.4226,
+        "unmarked_median": 7.5
+      },
+      {
+        "label": "21-30",
+        "n": 10,
+        "schema_pass": 10,
+        "reviewer_first_pass": 10,
+        "auto_accept": 10,
+        "solver_anomalies": 0,
+        "PREFERRED_WARNING_EXTREME": {
+          "PREFERRED": 0,
+          "WARNING": 0,
+          "EXTREME": 10
+        },
+        "format_distance_median": 1.3538,
+        "sentence_median": 14.0,
+        "coverage_median": 0.4083,
+        "unmarked_median": 8.5
+      },
+      {
+        "label": "31-40",
+        "n": 10,
+        "schema_pass": 10,
+        "reviewer_first_pass": 9,
+        "auto_accept": 10,
+        "solver_anomalies": 0,
+        "PREFERRED_WARNING_EXTREME": {
+          "PREFERRED": 0,
+          "WARNING": 0,
+          "EXTREME": 10
+        },
+        "format_distance_median": 1.3986,
+        "sentence_median": 13.0,
+        "coverage_median": 0.4007,
+        "unmarked_median": 8.0
+      },
+      {
+        "label": "41-50",
+        "n": 10,
+        "schema_pass": 10,
+        "reviewer_first_pass": 10,
+        "auto_accept": 10,
+        "solver_anomalies": 0,
+        "PREFERRED_WARNING_EXTREME": {
+          "PREFERRED": 0,
+          "WARNING": 0,
+          "EXTREME": 10
+        },
+        "format_distance_median": 1.7261,
+        "sentence_median": 13.5,
+        "coverage_median": 0.4641,
+        "unmarked_median": 7.0
+      },
+      {
+        "label": "51-60",
+        "n": 10,
+        "schema_pass": 10,
+        "reviewer_first_pass": 10,
+        "auto_accept": 10,
+        "solver_anomalies": 0,
+        "PREFERRED_WARNING_EXTREME": {
+          "PREFERRED": 0,
+          "WARNING": 2,
+          "EXTREME": 8
+        },
+        "format_distance_median": 0.904,
+        "sentence_median": 15.0,
+        "coverage_median": 0.3333,
+        "unmarked_median": 10.0
+      },
+      {
+        "label": "61-70",
+        "n": 10,
+        "schema_pass": 10,
+        "reviewer_first_pass": 9,
+        "auto_accept": 10,
+        "solver_anomalies": 0,
+        "PREFERRED_WARNING_EXTREME": {
+          "PREFERRED": 0,
+          "WARNING": 0,
+          "EXTREME": 10
+        },
+        "format_distance_median": 1.77,
+        "sentence_median": 13.0,
+        "coverage_median": 0.4584,
+        "unmarked_median": 7.0
+      },
+      {
+        "label": "71-75",
+        "n": 5,
+        "schema_pass": 5,
+        "reviewer_first_pass": 5,
+        "auto_accept": 5,
+        "solver_anomalies": 0,
+        "PREFERRED_WARNING_EXTREME": {
+          "PREFERRED": 0,
+          "WARNING": 0,
+          "EXTREME": 5
+        },
+        "format_distance_median": 1.8367,
+        "sentence_median": 11.0,
+        "coverage_median": 0.4615,
+        "unmarked_median": 6.0
+      }
+    ]
+  },
+  "quality_gates": {
+    "Gate A contract defect tracking has no AUTO_ACCEPTed synthetic defects": true,
+    "Gate B regression 100% PASS": true,
+    "Gate C Generator schema = 100%": true,
+    "Gate D diagnostics completeness/consistency = 100%": true,
+    "Gate E coverage 100% = 0": true,
+    "Gate F unmarked context 0 = 0": true,
+    "Gate G Solver contract output is schema-valid": true,
+    "Gate H no v1.1-style batch collapse": true,
+    "Gate I all monitored format geometry axes are within bounds": false,
+    "Novelty gate exact IDs/sentences and no historical reuse": true
+  },
+  "novelty_audit": {
+    "cohort_count": 75,
+    "unique_item_ids": 75,
+    "unique_sentences": 75,
+    "duplicate_item_ids": [],
+    "duplicate_sentences": [],
+    "historical_source_counts": {
+      "analysis/validation/validation_initial_items.json": 75,
+      "analysis/we_v2/we_v2_smoke_items.json": 10,
+      "analysis/we_v2_pilot/we_v2_pilot_final_items.json": 25,
+      "analysis/we_v2_patch/live_resmoke_items.json": 10
+    },
+    "historical_exact_sentence_overlap": [],
+    "historical_exact_item_id_overlap": [],
+    "pass": true
+  },
+  "recommendation": {
+    "code": "D",
+    "text": "Format-band design recalibration is required before a larger generation run. The validation cohort is outside one or more monitored geometry axes, including sentence length, coverage, unmarked context, gaps, or worst-band status. Thresholds and bands were not changed in this run."
+  }
+}
