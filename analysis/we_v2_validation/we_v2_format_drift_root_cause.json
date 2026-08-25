@@ -1,0 +1,6664 @@
+{
+  "report_version": "WE_V2_FORMAT_DRIFT_ROOT_CAUSE_1.0",
+  "analysis_only": true,
+  "summary": {
+    "scope": {
+      "cohort": "existing WE v2 Validation cohort only",
+      "cohort_source": "tmp/we_validation_run_2/we_v2_validation_accepted.json (canonical final items)",
+      "plan_source": "tmp/we_validation_run_2/we_v2_validation_plans.json",
+      "official_source": "analysis/we_format/written_expression_format_official.json",
+      "item_count": 75,
+      "official_item_count": 125,
+      "new_items_generated": false,
+      "historical_reviewer_solver_judgments_used": false,
+      "grammar_quality": "NOT_EVALUATED"
+    },
+    "corrected_view": {
+      "method": "deterministic lexical clean_form vs final error-form diff aligned to final span_token_indices",
+      "derived_single_location": 75,
+      "matches_stored_answer_for_integrity_check": 75,
+      "mismatches": [],
+      "format_fields_recomputed_from_final_spans": true
+    },
+    "official_vs_v2": {
+      "official": {
+        "n": 125,
+        "sentence_word_count": {
+          "n": 125,
+          "mean": 20.048,
+          "median": 20,
+          "min": 10,
+          "max": 33,
+          "stdev": 4.2727,
+          "p10": 15,
+          "p90": 25
+        },
+        "total_marked_words": {
+          "n": 125,
+          "mean": 5.176,
+          "median": 5,
+          "min": 4,
+          "max": 9,
+          "stdev": 1.1221,
+          "p10": 4,
+          "p90": 7
+        },
+        "mean_marked_span_length": {
+          "n": 125,
+          "mean": 1.294,
+          "median": 1.25,
+          "min": 1,
+          "max": 2.25,
+          "stdev": 0.2805,
+          "p10": 1,
+          "p90": 1.75
+        },
+        "max_marked_span_length": {
+          "n": 125,
+          "mean": 1.848,
+          "median": 2,
+          "min": 1,
+          "max": 4,
+          "stdev": 0.7077,
+          "p10": 1,
+          "p90": 3
+        },
+        "coverage": {
+          "n": 125,
+          "mean": 0.2705,
+          "median": 0.2632,
+          "min": 0.129,
+          "max": 0.6,
+          "stdev": 0.0829,
+          "p10": 0.1739,
+          "p90": 0.381
+        },
+        "unmarked_context": {
+          "n": 125,
+          "mean": 14.872,
+          "median": 15,
+          "min": 4,
+          "max": 27,
+          "stdev": 4.4049,
+          "p10": 10,
+          "p90": 20
+        },
+        "gaps": {
+          "A-B": {
+            "n": 125,
+            "mean": 3.536,
+            "median": 4,
+            "min": 1,
+            "max": 6,
+            "stdev": 1.195,
+            "p10": 2,
+            "p90": 5
+          },
+          "B-C": {
+            "n": 125,
+            "mean": 3.824,
+            "median": 4,
+            "min": 1,
+            "max": 7,
+            "stdev": 1.2893,
+            "p10": 2,
+            "p90": 5
+          },
+          "C-D": {
+            "n": 125,
+            "mean": 3.768,
+            "median": 4,
+            "min": 1,
+            "max": 7,
+            "stdev": 1.2772,
+            "p10": 2,
+            "p90": 5
+          }
+        },
+        "span_word_count_distribution": {
+          "1": 375,
+          "2": 106,
+          "3": 16,
+          "4": 3
+        },
+        "correct_span_type_distribution": {
+          "SINGLE_WORD": 98,
+          "SHORT_PHRASE": 12,
+          "CLAUSE_OR_CLAUSE_LIKE": 15
+        },
+        "correct_span_word_count_distribution": {
+          "1": 98,
+          "2": 21,
+          "3": 5,
+          "4": 1
+        }
+      },
+      "v2": {
+        "n": 75,
+        "sentence_word_count": {
+          "n": 75,
+          "mean": 13.9467,
+          "median": 14,
+          "min": 8,
+          "max": 24,
+          "stdev": 2.4981,
+          "p10": 12,
+          "p90": 17
+        },
+        "total_marked_words": {
+          "n": 75,
+          "mean": 5.7333,
+          "median": 5,
+          "min": 4,
+          "max": 10,
+          "stdev": 1.6302,
+          "p10": 4,
+          "p90": 8
+        },
+        "mean_marked_span_length": {
+          "n": 75,
+          "mean": 1.4333,
+          "median": 1.25,
+          "min": 1.0,
+          "max": 2.5,
+          "stdev": 0.4076,
+          "p10": 1.0,
+          "p90": 2.0
+        },
+        "max_marked_span_length": {
+          "n": 75,
+          "mean": 2.2267,
+          "median": 2,
+          "min": 1,
+          "max": 6,
+          "stdev": 1.2033,
+          "p10": 1,
+          "p90": 5
+        },
+        "coverage": {
+          "n": 75,
+          "mean": 0.4186,
+          "median": 0.4,
+          "min": 0.2105,
+          "max": 0.7692,
+          "stdev": 0.1199,
+          "p10": 0.2778,
+          "p90": 0.6
+        },
+        "unmarked_context": {
+          "n": 75,
+          "mean": 8.2133,
+          "median": 8,
+          "min": 3,
+          "max": 17,
+          "stdev": 2.7078,
+          "p10": 5,
+          "p90": 12
+        },
+        "gaps": {
+          "A-B": {
+            "n": 75,
+            "mean": 1.4,
+            "median": 1,
+            "min": 0,
+            "max": 9,
+            "stdev": 1.6275,
+            "p10": 0,
+            "p90": 3
+          },
+          "B-C": {
+            "n": 75,
+            "mean": 1.7333,
+            "median": 2,
+            "min": 0,
+            "max": 8,
+            "stdev": 1.6052,
+            "p10": 0,
+            "p90": 4
+          },
+          "C-D": {
+            "n": 75,
+            "mean": 3.3467,
+            "median": 3,
+            "min": 0,
+            "max": 11,
+            "stdev": 2.6071,
+            "p10": 0,
+            "p90": 7
+          }
+        },
+        "span_word_count_distribution": {
+          "1": 205,
+          "2": 79,
+          "3": 7,
+          "5": 8,
+          "6": 1
+        },
+        "correct_span_type_distribution": {
+          "SINGLE_WORD": 22,
+          "SHORT_PHRASE": 44,
+          "CLAUSE_OR_CLAUSE_LIKE": 9
+        },
+        "correct_span_word_count_distribution": {
+          "1": 22,
+          "2": 41,
+          "3": 3,
+          "5": 8,
+          "6": 1
+        }
+      }
+    },
+    "planned_vs_actual_sentence_length": {
+      "plan_region_counts": {
+        "16-20": 10,
+        "11-15": 60,
+        "21-25": 2,
+        "<=10": 3
+      },
+      "plan_midpoint_proxy": {
+        "n": 75,
+        "mean": 13.8133,
+        "median": 13.0,
+        "min": 10,
+        "max": 23.0,
+        "stdev": 2.4032,
+        "p10": 13.0,
+        "p90": 18.0
+      },
+      "median_plan_region_lower": 11,
+      "median_plan_region_upper": 15,
+      "clean_actual": {
+        "n": 75,
+        "mean": 13.8533,
+        "median": 14,
+        "min": 9,
+        "max": 25,
+        "stdev": 2.5399,
+        "p10": 11,
+        "p90": 17
+      },
+      "final_actual": {
+        "n": 75,
+        "mean": 13.9467,
+        "median": 14,
+        "min": 8,
+        "max": 24,
+        "stdev": 2.4981,
+        "p10": 12,
+        "p90": 17
+      },
+      "clean_to_final_delta": {
+        "n": 75,
+        "mean": 0.0933,
+        "median": 0,
+        "min": -1,
+        "max": 1,
+        "stdev": 0.47,
+        "p10": 0,
+        "p90": 1
+      },
+      "clean_in_plan_range": 71,
+      "clean_shorter_than_plan": 3,
+      "clean_longer_than_plan": 1,
+      "final_in_plan_range": 75,
+      "final_shorter_than_plan": 0,
+      "final_longer_than_plan": 0,
+      "judgment": "PLAN_SAMPLING_DRIFT: plan itself is short; realization is generally in the short plan range, so independent realization-shortening evidence is weak."
+    },
+    "planning_distribution": {
+      "intended_span_profile_counts": {
+        "1/1/1/1": 17,
+        "2/1/1/1": 7,
+        "2/2/2/2": 1,
+        "2/2/2/1": 2,
+        "1/2/1/1": 11,
+        "1/1/2/1": 6,
+        "1/2/2/1": 11,
+        "1/2/3/1": 1,
+        "6/1/2/1": 1,
+        "5/2/2/1": 3,
+        "1/3/2/1": 4,
+        "1/5/2/1": 2,
+        "2/1/2/1": 3,
+        "1/1/2/2": 1,
+        "5/1/1/1": 2,
+        "1/3/3/1": 1,
+        "1/1/1/2": 1,
+        "1/5/1/1": 1
+      },
+      "realized_span_profile_counts": {
+        "1/1/1/1": 17,
+        "2/1/1/1": 7,
+        "2/2/2/2": 1,
+        "2/2/2/1": 2,
+        "1/2/1/1": 11,
+        "1/1/2/1": 6,
+        "1/2/2/1": 11,
+        "1/2/3/1": 1,
+        "6/1/2/1": 1,
+        "5/2/2/1": 3,
+        "1/3/2/1": 4,
+        "1/5/2/1": 2,
+        "2/1/2/1": 3,
+        "1/1/2/2": 1,
+        "5/1/1/1": 2,
+        "1/3/3/1": 1,
+        "1/1/1/2": 1,
+        "1/5/1/1": 1
+      },
+      "intended_correct_span_type_counts": {
+        "SINGLE_WORD": 22,
+        "SHORT_PHRASE": 44,
+        "CLAUSE_OR_CLAUSE_LIKE": 9
+      },
+      "realized_correct_span_type_counts": {
+        "SINGLE_WORD": 22,
+        "SHORT_PHRASE": 44,
+        "CLAUSE_OR_CLAUSE_LIKE": 9
+      },
+      "intended_coverage_region_counts": {
+        "soft official reference; no exact quota": 75
+      },
+      "planned_tail_case_counts": {
+        "NONE": 67,
+        "multi_tail": 6,
+        "single_gap": 2
+      },
+      "desired_gaps_logged": false,
+      "desired_coverage_numeric_target_logged": false,
+      "plan_to_realized_exact_span_profile": 75,
+      "plan_to_realized_exact_correct_type": 75,
+      "official_sampling_guidance": {
+        "sentence_length_bins": {
+          "<=10": 0.008,
+          "11-15": 0.12,
+          "16-20": 0.392,
+          "21-25": 0.384,
+          "26-30": 0.08,
+          "31+": 0.016
+        },
+        "span_word_counts": {
+          "1": 0.75,
+          "2": 0.212,
+          "3": 0.032,
+          "4": 0.006
+        },
+        "correct_span_types": {
+          "SINGLE_WORD": 0.784,
+          "SHORT_PHRASE": 0.096,
+          "CLAUSE_OR_CLAUSE_LIKE": 0.12
+        }
+      }
+    },
+    "span_selection": {
+      "v2_by_label": {
+        "A": {
+          "1": 56,
+          "2": 13,
+          "5": 5,
+          "6": 1
+        },
+        "B": {
+          "1": 38,
+          "2": 29,
+          "3": 5,
+          "5": 3
+        },
+        "C": {
+          "1": 39,
+          "2": 34,
+          "3": 2
+        },
+        "D": {
+          "1": 72,
+          "2": 3
+        }
+      },
+      "official_by_label": {
+        "A": {
+          "1": 103,
+          "2": 19,
+          "3": 2,
+          "4": 1
+        },
+        "B": {
+          "1": 89,
+          "2": 32,
+          "3": 3,
+          "4": 1
+        },
+        "C": {
+          "1": 98,
+          "2": 22,
+          "3": 4,
+          "4": 1
+        },
+        "D": {
+          "1": 85,
+          "2": 33,
+          "3": 7
+        }
+      },
+      "v2_correct_span_length": {
+        "1": 22,
+        "2": 41,
+        "3": 3,
+        "5": 8,
+        "6": 1
+      },
+      "official_correct_span_length": {
+        "1": 98,
+        "2": 21,
+        "3": 5,
+        "4": 1
+      },
+      "v2_distractor_span_length": {
+        "1": 183,
+        "2": 38,
+        "3": 4
+      },
+      "long_span_count": 9,
+      "long_spans": [
+        {
+          "item_id": "we-v2-validation-015",
+          "generation_order": 15,
+          "label": "A",
+          "span_word_count": 6,
+          "span_text": "fossils discovering in the limestone quarry",
+          "correct_or_distractor": "correct",
+          "syntactic_role": "clause_or_clause_like (inferred from corrected span type)",
+          "primary_target": "NONFINITE_VERB_PHRASES",
+          "tested_error_type": "wrong_verb_form",
+          "decision_granularity": "VERB_FRAME",
+          "correction_locality": "CLAUSE_LEVEL",
+          "subtype": "past participle in a reduced passive relative clause",
+          "planned_span_profile": "6/1/2/1",
+          "why_this_length": "The plan explicitly requested this 5/6-word profile; realized span length matches the plan.",
+          "local_1_2_word_alternative": "likely_yes",
+          "candidate_pool_logged": false
+        },
+        {
+          "item_id": "we-v2-validation-017",
+          "generation_order": 17,
+          "label": "A",
+          "span_word_count": 5,
+          "span_text": "Despite the soil appeared dry",
+          "correct_or_distractor": "correct",
+          "syntactic_role": "clause_or_clause_like (inferred from corrected span type)",
+          "primary_target": "CONNECTORS_CONJUNCTIONS",
+          "tested_error_type": "incorrect_subordinator",
+          "decision_granularity": "CLAUSE_RELATION",
+          "correction_locality": "CLAUSE_LEVEL",
+          "subtype": "concessive subordinator before a finite clause",
+          "planned_span_profile": "5/2/2/1",
+          "why_this_length": "The plan explicitly requested this 5/6-word profile; realized span length matches the plan.",
+          "local_1_2_word_alternative": "likely_yes",
+          "candidate_pool_logged": false
+        },
+        {
+          "item_id": "we-v2-validation-021",
+          "generation_order": 21,
+          "label": "B",
+          "span_word_count": 5,
+          "span_text": "a developed newly optical sensor",
+          "correct_or_distractor": "correct",
+          "syntactic_role": "clause_or_clause_like (inferred from corrected span type)",
+          "primary_target": "WORD_ORDER_MODIFICATION",
+          "tested_error_type": "wrong_word_order",
+          "decision_granularity": "WORD_ORDER",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "subtype": "adjective order inside a complex noun phrase",
+          "planned_span_profile": "1/5/2/1",
+          "why_this_length": "The plan explicitly requested this 5/6-word profile; realized span length matches the plan.",
+          "local_1_2_word_alternative": "likely_yes",
+          "candidate_pool_logged": false
+        },
+        {
+          "item_id": "we-v2-validation-040",
+          "generation_order": 40,
+          "label": "A",
+          "span_word_count": 5,
+          "span_text": "artifacts recovering from the riverbed",
+          "correct_or_distractor": "correct",
+          "syntactic_role": "clause_or_clause_like (inferred from corrected span type)",
+          "primary_target": "NONFINITE_VERB_PHRASES",
+          "tested_error_type": "wrong_verb_form",
+          "decision_granularity": "VERB_FRAME",
+          "correction_locality": "CLAUSE_LEVEL",
+          "subtype": "past participle in a reduced passive relative clause",
+          "planned_span_profile": "5/1/1/1",
+          "why_this_length": "The plan explicitly requested this 5/6-word profile; realized span length matches the plan.",
+          "local_1_2_word_alternative": "likely_yes",
+          "candidate_pool_logged": false
+        },
+        {
+          "item_id": "we-v2-validation-042",
+          "generation_order": 42,
+          "label": "A",
+          "span_word_count": 5,
+          "span_text": "Despite the signal was weak",
+          "correct_or_distractor": "correct",
+          "syntactic_role": "clause_or_clause_like (inferred from corrected span type)",
+          "primary_target": "CONNECTORS_CONJUNCTIONS",
+          "tested_error_type": "incorrect_subordinator",
+          "decision_granularity": "CLAUSE_RELATION",
+          "correction_locality": "CLAUSE_LEVEL",
+          "subtype": "concessive subordinator before a finite clause",
+          "planned_span_profile": "5/2/2/1",
+          "why_this_length": "The plan explicitly requested this 5/6-word profile; realized span length matches the plan.",
+          "local_1_2_word_alternative": "likely_yes",
+          "candidate_pool_logged": false
+        },
+        {
+          "item_id": "we-v2-validation-046",
+          "generation_order": 46,
+          "label": "B",
+          "span_word_count": 5,
+          "span_text": "a calibrated carefully digital scale",
+          "correct_or_distractor": "correct",
+          "syntactic_role": "clause_or_clause_like (inferred from corrected span type)",
+          "primary_target": "WORD_ORDER_MODIFICATION",
+          "tested_error_type": "wrong_word_order",
+          "decision_granularity": "WORD_ORDER",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "subtype": "adjective order inside a complex noun phrase",
+          "planned_span_profile": "1/5/2/1",
+          "why_this_length": "The plan explicitly requested this 5/6-word profile; realized span length matches the plan.",
+          "local_1_2_word_alternative": "likely_yes",
+          "candidate_pool_logged": false
+        },
+        {
+          "item_id": "we-v2-validation-065",
+          "generation_order": 65,
+          "label": "A",
+          "span_word_count": 5,
+          "span_text": "manuscripts preserving in the monastery",
+          "correct_or_distractor": "correct",
+          "syntactic_role": "clause_or_clause_like (inferred from corrected span type)",
+          "primary_target": "NONFINITE_VERB_PHRASES",
+          "tested_error_type": "wrong_verb_form",
+          "decision_granularity": "VERB_FRAME",
+          "correction_locality": "CLAUSE_LEVEL",
+          "subtype": "past participle in a reduced passive relative clause",
+          "planned_span_profile": "5/1/1/1",
+          "why_this_length": "The plan explicitly requested this 5/6-word profile; realized span length matches the plan.",
+          "local_1_2_word_alternative": "likely_yes",
+          "candidate_pool_logged": false
+        },
+        {
+          "item_id": "we-v2-validation-067",
+          "generation_order": 67,
+          "label": "A",
+          "span_word_count": 5,
+          "span_text": "Despite the route was steep",
+          "correct_or_distractor": "correct",
+          "syntactic_role": "clause_or_clause_like (inferred from corrected span type)",
+          "primary_target": "CONNECTORS_CONJUNCTIONS",
+          "tested_error_type": "incorrect_subordinator",
+          "decision_granularity": "CLAUSE_RELATION",
+          "correction_locality": "CLAUSE_LEVEL",
+          "subtype": "concessive subordinator before a finite clause",
+          "planned_span_profile": "5/2/2/1",
+          "why_this_length": "The plan explicitly requested this 5/6-word profile; realized span length matches the plan.",
+          "local_1_2_word_alternative": "likely_yes",
+          "candidate_pool_logged": false
+        },
+        {
+          "item_id": "we-v2-validation-071",
+          "generation_order": 71,
+          "label": "B",
+          "span_word_count": 5,
+          "span_text": "a discovered recently coastal cave",
+          "correct_or_distractor": "correct",
+          "syntactic_role": "clause_or_clause_like (inferred from corrected span type)",
+          "primary_target": "WORD_ORDER_MODIFICATION",
+          "tested_error_type": "wrong_word_order",
+          "decision_granularity": "WORD_ORDER",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "subtype": "adjective order inside a complex noun phrase",
+          "planned_span_profile": "1/5/1/1",
+          "why_this_length": "The plan explicitly requested this 5/6-word profile; realized span length matches the plan.",
+          "local_1_2_word_alternative": "likely_yes",
+          "candidate_pool_logged": false
+        }
+      ],
+      "candidate_pool_limit": "not logged; output-only audit cannot prove that a 1-word candidate existed and was rejected"
+    },
+    "correct_span_type_bias": {
+      "official_counts": {
+        "SINGLE_WORD": 98,
+        "SHORT_PHRASE": 12,
+        "CLAUSE_OR_CLAUSE_LIKE": 15
+      },
+      "v2_counts": {
+        "SINGLE_WORD": 22,
+        "SHORT_PHRASE": 44,
+        "CLAUSE_OR_CLAUSE_LIKE": 9
+      },
+      "official_proportions": {
+        "SINGLE_WORD": 0.784,
+        "SHORT_PHRASE": 0.096,
+        "CLAUSE_OR_CLAUSE_LIKE": 0.12
+      },
+      "v2_proportions": {
+        "SINGLE_WORD": 0.2933,
+        "SHORT_PHRASE": 0.5867,
+        "CLAUSE_OR_CLAUSE_LIKE": 0.12
+      },
+      "total_variation_distance": 0.4907,
+      "plan_realization_alignment": {
+        "correct_type_exact_match": 75,
+        "short_phrase_excess_is_present_at_plan_stage": true
+      },
+      "causal_trace": "The excess is already in intended_correct_span_type (44/75 SHORT_PHRASE) and is realized exactly; this points to plan/target-selection design, not a late Reviewer/Solver effect. The cohort does not log a separate candidate-pool selector trace."
+    },
+    "position_and_clustering": {
+      "v2": {
+        "normalized_start": {
+          "A": {
+            "n": 75,
+            "mean": 0.0827,
+            "median": 0.0769,
+            "min": 0.0,
+            "max": 0.25,
+            "stdev": 0.0496,
+            "p10": 0.0,
+            "p90": 0.1429
+          },
+          "B": {
+            "n": 75,
+            "mean": 0.2933,
+            "median": 0.2727,
+            "min": 0.0625,
+            "max": 0.5714,
+            "stdev": 0.1239,
+            "p10": 0.1538,
+            "p90": 0.5
+          },
+          "C": {
+            "n": 75,
+            "mean": 0.5376,
+            "median": 0.5556,
+            "min": 0.125,
+            "max": 0.8462,
+            "stdev": 0.1649,
+            "p10": 0.3333,
+            "p90": 0.75
+          },
+          "D": {
+            "n": 75,
+            "mean": 0.8822,
+            "median": 0.9231,
+            "min": 0.4615,
+            "max": 0.9583,
+            "stdev": 0.102,
+            "p10": 0.7222,
+            "p90": 0.9333
+          }
+        },
+        "zero_gap_rate": {
+          "A-B": 0.3067,
+          "B-C": 0.2667,
+          "C-D": 0.1333
+        },
+        "gap_le1_rate": {
+          "A-B": 0.64,
+          "B-C": 0.4933,
+          "C-D": 0.2533
+        },
+        "gap_sum": {
+          "n": 75,
+          "mean": 6.48,
+          "median": 6,
+          "min": 1,
+          "max": 16,
+          "stdev": 2.7379,
+          "p10": 4,
+          "p90": 10
+        },
+        "between_span_context_share": {
+          "n": 75,
+          "mean": 0.7912,
+          "median": 0.8571,
+          "min": 0.125,
+          "max": 1.0,
+          "stdev": 0.1812,
+          "p10": 0.5455,
+          "p90": 0.9412
+        },
+        "edge_unmarked_context": {
+          "n": 75,
+          "mean": 1.7333,
+          "median": 1,
+          "min": 0,
+          "max": 8,
+          "stdev": 1.6712,
+          "p10": 1,
+          "p90": 4
+        },
+        "first_span_before_10pct": 0.7867,
+        "D_start_at_or_after_75pct": 0.8933,
+        "C_D_gap_gt6": 0.1067,
+        "correct_neighbor_min_gap": {
+          "n": 75,
+          "mean": 1,
+          "median": 1,
+          "min": 0,
+          "max": 5,
+          "stdev": 1.1508,
+          "p10": 0,
+          "p90": 3
+        }
+      },
+      "official": {
+        "normalized_start": {
+          "A": {
+            "n": 125,
+            "mean": 0.0574,
+            "median": 0.0556,
+            "min": 0.0417,
+            "max": 0.1,
+            "stdev": 0.0128,
+            "p10": 0.0435,
+            "p90": 0.0769
+          },
+          "B": {
+            "n": 125,
+            "mean": 0.2935,
+            "median": 0.2941,
+            "min": 0.25,
+            "max": 0.4,
+            "stdev": 0.0175,
+            "p10": 0.2727,
+            "p90": 0.3125
+          },
+          "C": {
+            "n": 125,
+            "mean": 0.5504,
+            "median": 0.55,
+            "min": 0.5263,
+            "max": 0.6,
+            "stdev": 0.0163,
+            "p10": 0.5294,
+            "p90": 0.5714
+          },
+          "D": {
+            "n": 125,
+            "mean": 0.8018,
+            "median": 0.8,
+            "min": 0.7692,
+            "max": 0.8333,
+            "stdev": 0.0158,
+            "p10": 0.7826,
+            "p90": 0.8235
+          }
+        },
+        "zero_gap_rate": {
+          "A-B": 0.0,
+          "B-C": 0.0,
+          "C-D": 0.0
+        },
+        "gap_le1_rate": {
+          "A-B": 0.072,
+          "B-C": 0.04,
+          "C-D": 0.048
+        },
+        "gap_sum": {
+          "n": 125,
+          "mean": 11.128,
+          "median": 11,
+          "min": 3,
+          "max": 20,
+          "stdev": 3.3068,
+          "p10": 7,
+          "p90": 15
+        },
+        "between_span_context_share": {
+          "n": 125,
+          "mean": 0.7475,
+          "median": 0.75,
+          "min": 0.5714285714285714,
+          "max": 0.9,
+          "stdev": 0.0504,
+          "p10": 0.6923,
+          "p90": 0.8182
+        },
+        "edge_unmarked_context": {
+          "n": 125,
+          "mean": 3.744,
+          "median": 3,
+          "min": 1,
+          "max": 7,
+          "stdev": 1.3253,
+          "p10": 2,
+          "p90": 6
+        },
+        "first_span_before_10pct": 0.992,
+        "D_start_at_or_after_75pct": 1.0,
+        "C_D_gap_gt6": 0.016,
+        "correct_neighbor_min_gap": {
+          "n": 125,
+          "mean": 3.52,
+          "median": 4,
+          "min": 1,
+          "max": 6,
+          "stdev": 1.2864,
+          "p10": 2,
+          "p90": 5
+        }
+      }
+    },
+    "batch_and_order": {
+      "windows_25": [
+        {
+          "label": "1-25",
+          "n": 25,
+          "sentence_median": 14,
+          "coverage_median": 0.3889,
+          "unmarked_median": 8,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 3,
+          "gaps_median": {
+            "A-B": 1,
+            "B-C": 2,
+            "C-D": 2
+          },
+          "zero_gap_rate": 0.2
+        },
+        {
+          "label": "26-50",
+          "n": 25,
+          "sentence_median": 14,
+          "coverage_median": 0.4,
+          "unmarked_median": 8,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 3,
+          "gaps_median": {
+            "A-B": 1,
+            "B-C": 1,
+            "C-D": 3
+          },
+          "zero_gap_rate": 0.24
+        },
+        {
+          "label": "51-75",
+          "n": 25,
+          "sentence_median": 13,
+          "coverage_median": 0.4167,
+          "unmarked_median": 7,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 3,
+          "gaps_median": {
+            "A-B": 1,
+            "B-C": 1,
+            "C-D": 3
+          },
+          "zero_gap_rate": 0.2667
+        }
+      ],
+      "windows_5": [
+        {
+          "label": "1-5",
+          "n": 5,
+          "sentence_median": 17,
+          "coverage_median": 0.3571,
+          "unmarked_median": 13,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "gaps_median": {
+            "A-B": 2,
+            "B-C": 3,
+            "C-D": 2
+          },
+          "zero_gap_rate": 0.2667
+        },
+        {
+          "label": "6-10",
+          "n": 5,
+          "sentence_median": 13,
+          "coverage_median": 0.3846,
+          "unmarked_median": 8,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "gaps_median": {
+            "A-B": 2,
+            "B-C": 1,
+            "C-D": 2
+          },
+          "zero_gap_rate": 0.2
+        },
+        {
+          "label": "11-15",
+          "n": 5,
+          "sentence_median": 13,
+          "coverage_median": 0.4444,
+          "unmarked_median": 7,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 1,
+          "gaps_median": {
+            "A-B": 2,
+            "B-C": 2,
+            "C-D": 1
+          },
+          "zero_gap_rate": 0.2
+        },
+        {
+          "label": "16-20",
+          "n": 5,
+          "sentence_median": 14,
+          "coverage_median": 0.3889,
+          "unmarked_median": 10,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 1,
+          "gaps_median": {
+            "A-B": 1,
+            "B-C": 0,
+            "C-D": 5
+          },
+          "zero_gap_rate": 0.2667
+        },
+        {
+          "label": "21-25",
+          "n": 5,
+          "sentence_median": 13,
+          "coverage_median": 0.4615,
+          "unmarked_median": 7,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 1,
+          "gaps_median": {
+            "A-B": 1,
+            "B-C": 2,
+            "C-D": 2
+          },
+          "zero_gap_rate": 0.0667
+        },
+        {
+          "label": "26-30",
+          "n": 5,
+          "sentence_median": 15,
+          "coverage_median": 0.2857,
+          "unmarked_median": 10,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "gaps_median": {
+            "A-B": 0,
+            "B-C": 0,
+            "C-D": 3
+          },
+          "zero_gap_rate": 0.4667
+        },
+        {
+          "label": "31-35",
+          "n": 5,
+          "sentence_median": 13,
+          "coverage_median": 0.3846,
+          "unmarked_median": 8,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "gaps_median": {
+            "A-B": 1,
+            "B-C": 1,
+            "C-D": 4
+          },
+          "zero_gap_rate": 0.2
+        },
+        {
+          "label": "36-40",
+          "n": 5,
+          "sentence_median": 13,
+          "coverage_median": 0.4167,
+          "unmarked_median": 8,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 1,
+          "gaps_median": {
+            "A-B": 2,
+            "B-C": 2,
+            "C-D": 2
+          },
+          "zero_gap_rate": 0.2
+        },
+        {
+          "label": "41-45",
+          "n": 5,
+          "sentence_median": 14,
+          "coverage_median": 0.4615,
+          "unmarked_median": 8,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 1,
+          "gaps_median": {
+            "A-B": 1,
+            "B-C": 1,
+            "C-D": 5
+          },
+          "zero_gap_rate": 0.2667
+        },
+        {
+          "label": "46-50",
+          "n": 5,
+          "sentence_median": 13,
+          "coverage_median": 0.5,
+          "unmarked_median": 7,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 1,
+          "gaps_median": {
+            "A-B": 1,
+            "B-C": 2,
+            "C-D": 3
+          },
+          "zero_gap_rate": 0.0667
+        },
+        {
+          "label": "51-55",
+          "n": 5,
+          "sentence_median": 15,
+          "coverage_median": 0.3125,
+          "unmarked_median": 11,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "gaps_median": {
+            "A-B": 0,
+            "B-C": 2,
+            "C-D": 2
+          },
+          "zero_gap_rate": 0.4667
+        },
+        {
+          "label": "56-60",
+          "n": 5,
+          "sentence_median": 15,
+          "coverage_median": 0.4,
+          "unmarked_median": 9,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "gaps_median": {
+            "A-B": 1,
+            "B-C": 3,
+            "C-D": 4
+          },
+          "zero_gap_rate": 0.2
+        },
+        {
+          "label": "61-65",
+          "n": 5,
+          "sentence_median": 12,
+          "coverage_median": 0.4167,
+          "unmarked_median": 7,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 1,
+          "gaps_median": {
+            "A-B": 2,
+            "B-C": 2,
+            "C-D": 1
+          },
+          "zero_gap_rate": 0.2667
+        },
+        {
+          "label": "66-70",
+          "n": 5,
+          "sentence_median": 13,
+          "coverage_median": 0.5,
+          "unmarked_median": 7,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 1,
+          "gaps_median": {
+            "A-B": 1,
+            "B-C": 0,
+            "C-D": 5
+          },
+          "zero_gap_rate": 0.2667
+        },
+        {
+          "label": "71-75",
+          "n": 5,
+          "sentence_median": 11,
+          "coverage_median": 0.4615,
+          "unmarked_median": 6,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 1,
+          "gaps_median": {
+            "A-B": 1,
+            "B-C": 1,
+            "C-D": 3
+          },
+          "zero_gap_rate": 0.1333
+        }
+      ],
+      "spearman_generation_order": {
+        "final_sentence_word_count": -0.2744,
+        "coverage": 0.2099,
+        "unmarked_context": -0.2819,
+        "mean_marked_span_length": 0.0245,
+        "max_marked_span_length": 0.0388
+      },
+      "judgment": "No stable monotonic progressive-shortening pattern; the final 5-item window is short, but 51-60 reverses the direction. This is not a Batch2-style collapse."
+    },
+    "target_interactions": {
+      "primary_target": {
+        "CLAUSE_STRUCTURE": {
+          "n": 3,
+          "sentence_median": 15,
+          "coverage_median": 0.4667,
+          "unmarked_median": 8,
+          "mean_span_median": 1.75,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 3
+          }
+        },
+        "COMPARATIVES_DEGREE": {
+          "n": 3,
+          "sentence_median": 13,
+          "coverage_median": 0.4615,
+          "unmarked_median": 7,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 3
+          }
+        },
+        "CONNECTORS_CONJUNCTIONS": {
+          "n": 3,
+          "sentence_median": 14,
+          "coverage_median": 0.7143,
+          "unmarked_median": 4,
+          "mean_span_median": 2.5,
+          "max_span_ge4": 3,
+          "correct_span_type": {
+            "CLAUSE_OR_CLAUSE_LIKE": 3
+          }
+        },
+        "EXISTENTIAL_EXPLETIVE": {
+          "n": 3,
+          "sentence_median": 12,
+          "coverage_median": 0.5,
+          "unmarked_median": 6,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 3
+          }
+        },
+        "NONFINITE_VERB_PHRASES": {
+          "n": 9,
+          "sentence_median": 13,
+          "coverage_median": 0.4615,
+          "unmarked_median": 7,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 3,
+          "correct_span_type": {
+            "SINGLE_WORD": 3,
+            "CLAUSE_OR_CLAUSE_LIKE": 3,
+            "SHORT_PHRASE": 3
+          }
+        },
+        "PARALLEL_STRUCTURE": {
+          "n": 6,
+          "sentence_median": 14.5,
+          "coverage_median": 0.4286,
+          "unmarked_median": 8.0,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 6
+          }
+        },
+        "REFERENCE_AND_DETERMINERS": {
+          "n": 15,
+          "sentence_median": 15,
+          "coverage_median": 0.3333,
+          "unmarked_median": 10,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SINGLE_WORD": 6,
+            "SHORT_PHRASE": 9
+          }
+        },
+        "RELATIVE_CLAUSES": {
+          "n": 6,
+          "sentence_median": 14.0,
+          "coverage_median": 0.2857,
+          "unmarked_median": 10.0,
+          "mean_span_median": 1.0,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SINGLE_WORD": 6
+          }
+        },
+        "VERB_COMPLEMENTATION": {
+          "n": 9,
+          "sentence_median": 13,
+          "coverage_median": 0.3846,
+          "unmarked_median": 7,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 6,
+            "SINGLE_WORD": 3
+          }
+        },
+        "VERB_FORM_VOICE": {
+          "n": 6,
+          "sentence_median": 14.5,
+          "coverage_median": 0.3486,
+          "unmarked_median": 9.5,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 5,
+            "SINGLE_WORD": 1
+          }
+        },
+        "WORD_CLASS_FORM": {
+          "n": 9,
+          "sentence_median": 12,
+          "coverage_median": 0.3846,
+          "unmarked_median": 8,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SINGLE_WORD": 3,
+            "SHORT_PHRASE": 6
+          }
+        },
+        "WORD_ORDER_MODIFICATION": {
+          "n": 3,
+          "sentence_median": 14,
+          "coverage_median": 0.6,
+          "unmarked_median": 6,
+          "mean_span_median": 2.25,
+          "max_span_ge4": 3,
+          "correct_span_type": {
+            "CLAUSE_OR_CLAUSE_LIKE": 3
+          }
+        }
+      },
+      "tested_error_type": {
+        "agreement_error": {
+          "n": 12,
+          "sentence_median": 13.5,
+          "coverage_median": 0.3622,
+          "unmarked_median": 8.5,
+          "mean_span_median": 1.125,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SINGLE_WORD": 6,
+            "SHORT_PHRASE": 6
+          }
+        },
+        "double_subject": {
+          "n": 3,
+          "sentence_median": 15,
+          "coverage_median": 0.4667,
+          "unmarked_median": 8,
+          "mean_span_median": 1.75,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 3
+          }
+        },
+        "extraneous_element": {
+          "n": 3,
+          "sentence_median": 16,
+          "coverage_median": 0.3125,
+          "unmarked_median": 11,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 3
+          }
+        },
+        "incorrect_part_of_speech": {
+          "n": 15,
+          "sentence_median": 12,
+          "coverage_median": 0.4167,
+          "unmarked_median": 7,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 9,
+            "SINGLE_WORD": 6
+          }
+        },
+        "incorrect_reference": {
+          "n": 3,
+          "sentence_median": 15,
+          "coverage_median": 0.3333,
+          "unmarked_median": 10,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SINGLE_WORD": 3
+          }
+        },
+        "incorrect_relative_marker": {
+          "n": 3,
+          "sentence_median": 14,
+          "coverage_median": 0.2857,
+          "unmarked_median": 10,
+          "mean_span_median": 1.0,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SINGLE_WORD": 3
+          }
+        },
+        "incorrect_subordinator": {
+          "n": 3,
+          "sentence_median": 14,
+          "coverage_median": 0.7143,
+          "unmarked_median": 4,
+          "mean_span_median": 2.5,
+          "max_span_ge4": 3,
+          "correct_span_type": {
+            "CLAUSE_OR_CLAUSE_LIKE": 3
+          }
+        },
+        "missing_required_element": {
+          "n": 3,
+          "sentence_median": 15,
+          "coverage_median": 0.4,
+          "unmarked_median": 9,
+          "mean_span_median": 1.75,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 3
+          }
+        },
+        "wrong_degree_form": {
+          "n": 3,
+          "sentence_median": 13,
+          "coverage_median": 0.4615,
+          "unmarked_median": 7,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 3
+          }
+        },
+        "wrong_preposition_collocation": {
+          "n": 3,
+          "sentence_median": 13,
+          "coverage_median": 0.3846,
+          "unmarked_median": 8,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 3
+          }
+        },
+        "wrong_verb_form": {
+          "n": 18,
+          "sentence_median": 14.0,
+          "coverage_median": 0.4143,
+          "unmarked_median": 8.0,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 3,
+          "correct_span_type": {
+            "SINGLE_WORD": 4,
+            "SHORT_PHRASE": 11,
+            "CLAUSE_OR_CLAUSE_LIKE": 3
+          }
+        },
+        "wrong_voice": {
+          "n": 3,
+          "sentence_median": 13,
+          "coverage_median": 0.3846,
+          "unmarked_median": 8,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 3
+          }
+        },
+        "wrong_word_order": {
+          "n": 3,
+          "sentence_median": 14,
+          "coverage_median": 0.6,
+          "unmarked_median": 6,
+          "mean_span_median": 2.25,
+          "max_span_ge4": 3,
+          "correct_span_type": {
+            "CLAUSE_OR_CLAUSE_LIKE": 3
+          }
+        }
+      },
+      "decision_granularity": {
+        "AGREEMENT_DEPENDENCY": {
+          "n": 6,
+          "sentence_median": 14.5,
+          "coverage_median": 0.2762,
+          "unmarked_median": 10.5,
+          "mean_span_median": 1.0,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SINGLE_WORD": 6
+          }
+        },
+        "CLAUSE_RELATION": {
+          "n": 6,
+          "sentence_median": 14.5,
+          "coverage_median": 0.5834,
+          "unmarked_median": 6.0,
+          "mean_span_median": 2.125,
+          "max_span_ge4": 3,
+          "correct_span_type": {
+            "CLAUSE_OR_CLAUSE_LIKE": 3,
+            "SHORT_PHRASE": 3
+          }
+        },
+        "FUNCTION_WORD": {
+          "n": 21,
+          "sentence_median": 14,
+          "coverage_median": 0.3636,
+          "unmarked_median": 9,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SINGLE_WORD": 6,
+            "SHORT_PHRASE": 15
+          }
+        },
+        "MORPHOLOGY": {
+          "n": 9,
+          "sentence_median": 12,
+          "coverage_median": 0.3846,
+          "unmarked_median": 8,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SINGLE_WORD": 3,
+            "SHORT_PHRASE": 6
+          }
+        },
+        "OTHER": {
+          "n": 3,
+          "sentence_median": 13,
+          "coverage_median": 0.4615,
+          "unmarked_median": 7,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 3
+          }
+        },
+        "VERB_FRAME": {
+          "n": 21,
+          "sentence_median": 13,
+          "coverage_median": 0.4,
+          "unmarked_median": 8,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 3,
+          "correct_span_type": {
+            "SINGLE_WORD": 4,
+            "SHORT_PHRASE": 14,
+            "CLAUSE_OR_CLAUSE_LIKE": 3
+          }
+        },
+        "WORD_CLASS": {
+          "n": 6,
+          "sentence_median": 12.5,
+          "coverage_median": 0.4643,
+          "unmarked_median": 7.0,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SHORT_PHRASE": 3,
+            "SINGLE_WORD": 3
+          }
+        },
+        "WORD_ORDER": {
+          "n": 3,
+          "sentence_median": 14,
+          "coverage_median": 0.6,
+          "unmarked_median": 6,
+          "mean_span_median": 2.25,
+          "max_span_ge4": 3,
+          "correct_span_type": {
+            "CLAUSE_OR_CLAUSE_LIKE": 3
+          }
+        }
+      },
+      "correction_locality": {
+        "CLAUSE_LEVEL": {
+          "n": 27,
+          "sentence_median": 14,
+          "coverage_median": 0.4545,
+          "unmarked_median": 7,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 6,
+          "correct_span_type": {
+            "SINGLE_WORD": 3,
+            "SHORT_PHRASE": 18,
+            "CLAUSE_OR_CLAUSE_LIKE": 6
+          }
+        },
+        "DEPENDENCY_BASED": {
+          "n": 12,
+          "sentence_median": 14.5,
+          "coverage_median": 0.2857,
+          "unmarked_median": 10.5,
+          "mean_span_median": 1.0,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SINGLE_WORD": 7,
+            "SHORT_PHRASE": 5
+          }
+        },
+        "LOCAL_SHORT_SPAN": {
+          "n": 9,
+          "sentence_median": 14,
+          "coverage_median": 0.4545,
+          "unmarked_median": 7,
+          "mean_span_median": 1.5,
+          "max_span_ge4": 3,
+          "correct_span_type": {
+            "SHORT_PHRASE": 6,
+            "CLAUSE_OR_CLAUSE_LIKE": 3
+          }
+        },
+        "LOCAL_SINGLE_TOKEN": {
+          "n": 27,
+          "sentence_median": 13,
+          "coverage_median": 0.3846,
+          "unmarked_median": 8,
+          "mean_span_median": 1.25,
+          "max_span_ge4": 0,
+          "correct_span_type": {
+            "SINGLE_WORD": 12,
+            "SHORT_PHRASE": 15
+          }
+        }
+      }
+    },
+    "counterfactuals": {
+      "method": "rank-matched Official empirical quantiles for sentence lengths, each marked span length, and each gap; the fixed-20 case is also reported. The composite proxy includes gaps and is not the canonical stored 5-axis RMS distance.",
+      "observed": {
+        "coverage_median": 0.4,
+        "unmarked_median": 8,
+        "proxy_distance_median": 1.6739
+      },
+      "format_distance_proxy_median_by_counterfactual": {
+        "sentence_fixed_20_keep_v2_spans": 1.4463,
+        "spans_official_distribution_keep_v2_sentence": 1.6832,
+        "both_sentence20_and_official_spans": 1.3516,
+        "gap_A-B_official_distribution": 1.5122,
+        "gap_B-C_official_distribution": 1.5581,
+        "gap_C-D_official_distribution": 1.5645,
+        "correct_span_type_official_distribution": "numeric proxy unchanged; categorical type TV distance falls from 0.4907 to 0"
+      },
+      "sentence_fixed_20_keep_v2_spans": {
+        "coverage_median": 0.25,
+        "coverage_mean": 0.2867,
+        "unmarked_median": 15,
+        "unmarked_mean": 14.2667
+      },
+      "spans_official_distribution_keep_v2_sentence": {
+        "coverage_median": 0.375,
+        "coverage_mean": 0.3781,
+        "unmarked_median": 9,
+        "unmarked_mean": 8.7867,
+        "assigned_span_count_distribution": {
+          "1": 225,
+          "2": 64,
+          "3": 10,
+          "4": 1
+        }
+      },
+      "both_sentence20_and_official_spans": {
+        "coverage_median": 0.25,
+        "coverage_mean": 0.258,
+        "unmarked_median": 15,
+        "unmarked_mean": 14.84
+      },
+      "gap_official_distribution_keep_other_axes": {
+        "gap_medians": {
+          "A-B": 4,
+          "B-C": 4,
+          "C-D": 4
+        },
+        "zero_gap_rate": {
+          "A-B": 0.0,
+          "B-C": 0.0,
+          "C-D": 0.0
+        }
+      },
+      "correct_type_official_distribution": {
+        "v2_counts": {
+          "SINGLE_WORD": 22,
+          "SHORT_PHRASE": 44,
+          "CLAUSE_OR_CLAUSE_LIKE": 9
+        },
+        "official_counts": {
+          "SINGLE_WORD": 98,
+          "SHORT_PHRASE": 12,
+          "CLAUSE_OR_CLAUSE_LIKE": 15
+        },
+        "total_variation_before": 0.4907,
+        "total_variation_after_replacement": 0.0,
+        "canonical_numeric_distance_change": "none because correct_span_type is categorical and excluded from stored format_distribution_distance"
+      },
+      "coverage_median_shapley": {
+        "observed": 0.4,
+        "denominator_only": 0.25,
+        "numerator_only": 0.375,
+        "both": 0.25,
+        "denominator_effect": 0.1375,
+        "numerator_effect": 0.0125,
+        "denominator_fraction_of_observed_to_both_change": 0.9167,
+        "numerator_fraction_of_observed_to_both_change": 0.0833
+      }
+    },
+    "band_separation": {
+      "worst_band_counts": {
+        "PREFERRED": 0,
+        "WARNING": 3,
+        "EXTREME": 72
+      },
+      "severity_counts": {
+        "SINGLE_TAIL": 10,
+        "MULTI_TAIL": 54,
+        "HIGH_DISTANCE_MULTI_TAIL": 8
+      },
+      "single_tail_count": 10,
+      "multi_tail_count": 54,
+      "high_distance_multi_tail_count": 8,
+      "single_tail_share_of_all": 0.1333,
+      "multi_axis_share_of_all": 0.8267,
+      "high_distance_multi_tail_share_of_all": 0.1067,
+      "interpretation": "SINGLE_TAIL is a band-sensitivity/one-axis diagnostic candidate, not automatically a false positive. MULTI_TAIL + HIGH_DISTANCE_MULTI_TAIL are genuine multi-axis geometry departures. Relaxing the band would not change the observed sentence, coverage, context, span, or gap distributions."
+    },
+    "engineering_stage_assessment": {
+      "target_grammar_phenomenon_selection": "MEDIUM: target mix constrains available span types; the cohort repeats a small authored base set three times and places many clause/phrase targets in the correct-span distribution.",
+      "format_plan_sampling": "HIGH: 63/75 planned regions are <=15 words versus 16/125 Official; intended SHORT_PHRASE is 44/75 versus 12/125 Official and plan-to-realization matches exactly.",
+      "clean_sentence_planning": "HIGH through the plan interface: clean sentence lengths follow the short planned regions; no evidence that final mutation caused the main shortness.",
+      "clean_sentence_realization": "LOW/NONE as an independent root cause: clean and final medians are recorded; final sentences generally remain in plan range.",
+      "error_mutation": "LOW for format drift: lexical diff changes median sentence length negligibly; mutation location is used only to derive corrected answer location.",
+      "correct_span_selection": "MEDIUM/HIGH for type bias, but the observed excess is already specified by intended_correct_span_type; late selector trace is unavailable.",
+      "distractor_span_selection": "MEDIUM: zero/one-word gaps and multiword distractors show local clustering; exact candidate search range is not logged.",
+      "final_ABCD_placement": "HIGH for gap clustering: gap medians are 1/2/3 and zero-gap adjacency is common, while no numeric desired gaps are present in the plan.",
+      "diagnostics_band_classification": "LOW for the underlying drift; banding exposes it, but 62/75 are multi-axis tails and the median geometry is unchanged by labels."
+    },
+    "root_cause_ranking": {
+      "PLAN_SAMPLING_DRIFT": {
+        "rating": "HIGH",
+        "evidence": "Plan regions: 60/75=80.0% in 11-15 and 3/75=4.0% <=10; only 12/75 are >=16. Official has 16/125 <=15 and 109/125 >=16. Plan midpoint proxy median is short and clean/final outputs conform to it."
+      },
+      "SENTENCE_REALIZATION_TOO_SHORT": {
+        "rating": "LOW",
+        "evidence": "Clean sentence actual is already short; final-clean mutation deltas are small and final output is generally within the short plan range. It is not the dominant root once plan drift is controlled."
+      },
+      "SPAN_SELECTION_TOO_LONG": {
+        "rating": "MEDIUM",
+        "evidence": "V2 has 9/300 5+ word spans and no 4-word spans versus Official 0/500 5+ and 3/500 4-word; all 9 long spans were explicitly planned, so origin is plan/selection design rather than incidental realization."
+      },
+      "SPAN_CLUSTERING": {
+        "rating": "HIGH",
+        "evidence": "Gap medians 1/2/3 versus Official 4/4/4, with frequent zero gaps and lower between-span context. The plan contains no numeric gap target."
+      },
+      "CORRECT_SPAN_TYPE_BIAS": {
+        "rating": "HIGH",
+        "evidence": "SHORT_PHRASE is 44/75=58.7% versus Official 12/125=9.6%; SINGLE_WORD is 22/75=29.3% versus 78.4%. Intended correct type equals realized type for 75/75."
+      },
+      "FORMAT_BAND_OVER_SENSITIVITY": {
+        "rating": "LOW",
+        "evidence": "10/75 are SINGLE_TAIL, but 62/75 are MULTI_TAIL or HIGH_DISTANCE_MULTI_TAIL. Band labels do not create the observed geometry drift."
+      },
+      "FORMAT_PLAN_UNDERSPECIFICATION": {
+        "rating": "HIGH",
+        "evidence": "Coverage is qualitative only and desired gaps are not logged; therefore placement/context loss has no numeric plan control. This is a contributing mechanism under planning/placement, not a separate requested code change."
+      }
+    }
+  },
+  "per_item": [
+    {
+      "item_id": "we-v2-validation-001",
+      "generation_order": 1,
+      "batch": "A",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "agreement_error",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "correction_locality": "DEPENDENCY_BASED",
+      "plan": {
+        "sentence_length_region": "16-20",
+        "range_lower": 16,
+        "range_upper": 20,
+        "target_midpoint_proxy": 18.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 17,
+      "final_sentence_word_count": 17,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.2353,
+      "unmarked_context": 13,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 2,
+        "B": 9,
+        "C": 13,
+        "D": 16
+      },
+      "normalized_starts": {
+        "A": 0.1176,
+        "B": 0.5294,
+        "C": 0.7647,
+        "D": 0.9412
+      },
+      "gaps": {
+        "A-B": 6,
+        "B-C": 3,
+        "C-D": 2
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "erosion",
+        "B": "have",
+        "C": "ancient",
+        "D": "researchers"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-002",
+      "generation_order": 2,
+      "batch": "A",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "incorrect_reference",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "2/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3571,
+      "unmarked_context": 9,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 8,
+        "D": 9
+      },
+      "normalized_starts": {
+        "A": 0.0714,
+        "B": 0.2143,
+        "C": 0.5714,
+        "D": 0.6429
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 4,
+        "C-D": 0
+      },
+      "corrected_answer_location": "D",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "D",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "desert tortoises",
+        "B": "store",
+        "C": "protect",
+        "D": "its"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-003",
+      "generation_order": 3,
+      "batch": "A",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "extraneous_element",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "plan": {
+        "sentence_length_region": "21-25",
+        "range_lower": 21,
+        "range_upper": 25,
+        "target_midpoint_proxy": 23.0,
+        "intended_span_profile": "2/2/2/2",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 21,
+      "final_sentence_word_count": 22,
+      "total_marked_words": 8,
+      "mean_marked_span_length": 2.0,
+      "max_marked_span_length": 2,
+      "coverage": 0.3636,
+      "unmarked_context": 14,
+      "span_word_counts": {
+        "A": 2,
+        "B": 2,
+        "C": 2,
+        "D": 2
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SHORT_PHRASE"
+      },
+      "starts": {
+        "A": 0,
+        "B": 4,
+        "C": 12,
+        "D": 20
+      },
+      "normalized_starts": {
+        "A": 0.0,
+        "B": 0.1818,
+        "C": 0.5455,
+        "D": 0.9091
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 6,
+        "C-D": 6
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "The most",
+        "B": "sediment collected",
+        "C": "labeled containers",
+        "D": "laboratory team"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-004",
+      "generation_order": 4,
+      "batch": "A",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "missing_required_element",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "21-25",
+        "range_lower": 21,
+        "range_upper": 25,
+        "target_midpoint_proxy": 23.0,
+        "intended_span_profile": "2/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 25,
+      "final_sentence_word_count": 24,
+      "total_marked_words": 7,
+      "mean_marked_span_length": 1.75,
+      "max_marked_span_length": 2,
+      "coverage": 0.2917,
+      "unmarked_context": 17,
+      "span_word_counts": {
+        "A": 2,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 12,
+        "C": 16,
+        "D": 23
+      },
+      "normalized_starts": {
+        "A": 0.0417,
+        "B": 0.5,
+        "C": 0.6667,
+        "D": 0.9583
+      },
+      "gaps": {
+        "A-B": 9,
+        "B-C": 2,
+        "C-D": 5
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "survey team",
+        "B": "ancient inscription",
+        "C": "northern observatory",
+        "D": "researchers"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-005",
+      "generation_order": 5,
+      "batch": "A",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3846,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 5,
+        "D": 6
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.2308,
+        "C": 0.3846,
+        "D": 0.4615
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 0,
+        "C-D": 0
+      },
+      "corrected_answer_location": "D",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "D",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "reduce",
+        "B": "laboratory technicians",
+        "C": "avoid",
+        "D": "touch"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-006",
+      "generation_order": 6,
+      "batch": "A",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "wrong_preposition_collocation",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3846,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 5,
+        "C": 8,
+        "D": 11
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.3846,
+        "C": 0.6154,
+        "D": 0.8462
+      },
+      "gaps": {
+        "A-B": 3,
+        "B-C": 1,
+        "C-D": 2
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "effectiveness",
+        "B": "depends in",
+        "C": "monitoring",
+        "D": "recovery"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-007",
+      "generation_order": 7,
+      "batch": "A",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 12,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3846,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 4,
+        "C": 5,
+        "D": 9
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.3077,
+        "C": 0.3846,
+        "D": 0.6923
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 0,
+        "C-D": 2
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "instructor",
+        "B": "students",
+        "C": "to examine",
+        "D": "specimens"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-008",
+      "generation_order": 8,
+      "batch": "A",
+      "primary_target": "VERB_FORM_VOICE",
+      "tested_error_type": "wrong_voice",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 12,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3846,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 5,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.1538,
+        "C": 0.3846,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 1,
+        "C-D": 6
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "researchers",
+        "B": "were analyzed",
+        "C": "sediment",
+        "D": "containers"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-009",
+      "generation_order": 9,
+      "batch": "A",
+      "primary_target": "VERB_FORM_VOICE",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "DEPENDENCY_BASED",
+      "plan": {
+        "sentence_length_region": "16-20",
+        "range_lower": 16,
+        "range_upper": 20,
+        "target_midpoint_proxy": 18.0,
+        "intended_span_profile": "1/1/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 18,
+      "final_sentence_word_count": 18,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.2778,
+      "unmarked_context": 13,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 4,
+        "B": 5,
+        "C": 10,
+        "D": 17
+      },
+      "normalized_starts": {
+        "A": 0.2222,
+        "B": 0.2778,
+        "C": 0.5556,
+        "D": 0.9444
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 4,
+        "C-D": 5
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "expedition",
+        "B": "reached",
+        "C": "have map",
+        "D": "passes"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-010",
+      "generation_order": 10,
+      "batch": "A",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 15,
+      "final_sentence_word_count": 15,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.4,
+      "unmarked_context": 9,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 2,
+        "B": 5,
+        "C": 10,
+        "D": 14
+      },
+      "normalized_starts": {
+        "A": 0.1333,
+        "B": 0.3333,
+        "C": 0.6667,
+        "D": 0.9333
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 3,
+        "C-D": 2
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "program",
+        "B": "analyze data",
+        "C": "presenting conclusions",
+        "D": "classmates"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-011",
+      "generation_order": 11,
+      "batch": "A",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "WORD_CLASS",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/3/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 7,
+      "mean_marked_span_length": 1.75,
+      "max_marked_span_length": 3,
+      "coverage": 0.5,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 4,
+        "C": 9,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0714,
+        "B": 0.2857,
+        "C": 0.6429,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 3,
+        "C-D": 1
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 3,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "observatory",
+        "B": "records solar",
+        "C": "predicting magnetic disturbances",
+        "D": "storms"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-012",
+      "generation_order": 12,
+      "batch": "A",
+      "primary_target": "WORD_CLASS_FORM",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "MORPHOLOGY",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "<=10",
+        "range_lower": 1,
+        "range_upper": 10,
+        "target_midpoint_proxy": 10,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 9,
+      "final_sentence_word_count": 9,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.4444,
+      "unmarked_context": 5,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 5,
+        "D": 7
+      },
+      "normalized_starts": {
+        "A": 0.1111,
+        "B": 0.2222,
+        "C": 0.5556,
+        "D": 0.7778
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 2,
+        "C-D": 1
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "instrument",
+        "B": "measures",
+        "C": "accurate",
+        "D": "difficult"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-013",
+      "generation_order": 13,
+      "batch": "A",
+      "primary_target": "WORD_CLASS_FORM",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "MORPHOLOGY",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 12,
+      "final_sentence_word_count": 12,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.4167,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 2,
+        "B": 5,
+        "C": 10,
+        "D": 11
+      },
+      "normalized_starts": {
+        "A": 0.1667,
+        "B": 0.4167,
+        "C": 0.8333,
+        "D": 0.9167
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 3,
+        "C-D": 0
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "survey",
+        "B": "detail analysis",
+        "C": "volcanic",
+        "D": "formations"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-014",
+      "generation_order": 14,
+      "batch": "A",
+      "primary_target": "WORD_CLASS_FORM",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "MORPHOLOGY",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "2/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3846,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 7,
+        "C": 9,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.5385,
+        "C": 0.6923,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 4,
+        "B-C": 1,
+        "C-D": 2
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "rapid expand",
+        "B": "affected",
+        "C": "wetlands",
+        "D": "fields"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-015",
+      "generation_order": 15,
+      "batch": "A",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "6/1/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "planned_tail_case": "multi_tail"
+      },
+      "clean_sentence_word_count": 15,
+      "final_sentence_word_count": 15,
+      "total_marked_words": 10,
+      "mean_marked_span_length": 2.5,
+      "max_marked_span_length": 6,
+      "coverage": 0.6667,
+      "unmarked_context": 5,
+      "span_word_counts": {
+        "A": 6,
+        "B": 1,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "CLAUSE_OR_CLAUSE_LIKE",
+        "B": "SINGLE_WORD",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 7,
+        "C": 9,
+        "D": 14
+      },
+      "normalized_starts": {
+        "A": 0.0667,
+        "B": 0.4667,
+        "C": 0.6,
+        "D": 0.9333
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 1,
+        "C-D": 3
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 6,
+      "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "fossils discovering in the limestone quarry",
+        "B": "reveal",
+        "C": "ancient organisms",
+        "D": "climates"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-016",
+      "generation_order": 16,
+      "batch": "A",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.4286,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 2,
+        "B": 5,
+        "C": 7,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.1429,
+        "B": 0.3571,
+        "C": 0.5,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 0,
+        "C-D": 4
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "team",
+        "B": "compact device",
+        "C": "to monitoring",
+        "D": "villages"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-017",
+      "generation_order": 17,
+      "batch": "A",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "tested_error_type": "incorrect_subordinator",
+      "decision_granularity": "CLAUSE_RELATION",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "5/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "planned_tail_case": "multi_tail"
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 10,
+      "mean_marked_span_length": 2.5,
+      "max_marked_span_length": 5,
+      "coverage": 0.7143,
+      "unmarked_context": 4,
+      "span_word_counts": {
+        "A": 5,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "CLAUSE_OR_CLAUSE_LIKE",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 0,
+        "B": 6,
+        "C": 8,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0,
+        "B": 0.4286,
+        "C": 0.5714,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 0,
+        "C-D": 3
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 5,
+      "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "Despite the soil appeared dry",
+        "B": "deeper layers",
+        "C": "retained considerable",
+        "D": "summer"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-018",
+      "generation_order": 18,
+      "batch": "A",
+      "primary_target": "RELATIVE_CLAUSES",
+      "tested_error_type": "incorrect_relative_marker",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.2857,
+      "unmarked_context": 10,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 5,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0714,
+        "B": 0.1429,
+        "C": 0.3571,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 2,
+        "C-D": 7
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "engineer",
+        "B": "which",
+        "C": "bridge",
+        "D": "institute"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-019",
+      "generation_order": 19,
+      "batch": "A",
+      "primary_target": "RELATIVE_CLAUSES",
+      "tested_error_type": "agreement_error",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "correction_locality": "DEPENDENCY_BASED",
+      "plan": {
+        "sentence_length_region": "16-20",
+        "range_lower": 16,
+        "range_upper": 20,
+        "target_midpoint_proxy": 18.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 16,
+      "final_sentence_word_count": 16,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.25,
+      "unmarked_context": 12,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 5,
+        "D": 15
+      },
+      "normalized_starts": {
+        "A": 0.0625,
+        "B": 0.1875,
+        "C": 0.3125,
+        "D": 0.9375
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 1,
+        "C-D": 9
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "sequence",
+        "B": "reactions",
+        "C": "occurs",
+        "D": "compound"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-020",
+      "generation_order": 20,
+      "batch": "A",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "tested_error_type": "double_subject",
+      "decision_granularity": "CLAUSE_RELATION",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "16-20",
+        "range_lower": 16,
+        "range_upper": 20,
+        "target_midpoint_proxy": 18.0,
+        "intended_span_profile": "1/3/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 17,
+      "final_sentence_word_count": 18,
+      "total_marked_words": 7,
+      "mean_marked_span_length": 1.75,
+      "max_marked_span_length": 3,
+      "coverage": 0.3889,
+      "unmarked_context": 11,
+      "span_word_counts": {
+        "A": 1,
+        "B": 3,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 6,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0556,
+        "B": 0.1667,
+        "C": 0.3333,
+        "D": 0.7222
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 0,
+        "C-D": 5
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "scientist",
+        "B": "led the survey",
+        "C": "she published",
+        "D": "journal"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-021",
+      "generation_order": 21,
+      "batch": "A",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "tested_error_type": "wrong_word_order",
+      "decision_granularity": "WORD_ORDER",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/5/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 15,
+      "final_sentence_word_count": 15,
+      "total_marked_words": 9,
+      "mean_marked_span_length": 2.25,
+      "max_marked_span_length": 5,
+      "coverage": 0.6,
+      "unmarked_context": 6,
+      "span_word_counts": {
+        "A": 1,
+        "B": 5,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "CLAUSE_OR_CLAUSE_LIKE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 10,
+        "D": 14
+      },
+      "normalized_starts": {
+        "A": 0.0667,
+        "B": 0.2,
+        "C": 0.6667,
+        "D": 0.9333
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 2,
+        "C-D": 2
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 5,
+      "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "researchers",
+        "B": "a developed newly optical sensor",
+        "C": "faint signals",
+        "D": "stars"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-022",
+      "generation_order": 22,
+      "batch": "A",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "tested_error_type": "wrong_degree_form",
+      "decision_granularity": "OTHER",
+      "correction_locality": "DEPENDENCY_BASED",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.4615,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 2,
+        "B": 4,
+        "C": 8,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.1538,
+        "B": 0.3077,
+        "C": 0.6154,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 2,
+        "C-D": 2
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "model",
+        "B": "most reliable",
+        "C": "original design",
+        "D": "conditions"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-023",
+      "generation_order": 23,
+      "batch": "A",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "tested_error_type": "agreement_error",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "2/1/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.4286,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SINGLE_WORD",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 0,
+        "B": 3,
+        "C": 6,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0,
+        "B": 0.2143,
+        "C": 0.4286,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 2,
+        "C-D": 5
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "There is",
+        "B": "explanations",
+        "C": "unusual decline",
+        "D": "coast"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-024",
+      "generation_order": 24,
+      "batch": "A",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "WORD_CLASS",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "<=10",
+        "range_lower": 1,
+        "range_upper": 10,
+        "target_midpoint_proxy": 10,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 9,
+      "final_sentence_word_count": 8,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.5,
+      "unmarked_context": 4,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 4,
+        "C": 5,
+        "D": 7
+      },
+      "normalized_starts": {
+        "A": 0.125,
+        "B": 0.5,
+        "C": 0.625,
+        "D": 0.875
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 0,
+        "C-D": 1
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "discovery",
+        "B": "researchers",
+        "C": "cautiously",
+        "D": "contamination"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-025",
+      "generation_order": 25,
+      "batch": "A",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "agreement_error",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 12,
+      "final_sentence_word_count": 12,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.4167,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 7,
+        "D": 11
+      },
+      "normalized_starts": {
+        "A": 0.0833,
+        "B": 0.25,
+        "C": 0.5833,
+        "D": 0.9167
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 2,
+        "C-D": 3
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "laboratory",
+        "B": "many information",
+        "C": "mineral",
+        "D": "report"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-026",
+      "generation_order": 26,
+      "batch": "B",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "agreement_error",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "correction_locality": "DEPENDENCY_BASED",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.2857,
+      "unmarked_context": 10,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 8,
+        "C": 9,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0714,
+        "B": 0.5714,
+        "C": 0.6429,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 6,
+        "B-C": 0,
+        "C-D": 3
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "concentration",
+        "B": "vary",
+        "C": "considerably",
+        "D": "months"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-027",
+      "generation_order": 27,
+      "batch": "B",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "incorrect_reference",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "16-20",
+        "range_lower": 16,
+        "range_upper": 20,
+        "target_midpoint_proxy": 18.0,
+        "intended_span_profile": "2/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 18,
+      "final_sentence_word_count": 18,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.2778,
+      "unmarked_context": 13,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 9,
+        "D": 10
+      },
+      "normalized_starts": {
+        "A": 0.0556,
+        "B": 0.1667,
+        "C": 0.5,
+        "D": 0.5556
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 5,
+        "C-D": 0
+      },
+      "corrected_answer_location": "D",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "D",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "migratory salmon",
+        "B": "reach",
+        "C": "use",
+        "D": "its"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-028",
+      "generation_order": 28,
+      "batch": "B",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "extraneous_element",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "plan": {
+        "sentence_length_region": "16-20",
+        "range_lower": 16,
+        "range_upper": 20,
+        "target_midpoint_proxy": 18.0,
+        "intended_span_profile": "1/1/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 15,
+      "final_sentence_word_count": 16,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3125,
+      "unmarked_context": 11,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 0,
+        "B": 1,
+        "C": 2,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0,
+        "B": 0.0625,
+        "C": 0.125,
+        "D": 0.8125
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 0,
+        "C-D": 9
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "Several",
+        "B": "of",
+        "C": "the the",
+        "D": "laboratories"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-029",
+      "generation_order": 29,
+      "batch": "B",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "missing_required_element",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 16,
+      "final_sentence_word_count": 15,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.4,
+      "unmarked_context": 9,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 2,
+        "B": 5,
+        "C": 11,
+        "D": 14
+      },
+      "normalized_starts": {
+        "A": 0.1333,
+        "B": 0.3333,
+        "C": 0.7333,
+        "D": 0.9333
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 4,
+        "C-D": 1
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "excavation",
+        "B": "ceremonial vessel",
+        "C": "compact clay",
+        "D": "auditors"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-030",
+      "generation_order": 30,
+      "batch": "B",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.2857,
+      "unmarked_context": 10,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0714,
+        "B": 0.1429,
+        "C": 0.2143,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 0,
+        "C-D": 9
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "biologists",
+        "B": "recommend",
+        "C": "record",
+        "D": "wetland"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-031",
+      "generation_order": 31,
+      "batch": "B",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "wrong_preposition_collocation",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "2/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3846,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 6,
+        "C": 8,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.4615,
+        "C": 0.6154,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 3,
+        "B-C": 1,
+        "C-D": 3
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "interested on",
+        "B": "rely",
+        "C": "calibrated",
+        "D": "experiments"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-032",
+      "generation_order": 32,
+      "batch": "B",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/2/2",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 12,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.4615,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 2,
+        "D": 2
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SHORT_PHRASE",
+        "D": "SHORT_PHRASE"
+      },
+      "starts": {
+        "A": 1,
+        "B": 4,
+        "C": 5,
+        "D": 11
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.3077,
+        "C": 0.3846,
+        "D": 0.8462
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 0,
+        "C-D": 4
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "supervisor",
+        "B": "assistants",
+        "C": "to organize",
+        "D": "geographic region"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-033",
+      "generation_order": 33,
+      "batch": "B",
+      "primary_target": "VERB_FORM_VOICE",
+      "tested_error_type": "wrong_voice",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 12,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3846,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 6,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.1538,
+        "C": 0.4615,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 2,
+        "C-D": 5
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "archivists",
+        "B": "were catalogued",
+        "C": "manuscripts",
+        "D": "folders"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-034",
+      "generation_order": 34,
+      "batch": "B",
+      "primary_target": "VERB_FORM_VOICE",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "DEPENDENCY_BASED",
+      "plan": {
+        "sentence_length_region": "16-20",
+        "range_lower": 16,
+        "range_upper": 20,
+        "target_midpoint_proxy": 18.0,
+        "intended_span_profile": "1/1/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 16,
+      "final_sentence_word_count": 16,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3125,
+      "unmarked_context": 11,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 4,
+        "B": 5,
+        "C": 7,
+        "D": 15
+      },
+      "normalized_starts": {
+        "A": 0.25,
+        "B": 0.3125,
+        "C": 0.4375,
+        "D": 0.9375
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 1,
+        "C-D": 6
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "observatory",
+        "B": "opened",
+        "C": "have calibrated",
+        "D": "nights"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-035",
+      "generation_order": 35,
+      "batch": "B",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.4286,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 8,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0714,
+        "B": 0.2143,
+        "C": 0.5714,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 3,
+        "C-D": 3
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "device",
+        "B": "measure temperature",
+        "C": "transmitting readings",
+        "D": "station"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-036",
+      "generation_order": 36,
+      "batch": "B",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "WORD_CLASS",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.4286,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 4,
+        "C": 9,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0714,
+        "B": 0.2857,
+        "C": 0.6429,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 3,
+        "C-D": 2
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "policy",
+        "B": "reduces industrial",
+        "C": "encouraging businesses",
+        "D": "materials"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-037",
+      "generation_order": 37,
+      "batch": "B",
+      "primary_target": "WORD_CLASS_FORM",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "MORPHOLOGY",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.3077,
+      "unmarked_context": 9,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 5,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.1538,
+        "C": 0.3846,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 2,
+        "C-D": 6
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "scientist",
+        "B": "careful",
+        "C": "samples",
+        "D": "committee"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-038",
+      "generation_order": 38,
+      "batch": "B",
+      "primary_target": "WORD_CLASS_FORM",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "MORPHOLOGY",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3846,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 4,
+        "C": 7,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.3077,
+        "C": 0.5385,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 1,
+        "C-D": 4
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "museum",
+        "B": "remark collection",
+        "C": "bronze",
+        "D": "settlement"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-039",
+      "generation_order": 39,
+      "batch": "B",
+      "primary_target": "WORD_CLASS_FORM",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "MORPHOLOGY",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "2/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 12,
+      "final_sentence_word_count": 12,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.4167,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 6,
+        "C": 9,
+        "D": 11
+      },
+      "normalized_starts": {
+        "A": 0.0833,
+        "B": 0.5,
+        "C": 0.75,
+        "D": 0.9167
+      },
+      "gaps": {
+        "A-B": 3,
+        "B-C": 2,
+        "C-D": 1
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "accurate measure",
+        "B": "improves",
+        "C": "seasonal",
+        "D": "growth"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-040",
+      "generation_order": 40,
+      "batch": "B",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "5/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "planned_tail_case": "multi_tail"
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 8,
+      "mean_marked_span_length": 2.0,
+      "max_marked_span_length": 5,
+      "coverage": 0.6154,
+      "unmarked_context": 5,
+      "span_word_counts": {
+        "A": 5,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "CLAUSE_OR_CLAUSE_LIKE",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 6,
+        "C": 11,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.4615,
+        "C": 0.8462,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 4,
+        "C-D": 0
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 5,
+      "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "artifacts recovering from the riverbed",
+        "B": "provide",
+        "C": "inland",
+        "D": "settlements"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-041",
+      "generation_order": 41,
+      "batch": "B",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.4615,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 4,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.1538,
+        "C": 0.3077,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 0,
+        "C-D": 6
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "agency",
+        "B": "installed sensors",
+        "C": "to detecting",
+        "D": "storms"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-042",
+      "generation_order": 42,
+      "batch": "B",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "tested_error_type": "incorrect_subordinator",
+      "decision_granularity": "CLAUSE_RELATION",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "5/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "planned_tail_case": "multi_tail"
+      },
+      "clean_sentence_word_count": 15,
+      "final_sentence_word_count": 15,
+      "total_marked_words": 10,
+      "mean_marked_span_length": 2.5,
+      "max_marked_span_length": 5,
+      "coverage": 0.6667,
+      "unmarked_context": 5,
+      "span_word_counts": {
+        "A": 5,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "CLAUSE_OR_CLAUSE_LIKE",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 0,
+        "B": 6,
+        "C": 9,
+        "D": 14
+      },
+      "normalized_starts": {
+        "A": 0.0,
+        "B": 0.4,
+        "C": 0.6,
+        "D": 0.9333
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 1,
+        "C-D": 3
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 5,
+      "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "Despite the signal was weak",
+        "B": "receiver detected",
+        "C": "clear pattern",
+        "D": "noise"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-043",
+      "generation_order": 43,
+      "batch": "B",
+      "primary_target": "RELATIVE_CLAUSES",
+      "tested_error_type": "incorrect_relative_marker",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.3077,
+      "unmarked_context": 9,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 6,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.1538,
+        "C": 0.4615,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 3,
+        "C-D": 5
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "botanist",
+        "B": "which",
+        "C": "region",
+        "D": "expedition"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-044",
+      "generation_order": 44,
+      "batch": "B",
+      "primary_target": "RELATIVE_CLAUSES",
+      "tested_error_type": "agreement_error",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "correction_locality": "DEPENDENCY_BASED",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.2857,
+      "unmarked_context": 10,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 5,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0714,
+        "B": 0.2143,
+        "C": 0.3571,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 1,
+        "C-D": 7
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "group",
+        "B": "instruments",
+        "C": "was",
+        "D": "laboratory"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-045",
+      "generation_order": 45,
+      "batch": "B",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "tested_error_type": "double_subject",
+      "decision_granularity": "CLAUSE_RELATION",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/3/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 15,
+      "total_marked_words": 7,
+      "mean_marked_span_length": 1.75,
+      "max_marked_span_length": 3,
+      "coverage": 0.4667,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 1,
+        "B": 3,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 6,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0667,
+        "B": 0.2,
+        "C": 0.4,
+        "D": 0.8667
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 0,
+        "C-D": 5
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "technician",
+        "B": "repaired the microscope",
+        "C": "he recorded",
+        "D": "laboratory"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-046",
+      "generation_order": 46,
+      "batch": "B",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "tested_error_type": "wrong_word_order",
+      "decision_granularity": "WORD_ORDER",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/5/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 9,
+      "mean_marked_span_length": 2.25,
+      "max_marked_span_length": 5,
+      "coverage": 0.6429,
+      "unmarked_context": 5,
+      "span_word_counts": {
+        "A": 1,
+        "B": 5,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "CLAUSE_OR_CLAUSE_LIKE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 10,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0714,
+        "B": 0.2143,
+        "C": 0.7143,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 2,
+        "C-D": 1
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 5,
+      "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "technicians",
+        "B": "a calibrated carefully digital scale",
+        "C": "minute changes",
+        "D": "mass"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-047",
+      "generation_order": 47,
+      "batch": "B",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "tested_error_type": "wrong_degree_form",
+      "decision_granularity": "OTHER",
+      "correction_locality": "DEPENDENCY_BASED",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "2/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 7,
+      "mean_marked_span_length": 1.75,
+      "max_marked_span_length": 2,
+      "coverage": 0.5,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 2,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 4,
+        "C": 8,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0714,
+        "B": 0.2857,
+        "C": 0.5714,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 2,
+        "C-D": 3
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "northern route",
+        "B": "least expensive",
+        "C": "southern route",
+        "D": "season"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-048",
+      "generation_order": 48,
+      "batch": "B",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "tested_error_type": "agreement_error",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "2/1/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 12,
+      "final_sentence_word_count": 12,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.5,
+      "unmarked_context": 6,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SINGLE_WORD",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 0,
+        "B": 4,
+        "C": 6,
+        "D": 11
+      },
+      "normalized_starts": {
+        "A": 0.0,
+        "B": 0.3333,
+        "C": 0.5,
+        "D": 0.9167
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 1,
+        "C-D": 3
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "There is",
+        "B": "pathways",
+        "C": "transporting nutrients",
+        "D": "system"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-049",
+      "generation_order": 49,
+      "batch": "B",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "WORD_CLASS",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 11,
+      "final_sentence_word_count": 11,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.3636,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 2,
+        "B": 5,
+        "C": 6,
+        "D": 10
+      },
+      "normalized_starts": {
+        "A": 0.1818,
+        "B": 0.4545,
+        "C": 0.5455,
+        "D": 0.9091
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 0,
+        "C-D": 3
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "result",
+        "B": "committee",
+        "C": "skepticism",
+        "D": "explanation"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-050",
+      "generation_order": 50,
+      "batch": "B",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "agreement_error",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.4615,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 7,
+        "D": 11
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.2308,
+        "C": 0.5385,
+        "D": 0.8462
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 2,
+        "C-D": 2
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "survey",
+        "B": "few evidence",
+        "C": "migration route",
+        "D": "storm"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-051",
+      "generation_order": 51,
+      "batch": "C",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "agreement_error",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "correction_locality": "DEPENDENCY_BASED",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 15,
+      "final_sentence_word_count": 15,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.2667,
+      "unmarked_context": 11,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 8,
+        "C": 11,
+        "D": 14
+      },
+      "normalized_starts": {
+        "A": 0.0667,
+        "B": 0.5333,
+        "C": 0.7333,
+        "D": 0.9333
+      },
+      "gaps": {
+        "A-B": 6,
+        "B-C": 2,
+        "C-D": 2
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "collection",
+        "B": "provide",
+        "C": "evidence",
+        "D": "traditions"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-052",
+      "generation_order": 52,
+      "batch": "C",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "incorrect_reference",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "2/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 15,
+      "final_sentence_word_count": 15,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3333,
+      "unmarked_context": 10,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 8,
+        "D": 9
+      },
+      "normalized_starts": {
+        "A": 0.0667,
+        "B": 0.2,
+        "C": 0.5333,
+        "D": 0.6
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 4,
+        "C-D": 0
+      },
+      "corrected_answer_location": "D",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "D",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "mature redwoods",
+        "B": "develop",
+        "C": "withstand",
+        "D": "its"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-053",
+      "generation_order": 53,
+      "batch": "C",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "extraneous_element",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "plan": {
+        "sentence_length_region": "16-20",
+        "range_lower": 16,
+        "range_upper": 20,
+        "target_midpoint_proxy": 18.0,
+        "intended_span_profile": "1/1/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 15,
+      "final_sentence_word_count": 16,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3125,
+      "unmarked_context": 11,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0625,
+        "B": 0.125,
+        "C": 0.1875,
+        "D": 0.8125
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 0,
+        "C-D": 8
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "number",
+        "B": "of",
+        "C": "the the",
+        "D": "database"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-054",
+      "generation_order": 54,
+      "batch": "C",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "missing_required_element",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/3/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 12,
+      "total_marked_words": 7,
+      "mean_marked_span_length": 1.75,
+      "max_marked_span_length": 3,
+      "coverage": 0.5833,
+      "unmarked_context": 5,
+      "span_word_counts": {
+        "A": 1,
+        "B": 3,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 4,
+        "C": 9,
+        "D": 11
+      },
+      "normalized_starts": {
+        "A": 0.0833,
+        "B": 0.3333,
+        "C": 0.75,
+        "D": 0.9167
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 2,
+        "C-D": 0
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 3,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "museum",
+        "B": "unusually detailed map",
+        "C": "coastal trade",
+        "D": "routes"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-055",
+      "generation_order": 55,
+      "batch": "C",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 15,
+      "final_sentence_word_count": 15,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.2667,
+      "unmarked_context": 11,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 14
+      },
+      "normalized_starts": {
+        "A": 0.0667,
+        "B": 0.1333,
+        "C": 0.2,
+        "D": 0.9333
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 0,
+        "C-D": 10
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "archive",
+        "B": "prohibits",
+        "C": "remove",
+        "D": "curator"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-056",
+      "generation_order": 56,
+      "batch": "C",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "wrong_preposition_collocation",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 15,
+      "final_sentence_word_count": 15,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3333,
+      "unmarked_context": 10,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 2,
+        "B": 4,
+        "C": 10,
+        "D": 14
+      },
+      "normalized_starts": {
+        "A": 0.1333,
+        "B": 0.2667,
+        "C": 0.6667,
+        "D": 0.9333
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 4,
+        "C-D": 3
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "sensor",
+        "B": "capable for",
+        "C": "pressure",
+        "D": "shelf"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-057",
+      "generation_order": 57,
+      "batch": "C",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 10,
+      "final_sentence_word_count": 11,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.4545,
+      "unmarked_context": 6,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 4,
+        "D": 10
+      },
+      "normalized_starts": {
+        "A": 0.0909,
+        "B": 0.2727,
+        "C": 0.3636,
+        "D": 0.9091
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 0,
+        "C-D": 4
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "software",
+        "B": "users",
+        "C": "to compare",
+        "D": "seasons"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-058",
+      "generation_order": 58,
+      "batch": "C",
+      "primary_target": "VERB_FORM_VOICE",
+      "tested_error_type": "wrong_voice",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 11,
+      "final_sentence_word_count": 12,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.4167,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 6,
+        "D": 11
+      },
+      "normalized_starts": {
+        "A": 0.0833,
+        "B": 0.1667,
+        "C": 0.5,
+        "D": 0.9167
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 2,
+        "C-D": 4
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "engineers",
+        "B": "were tested",
+        "C": "bridge",
+        "D": "cables"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-059",
+      "generation_order": 59,
+      "batch": "C",
+      "primary_target": "VERB_FORM_VOICE",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "DEPENDENCY_BASED",
+      "plan": {
+        "sentence_length_region": "16-20",
+        "range_lower": 16,
+        "range_upper": 20,
+        "target_midpoint_proxy": 18.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": "single_gap"
+      },
+      "clean_sentence_word_count": 20,
+      "final_sentence_word_count": 19,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.2105,
+      "unmarked_context": 15,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 2,
+        "B": 3,
+        "C": 12,
+        "D": 18
+      },
+      "normalized_starts": {
+        "A": 0.1053,
+        "B": 0.1579,
+        "C": 0.6316,
+        "D": 0.9474
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 8,
+        "C-D": 5
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "committee",
+        "B": "convened",
+        "C": "distribute",
+        "D": "member"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-060",
+      "generation_order": 60,
+      "batch": "C",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 15,
+      "final_sentence_word_count": 15,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.4,
+      "unmarked_context": 9,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 5,
+        "C": 10,
+        "D": 14
+      },
+      "normalized_starts": {
+        "A": 0.0667,
+        "B": 0.3333,
+        "C": 0.6667,
+        "D": 0.9333
+      },
+      "gaps": {
+        "A-B": 3,
+        "B-C": 3,
+        "C-D": 2
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "expedition",
+        "B": "collect samples",
+        "C": "preserving evidence",
+        "D": "cave"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-061",
+      "generation_order": 61,
+      "batch": "C",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "WORD_CLASS",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/3/3/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 15,
+      "final_sentence_word_count": 15,
+      "total_marked_words": 8,
+      "mean_marked_span_length": 2.0,
+      "max_marked_span_length": 3,
+      "coverage": 0.5333,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 3,
+        "C": 3,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 4,
+        "C": 9,
+        "D": 14
+      },
+      "normalized_starts": {
+        "A": 0.0667,
+        "B": 0.2667,
+        "C": 0.6,
+        "D": 0.9333
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 2,
+        "C-D": 2
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 3,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "manuscript",
+        "B": "describes the expedition",
+        "C": "comparing its findings",
+        "D": "accounts"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-062",
+      "generation_order": 62,
+      "batch": "C",
+      "primary_target": "WORD_CLASS_FORM",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "MORPHOLOGY",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 12,
+      "final_sentence_word_count": 12,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.3333,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 3,
+        "B": 4,
+        "C": 6,
+        "D": 7
+      },
+      "normalized_starts": {
+        "A": 0.25,
+        "B": 0.3333,
+        "C": 0.5,
+        "D": 0.5833
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 1,
+        "C-D": 0
+      },
+      "corrected_answer_location": "D",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "D",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "camera",
+        "B": "records",
+        "C": "objects",
+        "D": "clear"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-063",
+      "generation_order": 63,
+      "batch": "C",
+      "primary_target": "WORD_CLASS_FORM",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "MORPHOLOGY",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 12,
+      "final_sentence_word_count": 12,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.4167,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 4,
+        "C": 9,
+        "D": 11
+      },
+      "normalized_starts": {
+        "A": 0.0833,
+        "B": 0.3333,
+        "C": 0.75,
+        "D": 0.9167
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 3,
+        "C-D": 1
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "committee",
+        "B": "comprehend report",
+        "C": "declining",
+        "D": "population"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-064",
+      "generation_order": 64,
+      "batch": "C",
+      "primary_target": "WORD_CLASS_FORM",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "MORPHOLOGY",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "2/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.3846,
+      "unmarked_context": 8,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 6,
+        "C": 8,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.4615,
+        "C": 0.6154,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 3,
+        "B-C": 1,
+        "C-D": 3
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "continued preserve",
+        "B": "depends",
+        "C": "stable",
+        "D": "archive"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-065",
+      "generation_order": 65,
+      "batch": "C",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "5/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "planned_tail_case": "multi_tail"
+      },
+      "clean_sentence_word_count": 12,
+      "final_sentence_word_count": 12,
+      "total_marked_words": 8,
+      "mean_marked_span_length": 2.0,
+      "max_marked_span_length": 5,
+      "coverage": 0.6667,
+      "unmarked_context": 4,
+      "span_word_counts": {
+        "A": 5,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "CLAUSE_OR_CLAUSE_LIKE",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 6,
+        "C": 10,
+        "D": 11
+      },
+      "normalized_starts": {
+        "A": 0.0833,
+        "B": 0.5,
+        "C": 0.8333,
+        "D": 0.9167
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 3,
+        "C-D": 0
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 5,
+      "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "manuscripts preserving in the monastery",
+        "B": "survived",
+        "C": "seasonal",
+        "D": "flooding"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-066",
+      "generation_order": 66,
+      "batch": "C",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "decision_granularity": "VERB_FRAME",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 12,
+      "final_sentence_word_count": 12,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.5,
+      "unmarked_context": 6,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 4,
+        "D": 11
+      },
+      "normalized_starts": {
+        "A": 0.0833,
+        "B": 0.1667,
+        "C": 0.3333,
+        "D": 0.9167
+      },
+      "gaps": {
+        "A-B": 0,
+        "B-C": 0,
+        "C-D": 5
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "botanists",
+        "B": "collected samples",
+        "C": "to comparing",
+        "D": "populations"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-067",
+      "generation_order": 67,
+      "batch": "C",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "tested_error_type": "incorrect_subordinator",
+      "decision_granularity": "CLAUSE_RELATION",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "5/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "planned_tail_case": "multi_tail"
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 10,
+      "mean_marked_span_length": 2.5,
+      "max_marked_span_length": 5,
+      "coverage": 0.7692,
+      "unmarked_context": 3,
+      "span_word_counts": {
+        "A": 5,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "CLAUSE_OR_CLAUSE_LIKE",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 0,
+        "B": 6,
+        "C": 9,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.0,
+        "B": 0.4615,
+        "C": 0.6923,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 1,
+        "C-D": 1
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 5,
+      "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "Despite the route was steep",
+        "B": "hikers reached",
+        "C": "upper station",
+        "D": "sunset"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-068",
+      "generation_order": 68,
+      "batch": "C",
+      "primary_target": "RELATIVE_CLAUSES",
+      "tested_error_type": "incorrect_relative_marker",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "16-20",
+        "range_lower": 16,
+        "range_upper": 20,
+        "target_midpoint_proxy": 18.0,
+        "intended_span_profile": "1/1/1/2",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": "single_gap"
+      },
+      "clean_sentence_word_count": 18,
+      "final_sentence_word_count": 18,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.2778,
+      "unmarked_context": 13,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 2
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SHORT_PHRASE"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 4,
+        "D": 16
+      },
+      "normalized_starts": {
+        "A": 0.0556,
+        "B": 0.1667,
+        "C": 0.2222,
+        "D": 0.8889
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 0,
+        "C-D": 11
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "archive",
+        "B": "letters",
+        "C": "who",
+        "D": "transmission trials"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-069",
+      "generation_order": 69,
+      "batch": "C",
+      "primary_target": "RELATIVE_CLAUSES",
+      "tested_error_type": "agreement_error",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "correction_locality": "DEPENDENCY_BASED",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.3077,
+      "unmarked_context": 9,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 5,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.0769,
+        "B": 0.2308,
+        "C": 0.3846,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 1,
+        "C-D": 6
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "network",
+        "B": "channels",
+        "C": "carries",
+        "D": "spring"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-070",
+      "generation_order": 70,
+      "batch": "C",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "tested_error_type": "double_subject",
+      "decision_granularity": "CLAUSE_RELATION",
+      "correction_locality": "CLAUSE_LEVEL",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/3/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 7,
+      "mean_marked_span_length": 1.75,
+      "max_marked_span_length": 3,
+      "coverage": 0.5,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 3,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 6,
+        "D": 9
+      },
+      "normalized_starts": {
+        "A": 0.0714,
+        "B": 0.2143,
+        "C": 0.4286,
+        "D": 0.6429
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 0,
+        "C-D": 1
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "historian",
+        "B": "examined the tablets",
+        "C": "she identified",
+        "D": "origin"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-071",
+      "generation_order": 71,
+      "batch": "C",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "tested_error_type": "wrong_word_order",
+      "decision_granularity": "WORD_ORDER",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/5/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 14,
+      "final_sentence_word_count": 14,
+      "total_marked_words": 8,
+      "mean_marked_span_length": 2.0,
+      "max_marked_span_length": 5,
+      "coverage": 0.5714,
+      "unmarked_context": 6,
+      "span_word_counts": {
+        "A": 1,
+        "B": 5,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "CLAUSE_OR_CLAUSE_LIKE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 10,
+        "D": 13
+      },
+      "normalized_starts": {
+        "A": 0.0714,
+        "B": 0.2143,
+        "C": 0.7143,
+        "D": 0.9286
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 2,
+        "C-D": 2
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 5,
+      "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "explorers",
+        "B": "a discovered recently coastal cave",
+        "C": "tide",
+        "D": "rise"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-072",
+      "generation_order": 72,
+      "batch": "C",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "tested_error_type": "wrong_degree_form",
+      "decision_granularity": "OTHER",
+      "correction_locality": "DEPENDENCY_BASED",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 13,
+      "final_sentence_word_count": 13,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.4615,
+      "unmarked_context": 7,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 2,
+        "B": 4,
+        "C": 7,
+        "D": 12
+      },
+      "normalized_starts": {
+        "A": 0.1538,
+        "B": 0.3077,
+        "C": 0.5385,
+        "D": 0.9231
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 1,
+        "C-D": 3
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "estimate",
+        "B": "most precise",
+        "C": "earlier projections",
+        "D": "measurements"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-073",
+      "generation_order": 73,
+      "batch": "C",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "tested_error_type": "agreement_error",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "2/1/2/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 11,
+      "final_sentence_word_count": 11,
+      "total_marked_words": 6,
+      "mean_marked_span_length": 1.5,
+      "max_marked_span_length": 2,
+      "coverage": 0.5455,
+      "unmarked_context": 5,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 2,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SINGLE_WORD",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 0,
+        "B": 3,
+        "C": 5,
+        "D": 10
+      },
+      "normalized_starts": {
+        "A": 0.0,
+        "B": 0.2727,
+        "C": 0.4545,
+        "D": 0.9091
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 1,
+        "C-D": 3
+      },
+      "corrected_answer_location": "A",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "A",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "There is",
+        "B": "records",
+        "C": "volcanic activity",
+        "D": "plateau"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-074",
+      "generation_order": 74,
+      "batch": "C",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "incorrect_part_of_speech",
+      "decision_granularity": "WORD_CLASS",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "plan": {
+        "sentence_length_region": "<=10",
+        "range_lower": 1,
+        "range_upper": 10,
+        "target_midpoint_proxy": 10,
+        "intended_span_profile": "1/1/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SINGLE_WORD",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 10,
+      "final_sentence_word_count": 10,
+      "total_marked_words": 4,
+      "mean_marked_span_length": 1.0,
+      "max_marked_span_length": 1,
+      "coverage": 0.4,
+      "unmarked_context": 6,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 4,
+        "C": 5,
+        "D": 9
+      },
+      "normalized_starts": {
+        "A": 0.1,
+        "B": 0.4,
+        "C": 0.5,
+        "D": 0.9
+      },
+      "gaps": {
+        "A-B": 2,
+        "B-C": 0,
+        "C-D": 3
+      },
+      "corrected_answer_location": "C",
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "stored_answer_for_integrity_check": "C",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "evidence",
+        "B": "explanation",
+        "C": "convincingly",
+        "D": "panel"
+      }
+    },
+    {
+      "item_id": "we-v2-validation-075",
+      "generation_order": 75,
+      "batch": "C",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "agreement_error",
+      "decision_granularity": "FUNCTION_WORD",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "plan": {
+        "sentence_length_region": "11-15",
+        "range_lower": 11,
+        "range_upper": 15,
+        "target_midpoint_proxy": 13.0,
+        "intended_span_profile": "1/2/1/1",
+        "intended_coverage_region": "soft official reference; no exact quota",
+        "intended_correct_span_type": "SHORT_PHRASE",
+        "planned_tail_case": null
+      },
+      "clean_sentence_word_count": 11,
+      "final_sentence_word_count": 11,
+      "total_marked_words": 5,
+      "mean_marked_span_length": 1.25,
+      "max_marked_span_length": 2,
+      "coverage": 0.4545,
+      "unmarked_context": 6,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "starts": {
+        "A": 1,
+        "B": 3,
+        "C": 9,
+        "D": 10
+      },
+      "normalized_starts": {
+        "A": 0.0909,
+        "B": 0.2727,
+        "C": 0.8182,
+        "D": 0.9091
+      },
+      "gaps": {
+        "A-B": 1,
+        "B-C": 4,
+        "C-D": 0
+      },
+      "corrected_answer_location": "B",
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "stored_answer_for_integrity_check": "B",
+      "answer_location_match": true,
+      "marked_parts": {
+        "A": "archive",
+        "B": "little documents",
+        "C": "commercial",
+        "D": "activity"
+      }
+    }
+  ]
+}
