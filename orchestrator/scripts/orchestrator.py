@@ -79,6 +79,7 @@ __all__ = [
     "process_solver_stage",
     "record_stage_failure",
     "retry_failed_stage",
+    "build_retry_summary",
     "build_accepted_item",
     "build_qa_audit",
     "build_provenance_record",
@@ -264,15 +265,38 @@ def load_items_by_id(path: Path, label: str = "") -> dict[str, dict]:
         actually happen given how the dict is built, kept for clarity when
         this function is refactored)
     """
-    data = json.loads(path.read_text(encoding="utf-8"))
-    items = data["items"] if isinstance(data, dict) and "items" in data else data
+    source = label or str(path)
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{source}: could not load JSON: {exc}") from exc
+
+    if isinstance(data, dict):
+        if "items" not in data:
+            raise ValueError(f"{source}: top-level object must contain an 'items' array")
+        items = data["items"]
+        if not isinstance(items, list):
+            raise ValueError(f"{source}: top-level 'items' must be a list")
+    elif isinstance(data, list):
+        # Bare lists are retained for compatibility with the replay fixtures
+        # that have historically used that form.
+        items = data
+    else:
+        raise ValueError(
+            f"{source}: top-level JSON must be an object containing an 'items' array or a list"
+        )
+
     by_id: dict[str, dict] = {}
     for idx, item in enumerate(items):
+        if not isinstance(item, dict):
+            raise ValueError(f"{source}: item at position {idx} must be an object")
         item_id = item.get("item_id")
-        if not item_id:
-            raise ValueError(f"{label or path}: item at position {idx} has no item_id")
+        if not isinstance(item_id, str) or not item_id.strip():
+            raise ValueError(
+                f"{source}: item at position {idx} must have a non-empty string item_id"
+            )
         if item_id in by_id:
-            raise ValueError(f"{label or path}: duplicate item_id {item_id!r} - cannot join unambiguously")
+            raise ValueError(f"{source}: duplicate item_id {item_id!r} - cannot join unambiguously")
         by_id[item_id] = item
     return by_id
 
@@ -833,6 +857,20 @@ def save_candidate_state(path: Path, candidates: dict[str, Candidate]) -> None:
     atomic_write_json(path, {item_id: candidate_to_dict(candidate) for item_id, candidate in candidates.items()})
 
 
+def build_retry_summary(candidate: Candidate) -> dict[str, dict[str, int]]:
+    """Expose cumulative transient retry counters in final artifacts."""
+    return {
+        "system": {
+            stage: candidate.system_failure_retries.get(stage, 0)
+            for stage in RETRY_STAGES
+        },
+        "validation": {
+            stage: candidate.validation_failure_retries.get(stage, 0)
+            for stage in RETRY_STAGES
+        },
+    }
+
+
 def _identity_errors(candidate: Candidate, item: object, stage: str) -> list[str]:
     if not isinstance(item, dict):
         return [f"{stage} item must be an object"]
@@ -1106,6 +1144,12 @@ def process_solver_stage(
 
     if precomputed_solver_input is not None:
         blinded = precomputed_solver_input
+    elif candidate.solver_input is not None:
+        # A transient Solver retry must use the exact allowlisted payload that
+        # was persisted for the previous Solver call.  Quality-driven
+        # generator/reviewer transitions clear solver_input before reaching
+        # this path, so a changed generator item cannot reuse stale input.
+        blinded = candidate.solver_input
     else:
         try:
             blinded = blind_for_solver(config, candidate.generator_item)
@@ -1223,6 +1267,7 @@ def build_qa_audit(candidate: Candidate, versions: dict) -> dict:
             candidate.solver_input, ensure_ascii=False, sort_keys=True, separators=(",", ":")
         ).encode("utf-8")
         solver_input_hash = f"sha256:{hashlib.sha256(canonical).hexdigest()}"
+    retry_summary = build_retry_summary(candidate)
     return {
         "item_id": candidate.item_id,
         "concept_id": candidate.concept_id,
@@ -1230,6 +1275,7 @@ def build_qa_audit(candidate: Candidate, versions: dict) -> dict:
         "state_history": candidate.state_history,
         "generation_attempt": candidate.generation_attempt,
         "revision_count": candidate.revision_count,
+        "retry_summary": retry_summary,
         "reviewer": candidate.reviewer_item,
         "solver": candidate.solver_item,
         "solver_input_sha256": solver_input_hash,
@@ -1263,6 +1309,7 @@ def build_provenance_record(candidate: Candidate, versions: dict) -> dict:
         "state_history": candidate.state_history,
         "generation_attempt": candidate.generation_attempt,
         "revision_count": candidate.revision_count,
+        "retry_summary": build_retry_summary(candidate),
         "generator": None if not candidate.generator_item else {
             "answer": candidate.generator_item.get("correct_answer"),
         },

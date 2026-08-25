@@ -85,7 +85,11 @@ from orchestrator import (  # noqa: E402
     save_candidate_state,
     strip_internal_test_keys,
 )
-from shared.json_io import atomic_write_json  # noqa: E402
+from shared.json_io import (  # noqa: E402
+    atomic_write_json,
+    exclusive_file_lock,
+    exclusive_state_transaction,
+)
 
 PILOT_DIR = REPO_ROOT / "analysis" / "pilot"
 STATE_PATH = PILOT_DIR / "candidates_state.json"
@@ -100,6 +104,11 @@ def load_state() -> dict[str, Candidate]:
 def save_state(candidates: dict[str, Candidate]) -> None:
     PILOT_DIR.mkdir(parents=True, exist_ok=True)
     save_candidate_state(STATE_PATH, candidates)
+
+
+def state_transaction():
+    """Lock the full Candidate read-modify-write cycle for this driver."""
+    return exclusive_state_transaction(STATE_PATH, load_state, save_state)
 
 
 def state_tally(candidates: dict[str, Candidate]) -> dict[str, int]:
@@ -133,7 +142,8 @@ def cmd_init(structure_path: str, we_path: str) -> None:
         c = process_generation_output(c, config)
         candidates[item_id] = c
 
-    save_state(candidates)
+    with exclusive_file_lock(STATE_PATH):
+        save_state(candidates)
 
     ready = sorted(i for i, c in candidates.items() if c.state == State.REVIEWING)
     failed = sorted(i for i, c in candidates.items() if c.state != State.REVIEWING)
@@ -148,33 +158,31 @@ def cmd_init(structure_path: str, we_path: str) -> None:
 
 def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
     config = load_config()
-    candidates = load_state()
     reviewer_items = load_items_by_id(Path(reviewer_path), f"reviewer round {round_label}")
 
     routed: dict[str, list[str]] = {"SOLVING": [], "REVISE_REQUIRED": [], "REJECTED": [], "DISCARDED": [], "VALIDATION_FAILED": [], "GENERATION_FAILED": [], "skipped_not_reviewing": []}
-    for item_id, c in candidates.items():
-        if (
-            c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
-            and c.failure is not None
-            and c.failure.stage == "reviewer"
-            and item_id in reviewer_items
-        ):
-            c = retry_failed_stage(c, config)
-        if c.state != State.REVIEWING:
-            continue
-        if item_id not in reviewer_items:
-            routed["skipped_not_reviewing"].append(item_id)
-            continue
-        c.reviewer_item = strip_internal_test_keys(reviewer_items[item_id])
-        c = process_review_output(c, config)
-        routed.setdefault(c.state, []).append(item_id)
+    with state_transaction() as candidates:
+        for item_id, c in candidates.items():
+            if (
+                c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
+                and c.failure is not None
+                and c.failure.stage == "reviewer"
+                and item_id in reviewer_items
+            ):
+                c = retry_failed_stage(c, config)
+            if c.state != State.REVIEWING:
+                continue
+            if item_id not in reviewer_items:
+                routed["skipped_not_reviewing"].append(item_id)
+                continue
+            c.reviewer_item = strip_internal_test_keys(reviewer_items[item_id])
+            c = process_review_output(c, config)
+            routed.setdefault(c.state, []).append(item_id)
 
-    save_state(candidates)
-
-    feedback_items = []
-    for item_id in routed.get("REVISE_REQUIRED", []):
-        c = candidates[item_id]
-        feedback_items.append(build_generator_feedback(c.reviewer_item))
+        feedback_items = [
+            build_generator_feedback(candidates[item_id].reviewer_item)
+            for item_id in routed.get("REVISE_REQUIRED", [])
+        ]
     feedback_path = PILOT_DIR / f"round_feedback_{round_label}.json"
     atomic_write_json(feedback_path, {"items": feedback_items})
 
@@ -188,42 +196,41 @@ def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
 
 def cmd_apply_revision(generator_path: str) -> None:
     config = load_config()
-    candidates = load_state()
     revised_items = load_items_by_id(Path(generator_path), "generator revision round")
 
     updated = []
     skipped = []
-    for item_id, gitem in revised_items.items():
-        c = candidates.get(item_id)
-        is_revision = c is not None and c.state == State.REVISE_REQUIRED
-        is_generator_retry = (
-            c is not None
-            and c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
-            and c.failure is not None
-            and c.failure.stage == "generator"
-        )
-        if c is None or not (is_revision or is_generator_retry):
-            skipped.append(item_id)
-            continue
-        if is_generator_retry:
-            c = retry_failed_stage(c, config)
-        else:
-            # A revision is a quality-driven new Generator attempt. It is
-            # intentionally distinct from transient failure retry counters.
-            c.reviewer_item = None
-            c.solver_item = None
-            c.solver_input = None
-            c.leakage_check = None
-            c.consensus = None
-            c.failure = None
-            c.transition(State.GENERATED, "Reviewer-requested revision regenerated")
-        c.generator_item = strip_internal_test_keys(gitem)
-        if is_revision:
-            c.generation_attempt += 1
-        c = process_generation_output(c, config)
-        updated.append(item_id)
+    with state_transaction() as candidates:
+        for item_id, gitem in revised_items.items():
+            c = candidates.get(item_id)
+            is_revision = c is not None and c.state == State.REVISE_REQUIRED
+            is_generator_retry = (
+                c is not None
+                and c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
+                and c.failure is not None
+                and c.failure.stage == "generator"
+            )
+            if c is None or not (is_revision or is_generator_retry):
+                skipped.append(item_id)
+                continue
+            if is_generator_retry:
+                c = retry_failed_stage(c, config)
+            else:
+                # A revision is a quality-driven new Generator attempt. It is
+                # intentionally distinct from transient failure retry counters.
+                c.reviewer_item = None
+                c.solver_item = None
+                c.solver_input = None
+                c.leakage_check = None
+                c.consensus = None
+                c.failure = None
+                c.transition(State.GENERATED, "Reviewer-requested revision regenerated")
+            c.generator_item = strip_internal_test_keys(gitem)
+            if is_revision:
+                c.generation_attempt += 1
+            c = process_generation_output(c, config)
+            updated.append(item_id)
 
-    save_state(candidates)
     print(f"Applied revision to {len(updated)} candidate(s): {sorted(updated)}")
     if skipped:
         print(f"Skipped (not in REVISE_REQUIRED, or no matching candidate): {sorted(skipped)}")
@@ -234,52 +241,51 @@ def cmd_apply_revision(generator_path: str) -> None:
 
 def cmd_prepare_solver_batch() -> None:
     config = load_config()
-    candidates = load_state()
-    solving = {}
-    for item_id, c in candidates.items():
-        if (
-            c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
-            and c.failure is not None
-            and c.failure.stage == "solver"
-        ):
-            c = retry_failed_stage(c, config)
-        if c.state == State.SOLVING:
-            solving[item_id] = c
-
     batch = []
     errors = []
-    for item_id, c in solving.items():
-        try:
-            blinded = blind_for_solver(config, c.generator_item)
-        except SystemCallError as e:
-            c.solver_input = None
-            record_stage_failure(
-                c,
-                config,
-                kind="system",
-                stage="solver",
-                detail=f"during blinding: {e}",
-            )
-            errors.append(f"{item_id}: {e}")
-            continue
-        ok, problems = leakage_guard(blinded, c.section)
-        c.leakage_check = {
-            "ok": ok, "problems": problems, "blinded_keys": sorted(blinded.keys())
-        }
-        if not ok:
-            c.solver_input = None
-            c.transition(State.MANUAL_REVIEW, f"leakage guard failed before Solver: {problems}")
-            errors.append(f"{item_id}: leakage guard failed: {problems}")
-            continue
-        c.solver_input = blinded
-        batch.append(blinded)
+    with state_transaction() as candidates:
+        solving = {}
+        for item_id, c in candidates.items():
+            if (
+                c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
+                and c.failure is not None
+                and c.failure.stage == "solver"
+            ):
+                c = retry_failed_stage(c, config)
+            if c.state == State.SOLVING:
+                solving[item_id] = c
 
-    out_path = PILOT_DIR / "solver_input_batch.json"
-    atomic_write_json(out_path, {"items": batch})
-    # The blinded input and leakage result are part of the cross-process
-    # contract. Persist them before the command exits so apply_solver can
-    # consume the exact input handed to the Solver.
-    save_state(candidates)
+        for item_id, c in solving.items():
+            try:
+                blinded = c.solver_input if c.solver_input is not None else blind_for_solver(config, c.generator_item)
+            except SystemCallError as e:
+                c.solver_input = None
+                record_stage_failure(
+                    c,
+                    config,
+                    kind="system",
+                    stage="solver",
+                    detail=f"during blinding: {e}",
+                )
+                errors.append(f"{item_id}: {e}")
+                continue
+            ok, problems = leakage_guard(blinded, c.section)
+            c.leakage_check = {
+                "ok": ok, "problems": problems, "blinded_keys": sorted(blinded.keys())
+            }
+            if not ok:
+                c.solver_input = None
+                c.transition(State.MANUAL_REVIEW, f"leakage guard failed before Solver: {problems}")
+                errors.append(f"{item_id}: leakage guard failed: {problems}")
+                continue
+            c.solver_input = blinded
+            batch.append(blinded)
+
+        out_path = PILOT_DIR / "solver_input_batch.json"
+        atomic_write_json(out_path, {"items": batch})
+        # The blinded input and leakage result are part of the cross-process
+        # contract. Persist them before the command exits so apply_solver can
+        # consume the exact input handed to the Solver.
     print(f"Blinded {len(batch)} candidate(s) currently in SOLVING -> {out_path}")
     if errors:
         print("Blinding errors:")
@@ -290,35 +296,33 @@ def cmd_prepare_solver_batch() -> None:
 
 def cmd_apply_solver(solver_path: str) -> None:
     config = load_config()
-    candidates = load_state()
     solver_items = load_items_by_id(Path(solver_path), "solver output")
 
     routed: dict[str, list[str]] = {}
     missing = []
-    for item_id, c in candidates.items():
-        if (
-            c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
-            and c.failure is not None
-            and c.failure.stage == "solver"
-            and c.solver_input is not None
-            and item_id in solver_items
-        ):
-            c = retry_failed_stage(c, config)
-        if c.state != State.SOLVING or c.solver_input is None:
-            continue
-        s_item = solver_items.get(item_id)
-        if s_item is None:
-            missing.append(item_id)
-            continue
-        c = process_solver_stage(
-            c,
-            config,
-            strip_internal_test_keys(s_item),
-            precomputed_solver_input=c.solver_input,
-        )
-        routed.setdefault(c.state, []).append(item_id)
-
-    save_state(candidates)
+    with state_transaction() as candidates:
+        for item_id, c in candidates.items():
+            if (
+                c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
+                and c.failure is not None
+                and c.failure.stage == "solver"
+                and c.solver_input is not None
+                and item_id in solver_items
+            ):
+                c = retry_failed_stage(c, config)
+            if c.state != State.SOLVING or c.solver_input is None:
+                continue
+            s_item = solver_items.get(item_id)
+            if s_item is None:
+                missing.append(item_id)
+                continue
+            c = process_solver_stage(
+                c,
+                config,
+                strip_internal_test_keys(s_item),
+                precomputed_solver_input=c.solver_input,
+            )
+            routed.setdefault(c.state, []).append(item_id)
     print(f"Solver output applied. Routing:")
     for state, ids in routed.items():
         print(f"  {state} ({len(ids)}): {sorted(ids)}")

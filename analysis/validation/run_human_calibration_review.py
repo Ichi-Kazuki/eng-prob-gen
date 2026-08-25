@@ -23,7 +23,10 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
 VAL = ROOT / "analysis" / "validation"
+
+from shared.json_io import atomic_write_json  # noqa: E402
 
 BLIND_PATH = VAL / "human_review_calibration_blind.json"
 RESULTS_PATH = VAL / "human_review_results.json"
@@ -60,9 +63,7 @@ def load_json(path: Path, default=None):
 
 
 def save_results(results: dict) -> None:
-    RESULTS_PATH.write_text(
-        json.dumps(results, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+    atomic_write_json(RESULTS_PATH, results)
 
 
 def load_results() -> dict:
@@ -86,9 +87,10 @@ def prompt_choice(label: str, choices: list[str]) -> str:
         raw = input("> ").strip()
         if raw in choice_map:
             return choice_map[raw]
-        raw_upper = raw.upper()
-        if raw_upper in choices:
-            return raw_upper
+        canonical_by_input = {choice.casefold(): choice for choice in choices}
+        canonical = canonical_by_input.get(raw.casefold())
+        if canonical is not None:
+            return canonical
         print("Invalid input. Enter the number or the exact label shown above.")
 
 

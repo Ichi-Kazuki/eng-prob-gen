@@ -63,3 +63,24 @@ def exclusive_file_lock(path: Path) -> Iterator[None]:
                 fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
         finally:
             handle.close()
+
+
+@contextmanager
+def exclusive_state_transaction(path: Path, load, save) -> Iterator[object]:
+    """Run one complete read-modify-write operation under one file lock.
+
+    ``atomic_write_json`` protects the final replacement only.  Callers that
+    need to update a shared state document must hold the lock while loading,
+    mutating, and saving it; otherwise two writers can still overwrite one
+    another's changes.  The callbacks deliberately stay outside this module
+    so the helper can be reused for typed state objects without introducing a
+    dependency from the persistence layer to the orchestrator.
+    """
+    with exclusive_file_lock(path):
+        value = load()
+        try:
+            yield value
+        except BaseException:
+            raise
+        else:
+            save(value)

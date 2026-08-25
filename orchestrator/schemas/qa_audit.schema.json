@@ -17,6 +17,15 @@
     "state_history": { "type": "array", "items": { "type": "string" } },
     "generation_attempt": { "type": "integer", "minimum": 1 },
     "revision_count": { "type": "integer", "minimum": 0 },
+    "retry_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "system": { "$ref": "#/$defs/retry_counts" },
+        "validation": { "$ref": "#/$defs/retry_counts" }
+      },
+      "required": ["system", "validation"]
+    },
     "reviewer": {
       "description": "Full Reviewer Agent output object (see agents/toefl_itp_grammar_reviewer/schema/reviewer_output.schema.json), or null if the candidate never reached REVIEWING.",
       "type": ["object", "null"]
@@ -72,6 +81,18 @@
         "created": { "type": "string" },
         "updated": { "type": "string" }
       }
+    }
+  },
+  "$defs": {
+    "retry_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "generator": { "type": "integer", "minimum": 0 },
+        "reviewer": { "type": "integer", "minimum": 0 },
+        "solver": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["generator", "reviewer", "solver"]
     }
   }
 }

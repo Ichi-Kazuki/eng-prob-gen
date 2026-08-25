@@ -5,6 +5,7 @@ from __future__ import annotations
 import copy
 import importlib.util
 import json
+import multiprocessing
 import subprocess
 import sys
 import tempfile
@@ -38,6 +39,36 @@ def run_validator(relpath: str, item: dict) -> subprocess.CompletedProcess:
         )
     finally:
         Path(path).unlink(missing_ok=True)
+
+
+def _state_transaction_worker(
+    state_path: str,
+    marker: str,
+    started: object,
+    entered: object,
+    go: object,
+    release: object,
+    hold_lock: bool,
+) -> None:
+    """Worker used to deterministically exercise the cross-process lock."""
+    path = Path(state_path)
+    if not hold_lock:
+        started.set()
+        go.wait(10)
+
+    def load() -> dict[str, core.Candidate]:
+        return core.load_candidate_state(path)
+
+    def save(candidates: dict[str, core.Candidate]) -> None:
+        core.save_candidate_state(path, candidates)
+
+    from shared.json_io import exclusive_state_transaction
+
+    with exclusive_state_transaction(path, load, save) as candidates:
+        entered.set()
+        candidates["tx-001"].notes.append(marker)
+        if hold_lock:
+            release.wait(10)
 
 
 class GeneratorSchemaRegressions(unittest.TestCase):
@@ -137,6 +168,67 @@ class ReviewerInvariantRegressions(unittest.TestCase):
 
 
 class StateAndDriverRegressions(unittest.TestCase):
+    def test_load_items_by_id_rejects_malformed_inputs_closed(self) -> None:
+        malformed = [
+            ("scalar", 123, "top-level JSON"),
+            ("missing items", {"foo": "bar"}, "contain an 'items' array"),
+            ("items scalar", {"items": "not-a-list"}, "'items' must be a list"),
+            ("scalar item", {"items": [{"item_id": "x"}, 123]}, "must be an object"),
+            ("missing item_id", {"items": [{"section": "Structure"}]}, "non-empty string item_id"),
+            ("empty item_id", {"items": [{"item_id": ""}]}, "non-empty string item_id"),
+            ("duplicate item_id", {"items": [{"item_id": "x"}, {"item_id": "x"}]}, "duplicate item_id"),
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "malformed.json"
+            for label, payload, message in malformed:
+                with self.subTest(label=label):
+                    path.write_text(json.dumps(payload), encoding="utf-8")
+                    with self.assertRaisesRegex(ValueError, message):
+                        core.load_items_by_id(path, label)
+
+    def test_candidate_state_transaction_preserves_competing_updates(self) -> None:
+        candidate = core.Candidate("tx-001", "tx-001", "Structure")
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "candidates_state.json"
+            core.save_candidate_state(path, {candidate.item_id: candidate})
+            context = multiprocessing.get_context("spawn")
+            first_entered = context.Event()
+            first_release = context.Event()
+            second_started = context.Event()
+            second_entered = context.Event()
+            second_go = context.Event()
+            first = context.Process(
+                target=_state_transaction_worker,
+                args=(str(path), "first", second_started, first_entered, second_go, first_release, True),
+            )
+            second = context.Process(
+                target=_state_transaction_worker,
+                args=(str(path), "second", second_started, second_entered, second_go, first_release, False),
+            )
+            first.start()
+            second.start()
+            try:
+                self.assertTrue(first_entered.wait(10), "first writer did not acquire the state lock")
+                self.assertTrue(second_started.wait(10), "second writer did not start")
+                second_go.set()
+                self.assertFalse(
+                    second_entered.wait(1),
+                    "second writer entered the transaction while the first writer held the lock",
+                )
+                first_release.set()
+                self.assertTrue(second_entered.wait(10), "second writer did not complete after unlock")
+                first.join(10)
+                second.join(10)
+                self.assertEqual(first.exitcode, 0)
+                self.assertEqual(second.exitcode, 0)
+            finally:
+                first_release.set()
+                second_go.set()
+                first.join(10)
+                second.join(10)
+
+            saved = core.load_candidate_state(path)["tx-001"]
+            self.assertEqual(saved.notes, ["first", "second"])
     def test_invalid_direct_transition_is_rejected(self) -> None:
         candidate = core.Candidate("state-001", "state-001", "Structure")
         with self.assertRaises(ValueError):
@@ -207,6 +299,82 @@ class StateAndDriverRegressions(unittest.TestCase):
             self.assertEqual(final.state, core.State.ACCEPTED)
             self.assertIsNotNone(final.solver_item)
             self.assertIsNotNone(final.solver_input)
+
+    def test_solver_retry_reuses_persisted_input_in_prepare_batch(self) -> None:
+        generator = fixture("analysis/generator_smoke_test.json", 0)
+        reviewer = fixture("analysis/reviewer_smoke_test.json", 0)
+        solver = fixture("analysis/solver_smoke_test.json", 0)
+        original_input = {
+            "item_id": generator["item_id"],
+            "section": generator["section"],
+            "stem": generator["stem"],
+            "options": generator["options"],
+        }
+        candidate = core.Candidate(generator["item_id"], generator["item_id"], generator["section"])
+        candidate.state = core.State.SOLVING
+        candidate.state_history = [core.State.GENERATED, core.State.REVIEWING, core.State.SOLVING]
+        candidate.generator_item = generator
+        candidate.reviewer_item = reviewer
+        candidate.solver_input = copy.deepcopy(original_input)
+
+        with mock.patch.object(core, "run_schema_validator", side_effect=core.SystemCallError("temporary solver outage")):
+            candidate = core.process_solver_stage(
+                candidate, core.load_config(), solver, precomputed_solver_input=original_input
+            )
+        self.assertEqual(candidate.state, core.State.GENERATION_FAILED)
+        self.assertEqual(candidate.solver_input, original_input)
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with mock.patch.object(pilot_driver, "PILOT_DIR", root), \
+                 mock.patch.object(pilot_driver, "STATE_PATH", root / "candidates_state.json"):
+                pilot_driver.save_state({candidate.item_id: candidate})
+                with mock.patch.object(
+                    pilot_driver,
+                    "blind_for_solver",
+                    side_effect=AssertionError("transient retry must not reblind Solver input"),
+                ):
+                    pilot_driver.cmd_prepare_solver_batch()
+                prepared = json.loads((root / "solver_input_batch.json").read_text(encoding="utf-8"))
+                reloaded = pilot_driver.load_state()[candidate.item_id]
+
+        self.assertEqual(prepared["items"], [original_input])
+        self.assertEqual(reloaded.solver_input, original_input)
+        self.assertEqual(reloaded.system_failure_retries["solver"], 1)
+        self.assertEqual(reloaded.revision_count, 0)
+        self.assertEqual(reloaded.generation_attempt, 1)
+
+    def test_validation_round_feedback_contains_only_newly_routed_revisions(self) -> None:
+        stale_generator = fixture("analysis/generator_smoke_test.json", 0)
+        stale_reviewer = copy.deepcopy(fixture("analysis/reviewer_smoke_test.json", 2))
+        stale_reviewer["item_id"] = stale_generator["item_id"]
+        stale = core.Candidate(stale_generator["item_id"], stale_generator["item_id"], "Structure")
+        stale.state = core.State.REVISE_REQUIRED
+        stale.state_history = [core.State.GENERATED, core.State.REVIEWING, core.State.REVISE_REQUIRED]
+        stale.revision_count = 1
+        stale.generator_item = stale_generator
+        stale.reviewer_item = stale_reviewer
+
+        current_generator = fixture("analysis/generator_smoke_test.json", 2)
+        current = core.Candidate(current_generator["item_id"], current_generator["item_id"], "Structure")
+        current.state = core.State.REVIEWING
+        current.state_history = [core.State.GENERATED, core.State.REVIEWING]
+        current.generator_item = current_generator
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            state_path = root / "validation_candidates_state.json"
+            with mock.patch.object(validation_driver, "VALIDATION_DIR", root), \
+                 mock.patch.object(validation_driver, "STATE_PATH", state_path):
+                validation_driver.save_state({stale.item_id: stale, current.item_id: current})
+                validation_driver.cmd_apply_review(
+                    str(ROOT / "analysis/reviewer_smoke_test.json"), "round-test"
+                )
+                feedback = json.loads(
+                    (root / "validation_round_feedback_round-test.json").read_text(encoding="utf-8")
+                )
+
+        self.assertEqual([item["item_id"] for item in feedback["items"]], [current.item_id])
 
     def test_finalize_rejects_transient_state_in_both_drivers(self) -> None:
         candidate = core.Candidate("transient-001", "transient-001", "Structure")
@@ -471,6 +639,25 @@ class CandidatePersistenceInvariantRegressions(unittest.TestCase):
             "invalid state transition",
         )
 
+    def test_final_provenance_exposes_separate_retry_counters(self) -> None:
+        candidate = core.Candidate("retry-provenance-001", "retry-provenance-001", "Structure")
+        candidate.state = core.State.REVISE_REQUIRED
+        candidate.state_history = [core.State.GENERATED, core.State.REVIEWING, core.State.REVISE_REQUIRED]
+        candidate.system_failure_retries = {"reviewer": 1, "solver": 2}
+        candidate.validation_failure_retries = {"generator": 3}
+        record = core.build_provenance_record(candidate, core.load_versions(core.load_config()))
+
+        self.assertEqual(
+            record["retry_summary"],
+            {
+                "system": {"generator": 0, "reviewer": 1, "solver": 2},
+                "validation": {"generator": 3, "reviewer": 0, "solver": 0},
+            },
+        )
+        self.assertEqual(record["qa_audit"]["retry_summary"], record["retry_summary"])
+        self.assertEqual(record["revision_count"], 0)
+        self.assertEqual(core.validate_final_record(record), [])
+
 
 class GenericGeneratorValidatorRegressions(unittest.TestCase):
     @staticmethod
@@ -622,6 +809,7 @@ class WrittenExpressionV2Regressions(unittest.TestCase):
         )
         self.assertEqual(valid.returncode, 0, valid.stdout + valid.stderr)
 
+
     def test_reviewer_v2_pass_invariants_and_schema_fail_closed(self) -> None:
         base = fixture("analysis/we_v2/we_v2_smoke_review.json", 0)
         cases = []
@@ -658,6 +846,34 @@ class WrittenExpressionV2Regressions(unittest.TestCase):
             text=True,
         )
         self.assertEqual(valid.returncode, 0, valid.stdout + valid.stderr)
+
+
+class HumanCalibrationRegressions(unittest.TestCase):
+    @staticmethod
+    def module():
+        path = ROOT / "analysis/validation/run_human_calibration_review.py"
+        spec = importlib.util.spec_from_file_location("human_calibration_review", path)
+        module = importlib.util.module_from_spec(spec)
+        assert spec is not None and spec.loader is not None
+        spec.loader.exec_module(module)
+        return module
+
+    def test_prompt_choice_returns_canonical_value_case_insensitively(self) -> None:
+        module = self.module()
+        for raw in ("grammar", "GRAMMAR", "Grammar"):
+            with self.subTest(raw=raw), mock.patch("builtins.input", return_value=raw):
+                self.assertEqual(module.prompt_choice("main_problem:", module.MAIN_PROBLEM_CHOICES), "grammar")
+        with mock.patch("builtins.input", return_value="1"):
+            self.assertEqual(module.prompt_choice("main_problem:", module.MAIN_PROBLEM_CHOICES), "NONE")
+
+    def test_human_calibration_results_use_atomic_json_persistence(self) -> None:
+        module = self.module()
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "human_review_results.json"
+            with mock.patch.object(module, "RESULTS_PATH", path):
+                module.save_results({"title": "test", "answers": {"q1": {"decision": "KEEP"}}})
+            self.assertEqual(json.loads(path.read_text(encoding="utf-8"))["answers"]["q1"]["decision"], "KEEP")
+            self.assertFalse(list(path.parent.glob(f".{path.name}.*.tmp")))
 
 
 class RepositoryHygieneRegressions(unittest.TestCase):
