@@ -70,6 +70,7 @@ __all__ = [
     "strip_internal_test_keys",
     "run_schema_validator",
     "blind_for_solver",
+    "canonicalize_solver_input",
     "leakage_guard",
     "build_generator_feedback",
     "derive_slot_requirements",
@@ -426,6 +427,17 @@ def blind_for_solver(config: dict, item: dict, timeout_seconds: float = 60) -> d
     if len(items) != 1 or not isinstance(items[0], dict):
         raise SystemCallError("blinding script returned unexpected item count")
     return items[0]
+
+
+def canonicalize_solver_input(config: dict, item: dict) -> dict:
+    """Return the canonical blind payload using the production blinding path.
+
+    Persisted-state validation calls this helper instead of rebuilding the
+    allowlist locally.  That keeps state-load checks on the same contract as
+    live Solver retries and prevents policy drift.
+    """
+
+    return blind_for_solver(config, item)
 
 
 def leakage_guard(blinded_item: dict, section: str) -> tuple[bool, list[str]]:
@@ -799,9 +811,27 @@ def validate_candidate_invariants(candidate: Candidate) -> None:
             errors.append("SOLVING requires reviewer verdict PASS")
 
     if candidate.solver_input is not None:
-        ok, problems = leakage_guard(candidate.solver_input, candidate.section)
-        if not ok:
-            errors.append("solver_input leakage/shape invariant failed: " + "; ".join(problems))
+        if not isinstance(candidate.solver_input, dict):
+            errors.append("solver_input must be an object")
+        else:
+            ok, problems = leakage_guard(candidate.solver_input, candidate.section)
+            if not ok:
+                errors.append("solver_input leakage/shape invariant failed: " + "; ".join(problems))
+            if candidate.generator_item is None:
+                errors.append("solver_input requires generator_item for canonical validation")
+            elif isinstance(candidate.generator_item, dict):
+                try:
+                    expected_solver_input = canonicalize_solver_input(
+                        load_config(), candidate.generator_item
+                    )
+                except Exception as exc:  # fail closed if the production blinder is unavailable
+                    errors.append(f"solver_input canonicalization failed: {type(exc).__name__}: {exc}")
+                else:
+                    if candidate.solver_input != expected_solver_input:
+                        errors.append(
+                            "solver_input does not match the canonical blinded payload "
+                            "derived from generator_item"
+                        )
 
     if candidate.state == State.ACCEPTED:
         if candidate.generator_item is None or candidate.reviewer_item is None or candidate.solver_item is None:
@@ -812,11 +842,48 @@ def validate_candidate_invariants(candidate: Candidate) -> None:
             errors.append("ACCEPTED requires a successful leakage_check")
         if candidate.consensus is None:
             errors.append("ACCEPTED requires consensus metadata")
-        else:
-            if candidate.consensus.auto_accept is not True or candidate.consensus.routing != State.ACCEPTED:
-                errors.append("ACCEPTED requires auto_accept consensus routing")
         if candidate.reviewer_item is not None and candidate.reviewer_item.get("verdict") != "PASS":
             errors.append("ACCEPTED requires reviewer verdict PASS")
+
+        if (
+            isinstance(candidate.generator_item, dict)
+            and isinstance(candidate.reviewer_item, dict)
+            and isinstance(candidate.solver_item, dict)
+            and isinstance(candidate.consensus, ConsensusResult)
+        ):
+            try:
+                recomputed = evaluate_consensus(
+                    candidate.generator_item,
+                    candidate.reviewer_item,
+                    candidate.solver_item,
+                    load_config(),
+                )
+            except Exception as exc:  # persisted state must never fail open
+                errors.append(
+                    f"ACCEPTED consensus recomputation failed: {type(exc).__name__}: {exc}"
+                )
+            else:
+                if recomputed.auto_accept is not True or recomputed.routing != State.ACCEPTED:
+                    errors.append(
+                        "ACCEPTED consensus recomputation did not produce "
+                        "auto_accept=True and routing=ACCEPTED"
+                    )
+                stored = {
+                    "auto_accept": candidate.consensus.auto_accept,
+                    "routing": candidate.consensus.routing,
+                    "failed_conditions": candidate.consensus.failed_conditions,
+                    "disagreement_reasons": candidate.consensus.disagreement_reasons,
+                }
+                expected = {
+                    "auto_accept": recomputed.auto_accept,
+                    "routing": recomputed.routing,
+                    "failed_conditions": recomputed.failed_conditions,
+                    "disagreement_reasons": recomputed.disagreement_reasons,
+                }
+                if stored != expected:
+                    errors.append(
+                        "persisted consensus metadata does not match recomputed consensus"
+                    )
 
     if candidate.consensus is not None:
         if candidate.consensus.routing not in {State.ACCEPTED, State.MANUAL_REVIEW, State.DISCARDED}:
@@ -1334,15 +1401,48 @@ def build_provenance_record(candidate: Candidate, versions: dict) -> dict:
 # Manual review queue (spec section 15)
 # ---------------------------------------------------------------------------
 
+def _manual_review_routing_reason(candidate: Candidate) -> str:
+    """Classify why a candidate reached MANUAL_REVIEW for internal QA."""
+
+    if candidate.leakage_check is not None and candidate.leakage_check.get("ok") is not True:
+        return "leakage_guard_failure"
+    if candidate.failure is not None:
+        if any("retry limit exceeded" in note for note in candidate.notes):
+            return "retry_exhaustion"
+        return f"{candidate.failure.kind}_failure"
+    if candidate.consensus is not None:
+        if candidate.consensus.disagreement_reasons or candidate.consensus.failed_conditions:
+            return "consensus_disagreement"
+        return "consensus_non_accept"
+    return "manual_review_routing"
+
+
 def build_manual_review_entry(candidate: Candidate) -> dict:
     g = candidate.generator_item or {}
     r = candidate.reviewer_item or {}
     s = candidate.solver_item or {}
+    consensus = None if candidate.consensus is None else {
+        "auto_accept": candidate.consensus.auto_accept,
+        "routing": candidate.consensus.routing,
+        "failed_conditions": candidate.consensus.failed_conditions,
+        "disagreement_reasons": candidate.consensus.disagreement_reasons,
+    }
+    failure = None if candidate.failure is None else {
+        "kind": candidate.failure.kind,
+        "stage": candidate.failure.stage,
+        "detail": candidate.failure.detail,
+    }
     return {
         "item_id": candidate.item_id,
         "section": candidate.section,
         "item": g,
-        "disagreement_reasons": [] if candidate.consensus is None else candidate.consensus.disagreement_reasons,
+        "routing_reason": _manual_review_routing_reason(candidate),
+        "consensus": consensus,
+        "failed_conditions": [] if consensus is None else consensus["failed_conditions"],
+        "disagreement_reasons": [] if consensus is None else consensus["disagreement_reasons"],
+        "failure": failure,
+        "leakage_check": candidate.leakage_check,
+        "notes": list(candidate.notes),
         "generator_answer": g.get("correct_answer"),
         "reviewer_answer": r.get("independent_answer"),
         "solver_answer": s.get("solver_answer"),
@@ -1404,13 +1504,31 @@ def append_manual_review_queue(config: dict, entries: list[dict]) -> Path:
                     f"manual review queue {path} contains duplicate item_id {entry['item_id']!r}"
                 )
             existing_ids.add(entry["item_id"])
+        incoming_by_id: dict[str, dict] = {}
+        incoming_order: list[str] = []
         for entry in entries:
             if not isinstance(entry, dict) or not isinstance(entry.get("item_id"), str):
                 raise JsonPersistenceError("new manual review entry has no valid item_id")
-            if entry["item_id"] not in existing_ids:
-                existing.append(entry)
-                existing_ids.add(entry["item_id"])
-        atomic_write_json(path, {"items": existing})
+            item_id = entry["item_id"]
+            if item_id not in incoming_by_id:
+                incoming_order.append(item_id)
+            # Last entry for an item in one append operation is the newest
+            # snapshot and must win deterministically.
+            incoming_by_id[item_id] = entry
+
+        merged: list[dict] = []
+        replaced_ids: set[str] = set()
+        for entry in existing:
+            item_id = entry["item_id"]
+            if item_id in incoming_by_id:
+                merged.append(incoming_by_id[item_id])
+                replaced_ids.add(item_id)
+            else:
+                merged.append(entry)
+        for item_id in incoming_order:
+            if item_id not in replaced_ids and item_id not in existing_ids:
+                merged.append(incoming_by_id[item_id])
+        atomic_write_json(path, {"items": merged})
     return path
 
 

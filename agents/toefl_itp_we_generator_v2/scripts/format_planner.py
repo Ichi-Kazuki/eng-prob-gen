@@ -1,4 +1,4 @@
-"""WE v2.1 format planning and span-selection policy.
+"""WE v2.1.1 format planning and span-selection policy.
 
 This module owns only the format layer.  It does not generate prose, mutate
 grammar, or decide whether an error is valid.  The official 125-item artifact
@@ -14,6 +14,7 @@ import json
 import math
 import random
 import re
+import sys
 from collections import Counter
 from dataclasses import dataclass
 from functools import lru_cache
@@ -23,7 +24,16 @@ from typing import Any, Iterable, Sequence
 
 ROOT = Path(__file__).resolve().parents[3]
 OFFICIAL_SOURCE = ROOT / "analysis" / "we_format" / "written_expression_format_official.json"
-TOKEN_RE = re.compile(r"[\w]+(?:['-][\w]+)*", re.UNICODE)
+sys.path.insert(0, str(ROOT))
+
+from shared.tokenization import (  # noqa: E402
+    LEXICAL_TOKEN_RE,
+    lexical_token_matches,
+    lexical_token_spans,
+)
+
+
+TOKEN_RE = LEXICAL_TOKEN_RE
 LABELS = ("A", "B", "C", "D")
 SPAN_TYPES = {"SINGLE_WORD", "SHORT_PHRASE", "CLAUSE_OR_CLAUSE_LIKE"}
 NORMAL_MAX_SPAN_WORDS = 4
@@ -288,7 +298,7 @@ def sample_format_plan(rng: random.Random, profile: dict[str, Any] | None = None
         for _ in range(3)
     )
     # The official marked-span sample contains no 5+ word spans.  A normal
-    # v2.1 plan therefore never asks for one, even when grammar could justify
+    # v2.1.1 plan therefore never asks for one, even when grammar could justify
     # a longer syntactic unit; it is excluded at sampling time, not shortened.
     answer_position = str(_sample_observation(profile["correct_positions"], rng))
     return FormatPlan(sentence, correct_span, gap_targets, distractors, answer_position)
@@ -326,7 +336,7 @@ def plan_summary(plan: FormatPlan, profile: dict[str, Any] | None = None) -> dic
 
 
 def lexical_tokens(sentence: str) -> list[re.Match[str]]:
-    return list(TOKEN_RE.finditer(sentence))
+    return lexical_token_matches(sentence)
 
 
 def _span_text(sentence: str, token_matches: Sequence[re.Match[str]], start: int, end: int) -> str:
@@ -580,8 +590,13 @@ def _non_overlapping(spans: Sequence[SpanCandidate]) -> bool:
 
 
 def _unique_substring(sentence: str, text: str) -> bool:
-    first = sentence.find(text)
-    return first >= 0 and sentence.find(text, first + 1) < 0
+    """Return whether a candidate occurs once as a lexical token sequence.
+
+    The historical helper name is retained for compatibility with callers,
+    but uniqueness is intentionally no longer based on raw substring search.
+    """
+
+    return len(lexical_token_spans(sentence, text)) == 1
 
 
 def _gaps(spans: Sequence[SpanCandidate]) -> tuple[int, int, int]:
@@ -679,7 +694,10 @@ def select_span_set(
     The grammar-provided correct locus is authoritative even when its type
     differs from the independently sampled format type.  A 5+ word correct
     locus is accepted only when ``long_span_rationale`` documents the grammar
-    exception; distractors remain capped at the normal four words.
+    exception; distractors remain capped at the normal four words.  The
+    ``same_phrase_multiple_distractors`` config flag is a soft preference:
+    there is no deterministic phrase-group parser, so syntactic coherence is
+    used for ranking without pretending to enforce an ambiguous grouping.
     """
 
     rng = rng or random.Random(0)
@@ -733,7 +751,7 @@ def select_span_set(
                 continue
             gaps = _gaps(spans)
             # Official observed gaps start at one.  A zero-gap set is not a
-            # normal v2.1 candidate and is rejected before scoring.
+            # normal v2.1.1 candidate and is rejected before scoring.
             if any(gap < 1 for gap in gaps):
                 continue
             score = score_span_set(len(token_matches), spans, anchor, plan, profile)
@@ -812,9 +830,9 @@ def pre_emission_checks(
                 "5+ word spans require a non-empty long_span_rationale for the correct span"
             )
     if gaps and any(gap < 1 for gap in gaps):
-        errors.append("zero-gap adjacency is disallowed in normal v2.1 planning")
+        errors.append("zero-gap adjacency is disallowed in normal v2.1.1 planning")
     if coverage >= 1.0:
-        errors.append("100% marked coverage is disallowed in normal v2.1 planning")
+        errors.append("100% marked coverage is disallowed in normal v2.1.1 planning")
     if word_count - total_marked <= 0:
         errors.append("unmarked context must remain positive")
     actual_type = ordered[ordered.index(correct_span)].span_type if correct_span in ordered else None

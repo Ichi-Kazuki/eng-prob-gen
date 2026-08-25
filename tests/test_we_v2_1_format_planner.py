@@ -1,4 +1,4 @@
-"""Unit and regression coverage for the WE v2.1 format-only policy."""
+"""Unit and regression coverage for the WE v2.1.1 format-only policy."""
 
 from __future__ import annotations
 
@@ -23,13 +23,16 @@ from format_planner import (  # noqa: E402
     enumerate_candidate_spans,
     empirical_probabilities,
     get_official_profile,
+    lexical_tokens,
     pre_emission_checks,
     sample_correct_span_plan,
     sample_sentence_length_plan,
     select_span_set,
     syntactic_coherence_score,
     SpanSelectionError,
+    _unique_substring,
 )
+from validate_format import span_token_indices, tokens as validator_tokens  # noqa: E402
 
 
 class WeV21FormatPlannerTests(unittest.TestCase):
@@ -72,6 +75,48 @@ class WeV21FormatPlannerTests(unittest.TestCase):
         candidates = enumerate_candidate_spans(sentence)
         self.assertTrue(candidates)
         self.assertLessEqual(max(candidate.word_count for candidate in candidates), 4)
+
+    def test_span_uniqueness_uses_lexical_tokens_not_raw_substrings(self) -> None:
+        cases = (
+            ("An international team worked in Europe.", "in"),
+            ("he left the theater.", "he"),
+            ("They arrived at the station.", "at"),
+            ("There was the answer.", "the"),
+        )
+        for sentence, span in cases:
+            with self.subTest(sentence=sentence, span=span):
+                indices, errors = span_token_indices(sentence, span)
+                self.assertTrue(indices, errors)
+                self.assertEqual(errors, [])
+                self.assertTrue(_unique_substring(sentence, span))
+
+        repeated_token, errors = span_token_indices("the the station opened.", "the")
+        self.assertEqual(repeated_token, [])
+        self.assertIn("more than once", " ".join(errors))
+
+        repeated_phrase, errors = span_token_indices(
+            "The long term plan replaced the long term trial.", "long term"
+        )
+        self.assertEqual(repeated_phrase, [])
+        self.assertIn("more than once", " ".join(errors))
+
+    def test_planner_and_validator_share_apostrophe_hyphen_tokenization(self) -> None:
+        text = "student's student’s long-term valley's valley’s 1900's"
+        self.assertEqual(len(lexical_tokens(text)), 6)
+        self.assertEqual(len(lexical_tokens(text)), len(validator_tokens(text)))
+        punctuation = "... — !"
+        self.assertEqual(len(lexical_tokens(punctuation)), 0)
+        self.assertEqual(len(validator_tokens(punctuation)), 0)
+
+    def test_same_phrase_multiple_distractors_is_documented_as_soft_preference(self) -> None:
+        config = json.loads(
+            (ROOT / "agents/toefl_itp_we_generator_v2/config/we_v2_format_config.json")
+            .read_text(encoding="utf-8")
+        )
+        policy = config["v2_1_policy"]["span_candidates"]
+        self.assertFalse(policy["same_phrase_multiple_distractors"])
+        self.assertEqual(policy["same_phrase_multiple_distractors_enforcement"], "soft_preference")
+        self.assertIn("soft preference", select_span_set.__doc__)
 
     def test_syntactic_coherence_prefers_complete_local_units(self) -> None:
         sentence = (
@@ -255,7 +300,7 @@ class WeV21FormatPlannerTests(unittest.TestCase):
         self.assertIn("candidate spans", prompt)
         self.assertIn("5+ word span", prompt)
         self.assertIn("zero-gap", prompt)
-        self.assertIn("v2.1", prompt)
+        self.assertIn("v2.1.1", prompt)
 
     def test_schema_accepts_historical_v20_and_current_v21_version_literals(self) -> None:
         schema = json.loads((ROOT / "agents" / "toefl_itp_we_generator_v2" / "schema" / "written_expression_item_v2.schema.json").read_text(encoding="utf-8"))

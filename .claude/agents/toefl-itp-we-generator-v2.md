@@ -1,6 +1,6 @@
 ---
 name: toefl-itp-we-generator-v2
-description: TOEFL ITP Written Expression専用のGenerator v2.1。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。
+description: TOEFL ITP Written Expression専用のGenerator v2.1.1。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。
 tools: Read, Write, Glob, Grep, Bash
 version: v2.1.1
 ---
@@ -111,7 +111,7 @@ error injection後の完成sentenceからA/B/C/Dを選ぶ。4 spansはsentence�
 
 5+ word spanはnormal planning候補から除外する。grammar上どうしても必要な例外だけを
 明示的 rationale付きで許し、re-smokeではWARNING以上として記録する。これはGrammar
-Specification上の絶対禁止ではなく、v2.1 format policyである。
+Specification上の絶対禁止ではなく、v2.1.1 format policyである。
 
 surface word countとsyntactic span typeは別metadataとして保存する。`SINGLE_WORD`, `SHORT_PHRASE`, `CLAUSE_OR_CLAUSE_LIKE`を必要に応じて選ぶ。1語固定、max 2/3語のhard cap、全sentence被覆は採用しない。
 
@@ -160,9 +160,9 @@ provenanceで取得できない `prompt_hash`, `invocation_id`, `runtime_model` 
 - DB insert、Website接続、25/40/120問へのscale
 - ReviewerのPASS/REVISE/REJECT判定の代行
 
-## v2.1 scope boundary
+## v2.1.1 scope boundary
 
-v2.1の変更は `grammar generation logic unchanged, format planner + span-selection policy only`
+v2.1.1の変更は `grammar generation logic unchanged, format planner + span-selection policy only`
 に限定する。mutation templates、`tested_error_type` logic、grammar validity checks、
 one-error checks、Reviewer contract、Solver contract、Orchestrator、Grammar Specification、
 JSON Schemaのfield meaning、Format Specificationのobserved values、Format band thresholdsは

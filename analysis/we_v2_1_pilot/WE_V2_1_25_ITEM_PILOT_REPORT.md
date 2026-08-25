@@ -1,4 +1,7 @@
-# WE v2.1 — 25-item Independent Pilot
+# WE v2.1.1-compatible — 25-item Independent Pilot
+
+> This locked pilot retains its historical v2.1 run IDs and schema-contract
+> literals for compatibility; the current runtime implementation is v2.1.1.
 
 Run: `we-v2.1-25-item-pilot-20260825`  
 Status: **CONTRACT_REPLAY_ONLY**  

@@ -2,7 +2,7 @@
   "report_version": "WE_V2_1_25_ITEM_PILOT_1.0",
   "run": {
     "run_id": "we-v2.1-25-item-pilot-20260825",
-    "started_at_utc": "2026-08-25T12:23:43.845841+00:00",
+    "started_at_utc": "2026-08-25T14:24:41.826389+00:00",
     "agent_version": "Written Expression Generator v2.1",
     "reviewer_version": "Written Expression Reviewer v2.0",
     "solver_version": "TOEFL ITP Grammar Independent Solver Agent",
@@ -23,7 +23,7 @@
     "version_lock": {
       "generator_prompt": {
         "path": ".claude/agents/toefl-itp-we-generator-v2.md",
-        "sha256": "sha256:b42f60f859a36cadd576ad9d3fd7cbd7be6104e8822986e7bd451d281d6e3609"
+        "sha256": "sha256:b2b44bb4f5b1cfaa41453e119af24f92f8dff55027fc5bc9c046edffc0dfe6b5"
       },
       "reviewer_prompt": {
         "path": ".claude/agents/toefl-itp-we-reviewer-v2.md",
@@ -35,7 +35,7 @@
       },
       "orchestrator": {
         "path": "orchestrator/scripts/orchestrator.py",
-        "sha256": "sha256:13d49840f00b06042d7b982fcde163fe3698d84757510b7faf199fa9054b8f5a"
+        "sha256": "sha256:89c75a105ff82a86aee87772101ce51299ba91b648020d9a553652cbbd497f02"
       },
       "grammar_spec": {
         "path": "specs/toefl_itp_grammar_spec.json",
@@ -47,7 +47,7 @@
       },
       "format_config": {
         "path": "agents/toefl_itp_we_generator_v2/config/we_v2_format_config.json",
-        "sha256": "sha256:3d740c542e122bc7624fa67f9eefa48615725d0ba467ffd2ed68f0cdf7d537ce"
+        "sha256": "sha256:24801aaf1b62b808ebb14aff554df9825fea971fdc7bcc696bbb7f9579e8824b"
       },
       "generator_schema": {
         "path": "agents/toefl_itp_we_generator_v2/schema/written_expression_item_v2.schema.json",
@@ -103,14 +103,14 @@
           "024": "01a038cb-c01e-7072-9677-1ed5b80ee614",
           "025": "01a038ce-b667-7f91-b05d-7ba88ebacc2c"
         },
-        "timestamp": "2026-08-25T12:23:43.845841+00:00"
+        "timestamp": "2026-08-25T14:24:41.826389+00:00"
       },
       "reviewer": {
         "available": false,
         "runtime": "multi_agent_v1",
         "model_identifier": null,
         "invocation_id": null,
-        "timestamp": "2026-08-25T12:23:43.845841+00:00",
+        "timestamp": "2026-08-25T14:24:41.826389+00:00",
         "reason": "No distinct Reviewer runtime invocation was available after the Agent thread limit; no synthetic verdicts were created."
       },
       "solver": {
@@ -118,13 +118,13 @@
         "runtime": "multi_agent_v1",
         "model_identifier": null,
         "invocation_id": null,
-        "timestamp": "2026-08-25T12:23:43.845841+00:00",
+        "timestamp": "2026-08-25T14:24:41.826389+00:00",
         "reason": "No distinct Solver runtime invocation was available after the Agent thread limit; no synthetic answers were created."
       }
     }
   },
   "policy": {
-    "grammar_generation": "current WE Generator v2.1",
+    "grammar_generation": "current WE Generator v2.1.1",
     "changed_surface": "none during pilot",
     "normal_max_span_words": 4,
     "normal_min_gap": 1,
@@ -633,9 +633,14 @@
         "changed_error_token_indices": [
           6
         ],
+        "clean_locus_token_indices": [
+          6
+        ],
         "marked_correct_token_indices": [
           6
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -653,9 +658,14 @@
         "changed_error_token_indices": [
           13
         ],
+        "clean_locus_token_indices": [
+          13
+        ],
         "marked_correct_token_indices": [
           13
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -673,9 +683,14 @@
         "changed_error_token_indices": [
           11
         ],
+        "clean_locus_token_indices": [
+          11
+        ],
         "marked_correct_token_indices": [
           11
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -693,9 +708,14 @@
         "changed_error_token_indices": [
           11
         ],
+        "clean_locus_token_indices": [
+          11
+        ],
         "marked_correct_token_indices": [
           11
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -713,9 +733,14 @@
         "changed_error_token_indices": [
           14
         ],
+        "clean_locus_token_indices": [
+          14
+        ],
         "marked_correct_token_indices": [
           14
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -733,9 +758,14 @@
         "changed_error_token_indices": [
           12
         ],
+        "clean_locus_token_indices": [
+          12
+        ],
         "marked_correct_token_indices": [
           12
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -753,9 +783,14 @@
         "changed_error_token_indices": [
           9
         ],
+        "clean_locus_token_indices": [
+          9
+        ],
         "marked_correct_token_indices": [
           9
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -773,9 +808,14 @@
         "changed_error_token_indices": [
           8
         ],
+        "clean_locus_token_indices": [
+          8
+        ],
         "marked_correct_token_indices": [
           8
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -793,9 +833,14 @@
         "changed_error_token_indices": [
           9
         ],
+        "clean_locus_token_indices": [
+          9
+        ],
         "marked_correct_token_indices": [
           9
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -813,9 +858,14 @@
         "changed_error_token_indices": [
           5
         ],
+        "clean_locus_token_indices": [
+          5
+        ],
         "marked_correct_token_indices": [
           5
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -833,9 +883,14 @@
         "changed_error_token_indices": [
           8
         ],
+        "clean_locus_token_indices": [
+          8
+        ],
         "marked_correct_token_indices": [
           8
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -853,9 +908,14 @@
         "changed_error_token_indices": [
           14
         ],
+        "clean_locus_token_indices": [
+          14
+        ],
         "marked_correct_token_indices": [
           14
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -873,9 +933,14 @@
         "changed_error_token_indices": [
           15
         ],
+        "clean_locus_token_indices": [
+          15
+        ],
         "marked_correct_token_indices": [
           15
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -893,9 +958,14 @@
         "changed_error_token_indices": [
           15
         ],
+        "clean_locus_token_indices": [
+          15
+        ],
         "marked_correct_token_indices": [
           15
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -913,9 +983,14 @@
         "changed_error_token_indices": [
           16
         ],
+        "clean_locus_token_indices": [
+          16
+        ],
         "marked_correct_token_indices": [
           16
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -933,9 +1008,14 @@
         "changed_error_token_indices": [
           9
         ],
+        "clean_locus_token_indices": [
+          9
+        ],
         "marked_correct_token_indices": [
           9
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -953,9 +1033,14 @@
         "changed_error_token_indices": [
           12
         ],
+        "clean_locus_token_indices": [
+          12
+        ],
         "marked_correct_token_indices": [
           12
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -973,9 +1058,14 @@
         "changed_error_token_indices": [
           12
         ],
+        "clean_locus_token_indices": [
+          12
+        ],
         "marked_correct_token_indices": [
           12
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -993,9 +1083,14 @@
         "changed_error_token_indices": [
           13
         ],
+        "clean_locus_token_indices": [
+          13
+        ],
         "marked_correct_token_indices": [
           13
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -1013,9 +1108,14 @@
         "changed_error_token_indices": [
           12
         ],
+        "clean_locus_token_indices": [
+          12
+        ],
         "marked_correct_token_indices": [
           12
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -1033,9 +1133,14 @@
         "changed_error_token_indices": [
           13
         ],
+        "clean_locus_token_indices": [
+          13
+        ],
         "marked_correct_token_indices": [
           13
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -1053,9 +1158,14 @@
         "changed_error_token_indices": [
           10
         ],
+        "clean_locus_token_indices": [
+          10
+        ],
         "marked_correct_token_indices": [
           10
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -1073,9 +1183,14 @@
         "changed_error_token_indices": [
           15
         ],
+        "clean_locus_token_indices": [
+          15
+        ],
         "marked_correct_token_indices": [
           15
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -1093,11 +1208,18 @@
         "changed_error_token_indices": [
           14
         ],
+        "clean_locus_token_indices": [
+          14,
+          15,
+          16
+        ],
         "marked_correct_token_indices": [
           14,
           15,
           16
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -1115,9 +1237,14 @@
         "changed_error_token_indices": [
           9
         ],
+        "clean_locus_token_indices": [
+          9
+        ],
         "marked_correct_token_indices": [
           9
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -1632,9 +1759,14 @@
         "changed_error_token_indices": [
           6
         ],
+        "clean_locus_token_indices": [
+          6
+        ],
         "marked_correct_token_indices": [
           6
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -1778,9 +1910,14 @@
         "changed_error_token_indices": [
           13
         ],
+        "clean_locus_token_indices": [
+          13
+        ],
         "marked_correct_token_indices": [
           13
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -1925,9 +2062,14 @@
         "changed_error_token_indices": [
           11
         ],
+        "clean_locus_token_indices": [
+          11
+        ],
         "marked_correct_token_indices": [
           11
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -2071,9 +2213,14 @@
         "changed_error_token_indices": [
           11
         ],
+        "clean_locus_token_indices": [
+          11
+        ],
         "marked_correct_token_indices": [
           11
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -2218,9 +2365,14 @@
         "changed_error_token_indices": [
           14
         ],
+        "clean_locus_token_indices": [
+          14
+        ],
         "marked_correct_token_indices": [
           14
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -2365,9 +2517,14 @@
         "changed_error_token_indices": [
           12
         ],
+        "clean_locus_token_indices": [
+          12
+        ],
         "marked_correct_token_indices": [
           12
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -2512,9 +2669,14 @@
         "changed_error_token_indices": [
           9
         ],
+        "clean_locus_token_indices": [
+          9
+        ],
         "marked_correct_token_indices": [
           9
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -2659,9 +2821,14 @@
         "changed_error_token_indices": [
           8
         ],
+        "clean_locus_token_indices": [
+          8
+        ],
         "marked_correct_token_indices": [
           8
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -2807,9 +2974,14 @@
         "changed_error_token_indices": [
           9
         ],
+        "clean_locus_token_indices": [
+          9
+        ],
         "marked_correct_token_indices": [
           9
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -2955,9 +3127,14 @@
         "changed_error_token_indices": [
           5
         ],
+        "clean_locus_token_indices": [
+          5
+        ],
         "marked_correct_token_indices": [
           5
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -3101,9 +3278,14 @@
         "changed_error_token_indices": [
           8
         ],
+        "clean_locus_token_indices": [
+          8
+        ],
         "marked_correct_token_indices": [
           8
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -3248,9 +3430,14 @@
         "changed_error_token_indices": [
           14
         ],
+        "clean_locus_token_indices": [
+          14
+        ],
         "marked_correct_token_indices": [
           14
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -3394,9 +3581,14 @@
         "changed_error_token_indices": [
           15
         ],
+        "clean_locus_token_indices": [
+          15
+        ],
         "marked_correct_token_indices": [
           15
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -3541,9 +3733,14 @@
         "changed_error_token_indices": [
           15
         ],
+        "clean_locus_token_indices": [
+          15
+        ],
         "marked_correct_token_indices": [
           15
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -3688,9 +3885,14 @@
         "changed_error_token_indices": [
           16
         ],
+        "clean_locus_token_indices": [
+          16
+        ],
         "marked_correct_token_indices": [
           16
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -3834,9 +4036,14 @@
         "changed_error_token_indices": [
           9
         ],
+        "clean_locus_token_indices": [
+          9
+        ],
         "marked_correct_token_indices": [
           9
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -3980,9 +4187,14 @@
         "changed_error_token_indices": [
           12
         ],
+        "clean_locus_token_indices": [
+          12
+        ],
         "marked_correct_token_indices": [
           12
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -4128,9 +4340,14 @@
         "changed_error_token_indices": [
           12
         ],
+        "clean_locus_token_indices": [
+          12
+        ],
         "marked_correct_token_indices": [
           12
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -4274,9 +4491,14 @@
         "changed_error_token_indices": [
           13
         ],
+        "clean_locus_token_indices": [
+          13
+        ],
         "marked_correct_token_indices": [
           13
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -4420,9 +4642,14 @@
         "changed_error_token_indices": [
           12
         ],
+        "clean_locus_token_indices": [
+          12
+        ],
         "marked_correct_token_indices": [
           12
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -4569,9 +4796,14 @@
         "changed_error_token_indices": [
           13
         ],
+        "clean_locus_token_indices": [
+          13
+        ],
         "marked_correct_token_indices": [
           13
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -4715,9 +4947,14 @@
         "changed_error_token_indices": [
           10
         ],
+        "clean_locus_token_indices": [
+          10
+        ],
         "marked_correct_token_indices": [
           10
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -4864,9 +5101,14 @@
         "changed_error_token_indices": [
           15
         ],
+        "clean_locus_token_indices": [
+          15
+        ],
         "marked_correct_token_indices": [
           15
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -5012,11 +5254,18 @@
         "changed_error_token_indices": [
           14
         ],
+        "clean_locus_token_indices": [
+          14,
+          15,
+          16
+        ],
         "marked_correct_token_indices": [
           14,
           15,
           16
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,
@@ -5160,9 +5409,14 @@
         "changed_error_token_indices": [
           9
         ],
+        "clean_locus_token_indices": [
+          9
+        ],
         "marked_correct_token_indices": [
           9
         ],
+        "clean_locus_accounted_for": true,
+        "error_locus_accounted_for": true,
         "all_surface_edits_accounted_for": true,
         "external_mutation": true,
         "one_intended_marked_locus": true,

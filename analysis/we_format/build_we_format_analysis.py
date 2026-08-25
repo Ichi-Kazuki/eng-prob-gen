@@ -12,6 +12,7 @@ import json
 import math
 import re
 import statistics
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable
@@ -19,15 +20,17 @@ from typing import Any, Iterable
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "analysis" / "we_format"
+sys.path.insert(0, str(ROOT))
+
+from shared.tokenization import LEXICAL_TOKEN_PATTERN, lexical_tokens  # noqa: E402
 
 TOKENIZATION_RULE = (
     "Unicode-aware lexical tokens: [letters/numbers] sequences are words; an "
     "internal apostrophe or hyphen remains inside the same token; punctuation-only "
     "tokens are excluded. Contractions, possessives, hyphenated forms, and numeric "
     "forms such as 1900's count as one token. The same rule is used for sentences, "
-    "marked spans, corrections, and gaps."
+    "marked spans, corrections, and gaps. Pattern: " + LEXICAL_TOKEN_PATTERN
 )
-WORD_RE = re.compile(r"[^\W_]+(?:['’\-][^\W_]+)*", re.UNICODE)
 
 
 # Counts read from the four underlined spans on the official PDF pages.  The PDF
@@ -76,7 +79,7 @@ OFFICIAL_SPAN_COUNTS: dict[str, list[int]] = {
 
 
 def words(text: str | None) -> list[str]:
-    return WORD_RE.findall(text or "")
+    return lexical_tokens(text)
 
 
 def norm(text: str) -> str:

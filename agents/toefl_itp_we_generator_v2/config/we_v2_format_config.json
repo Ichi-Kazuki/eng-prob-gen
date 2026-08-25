@@ -9,7 +9,7 @@
   },
   "tokenization": {
     "description": "Unicode-aware lexical tokens; internal apostrophes and hyphens remain inside a token; punctuation-only tokens are excluded.",
-    "regex": "[\\w]+(?:['-][\\w]+)*"
+    "regex": "[^\\W_]+(?:['’\\-][^\\W_]+)*"
   },
   "empirical_band_method": {
     "name": "nearest_rank_empirical_quantile",
@@ -57,7 +57,7 @@
     "correct_span_types": {"SINGLE_WORD": 0.784, "SHORT_PHRASE": 0.096, "CLAUSE_OR_CLAUSE_LIKE": 0.12},
     "correction_locality": {"DEPENDENCY_BASED": 0.152, "LOCAL_SHORT_SPAN": 0.104, "SEMANTIC_OR_CONTEXT_DEPENDENT": 0.088, "LOCAL_SINGLE_TOKEN": 0.224, "CLAUSE_LEVEL": 0.432},
     "decision_granularity": {"FUNCTION_WORD": 0.208, "WORD_ORDER": 0.048, "CLAUSE_RELATION": 0.064, "VERB_FRAME": 0.352, "OTHER": 0.056, "MORPHOLOGY": 0.12, "WORD_CLASS": 0.032, "AGREEMENT_DEPENDENCY": 0.112, "LOCAL_PHRASE": 0.008},
-    "use": "Historical v2 guidance retained for diagnostics; v2.1 derives sampling from the official artifact at runtime rather than consuming hand-copied probabilities."
+    "use": "Historical v2 guidance retained for diagnostics; v2.1.1 derives sampling from the official artifact at runtime rather than consuming hand-copied probabilities."
   },
   "v2_1_policy": {
     "implementation": "agents/toefl_itp_we_generator_v2/scripts/format_planner.py",
@@ -77,7 +77,9 @@
       "normal_max_word_count": 4,
       "preferred_word_counts": [1, 2],
       "zero_gap_normal_case": false,
-      "same_phrase_multiple_distractors": false
+      "same_phrase_multiple_distractors": false,
+      "same_phrase_multiple_distractors_enforcement": "soft_preference",
+      "same_phrase_multiple_distractors_note": "No deterministic phrase-group parser is defined; syntactic_coherence scoring provides a soft preference and this field is not a hard invariant."
     },
     "gap_sampling": {
       "method": "empirical_draw_from_items_gap_A_B_gap_B_C_gap_C_D",

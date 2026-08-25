@@ -43,10 +43,17 @@ def exclusive_file_lock(path: Path) -> Iterator[None]:
     """Best-effort cross-platform single-writer lock for one JSON file."""
     lock_path = Path(f"{path}.lock")
     lock_path.parent.mkdir(parents=True, exist_ok=True)
-    handle = lock_path.open("a+", encoding="utf-8")
+    # Windows byte-range locking requires a real byte at the lock offset.
+    # Keep the lock file binary and seed it once before taking byte 0.
+    handle = lock_path.open("a+b")
     try:
         if os.name == "nt":
             import msvcrt
+            handle.seek(0, os.SEEK_END)
+            if handle.tell() == 0:
+                handle.write(b"\0")
+                handle.flush()
+            handle.seek(0)
             msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
         else:  # pragma: no cover - Windows is the supported runtime here
             import fcntl

@@ -1,4 +1,11 @@
-# WE v2.1 deterministic format validator
+# WE v2.1.1 deterministic format validator
+
+The lexical token contract is shared with the planner, format analysis, and
+pilot integrity audit through `shared/tokenization.py`: Unicode letters and
+numbers form tokens, internal ASCII/curly apostrophes and hyphens stay inside
+one token, and punctuation-only fragments are excluded. The
+`same_phrase_multiple_distractors` setting is a soft preference because no
+deterministic phrase-group parser is defined.
 
 `scripts/validate_format.py` is independent of the LLM Generator and Reviewer. It applies the addendum tokenization rule and calculates span alignment, overlap/order, word counts, marked coverage, unmarked context, three gaps, correct-span size/type, empirical percentile profile, and format band.
 

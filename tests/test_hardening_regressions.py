@@ -71,6 +71,13 @@ def _state_transaction_worker(
             release.wait(10)
 
 
+def _queue_append_worker(queue_path: str, item_id: str) -> None:
+    core.append_manual_review_queue(
+        {"paths": {"manual_review_queue": queue_path}},
+        [{"item_id": item_id, "routing_reason": "concurrent-test"}],
+    )
+
+
 class GeneratorSchemaRegressions(unittest.TestCase):
     def test_required_fields_and_unknown_properties_are_rejected(self) -> None:
         structure = fixture("analysis/generator_smoke_test.json", 0)
@@ -612,6 +619,15 @@ class CandidatePersistenceInvariantRegressions(unittest.TestCase):
         candidate.reviewer_item = reviewer
         return candidate
 
+    def base_accepted_candidate(self) -> core.Candidate:
+        candidate = self.base_solver_candidate()
+        solver = fixture("analysis/solver_smoke_test.json", 0)
+        with mock.patch.object(core, "run_schema_validator", return_value=(True, "")):
+            candidate = core.process_solver_stage(candidate, core.load_config(), solver)
+        self.assertEqual(candidate.state, core.State.ACCEPTED)
+        self.assertIsNotNone(candidate.consensus)
+        return candidate
+
     def test_solving_with_revise_verdict_is_rejected_on_load(self) -> None:
         candidate = self.base_solver_candidate()
         candidate.reviewer_item = copy.deepcopy(candidate.reviewer_item)
@@ -637,6 +653,75 @@ class CandidatePersistenceInvariantRegressions(unittest.TestCase):
         self.assert_corrupt_state_rejected(
             {candidate.item_id: data},
             "invalid state transition",
+        )
+
+    def test_normal_persisted_accepted_state_loads(self) -> None:
+        candidate = self.base_accepted_candidate()
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "candidates_state.json"
+            core.save_candidate_state(path, {candidate.item_id: candidate})
+            loaded = core.load_candidate_state(path)[candidate.item_id]
+        self.assertEqual(loaded.state, core.State.ACCEPTED)
+        self.assertEqual(loaded.solver_input, candidate.solver_input)
+
+    def test_accepted_state_solver_answer_tampering_is_rejected(self) -> None:
+        candidate = self.base_accepted_candidate()
+        data = core.candidate_to_dict(candidate)
+        original_answer = data["solver_item"]["solver_answer"]
+        data["solver_item"]["solver_answer"] = "D" if original_answer != "D" else "A"
+        self.assertTrue(data["consensus"]["auto_accept"])
+        self.assert_corrupt_state_rejected(
+            {candidate.item_id: data}, "recomputed consensus|consensus metadata"
+        )
+
+    def test_accepted_state_solver_confidence_low_is_rejected(self) -> None:
+        candidate = self.base_accepted_candidate()
+        data = core.candidate_to_dict(candidate)
+        data["solver_item"]["confidence"] = "LOW"
+        self.assert_corrupt_state_rejected(
+            {candidate.item_id: data}, "recomputed consensus|consensus metadata"
+        )
+
+    def test_accepted_state_solver_ambiguity_is_rejected(self) -> None:
+        candidate = self.base_accepted_candidate()
+        data = core.candidate_to_dict(candidate)
+        data["solver_item"]["ambiguity_detected"] = True
+        self.assert_corrupt_state_rejected(
+            {candidate.item_id: data}, "recomputed consensus|consensus metadata"
+        )
+
+    def test_accepted_state_high_source_similarity_risk_is_rejected(self) -> None:
+        candidate = self.base_accepted_candidate()
+        data = core.candidate_to_dict(candidate)
+        data["reviewer_item"]["source_similarity_risk"] = "HIGH"
+        self.assert_corrupt_state_rejected(
+            {candidate.item_id: data}, "recomputed consensus|consensus metadata"
+        )
+
+    def test_accepted_state_answer_disagreement_cannot_hide_behind_stale_consensus(self) -> None:
+        candidate = self.base_accepted_candidate()
+        data = core.candidate_to_dict(candidate)
+        data["solver_item"]["solver_answer"] = "D"
+        data["consensus"]["auto_accept"] = True
+        data["consensus"]["routing"] = core.State.ACCEPTED
+        self.assert_corrupt_state_rejected(
+            {candidate.item_id: data}, "recomputed consensus|consensus metadata"
+        )
+
+    def test_accepted_state_solver_input_stem_tampering_is_rejected(self) -> None:
+        candidate = self.base_accepted_candidate()
+        data = core.candidate_to_dict(candidate)
+        data["solver_input"]["stem"] += " altered"
+        self.assert_corrupt_state_rejected(
+            {candidate.item_id: data}, "canonical blinded payload"
+        )
+
+    def test_accepted_state_solver_input_option_tampering_is_rejected(self) -> None:
+        candidate = self.base_accepted_candidate()
+        data = core.candidate_to_dict(candidate)
+        data["solver_input"]["options"]["A"] += " altered"
+        self.assert_corrupt_state_rejected(
+            {candidate.item_id: data}, "canonical blinded payload"
         )
 
     def test_final_provenance_exposes_separate_retry_counters(self) -> None:
@@ -710,19 +795,63 @@ class GenericGeneratorValidatorRegressions(unittest.TestCase):
 
 
 class PersistenceAndSubprocessRegressions(unittest.TestCase):
+    def test_concurrent_manual_review_queue_appends_preserve_all_entries(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            queue = Path(directory) / "queue.json"
+            context = multiprocessing.get_context("spawn")
+            processes = [
+                context.Process(target=_queue_append_worker, args=(str(queue), f"queue-{index:03d}"))
+                for index in range(6)
+            ]
+            for process in processes:
+                process.start()
+            for process in processes:
+                process.join(20)
+            self.assertTrue(all(process.exitcode == 0 for process in processes))
+            data = json.loads(queue.read_text(encoding="utf-8"))
+            self.assertEqual(
+                {entry["item_id"] for entry in data["items"]},
+                {f"queue-{index:03d}" for index in range(6)},
+            )
+
     def test_queue_deduplicates_and_fails_closed_on_corrupt_json(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             queue = Path(directory) / "queue.json"
             config = {"paths": {"manual_review_queue": str(queue)}}
             entry = {"item_id": "queue-001"}
             core.append_manual_review_queue(config, [entry, entry])
-            core.append_manual_review_queue(config, [entry])
-            self.assertEqual(len(json.loads(queue.read_text(encoding="utf-8"))["items"]), 1)
+            updated = {"item_id": "queue-001", "routing_reason": "retry_exhaustion"}
+            core.append_manual_review_queue(config, [updated])
+            queued = json.loads(queue.read_text(encoding="utf-8"))["items"]
+            self.assertEqual(len(queued), 1)
+            self.assertEqual(queued[0], updated)
             original = "{broken"
             queue.write_text(original, encoding="utf-8")
             with self.assertRaises(JsonPersistenceError):
                 core.append_manual_review_queue(config, [{"item_id": "queue-002"}])
             self.assertEqual(queue.read_text(encoding="utf-8"), original)
+
+    def test_manual_review_entry_preserves_internal_routing_metadata(self) -> None:
+        candidate = core.Candidate("manual-001", "manual-001", "Structure")
+        candidate.state = core.State.MANUAL_REVIEW
+        candidate.state_history = [core.State.GENERATED, core.State.REVIEWING, core.State.SOLVING, core.State.MANUAL_REVIEW]
+        candidate.consensus = core.ConsensusResult(
+            auto_accept=False,
+            routing=core.State.MANUAL_REVIEW,
+            failed_conditions=["solver.solver_answer != generator.correct_answer"],
+            disagreement_reasons=["solver_generator_mismatch"],
+        )
+        candidate.failure = core.FailureInfo("system", "solver", "retry limit exceeded")
+        candidate.leakage_check = {"ok": False, "problems": ["unexpected key: correct_answer"]}
+        candidate.notes = ["solver system retry limit exceeded; routed to MANUAL_REVIEW"]
+        entry = core.build_manual_review_entry(candidate)
+
+        self.assertEqual(entry["routing_reason"], "leakage_guard_failure")
+        self.assertEqual(entry["consensus"]["failed_conditions"], candidate.consensus.failed_conditions)
+        self.assertEqual(entry["consensus"]["disagreement_reasons"], candidate.consensus.disagreement_reasons)
+        self.assertEqual(entry["failure"]["detail"], "retry limit exceeded")
+        self.assertEqual(entry["leakage_check"], candidate.leakage_check)
+        self.assertEqual(entry["notes"], candidate.notes)
 
     def test_validator_timeout_and_unexpected_exit_are_system_failures(self) -> None:
         script = "agents/toefl_itp_grammar_generator/scripts/validate_output.py"

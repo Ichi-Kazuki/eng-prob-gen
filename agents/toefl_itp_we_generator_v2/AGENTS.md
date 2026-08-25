@@ -1,4 +1,8 @@
-# TOEFL ITP Written Expression Generator v2.1
+# TOEFL ITP Written Expression Generator v2.1.1
+
+v2.1.1 is the current runtime implementation label. The JSON Schema and
+output-field contract remain the v2.1 contract because this release is a
+format-only patch; it does not introduce a schema-version bump.
 
 このディレクトリは、既存の `agents/toefl_itp_grammar_generator/` と完全に分離されたWE専用v2実装である。
 
@@ -13,7 +17,7 @@ format plan conformance → sentence全体からのcandidate span列挙 → geom
 → deterministic format diagnostics で固定する。既存v1.1のfull-sentence partition outputを
 入力テンプレートとして再利用しない。
 
-## v2.1 format policy
+## v2.1.1 format policy
 
 - sentence target は `analysis/we_format/written_expression_format_official.json` の
   `items[].sentence_word_count` を empirical sampling する。固定20語、固定13語、または
@@ -37,7 +41,7 @@ format plan conformance → sentence全体からのcandidate span列挙 → geom
   修正できる場合はgrammar locusを固定してreselectionし、sentence planが短い場合はclean
   sentence generationへ戻る。
 
-## v2.1 scope boundary
+## v2.1.1 scope boundary
 
 `grammar generation logic unchanged, format planner + span-selection policy only`。
 mutation templates、`tested_error_type` logic、grammar validity checks、one-error checks、

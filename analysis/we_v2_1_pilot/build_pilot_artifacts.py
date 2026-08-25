@@ -1,4 +1,4 @@
-"""Build the WE v2.1 independent 25-item pilot artifacts.
+"""Build the WE v2.1.1-compatible independent 25-item pilot artifacts.
 
 The Generator outputs are produced one item per Agent microbatch.  This
 builder is deliberately format/integrity-only: it never fabricates Reviewer
@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import re
 import statistics
 import sys
 from collections import Counter
@@ -30,13 +29,14 @@ CONFIG_PATH = ROOT / "agents" / "toefl_itp_we_generator_v2" / "config" / "we_v2_
 
 sys.path.insert(0, str(ROOT / "agents" / "toefl_itp_we_generator_v2" / "scripts"))
 sys.path.insert(0, str(ROOT / "orchestrator" / "scripts"))
+sys.path.insert(0, str(ROOT))
 
 from format_planner import get_official_profile  # noqa: E402
 from validate_format import format_diagnostics, load_json  # noqa: E402
 from orchestrator import blind_for_solver, leakage_guard, load_config  # noqa: E402
+from shared.tokenization import lexical_token_spans, lexical_tokens  # noqa: E402
 
 
-TOKEN_RE = re.compile(r"[\w]+(?:['-][\w]+)*|[^\w\s]", re.UNICODE)
 LABELS = ("A", "B", "C", "D")
 METRIC_KEYS = (
     "sentence_word_count",
@@ -70,18 +70,62 @@ def item_tokens(text: str) -> list[str]:
     # The current mutation-integrity audit is lexical, matching the
     # clean/error alignment used by the historical format audit. Punctuation
     # is not a separate mutation locus.
-    return [match.group(0) for match in re.finditer(r"[\w]+(?:['-][\w]+)*", text, re.UNICODE)]
+    return lexical_tokens(text)
 
 
 def lexical_token_indices(sentence: str, span: str) -> list[int]:
-    token_matches = list(re.finditer(r"[\w]+(?:['-][\w]+)*", sentence, re.UNICODE))
-    span_matches = list(re.finditer(r"[\w]+(?:['-][\w]+)*", span, re.UNICODE))
-    words = [m.group(0) for m in span_matches]
-    sentence_words = [m.group(0) for m in token_matches]
-    for start in range(len(sentence_words) - len(words) + 1):
-        if sentence_words[start : start + len(words)] == words:
-            return list(range(start, start + len(words)))
+    occurrences = lexical_token_spans(sentence, span)
+    if len(occurrences) == 1:
+        start, end = occurrences[0]
+        return list(range(start, end))
     return []
+
+
+def mapped_clean_locus(
+    opcodes: list[tuple[str, int, int, int, int]],
+    error_indices: list[int],
+) -> list[int]:
+    """Map an intended error-side token range back to clean-side tokens.
+
+    SequenceMatcher can represent a local word-order mutation as an insert
+    followed by an equal block and a delete.  Including a zero-width delete at
+    the marked range boundary keeps the moved clean token in the same intended
+    local locus while still rejecting unrelated edits elsewhere.
+    """
+
+    if not error_indices:
+        return []
+    error_start = min(error_indices)
+    error_end = max(error_indices) + 1
+    clean_indices: set[int] = set()
+    for tag, clean_start, clean_end, error_opcode_start, error_opcode_end in opcodes:
+        if tag == "equal":
+            if (
+                clean_start < clean_end
+                and error_opcode_start < error_end
+                and error_opcode_end > error_start
+            ):
+                overlap_start = max(error_opcode_start, error_start)
+                overlap_end = min(error_opcode_end, error_end)
+                clean_indices.update(
+                    range(
+                        clean_start + (overlap_start - error_opcode_start),
+                        clean_start + (overlap_end - error_opcode_start),
+                    )
+                )
+            continue
+        if clean_start == clean_end:
+            continue
+        overlaps = (
+            error_opcode_start < error_end and error_opcode_end > error_start
+        )
+        zero_width_at_boundary = (
+            error_opcode_start == error_opcode_end
+            and error_start <= error_opcode_start <= error_end
+        )
+        if overlaps or zero_width_at_boundary:
+            clean_indices.update(range(clean_start, clean_end))
+    return sorted(clean_indices)
 
 
 def load_generator_items() -> list[dict[str, Any]]:
@@ -137,7 +181,8 @@ def integrity_check(item: dict[str, Any]) -> dict[str, Any]:
     clean_tokens = item_tokens(clean_form or "")
     error_tokens = item_tokens(error_form or "")
     matcher = SequenceMatcher(a=clean_tokens, b=error_tokens, autojunk=False)
-    opcodes = [opcode for opcode in matcher.get_opcodes() if opcode[0] != "equal"]
+    all_opcodes = matcher.get_opcodes()
+    opcodes = [opcode for opcode in all_opcodes if opcode[0] != "equal"]
     changed_error_indices: list[int] = []
     changed_clean_indices: list[int] = []
     for tag, i1, i2, j1, j2 in opcodes:
@@ -146,8 +191,21 @@ def integrity_check(item: dict[str, Any]) -> dict[str, Any]:
     answer = item.get("correct_answer")
     marked = item.get("marked_parts", {})
     marked_indices = lexical_token_indices(sentence or "", marked.get(answer, ""))
+    clean_locus_indices = mapped_clean_locus(all_opcodes, marked_indices)
     external_mutation = error_form == sentence
-    locus_accounted = bool(changed_error_indices) and set(changed_error_indices).issubset(set(marked_indices))
+    error_locus_accounted = (
+        bool(changed_error_indices)
+        and set(changed_error_indices).issubset(set(marked_indices))
+    )
+    clean_locus_accounted = (
+        not changed_clean_indices
+        or set(changed_clean_indices).issubset(set(clean_locus_indices))
+    )
+    locus_accounted = (
+        bool(changed_clean_indices or changed_error_indices)
+        and error_locus_accounted
+        and clean_locus_accounted
+    )
     # A pure local word-order mutation can produce two SequenceMatcher
     # opcodes (delete + insert) while still being one locus and preserving the
     # lexical multiset. Count that as one deterministic surface edit.
@@ -169,7 +227,10 @@ def integrity_check(item: dict[str, Any]) -> dict[str, Any]:
         "surface_edit_opcode_count": len(opcodes),
         "changed_clean_token_indices": changed_clean_indices,
         "changed_error_token_indices": changed_error_indices,
+        "clean_locus_token_indices": clean_locus_indices,
         "marked_correct_token_indices": marked_indices,
+        "clean_locus_accounted_for": clean_locus_accounted,
+        "error_locus_accounted_for": error_locus_accounted,
         "all_surface_edits_accounted_for": locus_accounted,
         "external_mutation": external_mutation,
         "one_intended_marked_locus": metadata_aligned,
@@ -481,7 +542,7 @@ def main() -> int:
             },
         },
         "policy": {
-            "grammar_generation": "current WE Generator v2.1",
+            "grammar_generation": "current WE Generator v2.1.1",
             "changed_surface": "none during pilot",
             "normal_max_span_words": 4,
             "normal_min_gap": 1,
@@ -623,7 +684,10 @@ def main() -> int:
             f"{data.get('gap_medians', {'gap_A_B': 'n/a', 'gap_B_C': 'n/a', 'gap_C_D': 'n/a'}).get('gap_B_C', data.get('gap_medians', {}).get('B-C', 'n/a'))}/"
             f"{data.get('gap_medians', {'gap_A_B': 'n/a', 'gap_B_C': 'n/a', 'gap_C_D': 'n/a'}).get('gap_C_D', data.get('gap_medians', {}).get('C-D', 'n/a'))} |"
         )
-    report = f"""# WE v2.1 — 25-item Independent Pilot
+    report = f"""# WE v2.1.1-compatible — 25-item Independent Pilot
+
+> This locked pilot retains its historical v2.1 run IDs and schema-contract
+> literals for compatibility; the current runtime implementation is v2.1.1.
 
 Run: `{RUN_ID}`  
 Status: **CONTRACT_REPLAY_ONLY**  

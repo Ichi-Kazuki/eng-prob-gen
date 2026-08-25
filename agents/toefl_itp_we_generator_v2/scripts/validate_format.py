@@ -16,7 +16,6 @@ from __future__ import annotations
 import argparse
 import json
 import math
-import re
 import sys
 from functools import lru_cache
 from pathlib import Path
@@ -27,7 +26,16 @@ ROOT = Path(__file__).resolve().parents[3]
 CONFIG_PATH = ROOT / "agents" / "toefl_itp_we_generator_v2" / "config" / "we_v2_format_config.json"
 GRAMMAR_SPEC_PATH = ROOT / "specs" / "toefl_itp_grammar_spec.json"
 TAXONOMY_PATH = ROOT / "analysis" / "grammar_taxonomy.json"
-TOKEN_RE = re.compile(r"[\w]+(?:['-][\w]+)*", re.UNICODE)
+sys.path.insert(0, str(ROOT))
+
+from shared.tokenization import (  # noqa: E402
+    LEXICAL_TOKEN_RE,
+    lexical_token_matches,
+    lexical_token_spans,
+)
+
+
+TOKEN_RE = LEXICAL_TOKEN_RE
 LABELS = ("A", "B", "C", "D")
 SPAN_TYPES = {"SINGLE_WORD", "SHORT_PHRASE", "CLAUSE_OR_CLAUSE_LIKE"}
 ERROR_SCOPES = {"local", "clause_level", "sentence_level", "cross_clause"}
@@ -53,29 +61,27 @@ def load_items(path: Path) -> list[dict[str, Any]]:
 def tokens(text: str) -> list[dict[str, Any]]:
     return [
         {"text": m.group(0), "start": m.start(), "end": m.end(), "index": i}
-        for i, m in enumerate(TOKEN_RE.finditer(text))
+        for i, m in enumerate(lexical_token_matches(text))
     ]
 
 
 def span_token_indices(sentence: str, span: str) -> tuple[list[int], list[str]]:
-    first = sentence.find(span)
-    if first < 0:
-        return [], ["span is not an exact substring of sentence"]
-    if sentence.find(span, first + 1) >= 0:
+    occurrences = lexical_token_spans(sentence, span)
+    if not occurrences:
+        return [], ["span is not an exact lexical-token sequence in sentence"]
+    if len(occurrences) > 1:
         return [], ["span occurs more than once; alignment is not unique"]
 
     sentence_tokens = tokens(sentence)
-    start_char = first
-    end_char = first + len(span)
-    selected = [
-        t for t in sentence_tokens
-        if t["start"] >= start_char and t["end"] <= end_char
-    ]
+    start_index, end_index = occurrences[0]
+    selected = sentence_tokens[start_index:end_index]
     errors: list[str] = []
     if not selected:
         errors.append("span contains no lexical token")
         return [], errors
-    if selected[0]["start"] != start_char or selected[-1]["end"] != end_char:
+    start_char = selected[0]["start"]
+    end_char = selected[-1]["end"]
+    if sentence[start_char:end_char].casefold() != span.casefold():
         errors.append("span cuts through a lexical token or has unaligned boundary")
     expected = list(range(selected[0]["index"], selected[-1]["index"] + 1))
     actual = [t["index"] for t in selected]
@@ -345,7 +351,7 @@ def main() -> int:
         }
         results = [validate_item(item, config, targets, error_types) for item in load_items(args.items)]
         report = {
-            "validator": "TOEFL ITP WE deterministic format validator v2.1",
+            "validator": "TOEFL ITP WE deterministic format validator v2.1.1",
             "config": config["config_id"],
             "item_count": len(results),
             "valid_count": sum(result["valid"] for result in results),
