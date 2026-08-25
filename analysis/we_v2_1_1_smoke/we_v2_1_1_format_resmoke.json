@@ -1,0 +1,3745 @@
+{
+  "report_version": "WE_V2_1_1_FORMAT_RESMOKE_1.0",
+  "run": {
+    "agent_version": "Written Expression Generator v2.1.1",
+    "batch_id": "we-v2.1.1-format-resmoke-20260825",
+    "generation_unit": "one fresh item per microbatch",
+    "item_count": 15,
+    "fresh_generation": true,
+    "historical_cohort_reused": false,
+    "historical_exact_match_count": 0,
+    "grammar_quality": "NOT_EVALUATED",
+    "independent_reviewer_runtime_available": false,
+    "independent_solver_runtime_available": false,
+    "synthetic_consensus_generated": false,
+    "source_of_truth": "analysis/we_format/written_expression_format_official.json"
+  },
+  "policy": {
+    "grammar_generation": "unchanged",
+    "changed_surface": "distractor span syntactic-coherence scoring only",
+    "normal_max_span_words": 4,
+    "normal_min_gap": 1,
+    "band_thresholds_changed": false
+  },
+  "format_validation": {
+    "validator": "format_diagnostics direct pre-emission validation",
+    "valid_count": 15,
+    "invalid_count": 0,
+    "grammar_contract_validation": "NOT_RUN; grammar quality is NOT_EVALUATED"
+  },
+  "v2_1_1_resmoke": {
+    "item_count": 15,
+    "marked_span_count": 60,
+    "grammar_quality": "NOT_EVALUATED",
+    "sentence_word_count": {
+      "median": 21,
+      "min": 18,
+      "max": 26
+    },
+    "coverage": {
+      "median": 0.2381,
+      "ge_0_60_count": 0
+    },
+    "unmarked_context": {
+      "median": 16,
+      "zero_count": 0
+    },
+    "zero_gap_rate": 0.0,
+    "five_plus_span_count": 0,
+    "correct_span_type_distribution": {
+      "SINGLE_WORD": 10,
+      "CLAUSE_OR_CLAUSE_LIKE": 3,
+      "SHORT_PHRASE": 2
+    },
+    "format_band_counts": {
+      "EXTREME": 2,
+      "PREFERRED": 12,
+      "WARNING": 1
+    },
+    "extreme_item_count": 2,
+    "single_word_correct_gt_short_phrase": true,
+    "coherence_audit": {
+      "clearly_incoherent_count": 0,
+      "borderline_count": 1,
+      "coherent_count": 59,
+      "audited_spans": [
+        {
+          "label": "A",
+          "text": "records",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "temperature",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "salinity",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "northern marshes",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.38,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "require",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "technicians",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "regional",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "annual fieldwork",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.38,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "were nesting",
+          "word_count": 2,
+          "correct_span": true,
+          "syntactic_coherence": 1.3,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "unusually",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "wetlands",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "period",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "identifies",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "systems",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "severe",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "the river",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.42,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "were altered",
+          "word_count": 2,
+          "correct_span": true,
+          "syntactic_coherence": 1.3,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "construction",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "valley",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "decade",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "measures",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "can detect",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.3,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "mechanical failures",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.38,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "facility",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "includes",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "were gathered",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.3,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "preserved",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "conditions",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "When",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.12,
+          "audit": "BORDERLINE"
+        },
+        {
+          "label": "B",
+          "text": "protocol",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "clinic",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "reporting accuracy",
+          "word_count": 2,
+          "correct_span": true,
+          "syntactic_coherence": 1.38,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "tested",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "withstands",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "structural strength",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.38,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "carefully",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "found",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "floods",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "explain",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "agricultural history",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.38,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "contains",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "the settlement",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.42,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "river",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "stewardship",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "municipal",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "was altered",
+          "word_count": 2,
+          "correct_span": true,
+          "syntactic_coherence": 1.3,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "connected",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "nearby",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "reviewed",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "projections",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "expansion",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "the district",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.42,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "first",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "inconsistent results",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.08,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "repeated",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "controls",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "A",
+          "text": "several paintings",
+          "word_count": 2,
+          "correct_span": true,
+          "syntactic_coherence": 1.42,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "opens",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "spring",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "audiences",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    "official_geometry_source_item_count": 125,
+    "gates": {
+      "sentence_median_17_23": true,
+      "coverage_median_20_35_percent": true,
+      "unmarked_median_at_least_12": true,
+      "coverage_ge_60_zero": true,
+      "zero_gap_at_most_20_percent": true,
+      "five_plus_spans_zero": true,
+      "single_word_correct_gt_short_phrase": true,
+      "extreme_not_majority": true,
+      "coherence_audit_all_60": true,
+      "clearly_incoherent_zero": true,
+      "borderline_at_most_two": true
+    }
+  },
+  "items": [
+    {
+      "item_id": "we-v2.1.1-resmoke-001",
+      "generation_order": 1,
+      "sentence": "The coastal monitoring station records monthly shifts in water temperature and salinity for scientists studying remote northern marshes throughout winter.",
+      "marked_parts": {
+        "A": "records",
+        "B": "temperature",
+        "C": "salinity",
+        "D": "northern marshes"
+      },
+      "correct_answer": "A",
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SHORT_PHRASE"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 22,
+          "lower": 20,
+          "upper": 24,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 1,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          2
+        ],
+        "answer_position": "D",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 20,
+          "span_word_counts": [
+            1,
+            1,
+            1,
+            2
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.25,
+          "unmarked_context": 15,
+          "gaps": [
+            4,
+            1,
+            4
+          ],
+          "correct_span_type": "SINGLE_WORD"
+        }
+      },
+      "format": {
+        "sentence_word_count": 20,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.25,
+        "unmarked_word_count": 15,
+        "gap_A_B": 4,
+        "gap_B_C": 1,
+        "gap_C_D": 4,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.1472,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.492,
+          "marked_coverage_ratio": 0.456,
+          "unmarked_word_count": 0.528,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.608,
+          "gap_B_C": 0.02,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "EXTREME",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            4
+          ],
+          "B": [
+            9
+          ],
+          "C": [
+            11
+          ],
+          "D": [
+            16,
+            17
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": -0.1746,
+        "correct_index": 0
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "records",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "temperature",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "salinity",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "northern marshes",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.38,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-002",
+      "generation_order": 2,
+      "sentence": "Several mineral specimens require precise labels before laboratory technicians transport them for comparison with regional geological surveys during the annual fieldwork.",
+      "marked_parts": {
+        "A": "require",
+        "B": "technicians",
+        "C": "regional",
+        "D": "annual fieldwork"
+      },
+      "correct_answer": "A",
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SHORT_PHRASE"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 23,
+          "lower": 21,
+          "upper": 25,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 5,
+          "gap_C_D": 3
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "C",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 21,
+          "span_word_counts": [
+            1,
+            1,
+            1,
+            2
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.2381,
+          "unmarked_context": 16,
+          "gaps": [
+            4,
+            5,
+            4
+          ],
+          "correct_span_type": "SINGLE_WORD"
+        }
+      },
+      "format": {
+        "sentence_word_count": 21,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2381,
+        "unmarked_word_count": 16,
+        "gap_A_B": 4,
+        "gap_B_C": 5,
+        "gap_C_D": 4,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.2705,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.576,
+          "marked_coverage_ratio": 0.392,
+          "unmarked_word_count": 0.588,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.608,
+          "gap_B_C": 0.78,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            3
+          ],
+          "B": [
+            8
+          ],
+          "C": [
+            14
+          ],
+          "D": [
+            19,
+            20
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 0.4675,
+        "correct_index": 0
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "require",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "technicians",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "regional",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "annual fieldwork",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.38,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-003",
+      "generation_order": 3,
+      "sentence": "Field researchers observed that migratory birds were nesting earlier during an unusually warm spring near protected coastal wetlands during the spring migration period.",
+      "marked_parts": {
+        "A": "were nesting",
+        "B": "unusually",
+        "C": "wetlands",
+        "D": "period"
+      },
+      "correct_answer": "A",
+      "span_types": {
+        "A": "CLAUSE_OR_CLAUSE_LIKE",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 25,
+          "lower": 23,
+          "upper": 27,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 5,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          2,
+          1,
+          1
+        ],
+        "answer_position": "C",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [
+          "grammar locus retained as CLAUSE_OR_CLAUSE_LIKE; sampled type SINGLE_WORD was not forced"
+        ],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 23,
+          "span_word_counts": [
+            2,
+            1,
+            1,
+            1
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.2174,
+          "unmarked_context": 18,
+          "gaps": [
+            3,
+            5,
+            4
+          ],
+          "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE"
+        }
+      },
+      "format": {
+        "sentence_word_count": 23,
+        "span_word_counts": {
+          "A": 2,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2174,
+        "unmarked_word_count": 18,
+        "gap_A_B": 3,
+        "gap_B_C": 5,
+        "gap_C_D": 4,
+        "correct_span_word_count": 2,
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.5951,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.74,
+          "marked_coverage_ratio": 0.296,
+          "unmarked_word_count": 0.748,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.312,
+          "gap_B_C": 0.78,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            6,
+            7
+          ],
+          "B": [
+            11
+          ],
+          "C": [
+            17
+          ],
+          "D": [
+            22
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 2.0934,
+        "correct_index": 0
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "were nesting",
+          "word_count": 2,
+          "correct_span": true,
+          "syntactic_coherence": 1.3,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "unusually",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "wetlands",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "period",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-004",
+      "generation_order": 4,
+      "sentence": "The municipal assessment identifies districts where aging drainage systems increase flood risk during severe summer storms beside the river throughout the year.",
+      "marked_parts": {
+        "A": "identifies",
+        "B": "systems",
+        "C": "severe",
+        "D": "the river"
+      },
+      "correct_answer": "A",
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SHORT_PHRASE"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 24,
+          "lower": 22,
+          "upper": 26,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "CLAUSE_OR_CLAUSE_LIKE",
+          "target_word_count": 3,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 5,
+          "gap_B_C": 4,
+          "gap_C_D": 3
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "D",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [
+          "grammar locus retained as SINGLE_WORD; sampled type CLAUSE_OR_CLAUSE_LIKE was not forced"
+        ],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 22,
+          "span_word_counts": [
+            1,
+            1,
+            1,
+            2
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.2273,
+          "unmarked_context": 17,
+          "gaps": [
+            4,
+            4,
+            3
+          ],
+          "correct_span_type": "SINGLE_WORD"
+        }
+      },
+      "format": {
+        "sentence_word_count": 22,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2273,
+        "unmarked_word_count": 17,
+        "gap_A_B": 4,
+        "gap_B_C": 4,
+        "gap_C_D": 3,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.4297,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.664,
+          "marked_coverage_ratio": 0.336,
+          "unmarked_word_count": 0.66,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.608,
+          "gap_B_C": 0.54,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            3
+          ],
+          "B": [
+            8
+          ],
+          "C": [
+            13
+          ],
+          "D": [
+            17,
+            18
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 1.8102,
+        "correct_index": 0
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "identifies",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "systems",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "severe",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "the river",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.42,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-005",
+      "generation_order": 5,
+      "sentence": "Historical maps reveal that inland trade routes were altered after railway construction across a northern valley during the subsequent decade.",
+      "marked_parts": {
+        "A": "were altered",
+        "B": "construction",
+        "C": "valley",
+        "D": "decade"
+      },
+      "correct_answer": "A",
+      "span_types": {
+        "A": "CLAUSE_OR_CLAUSE_LIKE",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 21,
+          "lower": 19,
+          "upper": 23,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "CLAUSE_OR_CLAUSE_LIKE",
+          "target_word_count": 2,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 3,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          1,
+          3,
+          1
+        ],
+        "answer_position": "A",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 20,
+          "span_word_counts": [
+            2,
+            1,
+            1,
+            1
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.25,
+          "unmarked_context": 15,
+          "gaps": [
+            2,
+            3,
+            3
+          ],
+          "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE"
+        }
+      },
+      "format": {
+        "sentence_word_count": 20,
+        "span_word_counts": {
+          "A": 2,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.25,
+        "unmarked_word_count": 15,
+        "gap_A_B": 2,
+        "gap_B_C": 3,
+        "gap_C_D": 3,
+        "correct_span_word_count": 2,
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.1472,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.492,
+          "marked_coverage_ratio": 0.456,
+          "unmarked_word_count": 0.528,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.292,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            7,
+            8
+          ],
+          "B": [
+            11
+          ],
+          "C": [
+            15
+          ],
+          "D": [
+            19
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 1.0159,
+        "correct_index": 0
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "were altered",
+          "word_count": 2,
+          "correct_span": true,
+          "syntactic_coherence": 1.3,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "construction",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "valley",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "decade",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-006",
+      "generation_order": 6,
+      "sentence": "Because the instrument measures pressure continuously, engineers can detect subtle changes before mechanical failures interrupt production at a remote facility during extended winter monitoring operations.",
+      "marked_parts": {
+        "A": "measures",
+        "B": "can detect",
+        "C": "mechanical failures",
+        "D": "facility"
+      },
+      "correct_answer": "A",
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 27,
+          "lower": 25,
+          "upper": 29,
+          "region": "26-30",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 2,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          1,
+          2,
+          2
+        ],
+        "answer_position": "D",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 25,
+          "span_word_counts": [
+            1,
+            2,
+            2,
+            1
+          ],
+          "total_marked_words": 6,
+          "coverage": 0.24,
+          "unmarked_context": 19,
+          "gaps": [
+            3,
+            3,
+            5
+          ],
+          "correct_span_type": "SINGLE_WORD"
+        }
+      },
+      "format": {
+        "sentence_word_count": 25,
+        "span_word_counts": {
+          "A": 1,
+          "B": 2,
+          "C": 2,
+          "D": 1
+        },
+        "mean_span_length": 1.5,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.24,
+        "unmarked_word_count": 19,
+        "gap_A_B": 3,
+        "gap_B_C": 3,
+        "gap_C_D": 5,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.8509,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.884,
+          "marked_coverage_ratio": 0.42,
+          "unmarked_word_count": 0.824,
+          "mean_span_length": 0.784,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.312,
+          "gap_B_C": 0.292,
+          "gap_C_D": 0.832
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            3
+          ],
+          "B": [
+            7,
+            8
+          ],
+          "C": [
+            12,
+            13
+          ],
+          "D": [
+            19
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 2.8603,
+        "correct_index": 0
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "measures",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "can detect",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.3,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "mechanical failures",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.38,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "facility",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-007",
+      "generation_order": 7,
+      "sentence": "The botanical collection includes specimens that were gathered from high elevations and preserved under carefully controlled conditions for later ecological studies.",
+      "marked_parts": {
+        "A": "includes",
+        "B": "were gathered",
+        "C": "preserved",
+        "D": "conditions"
+      },
+      "correct_answer": "A",
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "CLAUSE_OR_CLAUSE_LIKE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 23,
+          "lower": 21,
+          "upper": 25,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 1,
+          "gap_B_C": 5,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 21,
+          "span_word_counts": [
+            1,
+            2,
+            1,
+            1
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.2381,
+          "unmarked_context": 16,
+          "gaps": [
+            2,
+            4,
+            3
+          ],
+          "correct_span_type": "SINGLE_WORD"
+        }
+      },
+      "format": {
+        "sentence_word_count": 21,
+        "span_word_counts": {
+          "A": 1,
+          "B": 2,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2381,
+        "unmarked_word_count": 16,
+        "gap_A_B": 2,
+        "gap_B_C": 4,
+        "gap_C_D": 3,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.2705,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.576,
+          "marked_coverage_ratio": 0.392,
+          "unmarked_word_count": 0.588,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.54,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            3
+          ],
+          "B": [
+            6,
+            7
+          ],
+          "C": [
+            12
+          ],
+          "D": [
+            16
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 1.3214,
+        "correct_index": 0
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "includes",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "were gathered",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.3,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "preserved",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "conditions",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-008",
+      "generation_order": 8,
+      "sentence": "When the revised protocol reaches every participating clinic, public health officials expect reporting accuracy to improve across isolated rural districts during the following calendar year nationwide.",
+      "marked_parts": {
+        "A": "When",
+        "B": "protocol",
+        "C": "clinic",
+        "D": "reporting accuracy"
+      },
+      "correct_answer": "D",
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SHORT_PHRASE"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 28,
+          "lower": 26,
+          "upper": 30,
+          "region": "26-30",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 2,
+          "gap_B_C": 3,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          1,
+          2,
+          1
+        ],
+        "answer_position": "D",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [
+          "grammar locus retained as SHORT_PHRASE; sampled type SINGLE_WORD was not forced"
+        ],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 26,
+          "span_word_counts": [
+            1,
+            1,
+            1,
+            2
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.1923,
+          "unmarked_context": 21,
+          "gaps": [
+            2,
+            3,
+            4
+          ],
+          "correct_span_type": "SHORT_PHRASE"
+        }
+      },
+      "format": {
+        "sentence_word_count": 26,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.1923,
+        "unmarked_word_count": 21,
+        "gap_A_B": 2,
+        "gap_B_C": 3,
+        "gap_C_D": 4,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 1.0943,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.92,
+          "marked_coverage_ratio": 0.216,
+          "unmarked_word_count": 0.912,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.292,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "WARNING",
+        "metric_band_status": {
+          "sentence_word_count": "WARNING",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "WARNING",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            0
+          ],
+          "B": [
+            3
+          ],
+          "C": [
+            7
+          ],
+          "D": [
+            12,
+            13
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 4.0774,
+        "correct_index": 3
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "When",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.12,
+          "audit": "BORDERLINE"
+        },
+        {
+          "label": "B",
+          "text": "protocol",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "clinic",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "reporting accuracy",
+          "word_count": 2,
+          "correct_span": true,
+          "syntactic_coherence": 1.38,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-009",
+      "generation_order": 9,
+      "sentence": "The engineering team tested a lighter alloy that withstands repeated heating without losing structural strength during extended laboratory simulations under carefully controlled conditions.",
+      "marked_parts": {
+        "A": "tested",
+        "B": "withstands",
+        "C": "structural strength",
+        "D": "carefully"
+      },
+      "correct_answer": "B",
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SHORT_PHRASE",
+        "D": "SINGLE_WORD"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 22,
+          "lower": 20,
+          "upper": 24,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 5,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 23,
+          "span_word_counts": [
+            1,
+            1,
+            2,
+            1
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.2174,
+          "unmarked_context": 18,
+          "gaps": [
+            4,
+            4,
+            5
+          ],
+          "correct_span_type": "SINGLE_WORD"
+        }
+      },
+      "format": {
+        "sentence_word_count": 23,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 2,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2174,
+        "unmarked_word_count": 18,
+        "gap_A_B": 4,
+        "gap_B_C": 4,
+        "gap_C_D": 5,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.5951,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.74,
+          "marked_coverage_ratio": 0.296,
+          "unmarked_word_count": 0.748,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.608,
+          "gap_B_C": 0.54,
+          "gap_C_D": 0.832
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            3
+          ],
+          "B": [
+            8
+          ],
+          "C": [
+            13,
+            14
+          ],
+          "D": [
+            20
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 1.3919,
+        "correct_index": 1
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "tested",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "withstands",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "structural strength",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.38,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "carefully",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-010",
+      "generation_order": 10,
+      "sentence": "Sediment researchers found evidence of ancient floods that may explain unexpected changes in the valley's agricultural history after droughts.",
+      "marked_parts": {
+        "A": "found",
+        "B": "floods",
+        "C": "explain",
+        "D": "agricultural history"
+      },
+      "correct_answer": "A",
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SHORT_PHRASE"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "CLAUSE_OR_CLAUSE_LIKE",
+          "target_word_count": 2,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 2,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          2
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [
+          "grammar locus retained as SINGLE_WORD; sampled type CLAUSE_OR_CLAUSE_LIKE was not forced"
+        ],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 19,
+          "span_word_counts": [
+            1,
+            1,
+            1,
+            2
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.2632,
+          "unmarked_context": 14,
+          "gaps": [
+            3,
+            2,
+            5
+          ],
+          "correct_span_type": "SINGLE_WORD"
+        }
+      },
+      "format": {
+        "sentence_word_count": 19,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2632,
+        "unmarked_word_count": 14,
+        "gap_A_B": 3,
+        "gap_B_C": 2,
+        "gap_C_D": 5,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.1815,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.428,
+          "marked_coverage_ratio": 0.496,
+          "unmarked_word_count": 0.464,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.312,
+          "gap_B_C": 0.088,
+          "gap_C_D": 0.832
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            2
+          ],
+          "B": [
+            6
+          ],
+          "C": [
+            9
+          ],
+          "D": [
+            15,
+            16
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 1.1551,
+        "correct_index": 0
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "found",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "floods",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "explain",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "agricultural history",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.38,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-011",
+      "generation_order": 11,
+      "sentence": "The museum archive contains documents that clarify how the settlement developed beside the northern river over several generations of stewardship.",
+      "marked_parts": {
+        "A": "contains",
+        "B": "the settlement",
+        "C": "river",
+        "D": "stewardship"
+      },
+      "correct_answer": "A",
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 18,
+          "lower": 16,
+          "upper": 20,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 5,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "A",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 20,
+          "span_word_counts": [
+            1,
+            2,
+            1,
+            1
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.25,
+          "unmarked_context": 15,
+          "gaps": [
+            4,
+            4,
+            4
+          ],
+          "correct_span_type": "SINGLE_WORD"
+        }
+      },
+      "format": {
+        "sentence_word_count": 20,
+        "span_word_counts": {
+          "A": 1,
+          "B": 2,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.25,
+        "unmarked_word_count": 15,
+        "gap_A_B": 4,
+        "gap_B_C": 4,
+        "gap_C_D": 4,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.1472,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.492,
+          "marked_coverage_ratio": 0.456,
+          "unmarked_word_count": 0.528,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.608,
+          "gap_B_C": 0.54,
+          "gap_C_D": 0.568
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            3
+          ],
+          "B": [
+            8,
+            9
+          ],
+          "C": [
+            14
+          ],
+          "D": [
+            19
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": -0.5092,
+        "correct_index": 0
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "contains",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "the settlement",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.42,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "river",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "stewardship",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-012",
+      "generation_order": 12,
+      "sentence": "A municipal archive clearly shows how the settlement was altered after improved roads connected the valley with nearby agricultural districts.",
+      "marked_parts": {
+        "A": "municipal",
+        "B": "was altered",
+        "C": "connected",
+        "D": "nearby"
+      },
+      "correct_answer": "B",
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "CLAUSE_OR_CLAUSE_LIKE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 21,
+          "lower": 19,
+          "upper": 23,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 6,
+          "gap_B_C": 4,
+          "gap_C_D": 3
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "A",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [
+          "grammar locus retained as CLAUSE_OR_CLAUSE_LIKE; sampled type SINGLE_WORD was not forced"
+        ],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 20,
+          "span_word_counts": [
+            1,
+            2,
+            1,
+            1
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.25,
+          "unmarked_context": 15,
+          "gaps": [
+            6,
+            3,
+            3
+          ],
+          "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE"
+        }
+      },
+      "format": {
+        "sentence_word_count": 20,
+        "span_word_counts": {
+          "A": 1,
+          "B": 2,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.25,
+        "unmarked_word_count": 15,
+        "gap_A_B": 6,
+        "gap_B_C": 3,
+        "gap_C_D": 3,
+        "correct_span_word_count": 2,
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.1472,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.492,
+          "marked_coverage_ratio": 0.456,
+          "unmarked_word_count": 0.528,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.992,
+          "gap_B_C": 0.292,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "EXTREME",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            1
+          ],
+          "B": [
+            8,
+            9
+          ],
+          "C": [
+            13
+          ],
+          "D": [
+            17
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 1.1977,
+        "correct_index": 1
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "municipal",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "was altered",
+          "word_count": 2,
+          "correct_span": true,
+          "syntactic_coherence": 1.3,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "connected",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "nearby",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-013",
+      "generation_order": 13,
+      "sentence": "The planning committee reviewed recently updated population projections before recommending a phased expansion of the university campus near the district boundary next autumn.",
+      "marked_parts": {
+        "A": "reviewed",
+        "B": "projections",
+        "C": "expansion",
+        "D": "the district"
+      },
+      "correct_answer": "A",
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SHORT_PHRASE"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 25,
+          "lower": 23,
+          "upper": 27,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 5,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          2
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [
+          "grammar locus retained as SINGLE_WORD; sampled type SHORT_PHRASE was not forced"
+        ],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 23,
+          "span_word_counts": [
+            1,
+            1,
+            1,
+            2
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.2174,
+          "unmarked_context": 18,
+          "gaps": [
+            3,
+            4,
+            5
+          ],
+          "correct_span_type": "SINGLE_WORD"
+        }
+      },
+      "format": {
+        "sentence_word_count": 23,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 2
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2174,
+        "unmarked_word_count": 18,
+        "gap_A_B": 3,
+        "gap_B_C": 4,
+        "gap_C_D": 5,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.5951,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.74,
+          "marked_coverage_ratio": 0.296,
+          "unmarked_word_count": 0.748,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.312,
+          "gap_B_C": 0.54,
+          "gap_C_D": 0.832
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            3
+          ],
+          "B": [
+            7
+          ],
+          "C": [
+            12
+          ],
+          "D": [
+            18,
+            19
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 2.4289,
+        "correct_index": 0
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "reviewed",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "projections",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "expansion",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "the district",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.42,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-014",
+      "generation_order": 14,
+      "sentence": "Although the first trial produced inconsistent results, the research group repeated the procedure with controls during three trials.",
+      "marked_parts": {
+        "A": "first",
+        "B": "inconsistent results",
+        "C": "repeated",
+        "D": "controls"
+      },
+      "correct_answer": "C",
+      "span_types": {
+        "A": "SINGLE_WORD",
+        "B": "SHORT_PHRASE",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 2,
+          "gap_B_C": 3,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "C",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 18,
+          "span_word_counts": [
+            1,
+            2,
+            1,
+            1
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.2778,
+          "unmarked_context": 13,
+          "gaps": [
+            2,
+            3,
+            3
+          ],
+          "correct_span_type": "SINGLE_WORD"
+        }
+      },
+      "format": {
+        "sentence_word_count": 18,
+        "span_word_counts": {
+          "A": 1,
+          "B": 2,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2778,
+        "unmarked_word_count": 13,
+        "gap_A_B": 2,
+        "gap_B_C": 3,
+        "gap_C_D": 3,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.3327,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.36,
+          "marked_coverage_ratio": 0.544,
+          "unmarked_word_count": 0.396,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.132,
+          "gap_B_C": 0.292,
+          "gap_C_D": 0.268
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            2
+          ],
+          "B": [
+            5,
+            6
+          ],
+          "C": [
+            10
+          ],
+          "D": [
+            14
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 0.6613,
+        "correct_index": 2
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "first",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "inconsistent results",
+          "word_count": 2,
+          "correct_span": false,
+          "syntactic_coherence": 1.08,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "repeated",
+          "word_count": 1,
+          "correct_span": true,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "controls",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        }
+      ]
+    },
+    {
+      "item_id": "we-v2.1.1-resmoke-015",
+      "generation_order": 15,
+      "sentence": "The city museum plans to restore several paintings before its traveling exhibition opens in neighboring cities next spring for visiting scholars and local audiences.",
+      "marked_parts": {
+        "A": "several paintings",
+        "B": "opens",
+        "C": "spring",
+        "D": "audiences"
+      },
+      "correct_answer": "A",
+      "span_types": {
+        "A": "SHORT_PHRASE",
+        "B": "SINGLE_WORD",
+        "C": "SINGLE_WORD",
+        "D": "SINGLE_WORD"
+      },
+      "grammar_quality": "NOT_EVALUATED",
+      "plan": {
+        "sentence": {
+          "target": 23,
+          "lower": 21,
+          "upper": 25,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 5,
+          "gap_B_C": 4,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          1,
+          2,
+          1
+        ],
+        "answer_position": "A",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "pre_emission": {
+        "valid": true,
+        "errors": [],
+        "warnings": [
+          "grammar locus retained as SHORT_PHRASE; sampled type SINGLE_WORD was not forced"
+        ],
+        "exceptions": {
+          "long_span_rationale": null
+        },
+        "metrics": {
+          "sentence_word_count": 24,
+          "span_word_counts": [
+            2,
+            1,
+            1,
+            1
+          ],
+          "total_marked_words": 5,
+          "coverage": 0.2083,
+          "unmarked_context": 19,
+          "gaps": [
+            4,
+            4,
+            5
+          ],
+          "correct_span_type": "SHORT_PHRASE"
+        }
+      },
+      "format": {
+        "sentence_word_count": 24,
+        "span_word_counts": {
+          "A": 2,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.25,
+        "max_span_length": 2,
+        "marked_coverage_ratio": 0.2083,
+        "unmarked_word_count": 19,
+        "gap_A_B": 4,
+        "gap_B_C": 4,
+        "gap_C_D": 5,
+        "correct_span_word_count": 2,
+        "correct_span_type": "SHORT_PHRASE",
+        "correction_locality": "NOT_EVALUATED",
+        "decision_granularity": "NOT_EVALUATED",
+        "format_distribution_distance": 0.7617,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.824,
+          "marked_coverage_ratio": 0.272,
+          "unmarked_word_count": 0.824,
+          "mean_span_length": 0.5,
+          "max_span_length": 0.588,
+          "gap_A_B": 0.608,
+          "gap_B_C": 0.54,
+          "gap_C_D": 0.832
+        },
+        "format_band_status": "PREFERRED",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "PREFERRED",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            6,
+            7
+          ],
+          "B": [
+            12
+          ],
+          "C": [
+            17
+          ],
+          "D": [
+            23
+          ]
+        }
+      },
+      "selection": {
+        "candidate_scope": "whole_sentence",
+        "score": 2.7862,
+        "correct_index": 0
+      },
+      "coherence_audit": [
+        {
+          "label": "A",
+          "text": "several paintings",
+          "word_count": 2,
+          "correct_span": true,
+          "syntactic_coherence": 1.42,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "B",
+          "text": "opens",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "C",
+          "text": "spring",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        },
+        {
+          "label": "D",
+          "text": "audiences",
+          "word_count": 1,
+          "correct_span": false,
+          "syntactic_coherence": 0.95,
+          "audit": "COHERENT"
+        }
+      ]
+    }
+  ]
+}

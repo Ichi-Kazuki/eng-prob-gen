@@ -27,6 +27,7 @@ from format_planner import (  # noqa: E402
     sample_correct_span_plan,
     sample_sentence_length_plan,
     select_span_set,
+    syntactic_coherence_score,
     SpanSelectionError,
 )
 
@@ -71,6 +72,62 @@ class WeV21FormatPlannerTests(unittest.TestCase):
         candidates = enumerate_candidate_spans(sentence)
         self.assertTrue(candidates)
         self.assertLessEqual(max(candidate.word_count for candidate in candidates), 4)
+
+    def test_syntactic_coherence_prefers_complete_local_units(self) -> None:
+        sentence = (
+            "Because the valley's steep slopes limit mechanized farming, local cooperatives have "
+            "gradual adopted terraced cultivation to preserve scarce soil during intense monsoon seasons."
+        )
+        candidates = {candidate.text.lower(): candidate for candidate in enumerate_candidate_spans(sentence)}
+        self.assertGreater(candidates["soil"].syntactic_coherence, candidates["soil during"].syntactic_coherence)
+        self.assertEqual(candidates["soil during"].syntactic_coherence, 0.0)
+        self.assertGreater(candidates["intense monsoon"].syntactic_coherence, 1.0)
+        self.assertEqual(
+            syntactic_coherence_score(sentence, candidates["soil"].start, candidates["soil"].end),
+            candidates["soil"].syntactic_coherence,
+        )
+
+    def test_coherence_regression_avoids_observed_incomplete_distractors(self) -> None:
+        sentence = (
+            "Although the observatory records seasonal changes among stellar populations, the calibration "
+            "team report its findings only after independent checks of the instruments."
+        )
+        candidates = {candidate.text.lower(): candidate for candidate in enumerate_candidate_spans(sentence)}
+        self.assertEqual(candidates["after independent"].syntactic_coherence, 0.0)
+        self.assertGreater(candidates["independent checks"].syntactic_coherence, 1.0)
+        plan = FormatPlan(
+            sentence=SentenceLengthPlan(target=22, lower=1, upper=30),
+            correct_span=CorrectSpanPlan("SINGLE_WORD", 1),
+            gap_targets={"gap_A_B": 3, "gap_B_C": 5, "gap_C_D": 3},
+            distractor_word_counts=(1, 1, 2),
+            answer_position="C",
+        )
+        selection = select_span_set(sentence, "report", plan, random.Random(6), self.profile)
+        selected_text = {span.text.lower() for span in selection.spans}
+        self.assertNotIn("after independent", selected_text)
+
+    def test_coherence_marks_function_word_and_partial_boundaries_low(self) -> None:
+        sentence = "The independent checks were completed after careful review."
+        candidates = {candidate.text.lower(): candidate for candidate in enumerate_candidate_spans(sentence)}
+        self.assertLess(candidates["the"].syntactic_coherence, 0.2)
+        self.assertLess(candidates["after careful"].syntactic_coherence, 0.2)
+        self.assertGreater(candidates["independent checks"].syntactic_coherence, 1.0)
+        self.assertGreater(candidates["after careful review"].syntactic_coherence, 1.0)
+
+    def test_coherence_does_not_move_grammar_selected_correct_locus(self) -> None:
+        sentence = "Researchers observed that birds were nesting near coastal wetlands during spring."
+        plan = FormatPlan(
+            sentence=SentenceLengthPlan(target=12, lower=1, upper=30),
+            correct_span=CorrectSpanPlan("SHORT_PHRASE", 2),
+            gap_targets={"gap_A_B": 2, "gap_B_C": 2, "gap_C_D": 2},
+            distractor_word_counts=(1, 1, 1),
+            answer_position="C",
+        )
+        selection = select_span_set(sentence, "were", plan, random.Random(7), self.profile)
+        anchor = selection.spans[selection.correct_index]
+        self.assertEqual(anchor.text, "were")
+        self.assertEqual(anchor.span_type, "SINGLE_WORD")
+        self.assertTrue(pre_emission_checks(sentence, selection.spans, plan, anchor)["valid"])
 
     def test_selection_searches_whole_sentence_and_avoids_zero_gap_clustering(self) -> None:
         sentence = (

@@ -1,5 +1,21 @@
 # WE Generator v2 changelog
 
+## v2.1.1 — 2026-08-25
+
+Format-only minor patch: `distractor span syntactic-coherence scoring only`.
+
+### Changed
+
+- added local `syntactic_coherence` scoring to distractor candidate ranking;
+- preferred complete short units and penalized incomplete local cuts;
+- preserved the grammar-selected correct span as authoritative;
+- left grammar generation, mutation, Reviewer, Solver, Schema, Specification,
+  and Format band thresholds unchanged.
+
+### Scope boundary
+
+`grammar generation logic unchanged, format planner + span-selection policy only`
+
 ## v2.1 — 2026-08-25
 
 Root cause addressed: `PLAN_SAMPLING_DRIFT` in sentence-length, correct-span

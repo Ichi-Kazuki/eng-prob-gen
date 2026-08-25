@@ -32,6 +32,49 @@ CLAUSE_MARKERS = {
     "until", "when", "where", "while", "which", "who", "whom", "whose",
 }
 BOUNDARY_WORDS = {"and", "or", "but", "nor", "of", "to", "for", "in", "on", "at", "by", "with"}
+DETERMINERS = {
+    "a", "an", "the", "this", "that", "these", "those", "each", "every",
+    "either", "neither", "some", "any", "no", "another", "both", "many",
+    "much", "few", "several", "all", "enough", "one", "two", "three", "four",
+    "five", "my", "your", "his", "her", "its", "our", "their",
+}
+PREPOSITIONS = {
+    "about", "above", "across", "after", "against", "along", "among", "around",
+    "at", "before", "behind", "below", "beneath", "beside", "between", "beyond",
+    "by", "despite", "during", "except", "for", "from", "in", "inside", "into",
+    "near", "of", "off", "on", "onto", "over", "per", "since", "through",
+    "throughout", "to", "toward", "under", "until", "up", "upon", "via", "with",
+    "within", "without",
+}
+AUXILIARIES = {
+    "am", "are", "be", "been", "being", "can", "could", "did", "do", "does",
+    "had", "has", "have", "is", "may", "might", "must", "shall", "should", "was",
+    "were", "will", "would",
+}
+CONJUNCTIONS = {"and", "or", "but", "nor", "yet", "so"}
+COMMON_ADVERBS = {
+    "already", "always", "carefully", "clearly", "early", "earlier", "especially", "even",
+    "ever", "often", "only", "quite", "rather", "recently", "seldom", "simply",
+    "still", "then", "there", "together", "usually", "very", "well", "later",
+}
+COMMON_ADJECTIVES = {
+    "ancient", "annual", "available", "coastal", "chemical", "careful", "current",
+    "detailed", "different", "direct", "early", "every", "extended", "familiar",
+    "fragile", "gradual", "high", "independent", "intense", "local", "long-term", "mechanical",
+    "mechanized", "natural", "northern", "regional", "remote", "revised", "scarce",
+    "seasonal", "several", "similar", "small", "steep", "stellar", "structural",
+    "terraced", "unusual", "unstable", "warm", "wet", "following", "first", "next",
+    "neighboring", "public", "latest", "monthly", "subtle",
+}
+COMMON_VERBS = {
+    "adopt", "adopted", "altered", "approved", "compare", "compared", "contains",
+    "clarify", "changes", "detect", "developed", "determined", "examines", "expect",
+    "find", "found", "gathered", "identifies", "include", "includes", "increases",
+    "limit", "limits", "measure", "measures", "monitor", "observed", "opens",
+    "preserves", "plans", "produce", "produced", "reaches", "records", "reduce",
+    "reduced", "repeated", "require", "requires", "restore", "reviewed", "shows",
+    "studying", "tested", "tests", "transport", "withstand", "were", "was",
+}
 
 
 @dataclass(frozen=True)
@@ -83,6 +126,7 @@ class SpanCandidate:
     word_count: int
     span_type: str
     lexical_quality: float = 0.0
+    syntactic_coherence: float = 0.0
 
     @property
     def is_single_word(self) -> bool:
@@ -313,6 +357,149 @@ def _lexical_quality(sentence: str, matches: Sequence[re.Match[str]], start: int
     return quality
 
 
+def _is_adverb(word: str) -> bool:
+    return word in COMMON_ADVERBS or word.endswith("ly")
+
+
+def _is_adjective(word: str) -> bool:
+    return (
+        word in COMMON_ADJECTIVES
+        or word.endswith(("able", "ible", "al", "ary", "ful", "ic", "ive", "less", "ous"))
+        or word.endswith(("ed", "ing"))
+    )
+
+
+def _is_verb(word: str) -> bool:
+    return (
+        word in COMMON_VERBS
+        or word.endswith("ed")
+        or word.endswith("ing")
+        or word.endswith("s") and word not in DETERMINERS
+    )
+
+
+def _is_noun(word: str) -> bool:
+    return (
+        word not in DETERMINERS | PREPOSITIONS | AUXILIARIES | CONJUNCTIONS | CLAUSE_MARKERS
+        and not _is_adverb(word)
+        and not _is_adjective(word)
+    )
+
+
+def _is_natural_noun_phrase(words: Sequence[str]) -> bool:
+    """Return whether the local words contain a plausible NP head."""
+
+    if not words:
+        return False
+    return any(_is_noun(word) for word in words)
+
+
+def _is_incomplete_fragment(score: float, words: Sequence[str], next_word: str | None) -> bool:
+    """Identify only clear local fragments for the fallback-safe filter."""
+
+    if score > 0.35:
+        return False
+    if not words:
+        return False
+    first, last = words[0], words[-1]
+    if last in PREPOSITIONS | DETERMINERS | AUXILIARIES | CONJUNCTIONS:
+        return True
+    if first in PREPOSITIONS and not _is_natural_noun_phrase(words[1:]):
+        return True
+    if next_word and _is_adjective(last) and _is_noun(next_word):
+        return True
+    if next_word and last in AUXILIARIES and _is_verb(next_word):
+        return True
+    return len(words) > 1 and first in PREPOSITIONS and not _is_natural_noun_phrase(words)
+
+
+def _syntactic_coherence(
+    sentence: str,
+    matches: Sequence[re.Match[str]],
+    start: int,
+    end: int,
+) -> float:
+    """Score how naturally a short token window forms a local constituent.
+
+    This is deliberately a conservative, local heuristic rather than a
+    grammar validator.  It recognizes common determiner/NP, adjective/NP,
+    preposition/NP, auxiliary/verb, adverb/modifier, and verb/complement
+    shapes, while marking obvious partial cuts for a substantial soft penalty.
+    The caller applies this only to distractors; the grammar-selected correct
+    span remains authoritative.
+    """
+
+    words = [match.group(0).lower() for match in matches[start:end]]
+    next_word = matches[end].group(0).lower() if end < len(matches) else None
+    if not words:
+        return 0.0
+
+    count = len(words)
+    first, last = words[0], words[-1]
+    score = 0.95 if count == 1 else 0.72
+
+    if count == 1:
+        if first in DETERMINERS:
+            return 0.05
+        if first in PREPOSITIONS or first in CLAUSE_MARKERS:
+            return 0.12
+        if first in AUXILIARIES:
+            return 0.16 if not (next_word and _is_verb(next_word)) else 0.04
+        if first in CONJUNCTIONS:
+            return 0.08
+        if _is_adjective(first) and next_word and _is_noun(next_word):
+            return 0.30
+        return score
+
+    if first in DETERMINERS and _is_natural_noun_phrase(words[1:]):
+        score = 1.42
+    elif _is_adjective(first) and _is_noun(words[1]):
+        score = 1.38
+    elif first in PREPOSITIONS and _is_natural_noun_phrase(words[1:]):
+        score = 1.34
+    elif first in AUXILIARIES and (_is_verb(words[1]) or words[1] in AUXILIARIES):
+        score = 1.30
+    elif _is_adverb(first) and (_is_adjective(words[1]) or _is_verb(words[1])):
+        score = 1.26
+    elif _is_verb(first) and _is_natural_noun_phrase(words[1:]):
+        score = 1.20
+    elif _is_noun(first) and _is_noun(words[1]):
+        score = 1.08
+
+    # Explicitly penalize the observed bad cuts and equivalent boundaries.
+    if last in PREPOSITIONS | DETERMINERS | AUXILIARIES | CONJUNCTIONS:
+        score -= 0.82
+    if first in PREPOSITIONS and (
+        not _is_natural_noun_phrase(words[1:])
+        or all(_is_adjective(word) for word in words[1:])
+    ):
+        score -= 0.78
+    if _is_noun(first) and last in PREPOSITIONS:
+        score -= 0.55
+    if (
+        _is_adjective(last)
+        and next_word
+        and _is_noun(next_word)
+        and not (first in AUXILIARIES and _is_verb(last))
+    ):
+        score -= 0.72
+    if last in AUXILIARIES and next_word and _is_verb(next_word):
+        score -= 0.75
+    if _is_verb(first) and last in PREPOSITIONS and next_word:
+        score -= 0.35
+
+    return max(0.0, round(score, 4))
+
+
+def syntactic_coherence_score(sentence: str, start: int, end: int) -> float:
+    """Public helper for deterministic span-coherence regression fixtures."""
+
+    matches = lexical_tokens(sentence)
+    if not (0 <= start < end <= len(matches)):
+        raise ValueError("span token range is outside the sentence")
+    return _syntactic_coherence(sentence, matches, start, end)
+
+
 def enumerate_candidate_spans(sentence: str, max_words: int = 4) -> list[SpanCandidate]:
     """Enumerate local lexical candidates across the entire sentence.
 
@@ -342,6 +529,7 @@ def enumerate_candidate_spans(sentence: str, max_words: int = 4) -> list[SpanCan
                 word_count=count,
                 span_type=span_type,
                 lexical_quality=_lexical_quality(sentence, matches, start, end),
+                syntactic_coherence=_syntactic_coherence(sentence, matches, start, end),
             ))
     return candidates
 
@@ -381,6 +569,7 @@ def _resolve_correct_span(
             word_count=selected.word_count,
             span_type=selected.span_type,
             lexical_quality=selected.lexical_quality,
+            syntactic_coherence=selected.syntactic_coherence,
         )
     return selected
 
@@ -465,7 +654,13 @@ def score_span_set(
         score += 0.80
     if correct_index != LABELS.index(plan.answer_position):
         score += 0.25
-    score -= 0.05 * sum(span.lexical_quality for span in ordered if span != correct_span)
+    distractors = [span for span in ordered if span != correct_span]
+    score -= 0.05 * sum(span.lexical_quality for span in distractors)
+    # Local constituent quality is a soft preference.  It is intentionally
+    # stronger than the old generic lexical-length bonus so that a complete
+    # short unit beats a geometrically convenient partial cut, without ever
+    # rescoring or moving the grammar-selected correct locus.
+    score -= 0.55 * sum(span.syntactic_coherence for span in distractors)
     return score
 
 
@@ -495,37 +690,61 @@ def select_span_set(
         plan.correct_span.span_type,
         long_span_rationale=long_span_rationale,
     )
+    token_matches = lexical_tokens(sentence)
     all_candidates = enumerate_candidate_spans(sentence, max_words=NORMAL_MAX_SPAN_WORDS)
     distractors = [
         candidate for candidate in all_candidates
         if (candidate.start, candidate.end) != (anchor.start, anchor.end)
         and candidate.word_count <= NORMAL_MAX_SPAN_WORDS
-        and candidate.end <= len(lexical_tokens(sentence))
+        and candidate.end <= len(token_matches)
         and _unique_substring(sentence, candidate.text)
     ]
-    # Keep the pool sentence-wide and favour one/two-word local units.  The
-    # pool is shuffled before ranking so equal-quality positions do not lock
-    # the correct answer to a fixed A/B/C/D slot.
-    rng.shuffle(distractors)
-    distractors.sort(key=lambda span: (
-        0 if span.word_count == 1 else 1 if span.word_count == 2 else 2,
-        -span.lexical_quality,
-    ))
-    distractors = distractors[:max_distractor_candidates]
+    # Keep scoring soft in general, but do not retain clearly incomplete local
+    # fragments when the sentence offers safe coherent alternatives.  If the
+    # conservative pool cannot satisfy geometry, retry with the original pool.
+    safe_distractors = [
+        candidate for candidate in distractors
+        if not _is_incomplete_fragment(
+            candidate.syntactic_coherence,
+            [match.group(0).lower() for match in token_matches[candidate.start:candidate.end]],
+            token_matches[candidate.end].group(0).lower()
+            if candidate.end < len(token_matches) else None,
+        )
+    ]
+    use_safe_pool = len(safe_distractors) >= 3
 
-    best: tuple[float, tuple[SpanCandidate, ...]] | None = None
-    for combo in itertools.combinations(distractors, 3):
-        spans = tuple(sorted((anchor, *combo), key=lambda span: span.start))
-        if not _non_overlapping(spans):
-            continue
-        gaps = _gaps(spans)
-        # Official observed gaps start at one.  A zero-gap set is not a normal
-        # v2.1 candidate and is rejected before scoring.
-        if any(gap < 1 for gap in gaps):
-            continue
-        score = score_span_set(len(lexical_tokens(sentence)), spans, anchor, plan, profile)
-        if best is None or score < best[0]:
-            best = (score, spans)
+    def ranked_pool(pool: Sequence[SpanCandidate]) -> list[SpanCandidate]:
+        # The pool is shuffled before ranking so equal-quality positions do not
+        # lock the correct answer to a fixed A/B/C/D slot.
+        ranked = list(pool)
+        rng.shuffle(ranked)
+        ranked.sort(key=lambda span: (
+            0 if span.word_count == 1 else 1 if span.word_count == 2 else 2,
+            -span.syntactic_coherence,
+            -span.lexical_quality,
+        ))
+        return ranked[:max_distractor_candidates]
+
+    def search(pool: Sequence[SpanCandidate]) -> tuple[float, tuple[SpanCandidate, ...]] | None:
+        best: tuple[float, tuple[SpanCandidate, ...]] | None = None
+        for combo in itertools.combinations(ranked_pool(pool), 3):
+            spans = tuple(sorted((anchor, *combo), key=lambda span: span.start))
+            if not _non_overlapping(spans):
+                continue
+            gaps = _gaps(spans)
+            # Official observed gaps start at one.  A zero-gap set is not a
+            # normal v2.1 candidate and is rejected before scoring.
+            if any(gap < 1 for gap in gaps):
+                continue
+            score = score_span_set(len(token_matches), spans, anchor, plan, profile)
+            if best is None or score < best[0]:
+                best = (score, spans)
+        return best
+
+    distractor_pool = safe_distractors if use_safe_pool else distractors
+    best = search(distractor_pool)
+    if best is None and use_safe_pool:
+        best = search(distractors)
     if best is None:
         raise SpanSelectionError("no whole-sentence four-span set satisfies normal nonzero-gap policy")
     selected = best[1]

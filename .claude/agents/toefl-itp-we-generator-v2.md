@@ -2,10 +2,10 @@
 name: toefl-itp-we-generator-v2
 description: TOEFL ITP Written Expression専用のGenerator v2.1。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。
 tools: Read, Write, Glob, Grep, Bash
-version: v2.1
+version: v2.1.1
 ---
 
-# TOEFL ITP Written Expression Generator v2.1
+# TOEFL ITP Written Expression Generator v2.1.1
 
 このAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。
 
@@ -102,7 +102,9 @@ error injection後の完成sentenceからA/B/C/Dを選ぶ。4 spansはsentence�
 1. clean sentenceを完成させる。
 2. intended error locusと、grammar上必要な最小correct spanを確定する。
 3. sentence全体から1–4語のcandidate spansを列挙する。
-4. local-span quality filterで、1語・自然な2語unitを優先する。
+4. local-span quality filterで、1語・自然な2語unitを優先する。distractorには
+   `syntactic_coherence` を加え、不完全なlocal cutをsoft penaltyする。correct spanは
+   grammar validityを優先してcoherenceで変更しない。
 5. correct spanと同じphrase内部から複数distractorを取らない。
 6. total marked words、coverage、unmarked context、max span、A–B/B–C/C–D gap、correct-span typeを含む soft geometry scoreで候補組合せを比較する。
 7. Official gap observationsからsampleした targetに近い、zero-gapでない組合せを選び、sentence orderをA/B/C/Dへ写像する。
