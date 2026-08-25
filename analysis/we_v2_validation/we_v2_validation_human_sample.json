@@ -149,11 +149,11 @@
     {
       "item_id": "we-v2-validation-009",
       "section": "Written Expression",
-      "sentence": "By the time the expedition reached the valley, local guides mapped the safest route through the passes.",
+      "sentence": "By the time the expedition reached the valley, local guides have map the safest route through the passes.",
       "marked_parts": {
         "A": "expedition",
         "B": "reached",
-        "C": "mapped",
+        "C": "have map",
         "D": "passes"
       }
     },

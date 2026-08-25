@@ -1,149 +1,167 @@
-"""Hard schema validation for TOEFL ITP Grammar Generator Agent output.
+"""Validate TOEFL ITP Generator output.
 
-Spec section 9 scope only: structural/schema checks (option counts, correct_answer
-range, taxonomy membership of enum-like fields). This does NOT judge grammatical
-correctness, distractor quality, or "TOEFL-ITP-likeness" - that is Reviewer Agent's
-job, not this script's.
+The committed Draft 2020-12 schemas are the structural source of truth.
+Python checks are limited to cross-field semantics that schemas do not make
+convenient to express.
 
-Usage:
-    python validate_output.py <path-to-generated-items.json>
-
-Exit code 0 if every item passes; 1 if any item fails.
+Exit codes: 0 valid, 1 candidate/schema/semantic failure, 2 runtime failure.
 """
+
+from __future__ import annotations
 
 import json
 import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO_ROOT))
+
+from shared.schema_validation import (  # noqa: E402
+    SchemaValidationRuntimeError,
+    load_schema,
+    schema_errors,
+)
+
 SPEC_JSON = REPO_ROOT / "specs" / "toefl_itp_grammar_spec.json"
+SCHEMA_DIR = Path(__file__).resolve().parents[1] / "schema"
+SECTION_SCHEMA_PATHS = {
+    "Structure": SCHEMA_DIR / "structure_item.schema.json",
+    "Written Expression": SCHEMA_DIR / "written_expression_item.schema.json",
+}
 
-DIFFICULTY_TIERS = {"EASY", "MEDIUM", "HARD"}
-ERROR_SCOPES = {"local", "clause_level", "sentence_level", "cross_clause"}
+_SCHEMA_CACHE: dict[str, dict] = {}
 
 
-def load_taxonomy_values():
+def load_taxonomy_values() -> tuple[set[str], set[str]]:
+    """Compatibility helper for callers that inspect the specification."""
     spec = json.loads(SPEC_JSON.read_text(encoding="utf-8"))
-    primary_targets = {pt["id"] for pt in spec["primary_targets"]}
-    tested_error_types = {t["id"] for t in spec["tested_error_types"]}
-    return primary_targets, tested_error_types
+    return (
+        {entry["id"] for entry in spec["primary_targets"]},
+        {entry["id"] for entry in spec["tested_error_types"]},
+    )
 
 
-def load_items(path: Path):
+def taxonomy_values() -> tuple[set[str], set[str]]:
+    return load_taxonomy_values()
+
+
+def load_items(path: Path) -> list[object]:
     data = json.loads(path.read_text(encoding="utf-8"))
     if isinstance(data, dict) and "items" in data:
-        return data["items"]
+        items = data["items"]
+        if not isinstance(items, list):
+            raise ValueError("$.items must be an array")
+        return items
     if isinstance(data, list):
         return data
     if isinstance(data, dict):
         return [data]
-    raise ValueError("Unrecognized top-level JSON shape")
+    raise ValueError("$ must be an item object, an array, or an object containing $.items")
 
 
-def validate_structure_item(item, primary_targets, errors):
-    prefix = f"[{item.get('item_id', '?')}] "
+def section_schema(section: object) -> tuple[dict | None, Path | None]:
+    path = SECTION_SCHEMA_PATHS.get(section) if isinstance(section, str) else None
+    if path is None:
+        return None, None
+    if section not in _SCHEMA_CACHE:
+        _SCHEMA_CACHE[section] = load_schema(path)
+    return _SCHEMA_CACHE[section], path
 
-    options = item.get("options")
-    if not isinstance(options, dict) or set(options.keys()) != {"A", "B", "C", "D"}:
-        errors.append(prefix + "options must have exactly keys A, B, C, D")
+
+def validate_structure_item(item: dict, _primary_targets: object, errors: list[str]) -> None:
+    """Cross-field checks only; structural rules belong to JSON Schema."""
+    answer = item["correct_answer"]
+    if answer not in item["options"]:
+        errors.append(f"[{item['item_id']}] $.correct_answer: does not reference $.options")
+
+
+def validate_written_expression_item(
+    item: dict,
+    _primary_targets: object,
+    _tested_error_types: object,
+    errors: list[str],
+) -> None:
+    """Cross-field checks only; structural rules belong to JSON Schema."""
+    answer = item["correct_answer"]
+    if answer not in item["marked_parts"]:
+        errors.append(f"[{item['item_id']}] $.correct_answer: does not reference $.marked_parts")
+
+
+def validate_semantics(
+    item: dict,
+    primary_targets: object = None,
+    tested_error_types: object = None,
+    errors: list[str] | None = None,
+) -> list[str]:
+    collected = errors if errors is not None else []
+    if item["section"] == "Structure":
+        validate_structure_item(item, primary_targets, collected)
     else:
-        for k, v in options.items():
-            if not isinstance(v, str) or not v.strip():
-                errors.append(prefix + f"options.{k} must be a non-empty string")
-
-    correct = item.get("correct_answer")
-    if correct not in {"A", "B", "C", "D"}:
-        errors.append(prefix + "correct_answer must be one of A/B/C/D")
-    elif isinstance(options, dict) and correct not in options:
-        errors.append(prefix + "correct_answer does not point to an existing option")
-
-    rationales = item.get("distractor_rationales")
-    if not isinstance(rationales, dict) or set(rationales.keys()) != {"A", "B", "C", "D"}:
-        errors.append(prefix + "distractor_rationales must have exactly keys A, B, C, D")
-
-    pt = item.get("primary_target")
-    if pt not in primary_targets:
-        errors.append(prefix + f"primary_target '{pt}' is not one of the 15 taxonomy values")
-
-    if item.get("difficulty") not in DIFFICULTY_TIERS:
-        errors.append(prefix + "difficulty must be EASY/MEDIUM/HARD")
-
-    if not isinstance(item.get("stem"), str) or not item["stem"].strip():
-        errors.append(prefix + "stem must be a non-empty string")
+        validate_written_expression_item(item, primary_targets, tested_error_types, collected)
+    return collected
 
 
-def validate_written_expression_item(item, primary_targets, tested_error_types, errors):
-    prefix = f"[{item.get('item_id', '?')}] "
-
-    marked = item.get("marked_parts")
-    if not isinstance(marked, dict) or set(marked.keys()) != {"A", "B", "C", "D"}:
-        errors.append(prefix + "marked_parts must have exactly keys A, B, C, D")
+def validate_contract(
+    item: object,
+    primary_targets: object = None,
+    tested_error_types: object = None,
+    errors: list[str] | None = None,
+) -> list[str]:
+    collected: list[str] = []
+    item_id = item.get("item_id", "?") if isinstance(item, dict) else "?"
+    if not isinstance(item, dict):
+        collected.append(f"[{item_id}] $: generated item must be an object")
     else:
-        for k, v in marked.items():
-            if not isinstance(v, str) or not v.strip():
-                errors.append(prefix + f"marked_parts.{k} must be a non-empty string")
-
-    correct = item.get("correct_answer")
-    if correct not in {"A", "B", "C", "D"}:
-        errors.append(prefix + "correct_answer must be one of A/B/C/D")
-    elif isinstance(marked, dict) and correct not in marked:
-        errors.append(prefix + "correct_answer does not point to an existing marked_parts entry")
-
-    pt = item.get("primary_target")
-    if pt not in primary_targets:
-        errors.append(prefix + f"primary_target '{pt}' is not one of the 15 taxonomy values")
-
-    tet = item.get("tested_error_type")
-    if tet not in tested_error_types:
-        errors.append(prefix + f"tested_error_type '{tet}' is not a valid taxonomy value")
-    if tet == "fragment":
-        errors.append(prefix + "tested_error_type 'fragment' is not possible for Written Expression (spec footnote 1)")
-    if tet == "wrong_complementation":
-        errors.append(prefix + "tested_error_type 'wrong_complementation' was superseded by wrong_preposition_collocation for this section (spec footnote 2)")
-
-    if item.get("error_scope") not in ERROR_SCOPES:
-        errors.append(prefix + "error_scope must be one of local/clause_level/sentence_level/cross_clause")
-
-    if item.get("difficulty") not in DIFFICULTY_TIERS:
-        errors.append(prefix + "difficulty must be EASY/MEDIUM/HARD")
-
-    if not isinstance(item.get("sentence"), str) or not item["sentence"].strip():
-        errors.append(prefix + "sentence must be a non-empty string")
+        schema, schema_path = section_schema(item.get("section"))
+        if schema is None:
+            collected.append(
+                f"[{item_id}] $.section: must be 'Structure' or 'Written Expression', "
+                f"got {item.get('section')!r}"
+            )
+        else:
+            structural = schema_errors(item, schema)
+            collected.extend(
+                f"[{item_id}] {schema_path.name}: {message}" for message in structural
+            )
+            if not structural:
+                validate_semantics(item, primary_targets, tested_error_types, collected)
+    if errors is not None:
+        errors.extend(collected)
+    return collected
 
 
-def main():
+validate = validate_contract
+validate_item = validate_contract
+
+
+def main() -> int:
     if len(sys.argv) != 2:
         print(__doc__)
-        sys.exit(2)
+        return 2
+    try:
+        items = load_items(Path(sys.argv[1]))
+        errors: list[str] = []
+        counts = {"Structure": 0, "Written Expression": 0}
+        for item in items:
+            if isinstance(item, dict) and item.get("section") in counts:
+                counts[item["section"]] += 1
+            validate_contract(item, errors=errors)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, SchemaValidationRuntimeError) as exc:
+        print(f"SYSTEM ERROR: {exc}", file=sys.stderr)
+        return 2
+    except ValueError as exc:
+        print(f"[?] $: {exc}")
+        return 1
 
-    path = Path(sys.argv[1])
-    primary_targets, tested_error_types = load_taxonomy_values()
-    items = load_items(path)
-
-    errors = []
-    section_counts = {"Structure": 0, "Written Expression": 0}
-
-    for item in items:
-        section = item.get("section")
-        if section == "Structure":
-            section_counts["Structure"] += 1
-            validate_structure_item(item, primary_targets, errors)
-        elif section == "Written Expression":
-            section_counts["Written Expression"] += 1
-            validate_written_expression_item(item, primary_targets, tested_error_types, errors)
-        else:
-            errors.append(f"[{item.get('item_id', '?')}] section must be 'Structure' or 'Written Expression', got {section!r}")
-
-    print(f"Checked {len(items)} item(s): {section_counts}")
+    print(f"Checked {len(items)} item(s): {counts}")
     if errors:
         print(f"\n{len(errors)} validation error(s):")
-        for e in errors:
-            print(f"  - {e}")
-        sys.exit(1)
-
-    print("All items passed hard schema validation (section 9 scope only).")
-    sys.exit(0)
+        for error in errors:
+            print(f"  - {error}")
+        return 1
+    print("All items passed Draft 2020-12 schema and semantic validation.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

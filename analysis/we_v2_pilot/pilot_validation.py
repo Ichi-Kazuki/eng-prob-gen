@@ -11,81 +11,11 @@ ROOT = Path(__file__).resolve().parents[2]
 GENERATOR_SCRIPTS = ROOT / "agents" / "toefl_itp_we_generator_v2" / "scripts"
 if str(GENERATOR_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(GENERATOR_SCRIPTS))
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from validate_format import load_json, validate_item  # noqa: E402
-
-
-TYPE_MAP = {
-    "object": dict,
-    "array": list,
-    "string": str,
-    "boolean": bool,
-    "number": (int, float),
-    "integer": int,
-    "null": type(None),
-}
-
-
-def schema_errors(value: Any, schema: dict, path: str = "") -> list[str]:
-    """Validate the small JSON Schema subset used by the Generator contract."""
-
-    errors: list[str] = []
-    where = path or "<root>"
-
-    if "const" in schema and value != schema["const"]:
-        errors.append(f"{where}: must equal {schema['const']!r}")
-    if "enum" in schema and value not in schema["enum"]:
-        errors.append(f"{where}: {value!r} not in {schema['enum']}")
-
-    types = schema.get("type")
-    if types is not None:
-        allowed = types if isinstance(types, list) else [types]
-        ok = any(
-            isinstance(value, TYPE_MAP[name])
-            and not (name in {"integer", "number"} and isinstance(value, bool))
-            for name in allowed
-        )
-        if not ok:
-            errors.append(f"{where}: expected type {allowed}, got {type(value).__name__}")
-            return errors
-
-    if isinstance(value, str) and "minLength" in schema and len(value) < schema["minLength"]:
-        errors.append(f"{where}: shorter than minLength {schema['minLength']}")
-    if isinstance(value, (int, float)) and not isinstance(value, bool):
-        if "minimum" in schema and value < schema["minimum"]:
-            errors.append(f"{where}: below minimum {schema['minimum']}")
-        if "maximum" in schema and value > schema["maximum"]:
-            errors.append(f"{where}: above maximum {schema['maximum']}")
-    if isinstance(value, list):
-        if "minItems" in schema and len(value) < schema["minItems"]:
-            errors.append(f"{where}: fewer than minItems {schema['minItems']}")
-        if "items" in schema:
-            for index, element in enumerate(value):
-                errors.extend(schema_errors(element, schema["items"], f"{where}[{index}]"))
-    if isinstance(value, dict):
-        for key in schema.get("required", []):
-            if key not in value:
-                errors.append(f"{where}: missing required property {key!r}")
-        properties = schema.get("properties", {})
-        extra = schema.get("additionalProperties", True)
-        # Always computed: when a node declares `additionalProperties` as a
-        # subschema but no `properties`, every key is an "unknown" key and the
-        # subschema is exactly what must validate it.
-        unknown = sorted(set(value) - set(properties))
-        if extra is False:
-            for key in unknown:
-                errors.append(f"{where}: additional property {key!r} is not allowed")
-        elif isinstance(extra, dict):
-            for key in unknown:
-                errors.extend(schema_errors(value[key], extra, f"{where}.{key}"))
-        for key, subschema in properties.items():
-            if key in value:
-                errors.extend(schema_errors(value[key], subschema, f"{where}.{key}"))
-        propnames = schema.get("propertyNames")
-        if isinstance(propnames, dict):
-            for key in value:
-                errors.extend(schema_errors(key, propnames, f"{where}:key({key})"))
-    return errors
+from shared.schema_validation import schema_errors  # noqa: E402
 
 
 def plan_mismatches(item: dict[str, Any], slot: dict[str, Any] | None) -> list[str]:

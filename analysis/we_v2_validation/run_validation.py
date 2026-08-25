@@ -27,6 +27,7 @@ import subprocess
 import sys
 import tempfile
 from collections import Counter, defaultdict
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from statistics import median
@@ -34,7 +35,10 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT_DIR = ROOT / "analysis" / "we_v2_validation"
+# Default: the tracked artifact directory. Set WE_V2_VALIDATION_OUT_DIR to
+# replay the harness into a temporary directory without overwriting the
+# committed historical artifacts.
+OUT_DIR = Path(os.environ.get("WE_V2_VALIDATION_OUT_DIR") or (ROOT / "analysis" / "we_v2_validation"))
 GENERATOR_DIR = ROOT / "agents" / "toefl_itp_we_generator_v2"
 GENERATOR_SCRIPTS = GENERATOR_DIR / "scripts"
 sys.path.insert(0, str(GENERATOR_SCRIPTS))
@@ -77,7 +81,7 @@ REVIEWER_VERSION = "Written Expression Reviewer v2.0"
 SECTION = "Written Expression"
 LABELS = ("A", "B", "C", "D")
 BATCH_NAMES = ("A", "B", "C")
-JUDGMENT_MODE = "contract_only_replay"
+JUDGMENT_MODE = "CONTRACT_REPLAY_ONLY"
 JUDGMENT_QUALITY_EVALUABLE = False
 REVISION_IDS = {
     "we-v2-validation-011",
@@ -494,12 +498,42 @@ def canonicalize(raw_items: list[dict[str, Any]]) -> tuple[list[dict[str, Any]],
     return emitted, failures
 
 
+def replay_annotations(scope: str, item_ids: list[str] | None = None) -> dict[str, Any]:
+    """Out-of-contract replay/audit annotations for a set of formal records.
+
+    ``judgment_mode`` and ``grammar_quality_evaluable`` describe how this
+    harness produced the records, not what an agent decided.  They belong to
+    the run, not to any agent's formal output contract, so they are emitted
+    here - never inside a Reviewer or Solver payload.
+    """
+    annotations: dict[str, Any] = {
+        "scope": scope,
+        "judgment_mode": JUDGMENT_MODE,
+        "grammar_quality_evaluable": JUDGMENT_QUALITY_EVALUABLE,
+        "grammar_quality_conclusion": "NOT_EVALUATED",
+        "note": (
+            "Contract-replay annotations. Held outside the formal agent output "
+            "contracts; the committed agent schemas are unchanged."
+        ),
+    }
+    if item_ids is not None:
+        annotations["item_ids"] = list(item_ids)
+    return annotations
+
+
 def reviewer_record(item: dict[str, Any], order: int, review_batch_id: str, round_label: str, replay_answer: str) -> dict[str, Any]:
     """Materialize a Reviewer-shaped contract fixture.
 
     There is no callable live Reviewer runtime in this repository.  The
     answer is therefore retained only to exercise the downstream schema and
     consensus contracts; it is explicitly not an independent grammar result.
+
+    Replay/audit annotations such as ``judgment_mode`` and
+    ``grammar_quality_evaluable`` are kept in the surrounding validation state,
+    metrics and ``replay_metadata`` sidecar.  They are deliberately not part of
+    this payload: ``reviewer_output_v2.schema.json`` is the formal Reviewer
+    output contract and does not admit them, and this record is validated
+    against that contract through ``validate_contract``.
     """
     generator_answer = item["correct_answer"]
     revision_needed = round_label == "round1" and item["item_id"] in REVISION_IDS
@@ -522,8 +556,6 @@ def reviewer_record(item: dict[str, Any], order: int, review_batch_id: str, roun
         "generator_answer": generator_answer,
         "answer_match": replay_answer == generator_answer,
         "grammar_validity": "PASS",
-        "judgment_mode": JUDGMENT_MODE,
-        "grammar_quality_evaluable": JUDGMENT_QUALITY_EVALUABLE,
         "format_validity": format_validity,
         "detected_error_count": 1,
         "detected_error_position": replay_answer,
@@ -557,7 +589,13 @@ def reviewer_record(item: dict[str, Any], order: int, review_batch_id: str, roun
 
 
 def solver_record(blinded: dict[str, Any], order: int, replay_answer: str, correction: str, batch_id: str) -> dict[str, Any]:
-    """Materialize a blind Solver-shaped contract fixture, not a grammar judgment."""
+    """Materialize a blind Solver-shaped contract fixture, not a grammar judgment.
+
+    Replay/audit annotations such as ``judgment_mode`` and
+    ``grammar_quality_evaluable`` are kept in the surrounding validation
+    state and metrics.  They are deliberately not part of this payload:
+    the Solver output contract is metadata-free and is validated as such.
+    """
     return {
         "item_id": blinded["item_id"],
         "section": SECTION,
@@ -566,8 +604,6 @@ def solver_record(blinded: dict[str, Any], order: int, replay_answer: str, corre
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": False,
         "suggested_correction": correction,
-        "judgment_mode": JUDGMENT_MODE,
-        "grammar_quality_evaluable": JUDGMENT_QUALITY_EVALUABLE,
     }
 
 
@@ -1026,7 +1062,7 @@ def run_regressions(blind_input: Path) -> dict[str, Any]:
         }
         for key, path in artifact_checks.items():
             results[key] = {
-                "path": path.relative_to(ROOT).as_posix(),
+                "path": path.relative_to(OUT_DIR).as_posix(),
                 "exists": path.exists(),
                 "temporary": True,
                 "status": "PASS" if path.exists() else "FAIL",
@@ -1289,7 +1325,7 @@ def main() -> int:
     by_id = {item["item_id"]: item for item in initial_items}
     slot_by_id = {slot["item_id"]: slot for slot in plan["slots"]}
     round1 = [reviewer_record(item, item["provenance"]["item_generation_order"], f"{RUN_ID}-review-round1", "round1", extras[item["item_id"]]["derived_answer"]) for item in initial_items]
-    round1_errors = [error for item in round1 for error in REVIEWER_VALIDATOR.validate(item)]
+    round1_errors = [error for item in round1 for error in REVIEWER_VALIDATOR.validate_contract(item)]
     if round1_errors:
         raise RuntimeError(f"Reviewer round 1 contract errors: {round1_errors[:5]}")
 
@@ -1306,10 +1342,17 @@ def main() -> int:
     final_by_id.update({item["item_id"]: item for item in revised_items})
     final_items = [final_by_id[item["item_id"]] for item in initial_items]
     final_review = [reviewer_record(item, item["provenance"]["item_generation_order"], f"{RUN_ID}-review-round2", "round2", extras[item["item_id"]]["derived_answer"]) for item in final_items]
-    final_review_errors = [error for item in final_review for error in REVIEWER_VALIDATOR.validate(item)]
+    final_review_errors = [error for item in final_review for error in REVIEWER_VALIDATOR.validate_contract(item)]
     if final_review_errors:
         raise RuntimeError(f"Reviewer final contract errors: {final_review_errors[:5]}")
-    write_json(OUT_DIR / "we_v2_validation_reviews.json", {"round1": round1, "round2": final_review})
+    write_json(OUT_DIR / "we_v2_validation_reviews.json", {
+        "round1": round1,
+        "round2": final_review,
+        # Outside the Reviewer contract on purpose - see replay_annotations().
+        "replay_metadata": replay_annotations(
+            "reviewer_records", [item["item_id"] for item in final_review]
+        ),
+    })
 
     blinded = []
     for item in final_items:
@@ -1328,11 +1371,19 @@ def main() -> int:
     solver_errors = []
     for item in solver_items:
         errors: list[str] = []
-        SOLVER_VALIDATOR.validate_item(item, errors)
+        SOLVER_VALIDATOR.validate_contract(item, errors)
         solver_errors.extend(errors)
     if solver_errors:
         raise RuntimeError(f"Solver contract errors: {solver_errors[:5]}")
-    write_json(OUT_DIR / "we_v2_validation_solver.json", {"items": solver_items, "blind_input": "_solver_input_blind.json", "allowed_fields": ["item_id", "section", "sentence", "marked_parts"]})
+    write_json(OUT_DIR / "we_v2_validation_solver.json", {
+        "items": solver_items,
+        "blind_input": "_solver_input_blind.json",
+        "allowed_fields": ["item_id", "section", "sentence", "marked_parts"],
+        # Outside the Solver contract on purpose - see replay_annotations().
+        "replay_metadata": replay_annotations(
+            "solver_records", [item["item_id"] for item in solver_items]
+        ),
+    })
 
     review_by_id = {item["item_id"]: item for item in final_review}
     solver_by_id = {item["item_id"]: item for item in solver_items}
@@ -1403,7 +1454,20 @@ def main() -> int:
             failures.append({"item_id": item_id, "state": final_state, "reason": states[item_id]["consensus"]})
     write_json(OUT_DIR / "we_v2_validation_accepted.json", {"items": accepted})
     write_json(OUT_DIR / "we_v2_validation_failures.json", {"items": failures})
-    write_json(OUT_DIR / "we_v2_validation_provenance.json", {"run": {"run_id": RUN_ID, "initial_candidate_count": 75, "replacement_generation": False, "timestamps": {"completed_at": datetime.now(timezone.utc).isoformat()}}, "items": provenance_records})
+    write_json(OUT_DIR / "we_v2_validation_provenance.json", {
+        "run": {
+            "run_id": RUN_ID,
+            "initial_candidate_count": 75,
+            "replacement_generation": False,
+            "timestamps": {"completed_at": datetime.now(timezone.utc).isoformat()},
+        },
+        # Keep replay/audit annotations at the artifact boundary. The nested
+        # review and solver records remain exact formal contract payloads.
+        "replay_metadata": replay_annotations(
+            "provenance_records", [record["item_id"] for record in provenance_records]
+        ),
+        "items": provenance_records,
+    })
 
     format_report = format_analysis(final_items, plan)
     batch_order = batch_and_order_metrics(final_items, round1, solver_items, states)

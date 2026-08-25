@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "item_id": "adv-schema-struct-001",
+      "section": "Structure",
+      "primary_target": "RELATIVE_CLAUSES",
+      "difficulty": "MEDIUM",
+      "stem": "The committee approved the proposal ____ the director had drafted.",
+      "options": {
+        "A": "which",
+        "B": "that",
+        "C": "what",
+        "D": "whom"
+      },
+      "correct_answer": "B",
+      "distractor_rationales": {
+        "A": "non-restrictive marker without a comma",
+        "B": "correct restrictive relative marker",
+        "C": "free relative, no antecedent available",
+        "D": "personal antecedent required"
+      },
+      "totally_unexpected_field": "this key is not in the committed schema"
+    }
+  ]
+}

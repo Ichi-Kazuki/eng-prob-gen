@@ -22,7 +22,7 @@
     "source_similarity_risk"
   ],
   "properties": {
-    "item_id": { "type": "string", "minLength": 1 },
+    "item_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
     "section": { "enum": ["Structure", "Written Expression"] },
     "verdict": { "enum": ["PASS", "REVISE", "REJECT"] },
     "critical_failure": { "type": "boolean" },
@@ -62,8 +62,8 @@
         "required": ["severity", "category", "description", "related_check"],
         "properties": {
           "severity": { "enum": ["CRITICAL", "MAJOR", "MINOR"] },
-          "category": { "type": "string", "minLength": 1 },
-          "description": { "type": "string", "minLength": 1 },
+          "category": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "description": { "type": "string", "minLength": 1, "pattern": "\\S" },
           "related_check": {
             "enum": [
               "grammar_validity",
@@ -82,7 +82,7 @@
     },
     "revision_requirements": {
       "type": "array",
-      "items": { "type": "string", "minLength": 1 }
+      "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
     },
     "source_similarity_risk": { "enum": ["LOW", "MEDIUM", "HIGH"] },
     "detected_error_count": { "type": "integer", "minimum": 0 },

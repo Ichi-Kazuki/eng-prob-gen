@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "accepted_item.schema.json",
   "title": "TOEFL ITP Orchestrator - accepted_item (public-facing, future Question DB input)",
-  "description": "The subset of an ACCEPTED candidate that is safe and appropriate to ship to end users / the Question DB. Contains no Reviewer verdicts, Solver answers, confidence, issues, or any other internal QA signal - see qa_audit.schema.json for that. This schema is descriptive documentation of the shape orchestrator.build_accepted_item() produces; it is not (yet) enforced by a JSON Schema library at runtime, consistent with this repo's other agents (schema-shape checks are hand-written Python, see agents/*/scripts/validate_output.py).",
+  "description": "The runtime-validated subset of an ACCEPTED candidate that is safe and appropriate to ship to end users / the Question DB. Contains no Reviewer verdicts, Solver answers, confidence, issues, or any other internal QA signal.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -10,33 +10,37 @@
     "spec_version", "taxonomy_version", "correct_answer", "explanation", "taxonomy"
   ],
   "properties": {
-    "item_id": { "type": "string", "minLength": 1 },
+    "item_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
     "section": { "enum": ["Structure", "Written Expression"] },
     "difficulty": {
       "enum": ["EASY", "MEDIUM", "HARD"],
       "description": "This is reviewer_difficulty (the Reviewer's independently re-assessed value), not the Generator's self-declared difficulty - see spec section 8 on why the Generator's own claim is not trusted as final."
     },
-    "vocabulary_domain": { "type": "string", "minLength": 1 },
-    "spec_version": { "type": "string", "minLength": 1 },
-    "taxonomy_version": { "type": "string", "minLength": 1 },
-    "stem": { "type": "string", "description": "Structure only" },
+    "vocabulary_domain": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "spec_version": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "taxonomy_version": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "stem": { "type": "string", "minLength": 1, "pattern": "\\S", "description": "Structure only" },
     "options": {
       "type": "object",
       "description": "Structure only",
       "additionalProperties": false,
       "properties": {
-        "A": { "type": "string" }, "B": { "type": "string" },
-        "C": { "type": "string" }, "D": { "type": "string" }
+        "A": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "B": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "C": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "D": { "type": "string", "minLength": 1, "pattern": "\\S" }
       }
     },
-    "sentence": { "type": "string", "description": "Written Expression only" },
+    "sentence": { "type": "string", "minLength": 1, "pattern": "\\S", "description": "Written Expression only" },
     "marked_parts": {
       "type": "object",
       "description": "Written Expression only",
       "additionalProperties": false,
       "properties": {
-        "A": { "type": "string" }, "B": { "type": "string" },
-        "C": { "type": "string" }, "D": { "type": "string" }
+        "A": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "B": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "C": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "D": { "type": "string", "minLength": 1, "pattern": "\\S" }
       }
     },
     "correct_answer": { "enum": ["A", "B", "C", "D"] },
@@ -45,9 +49,20 @@
       "additionalProperties": false,
       "required": ["answer_explanation"],
       "properties": {
-        "answer_explanation": { "type": "string" },
-        "distractor_rationales": { "type": "object", "description": "Structure only" },
-        "minimal_correction": { "type": "string", "description": "Written Expression only" }
+        "answer_explanation": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "distractor_rationales": {
+          "type": "object",
+          "description": "Structure only",
+          "additionalProperties": false,
+          "required": ["A", "B", "C", "D"],
+          "properties": {
+            "A": { "type": "string", "minLength": 1, "pattern": "\\S" },
+            "B": { "type": "string", "minLength": 1, "pattern": "\\S" },
+            "C": { "type": "string", "minLength": 1, "pattern": "\\S" },
+            "D": { "type": "string", "minLength": 1, "pattern": "\\S" }
+          }
+        },
+        "minimal_correction": { "type": "string", "minLength": 1, "pattern": "\\S" }
       }
     },
     "taxonomy": {
@@ -55,12 +70,81 @@
       "additionalProperties": false,
       "required": ["primary_target", "subtype", "secondary_features"],
       "properties": {
-        "primary_target": { "type": "string" },
-        "subtype": { "type": "string" },
-        "secondary_features": { "type": "array", "items": { "type": "string" } },
-        "tested_error_type": { "type": "string", "description": "Written Expression only" },
-        "error_scope": { "type": "string", "description": "Written Expression only" }
+        "primary_target": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "subtype": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "secondary_features": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+        },
+        "tested_error_type": {
+          "type": "string", "minLength": 1, "pattern": "\\S",
+          "description": "Written Expression only"
+        },
+        "error_scope": {
+          "type": "string", "minLength": 1, "pattern": "\\S",
+          "description": "Written Expression only"
+        }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "section": { "const": "Structure" } } },
+      "then": {
+        "required": ["stem", "options"],
+        "properties": {
+          "stem": { "type": "string", "minLength": 1 },
+          "options": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["A", "B", "C", "D"],
+            "properties": {
+              "A": { "type": "string", "minLength": 1, "pattern": "\\S" },
+              "B": { "type": "string", "minLength": 1, "pattern": "\\S" },
+              "C": { "type": "string", "minLength": 1, "pattern": "\\S" },
+              "D": { "type": "string", "minLength": 1, "pattern": "\\S" }
+            }
+          },
+          "explanation": {
+            "required": ["answer_explanation", "distractor_rationales"]
+          }
+        },
+        "not": {
+          "anyOf": [
+            { "required": ["sentence"] },
+            { "required": ["marked_parts"] }
+          ]
+        }
+      },
+      "else": {
+        "required": ["sentence", "marked_parts"],
+        "properties": {
+          "sentence": { "type": "string", "minLength": 1 },
+          "marked_parts": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["A", "B", "C", "D"],
+            "properties": {
+              "A": { "type": "string", "minLength": 1, "pattern": "\\S" },
+              "B": { "type": "string", "minLength": 1, "pattern": "\\S" },
+              "C": { "type": "string", "minLength": 1, "pattern": "\\S" },
+              "D": { "type": "string", "minLength": 1, "pattern": "\\S" }
+            }
+          },
+          "explanation": {
+            "required": ["answer_explanation", "minimal_correction"]
+          },
+          "taxonomy": {
+            "required": ["tested_error_type", "error_scope"]
+          }
+        },
+        "not": {
+          "anyOf": [
+            { "required": ["stem"] },
+            { "required": ["options"] }
+          ]
+        }
+      }
+    }
+  ]
 }

@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.lock
+
+      - name: Install locked dependencies
+        run: python -m pip install --requirement requirements.lock
+
+      - name: Schema and hardening unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Smoke regression
+        run: python orchestrator/scripts/run_smoke_test.py "$RUNNER_TEMP/orchestrator_smoke_test.json"
+
+      - name: Adversarial regression
+        run: python orchestrator/scripts/run_adversarial_test.py "$RUNNER_TEMP/orchestrator_adversarial_test.json"
+
+      - name: Reject-path regression
+        run: python orchestrator/scripts/run_reject_path_test.py "$RUNNER_TEMP/orchestrator_reject_path_test.json"
+
+      - name: Acceptance tests
+        run: python orchestrator/scripts/run_acceptance_tests.py "$RUNNER_TEMP/acceptance"
+
+      - name: Prompt hardening regression
+        run: >-
+          python agents/toefl_itp_grammar_reviewer/scripts/run_p0_hardening_regression.py
+          "$RUNNER_TEMP/prompt_hardening.json"
+
+      - name: Provenance validation
+        run: |
+          python orchestrator/scripts/validate_provenance.py "$RUNNER_TEMP/orchestrator_smoke_test.json"
+          python orchestrator/scripts/validate_provenance.py "$RUNNER_TEMP/orchestrator_adversarial_test.json"
+          python orchestrator/scripts/validate_provenance.py "$RUNNER_TEMP/orchestrator_reject_path_test.json"
+
+      - name: Assert tests changed no tracked files
+        run: git diff --exit-code

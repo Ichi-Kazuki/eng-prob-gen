@@ -4,8 +4,92 @@
     "initial_candidate_count": 75,
     "replacement_generation": false,
     "timestamps": {
-      "completed_at": "2026-08-24T10:10:17.539342+00:00"
+      "completed_at": "2026-08-25T02:15:44.717989+00:00"
     }
+  },
+  "replay_metadata": {
+    "scope": "provenance_records",
+    "judgment_mode": "CONTRACT_REPLAY_ONLY",
+    "grammar_quality_evaluable": false,
+    "grammar_quality_conclusion": "NOT_EVALUATED",
+    "note": "Contract-replay annotations. Held outside the formal agent output contracts; the committed agent schemas are unchanged.",
+    "item_ids": [
+      "we-v2-validation-001",
+      "we-v2-validation-002",
+      "we-v2-validation-003",
+      "we-v2-validation-004",
+      "we-v2-validation-005",
+      "we-v2-validation-006",
+      "we-v2-validation-007",
+      "we-v2-validation-008",
+      "we-v2-validation-009",
+      "we-v2-validation-010",
+      "we-v2-validation-011",
+      "we-v2-validation-012",
+      "we-v2-validation-013",
+      "we-v2-validation-014",
+      "we-v2-validation-015",
+      "we-v2-validation-016",
+      "we-v2-validation-017",
+      "we-v2-validation-018",
+      "we-v2-validation-019",
+      "we-v2-validation-020",
+      "we-v2-validation-021",
+      "we-v2-validation-022",
+      "we-v2-validation-023",
+      "we-v2-validation-024",
+      "we-v2-validation-025",
+      "we-v2-validation-026",
+      "we-v2-validation-027",
+      "we-v2-validation-028",
+      "we-v2-validation-029",
+      "we-v2-validation-030",
+      "we-v2-validation-031",
+      "we-v2-validation-032",
+      "we-v2-validation-033",
+      "we-v2-validation-034",
+      "we-v2-validation-035",
+      "we-v2-validation-036",
+      "we-v2-validation-037",
+      "we-v2-validation-038",
+      "we-v2-validation-039",
+      "we-v2-validation-040",
+      "we-v2-validation-041",
+      "we-v2-validation-042",
+      "we-v2-validation-043",
+      "we-v2-validation-044",
+      "we-v2-validation-045",
+      "we-v2-validation-046",
+      "we-v2-validation-047",
+      "we-v2-validation-048",
+      "we-v2-validation-049",
+      "we-v2-validation-050",
+      "we-v2-validation-051",
+      "we-v2-validation-052",
+      "we-v2-validation-053",
+      "we-v2-validation-054",
+      "we-v2-validation-055",
+      "we-v2-validation-056",
+      "we-v2-validation-057",
+      "we-v2-validation-058",
+      "we-v2-validation-059",
+      "we-v2-validation-060",
+      "we-v2-validation-061",
+      "we-v2-validation-062",
+      "we-v2-validation-063",
+      "we-v2-validation-064",
+      "we-v2-validation-065",
+      "we-v2-validation-066",
+      "we-v2-validation-067",
+      "we-v2-validation-068",
+      "we-v2-validation-069",
+      "we-v2-validation-070",
+      "we-v2-validation-071",
+      "we-v2-validation-072",
+      "we-v2-validation-073",
+      "we-v2-validation-074",
+      "we-v2-validation-075"
+    ]
   },
   "items": [
     {
@@ -43,7 +127,7 @@
           "D": "researchers"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as have -> has.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as have -> has.",
         "minimal_correction": "have -> has",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -163,7 +247,7 @@
           "D": "researchers"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as have -> has.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as have -> has.",
         "minimal_correction": "have -> has",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -274,8 +358,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -375,9 +457,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "have -> has",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "have -> has"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -422,7 +502,7 @@
           "D": "its"
         },
         "correct_answer": "D",
-        "error_explanation": "The intended grammatical error is in marked part D; the clean form repairs it as its -> their.",
+        "error_explanation": "The actual clean/error mutation is in marked part D; the clean form repairs it as its -> their.",
         "minimal_correction": "its -> their",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -543,7 +623,7 @@
           "D": "its"
         },
         "correct_answer": "D",
-        "error_explanation": "The intended grammatical error is in marked part D; the clean form repairs it as its -> their.",
+        "error_explanation": "The actual clean/error mutation is in marked part D; the clean form repairs it as its -> their.",
         "minimal_correction": "its -> their",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -655,8 +735,6 @@
             "generator_answer": "D",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "D",
@@ -757,9 +835,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "its -> their",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "its -> their"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -803,14 +879,14 @@
           "C": "labeled containers",
           "D": "laboratory team"
         },
-        "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as The most -> Most.",
+        "correct_answer": "A",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as The most -> Most.",
         "minimal_correction": "The most -> Most",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SHORT_SPAN",
           "decision_granularity": "FUNCTION_WORD",
-          "intended_error_position": "C",
+          "intended_error_position": "A",
           "correct_span_type": "SHORT_PHRASE"
         },
         "format_metadata": {
@@ -927,14 +1003,14 @@
           "C": "labeled containers",
           "D": "laboratory team"
         },
-        "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as The most -> Most.",
+        "correct_answer": "A",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as The most -> Most.",
         "minimal_correction": "The most -> Most",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SHORT_SPAN",
           "decision_granularity": "FUNCTION_WORD",
-          "intended_error_position": "C",
+          "intended_error_position": "A",
           "correct_span_type": "SHORT_PHRASE"
         },
         "format_metadata": {
@@ -1039,21 +1115,19 @@
             "agent_version": "Written Expression Reviewer v2.0",
             "verdict": "PASS",
             "critical_failure": false,
-            "independent_answer": "C",
-            "generator_answer": "C",
+            "independent_answer": "A",
+            "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
-            "detected_error_position": "C",
+            "detected_error_position": "A",
             "non_error_parts_valid": true,
             "minimal_correction_valid": true,
             "marked_part_assessments": {
-              "A": "ACCEPTABLE",
+              "A": "ERROR",
               "B": "ACCEPTABLE",
-              "C": "ERROR",
+              "C": "ACCEPTABLE",
               "D": "ACCEPTABLE"
             },
             "checks": {
@@ -1144,13 +1218,11 @@
       "solver": {
         "item_id": "we-v2-validation-003",
         "section": "Written Expression",
-        "solver_answer": "C",
+        "solver_answer": "A",
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "The most -> Most",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "The most -> Most"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -1195,7 +1267,7 @@
           "D": "researchers"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as missing the before ancient inscription.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as missing the before ancient inscription.",
         "minimal_correction": "missing the before ancient inscription",
         "grammar_metadata": {
           "error_scope": "local",
@@ -1318,7 +1390,7 @@
           "D": "researchers"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as missing the before ancient inscription.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as missing the before ancient inscription.",
         "minimal_correction": "missing the before ancient inscription",
         "grammar_metadata": {
           "error_scope": "local",
@@ -1432,8 +1504,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -1536,9 +1606,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "missing the before ancient inscription",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "missing the before ancient inscription"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -1583,7 +1651,7 @@
           "D": "touch"
         },
         "correct_answer": "D",
-        "error_explanation": "The intended grammatical error is in marked part D; the clean form repairs it as touch -> touching.",
+        "error_explanation": "The actual clean/error mutation is in marked part D; the clean form repairs it as touch -> touching.",
         "minimal_correction": "touch -> touching",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -1704,7 +1772,7 @@
           "D": "touch"
         },
         "correct_answer": "D",
-        "error_explanation": "The intended grammatical error is in marked part D; the clean form repairs it as touch -> touching.",
+        "error_explanation": "The actual clean/error mutation is in marked part D; the clean form repairs it as touch -> touching.",
         "minimal_correction": "touch -> touching",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -1816,8 +1884,6 @@
             "generator_answer": "D",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "D",
@@ -1918,9 +1984,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "touch -> touching",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "touch -> touching"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -1965,7 +2029,7 @@
           "D": "recovery"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as depends in -> depends on.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as depends in -> depends on.",
         "minimal_correction": "depends in -> depends on",
         "grammar_metadata": {
           "error_scope": "local",
@@ -2086,7 +2150,7 @@
           "D": "recovery"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as depends in -> depends on.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as depends in -> depends on.",
         "minimal_correction": "depends in -> depends on",
         "grammar_metadata": {
           "error_scope": "local",
@@ -2198,8 +2262,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -2300,9 +2362,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "depends in -> depends on",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "depends in -> depends on"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -2347,7 +2407,7 @@
           "D": "specimens"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as to examine -> examine.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as to examine -> examine.",
         "minimal_correction": "to examine -> examine",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -2468,7 +2528,7 @@
           "D": "specimens"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as to examine -> examine.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as to examine -> examine.",
         "minimal_correction": "to examine -> examine",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -2580,8 +2640,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -2682,9 +2740,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "to examine -> examine",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "to examine -> examine"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -2729,7 +2785,7 @@
           "D": "containers"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as were analyzed -> analyzed.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as were analyzed -> analyzed.",
         "minimal_correction": "were analyzed -> analyzed",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -2850,7 +2906,7 @@
           "D": "containers"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as were analyzed -> analyzed.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as were analyzed -> analyzed.",
         "minimal_correction": "were analyzed -> analyzed",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -2962,8 +3018,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -3064,9 +3118,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "were analyzed -> analyzed",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "were analyzed -> analyzed"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -3103,60 +3155,60 @@
         "tested_error_type": "wrong_verb_form",
         "difficulty": "MEDIUM",
         "vocabulary_domain": "observational astronomy",
-        "sentence": "By the time the expedition reached the valley, local guides mapped the safest route through the passes.",
+        "sentence": "By the time the expedition reached the valley, local guides have map the safest route through the passes.",
         "marked_parts": {
           "A": "expedition",
           "B": "reached",
-          "C": "mapped",
+          "C": "have map",
           "D": "passes"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as mapped -> had mapped.",
-        "minimal_correction": "mapped -> had mapped",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as have map -> had mapped.",
+        "minimal_correction": "have map -> had mapped",
         "grammar_metadata": {
           "error_scope": "clause_level",
           "correction_locality": "DEPENDENCY_BASED",
           "decision_granularity": "VERB_FRAME",
           "intended_error_position": "C",
-          "correct_span_type": "SINGLE_WORD"
+          "correct_span_type": "SHORT_PHRASE"
         },
         "format_metadata": {
           "target_sentence_length_region": "16-20",
-          "expected_span_profile": "1/1/1/1; realized A=1, B=1, C=1, D=1",
+          "expected_span_profile": "1/1/2/1; realized A=1, B=1, C=2, D=1",
           "coverage_profile": "Official distribution is a soft empirical reference; canonical diagnostics are authoritative.",
           "approximate_context_profile": "Canonical diagnostics compute context and gaps deterministically after span selection.",
           "span_types": {
             "A": "SINGLE_WORD",
             "B": "SINGLE_WORD",
-            "C": "SINGLE_WORD",
+            "C": "SHORT_PHRASE",
             "D": "SINGLE_WORD"
           },
           "diagnostics": {
-            "sentence_word_count": 17,
+            "sentence_word_count": 18,
             "span_word_counts": {
               "A": 1,
               "B": 1,
-              "C": 1,
+              "C": 2,
               "D": 1
             },
-            "mean_span_length": 1.0,
-            "max_span_length": 1,
-            "marked_coverage_ratio": 0.2353,
+            "mean_span_length": 1.25,
+            "max_span_length": 2,
+            "marked_coverage_ratio": 0.2778,
             "unmarked_word_count": 13,
             "gap_A_B": 0,
             "gap_B_C": 4,
             "gap_C_D": 5,
-            "correct_span_word_count": 1,
-            "correct_span_type": "SINGLE_WORD",
+            "correct_span_word_count": 2,
+            "correct_span_type": "SHORT_PHRASE",
             "correction_locality": "DEPENDENCY_BASED",
             "decision_granularity": "VERB_FRAME",
-            "format_distribution_distance": 0.7015,
+            "format_distribution_distance": 0.3327,
             "format_percentile_profile": {
-              "sentence_word_count": 0.268,
-              "marked_coverage_ratio": 0.36,
+              "sentence_word_count": 0.36,
+              "marked_coverage_ratio": 0.544,
               "unmarked_word_count": 0.396,
-              "mean_span_length": 0.156,
-              "max_span_length": 0.156,
+              "mean_span_length": 0.5,
+              "max_span_length": 0.588,
               "gap_A_B": 0.0,
               "gap_B_C": 0.54,
               "gap_C_D": 0.832
@@ -3180,10 +3232,11 @@
                 5
               ],
               "C": [
-                10
+                10,
+                11
               ],
               "D": [
-                16
+                17
               ]
             }
           }
@@ -3201,8 +3254,8 @@
         },
         "qa_metadata": {
           "clean_form": "By the time the expedition reached the valley, local guides had mapped the safest route through the passes.",
-          "error_form": "By the time the expedition reached the valley, local guides mapped the safest route through the passes.",
-          "minimal_correction": "mapped -> had mapped",
+          "error_form": "By the time the expedition reached the valley, local guides have map the safest route through the passes.",
+          "minimal_correction": "have map -> had mapped",
           "mutation_type": "one genuine grammatical mutation from a separately validated clean sentence",
           "clean_sentence_validated": true,
           "grammar_check_status": "PASS",
@@ -3223,60 +3276,60 @@
         "tested_error_type": "wrong_verb_form",
         "difficulty": "MEDIUM",
         "vocabulary_domain": "observational astronomy",
-        "sentence": "By the time the expedition reached the valley, local guides mapped the safest route through the passes.",
+        "sentence": "By the time the expedition reached the valley, local guides have map the safest route through the passes.",
         "marked_parts": {
           "A": "expedition",
           "B": "reached",
-          "C": "mapped",
+          "C": "have map",
           "D": "passes"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as mapped -> had mapped.",
-        "minimal_correction": "mapped -> had mapped",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as have map -> had mapped.",
+        "minimal_correction": "have map -> had mapped",
         "grammar_metadata": {
           "error_scope": "clause_level",
           "correction_locality": "DEPENDENCY_BASED",
           "decision_granularity": "VERB_FRAME",
           "intended_error_position": "C",
-          "correct_span_type": "SINGLE_WORD"
+          "correct_span_type": "SHORT_PHRASE"
         },
         "format_metadata": {
           "target_sentence_length_region": "16-20",
-          "expected_span_profile": "1/1/1/1; realized A=1, B=1, C=1, D=1",
+          "expected_span_profile": "1/1/2/1; realized A=1, B=1, C=2, D=1",
           "coverage_profile": "Official distribution is a soft empirical reference; canonical diagnostics are authoritative.",
           "approximate_context_profile": "Canonical diagnostics compute context and gaps deterministically after span selection.",
           "span_types": {
             "A": "SINGLE_WORD",
             "B": "SINGLE_WORD",
-            "C": "SINGLE_WORD",
+            "C": "SHORT_PHRASE",
             "D": "SINGLE_WORD"
           },
           "diagnostics": {
-            "sentence_word_count": 17,
+            "sentence_word_count": 18,
             "span_word_counts": {
               "A": 1,
               "B": 1,
-              "C": 1,
+              "C": 2,
               "D": 1
             },
-            "mean_span_length": 1.0,
-            "max_span_length": 1,
-            "marked_coverage_ratio": 0.2353,
+            "mean_span_length": 1.25,
+            "max_span_length": 2,
+            "marked_coverage_ratio": 0.2778,
             "unmarked_word_count": 13,
             "gap_A_B": 0,
             "gap_B_C": 4,
             "gap_C_D": 5,
-            "correct_span_word_count": 1,
-            "correct_span_type": "SINGLE_WORD",
+            "correct_span_word_count": 2,
+            "correct_span_type": "SHORT_PHRASE",
             "correction_locality": "DEPENDENCY_BASED",
             "decision_granularity": "VERB_FRAME",
-            "format_distribution_distance": 0.7015,
+            "format_distribution_distance": 0.3327,
             "format_percentile_profile": {
-              "sentence_word_count": 0.268,
-              "marked_coverage_ratio": 0.36,
+              "sentence_word_count": 0.36,
+              "marked_coverage_ratio": 0.544,
               "unmarked_word_count": 0.396,
-              "mean_span_length": 0.156,
-              "max_span_length": 0.156,
+              "mean_span_length": 0.5,
+              "max_span_length": 0.588,
               "gap_A_B": 0.0,
               "gap_B_C": 0.54,
               "gap_C_D": 0.832
@@ -3300,10 +3353,11 @@
                 5
               ],
               "C": [
-                10
+                10,
+                11
               ],
               "D": [
-                16
+                17
               ]
             }
           }
@@ -3321,8 +3375,8 @@
         },
         "qa_metadata": {
           "clean_form": "By the time the expedition reached the valley, local guides had mapped the safest route through the passes.",
-          "error_form": "By the time the expedition reached the valley, local guides mapped the safest route through the passes.",
-          "minimal_correction": "mapped -> had mapped",
+          "error_form": "By the time the expedition reached the valley, local guides have map the safest route through the passes.",
+          "minimal_correction": "have map -> had mapped",
           "mutation_type": "one genuine grammatical mutation from a separately validated clean sentence",
           "clean_sentence_validated": true,
           "grammar_check_status": "PASS",
@@ -3342,8 +3396,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -3365,31 +3417,31 @@
               "provenance": "PASS"
             },
             "format_diagnostics": {
-              "sentence_word_count": 17,
+              "sentence_word_count": 18,
               "span_word_counts": {
                 "A": 1,
                 "B": 1,
-                "C": 1,
+                "C": 2,
                 "D": 1
               },
-              "mean_span_length": 1.0,
-              "max_span_length": 1,
-              "marked_coverage_ratio": 0.2353,
+              "mean_span_length": 1.25,
+              "max_span_length": 2,
+              "marked_coverage_ratio": 0.2778,
               "unmarked_word_count": 13,
               "gap_A_B": 0,
               "gap_B_C": 4,
               "gap_C_D": 5,
-              "correct_span_word_count": 1,
-              "correct_span_type": "SINGLE_WORD",
+              "correct_span_word_count": 2,
+              "correct_span_type": "SHORT_PHRASE",
               "correction_locality": "DEPENDENCY_BASED",
               "decision_granularity": "VERB_FRAME",
-              "format_distribution_distance": 0.7015,
+              "format_distribution_distance": 0.3327,
               "format_percentile_profile": {
-                "sentence_word_count": 0.268,
-                "marked_coverage_ratio": 0.36,
+                "sentence_word_count": 0.36,
+                "marked_coverage_ratio": 0.544,
                 "unmarked_word_count": 0.396,
-                "mean_span_length": 0.156,
-                "max_span_length": 0.156,
+                "mean_span_length": 0.5,
+                "max_span_length": 0.588,
                 "gap_A_B": 0.0,
                 "gap_B_C": 0.54,
                 "gap_C_D": 0.832
@@ -3413,10 +3465,11 @@
                   5
                 ],
                 "C": [
-                  10
+                  10,
+                  11
                 ],
                 "D": [
-                  16
+                  17
                 ]
               }
             },
@@ -3443,9 +3496,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "mapped -> had mapped",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "have map -> had mapped"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -3490,7 +3541,7 @@
           "D": "classmates"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as presenting conclusions -> present conclusions.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as presenting conclusions -> present conclusions.",
         "minimal_correction": "presenting conclusions -> present conclusions",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -3612,7 +3663,7 @@
           "D": "classmates"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as presenting conclusions -> present conclusions.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as presenting conclusions -> present conclusions.",
         "minimal_correction": "presenting conclusions -> present conclusions",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -3725,8 +3776,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "PASS",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -3828,9 +3877,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "presenting conclusions -> present conclusions",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "presenting conclusions -> present conclusions"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -3875,7 +3922,7 @@
           "D": "storms"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as predicting magnetic disturbances -> predicts magnetic disturbances.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as predicting magnetic disturbances -> predicts magnetic disturbances.",
         "minimal_correction": "predicting magnetic disturbances -> predicts magnetic disturbances",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -3998,7 +4045,7 @@
           "D": "storms"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as predicting magnetic disturbances -> predicts magnetic disturbances.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as predicting magnetic disturbances -> predicts magnetic disturbances.",
         "minimal_correction": "predicting magnetic disturbances -> predicts magnetic disturbances",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -4112,8 +4159,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -4228,8 +4273,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -4332,9 +4375,7 @@
         "confidence": "MEDIUM",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "predicting magnetic disturbances -> predicts magnetic disturbances",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "predicting magnetic disturbances -> predicts magnetic disturbances"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -4379,7 +4420,7 @@
           "D": "difficult"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as accurate -> accurately.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as accurate -> accurately.",
         "minimal_correction": "accurate -> accurately",
         "grammar_metadata": {
           "error_scope": "local",
@@ -4499,7 +4540,7 @@
           "D": "difficult"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as accurate -> accurately.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as accurate -> accurately.",
         "minimal_correction": "accurate -> accurately",
         "grammar_metadata": {
           "error_scope": "local",
@@ -4610,8 +4651,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -4711,9 +4750,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "accurate -> accurately",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "accurate -> accurately"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -4757,15 +4794,15 @@
           "C": "volcanic",
           "D": "formations"
         },
-        "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as detail analysis -> detailed analysis.",
+        "correct_answer": "B",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as detail analysis -> detailed analysis.",
         "minimal_correction": "detail analysis -> detailed analysis",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "MORPHOLOGY",
-          "intended_error_position": "A",
-          "correct_span_type": "SINGLE_WORD"
+          "intended_error_position": "B",
+          "correct_span_type": "SHORT_PHRASE"
         },
         "format_metadata": {
           "target_sentence_length_region": "11-15",
@@ -4793,8 +4830,8 @@
             "gap_A_B": 2,
             "gap_B_C": 3,
             "gap_C_D": 0,
-            "correct_span_word_count": 1,
-            "correct_span_type": "SINGLE_WORD",
+            "correct_span_word_count": 2,
+            "correct_span_type": "SHORT_PHRASE",
             "correction_locality": "LOCAL_SINGLE_TOKEN",
             "decision_granularity": "MORPHOLOGY",
             "format_distribution_distance": 1.5712,
@@ -4878,15 +4915,15 @@
           "C": "volcanic",
           "D": "formations"
         },
-        "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as detail analysis -> detailed analysis.",
+        "correct_answer": "B",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as detail analysis -> detailed analysis.",
         "minimal_correction": "detail analysis -> detailed analysis",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "MORPHOLOGY",
-          "intended_error_position": "A",
-          "correct_span_type": "SINGLE_WORD"
+          "intended_error_position": "B",
+          "correct_span_type": "SHORT_PHRASE"
         },
         "format_metadata": {
           "target_sentence_length_region": "11-15",
@@ -4914,8 +4951,8 @@
             "gap_A_B": 2,
             "gap_B_C": 3,
             "gap_C_D": 0,
-            "correct_span_word_count": 1,
-            "correct_span_type": "SINGLE_WORD",
+            "correct_span_word_count": 2,
+            "correct_span_type": "SHORT_PHRASE",
             "correction_locality": "LOCAL_SINGLE_TOKEN",
             "decision_granularity": "MORPHOLOGY",
             "format_distribution_distance": 1.5712,
@@ -4987,20 +5024,18 @@
             "agent_version": "Written Expression Reviewer v2.0",
             "verdict": "PASS",
             "critical_failure": false,
-            "independent_answer": "A",
-            "generator_answer": "A",
+            "independent_answer": "B",
+            "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
-            "detected_error_position": "A",
+            "detected_error_position": "B",
             "non_error_parts_valid": true,
             "minimal_correction_valid": true,
             "marked_part_assessments": {
-              "A": "ERROR",
-              "B": "ACCEPTABLE",
+              "A": "ACCEPTABLE",
+              "B": "ERROR",
               "C": "ACCEPTABLE",
               "D": "ACCEPTABLE"
             },
@@ -5028,8 +5063,8 @@
               "gap_A_B": 2,
               "gap_B_C": 3,
               "gap_C_D": 0,
-              "correct_span_word_count": 1,
-              "correct_span_type": "SINGLE_WORD",
+              "correct_span_word_count": 2,
+              "correct_span_type": "SHORT_PHRASE",
               "correction_locality": "LOCAL_SINGLE_TOKEN",
               "decision_granularity": "MORPHOLOGY",
               "format_distribution_distance": 1.5712,
@@ -5089,13 +5124,11 @@
       "solver": {
         "item_id": "we-v2-validation-013",
         "section": "Written Expression",
-        "solver_answer": "A",
+        "solver_answer": "B",
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "detail analysis -> detailed analysis",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "detail analysis -> detailed analysis"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -5140,7 +5173,7 @@
           "D": "fields"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as rapid expand -> rapid expansion.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as rapid expand -> rapid expansion.",
         "minimal_correction": "rapid expand -> rapid expansion",
         "grammar_metadata": {
           "error_scope": "local",
@@ -5261,7 +5294,7 @@
           "D": "fields"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as rapid expand -> rapid expansion.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as rapid expand -> rapid expansion.",
         "minimal_correction": "rapid expand -> rapid expansion",
         "grammar_metadata": {
           "error_scope": "local",
@@ -5373,8 +5406,6 @@
             "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "A",
@@ -5475,9 +5506,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "rapid expand -> rapid expansion",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "rapid expand -> rapid expansion"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -5522,7 +5551,7 @@
           "D": "climates"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as discovering -> discovered.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as discovering -> discovered.",
         "minimal_correction": "discovering -> discovered",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -5648,7 +5677,7 @@
           "D": "climates"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as discovering -> discovered.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as discovering -> discovered.",
         "minimal_correction": "discovering -> discovered",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -5765,8 +5794,6 @@
             "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "A",
@@ -5872,9 +5899,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "discovering -> discovered",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "discovering -> discovered"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -5919,7 +5944,7 @@
           "D": "villages"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as to monitoring -> to monitor.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as to monitoring -> to monitor.",
         "minimal_correction": "to monitoring -> to monitor",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -6041,7 +6066,7 @@
           "D": "villages"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as to monitoring -> to monitor.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as to monitoring -> to monitor.",
         "minimal_correction": "to monitoring -> to monitor",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -6154,8 +6179,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -6257,9 +6280,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "to monitoring -> to monitor",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "to monitoring -> to monitor"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -6304,7 +6325,7 @@
           "D": "summer"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as Despite -> Although.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as Despite -> Although.",
         "minimal_correction": "Despite -> Although",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -6430,7 +6451,7 @@
           "D": "summer"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as Despite -> Although.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as Despite -> Although.",
         "minimal_correction": "Despite -> Although",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -6547,8 +6568,6 @@
             "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "A",
@@ -6654,9 +6673,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "Despite -> Although",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "Despite -> Although"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -6701,7 +6718,7 @@
           "D": "institute"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as which -> who.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as which -> who.",
         "minimal_correction": "which -> who",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -6821,7 +6838,7 @@
           "D": "institute"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as which -> who.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as which -> who.",
         "minimal_correction": "which -> who",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -6932,8 +6949,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -7033,9 +7048,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "which -> who",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "which -> who"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -7080,7 +7093,7 @@
           "D": "compound"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as occurs -> occur.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as occurs -> occur.",
         "minimal_correction": "occurs -> occur",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -7200,7 +7213,7 @@
           "D": "compound"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as occurs -> occur.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as occurs -> occur.",
         "minimal_correction": "occurs -> occur",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -7311,8 +7324,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -7412,9 +7423,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "occurs -> occur",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "occurs -> occur"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -7459,7 +7468,7 @@
           "D": "journal"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as delete she.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as delete she.",
         "minimal_correction": "delete she",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -7582,7 +7591,7 @@
           "D": "journal"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as delete she.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as delete she.",
         "minimal_correction": "delete she",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -7696,8 +7705,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -7800,9 +7807,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "delete she",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "delete she"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -7847,7 +7852,7 @@
           "D": "stars"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as a developed newly optical sensor -> a newly developed optical sensor.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as a developed newly optical sensor -> a newly developed optical sensor.",
         "minimal_correction": "a developed newly optical sensor -> a newly developed optical sensor",
         "grammar_metadata": {
           "error_scope": "local",
@@ -7972,7 +7977,7 @@
           "D": "stars"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as a developed newly optical sensor -> a newly developed optical sensor.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as a developed newly optical sensor -> a newly developed optical sensor.",
         "minimal_correction": "a developed newly optical sensor -> a newly developed optical sensor",
         "grammar_metadata": {
           "error_scope": "local",
@@ -8088,8 +8093,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -8194,9 +8197,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "a developed newly optical sensor -> a newly developed optical sensor",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "a developed newly optical sensor -> a newly developed optical sensor"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -8241,7 +8242,7 @@
           "D": "conditions"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as most reliable -> more reliable.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as most reliable -> more reliable.",
         "minimal_correction": "most reliable -> more reliable",
         "grammar_metadata": {
           "error_scope": "local",
@@ -8363,7 +8364,7 @@
           "D": "conditions"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as most reliable -> more reliable.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as most reliable -> more reliable.",
         "minimal_correction": "most reliable -> more reliable",
         "grammar_metadata": {
           "error_scope": "local",
@@ -8476,8 +8477,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -8579,9 +8578,7 @@
         "confidence": "MEDIUM",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "most reliable -> more reliable",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "most reliable -> more reliable"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -8626,7 +8623,7 @@
           "D": "coast"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as There is -> There are.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as There is -> There are.",
         "minimal_correction": "There is -> There are",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -8748,7 +8745,7 @@
           "D": "coast"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as There is -> There are.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as There is -> There are.",
         "minimal_correction": "There is -> There are",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -8861,8 +8858,6 @@
             "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "A",
@@ -8964,9 +8959,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "There is -> There are",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "There is -> There are"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -9011,7 +9004,7 @@
           "D": "contamination"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as cautiously -> cautious.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as cautiously -> cautious.",
         "minimal_correction": "cautiously -> cautious",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -9131,7 +9124,7 @@
           "D": "contamination"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as cautiously -> cautious.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as cautiously -> cautious.",
         "minimal_correction": "cautiously -> cautious",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -9242,8 +9235,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -9343,9 +9334,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "cautiously -> cautious",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "cautiously -> cautious"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -9390,7 +9379,7 @@
           "D": "report"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as many information -> much information.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as many information -> much information.",
         "minimal_correction": "many information -> much information",
         "grammar_metadata": {
           "error_scope": "local",
@@ -9511,7 +9500,7 @@
           "D": "report"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as many information -> much information.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as many information -> much information.",
         "minimal_correction": "many information -> much information",
         "grammar_metadata": {
           "error_scope": "local",
@@ -9623,8 +9612,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -9725,9 +9712,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "many information -> much information",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "many information -> much information"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -9772,7 +9757,7 @@
           "D": "months"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as vary -> varies.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as vary -> varies.",
         "minimal_correction": "vary -> varies",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -9892,7 +9877,7 @@
           "D": "months"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as vary -> varies.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as vary -> varies.",
         "minimal_correction": "vary -> varies",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -10003,8 +9988,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -10104,9 +10087,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "vary -> varies",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "vary -> varies"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -10151,7 +10132,7 @@
           "D": "its"
         },
         "correct_answer": "D",
-        "error_explanation": "The intended grammatical error is in marked part D; the clean form repairs it as its -> their.",
+        "error_explanation": "The actual clean/error mutation is in marked part D; the clean form repairs it as its -> their.",
         "minimal_correction": "its -> their",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -10272,7 +10253,7 @@
           "D": "its"
         },
         "correct_answer": "D",
-        "error_explanation": "The intended grammatical error is in marked part D; the clean form repairs it as its -> their.",
+        "error_explanation": "The actual clean/error mutation is in marked part D; the clean form repairs it as its -> their.",
         "minimal_correction": "its -> their",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -10384,8 +10365,6 @@
             "generator_answer": "D",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "D",
@@ -10486,9 +10465,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "its -> their",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "its -> their"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -10533,7 +10510,7 @@
           "D": "laboratories"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as the the -> the.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as the the -> the.",
         "minimal_correction": "the the -> the",
         "grammar_metadata": {
           "error_scope": "local",
@@ -10654,7 +10631,7 @@
           "D": "laboratories"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as the the -> the.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as the the -> the.",
         "minimal_correction": "the the -> the",
         "grammar_metadata": {
           "error_scope": "local",
@@ -10766,8 +10743,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -10868,9 +10843,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "the the -> the",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "the the -> the"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -10915,7 +10888,7 @@
           "D": "auditors"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as missing the before ceremonial vessel.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as missing the before ceremonial vessel.",
         "minimal_correction": "missing the before ceremonial vessel",
         "grammar_metadata": {
           "error_scope": "local",
@@ -11037,7 +11010,7 @@
           "D": "auditors"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as missing the before ceremonial vessel.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as missing the before ceremonial vessel.",
         "minimal_correction": "missing the before ceremonial vessel",
         "grammar_metadata": {
           "error_scope": "local",
@@ -11150,8 +11123,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -11253,9 +11224,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "missing the before ceremonial vessel",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "missing the before ceremonial vessel"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -11299,14 +11268,14 @@
           "C": "record",
           "D": "wetland"
         },
-        "correct_answer": "D",
-        "error_explanation": "The intended grammatical error is in marked part D; the clean form repairs it as record -> recording.",
+        "correct_answer": "C",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as record -> recording.",
         "minimal_correction": "record -> recording",
         "grammar_metadata": {
           "error_scope": "clause_level",
           "correction_locality": "CLAUSE_LEVEL",
           "decision_granularity": "VERB_FRAME",
-          "intended_error_position": "D",
+          "intended_error_position": "C",
           "correct_span_type": "SINGLE_WORD"
         },
         "format_metadata": {
@@ -11419,14 +11388,14 @@
           "C": "record",
           "D": "wetland"
         },
-        "correct_answer": "D",
-        "error_explanation": "The intended grammatical error is in marked part D; the clean form repairs it as record -> recording.",
+        "correct_answer": "C",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as record -> recording.",
         "minimal_correction": "record -> recording",
         "grammar_metadata": {
           "error_scope": "clause_level",
           "correction_locality": "CLAUSE_LEVEL",
           "decision_granularity": "VERB_FRAME",
-          "intended_error_position": "D",
+          "intended_error_position": "C",
           "correct_span_type": "SINGLE_WORD"
         },
         "format_metadata": {
@@ -11527,22 +11496,20 @@
             "agent_version": "Written Expression Reviewer v2.0",
             "verdict": "PASS",
             "critical_failure": false,
-            "independent_answer": "D",
-            "generator_answer": "D",
+            "independent_answer": "C",
+            "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
-            "detected_error_position": "D",
+            "detected_error_position": "C",
             "non_error_parts_valid": true,
             "minimal_correction_valid": true,
             "marked_part_assessments": {
               "A": "ACCEPTABLE",
               "B": "ACCEPTABLE",
-              "C": "ACCEPTABLE",
-              "D": "ERROR"
+              "C": "ERROR",
+              "D": "ACCEPTABLE"
             },
             "checks": {
               "grammar_validity": "PASS",
@@ -11628,13 +11595,11 @@
       "solver": {
         "item_id": "we-v2-validation-030",
         "section": "Written Expression",
-        "solver_answer": "D",
+        "solver_answer": "C",
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "record -> recording",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "record -> recording"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -11678,15 +11643,15 @@
           "C": "calibrated",
           "D": "experiments"
         },
-        "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as interested on -> interested in.",
+        "correct_answer": "A",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as interested on -> interested in.",
         "minimal_correction": "interested on -> interested in",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "FUNCTION_WORD",
-          "intended_error_position": "B",
-          "correct_span_type": "SINGLE_WORD"
+          "intended_error_position": "A",
+          "correct_span_type": "SHORT_PHRASE"
         },
         "format_metadata": {
           "target_sentence_length_region": "11-15",
@@ -11714,8 +11679,8 @@
             "gap_A_B": 3,
             "gap_B_C": 1,
             "gap_C_D": 3,
-            "correct_span_word_count": 1,
-            "correct_span_type": "SINGLE_WORD",
+            "correct_span_word_count": 2,
+            "correct_span_type": "SHORT_PHRASE",
             "correction_locality": "LOCAL_SINGLE_TOKEN",
             "decision_granularity": "FUNCTION_WORD",
             "format_distribution_distance": 1.3299,
@@ -11799,15 +11764,15 @@
           "C": "calibrated",
           "D": "experiments"
         },
-        "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as interested on -> interested in.",
+        "correct_answer": "A",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as interested on -> interested in.",
         "minimal_correction": "interested on -> interested in",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "FUNCTION_WORD",
-          "intended_error_position": "B",
-          "correct_span_type": "SINGLE_WORD"
+          "intended_error_position": "A",
+          "correct_span_type": "SHORT_PHRASE"
         },
         "format_metadata": {
           "target_sentence_length_region": "11-15",
@@ -11835,8 +11800,8 @@
             "gap_A_B": 3,
             "gap_B_C": 1,
             "gap_C_D": 3,
-            "correct_span_word_count": 1,
-            "correct_span_type": "SINGLE_WORD",
+            "correct_span_word_count": 2,
+            "correct_span_type": "SHORT_PHRASE",
             "correction_locality": "LOCAL_SINGLE_TOKEN",
             "decision_granularity": "FUNCTION_WORD",
             "format_distribution_distance": 1.3299,
@@ -11908,20 +11873,18 @@
             "agent_version": "Written Expression Reviewer v2.0",
             "verdict": "PASS",
             "critical_failure": false,
-            "independent_answer": "B",
-            "generator_answer": "B",
+            "independent_answer": "A",
+            "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
-            "detected_error_position": "B",
+            "detected_error_position": "A",
             "non_error_parts_valid": true,
             "minimal_correction_valid": true,
             "marked_part_assessments": {
-              "A": "ACCEPTABLE",
-              "B": "ERROR",
+              "A": "ERROR",
+              "B": "ACCEPTABLE",
               "C": "ACCEPTABLE",
               "D": "ACCEPTABLE"
             },
@@ -11949,8 +11912,8 @@
               "gap_A_B": 3,
               "gap_B_C": 1,
               "gap_C_D": 3,
-              "correct_span_word_count": 1,
-              "correct_span_type": "SINGLE_WORD",
+              "correct_span_word_count": 2,
+              "correct_span_type": "SHORT_PHRASE",
               "correction_locality": "LOCAL_SINGLE_TOKEN",
               "decision_granularity": "FUNCTION_WORD",
               "format_distribution_distance": 1.3299,
@@ -12010,13 +11973,11 @@
       "solver": {
         "item_id": "we-v2-validation-031",
         "section": "Written Expression",
-        "solver_answer": "B",
+        "solver_answer": "A",
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "interested on -> interested in",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "interested on -> interested in"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -12061,7 +12022,7 @@
           "D": "geographic region"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as to organize -> organize.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as to organize -> organize.",
         "minimal_correction": "to organize -> organize",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -12183,7 +12144,7 @@
           "D": "geographic region"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as to organize -> organize.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as to organize -> organize.",
         "minimal_correction": "to organize -> organize",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -12296,8 +12257,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -12399,9 +12358,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "to organize -> organize",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "to organize -> organize"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -12446,7 +12403,7 @@
           "D": "folders"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as were catalogued -> catalogued.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as were catalogued -> catalogued.",
         "minimal_correction": "were catalogued -> catalogued",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -12567,7 +12524,7 @@
           "D": "folders"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as were catalogued -> catalogued.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as were catalogued -> catalogued.",
         "minimal_correction": "were catalogued -> catalogued",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -12679,8 +12636,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -12781,9 +12736,7 @@
         "confidence": "MEDIUM",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "were catalogued -> catalogued",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "were catalogued -> catalogued"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -12828,7 +12781,7 @@
           "D": "nights"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as have calibrated -> had calibrated.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as have calibrated -> had calibrated.",
         "minimal_correction": "have calibrated -> had calibrated",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -12949,7 +12902,7 @@
           "D": "nights"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as have calibrated -> had calibrated.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as have calibrated -> had calibrated.",
         "minimal_correction": "have calibrated -> had calibrated",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -13061,8 +13014,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -13163,9 +13114,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "have calibrated -> had calibrated",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "have calibrated -> had calibrated"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -13210,7 +13159,7 @@
           "D": "station"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as transmitting readings -> transmit readings.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as transmitting readings -> transmit readings.",
         "minimal_correction": "transmitting readings -> transmit readings",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -13332,7 +13281,7 @@
           "D": "station"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as transmitting readings -> transmit readings.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as transmitting readings -> transmit readings.",
         "minimal_correction": "transmitting readings -> transmit readings",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -13445,8 +13394,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -13548,9 +13495,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "transmitting readings -> transmit readings",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "transmitting readings -> transmit readings"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -13595,7 +13540,7 @@
           "D": "materials"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as encouraging businesses -> encourages businesses.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as encouraging businesses -> encourages businesses.",
         "minimal_correction": "encouraging businesses -> encourages businesses",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -13717,7 +13662,7 @@
           "D": "materials"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as encouraging businesses -> encourages businesses.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as encouraging businesses -> encourages businesses.",
         "minimal_correction": "encouraging businesses -> encourages businesses",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -13830,8 +13775,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -13945,8 +13888,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -14048,9 +13989,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "encouraging businesses -> encourages businesses",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "encouraging businesses -> encourages businesses"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -14094,14 +14033,14 @@
           "C": "samples",
           "D": "committee"
         },
-        "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as careful -> carefully.",
+        "correct_answer": "B",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as careful -> carefully.",
         "minimal_correction": "careful -> carefully",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "MORPHOLOGY",
-          "intended_error_position": "C",
+          "intended_error_position": "B",
           "correct_span_type": "SINGLE_WORD"
         },
         "format_metadata": {
@@ -14214,14 +14153,14 @@
           "C": "samples",
           "D": "committee"
         },
-        "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as careful -> carefully.",
+        "correct_answer": "B",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as careful -> carefully.",
         "minimal_correction": "careful -> carefully",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "MORPHOLOGY",
-          "intended_error_position": "C",
+          "intended_error_position": "B",
           "correct_span_type": "SINGLE_WORD"
         },
         "format_metadata": {
@@ -14322,21 +14261,19 @@
             "agent_version": "Written Expression Reviewer v2.0",
             "verdict": "PASS",
             "critical_failure": false,
-            "independent_answer": "C",
-            "generator_answer": "C",
+            "independent_answer": "B",
+            "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
-            "detected_error_position": "C",
+            "detected_error_position": "B",
             "non_error_parts_valid": true,
             "minimal_correction_valid": true,
             "marked_part_assessments": {
               "A": "ACCEPTABLE",
-              "B": "ACCEPTABLE",
-              "C": "ERROR",
+              "B": "ERROR",
+              "C": "ACCEPTABLE",
               "D": "ACCEPTABLE"
             },
             "checks": {
@@ -14423,13 +14360,11 @@
       "solver": {
         "item_id": "we-v2-validation-037",
         "section": "Written Expression",
-        "solver_answer": "C",
+        "solver_answer": "B",
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "careful -> carefully",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "careful -> carefully"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -14473,15 +14408,15 @@
           "C": "bronze",
           "D": "settlement"
         },
-        "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as remark collection -> remarkable collection.",
+        "correct_answer": "B",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as remark collection -> remarkable collection.",
         "minimal_correction": "remark collection -> remarkable collection",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "MORPHOLOGY",
-          "intended_error_position": "A",
-          "correct_span_type": "SINGLE_WORD"
+          "intended_error_position": "B",
+          "correct_span_type": "SHORT_PHRASE"
         },
         "format_metadata": {
           "target_sentence_length_region": "11-15",
@@ -14509,8 +14444,8 @@
             "gap_A_B": 2,
             "gap_B_C": 1,
             "gap_C_D": 4,
-            "correct_span_word_count": 1,
-            "correct_span_type": "SINGLE_WORD",
+            "correct_span_word_count": 2,
+            "correct_span_type": "SHORT_PHRASE",
             "correction_locality": "LOCAL_SINGLE_TOKEN",
             "decision_granularity": "MORPHOLOGY",
             "format_distribution_distance": 1.3299,
@@ -14594,15 +14529,15 @@
           "C": "bronze",
           "D": "settlement"
         },
-        "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as remark collection -> remarkable collection.",
+        "correct_answer": "B",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as remark collection -> remarkable collection.",
         "minimal_correction": "remark collection -> remarkable collection",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "MORPHOLOGY",
-          "intended_error_position": "A",
-          "correct_span_type": "SINGLE_WORD"
+          "intended_error_position": "B",
+          "correct_span_type": "SHORT_PHRASE"
         },
         "format_metadata": {
           "target_sentence_length_region": "11-15",
@@ -14630,8 +14565,8 @@
             "gap_A_B": 2,
             "gap_B_C": 1,
             "gap_C_D": 4,
-            "correct_span_word_count": 1,
-            "correct_span_type": "SINGLE_WORD",
+            "correct_span_word_count": 2,
+            "correct_span_type": "SHORT_PHRASE",
             "correction_locality": "LOCAL_SINGLE_TOKEN",
             "decision_granularity": "MORPHOLOGY",
             "format_distribution_distance": 1.3299,
@@ -14703,20 +14638,18 @@
             "agent_version": "Written Expression Reviewer v2.0",
             "verdict": "PASS",
             "critical_failure": false,
-            "independent_answer": "A",
-            "generator_answer": "A",
+            "independent_answer": "B",
+            "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
-            "detected_error_position": "A",
+            "detected_error_position": "B",
             "non_error_parts_valid": true,
             "minimal_correction_valid": true,
             "marked_part_assessments": {
-              "A": "ERROR",
-              "B": "ACCEPTABLE",
+              "A": "ACCEPTABLE",
+              "B": "ERROR",
               "C": "ACCEPTABLE",
               "D": "ACCEPTABLE"
             },
@@ -14744,8 +14677,8 @@
               "gap_A_B": 2,
               "gap_B_C": 1,
               "gap_C_D": 4,
-              "correct_span_word_count": 1,
-              "correct_span_type": "SINGLE_WORD",
+              "correct_span_word_count": 2,
+              "correct_span_type": "SHORT_PHRASE",
               "correction_locality": "LOCAL_SINGLE_TOKEN",
               "decision_granularity": "MORPHOLOGY",
               "format_distribution_distance": 1.3299,
@@ -14805,13 +14738,11 @@
       "solver": {
         "item_id": "we-v2-validation-038",
         "section": "Written Expression",
-        "solver_answer": "A",
+        "solver_answer": "B",
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "remark collection -> remarkable collection",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "remark collection -> remarkable collection"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -14856,7 +14787,7 @@
           "D": "growth"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as accurate measure -> accurate measurement.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as accurate measure -> accurate measurement.",
         "minimal_correction": "accurate measure -> accurate measurement",
         "grammar_metadata": {
           "error_scope": "local",
@@ -14977,7 +14908,7 @@
           "D": "growth"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as accurate measure -> accurate measurement.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as accurate measure -> accurate measurement.",
         "minimal_correction": "accurate measure -> accurate measurement",
         "grammar_metadata": {
           "error_scope": "local",
@@ -15089,8 +15020,6 @@
             "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "A",
@@ -15191,9 +15120,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "accurate measure -> accurate measurement",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "accurate measure -> accurate measurement"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -15238,7 +15165,7 @@
           "D": "settlements"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as recovering -> recovered.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as recovering -> recovered.",
         "minimal_correction": "recovering -> recovered",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -15362,7 +15289,7 @@
           "D": "settlements"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as recovering -> recovered.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as recovering -> recovered.",
         "minimal_correction": "recovering -> recovered",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -15477,8 +15404,6 @@
             "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "A",
@@ -15582,9 +15507,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "recovering -> recovered",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "recovering -> recovered"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -15629,7 +15552,7 @@
           "D": "storms"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as to detecting -> to detect.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as to detecting -> to detect.",
         "minimal_correction": "to detecting -> to detect",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -15751,7 +15674,7 @@
           "D": "storms"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as to detecting -> to detect.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as to detecting -> to detect.",
         "minimal_correction": "to detecting -> to detect",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -15864,8 +15787,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -15967,9 +15888,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "to detecting -> to detect",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "to detecting -> to detect"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -16014,7 +15933,7 @@
           "D": "noise"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as Despite -> Although.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as Despite -> Although.",
         "minimal_correction": "Despite -> Although",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -16140,7 +16059,7 @@
           "D": "noise"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as Despite -> Although.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as Despite -> Although.",
         "minimal_correction": "Despite -> Although",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -16257,8 +16176,6 @@
             "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "A",
@@ -16364,9 +16281,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "Despite -> Although",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "Despite -> Although"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -16411,7 +16326,7 @@
           "D": "expedition"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as which -> whose.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as which -> whose.",
         "minimal_correction": "which -> whose",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -16531,7 +16446,7 @@
           "D": "expedition"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as which -> whose.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as which -> whose.",
         "minimal_correction": "which -> whose",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -16642,8 +16557,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -16743,9 +16656,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "which -> whose",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "which -> whose"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -16790,7 +16701,7 @@
           "D": "laboratory"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as was -> were.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as was -> were.",
         "minimal_correction": "was -> were",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -16910,7 +16821,7 @@
           "D": "laboratory"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as was -> were.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as was -> were.",
         "minimal_correction": "was -> were",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -17021,8 +16932,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -17122,9 +17031,7 @@
         "confidence": "MEDIUM",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "was -> were",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "was -> were"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -17169,7 +17076,7 @@
           "D": "laboratory"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as delete he.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as delete he.",
         "minimal_correction": "delete he",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -17292,7 +17199,7 @@
           "D": "laboratory"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as delete he.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as delete he.",
         "minimal_correction": "delete he",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -17406,8 +17313,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -17510,9 +17415,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "delete he",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "delete he"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -17557,7 +17460,7 @@
           "D": "mass"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as a calibrated carefully digital scale -> a carefully calibrated digital scale.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as a calibrated carefully digital scale -> a carefully calibrated digital scale.",
         "minimal_correction": "a calibrated carefully digital scale -> a carefully calibrated digital scale",
         "grammar_metadata": {
           "error_scope": "local",
@@ -17682,7 +17585,7 @@
           "D": "mass"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as a calibrated carefully digital scale -> a carefully calibrated digital scale.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as a calibrated carefully digital scale -> a carefully calibrated digital scale.",
         "minimal_correction": "a calibrated carefully digital scale -> a carefully calibrated digital scale",
         "grammar_metadata": {
           "error_scope": "local",
@@ -17798,8 +17701,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -17904,9 +17805,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "a calibrated carefully digital scale -> a carefully calibrated digital scale",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "a calibrated carefully digital scale -> a carefully calibrated digital scale"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -17951,7 +17850,7 @@
           "D": "season"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as least expensive -> less expensive.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as least expensive -> less expensive.",
         "minimal_correction": "least expensive -> less expensive",
         "grammar_metadata": {
           "error_scope": "local",
@@ -18074,7 +17973,7 @@
           "D": "season"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as least expensive -> less expensive.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as least expensive -> less expensive.",
         "minimal_correction": "least expensive -> less expensive",
         "grammar_metadata": {
           "error_scope": "local",
@@ -18188,8 +18087,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -18292,9 +18189,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "least expensive -> less expensive",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "least expensive -> less expensive"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -18339,7 +18234,7 @@
           "D": "system"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as There is -> There are.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as There is -> There are.",
         "minimal_correction": "There is -> There are",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -18461,7 +18356,7 @@
           "D": "system"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as There is -> There are.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as There is -> There are.",
         "minimal_correction": "There is -> There are",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -18574,8 +18469,6 @@
             "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "A",
@@ -18677,9 +18570,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "There is -> There are",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "There is -> There are"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -18724,7 +18615,7 @@
           "D": "explanation"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as skepticism -> skeptical.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as skepticism -> skeptical.",
         "minimal_correction": "skepticism -> skeptical",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -18844,7 +18735,7 @@
           "D": "explanation"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as skepticism -> skeptical.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as skepticism -> skeptical.",
         "minimal_correction": "skepticism -> skeptical",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -18955,8 +18846,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -19056,9 +18945,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "skepticism -> skeptical",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "skepticism -> skeptical"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -19103,7 +18990,7 @@
           "D": "storm"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as few evidence -> little evidence.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as few evidence -> little evidence.",
         "minimal_correction": "few evidence -> little evidence",
         "grammar_metadata": {
           "error_scope": "local",
@@ -19225,7 +19112,7 @@
           "D": "storm"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as few evidence -> little evidence.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as few evidence -> little evidence.",
         "minimal_correction": "few evidence -> little evidence",
         "grammar_metadata": {
           "error_scope": "local",
@@ -19338,8 +19225,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -19441,9 +19326,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "few evidence -> little evidence",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "few evidence -> little evidence"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -19488,7 +19371,7 @@
           "D": "traditions"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as provide -> provides.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as provide -> provides.",
         "minimal_correction": "provide -> provides",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -19608,7 +19491,7 @@
           "D": "traditions"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as provide -> provides.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as provide -> provides.",
         "minimal_correction": "provide -> provides",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -19719,8 +19602,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -19820,9 +19701,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "provide -> provides",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "provide -> provides"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -19867,7 +19746,7 @@
           "D": "its"
         },
         "correct_answer": "D",
-        "error_explanation": "The intended grammatical error is in marked part D; the clean form repairs it as its -> their.",
+        "error_explanation": "The actual clean/error mutation is in marked part D; the clean form repairs it as its -> their.",
         "minimal_correction": "its -> their",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -19988,7 +19867,7 @@
           "D": "its"
         },
         "correct_answer": "D",
-        "error_explanation": "The intended grammatical error is in marked part D; the clean form repairs it as its -> their.",
+        "error_explanation": "The actual clean/error mutation is in marked part D; the clean form repairs it as its -> their.",
         "minimal_correction": "its -> their",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -20100,8 +19979,6 @@
             "generator_answer": "D",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "D",
@@ -20202,9 +20079,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "its -> their",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "its -> their"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -20249,7 +20124,7 @@
           "D": "database"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as the the -> the.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as the the -> the.",
         "minimal_correction": "the the -> the",
         "grammar_metadata": {
           "error_scope": "local",
@@ -20370,7 +20245,7 @@
           "D": "database"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as the the -> the.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as the the -> the.",
         "minimal_correction": "the the -> the",
         "grammar_metadata": {
           "error_scope": "local",
@@ -20482,8 +20357,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -20584,9 +20457,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "the the -> the",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "the the -> the"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -20631,7 +20502,7 @@
           "D": "routes"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as missing an before unusually detailed map.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as missing an before unusually detailed map.",
         "minimal_correction": "missing an before unusually detailed map",
         "grammar_metadata": {
           "error_scope": "local",
@@ -20754,7 +20625,7 @@
           "D": "routes"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as missing an before unusually detailed map.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as missing an before unusually detailed map.",
         "minimal_correction": "missing an before unusually detailed map",
         "grammar_metadata": {
           "error_scope": "local",
@@ -20868,8 +20739,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -20972,9 +20841,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "missing an before unusually detailed map",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "missing an before unusually detailed map"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -21018,14 +20885,14 @@
           "C": "remove",
           "D": "curator"
         },
-        "correct_answer": "D",
-        "error_explanation": "The intended grammatical error is in marked part D; the clean form repairs it as remove -> removing.",
+        "correct_answer": "C",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as remove -> removing.",
         "minimal_correction": "remove -> removing",
         "grammar_metadata": {
           "error_scope": "clause_level",
           "correction_locality": "CLAUSE_LEVEL",
           "decision_granularity": "VERB_FRAME",
-          "intended_error_position": "D",
+          "intended_error_position": "C",
           "correct_span_type": "SINGLE_WORD"
         },
         "format_metadata": {
@@ -21138,14 +21005,14 @@
           "C": "remove",
           "D": "curator"
         },
-        "correct_answer": "D",
-        "error_explanation": "The intended grammatical error is in marked part D; the clean form repairs it as remove -> removing.",
+        "correct_answer": "C",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as remove -> removing.",
         "minimal_correction": "remove -> removing",
         "grammar_metadata": {
           "error_scope": "clause_level",
           "correction_locality": "CLAUSE_LEVEL",
           "decision_granularity": "VERB_FRAME",
-          "intended_error_position": "D",
+          "intended_error_position": "C",
           "correct_span_type": "SINGLE_WORD"
         },
         "format_metadata": {
@@ -21246,22 +21113,20 @@
             "agent_version": "Written Expression Reviewer v2.0",
             "verdict": "PASS",
             "critical_failure": false,
-            "independent_answer": "D",
-            "generator_answer": "D",
+            "independent_answer": "C",
+            "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
-            "detected_error_position": "D",
+            "detected_error_position": "C",
             "non_error_parts_valid": true,
             "minimal_correction_valid": true,
             "marked_part_assessments": {
               "A": "ACCEPTABLE",
               "B": "ACCEPTABLE",
-              "C": "ACCEPTABLE",
-              "D": "ERROR"
+              "C": "ERROR",
+              "D": "ACCEPTABLE"
             },
             "checks": {
               "grammar_validity": "PASS",
@@ -21347,13 +21212,11 @@
       "solver": {
         "item_id": "we-v2-validation-055",
         "section": "Written Expression",
-        "solver_answer": "D",
+        "solver_answer": "C",
         "confidence": "MEDIUM",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "remove -> removing",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "remove -> removing"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -21398,7 +21261,7 @@
           "D": "shelf"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as capable for -> capable of.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as capable for -> capable of.",
         "minimal_correction": "capable for -> capable of",
         "grammar_metadata": {
           "error_scope": "local",
@@ -21519,7 +21382,7 @@
           "D": "shelf"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as capable for -> capable of.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as capable for -> capable of.",
         "minimal_correction": "capable for -> capable of",
         "grammar_metadata": {
           "error_scope": "local",
@@ -21631,8 +21494,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "PASS",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -21733,9 +21594,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "capable for -> capable of",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "capable for -> capable of"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -21780,7 +21639,7 @@
           "D": "seasons"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as to compare -> compare.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as to compare -> compare.",
         "minimal_correction": "to compare -> compare",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -21901,7 +21760,7 @@
           "D": "seasons"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as to compare -> compare.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as to compare -> compare.",
         "minimal_correction": "to compare -> compare",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -22013,8 +21872,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -22115,9 +21972,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "to compare -> compare",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "to compare -> compare"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -22162,7 +22017,7 @@
           "D": "cables"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as were tested -> tested.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as were tested -> tested.",
         "minimal_correction": "were tested -> tested",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -22283,7 +22138,7 @@
           "D": "cables"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as were tested -> tested.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as were tested -> tested.",
         "minimal_correction": "were tested -> tested",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -22395,8 +22250,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -22497,9 +22350,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "were tested -> tested",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "were tested -> tested"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -22536,16 +22387,16 @@
         "tested_error_type": "wrong_verb_form",
         "difficulty": "MEDIUM",
         "vocabulary_domain": "observational astronomy",
-        "sentence": "When the committee convened, after carefully checking the attendance records, the secretary distributed the revised agenda to every member.",
+        "sentence": "When the committee convened, after carefully checking the attendance records, the secretary distribute the revised agenda to every member.",
         "marked_parts": {
           "A": "committee",
           "B": "convened",
-          "C": "distributed",
+          "C": "distribute",
           "D": "member"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as distributed -> had distributed.",
-        "minimal_correction": "distributed -> had distributed",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as distribute -> had distributed.",
+        "minimal_correction": "distribute -> had distributed",
         "grammar_metadata": {
           "error_scope": "clause_level",
           "correction_locality": "DEPENDENCY_BASED",
@@ -22634,8 +22485,8 @@
         },
         "qa_metadata": {
           "clean_form": "When the committee convened, after carefully checking the attendance records, the secretary had distributed the revised agenda to every member.",
-          "error_form": "When the committee convened, after carefully checking the attendance records, the secretary distributed the revised agenda to every member.",
-          "minimal_correction": "distributed -> had distributed",
+          "error_form": "When the committee convened, after carefully checking the attendance records, the secretary distribute the revised agenda to every member.",
+          "minimal_correction": "distribute -> had distributed",
           "mutation_type": "one genuine grammatical mutation from a separately validated clean sentence",
           "clean_sentence_validated": true,
           "grammar_check_status": "PASS",
@@ -22656,16 +22507,16 @@
         "tested_error_type": "wrong_verb_form",
         "difficulty": "MEDIUM",
         "vocabulary_domain": "observational astronomy",
-        "sentence": "When the committee convened, after carefully checking the attendance records, the secretary distributed the revised agenda to every member.",
+        "sentence": "When the committee convened, after carefully checking the attendance records, the secretary distribute the revised agenda to every member.",
         "marked_parts": {
           "A": "committee",
           "B": "convened",
-          "C": "distributed",
+          "C": "distribute",
           "D": "member"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as distributed -> had distributed.",
-        "minimal_correction": "distributed -> had distributed",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as distribute -> had distributed.",
+        "minimal_correction": "distribute -> had distributed",
         "grammar_metadata": {
           "error_scope": "clause_level",
           "correction_locality": "DEPENDENCY_BASED",
@@ -22754,8 +22605,8 @@
         },
         "qa_metadata": {
           "clean_form": "When the committee convened, after carefully checking the attendance records, the secretary had distributed the revised agenda to every member.",
-          "error_form": "When the committee convened, after carefully checking the attendance records, the secretary distributed the revised agenda to every member.",
-          "minimal_correction": "distributed -> had distributed",
+          "error_form": "When the committee convened, after carefully checking the attendance records, the secretary distribute the revised agenda to every member.",
+          "minimal_correction": "distribute -> had distributed",
           "mutation_type": "one genuine grammatical mutation from a separately validated clean sentence",
           "clean_sentence_validated": true,
           "grammar_check_status": "PASS",
@@ -22775,8 +22626,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -22876,9 +22725,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "distributed -> had distributed",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "distribute -> had distributed"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -22923,7 +22770,7 @@
           "D": "cave"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as preserving evidence -> preserve evidence.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as preserving evidence -> preserve evidence.",
         "minimal_correction": "preserving evidence -> preserve evidence",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -23045,7 +22892,7 @@
           "D": "cave"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as preserving evidence -> preserve evidence.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as preserving evidence -> preserve evidence.",
         "minimal_correction": "preserving evidence -> preserve evidence",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -23158,8 +23005,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "PASS",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -23261,9 +23106,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "preserving evidence -> preserve evidence",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "preserving evidence -> preserve evidence"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -23308,7 +23151,7 @@
           "D": "accounts"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as comparing its findings -> compares its findings.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as comparing its findings -> compares its findings.",
         "minimal_correction": "comparing its findings -> compares its findings",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -23432,7 +23275,7 @@
           "D": "accounts"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as comparing its findings -> compares its findings.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as comparing its findings -> compares its findings.",
         "minimal_correction": "comparing its findings -> compares its findings",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -23547,8 +23390,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -23664,8 +23505,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -23769,9 +23608,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "comparing its findings -> compares its findings",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "comparing its findings -> compares its findings"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -23815,14 +23652,14 @@
           "C": "objects",
           "D": "clear"
         },
-        "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as clear -> clearly.",
+        "correct_answer": "D",
+        "error_explanation": "The actual clean/error mutation is in marked part D; the clean form repairs it as clear -> clearly.",
         "minimal_correction": "clear -> clearly",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "MORPHOLOGY",
-          "intended_error_position": "C",
+          "intended_error_position": "D",
           "correct_span_type": "SINGLE_WORD"
         },
         "format_metadata": {
@@ -23935,14 +23772,14 @@
           "C": "objects",
           "D": "clear"
         },
-        "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as clear -> clearly.",
+        "correct_answer": "D",
+        "error_explanation": "The actual clean/error mutation is in marked part D; the clean form repairs it as clear -> clearly.",
         "minimal_correction": "clear -> clearly",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "MORPHOLOGY",
-          "intended_error_position": "C",
+          "intended_error_position": "D",
           "correct_span_type": "SINGLE_WORD"
         },
         "format_metadata": {
@@ -24043,22 +23880,20 @@
             "agent_version": "Written Expression Reviewer v2.0",
             "verdict": "PASS",
             "critical_failure": false,
-            "independent_answer": "C",
-            "generator_answer": "C",
+            "independent_answer": "D",
+            "generator_answer": "D",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
-            "detected_error_position": "C",
+            "detected_error_position": "D",
             "non_error_parts_valid": true,
             "minimal_correction_valid": true,
             "marked_part_assessments": {
               "A": "ACCEPTABLE",
               "B": "ACCEPTABLE",
-              "C": "ERROR",
-              "D": "ACCEPTABLE"
+              "C": "ACCEPTABLE",
+              "D": "ERROR"
             },
             "checks": {
               "grammar_validity": "PASS",
@@ -24144,13 +23979,11 @@
       "solver": {
         "item_id": "we-v2-validation-062",
         "section": "Written Expression",
-        "solver_answer": "C",
+        "solver_answer": "D",
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "clear -> clearly",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "clear -> clearly"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -24194,15 +24027,15 @@
           "C": "declining",
           "D": "population"
         },
-        "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as comprehend report -> comprehensive report.",
+        "correct_answer": "B",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as comprehend report -> comprehensive report.",
         "minimal_correction": "comprehend report -> comprehensive report",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "MORPHOLOGY",
-          "intended_error_position": "A",
-          "correct_span_type": "SINGLE_WORD"
+          "intended_error_position": "B",
+          "correct_span_type": "SHORT_PHRASE"
         },
         "format_metadata": {
           "target_sentence_length_region": "11-15",
@@ -24230,8 +24063,8 @@
             "gap_A_B": 2,
             "gap_B_C": 3,
             "gap_C_D": 1,
-            "correct_span_word_count": 1,
-            "correct_span_type": "SINGLE_WORD",
+            "correct_span_word_count": 2,
+            "correct_span_type": "SHORT_PHRASE",
             "correction_locality": "LOCAL_SINGLE_TOKEN",
             "decision_granularity": "MORPHOLOGY",
             "format_distribution_distance": 1.5712,
@@ -24315,15 +24148,15 @@
           "C": "declining",
           "D": "population"
         },
-        "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as comprehend report -> comprehensive report.",
+        "correct_answer": "B",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as comprehend report -> comprehensive report.",
         "minimal_correction": "comprehend report -> comprehensive report",
         "grammar_metadata": {
           "error_scope": "local",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "MORPHOLOGY",
-          "intended_error_position": "A",
-          "correct_span_type": "SINGLE_WORD"
+          "intended_error_position": "B",
+          "correct_span_type": "SHORT_PHRASE"
         },
         "format_metadata": {
           "target_sentence_length_region": "11-15",
@@ -24351,8 +24184,8 @@
             "gap_A_B": 2,
             "gap_B_C": 3,
             "gap_C_D": 1,
-            "correct_span_word_count": 1,
-            "correct_span_type": "SINGLE_WORD",
+            "correct_span_word_count": 2,
+            "correct_span_type": "SHORT_PHRASE",
             "correction_locality": "LOCAL_SINGLE_TOKEN",
             "decision_granularity": "MORPHOLOGY",
             "format_distribution_distance": 1.5712,
@@ -24424,20 +24257,18 @@
             "agent_version": "Written Expression Reviewer v2.0",
             "verdict": "PASS",
             "critical_failure": false,
-            "independent_answer": "A",
-            "generator_answer": "A",
+            "independent_answer": "B",
+            "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
-            "detected_error_position": "A",
+            "detected_error_position": "B",
             "non_error_parts_valid": true,
             "minimal_correction_valid": true,
             "marked_part_assessments": {
-              "A": "ERROR",
-              "B": "ACCEPTABLE",
+              "A": "ACCEPTABLE",
+              "B": "ERROR",
               "C": "ACCEPTABLE",
               "D": "ACCEPTABLE"
             },
@@ -24465,8 +24296,8 @@
               "gap_A_B": 2,
               "gap_B_C": 3,
               "gap_C_D": 1,
-              "correct_span_word_count": 1,
-              "correct_span_type": "SINGLE_WORD",
+              "correct_span_word_count": 2,
+              "correct_span_type": "SHORT_PHRASE",
               "correction_locality": "LOCAL_SINGLE_TOKEN",
               "decision_granularity": "MORPHOLOGY",
               "format_distribution_distance": 1.5712,
@@ -24526,13 +24357,11 @@
       "solver": {
         "item_id": "we-v2-validation-063",
         "section": "Written Expression",
-        "solver_answer": "A",
+        "solver_answer": "B",
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "comprehend report -> comprehensive report",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "comprehend report -> comprehensive report"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -24577,7 +24406,7 @@
           "D": "archive"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as continued preserve -> continued preservation.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as continued preserve -> continued preservation.",
         "minimal_correction": "continued preserve -> continued preservation",
         "grammar_metadata": {
           "error_scope": "local",
@@ -24698,7 +24527,7 @@
           "D": "archive"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as continued preserve -> continued preservation.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as continued preserve -> continued preservation.",
         "minimal_correction": "continued preserve -> continued preservation",
         "grammar_metadata": {
           "error_scope": "local",
@@ -24810,8 +24639,6 @@
             "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "A",
@@ -24912,9 +24739,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "continued preserve -> continued preservation",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "continued preserve -> continued preservation"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -24959,7 +24784,7 @@
           "D": "flooding"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as preserving -> preserved.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as preserving -> preserved.",
         "minimal_correction": "preserving -> preserved",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -25083,7 +24908,7 @@
           "D": "flooding"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as preserving -> preserved.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as preserving -> preserved.",
         "minimal_correction": "preserving -> preserved",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -25198,8 +25023,6 @@
             "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "A",
@@ -25303,9 +25126,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "preserving -> preserved",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "preserving -> preserved"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -25350,7 +25171,7 @@
           "D": "populations"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as to comparing -> to compare.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as to comparing -> to compare.",
         "minimal_correction": "to comparing -> to compare",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -25472,7 +25293,7 @@
           "D": "populations"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as to comparing -> to compare.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as to comparing -> to compare.",
         "minimal_correction": "to comparing -> to compare",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -25585,8 +25406,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -25688,9 +25507,7 @@
         "confidence": "MEDIUM",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "to comparing -> to compare",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "to comparing -> to compare"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -25735,7 +25552,7 @@
           "D": "sunset"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as Despite -> Although.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as Despite -> Although.",
         "minimal_correction": "Despite -> Although",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -25861,7 +25678,7 @@
           "D": "sunset"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as Despite -> Although.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as Despite -> Although.",
         "minimal_correction": "Despite -> Although",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -25978,8 +25795,6 @@
             "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "A",
@@ -26085,9 +25900,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "Despite -> Although",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "Despite -> Although"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -26131,14 +25944,14 @@
           "C": "who",
           "D": "transmission trials"
         },
-        "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as who -> that.",
+        "correct_answer": "C",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as who -> that.",
         "minimal_correction": "who -> that",
         "grammar_metadata": {
           "error_scope": "cross_clause",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "FUNCTION_WORD",
-          "intended_error_position": "B",
+          "intended_error_position": "C",
           "correct_span_type": "SINGLE_WORD"
         },
         "format_metadata": {
@@ -26252,14 +26065,14 @@
           "C": "who",
           "D": "transmission trials"
         },
-        "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as who -> that.",
+        "correct_answer": "C",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as who -> that.",
         "minimal_correction": "who -> that",
         "grammar_metadata": {
           "error_scope": "cross_clause",
           "correction_locality": "LOCAL_SINGLE_TOKEN",
           "decision_granularity": "FUNCTION_WORD",
-          "intended_error_position": "B",
+          "intended_error_position": "C",
           "correct_span_type": "SINGLE_WORD"
         },
         "format_metadata": {
@@ -26361,21 +26174,19 @@
             "agent_version": "Written Expression Reviewer v2.0",
             "verdict": "PASS",
             "critical_failure": false,
-            "independent_answer": "B",
-            "generator_answer": "B",
+            "independent_answer": "C",
+            "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
-            "detected_error_position": "B",
+            "detected_error_position": "C",
             "non_error_parts_valid": true,
             "minimal_correction_valid": true,
             "marked_part_assessments": {
               "A": "ACCEPTABLE",
-              "B": "ERROR",
-              "C": "ACCEPTABLE",
+              "B": "ACCEPTABLE",
+              "C": "ERROR",
               "D": "ACCEPTABLE"
             },
             "checks": {
@@ -26463,13 +26274,11 @@
       "solver": {
         "item_id": "we-v2-validation-068",
         "section": "Written Expression",
-        "solver_answer": "B",
+        "solver_answer": "C",
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "who -> that",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "who -> that"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -26514,7 +26323,7 @@
           "D": "spring"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as carries -> carry.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as carries -> carry.",
         "minimal_correction": "carries -> carry",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -26634,7 +26443,7 @@
           "D": "spring"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as carries -> carry.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as carries -> carry.",
         "minimal_correction": "carries -> carry",
         "grammar_metadata": {
           "error_scope": "cross_clause",
@@ -26745,8 +26554,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -26846,9 +26653,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "carries -> carry",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "carries -> carry"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -26893,7 +26698,7 @@
           "D": "origin"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as delete she.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as delete she.",
         "minimal_correction": "delete she",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -27016,7 +26821,7 @@
           "D": "origin"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as delete she.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as delete she.",
         "minimal_correction": "delete she",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -27130,8 +26935,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -27234,9 +27037,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "delete she",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "delete she"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -27281,7 +27082,7 @@
           "D": "rise"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as a discovered recently coastal cave -> a recently discovered coastal cave.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as a discovered recently coastal cave -> a recently discovered coastal cave.",
         "minimal_correction": "a discovered recently coastal cave -> a recently discovered coastal cave",
         "grammar_metadata": {
           "error_scope": "local",
@@ -27405,7 +27206,7 @@
           "D": "rise"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as a discovered recently coastal cave -> a recently discovered coastal cave.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as a discovered recently coastal cave -> a recently discovered coastal cave.",
         "minimal_correction": "a discovered recently coastal cave -> a recently discovered coastal cave",
         "grammar_metadata": {
           "error_scope": "local",
@@ -27520,8 +27321,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -27625,9 +27424,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "a discovered recently coastal cave -> a recently discovered coastal cave",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "a discovered recently coastal cave -> a recently discovered coastal cave"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -27672,7 +27469,7 @@
           "D": "measurements"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as most precise -> more precise.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as most precise -> more precise.",
         "minimal_correction": "most precise -> more precise",
         "grammar_metadata": {
           "error_scope": "local",
@@ -27794,7 +27591,7 @@
           "D": "measurements"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as most precise -> more precise.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as most precise -> more precise.",
         "minimal_correction": "most precise -> more precise",
         "grammar_metadata": {
           "error_scope": "local",
@@ -27907,8 +27704,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -28010,9 +27805,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "most precise -> more precise",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "most precise -> more precise"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -28057,7 +27850,7 @@
           "D": "plateau"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as There is -> There are.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as There is -> There are.",
         "minimal_correction": "There is -> There are",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -28179,7 +27972,7 @@
           "D": "plateau"
         },
         "correct_answer": "A",
-        "error_explanation": "The intended grammatical error is in marked part A; the clean form repairs it as There is -> There are.",
+        "error_explanation": "The actual clean/error mutation is in marked part A; the clean form repairs it as There is -> There are.",
         "minimal_correction": "There is -> There are",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -28292,8 +28085,6 @@
             "generator_answer": "A",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "A",
@@ -28395,9 +28186,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "There is -> There are",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "There is -> There are"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -28442,7 +28231,7 @@
           "D": "panel"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as convincingly -> convincing.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as convincingly -> convincing.",
         "minimal_correction": "convincingly -> convincing",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -28562,7 +28351,7 @@
           "D": "panel"
         },
         "correct_answer": "C",
-        "error_explanation": "The intended grammatical error is in marked part C; the clean form repairs it as convincingly -> convincing.",
+        "error_explanation": "The actual clean/error mutation is in marked part C; the clean form repairs it as convincingly -> convincing.",
         "minimal_correction": "convincingly -> convincing",
         "grammar_metadata": {
           "error_scope": "clause_level",
@@ -28673,8 +28462,6 @@
             "generator_answer": "C",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "C",
@@ -28774,9 +28561,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "convincingly -> convincing",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "convincingly -> convincing"
       },
       "final_state": "ACCEPTED",
       "consensus": {
@@ -28821,7 +28606,7 @@
           "D": "activity"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as little documents -> few documents.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as little documents -> few documents.",
         "minimal_correction": "little documents -> few documents",
         "grammar_metadata": {
           "error_scope": "local",
@@ -28942,7 +28727,7 @@
           "D": "activity"
         },
         "correct_answer": "B",
-        "error_explanation": "The intended grammatical error is in marked part B; the clean form repairs it as little documents -> few documents.",
+        "error_explanation": "The actual clean/error mutation is in marked part B; the clean form repairs it as little documents -> few documents.",
         "minimal_correction": "little documents -> few documents",
         "grammar_metadata": {
           "error_scope": "local",
@@ -29054,8 +28839,6 @@
             "generator_answer": "B",
             "answer_match": true,
             "grammar_validity": "PASS",
-            "judgment_mode": "contract_only_replay",
-            "grammar_quality_evaluable": false,
             "format_validity": "WARN",
             "detected_error_count": 1,
             "detected_error_position": "B",
@@ -29156,9 +28939,7 @@
         "confidence": "HIGH",
         "reason": "Contract-only replay record; no independent grammar judgment is available in this workspace.",
         "ambiguity_detected": false,
-        "suggested_correction": "little documents -> few documents",
-        "judgment_mode": "contract_only_replay",
-        "grammar_quality_evaluable": false
+        "suggested_correction": "little documents -> few documents"
       },
       "final_state": "ACCEPTED",
       "consensus": {

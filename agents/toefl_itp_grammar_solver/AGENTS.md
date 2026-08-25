@@ -74,13 +74,11 @@ Expression items additionally require `suggested_correction`.
 
 ## Validation
 
-`agents/toefl_itp_grammar_solver/scripts/validate_output.py <file>` checks
-the shape of Solver output (required fields, enum membership, the
-`ambiguity_detected` consistency rule) and additionally guards against
-leakage: it fails if a Solver output item ever contains fields that only
-belong on Generator/Reviewer output (`correct_answer`, `primary_target`,
-`verdict`, etc.) — Solver output should never echo back metadata it was
-never given.
+`agents/toefl_itp_grammar_solver/scripts/validate_output.py <file>` enforces
+the committed Draft 2020-12 schema. Its `additionalProperties:false` rule is
+the Solver-output allowlist, and its conditionals enforce
+`ambiguity_detected` consistency. Exit codes are 0 valid, 1 output validation
+failure, and 2 runtime failure.
 
 ## Test artifacts
 

@@ -14,6 +14,16 @@
       ],
       "generation_attempt": 1,
       "revision_count": 0,
+      "validation_retry_counts": {
+        "generator": 0,
+        "reviewer": 0,
+        "solver": 0
+      },
+      "system_failure_retry_counts": {
+        "generator": 0,
+        "reviewer": 0,
+        "solver": 0
+      },
       "generator": {
         "answer": "A"
       },
@@ -34,9 +44,20 @@
       "versions": {
         "spec_version": "1.0.0",
         "taxonomy_version": "1.1",
-        "generator_version": "sha256:3567f2b6e246",
-        "reviewer_version": "sha256:e4142013a3cb",
-        "solver_version": "sha256:df1200bed2b1"
+        "generator_version": "sha256:a148b05d4200",
+        "reviewer_version": "sha256:63c6c3556790",
+        "solver_version": "sha256:278ca34f5c89",
+        "orchestrator_version": "sha256:8a45e9c1b1c9",
+        "config_version": "sha256:135035715e07",
+        "generator_validator_version": "sha256:b56f07719789",
+        "reviewer_validator_version": "sha256:a071508bcd79",
+        "solver_validator_version": "sha256:e4e81bf16b77",
+        "solver_blinding_version": "sha256:ad446787fa40",
+        "schema_runtime_version": "sha256:1213648c6c73",
+        "generator_schema_version": "sha256:a05e32d14420",
+        "reviewer_schema_version": "sha256:ffc3e71b76d9",
+        "solver_schema_version": "sha256:6754900f17e0",
+        "provenance_schema_version": "sha256:679167f74ffc"
       },
       "accepted_item": null,
       "qa_audit": {
@@ -50,6 +71,17 @@
         ],
         "generation_attempt": 1,
         "revision_count": 0,
+        "validation_retry_counts": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        },
+        "system_failure_retry_counts": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        },
+        "retry_history": [],
         "reviewer": {
           "item_id": "reject-struct-001",
           "section": "Structure",
@@ -112,13 +144,24 @@
         "versions": {
           "spec_version": "1.0.0",
           "taxonomy_version": "1.1",
-          "generator_version": "sha256:3567f2b6e246",
-          "reviewer_version": "sha256:e4142013a3cb",
-          "solver_version": "sha256:df1200bed2b1"
+          "generator_version": "sha256:a148b05d4200",
+          "reviewer_version": "sha256:63c6c3556790",
+          "solver_version": "sha256:278ca34f5c89",
+          "orchestrator_version": "sha256:8a45e9c1b1c9",
+          "config_version": "sha256:135035715e07",
+          "generator_validator_version": "sha256:b56f07719789",
+          "reviewer_validator_version": "sha256:a071508bcd79",
+          "solver_validator_version": "sha256:e4e81bf16b77",
+          "solver_blinding_version": "sha256:ad446787fa40",
+          "schema_runtime_version": "sha256:1213648c6c73",
+          "generator_schema_version": "sha256:a05e32d14420",
+          "reviewer_schema_version": "sha256:ffc3e71b76d9",
+          "solver_schema_version": "sha256:6754900f17e0",
+          "provenance_schema_version": "sha256:679167f74ffc"
         },
         "timestamps": {
-          "created": "2026-08-24T06:39:04.123754+00:00",
-          "updated": "2026-08-24T06:39:04.486305+00:00"
+          "created": "2026-08-25T03:36:28.607400+00:00",
+          "updated": "2026-08-25T03:36:29.441157+00:00"
         }
       }
     },
@@ -134,6 +177,16 @@
       ],
       "generation_attempt": 1,
       "revision_count": 0,
+      "validation_retry_counts": {
+        "generator": 0,
+        "reviewer": 0,
+        "solver": 0
+      },
+      "system_failure_retry_counts": {
+        "generator": 0,
+        "reviewer": 0,
+        "solver": 0
+      },
       "generator": {
         "answer": "B"
       },
@@ -156,9 +209,20 @@
       "versions": {
         "spec_version": "1.0.0",
         "taxonomy_version": "1.1",
-        "generator_version": "sha256:3567f2b6e246",
-        "reviewer_version": "sha256:e4142013a3cb",
-        "solver_version": "sha256:df1200bed2b1"
+        "generator_version": "sha256:a148b05d4200",
+        "reviewer_version": "sha256:63c6c3556790",
+        "solver_version": "sha256:278ca34f5c89",
+        "orchestrator_version": "sha256:8a45e9c1b1c9",
+        "config_version": "sha256:135035715e07",
+        "generator_validator_version": "sha256:b56f07719789",
+        "reviewer_validator_version": "sha256:a071508bcd79",
+        "solver_validator_version": "sha256:e4e81bf16b77",
+        "solver_blinding_version": "sha256:ad446787fa40",
+        "schema_runtime_version": "sha256:1213648c6c73",
+        "generator_schema_version": "sha256:a05e32d14420",
+        "reviewer_schema_version": "sha256:ffc3e71b76d9",
+        "solver_schema_version": "sha256:6754900f17e0",
+        "provenance_schema_version": "sha256:679167f74ffc"
       },
       "accepted_item": null,
       "qa_audit": {
@@ -172,6 +236,17 @@
         ],
         "generation_attempt": 1,
         "revision_count": 0,
+        "validation_retry_counts": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        },
+        "system_failure_retry_counts": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        },
+        "retry_history": [],
         "reviewer": {
           "item_id": "reject-we-002",
           "section": "Written Expression",
@@ -244,13 +319,24 @@
         "versions": {
           "spec_version": "1.0.0",
           "taxonomy_version": "1.1",
-          "generator_version": "sha256:3567f2b6e246",
-          "reviewer_version": "sha256:e4142013a3cb",
-          "solver_version": "sha256:df1200bed2b1"
+          "generator_version": "sha256:a148b05d4200",
+          "reviewer_version": "sha256:63c6c3556790",
+          "solver_version": "sha256:278ca34f5c89",
+          "orchestrator_version": "sha256:8a45e9c1b1c9",
+          "config_version": "sha256:135035715e07",
+          "generator_validator_version": "sha256:b56f07719789",
+          "reviewer_validator_version": "sha256:a071508bcd79",
+          "solver_validator_version": "sha256:e4e81bf16b77",
+          "solver_blinding_version": "sha256:ad446787fa40",
+          "schema_runtime_version": "sha256:1213648c6c73",
+          "generator_schema_version": "sha256:a05e32d14420",
+          "reviewer_schema_version": "sha256:ffc3e71b76d9",
+          "solver_schema_version": "sha256:6754900f17e0",
+          "provenance_schema_version": "sha256:679167f74ffc"
         },
         "timestamps": {
-          "created": "2026-08-24T06:39:04.486390+00:00",
-          "updated": "2026-08-24T06:39:04.798218+00:00"
+          "created": "2026-08-25T03:36:29.441255+00:00",
+          "updated": "2026-08-25T03:36:30.361283+00:00"
         }
       }
     }

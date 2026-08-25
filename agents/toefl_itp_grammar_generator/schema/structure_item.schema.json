@@ -20,7 +20,7 @@
     "distractor_rationales"
   ],
   "properties": {
-    "item_id": { "type": "string", "minLength": 1 },
+    "item_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
     "section": { "const": "Structure" },
     "primary_target": {
       "enum": [
@@ -41,36 +41,36 @@
         "WORD_CLASS_FORM"
       ]
     },
-    "subtype": { "type": "string", "minLength": 1 },
+    "subtype": { "type": "string", "minLength": 1, "pattern": "\\S" },
     "secondary_features": {
       "type": "array",
-      "items": { "type": "string", "minLength": 1 }
+      "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
     },
     "difficulty": { "enum": ["EASY", "MEDIUM", "HARD"] },
-    "vocabulary_domain": { "type": "string", "minLength": 1 },
-    "stem": { "type": "string", "minLength": 1 },
+    "vocabulary_domain": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "stem": { "type": "string", "minLength": 1, "pattern": "\\S" },
     "options": {
       "type": "object",
       "additionalProperties": false,
       "required": ["A", "B", "C", "D"],
       "properties": {
-        "A": { "type": "string", "minLength": 1 },
-        "B": { "type": "string", "minLength": 1 },
-        "C": { "type": "string", "minLength": 1 },
-        "D": { "type": "string", "minLength": 1 }
+        "A": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "B": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "C": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "D": { "type": "string", "minLength": 1, "pattern": "\\S" }
       }
     },
     "correct_answer": { "enum": ["A", "B", "C", "D"] },
-    "answer_explanation": { "type": "string", "minLength": 1 },
+    "answer_explanation": { "type": "string", "minLength": 1, "pattern": "\\S" },
     "distractor_rationales": {
       "type": "object",
       "additionalProperties": false,
       "required": ["A", "B", "C", "D"],
       "properties": {
-        "A": { "type": "string", "minLength": 1 },
-        "B": { "type": "string", "minLength": 1 },
-        "C": { "type": "string", "minLength": 1 },
-        "D": { "type": "string", "minLength": 1 }
+        "A": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "B": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "C": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "D": { "type": "string", "minLength": 1, "pattern": "\\S" }
       }
     }
   }

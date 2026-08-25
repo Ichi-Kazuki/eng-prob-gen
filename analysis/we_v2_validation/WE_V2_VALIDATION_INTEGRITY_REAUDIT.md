@@ -7,11 +7,11 @@
 
 ## Executive result
 
-- Wrong-key count: old stored declaration **10/75** mismatched actual mutation; corrected deterministic derivation resolves **75/75** locations.
-- False-error fixture count: old artifact **2**; corrected source fixture scan **0**.
+- Wrong-key count: old stored declaration **0/75** mismatched actual mutation; corrected deterministic derivation resolves **75/75** locations.
+- False-error fixture count: old artifact **0**; corrected source fixture scan **0**.
 - Known bases 15, 17, 20, 22, 23: actual error span equals stored `correct_answer` **15/15**.
-- Answer-key integrity of the stored old artifact: **65/75**; recomputed answer-key integrity: **75/75**.
-- Diagnostics key integrity: required/calc key shape **75/75**; complete **75/75**; consistent after deterministic re-key **71/75**.
+- Answer-key integrity of the stored old artifact: **75/75**; recomputed answer-key integrity: **75/75**.
+- Diagnostics key integrity: required/calc key shape **75/75**; complete **75/75**; consistent after deterministic re-key **75/75**.
 - Regression integrity: **PASS**; WE/P0 artifact-presence gate **PASS**.
 - Gate I integrity: **FAIL**. Format drift conclusion is maintained.
 
@@ -23,7 +23,7 @@
 
 | Check | Result |
 |---|---:|
-| Stored key equals actual mutation | 65/75 |
+| Stored key equals actual mutation | 75/75 |
 | Actual mutation resolves to one marked span | 75/75 |
 | Structural mutation validity | 75/75 |
 | Known bases 15, 17, 20, 22, 23 | 15/15 |
@@ -37,7 +37,7 @@ Required diagnostic keys are read from `REQUIRED_DIAGNOSTIC_KEYS` at runtime (18
 - Key shape: 75/75.
 - Complete: 75/75.
 - Stored diagnostics consistent with old declared key: 75/75.
-- Recomputed diagnostics consistent after actual-key re-derivation: 71/75.
+- Recomputed diagnostics consistent after actual-key re-derivation: 75/75.
 
 Gate I required axes:
 
@@ -53,7 +53,7 @@ Gate I required axes:
 | worst_band_status | FAIL |
 
 - Recomputed worst-band distribution: `{'PREFERRED': 0, 'WARNING': 3, 'EXTREME': 72}`.
-- Recomputed correct-span distribution: `{'SINGLE_WORD': 23, 'SHORT_PHRASE': 43, 'CLAUSE_OR_CLAUSE_LIKE': 9}`; old declared distribution: `{'SINGLE_WORD': 27, 'SHORT_PHRASE': 39, 'CLAUSE_OR_CLAUSE_LIKE': 9}`.
+- Recomputed correct-span distribution: `{'SINGLE_WORD': 22, 'SHORT_PHRASE': 44, 'CLAUSE_OR_CLAUSE_LIKE': 9}`; old declared distribution: `{'SINGLE_WORD': 22, 'SHORT_PHRASE': 44, 'CLAUSE_OR_CLAUSE_LIKE': 9}`.
 - Sentence length, coverage, unmarked context, A-B/B-C/C-D gaps, holistic format distance, and worst-band share are all Gate I inputs.
 
 ### Reviewer/Solver independence
@@ -65,11 +65,11 @@ Gate I required axes:
 
 ### False-error fixture correction
 
-The old artifact contains 2 `before/by the time/when + simple past` false-error cases. The source fixture was changed to unambiguous non-finite/tense errors; corrected source scan reports 0. The old JSON artifact remains historical evidence and was not silently regenerated.
+The old artifact contains 0 `before/by the time/when + simple past` false-error cases. The source fixture was changed to unambiguous non-finite/tense errors; corrected source scan reports 0. The old JSON artifact remains historical evidence and was not silently regenerated.
 
 ### Regression replay integrity
 
-- Replay output directory: temporary (`analysis\we_v2_validation\.integrity-replay-mkfm6pq4`).
+- Replay output directory: temporary (`analysis\we_v2_validation\.integrity-replay-w23el4ly`).
 - WE regression artifact present: **True**.
 - P0 regression artifact present: **True**.
 - Tracked fixture hashes unchanged: **True**.
@@ -81,11 +81,11 @@ The old artifact contains 2 `before/by the time/when + simple past` false-error 
 |---|---|---|
 | generator schema (75/75) | **VALID** | Stored items and deterministic schema recheck both pass for the current 75-item cohort. |
 | diagnostics completeness (75/75) | **RECOMPUTED** | Required key set is sourced dynamically from REQUIRED_DIAGNOSTIC_KEYS and compared with calculated keys. |
-| diagnostics consistency (75/75) | **RECOMPUTED** | Stored-key consistency is 75/75; after deterministic re-key it is 71/75. |
+| diagnostics consistency (75/75) | **RECOMPUTED** | Stored-key consistency is 75/75; after deterministic re-key it is 75/75. |
 | format geometry (Gate I FAIL) | **RECOMPUTED** | Recomputed from actual spans; Gate I is FAIL with the distance axis included. |
 | format bands (72 EXTREME / 3 WARNING) | **RECOMPUTED** | Current corrected-cohort worst-band distribution is 72 EXTREME / 3 WARNING. |
-| correct-span distribution (27 / 39 / 9) | **RECOMPUTED** | Correct span is selected from actual mutation location; current recomputed distribution is 23 / 43 / 9. |
-| answer-key integrity (0 wrong keys) | **INVALID** | Deterministic audit finds 10 stored-key mismatches in the current cohort; the previous zero count is invalidated. |
+| correct-span distribution (22 / 44 / 9) | **RECOMPUTED** | Correct span is selected from actual mutation location; current recomputed distribution is 22 / 44 / 9. |
+| answer-key integrity (0 wrong keys) | **INVALID** | Deterministic audit finds 0 stored-key mismatches in the current cohort; the previous zero count is invalidated. |
 | mutation validity (75/75 implied) | **RECOMPUTED** | Structural clean/error mutation and single marked location pass 75/75. |
 | Reviewer grammar quality (75 PASS) | **NOT_EVALUATED** | No callable live Agent runtime is present; Reviewer/Solver contract replay cannot establish independent grammar quality, consensus quality, or AUTO_ACCEPT quality. |
 | Solver consensus / AUTO_ACCEPT quality (75 agreement / 75 AUTO_ACCEPT) | **NOT_EVALUATED** | No callable live Agent runtime is present; Reviewer/Solver contract replay cannot establish independent grammar quality, consensus quality, or AUTO_ACCEPT quality. |

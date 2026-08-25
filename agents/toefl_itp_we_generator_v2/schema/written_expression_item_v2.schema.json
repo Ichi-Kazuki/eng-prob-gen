@@ -12,29 +12,29 @@
     "minimal_correction", "grammar_metadata", "format_metadata", "provenance", "qa_metadata"
   ],
   "properties": {
-    "item_id": {"type": "string", "minLength": 1},
+    "item_id": {"type": "string", "minLength": 1, "pattern": "\\S"},
     "section": {"const": "Written Expression"},
     "agent_version": {"const": "Written Expression Generator v2.0"},
-    "primary_target": {"type": "string", "minLength": 1},
-    "subtype": {"type": "string", "minLength": 1},
-    "secondary_features": {"type": "array", "items": {"type": "string", "minLength": 1}},
-    "tested_error_type": {"type": "string", "minLength": 1},
+    "primary_target": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "subtype": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "secondary_features": {"type": "array", "items": {"type": "string", "minLength": 1, "pattern": "\\S"}},
+    "tested_error_type": {"type": "string", "minLength": 1, "pattern": "\\S"},
     "difficulty": {"enum": ["EASY", "MEDIUM", "HARD"]},
-    "vocabulary_domain": {"type": "string", "minLength": 1},
-    "sentence": {"type": "string", "minLength": 1},
+    "vocabulary_domain": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "sentence": {"type": "string", "minLength": 1, "pattern": "\\S"},
     "marked_parts": {
       "type": "object", "additionalProperties": false,
       "required": ["A", "B", "C", "D"],
       "properties": {
-        "A": {"type": "string", "minLength": 1},
-        "B": {"type": "string", "minLength": 1},
-        "C": {"type": "string", "minLength": 1},
-        "D": {"type": "string", "minLength": 1}
+        "A": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "B": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "C": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "D": {"type": "string", "minLength": 1, "pattern": "\\S"}
       }
     },
     "correct_answer": {"enum": ["A", "B", "C", "D"]},
-    "error_explanation": {"type": "string", "minLength": 1},
-    "minimal_correction": {"type": "string", "minLength": 1},
+    "error_explanation": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "minimal_correction": {"type": "string", "minLength": 1, "pattern": "\\S"},
     "grammar_metadata": {
       "type": "object", "additionalProperties": false,
       "required": ["error_scope", "correction_locality", "decision_granularity", "intended_error_position", "correct_span_type"],
@@ -50,10 +50,10 @@
       "type": "object", "additionalProperties": false,
       "required": ["target_sentence_length_region", "expected_span_profile", "coverage_profile", "approximate_context_profile", "span_types", "diagnostics"],
       "properties": {
-        "target_sentence_length_region": {"type": "string", "minLength": 1},
-        "expected_span_profile": {"type": "string", "minLength": 1},
-        "coverage_profile": {"type": "string", "minLength": 1},
-        "approximate_context_profile": {"type": "string", "minLength": 1},
+        "target_sentence_length_region": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "expected_span_profile": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "coverage_profile": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "approximate_context_profile": {"type": "string", "minLength": 1, "pattern": "\\S"},
         "span_types": {
           "type": "object", "additionalProperties": false,
           "required": ["A", "B", "C", "D"],
@@ -79,8 +79,8 @@
             "gap_C_D": {"type": "integer", "minimum": 0},
             "correct_span_word_count": {"type": "integer", "minimum": 1},
             "correct_span_type": {"enum": ["SINGLE_WORD", "SHORT_PHRASE", "CLAUSE_OR_CLAUSE_LIKE"]},
-            "correction_locality": {"type": "string", "minLength": 1},
-            "decision_granularity": {"type": "string", "minLength": 1},
+            "correction_locality": {"type": "string", "minLength": 1, "pattern": "\\S"},
+            "decision_granularity": {"type": "string", "minLength": 1, "pattern": "\\S"},
             "format_distribution_distance": {"type": "number", "minimum": 0},
             "format_percentile_profile": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}},
             "format_band_status": {"enum": ["PREFERRED", "WARNING", "EXTREME"]},
@@ -105,10 +105,10 @@
       "properties": {
         "agent_version": {"const": "Written Expression Generator v2.0"},
         "prompt_hash": {"type": ["string", "null"]},
-        "spec_version": {"type": "string", "minLength": 1},
-        "format_spec_version": {"type": "string", "minLength": 1},
-        "generation_batch_id": {"type": "string", "minLength": 1},
-        "microbatch_id": {"type": "string", "minLength": 1},
+        "spec_version": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "format_spec_version": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "generation_batch_id": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "microbatch_id": {"type": "string", "minLength": 1, "pattern": "\\S"},
         "item_generation_order": {"type": "integer", "minimum": 1},
         "invocation_id": {"type": ["string", "null"]},
         "runtime_model": {"type": ["string", "null"]}
@@ -118,10 +118,10 @@
       "type": "object", "additionalProperties": false,
       "required": ["clean_form", "error_form", "minimal_correction", "mutation_type", "clean_sentence_validated", "grammar_check_status", "format_check_status"],
       "properties": {
-        "clean_form": {"type": "string", "minLength": 1},
-        "error_form": {"type": "string", "minLength": 1},
-        "minimal_correction": {"type": "string", "minLength": 1},
-        "mutation_type": {"type": "string", "minLength": 1},
+        "clean_form": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "error_form": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "minimal_correction": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "mutation_type": {"type": "string", "minLength": 1, "pattern": "\\S"},
         "clean_sentence_validated": {"const": true},
         "grammar_check_status": {"enum": ["PASS", "FAIL", "AMBIGUOUS"]},
         "format_check_status": {"enum": ["PASS", "WARN", "FAIL"]}

@@ -126,22 +126,27 @@ class GeneratorContractBoundaryTests(unittest.TestCase):
 
     def test_fixture_smoke_is_not_labeled_live(self) -> None:
         import run_patch  # noqa: E402
-
-        fixture = run_patch.run_fixture_smoke(
-            run_patch.load_json(run_patch.CONFIG_PATH),
-            run_patch.load_json(
-                ROOT / "agents/toefl_itp_we_generator_v2/schema/written_expression_item_v2.schema.json"
-            ),
-            {
-                entry["id"]
-                for entry in run_patch.load_json(ROOT / "analysis/grammar_taxonomy.json")["primary_targets"]
-            },
-            {
-                entry["id"]
-                for entry in run_patch.load_json(ROOT / "specs/toefl_itp_grammar_spec.json")["tested_error_types"]
-                if entry["id"] not in {"fragment", "wrong_complementation"}
-            },
-        )
+        with tempfile.TemporaryDirectory(prefix="we-v2-patch-test-") as directory:
+            old_output = run_patch.OUT
+            try:
+                run_patch.OUT = Path(directory)
+                fixture = run_patch.run_fixture_smoke(
+                    run_patch.load_json(run_patch.CONFIG_PATH),
+                    run_patch.load_json(
+                        ROOT / "agents/toefl_itp_we_generator_v2/schema/written_expression_item_v2.schema.json"
+                    ),
+                    {
+                        entry["id"]
+                        for entry in run_patch.load_json(ROOT / "analysis/grammar_taxonomy.json")["primary_targets"]
+                    },
+                    {
+                        entry["id"]
+                        for entry in run_patch.load_json(ROOT / "specs/toefl_itp_grammar_spec.json")["tested_error_types"]
+                        if entry["id"] not in {"fragment", "wrong_complementation"}
+                    },
+                )
+            finally:
+                run_patch.OUT = old_output
 
         self.assertFalse(fixture["metrics"].get("live_generation", False))
         self.assertIn("fixture_smoke_gate", fixture["metrics"])

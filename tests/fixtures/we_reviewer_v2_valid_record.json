@@ -1,0 +1,104 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2-validation-001",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Reviewer v2.0",
+      "verdict": "PASS",
+      "critical_failure": false,
+      "independent_answer": "B",
+      "generator_answer": "B",
+      "answer_match": true,
+      "grammar_validity": "PASS",
+      "format_validity": "WARN",
+      "detected_error_count": 1,
+      "detected_error_position": "B",
+      "non_error_parts_valid": true,
+      "minimal_correction_valid": true,
+      "marked_part_assessments": {
+        "A": "ACCEPTABLE",
+        "B": "ERROR",
+        "C": "ACCEPTABLE",
+        "D": "ACCEPTABLE"
+      },
+      "checks": {
+        "grammar_validity": "PASS",
+        "one_error_only": "PASS",
+        "answer_uniqueness": "PASS",
+        "format_validity": "WARN",
+        "target_metadata": "PASS",
+        "naturalness": "PASS",
+        "provenance": "PASS"
+      },
+      "format_diagnostics": {
+        "sentence_word_count": 17,
+        "span_word_counts": {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "D": 1
+        },
+        "mean_span_length": 1.0,
+        "max_span_length": 1,
+        "marked_coverage_ratio": 0.2353,
+        "unmarked_word_count": 13,
+        "gap_A_B": 6,
+        "gap_B_C": 3,
+        "gap_C_D": 2,
+        "correct_span_word_count": 1,
+        "correct_span_type": "SINGLE_WORD",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "format_distribution_distance": 0.7015,
+        "format_percentile_profile": {
+          "sentence_word_count": 0.268,
+          "marked_coverage_ratio": 0.36,
+          "unmarked_word_count": 0.396,
+          "mean_span_length": 0.156,
+          "max_span_length": 0.156,
+          "gap_A_B": 0.992,
+          "gap_B_C": 0.292,
+          "gap_C_D": 0.1
+        },
+        "format_band_status": "EXTREME",
+        "metric_band_status": {
+          "sentence_word_count": "PREFERRED",
+          "marked_coverage_ratio": "PREFERRED",
+          "unmarked_word_count": "PREFERRED",
+          "mean_span_length": "PREFERRED",
+          "max_span_length": "PREFERRED",
+          "gap_A_B": "EXTREME",
+          "gap_B_C": "PREFERRED",
+          "gap_C_D": "PREFERRED"
+        },
+        "span_token_indices": {
+          "A": [
+            2
+          ],
+          "B": [
+            9
+          ],
+          "C": [
+            13
+          ],
+          "D": [
+            16
+          ]
+        }
+      },
+      "issues": [],
+      "revision_requirements": [],
+      "source_similarity_risk": "LOW",
+      "provenance": {
+        "agent_version": "Written Expression Reviewer v2.0",
+        "prompt_hash": "sha256:1a2516739e83de8db8c0a58dddaac973b9960966f94a5554f42cd577d086767b",
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "review_batch_id": "we-v2-validation-20260824-review-round2",
+        "item_review_order": 1,
+        "invocation_id": null,
+        "runtime_model": null
+      }
+    }
+  ]
+}

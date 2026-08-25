@@ -1,11 +1,5 @@
 # TOEFL ITP Written Expression Generator v2.0.1 — 75-item LIVE Validation
 
-> **Status: SUPERSEDED / INVALIDATED for answer-key and grammar-quality conclusions.**
-> The retained report is superseded by `WE_V2_VALIDATION_INTEGRITY_REAUDIT.md`.
-> Its contract/format observations remain historical; the old zero wrong-key
-> conclusion and all contract-replay grammar-quality conclusions must not be
-> reused.
-
 - Run ID: `we-v2-validation-20260824`; scope: Written Expression only; exactly 75 initial candidates; replacement generation: false.
 - Generation architecture: sentence-first; 25 items × 3 batches; one item per microbatch; no monolithic 25-item generation context.
 - Runtime provenance caveat: this workspace has no callable live Agent runtime. `runtime_model` and `invocation_id` are therefore null in accordance with the no-inference rule.
@@ -67,7 +61,7 @@ Three initial metadata/plan-conformance defects were deliberately retained as in
 
 | Cohort | n | Sentence median | Span median | Coverage median | Unmarked median | Gaps A-B / B-C / C-D | Distance median |
 |---|---:|---:|---:|---:|---:|---|---:|
-| Official 125 | 125 | 20 | 1.0 | 0.2632 | 15 | 4 / 4 / 4 | None |
+| Official 125 | 125 | 20 | 1.0 | 0.2632 | 15 | 4 / 4 / 4 | 0.7878 |
 | v1.1 Validation 75 | 75 | 10.0 | 2.0 | 1.0 | 0.0 | 0.0 / 0.0 / 0.0 | 5.3116 |
 | v2 Smoke 10 | 10 | 21.0 | 1.0 | 0.2248 | 16.0 | 2.0 / 4.0 / 4.0 | 0.6774 |
 | v2 Pilot 25 | 25 | 21.0 | 1.0 | 0.25 | 15.0 | 3.0 / 2.0 / 3.0 | 0.6869 |
@@ -87,11 +81,11 @@ Three initial metadata/plan-conformance defects were deliberately retained as in
 
 ### Span and correct-span monitoring
 
-- Sorted span profiles: `{'1/1/1/1': 18, '1/2/1/1': 11, '1/2/2/1': 11, '2/1/1/1': 7, '1/1/2/1': 5, '1/3/2/1': 4, '2/1/2/1': 3, '5/2/2/1': 3, '1/5/2/1': 2, '2/2/2/1': 2, '5/1/1/1': 2, '1/1/1/2': 1, '1/1/2/2': 1, '1/2/3/1': 1, '1/3/3/1': 1, '1/5/1/1': 1, '2/2/2/2': 1, '6/1/2/1': 1}`.
-- Correct span types: `{'SINGLE_WORD': 27, 'SHORT_PHRASE': 39, 'CLAUSE_OR_CLAUSE_LIKE': 9}`; official reference: SINGLE_WORD 98/125, SHORT_PHRASE 12/125, CLAUSE_OR_CLAUSE_LIKE 15/125.
+- Sorted span profiles: `{'1/1/1/1': 17, '1/2/1/1': 11, '1/2/2/1': 11, '2/1/1/1': 7, '1/1/2/1': 6, '1/3/2/1': 4, '2/1/2/1': 3, '5/2/2/1': 3, '1/5/2/1': 2, '2/2/2/1': 2, '5/1/1/1': 2, '1/1/1/2': 1, '1/1/2/2': 1, '1/2/3/1': 1, '1/3/3/1': 1, '1/5/1/1': 1, '2/2/2/2': 1, '6/1/2/1': 1}`.
+- Correct span types: `{'SINGLE_WORD': 22, 'SHORT_PHRASE': 44, 'CLAUSE_OR_CLAUSE_LIKE': 9}`; official reference: SINGLE_WORD 98/125, SHORT_PHRASE 12/125, CLAUSE_OR_CLAUSE_LIKE 15/125.
 - Decision granularity: `{'AGREEMENT_DEPENDENCY': 6, 'FUNCTION_WORD': 21, 'VERB_FRAME': 21, 'WORD_CLASS': 6, 'MORPHOLOGY': 9, 'CLAUSE_RELATION': 6, 'WORD_ORDER': 3, 'OTHER': 3}`.
 - Correction locality: `{'DEPENDENCY_BASED': 12, 'LOCAL_SINGLE_TOKEN': 27, 'LOCAL_SHORT_SPAN': 9, 'CLAUSE_LEVEL': 27}`.
-- Marked span word-count comparison: validation `{'1': 206, '2': 78, '3': 7, '5': 8, '6': 1}` vs official `{'1': 375, '2': 106, '3': 16, '4': 3}`.
+- Marked span word-count comparison: validation `{'1': 205, '2': 79, '3': 7, '5': 8, '6': 1}` vs official `{'1': 375, '2': 106, '3': 16, '4': 3}`.
 
 ## 4. Batch stability and generation-order drift
 
@@ -137,7 +131,7 @@ The order windows are descriptive contract telemetry; they do not support gramma
 
 | Gate | Result |
 |---|---|
-- Judgment source: `contract_only_replay`; grammar-quality conclusions evaluable: `False`.
+- Judgment source: `CONTRACT_REPLAY_ONLY`; grammar-quality conclusions evaluable: `False`.
 | Gate A contract defect tracking has no AUTO_ACCEPTed synthetic defects | PASS |
 | Gate B regression 100% PASS | PASS |
 | Gate C Generator schema = 100% | PASS |

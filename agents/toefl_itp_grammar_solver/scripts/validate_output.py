@@ -1,135 +1,119 @@
-"""Schema-level validation for TOEFL ITP Independent Solver Agent output.
+"""Validate TOEFL ITP Independent Solver output.
 
-Checks only the *shape* of the Solver's own output (required fields, enum
-membership, and the internal-consistency rule that ambiguity_detected must
-be true iff solver_answer is AMBIGUOUS or NONE). This does NOT judge
-whether solver_answer is the *correct* answer - that is exercised
-separately via the smoke/adversarial test process.
+The committed Draft 2020-12 schema is the structural source of truth. Its
+``additionalProperties: false`` rule is the Solver-output allowlist and its
+conditionals enforce answer/ambiguity consistency.
 
-Usage:
-    python validate_output.py <path-to-solver-output.json>
-
-Exit code 0 if every item passes; 1 if any item fails.
+Exit codes: 0 valid, 1 output/schema/semantic failure, 2 runtime failure.
 """
+
+from __future__ import annotations
 
 import json
 import sys
 from pathlib import Path
 
-SECTIONS = {"Structure", "Written Expression"}
-SOLVER_ANSWERS = {"A", "B", "C", "D", "AMBIGUOUS", "NONE"}
-CONFIDENCE_LEVELS = {"HIGH", "MEDIUM", "LOW"}
-AMBIGUOUS_ANSWERS = {"AMBIGUOUS", "NONE"}
+REPO_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO_ROOT))
 
+from shared.schema_validation import (  # noqa: E402
+    SchemaValidationRuntimeError,
+    load_schema,
+    schema_errors,
+)
+
+OUTPUT_SCHEMA_PATH = Path(__file__).resolve().parents[1] / "schema" / "solver_output.schema.json"
 REQUIRED_TOP_KEYS = {
-    "item_id",
-    "section",
-    "solver_answer",
-    "confidence",
-    "reason",
-    "ambiguity_detected",
+    "item_id", "section", "solver_answer", "confidence", "reason", "ambiguity_detected"
 }
+ALLOWED_TOP_KEYS = REQUIRED_TOP_KEYS | {"suggested_correction"}
+SOLVER_ANSWERS = {"A", "B", "C", "D", "AMBIGUOUS", "NONE"}
+
+_SCHEMA_CACHE: dict | None = None
 
 
-def load_items(path: Path):
+def load_items(path: Path) -> list[object]:
     data = json.loads(path.read_text(encoding="utf-8"))
     if isinstance(data, dict) and "items" in data:
+        if not isinstance(data["items"], list):
+            raise ValueError("$.items must be an array")
         return data["items"]
     if isinstance(data, list):
         return data
     if isinstance(data, dict):
         return [data]
-    raise ValueError("Unrecognized top-level JSON shape")
+    raise ValueError("$ must be an item object, an array, or an object containing $.items")
 
 
-def validate_item(item, errors):
-    prefix = f"[{item.get('item_id', '?')}] "
-
-    missing = REQUIRED_TOP_KEYS - set(item.keys())
-    if missing:
-        errors.append(prefix + f"missing required field(s): {sorted(missing)}")
-
-    section = item.get("section")
-    if section not in SECTIONS:
-        errors.append(prefix + f"section must be one of {sorted(SECTIONS)}, got {section!r}")
-
-    answer = item.get("solver_answer")
-    if answer not in SOLVER_ANSWERS:
-        errors.append(prefix + f"solver_answer must be one of {sorted(SOLVER_ANSWERS)}, got {answer!r}")
-
-    if item.get("confidence") not in CONFIDENCE_LEVELS:
-        errors.append(prefix + f"confidence must be one of {sorted(CONFIDENCE_LEVELS)}")
-
-    if not isinstance(item.get("reason"), str) or not item["reason"].strip():
-        errors.append(prefix + "reason must be a non-empty string")
-
-    ambiguity = item.get("ambiguity_detected")
-    if not isinstance(ambiguity, bool):
-        errors.append(prefix + "ambiguity_detected must be a boolean")
-    elif answer in AMBIGUOUS_ANSWERS and ambiguity is not True:
-        errors.append(prefix + f"solver_answer={answer!r} requires ambiguity_detected=true")
-    elif answer in SOLVER_ANSWERS - AMBIGUOUS_ANSWERS and ambiguity is not False:
-        errors.append(prefix + f"solver_answer={answer!r} requires ambiguity_detected=false")
-
-    if section == "Written Expression":
-        if "suggested_correction" not in item:
-            errors.append(prefix + "Written Expression item missing field: suggested_correction")
-        elif not isinstance(item["suggested_correction"], str):
-            errors.append(prefix + "suggested_correction must be a string")
-
-    # Leakage guard: a Solver output item should never carry answer/metadata
-    # fields that only make sense on Generator/Reviewer output.
-    leaked_keys = {
-        "correct_answer",
-        "answer_explanation",
-        "distractor_rationales",
-        "primary_target",
-        "subtype",
-        "secondary_features",
-        "tested_error_type",
-        "difficulty",
-        "error_scope",
-        "minimal_correction",
-        "verdict",
-        "independent_answer",
-        "checks",
-        "issues",
-    } & set(item.keys())
-    if leaked_keys:
-        errors.append(prefix + f"output contains fields that should never appear on Solver output (possible leakage): {sorted(leaked_keys)}")
+def output_schema() -> dict:
+    global _SCHEMA_CACHE
+    if _SCHEMA_CACHE is None:
+        _SCHEMA_CACHE = load_schema(OUTPUT_SCHEMA_PATH)
+    return _SCHEMA_CACHE
 
 
-def main():
+def validate_semantics(item: dict, errors: list[str] | None = None) -> list[str]:
+    """Reserved for cross-field rules not expressible in the schema.
+
+    The current Solver contract expresses every structural and conditional
+    rule in Draft 2020-12 JSON Schema, so there is no duplicate Python rule.
+    """
+    return errors if errors is not None else []
+
+
+def validate_contract(item: object, errors: list[str] | None = None) -> list[str]:
+    collected: list[str] = []
+    item_id = item.get("item_id", "?") if isinstance(item, dict) else "?"
+    if not isinstance(item, dict):
+        collected.append(f"[{item_id}] $: solver result must be an object")
+    else:
+        structural = schema_errors(item, output_schema())
+        collected.extend(
+            f"[{item_id}] {OUTPUT_SCHEMA_PATH.name}: {message}" for message in structural
+        )
+        if not structural:
+            validate_semantics(item, collected)
+    if errors is not None:
+        errors.extend(collected)
+    return collected
+
+
+validate_item = validate_contract
+validate = validate_contract
+
+
+def main() -> int:
     if len(sys.argv) != 2:
         print(__doc__)
-        sys.exit(2)
-
-    path = Path(sys.argv[1])
-    items = load_items(path)
-
-    errors = []
-    section_counts = {"Structure": 0, "Written Expression": 0}
-    answer_counts = {k: 0 for k in SOLVER_ANSWERS}
-
-    for item in items:
-        section = item.get("section")
-        if section in section_counts:
-            section_counts[section] += 1
-        answer = item.get("solver_answer")
-        if answer in answer_counts:
-            answer_counts[answer] += 1
-        validate_item(item, errors)
+        return 2
+    try:
+        items = load_items(Path(sys.argv[1]))
+        errors: list[str] = []
+        section_counts = {"Structure": 0, "Written Expression": 0}
+        answer_counts = {answer: 0 for answer in SOLVER_ANSWERS}
+        for item in items:
+            if isinstance(item, dict):
+                if item.get("section") in section_counts:
+                    section_counts[item["section"]] += 1
+                if item.get("solver_answer") in answer_counts:
+                    answer_counts[item["solver_answer"]] += 1
+            validate_contract(item, errors)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, SchemaValidationRuntimeError) as exc:
+        print(f"SYSTEM ERROR: {exc}", file=sys.stderr)
+        return 2
+    except ValueError as exc:
+        print(f"[?] $: {exc}")
+        return 1
 
     print(f"Checked {len(items)} item(s): sections={section_counts} answers={answer_counts}")
     if errors:
         print(f"\n{len(errors)} validation error(s):")
-        for e in errors:
-            print(f"  - {e}")
-        sys.exit(1)
-
-    print("All items passed solver-output schema validation.")
-    sys.exit(0)
+        for error in errors:
+            print(f"  - {error}")
+        return 1
+    print("All items passed Draft 2020-12 schema and semantic validation.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

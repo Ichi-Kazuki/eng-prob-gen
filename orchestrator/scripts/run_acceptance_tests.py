@@ -10,9 +10,10 @@ have a disagreeing Solver, so those branches are tested directly against
 evaluate_consensus with small synthetic inputs rather than through a full
 fixture replay).
 
-Populates analysis/manual_review_queue.json with any MANUAL_REVIEW items
-produced (from the synthetic disagreement cases, since none of the current
-real fixtures produce a disagreement).
+All replay outputs and the synthetic manual-review queue are written to a
+temporary directory by default. Supplying an output directory keeps them
+there for inspection. The operational analysis/manual_review_queue.json is
+never touched.
 
 Usage:
     python run_acceptance_tests.py
@@ -21,6 +22,7 @@ Usage:
 import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -143,15 +145,19 @@ def base_solver_item(answer: str = "C", **overrides) -> dict:
 
 
 def main(output_dir: Path | None = None) -> int:
-    if output_dir is not None:
-        output_dir.mkdir(parents=True, exist_ok=True)
+    if output_dir is None:
+        with tempfile.TemporaryDirectory(prefix="itp-acceptance-") as directory:
+            return main(Path(directory))
+    RESULTS.clear()
+    output_dir.mkdir(parents=True, exist_ok=True)
     config = load_config()
-    if output_dir is not None:
-        # Acceptance replay must be side-effect free for tracked fixtures. The
-        # synthetic manual-review entry belongs beside the other temporary
-        # replay artifacts, never in analysis/manual_review_queue.json.
-        config["paths"] = dict(config["paths"])
-        config["paths"]["manual_review_queue"] = str((output_dir / "manual_review_queue.json").resolve())
+    # Acceptance replay must be side-effect free for tracked fixtures. The
+    # synthetic manual-review entry belongs beside the other temporary replay
+    # artifacts, never in analysis/manual_review_queue.json.
+    config["paths"] = dict(config["paths"])
+    config["paths"]["manual_review_queue"] = str(
+        (output_dir / "manual_review_queue.json").resolve()
+    )
     versions = load_versions(config)
 
     # -- #12 schema validation PASS, plus drives #1/#2/#9/#10/#4/#13 -------
@@ -164,9 +170,9 @@ def main(output_dir: Path | None = None) -> int:
           f"smoke_rc={smoke.returncode} adversarial_rc={adversarial.returncode} reject_rc={reject_path.returncode}")
 
     output_paths = {
-        "orchestrator_smoke_test.json": (output_dir or REPO_ROOT / "analysis") / "orchestrator_smoke_test.json",
-        "orchestrator_adversarial_test.json": (output_dir or REPO_ROOT / "analysis") / "orchestrator_adversarial_test.json",
-        "orchestrator_reject_path_test.json": (output_dir or REPO_ROOT / "analysis") / "orchestrator_reject_path_test.json",
+        "orchestrator_smoke_test.json": output_dir / "orchestrator_smoke_test.json",
+        "orchestrator_adversarial_test.json": output_dir / "orchestrator_adversarial_test.json",
+        "orchestrator_reject_path_test.json": output_dir / "orchestrator_reject_path_test.json",
     }
     prov_checks = [
         subprocess.run(
@@ -336,7 +342,7 @@ def main(output_dir: Path | None = None) -> int:
     )
     queue_path = append_manual_review_queue(config, [mr_entry])
     queue_data = json.loads(queue_path.read_text(encoding="utf-8"))
-    check("15", "MANUAL_REVIEW items are queued to analysis/manual_review_queue.json with actionable fields",
+    check("15", "MANUAL_REVIEW items are queued to the configured isolated queue with actionable fields",
           mr_candidate.state == State.MANUAL_REVIEW
           and any(e["item_id"] == "synthetic-struct-001" and e["possible_actions"] == ["ACCEPT", "REGENERATE", "DISCARD"]
                   for e in queue_data["items"]),

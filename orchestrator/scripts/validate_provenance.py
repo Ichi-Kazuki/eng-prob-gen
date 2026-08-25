@@ -1,112 +1,144 @@
-"""Schema-level validation for the Orchestrator's own provenance output.
+"""Validate Orchestrator provenance records.
 
-Checks only the *shape* of a provenance record (required fields, internal
-consistency such as accepted_item being non-null iff state == ACCEPTED),
-mirroring the pattern of agents/*/scripts/validate_output.py. Does not
-re-judge whether the underlying ACCEPTED/DISCARDED/etc. decision was
-correct - that is exercised by run_smoke_test.py / run_adversarial_test.py
-/ run_reject_path_test.py / run_acceptance_tests.py.
+Draft 2020-12 schemas own structural validation; Python checks only
+cross-record state consistency.
 
-Usage:
-    python validate_provenance.py <path-to-orchestrator-output.json>
-
-Exit code 0 if every record passes; 1 if any record fails.
+Exit codes: 0 valid, 1 record/schema/semantic failure, 2 runtime failure.
 """
+
+from __future__ import annotations
 
 import json
 import sys
 from pathlib import Path
 
-REQUIRED_TOP_KEYS = {
-    "item_id", "concept_id", "section", "state", "state_history",
-    "generation_attempt", "revision_count", "generator", "reviewer", "solver",
-    "consensus", "batch_slot", "versions", "accepted_item", "qa_audit",
-}
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT))
 
+from shared.schema_validation import (  # noqa: E402
+    SchemaValidationRuntimeError,
+    load_schema,
+    schema_errors,
+)
+
+SCHEMA_DIR = Path(__file__).resolve().parents[1] / "schemas"
+_SCHEMAS: dict[str, dict] = {}
 VALID_STATES = {
     "GENERATED", "GENERATION_FAILED", "VALIDATION_FAILED", "REVIEWING",
     "REVISE_REQUIRED", "REJECTED", "SOLVING", "ACCEPTED", "MANUAL_REVIEW",
     "DISCARDED",
 }
+STATES_WHERE_SOLVER_MAY_BE_SET = {"ACCEPTED", "MANUAL_REVIEW", "DISCARDED"}
 
 
-def load_records(path: Path) -> list[dict]:
+def schema(name: str) -> dict:
+    if name not in _SCHEMAS:
+        _SCHEMAS[name] = load_schema(SCHEMA_DIR / name)
+    return _SCHEMAS[name]
+
+
+def load_records(path: Path) -> list[object]:
     data = json.loads(path.read_text(encoding="utf-8"))
     if isinstance(data, dict) and "items" in data:
+        if not isinstance(data["items"], list):
+            raise ValueError("$.items must be an array")
         return data["items"]
     if isinstance(data, list):
         return data
-    raise ValueError("Unrecognized top-level JSON shape")
+    raise ValueError("$ must be an array or an object containing $.items")
 
 
-def validate_record(rec: dict, errors: list[str]) -> None:
-    prefix = f"[{rec.get('item_id', '?')}] "
-
-    missing = REQUIRED_TOP_KEYS - set(rec.keys())
-    if missing:
-        errors.append(prefix + f"missing required field(s): {sorted(missing)}")
-
-    state = rec.get("state")
+def validate_semantics(record: dict, errors: list[str] | None = None) -> list[str]:
+    collected = errors if errors is not None else []
+    prefix = f"[{record['item_id']}]"
+    state = record["state"]
+    accepted_item = record["accepted_item"]
     if state not in VALID_STATES:
-        errors.append(prefix + f"state {state!r} is not a recognized Orchestrator state")
-
-    accepted_item = rec.get("accepted_item")
-    if state == "ACCEPTED" and accepted_item is None:
-        errors.append(prefix + "state=ACCEPTED but accepted_item is null")
-    if state != "ACCEPTED" and accepted_item is not None:
-        errors.append(prefix + f"state={state!r} but accepted_item is non-null (should only be set for ACCEPTED)")
-
-    consensus = rec.get("consensus")
-    if not isinstance(consensus, bool):
-        errors.append(prefix + "consensus must be a boolean")
-    elif consensus and state != "ACCEPTED":
-        errors.append(prefix + "consensus=true but state != ACCEPTED")
-    elif not consensus and state == "ACCEPTED":
-        errors.append(prefix + "state=ACCEPTED but consensus=false")
-
-    if not isinstance(rec.get("state_history"), list) or not rec["state_history"]:
-        errors.append(prefix + "state_history must be a non-empty array")
-    elif rec["state_history"][-1] != state:
-        errors.append(prefix + "state_history's last entry does not match the record's current state")
-
-    qa_audit = rec.get("qa_audit")
-    if not isinstance(qa_audit, dict):
-        errors.append(prefix + "qa_audit must be present (it is the only place Reviewer/Solver detail lives)")
-
-    if state == "SOLVING":
-        errors.append(prefix + "state=SOLVING is a transient in-flight state and must not appear as a final record")
-
-    # Solver is only ever called once a candidate has passed through SOLVING,
-    # which only happens after a Reviewer PASS - so a non-null solver record
-    # should only appear on a final state reachable from SOLVING.
-    states_where_solver_may_be_set = {"ACCEPTED", "MANUAL_REVIEW", "DISCARDED"}
-    if state not in states_where_solver_may_be_set and rec.get("solver") is not None:
-        errors.append(
-            prefix + f"state={state!r} but solver is non-null - Solver must only be "
-            "reachable via a prior Reviewer PASS (state history should include SOLVING)"
+        collected.append(f"{prefix} $.state: unrecognized Orchestrator state {state!r}")
+    if (state == "ACCEPTED") != (accepted_item is not None):
+        collected.append(
+            f"{prefix} $.accepted_item: must be non-null iff $.state is ACCEPTED"
         )
+    if record["consensus"] is not (state == "ACCEPTED"):
+        collected.append(f"{prefix} $.consensus: must be true iff $.state is ACCEPTED")
+    if not record["state_history"] or record["state_history"][-1] != state:
+        collected.append(f"{prefix} $.state_history: final entry must equal $.state")
+    if state == "SOLVING":
+        collected.append(f"{prefix} $.state: SOLVING is not a final state")
+    if record["solver"] is not None and state not in STATES_WHERE_SOLVER_MAY_BE_SET:
+        collected.append(
+            f"{prefix} $.solver: non-null Solver output is not valid when $.state={state!r}"
+        )
+    if record["solver"] is not None and "SOLVING" not in record["state_history"]:
+        collected.append(
+            f"{prefix} $.solver: non-null Solver output requires SOLVING in $.state_history"
+        )
+
+    qa = record["qa_audit"]
+    for field in ("item_id", "state", "state_history", "revision_count"):
+        if qa[field] != record[field]:
+            collected.append(f"{prefix} $.qa_audit.{field}: must equal $.{field}")
+    for field in ("validation_retry_counts", "system_failure_retry_counts"):
+        if qa[field] != record[field]:
+            collected.append(f"{prefix} $.qa_audit.{field}: must equal $.{field}")
+    return collected
+
+
+def validate_contract(record: object, errors: list[str] | None = None) -> list[str]:
+    collected: list[str] = []
+    item_id = record.get("item_id", "?") if isinstance(record, dict) else "?"
+    if not isinstance(record, dict):
+        collected.append(f"[{item_id}] $: provenance record must be an object")
+    else:
+        structural = schema_errors(record, schema("provenance.schema.json"))
+        collected.extend(f"[{item_id}] provenance.schema.json: {e}" for e in structural)
+        if not structural:
+            qa_errors = schema_errors(
+                record["qa_audit"], schema("qa_audit.schema.json"), "$.qa_audit"
+            )
+            collected.extend(f"[{item_id}] qa_audit.schema.json: {e}" for e in qa_errors)
+            accepted_errors: list[str] = []
+            if record["accepted_item"] is not None:
+                accepted_errors = schema_errors(
+                    record["accepted_item"], schema("accepted_item.schema.json"), "$.accepted_item"
+                )
+                collected.extend(
+                    f"[{item_id}] accepted_item.schema.json: {e}" for e in accepted_errors
+                )
+            if not qa_errors and not accepted_errors:
+                validate_semantics(record, collected)
+    if errors is not None:
+        errors.extend(collected)
+    return collected
+
+
+validate_record = validate_contract
+validate = validate_contract
 
 
 def main() -> int:
     if len(sys.argv) != 2:
         print(__doc__)
         return 2
-
-    path = Path(sys.argv[1])
-    records = load_records(path)
-
-    errors: list[str] = []
-    for rec in records:
-        validate_record(rec, errors)
+    try:
+        records = load_records(Path(sys.argv[1]))
+        errors: list[str] = []
+        for record in records:
+            validate_contract(record, errors)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, SchemaValidationRuntimeError) as exc:
+        print(f"SYSTEM ERROR: {exc}", file=sys.stderr)
+        return 2
+    except ValueError as exc:
+        print(f"[?] $: {exc}")
+        return 1
 
     print(f"Checked {len(records)} provenance record(s).")
     if errors:
         print(f"\n{len(errors)} validation error(s):")
-        for e in errors:
-            print(f"  - {e}")
+        for error in errors:
+            print(f"  - {error}")
         return 1
-
-    print("All provenance records passed shape validation.")
+    print("All provenance records passed Draft 2020-12 schema and semantic validation.")
     return 0
 
 

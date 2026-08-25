@@ -35,6 +35,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from shared.json_io import (  # noqa: E402
+    JsonPersistenceError,
+    atomic_write_json,
+    exclusive_file_lock,
+    read_json,
+)
+
 __all__ = [
     "State",
     "TERMINAL_STATES",
@@ -46,6 +54,7 @@ __all__ = [
     "REPO_ROOT",
     "load_config",
     "load_versions",
+    "compute_files_version",
     "load_items_by_id",
     "strip_internal_test_keys",
     "run_schema_validator",
@@ -57,6 +66,9 @@ __all__ = [
     "process_generation_output",
     "process_review_output",
     "process_solver_stage",
+    "record_stage_failure",
+    "candidate_to_dict",
+    "candidate_from_dict",
     "build_accepted_item",
     "build_qa_audit",
     "build_provenance_record",
@@ -90,6 +102,12 @@ TERMINAL_STATES = {State.REJECTED, State.ACCEPTED, State.MANUAL_REVIEW, State.DI
 
 STRUCTURE_ALLOWLIST = ["item_id", "section", "stem", "options"]
 WE_ALLOWLIST = ["item_id", "section", "sentence", "marked_parts"]
+VALID_SECTIONS = {"Structure", "Written Expression"}
+# A provenance record must always identify one of the two pipeline sections.
+# If a malformed Generator record has no usable section, the candidate cannot
+# be routed further; keep the terminal failure record schema-valid with a
+# deterministic placeholder rather than copying the invalid value through.
+PROVENANCE_SECTION_FALLBACK = "Structure"
 
 # Fields the Generator revision loop may see. Deliberately excludes
 # independent_answer / checks / verdict / generator_answer / answer_match /
@@ -97,6 +115,15 @@ WE_ALLOWLIST = ["item_id", "section", "sentence", "marked_parts"]
 # would tell the Generator "here is the answer the Reviewer thinks is
 # correct" rather than "here is what to fix" (spec section 5).
 GENERATOR_FEEDBACK_ALLOWLIST = ["item_id", "issues", "revision_requirements"]
+REVIEWER_REQUIRED_CHECKS = {
+    "grammar_validity",
+    "answer_uniqueness",
+    "target_alignment",
+    "naturalness",
+    "toefl_style",
+    "distractor_quality",
+    "metadata_consistency",
+}
 
 INTERNAL_TEST_KEY_PREFIX = "_"
 
@@ -118,13 +145,27 @@ def load_spec_versions(config: dict) -> dict:
     }
 
 
+def compute_files_version(paths: list[Path] | tuple[Path, ...]) -> str:
+    """Hash one or more version inputs, including stable relative names."""
+    digest = hashlib.sha256()
+    for path in sorted((Path(path) for path in paths), key=lambda value: str(value)):
+        resolved = path if path.is_absolute() else REPO_ROOT / path
+        try:
+            relative_name = resolved.relative_to(REPO_ROOT).as_posix()
+        except ValueError:
+            relative_name = resolved.name
+        digest.update(relative_name.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(resolved.read_bytes())
+        digest.update(b"\0")
+    return f"sha256:{digest.hexdigest()[:12]}"
+
+
 def compute_agent_version(config: dict, key: str) -> str:
     """Content-hash the agent's prompt file so the recorded version changes
     automatically whenever the agent's instructions change, with no manual
     version bump to forget (spec section 13)."""
-    path = REPO_ROOT / config["paths"][key]
-    digest = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
-    return f"sha256:{digest}"
+    return compute_files_version([Path(config["paths"][key])])
 
 
 def load_versions(config: dict) -> dict:
@@ -132,6 +173,43 @@ def load_versions(config: dict) -> dict:
     v["generator_version"] = compute_agent_version(config, "generator_agent_md")
     v["reviewer_version"] = compute_agent_version(config, "reviewer_agent_md")
     v["solver_version"] = compute_agent_version(config, "solver_agent_md")
+    v.update({
+        "orchestrator_version": compute_files_version([
+            Path("orchestrator/scripts/orchestrator.py")
+        ]),
+        "config_version": compute_files_version([Path("orchestrator/config.json")]),
+        "generator_validator_version": compute_files_version([
+            Path(config["paths"]["generator_validate_script"])
+        ]),
+        "reviewer_validator_version": compute_files_version([
+            Path(config["paths"]["reviewer_validate_script"])
+        ]),
+        "solver_validator_version": compute_files_version([
+            Path(config["paths"]["solver_validate_script"])
+        ]),
+        "solver_blinding_version": compute_files_version([
+            Path(config["paths"]["solver_blinding_script"])
+        ]),
+        "schema_runtime_version": compute_files_version([
+            Path("shared/schema_validation.py"),
+            Path("requirements.lock"),
+        ]),
+        "generator_schema_version": compute_files_version([
+            Path("agents/toefl_itp_grammar_generator/schema/structure_item.schema.json"),
+            Path("agents/toefl_itp_grammar_generator/schema/written_expression_item.schema.json"),
+        ]),
+        "reviewer_schema_version": compute_files_version([
+            Path("agents/toefl_itp_grammar_reviewer/schema/reviewer_output.schema.json")
+        ]),
+        "solver_schema_version": compute_files_version([
+            Path("agents/toefl_itp_grammar_solver/schema/solver_output.schema.json")
+        ]),
+        "provenance_schema_version": compute_files_version([
+            Path("orchestrator/schemas/provenance.schema.json"),
+            Path("orchestrator/schemas/qa_audit.schema.json"),
+            Path("orchestrator/schemas/accepted_item.schema.json"),
+        ]),
+    })
     return v
 
 
@@ -162,6 +240,23 @@ def load_items_by_id(path: Path, label: str = "") -> dict[str, dict]:
             raise ValueError(f"{label or path}: duplicate item_id {item_id!r} - cannot join unambiguously")
         by_id[item_id] = item
     return by_id
+
+
+def require_exact_batch_ids(
+    expected: set[str], supplied: set[str], label: str
+) -> None:
+    """Reject incomplete or stale stage output before any state mutation."""
+    missing = sorted(expected - supplied)
+    extra = sorted(supplied - expected)
+    if not missing and not extra:
+        return
+
+    details = []
+    if missing:
+        details.append(f"missing item_id(s): {missing}")
+    if extra:
+        details.append(f"unexpected item_id(s): {extra}")
+    raise ValueError(f"{label} item_id set mismatch; " + "; ".join(details))
 
 
 def strip_internal_test_keys(item: dict) -> dict:
@@ -196,7 +291,27 @@ def parse_agent_json(raw_text: str, stage: str) -> dict:
         raise SystemCallError(f"{stage}: output was not valid JSON: {e}") from e
 
 
-def run_schema_validator(script_relpath: str, items: list[dict]) -> tuple[bool, str]:
+def _process_detail(
+    label: str,
+    stdout: str | None = None,
+    stderr: str | None = None,
+    returncode: int | None = None,
+) -> str:
+    parts = [label]
+    if returncode is not None:
+        parts.append(f"exit_code={returncode}")
+    if stdout:
+        parts.append(f"stdout={stdout.strip()}")
+    if stderr:
+        parts.append(f"stderr={stderr.strip()}")
+    return "; ".join(parts)
+
+
+def run_schema_validator(
+    script_relpath: str,
+    items: list[dict],
+    timeout_seconds: float = 60,
+) -> tuple[bool, str]:
     """Shell out to an agent's own validate_output.py (never reimplement
     schema checks in the Orchestrator itself). Returns (ok, combined_output).
     Raises SystemCallError if the validator script itself cannot be run
@@ -217,18 +332,32 @@ def run_schema_validator(script_relpath: str, items: list[dict]) -> tuple[bool, 
             [sys.executable, str(script_path), tmp_path],
             capture_output=True,
             text=True,
-            timeout=60,
+            timeout=timeout_seconds,
         )
+    except subprocess.TimeoutExpired as e:
+        raise SystemCallError(
+            _process_detail(
+                f"validator {script_relpath} timed out after {timeout_seconds}s",
+                e.stdout,
+                e.stderr,
+            )
+        ) from e
     except OSError as e:
         raise SystemCallError(f"failed to invoke validator {script_relpath}: {e}") from e
     finally:
         Path(tmp_path).unlink(missing_ok=True)
 
-    ok = proc.returncode == 0
-    return ok, (proc.stdout + proc.stderr)
+    detail = _process_detail(
+        f"validator {script_relpath}", proc.stdout, proc.stderr, proc.returncode
+    )
+    if proc.returncode == 0:
+        return True, detail
+    if proc.returncode == 1:
+        return False, detail
+    raise SystemCallError(detail)
 
 
-def blind_for_solver(config: dict, item: dict) -> dict:
+def blind_for_solver(config: dict, item: dict, timeout_seconds: float = 60) -> dict:
     """Blind a single candidate item using the EXISTING
     create_solver_input.py script (spec section 7: 'Orchestratorが独自に
     metadata削除処理を再実装しない'). Returns the blinded dict."""
@@ -236,34 +365,59 @@ def blind_for_solver(config: dict, item: dict) -> dict:
     if not script_path.exists():
         raise SystemCallError("solver blinding script not found")
 
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".json", delete=False, encoding="utf-8"
-    ) as tmp_in:
-        json.dump({"items": [item]}, tmp_in, ensure_ascii=False)
-        in_path = tmp_in.name
-    out_fd, out_path = tempfile.mkstemp(suffix=".json")
-    os.close(out_fd)
-    Path(out_path).unlink()  # let the script create it fresh
-
+    in_path: str | None = None
+    out_path: str | None = None
     try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        ) as tmp_in:
+            json.dump({"items": [item]}, tmp_in, ensure_ascii=False)
+            in_path = tmp_in.name
+        out_fd, out_path = tempfile.mkstemp(suffix=".json")
+        os.close(out_fd)
+        Path(out_path).unlink()  # let the script create it fresh
         proc = subprocess.run(
             [sys.executable, str(script_path), in_path, out_path],
             capture_output=True,
             text=True,
-            timeout=60,
+            timeout=timeout_seconds,
         )
         if proc.returncode != 0:
-            raise SystemCallError(f"blinding script failed: {proc.stdout}{proc.stderr}")
-        blinded = json.loads(Path(out_path).read_text(encoding="utf-8"))
-    except OSError as e:
+            raise SystemCallError(
+                _process_detail("blinding script failed", proc.stdout, proc.stderr, proc.returncode)
+            )
+        try:
+            blinded = json.loads(Path(out_path).read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as e:
+            raise SystemCallError(
+                _process_detail(
+                    f"blinding script produced malformed output: {e}",
+                    proc.stdout,
+                    proc.stderr,
+                    proc.returncode,
+                )
+            ) from e
+    except subprocess.TimeoutExpired as e:
+        raise SystemCallError(
+            _process_detail(
+                f"blinding script timed out after {timeout_seconds}s", e.stdout, e.stderr
+            )
+        ) from e
+    except (OSError, UnicodeDecodeError) as e:
         raise SystemCallError(f"failed to invoke blinding script: {e}") from e
     finally:
-        Path(in_path).unlink(missing_ok=True)
-        Path(out_path).unlink(missing_ok=True)
+        if in_path is not None:
+            Path(in_path).unlink(missing_ok=True)
+        if out_path is not None:
+            Path(out_path).unlink(missing_ok=True)
 
-    items = blinded.get("items", [])
+    if not isinstance(blinded, dict) or not isinstance(blinded.get("items"), list):
+        raise SystemCallError("blinding script returned malformed JSON shape: expected $.items array")
+    items = blinded["items"]
     if len(items) != 1:
         raise SystemCallError("blinding script returned unexpected item count")
+    if not isinstance(items[0], dict):
+        raise SystemCallError("blinding script returned malformed item: $.items[0] is not an object")
     return items[0]
 
 
@@ -337,6 +491,78 @@ def evaluate_consensus(
 
     failed: list[str] = []
 
+    # Defence in depth only: inspect consistency of fields the Reviewer
+    # reported. This does not make any grammar or item-quality judgement.
+    reviewer_checks = reviewer_item.get("checks")
+    is_we_v2_reviewer = reviewer_item.get("agent_version") == "Written Expression Reviewer v2.0"
+    required_reported_checks = (
+        {
+            "grammar_validity",
+            "one_error_only",
+            "answer_uniqueness",
+            "target_metadata",
+            "naturalness",
+            "provenance",
+        }
+        if is_we_v2_reviewer
+        else REVIEWER_REQUIRED_CHECKS
+    )
+    if not isinstance(reviewer_checks, dict) or any(
+        reviewer_checks.get(name) != "PASS" for name in required_reported_checks
+    ):
+        failed.append("reviewer.required_checks not all PASS")
+    if is_we_v2_reviewer:
+        # Format WARN is advisory, but either the top-level audit or its
+        # mirrored check must never report a format failure for AUTO_ACCEPT.
+        format_values = (
+            reviewer_item.get("format_validity"),
+            reviewer_checks.get("format_validity") if isinstance(reviewer_checks, dict) else None,
+        )
+        if any(value == "FAIL" for value in format_values):
+            failed.append("reviewer.format_validity == FAIL")
+        elif any(value not in {"PASS", "WARN"} for value in format_values):
+            failed.append("reviewer.format_validity missing or invalid")
+    reviewer_issues = reviewer_item.get("issues")
+    if not isinstance(reviewer_issues, list) or any(
+        isinstance(issue, dict) and issue.get("severity") == "CRITICAL"
+        for issue in reviewer_issues
+    ):
+        failed.append("reviewer.issues contains CRITICAL or is malformed")
+    expected_answer_match = (
+        reviewer_item.get("independent_answer") == reviewer_item.get("generator_answer")
+    )
+    if reviewer_item.get("answer_match") is not expected_answer_match:
+        failed.append("reviewer.answer_match internally inconsistent")
+    if not is_we_v2_reviewer:
+        expected_difficulty_mismatch = (
+            reviewer_item.get("reviewer_difficulty")
+            != reviewer_item.get("generator_difficulty")
+        )
+        if reviewer_item.get("difficulty_mismatch") is not expected_difficulty_mismatch:
+            failed.append("reviewer.difficulty_mismatch internally inconsistent")
+    if reviewer_item.get("generator_answer") != generator_answer:
+        failed.append("reviewer.generator_answer != generator.correct_answer")
+    if reviewer_item.get("item_id") != generator_item.get("item_id"):
+        failed.append("reviewer.item_id != generator.item_id")
+    if solver_item.get("item_id") != generator_item.get("item_id"):
+        failed.append("solver.item_id != generator.item_id")
+    if reviewer_item.get("section") != generator_item.get("section"):
+        failed.append("reviewer.section != generator.section")
+    if solver_item.get("section") != generator_item.get("section"):
+        failed.append("solver.section != generator.section")
+
+    if reviewer_item.get("section") == "Written Expression":
+        if reviewer_item.get("detected_error_count") != 1:
+            failed.append("reviewer.detected_error_count != 1 for PASS")
+        if reviewer_item.get("detected_error_position") not in {"A", "B", "C", "D"}:
+            failed.append("reviewer.detected_error_position not in [A,B,C,D] for PASS")
+        if reviewer_item.get("detected_error_position") != reviewer_answer:
+            failed.append("reviewer.detected_error_position != independent_answer")
+        if reviewer_item.get("non_error_parts_valid") is not True:
+            failed.append("reviewer.non_error_parts_valid != true")
+        if reviewer_item.get("minimal_correction_valid") is not True:
+            failed.append("reviewer.minimal_correction_valid != true")
+
     if reviewer_item.get("verdict") != "PASS":
         failed.append("reviewer.verdict != PASS")
     if reviewer_item.get("critical_failure") is not False:
@@ -384,7 +610,25 @@ def evaluate_consensus(
         reasons.append("source_similarity_high")
     if "reviewer.independent_answer != generator.correct_answer" in failed:
         reasons.append("reviewer_generator_mismatch")
-    if "reviewer.critical_failure != false" in failed or "reviewer.verdict != PASS" in failed:
+    reviewer_consistency_failures = {
+        "reviewer.required_checks not all PASS",
+        "reviewer.issues contains CRITICAL or is malformed",
+        "reviewer.answer_match internally inconsistent",
+        "reviewer.difficulty_mismatch internally inconsistent",
+        "reviewer.generator_answer != generator.correct_answer",
+        "reviewer.item_id != generator.item_id",
+        "reviewer.section != generator.section",
+        "reviewer.detected_error_count != 1 for PASS",
+        "reviewer.detected_error_position not in [A,B,C,D] for PASS",
+        "reviewer.detected_error_position != independent_answer",
+        "reviewer.non_error_parts_valid != true",
+        "reviewer.minimal_correction_valid != true",
+    }
+    if (
+        "reviewer.critical_failure != false" in failed
+        or "reviewer.verdict != PASS" in failed
+        or any(condition in reviewer_consistency_failures for condition in failed)
+    ):
         reasons.append("reviewer_state_inconsistent")
     if not reasons:
         reasons.append("unspecified_condition_failure")
@@ -408,6 +652,13 @@ class Candidate:
     state_history: list[str] = field(default_factory=lambda: [State.GENERATED])
     generation_attempt: int = 1
     revision_count: int = 0
+    validation_retry_counts: dict[str, int] = field(
+        default_factory=lambda: {"generator": 0, "reviewer": 0, "solver": 0}
+    )
+    system_failure_retry_counts: dict[str, int] = field(
+        default_factory=lambda: {"generator": 0, "reviewer": 0, "solver": 0}
+    )
+    retry_history: list[dict] = field(default_factory=list)
     generator_item: Optional[dict] = None
     reviewer_item: Optional[dict] = None
     solver_item: Optional[dict] = None
@@ -416,8 +667,17 @@ class Candidate:
     consensus: Optional[ConsensusResult] = None
     failure: Optional[FailureInfo] = None
     notes: list[str] = field(default_factory=list)
+    review_history: list[dict] = field(default_factory=list)
+    generation_history: list[dict] = field(default_factory=list)
     created_at: str = field(default_factory=now_iso)
     updated_at: str = field(default_factory=now_iso)
+
+    def __post_init__(self) -> None:
+        # ``section`` is the candidate's routing metadata, not a trusted copy
+        # of the Generator payload.  Keep it safe for provenance even when a
+        # caller constructed a candidate from malformed Generator output.
+        if self.section not in VALID_SECTIONS:
+            self.section = PROVENANCE_SECTION_FALLBACK
 
     def transition(self, new_state: str, note: Optional[str] = None) -> None:
         self.state = new_state
@@ -427,26 +687,193 @@ class Candidate:
             self.notes.append(note)
 
 
+def candidate_to_dict(candidate: Candidate) -> dict:
+    """Serialize all persistent Candidate state without dropping retry data."""
+    return {
+        "item_id": candidate.item_id,
+        "concept_id": candidate.concept_id,
+        "section": candidate.section,
+        "state": candidate.state,
+        "state_history": candidate.state_history,
+        "generation_attempt": candidate.generation_attempt,
+        "revision_count": candidate.revision_count,
+        "validation_retry_counts": candidate.validation_retry_counts,
+        "system_failure_retry_counts": candidate.system_failure_retry_counts,
+        "retry_history": candidate.retry_history,
+        "generator_item": candidate.generator_item,
+        "reviewer_item": candidate.reviewer_item,
+        "solver_item": candidate.solver_item,
+        "solver_input": candidate.solver_input,
+        "leakage_check": candidate.leakage_check,
+        "consensus": None if candidate.consensus is None else {
+            "auto_accept": candidate.consensus.auto_accept,
+            "routing": candidate.consensus.routing,
+            "failed_conditions": candidate.consensus.failed_conditions,
+            "disagreement_reasons": candidate.consensus.disagreement_reasons,
+        },
+        "failure": None if candidate.failure is None else {
+            "kind": candidate.failure.kind,
+            "stage": candidate.failure.stage,
+            "detail": candidate.failure.detail,
+        },
+        "notes": candidate.notes,
+        "review_history": candidate.review_history,
+        "generation_history": candidate.generation_history,
+        "created_at": candidate.created_at,
+        "updated_at": candidate.updated_at,
+    }
+
+
+def candidate_from_dict(data: dict) -> Candidate:
+    """Restore Candidate state, accepting older state files with no counters."""
+    candidate = Candidate(
+        item_id=data["item_id"], concept_id=data["concept_id"], section=data["section"]
+    )
+    candidate.state = data["state"]
+    candidate.state_history = data["state_history"]
+    candidate.generation_attempt = data.get("generation_attempt", 1)
+    candidate.revision_count = data.get("revision_count", 0)
+    candidate.validation_retry_counts.update(data.get("validation_retry_counts", {}))
+    candidate.system_failure_retry_counts.update(data.get("system_failure_retry_counts", {}))
+    candidate.retry_history = data.get("retry_history", [])
+    candidate.generator_item = data.get("generator_item")
+    candidate.reviewer_item = data.get("reviewer_item")
+    candidate.solver_item = data.get("solver_item")
+    candidate.solver_input = data.get("solver_input")
+    candidate.leakage_check = data.get("leakage_check")
+    consensus = data.get("consensus")
+    if consensus is not None:
+        candidate.consensus = ConsensusResult(**consensus)
+    failure = data.get("failure")
+    if failure is not None:
+        candidate.failure = FailureInfo(**failure)
+    candidate.notes = data.get("notes", [])
+    candidate.review_history = data.get("review_history", [])
+    candidate.generation_history = data.get("generation_history", [])
+    candidate.created_at = data.get("created_at", candidate.created_at)
+    candidate.updated_at = data.get("updated_at", candidate.updated_at)
+    return candidate
+
+
+def record_stage_failure(
+    candidate: Candidate,
+    config: dict,
+    *,
+    kind: str,
+    stage: str,
+    detail: str,
+    retry_state: str,
+) -> Candidate:
+    """Record and route a retryable stage failure using the configured budget."""
+    if kind not in {"system", "content"}:
+        raise ValueError(f"unknown failure kind: {kind}")
+    if stage not in {"generator", "reviewer", "solver"}:
+        raise ValueError(f"unknown failure stage: {stage}")
+
+    if kind == "system":
+        counters = candidate.system_failure_retry_counts
+        limit_key = "max_system_failure_retries"
+        failure_state = State.GENERATION_FAILED
+        exhausted_state = State.MANUAL_REVIEW
+    else:
+        counters = candidate.validation_retry_counts
+        limit_key = "max_generation_validation_retries"
+        failure_state = State.VALIDATION_FAILED
+        # Only the Generator stage owns the candidate's content, so only there
+        # does an exhausted content budget mean the content itself is
+        # unusable. A malformed Reviewer or Solver output says nothing about a
+        # candidate that may already hold a Reviewer PASS, so it goes to a
+        # human instead of being discarded.
+        exhausted_state = (
+            State.DISCARDED if stage == "generator" else State.MANUAL_REVIEW
+        )
+
+    counters[stage] = counters.get(stage, 0) + 1
+    failure_count = counters[stage]
+    retry_limit = config["retry_policy"][limit_key]
+    exhausted = failure_count > retry_limit
+    candidate.failure = FailureInfo(kind=kind, stage=stage, detail=detail)
+    candidate.transition(
+        failure_state,
+        f"{kind} failure at {stage} (failure {failure_count}; retry limit {retry_limit}): {detail}",
+    )
+    history_entry = {
+        "kind": kind,
+        "stage": stage,
+        "failure_count": failure_count,
+        "retry_limit": retry_limit,
+        "exhausted": exhausted,
+        "failure_state": failure_state,
+        "next_state": exhausted_state if exhausted else retry_state,
+        "detail": detail,
+        "timestamp": now_iso(),
+    }
+    candidate.retry_history.append(history_entry)
+
+    if exhausted:
+        # The failed payload is not a formal agent output and must never be
+        # serialized into qa_audit.reviewer/solver.  Keep it available while
+        # retries remain so the caller can replace it on the next attempt,
+        # then quarantine it once the candidate becomes terminal.  Generator
+        # output is not copied into qa_audit, but clearing it also prevents an
+        # invalid payload from leaking into top-level provenance summaries or
+        # batch-slot derivation.
+        if stage == "generator":
+            candidate.generator_item = None
+        elif stage == "reviewer":
+            candidate.reviewer_item = None
+        else:
+            candidate.solver_item = None
+        candidate.notes.append(
+            f"quarantined invalid {stage} payload after retry budget exhaustion"
+        )
+        candidate.transition(
+            exhausted_state,
+            f"{kind} retry budget exhausted at {stage}; routed to {exhausted_state}",
+        )
+    else:
+        candidate.transition(
+            retry_state,
+            f"retrying {stage} after {kind} failure "
+            f"({failure_count}/{retry_limit})",
+        )
+    return candidate
+
+
 def process_generation_output(candidate: Candidate, config: dict) -> Candidate:
     """Validate the Generator's candidate item against its own schema
     validator. Schema-shape failure -> VALIDATION_FAILED (content-shape,
     not quality). Cannot invoke the validator at all -> GENERATION_FAILED
     (system failure)."""
-    assert candidate.generator_item is not None
+    if candidate.state != State.GENERATED:
+        raise ValueError(
+            f"process_generation_output requires state GENERATED, got {candidate.state}"
+        )
+    if candidate.generator_item is None:
+        raise ValueError("process_generation_output requires generator_item")
     try:
         ok, output = run_schema_validator(
             config["paths"]["generator_validate_script"], [candidate.generator_item]
         )
     except SystemCallError as e:
-        candidate.failure = FailureInfo(kind="system", stage="generator", detail=str(e))
-        candidate.transition(State.GENERATION_FAILED, f"system failure: {e}")
-        return candidate
+        return record_stage_failure(
+            candidate, config, kind="system", stage="generator", detail=str(e),
+            retry_state=State.GENERATED,
+        )
 
     if not ok:
-        candidate.failure = FailureInfo(kind="content", stage="generator", detail=output.strip())
-        candidate.transition(State.VALIDATION_FAILED, "generator output failed schema validation")
-        return candidate
+        return record_stage_failure(
+            candidate, config, kind="content", stage="generator", detail=output.strip(),
+            retry_state=State.GENERATED,
+        )
 
+    # The schema gate is authoritative for the section carried by the
+    # Generator output. This also repairs a constructor fallback when a
+    # caller did not have reliable section metadata before validation.
+    generated_section = candidate.generator_item.get("section")
+    if generated_section in VALID_SECTIONS:
+        candidate.section = generated_section
+    candidate.failure = None
     candidate.transition(State.REVIEWING, "generator output passed schema validation")
     return candidate
 
@@ -456,7 +883,12 @@ def process_review_output(candidate: Candidate, config: dict) -> Candidate:
     max_revision_cycles, then DISCARDED. REJECT ends this candidate
     immediately - it is never patched, only replaced by a fresh item_id
     (spec section 5/9)."""
-    assert candidate.reviewer_item is not None
+    if candidate.state != State.REVIEWING:
+        raise ValueError(
+            f"process_review_output requires state REVIEWING, got {candidate.state}"
+        )
+    if candidate.reviewer_item is None:
+        raise ValueError("process_review_output requires reviewer_item")
     max_cycles = config["retry_policy"]["max_revision_cycles"]
 
     try:
@@ -464,14 +896,17 @@ def process_review_output(candidate: Candidate, config: dict) -> Candidate:
             config["paths"]["reviewer_validate_script"], [candidate.reviewer_item]
         )
     except SystemCallError as e:
-        candidate.failure = FailureInfo(kind="system", stage="reviewer", detail=str(e))
-        candidate.transition(State.GENERATION_FAILED, f"system failure: {e}")
-        return candidate
+        return record_stage_failure(
+            candidate, config, kind="system", stage="reviewer", detail=str(e),
+            retry_state=State.REVIEWING,
+        )
     if not ok:
-        candidate.failure = FailureInfo(kind="content", stage="reviewer", detail=output.strip())
-        candidate.transition(State.VALIDATION_FAILED, "reviewer output failed schema validation")
-        return candidate
+        return record_stage_failure(
+            candidate, config, kind="content", stage="reviewer", detail=output.strip(),
+            retry_state=State.REVIEWING,
+        )
 
+    candidate.failure = None
     verdict = candidate.reviewer_item["verdict"]
 
     if verdict == "PASS":
@@ -519,9 +954,10 @@ def process_solver_stage(
     try:
         blinded = blind_for_solver(config, candidate.generator_item)
     except SystemCallError as e:
-        candidate.failure = FailureInfo(kind="system", stage="solver", detail=str(e))
-        candidate.transition(State.GENERATION_FAILED, f"system failure during blinding: {e}")
-        return candidate
+        return record_stage_failure(
+            candidate, config, kind="system", stage="solver",
+            detail=f"blinding: {e}", retry_state=State.SOLVING,
+        )
 
     candidate.solver_input = blinded
     ok, problems = leakage_guard(blinded, candidate.section)
@@ -538,14 +974,17 @@ def process_solver_stage(
             config["paths"]["solver_validate_script"], [solver_item]
         )
     except SystemCallError as e:
-        candidate.failure = FailureInfo(kind="system", stage="solver", detail=str(e))
-        candidate.transition(State.GENERATION_FAILED, f"system failure: {e}")
-        return candidate
+        return record_stage_failure(
+            candidate, config, kind="system", stage="solver", detail=str(e),
+            retry_state=State.SOLVING,
+        )
     if not val_ok:
-        candidate.failure = FailureInfo(kind="content", stage="solver", detail=output.strip())
-        candidate.transition(State.VALIDATION_FAILED, "solver output failed schema validation")
-        return candidate
+        return record_stage_failure(
+            candidate, config, kind="content", stage="solver", detail=output.strip(),
+            retry_state=State.SOLVING,
+        )
 
+    candidate.failure = None
     candidate.solver_item = solver_item
     result = evaluate_consensus(candidate.generator_item, candidate.reviewer_item, solver_item, config)
     candidate.consensus = result
@@ -617,6 +1056,9 @@ def build_qa_audit(candidate: Candidate, versions: dict) -> dict:
         "state_history": candidate.state_history,
         "generation_attempt": candidate.generation_attempt,
         "revision_count": candidate.revision_count,
+        "validation_retry_counts": candidate.validation_retry_counts,
+        "system_failure_retry_counts": candidate.system_failure_retry_counts,
+        "retry_history": candidate.retry_history,
         "reviewer": candidate.reviewer_item,
         "solver": candidate.solver_item,
         "leakage_check": candidate.leakage_check,
@@ -640,27 +1082,61 @@ def build_qa_audit(candidate: Candidate, versions: dict) -> dict:
 def build_provenance_record(candidate: Candidate, versions: dict) -> dict:
     accepted = build_accepted_item(candidate, versions)
     audit = build_qa_audit(candidate, versions)
-    slot = derive_slot_requirements(candidate.generator_item) if candidate.generator_item else None
+    slot = (
+        derive_slot_requirements(candidate.generator_item)
+        if isinstance(candidate.generator_item, dict)
+        else None
+    )
+
+    generator_summary = None
+    if isinstance(candidate.generator_item, dict):
+        answer = candidate.generator_item.get("correct_answer")
+        generator_summary = {}
+        if isinstance(answer, str) and answer in {"A", "B", "C", "D"}:
+            generator_summary["answer"] = answer
+
+    reviewer_summary = None
+    if isinstance(candidate.reviewer_item, dict):
+        reviewer_summary = {}
+        verdict = candidate.reviewer_item.get("verdict")
+        independent_answer = candidate.reviewer_item.get("independent_answer")
+        difficulty = candidate.reviewer_item.get("reviewer_difficulty")
+        if isinstance(verdict, str) and verdict in {"PASS", "REVISE", "REJECT"}:
+            reviewer_summary["verdict"] = verdict
+        if isinstance(independent_answer, str):
+            reviewer_summary["independent_answer"] = independent_answer
+        if isinstance(difficulty, str) and difficulty in {"EASY", "MEDIUM", "HARD"}:
+            reviewer_summary["difficulty"] = difficulty
+
+    solver_summary = None
+    if isinstance(candidate.solver_item, dict):
+        solver_summary = {}
+        answer = candidate.solver_item.get("solver_answer")
+        confidence = candidate.solver_item.get("confidence")
+        if isinstance(answer, str):
+            solver_summary["answer"] = answer
+        if confidence in {"HIGH", "MEDIUM", "LOW"}:
+            solver_summary["confidence"] = confidence
+
+    section = (
+        candidate.section
+        if candidate.section in VALID_SECTIONS
+        else PROVENANCE_SECTION_FALLBACK
+    )
+
     return {
         "item_id": candidate.item_id,
         "concept_id": candidate.concept_id,
-        "section": candidate.section,
+        "section": section,
         "state": candidate.state,
         "state_history": candidate.state_history,
         "generation_attempt": candidate.generation_attempt,
         "revision_count": candidate.revision_count,
-        "generator": None if not candidate.generator_item else {
-            "answer": candidate.generator_item.get("correct_answer"),
-        },
-        "reviewer": None if not candidate.reviewer_item else {
-            "verdict": candidate.reviewer_item.get("verdict"),
-            "independent_answer": candidate.reviewer_item.get("independent_answer"),
-            "difficulty": candidate.reviewer_item.get("reviewer_difficulty"),
-        },
-        "solver": None if not candidate.solver_item else {
-            "answer": candidate.solver_item.get("solver_answer"),
-            "confidence": candidate.solver_item.get("confidence"),
-        },
+        "validation_retry_counts": candidate.validation_retry_counts,
+        "system_failure_retry_counts": candidate.system_failure_retry_counts,
+        "generator": generator_summary,
+        "reviewer": reviewer_summary,
+        "solver": solver_summary,
         "consensus": candidate.state == State.ACCEPTED,
         "batch_slot": slot,
         "versions": versions,
@@ -693,20 +1169,31 @@ def build_manual_review_entry(candidate: Candidate) -> dict:
 
 
 def append_manual_review_queue(config: dict, entries: list[dict]) -> Path:
-    path = REPO_ROOT / config["paths"]["manual_review_queue"]
-    existing: list[dict] = []
-    if path.exists():
-        try:
-            existing = json.loads(path.read_text(encoding="utf-8")).get("items", [])
-        except json.JSONDecodeError:
+    configured = Path(config["paths"]["manual_review_queue"])
+    path = configured if configured.is_absolute() else REPO_ROOT / configured
+    with exclusive_file_lock(path):
+        if path.exists():
+            document = read_json(path)
+            if not isinstance(document, dict) or not isinstance(document.get("items"), list):
+                raise JsonPersistenceError(
+                    f"manual review queue {path} must be an object containing an items array"
+                )
+            existing = document["items"]
+        else:
             existing = []
-    existing_ids = {e["item_id"] for e in existing}
-    for entry in entries:
-        if entry["item_id"] not in existing_ids:
-            existing.append(entry)
-    path.write_text(
-        json.dumps({"items": existing}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+        if any(not isinstance(entry, dict) or not entry.get("item_id") for entry in existing):
+            raise JsonPersistenceError(
+                f"manual review queue {path} contains an entry without a valid item_id"
+            )
+        existing_ids = {entry["item_id"] for entry in existing}
+        for entry in entries:
+            item_id = entry.get("item_id") if isinstance(entry, dict) else None
+            if not item_id:
+                raise JsonPersistenceError("new manual review entry has no valid item_id")
+            if item_id not in existing_ids:
+                existing.append(entry)
+                existing_ids.add(item_id)
+        atomic_write_json(path, {"items": existing})
     return path
 
 

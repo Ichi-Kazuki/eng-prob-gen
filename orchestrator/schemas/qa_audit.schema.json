@@ -2,12 +2,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "qa_audit.schema.json",
   "title": "TOEFL ITP Orchestrator - qa_audit (internal-only, never shipped to the site)",
-  "description": "Full pipeline history for one candidate: Reviewer verdict, Solver answer, revision history, issues, timestamps, and agent/spec version stamps. Kept separate from accepted_item.schema.json by construction - orchestrator.build_qa_audit() never receives or copies fields into the public accepted_item, and vice versa. Descriptive documentation of orchestrator.build_qa_audit()'s output shape; not enforced by a JSON Schema library at runtime (see accepted_item.schema.json note).",
+  "description": "Draft 2020-12 runtime contract for the full internal pipeline history. Kept separate from accepted_item.schema.json by construction.",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "item_id", "concept_id", "state", "state_history", "generation_attempt",
-    "revision_count", "reviewer", "solver", "leakage_check", "consensus",
+    "revision_count", "validation_retry_counts", "system_failure_retry_counts",
+    "retry_history", "reviewer", "solver", "leakage_check", "consensus",
     "failure", "notes", "versions", "timestamps"
   ],
   "properties": {
@@ -17,13 +18,25 @@
     "state_history": { "type": "array", "items": { "type": "string" } },
     "generation_attempt": { "type": "integer", "minimum": 1 },
     "revision_count": { "type": "integer", "minimum": 0 },
+    "validation_retry_counts": { "$ref": "#/$defs/stage_retry_counts" },
+    "system_failure_retry_counts": { "$ref": "#/$defs/stage_retry_counts" },
+    "retry_history": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/retry_event" }
+    },
     "reviewer": {
       "description": "Full Reviewer Agent output object (see agents/toefl_itp_grammar_reviewer/schema/reviewer_output.schema.json), or null if the candidate never reached REVIEWING.",
-      "type": ["object", "null"]
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/reviewer_output" }
+      ]
     },
     "solver": {
       "description": "Full Solver Agent output object (see agents/toefl_itp_grammar_solver/schema/solver_output.schema.json), or null if the candidate never reached SOLVING.",
-      "type": ["object", "null"]
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/solver_output" }
+      ]
     },
     "leakage_check": {
       "type": ["object", "null"],
@@ -53,12 +66,33 @@
     "notes": { "type": "array", "items": { "type": "string" } },
     "versions": {
       "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spec_version", "taxonomy_version", "generator_version",
+        "reviewer_version", "solver_version", "orchestrator_version",
+        "config_version", "generator_validator_version",
+        "reviewer_validator_version", "solver_validator_version",
+        "solver_blinding_version", "schema_runtime_version", "generator_schema_version",
+        "reviewer_schema_version", "solver_schema_version",
+        "provenance_schema_version"
+      ],
       "properties": {
         "spec_version": { "type": "string" },
         "taxonomy_version": { "type": "string" },
         "generator_version": { "type": "string" },
         "reviewer_version": { "type": "string" },
-        "solver_version": { "type": "string" }
+        "solver_version": { "type": "string" },
+        "orchestrator_version": { "type": "string" },
+        "config_version": { "type": "string" },
+        "generator_validator_version": { "type": "string" },
+        "reviewer_validator_version": { "type": "string" },
+        "solver_validator_version": { "type": "string" },
+        "solver_blinding_version": { "type": "string" },
+        "schema_runtime_version": { "type": "string" },
+        "generator_schema_version": { "type": "string" },
+        "reviewer_schema_version": { "type": "string" },
+        "solver_schema_version": { "type": "string" },
+        "provenance_schema_version": { "type": "string" }
       }
     },
     "timestamps": {
@@ -67,6 +101,172 @@
         "created": { "type": "string" },
         "updated": { "type": "string" }
       }
+    }
+  },
+  "$defs": {
+    "stage_retry_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generator", "reviewer", "solver"],
+      "properties": {
+        "generator": { "type": "integer", "minimum": 0 },
+        "reviewer": { "type": "integer", "minimum": 0 },
+        "solver": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "retry_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind", "stage", "failure_count", "retry_limit", "exhausted",
+        "failure_state", "next_state", "detail", "timestamp"
+      ],
+      "properties": {
+        "kind": { "enum": ["system", "content"] },
+        "stage": { "enum": ["generator", "reviewer", "solver"] },
+        "failure_count": { "type": "integer", "minimum": 1 },
+        "retry_limit": { "type": "integer", "minimum": 0 },
+        "exhausted": { "type": "boolean" },
+        "failure_state": { "enum": ["GENERATION_FAILED", "VALIDATION_FAILED"] },
+        "next_state": { "type": "string" },
+        "detail": { "type": "string" },
+        "timestamp": { "type": "string" }
+      }
+    },
+    "reviewer_output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item_id", "section", "verdict", "critical_failure",
+        "independent_answer", "generator_answer", "answer_match",
+        "reviewer_difficulty", "generator_difficulty", "difficulty_mismatch",
+        "checks", "issues", "revision_requirements", "source_similarity_risk"
+      ],
+      "properties": {
+        "item_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "section": { "enum": ["Structure", "Written Expression"] },
+        "verdict": { "enum": ["PASS", "REVISE", "REJECT"] },
+        "critical_failure": { "type": "boolean" },
+        "independent_answer": { "enum": ["A", "B", "C", "D", "NONE", "AMBIGUOUS"] },
+        "generator_answer": { "enum": ["A", "B", "C", "D"] },
+        "answer_match": { "type": "boolean" },
+        "reviewer_difficulty": { "enum": ["EASY", "MEDIUM", "HARD"] },
+        "generator_difficulty": { "enum": ["EASY", "MEDIUM", "HARD"] },
+        "difficulty_mismatch": { "type": "boolean" },
+        "checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "grammar_validity", "answer_uniqueness", "target_alignment",
+            "naturalness", "toefl_style", "distractor_quality", "metadata_consistency"
+          ],
+          "properties": {
+            "grammar_validity": { "enum": ["PASS", "REVISE", "REJECT"] },
+            "answer_uniqueness": { "enum": ["PASS", "REVISE", "REJECT"] },
+            "target_alignment": { "enum": ["PASS", "REVISE", "REJECT"] },
+            "naturalness": { "enum": ["PASS", "REVISE", "REJECT"] },
+            "toefl_style": { "enum": ["PASS", "REVISE", "REJECT"] },
+            "distractor_quality": { "enum": ["PASS", "REVISE", "REJECT"] },
+            "metadata_consistency": { "enum": ["PASS", "REVISE", "REJECT"] }
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["severity", "category", "description", "related_check"],
+            "properties": {
+              "severity": { "enum": ["CRITICAL", "MAJOR", "MINOR"] },
+              "category": { "type": "string", "minLength": 1, "pattern": "\\S" },
+              "description": { "type": "string", "minLength": 1, "pattern": "\\S" },
+              "related_check": {
+                "enum": [
+                  "grammar_validity", "answer_uniqueness", "target_alignment",
+                  "naturalness", "toefl_style", "distractor_quality",
+                  "metadata_consistency", "source_similarity_risk", "difficulty"
+                ]
+              }
+            }
+          }
+        },
+        "revision_requirements": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+        },
+        "source_similarity_risk": { "enum": ["LOW", "MEDIUM", "HIGH"] },
+        "detected_error_count": { "type": "integer", "minimum": 0 },
+        "detected_error_position": { "enum": ["A", "B", "C", "D", "NONE"] },
+        "non_error_parts_valid": { "type": "boolean" },
+        "minimal_correction_valid": { "type": "boolean" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "section": { "const": "Written Expression" } },
+            "required": ["section"]
+          },
+          "then": {
+            "required": [
+              "detected_error_count", "detected_error_position",
+              "non_error_parts_valid", "minimal_correction_valid"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": { "critical_failure": { "const": true } },
+            "required": ["critical_failure"]
+          },
+          "then": {
+            "properties": { "verdict": { "enum": ["REVISE", "REJECT"] } }
+          }
+        }
+      ]
+    },
+    "solver_output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item_id", "section", "solver_answer", "confidence", "reason",
+        "ambiguity_detected"
+      ],
+      "properties": {
+        "item_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "section": { "enum": ["Structure", "Written Expression"] },
+        "solver_answer": { "enum": ["A", "B", "C", "D", "AMBIGUOUS", "NONE"] },
+        "confidence": { "enum": ["HIGH", "MEDIUM", "LOW"] },
+        "reason": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "ambiguity_detected": { "type": "boolean" },
+        "suggested_correction": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "section": { "const": "Written Expression" } },
+            "required": ["section"]
+          },
+          "then": { "required": ["suggested_correction"] }
+        },
+        {
+          "if": {
+            "properties": { "solver_answer": { "enum": ["AMBIGUOUS", "NONE"] } },
+            "required": ["solver_answer"]
+          },
+          "then": {
+            "properties": { "ambiguity_detected": { "const": true } }
+          }
+        },
+        {
+          "if": {
+            "properties": { "solver_answer": { "enum": ["A", "B", "C", "D"] } },
+            "required": ["solver_answer"]
+          },
+          "then": {
+            "properties": { "ambiguity_detected": { "const": false } }
+          }
+        }
+      ]
     }
   }
 }

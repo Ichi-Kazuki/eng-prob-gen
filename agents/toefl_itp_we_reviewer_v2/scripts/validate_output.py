@@ -1,8 +1,27 @@
 #!/usr/bin/env python3
-"""Schema-shape validator for WE Reviewer v2 output.
+"""Contract validator for WE Reviewer v2 output.
 
-It validates the reviewer contract and safety invariant only. It does not
-re-decide English grammaticality; that is the reviewer's independent audit.
+Public validation API
+---------------------
+``validate_contract(item)`` is the ONLY supported entry point for external
+callers (CLI, internal imports, tests, orchestrator). It runs, in order:
+
+1. Structural validation against the committed
+   ``schema/reviewer_output_v2.schema.json`` (source of truth for the output
+   shape, including ``additionalProperties: false``). Structural failures
+   short-circuit: the semantic stage never sees a malformed record.
+2. ``validate_semantics(item)`` - the checks that a JSON Schema cannot
+   express (cross-field consistency and safety invariants).
+
+``validate_semantics`` is exposed for introspection and testing only. Calling
+it directly bypasses the structural schema gate and is not a supported
+validation path.
+
+``validate`` is kept as a backwards-compatible alias of ``validate_contract``
+so that existing importers are gated too.
+
+It does not re-decide English grammaticality; that is the reviewer's
+independent audit.
 """
 
 from __future__ import annotations
@@ -11,6 +30,16 @@ import json
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO_ROOT))
+
+from shared.schema_validation import (  # noqa: E402
+    SchemaValidationRuntimeError,
+    load_schema,
+    schema_errors,
+)
+
+OUTPUT_SCHEMA_PATH = Path(__file__).resolve().parents[1] / "schema" / "reviewer_output_v2.schema.json"
 
 LABELS = {"A", "B", "C", "D"}
 VALID_ANSWERS = LABELS | {"NONE", "AMBIGUOUS"}
@@ -28,7 +57,7 @@ def load_items(path: Path) -> list[dict]:
     raise ValueError("top-level JSON must be an item array or an object with items")
 
 
-def validate(item: dict) -> list[str]:
+def validate_semantics(item: dict) -> list[str]:
     errors: list[str] = []
     required = {
         "item_id", "section", "agent_version", "verdict", "critical_failure",
@@ -93,11 +122,53 @@ def validate(item: dict) -> list[str]:
     return errors
 
 
+_SCHEMA_CACHE: dict | None = None
+
+
+def output_schema() -> dict:
+    """Load (and memoize) the committed structural schema."""
+    global _SCHEMA_CACHE
+    if _SCHEMA_CACHE is None:
+        _SCHEMA_CACHE = load_schema(OUTPUT_SCHEMA_PATH)
+    return _SCHEMA_CACHE
+
+
+def validate_contract(item) -> list[str]:
+    """The full public contract: structural schema gate, then semantics.
+
+    Every caller - CLI, internal import, test, orchestrator - goes through
+    this one function, so there is no path that reaches the semantic checks
+    without first clearing the committed JSON Schema.
+    """
+    if not isinstance(item, dict):
+        return ["<root>: expected type ['object'], got %s" % type(item).__name__]
+    structural = schema_errors(item, output_schema())
+    if structural:
+        return [f"{OUTPUT_SCHEMA_PATH.name}: {error}" for error in structural]
+    return validate_semantics(item)
+
+
+# Backwards-compatible name. Existing importers that call ``validate()`` now
+# get the structural schema gate for free.
+validate = validate_contract
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         print("Usage: python validate_output.py <review.json>")
         return 2
-    results = [(item.get("item_id", "?"), validate(item)) for item in load_items(Path(sys.argv[1]))]
+    try:
+        items = load_items(Path(sys.argv[1]))
+
+        # The CLI has no validation logic of its own: it calls exactly the same
+        # public entry point that internal importers call.
+        results = [
+            (item.get("item_id", "?") if isinstance(item, dict) else "?", validate_contract(item))
+            for item in items
+        ]
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, SchemaValidationRuntimeError) as exc:
+        print(f"SYSTEM ERROR: {exc}", file=sys.stderr)
+        return 2
     failures = [(item_id, errors) for item_id, errors in results if errors]
     print(f"Checked {len(results)} WE Reviewer v2 result(s); {len(failures)} failed.")
     for item_id, errors in failures:

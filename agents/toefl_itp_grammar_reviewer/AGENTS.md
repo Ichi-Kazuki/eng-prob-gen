@@ -86,13 +86,12 @@ non_error_parts_valid, minimal_correction_valid`.
 
 ## Validation
 
-`agents/toefl_itp_grammar_reviewer/scripts/validate_output.py <file>`
-checks only the shape of the Reviewer's own output (required fields, enum
-membership, and the internal-consistency rule that `critical_failure: true`
-cannot coexist with `verdict: PASS`). It does not judge whether a verdict
-is the *correct* verdict — that is exercised by the adversarial test
-process (deliberately broken items that must not receive PASS), not by
-schema validation.
+`agents/toefl_itp_grammar_reviewer/scripts/validate_output.py <file>` loads
+the committed Draft 2020-12 schema and checks consistency among the
+Reviewer's own reported fields (PASS/checks/issues, answer/difficulty flags,
+and Written Expression error reporting). It does not judge whether a verdict
+is the *correct* English-quality verdict. Exit codes are 0 valid, 1 output
+validation failure, and 2 runtime failure.
 
 ## Test artifacts
 

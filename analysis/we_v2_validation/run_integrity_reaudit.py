@@ -282,7 +282,13 @@ def audit_items(items: list[dict[str, Any]]) -> tuple[dict[str, Any], list[dict[
     return summary, records, corrected_items, geometry_items
 
 
-def independence_audit(items: list[dict[str, Any]], reviews: dict[str, Any], solvers: list[dict[str, Any]]) -> dict[str, Any]:
+# ``run_validation.py`` renamed this annotation from ``contract_only_replay``
+# to ``CONTRACT_REPLAY_ONLY``; artifacts written before the rename are still
+# re-auditable, so both spellings are recognised here.
+CONTRACT_REPLAY_MODES = frozenset({"CONTRACT_REPLAY_ONLY", "contract_only_replay"})
+
+
+def independence_audit(items: list[dict[str, Any]], reviews: dict[str, Any], solvers: list[dict[str, Any]], solvers_sidecar: dict[str, Any] | None = None) -> dict[str, Any]:
     blind_records = []
     blind_errors = []
     for item in items:
@@ -308,6 +314,37 @@ def independence_audit(items: list[dict[str, Any]], reviews: dict[str, Any], sol
         "intended_answer_path_removed": "intended_answer" not in source_text,
         "deterministic_answer_utility_used": "derive_correct_answer" in source_text,
     }
+    # ``judgment_mode`` is a replay/audit annotation, not part of any formal
+    # agent output contract, so it now lives in the artifact-level
+    # ``replay_metadata`` sidecar. Historical artifacts predate that split and
+    # still carry it inside each record; both are accepted here so a re-audit
+    # of an older artifact keeps working. Each artifact is counted against its
+    # own sidecar: one artifact's sidecar says nothing about the other's
+    # records.
+    reviews_sidecar = reviews.get("replay_metadata") if isinstance(reviews, dict) else None
+    solver_sidecar = solvers_sidecar
+    contract_replay_only_records = 0
+    annotation_sources = set()
+    for group_records, sidecar in ((review_records, reviews_sidecar), (solvers, solver_sidecar)):
+        if not group_records:
+            continue
+        if isinstance(sidecar, dict) and sidecar.get("judgment_mode") in CONTRACT_REPLAY_MODES:
+            contract_replay_only_records += len(group_records)
+            annotation_sources.add("replay_metadata_sidecar")
+        else:
+            contract_replay_only_records += sum(
+                isinstance(record, dict)
+                and record.get("judgment_mode") in CONTRACT_REPLAY_MODES
+                for record in group_records
+            )
+            annotation_sources.add("legacy_in_record")
+    if len(annotation_sources) == 1:
+        annotation_source = annotation_sources.pop()
+    elif annotation_sources:
+        annotation_source = "mixed"
+    else:
+        annotation_source = "legacy_in_record"
+
     return {
         "solver_blind_input": {
             "allowlist": list(WRITTEN_EXPRESSION_ALLOWLIST),
@@ -327,10 +364,8 @@ def independence_audit(items: list[dict[str, Any]], reviews: dict[str, Any], sol
                 for record in solvers
                 if SOLVER_FORBIDDEN_KEYS.intersection(record)
             ],
-            "contract_replay_only_records": sum(
-                record.get("judgment_mode") == "contract_only_replay"
-                for record in all_replay_records
-            ),
+            "contract_replay_only_records": contract_replay_only_records,
+            "contract_replay_annotation_source": annotation_source,
         },
         "harness_source_controls": source_controls,
         "runtime_available": runtime_available,
@@ -646,7 +681,10 @@ def main() -> int:
     reviews = read_json(REVIEWS_PATH)
     solvers_data = read_json(SOLVER_PATH)
     solvers = solvers_data["items"] if isinstance(solvers_data, dict) else solvers_data
-    independence = independence_audit(items, reviews, solvers)
+    independence = independence_audit(
+        items, reviews, solvers,
+        solvers_data.get("replay_metadata") if isinstance(solvers_data, dict) else None,
+    )
 
     plan_path = OUT_DIR / "we_v2_validation_plans.json"
     plan_data = read_json(plan_path)

@@ -155,7 +155,7 @@
     "new_defect_introduced": 0
   },
   "judgment_quality": {
-    "mode": "contract_only_replay",
+    "mode": "CONTRACT_REPLAY_ONLY",
     "grammar_quality_evaluable": false,
     "reason": "Reviewer and Solver outputs are schema fixtures because no callable live runtime is available; their agreement is excluded from grammar-quality conclusions."
   },
@@ -168,6 +168,7 @@
       "gap_A_B": false,
       "gap_B_C": true,
       "gap_C_D": true,
+      "format_distance_median": true,
       "worst_band_status": false
     },
     "actual": {
@@ -182,7 +183,8 @@
         "WARNING": 3,
         "EXTREME": 72
       },
-      "extreme_band_share": 0.96
+      "extreme_band_share": 0.96,
+      "format_distance_median": 1.4674
     },
     "reference": {
       "sentence_word_count": 20,
@@ -191,6 +193,7 @@
       "gap_A_B": 4,
       "gap_B_C": 4,
       "gap_C_D": 4,
+      "format_distance_median": 0.7878,
       "max_extreme_band_share": 0.25
     },
     "tolerances": {
@@ -199,7 +202,8 @@
       "unmarked_word_count": 3.0,
       "gap_A_B": 2.0,
       "gap_B_C": 2.0,
-      "gap_C_D": 2.0
+      "gap_C_D": 2.0,
+      "format_distance_median": 0.75
     }
   },
   "batch_and_order": {

@@ -229,7 +229,7 @@ def main(output_path: Path | None = None) -> int:
             require(actual.get(key) == expected_value, f"{item_id}: historical {key} mismatch (expected {expected_value!r}, got {actual.get(key)!r})", failures)
 
         v2_review = expected_v2_review(case, generator_item)
-        v2_errors = REVIEWER_VALIDATOR.validate(v2_review)
+        v2_errors = REVIEWER_VALIDATOR.validate_contract(v2_review)
         require(not v2_errors, f"{item_id}: source-linked v2 Reviewer contract failed: {v2_errors}", failures)
         if v2_errors:
             v2_review_failures += 1

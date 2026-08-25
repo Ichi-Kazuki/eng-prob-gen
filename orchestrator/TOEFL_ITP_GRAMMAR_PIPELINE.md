@@ -141,6 +141,10 @@ in state `SOLVING`).
 - Schema-validation retries and system-failure retries are tracked
   separately from `revision_count`, because neither is a content-quality
   judgement (spec section 16 / this doc section 8).
+- Counters are stage-specific (`generator` / `reviewer` / `solver`) and every
+  failure/retry/exhaustion event is appended to `qa_audit.retry_history`.
+  Content-validation exhaustion routes to `DISCARDED`; system-failure
+  exhaustion routes to `MANUAL_REVIEW`.
 
 ## 6. Solver blinding (spec section 7)
 
@@ -278,6 +282,12 @@ Reviewer/Solver field into `accepted_item`.
   (`orchestrator.compute_agent_version()`). This changes automatically the
   moment an agent's prompt is edited, with no manual version bump to
   remember or forget.
+- The same 12-hex SHA-256 convention covers `orchestrator.py`, `config.json`,
+  all three output validators, the Solver blinding script, and the relevant
+  Generator/Reviewer/Solver/Orchestrator schemas.
+- `schema_runtime_version` hashes the shared Draft 2020-12 adapter together
+  with the dependency lock, so a validation-engine change is also visible in
+  acceptance provenance.
 
 ## 13. Batch integrity (spec section 14)
 
@@ -315,6 +325,10 @@ is attached as `batch_slot` on every provenance record.
 No UI is built (out of scope this round, per instructions); a human
 chooses one of the three `possible_actions` out of band.
 
+Queue updates use a cross-platform lock plus temp-file/flush/fsync/replace.
+Malformed existing JSON is an explicit error and is never treated as an empty
+queue.
+
 ## 15. Failure handling (spec section 16)
 
 `orchestrator.SystemCallError` is raised for **system** failures: an agent
@@ -328,7 +342,18 @@ A **content**-shape failure — output parses as JSON but fails the
 relevant `validate_output.py` schema check — maps to `VALIDATION_FAILED`
 and is retried up to `max_generation_validation_retries`, again without
 touching `revision_count` (this is a structural mistake, not the
-Reviewer's quality judgement).
+Reviewer's quality judgement). When that budget is exhausted the routing
+depends on which agent produced the malformed output: a **Generator**
+content failure ends in `DISCARDED`, because the candidate's own content
+is unusable; a **Reviewer** or **Solver** content failure ends in
+`MANUAL_REVIEW`, because a malformed judgement says nothing about a
+candidate that may already hold a Reviewer `PASS`.
+
+A file that cannot be read or parsed at all when an operator applies a
+batch of agent output (wrong path, truncated download, invalid encoding)
+is a **batch-level operator error**, not a per-candidate failure: the
+drivers report it and exit without changing any candidate state or
+consuming any retry budget.
 
 Only an actual Reviewer `REVISE`/`REJECT` verdict touches
 `revision_count` / ends the candidate on quality grounds.
@@ -345,8 +370,12 @@ failure, no exception).
 | `orchestrator/scripts/run_smoke_test.py` | Replays the 6 existing Generator/Reviewer/Solver smoke fixtures. | `analysis/orchestrator_smoke_test.json` |
 | `orchestrator/scripts/run_adversarial_test.py` | Replays the 5 deliberately-broken Reviewer adversarial fixtures. | `analysis/orchestrator_adversarial_test.json` |
 | `orchestrator/scripts/run_reject_path_test.py` | Replays the 2 existing Reviewer REJECT fixtures. | `analysis/orchestrator_reject_path_test.json` |
-| `orchestrator/scripts/run_acceptance_tests.py` | Runs the three scripts above plus direct unit tests of `evaluate_consensus`, retry limits, leakage guard, and failure classification; prints a pass/fail table against the 14 acceptance criteria (spec section 21). | console + populates `analysis/manual_review_queue.json` |
+| `orchestrator/scripts/run_acceptance_tests.py` | Runs the three scripts above plus direct unit tests of `evaluate_consensus`, retry limits, leakage guard, and failure classification; prints a pass/fail table against the 14 acceptance criteria (spec section 21). | console + temporary replay artifacts only |
 | `orchestrator/scripts/validate_provenance.py` | Shape-checks the Orchestrator's own output (same pattern as the other agents' `validate_output.py`). | console |
+
+The validation driver refuses `finalize` unless the fixed initial cohort is
+exactly 120 candidates and every candidate is terminal. State and final
+artifact writes are atomic.
 
 Run order: `run_smoke_test.py`, `run_adversarial_test.py`,
 `run_reject_path_test.py`, then `run_acceptance_tests.py` (which also

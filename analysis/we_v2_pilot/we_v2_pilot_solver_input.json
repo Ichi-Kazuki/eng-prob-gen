@@ -7,7 +7,7 @@
     "eligible_count": 22,
     "generator_validation": {
       "schema_pass": 22,
-      "format_pass": 25,
+      "format_pass": 22,
       "invalid_items": {
         "we-v2-pilot-013": [
           "<root>.format_metadata.diagnostics: missing required property 'sentence_word_count'",
@@ -27,7 +27,25 @@
           "<root>.format_metadata.diagnostics: missing required property 'format_percentile_profile'",
           "<root>.format_metadata.diagnostics: missing required property 'format_band_status'",
           "<root>.format_metadata.diagnostics: missing required property 'metric_band_status'",
-          "<root>.format_metadata.diagnostics: missing required property 'span_token_indices'"
+          "<root>.format_metadata.diagnostics: missing required property 'span_token_indices'",
+          "format_metadata.diagnostics missing required field: correct_span_type",
+          "format_metadata.diagnostics missing required field: correct_span_word_count",
+          "format_metadata.diagnostics missing required field: correction_locality",
+          "format_metadata.diagnostics missing required field: decision_granularity",
+          "format_metadata.diagnostics missing required field: format_band_status",
+          "format_metadata.diagnostics missing required field: format_distribution_distance",
+          "format_metadata.diagnostics missing required field: format_percentile_profile",
+          "format_metadata.diagnostics missing required field: gap_A_B",
+          "format_metadata.diagnostics missing required field: gap_B_C",
+          "format_metadata.diagnostics missing required field: gap_C_D",
+          "format_metadata.diagnostics missing required field: marked_coverage_ratio",
+          "format_metadata.diagnostics missing required field: max_span_length",
+          "format_metadata.diagnostics missing required field: mean_span_length",
+          "format_metadata.diagnostics missing required field: metric_band_status",
+          "format_metadata.diagnostics missing required field: sentence_word_count",
+          "format_metadata.diagnostics missing required field: span_token_indices",
+          "format_metadata.diagnostics missing required field: span_word_counts",
+          "format_metadata.diagnostics missing required field: unmarked_word_count"
         ],
         "we-v2-pilot-014": [
           "<root>.format_metadata.diagnostics: missing required property 'sentence_word_count'",
@@ -47,7 +65,25 @@
           "<root>.format_metadata.diagnostics: missing required property 'format_percentile_profile'",
           "<root>.format_metadata.diagnostics: missing required property 'format_band_status'",
           "<root>.format_metadata.diagnostics: missing required property 'metric_band_status'",
-          "<root>.format_metadata.diagnostics: missing required property 'span_token_indices'"
+          "<root>.format_metadata.diagnostics: missing required property 'span_token_indices'",
+          "format_metadata.diagnostics missing required field: correct_span_type",
+          "format_metadata.diagnostics missing required field: correct_span_word_count",
+          "format_metadata.diagnostics missing required field: correction_locality",
+          "format_metadata.diagnostics missing required field: decision_granularity",
+          "format_metadata.diagnostics missing required field: format_band_status",
+          "format_metadata.diagnostics missing required field: format_distribution_distance",
+          "format_metadata.diagnostics missing required field: format_percentile_profile",
+          "format_metadata.diagnostics missing required field: gap_A_B",
+          "format_metadata.diagnostics missing required field: gap_B_C",
+          "format_metadata.diagnostics missing required field: gap_C_D",
+          "format_metadata.diagnostics missing required field: marked_coverage_ratio",
+          "format_metadata.diagnostics missing required field: max_span_length",
+          "format_metadata.diagnostics missing required field: mean_span_length",
+          "format_metadata.diagnostics missing required field: metric_band_status",
+          "format_metadata.diagnostics missing required field: sentence_word_count",
+          "format_metadata.diagnostics missing required field: span_token_indices",
+          "format_metadata.diagnostics missing required field: span_word_counts",
+          "format_metadata.diagnostics missing required field: unmarked_word_count"
         ],
         "we-v2-pilot-015": [
           "<root>.format_metadata.diagnostics: missing required property 'sentence_word_count'",
@@ -67,7 +103,25 @@
           "<root>.format_metadata.diagnostics: missing required property 'format_percentile_profile'",
           "<root>.format_metadata.diagnostics: missing required property 'format_band_status'",
           "<root>.format_metadata.diagnostics: missing required property 'metric_band_status'",
-          "<root>.format_metadata.diagnostics: missing required property 'span_token_indices'"
+          "<root>.format_metadata.diagnostics: missing required property 'span_token_indices'",
+          "format_metadata.diagnostics missing required field: correct_span_type",
+          "format_metadata.diagnostics missing required field: correct_span_word_count",
+          "format_metadata.diagnostics missing required field: correction_locality",
+          "format_metadata.diagnostics missing required field: decision_granularity",
+          "format_metadata.diagnostics missing required field: format_band_status",
+          "format_metadata.diagnostics missing required field: format_distribution_distance",
+          "format_metadata.diagnostics missing required field: format_percentile_profile",
+          "format_metadata.diagnostics missing required field: gap_A_B",
+          "format_metadata.diagnostics missing required field: gap_B_C",
+          "format_metadata.diagnostics missing required field: gap_C_D",
+          "format_metadata.diagnostics missing required field: marked_coverage_ratio",
+          "format_metadata.diagnostics missing required field: max_span_length",
+          "format_metadata.diagnostics missing required field: mean_span_length",
+          "format_metadata.diagnostics missing required field: metric_band_status",
+          "format_metadata.diagnostics missing required field: sentence_word_count",
+          "format_metadata.diagnostics missing required field: span_token_indices",
+          "format_metadata.diagnostics missing required field: span_word_counts",
+          "format_metadata.diagnostics missing required field: unmarked_word_count"
         ]
       }
     }

@@ -1,0 +1,22 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Locally installed or downloaded analysis dependencies
+.analysis_tmp_deps/
+.analysis_tmp_uv_cache/
+.tmp_p0_deps/
+.tmp_p0_local/
+
+# Generated scratch/OCR/replay artifacts
+tmp/
+
+# Transient atomic-write / lock files
+*.tmp
+analysis/manual_review_queue.json.lock
+

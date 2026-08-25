@@ -14,11 +14,11 @@
     "ambiguity_detected"
   ],
   "properties": {
-    "item_id": { "type": "string", "minLength": 1 },
+    "item_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
     "section": { "enum": ["Structure", "Written Expression"] },
     "solver_answer": { "enum": ["A", "B", "C", "D", "AMBIGUOUS", "NONE"] },
     "confidence": { "enum": ["HIGH", "MEDIUM", "LOW"] },
-    "reason": { "type": "string", "minLength": 1 },
+    "reason": { "type": "string", "minLength": 1, "pattern": "\\S" },
     "ambiguity_detected": { "type": "boolean" },
     "suggested_correction": { "type": "string" }
   },

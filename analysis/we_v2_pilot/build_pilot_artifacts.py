@@ -32,6 +32,9 @@ PILOT = ROOT / "analysis" / "we_v2_pilot"
 RAW = PILOT / "raw"
 FINAL_ITEMS_PATH = PILOT / "we_v2_pilot_final_items.json"
 
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 sys.path.insert(0, str(ROOT / "agents" / "toefl_itp_we_generator_v2" / "scripts"))
 from validate_format import (  # noqa: E402
     DiagnosticsEmissionError, inject_canonical_diagnostics,
@@ -40,6 +43,7 @@ from validate_format import (  # noqa: E402
 
 sys.path.insert(0, str(PILOT))
 from pilot_validation import build_validation_report  # noqa: E402
+from shared.schema_validation import schema_errors  # noqa: E402
 
 BATCH_ID = "we-v2-live-pilot-20260824"
 MICROBATCHES = [f"{BATCH_ID}-micro-{i:02d}" for i in range(1, 10)]
@@ -71,78 +75,6 @@ ORCHESTRATOR = load_module(
     "pilot_orchestrator",
     ROOT / "orchestrator" / "scripts" / "orchestrator.py",
 )
-
-
-# ---------------------------------------------------------------------------
-# Minimal JSON Schema subset validator (the repo has no jsonschema dependency).
-# Covers exactly the constructs used by written_expression_item_v2.schema.json.
-# ---------------------------------------------------------------------------
-
-TYPE_MAP = {
-    "object": dict, "array": list, "string": str, "boolean": bool,
-    "number": (int, float), "integer": int, "null": type(None),
-}
-
-
-def schema_errors(value: Any, schema: dict, path: str = "") -> list[str]:
-    errors: list[str] = []
-    where = path or "<root>"
-
-    if "const" in schema and value != schema["const"]:
-        errors.append(f"{where}: must equal {schema['const']!r}")
-    if "enum" in schema and value not in schema["enum"]:
-        errors.append(f"{where}: {value!r} not in {schema['enum']}")
-
-    types = schema.get("type")
-    if types is not None:
-        allowed = types if isinstance(types, list) else [types]
-        # bool is a subclass of int; keep them distinct.
-        ok = any(
-            (isinstance(value, TYPE_MAP[name]) and not (name in {"integer", "number"} and isinstance(value, bool)))
-            for name in allowed
-        )
-        if not ok:
-            errors.append(f"{where}: expected type {allowed}, got {type(value).__name__}")
-            return errors
-
-    if isinstance(value, str):
-        if "minLength" in schema and len(value) < schema["minLength"]:
-            errors.append(f"{where}: shorter than minLength {schema['minLength']}")
-    if isinstance(value, (int, float)) and not isinstance(value, bool):
-        if "minimum" in schema and value < schema["minimum"]:
-            errors.append(f"{where}: below minimum {schema['minimum']}")
-        if "maximum" in schema and value > schema["maximum"]:
-            errors.append(f"{where}: above maximum {schema['maximum']}")
-    if isinstance(value, list):
-        if "minItems" in schema and len(value) < schema["minItems"]:
-            errors.append(f"{where}: fewer than minItems {schema['minItems']}")
-        if "items" in schema:
-            for index, element in enumerate(value):
-                errors.extend(schema_errors(element, schema["items"], f"{where}[{index}]"))
-    if isinstance(value, dict):
-        for key in schema.get("required", []):
-            if key not in value:
-                errors.append(f"{where}: missing required property {key!r}")
-        properties = schema.get("properties", {})
-        for key, subschema in properties.items():
-            if key in value:
-                errors.extend(schema_errors(value[key], subschema, f"{where}.{key}"))
-        extra = schema.get("additionalProperties", True)
-        # Always computed: when a node declares `additionalProperties` as a
-        # subschema but no `properties`, every key is an "unknown" key and the
-        # subschema is exactly what must validate it.
-        unknown = sorted(set(value) - set(properties))
-        if extra is False:
-            for key in unknown:
-                errors.append(f"{where}: additional property {key!r} is not allowed")
-        elif isinstance(extra, dict):
-            for key in unknown:
-                errors.extend(schema_errors(value[key], extra, f"{where}.{key}"))
-        propnames = schema.get("propertyNames")
-        if isinstance(propnames, dict):
-            for key in value:
-                errors.extend(schema_errors(key, propnames, f"{where}:key({key})"))
-    return errors
 
 
 # ---------------------------------------------------------------------------
@@ -426,7 +358,7 @@ def reviewer_contract_errors(review: Any) -> list[str]:
     if not isinstance(review, dict):
         return ["reviewer result must be an object"]
     try:
-        return REVIEWER_VALIDATOR.validate(review)
+        return REVIEWER_VALIDATOR.validate_contract(review)
     except Exception as exc:
         return [f"reviewer validator exception: {type(exc).__name__}: {exc}"]
 
@@ -438,7 +370,7 @@ def solver_contract_errors(entry: Any) -> list[str]:
         return ["solver result must be an object"]
     errors: list[str] = []
     try:
-        SOLVER_VALIDATOR.validate_item(entry, errors)
+        SOLVER_VALIDATOR.validate_contract(entry, errors)
     except Exception as exc:
         errors.append(f"solver validator exception: {type(exc).__name__}: {exc}")
     return errors
@@ -523,7 +455,10 @@ def stage_solver_input() -> int:
                 "eligible_count": len(blind),
                 "generator_validation": {
                     "schema_pass": generator_validation["generator_schema_pass"],
-                    "format_pass": generator_validation["format_validator_pass"],
+                    "format_pass": sum(
+                        record["generator_schema_pass"] and record["format_validator_pass"]
+                        for record in generator_validation["items"]
+                    ),
                     "invalid_items": generator_contract_errors,
                 },
             },

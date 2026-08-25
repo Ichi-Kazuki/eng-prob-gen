@@ -23,6 +23,19 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[3]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+# `schema_errors` now lives in the shared runtime schema engine so every
+# agent validator enforces the same committed JSON Schema subset. It is
+# re-exported here because existing callers import it from this module.
+from shared.schema_validation import (  # noqa: E402,F401
+    TYPE_MAP,
+    SchemaValidationRuntimeError,
+    load_schema,
+    schema_errors,
+)
+
 CONFIG_PATH = ROOT / "agents" / "toefl_itp_we_generator_v2" / "config" / "we_v2_format_config.json"
 GRAMMAR_SPEC_PATH = ROOT / "specs" / "toefl_itp_grammar_spec.json"
 TAXONOMY_PATH = ROOT / "analysis" / "grammar_taxonomy.json"
@@ -32,10 +45,6 @@ SPAN_TYPES = {"SINGLE_WORD", "SHORT_PHRASE", "CLAUSE_OR_CLAUSE_LIKE"}
 ERROR_SCOPES = {"local", "clause_level", "sentence_level", "cross_clause"}
 CORRECTION_LOCALITIES = {"DEPENDENCY_BASED", "LOCAL_SHORT_SPAN", "SEMANTIC_OR_CONTEXT_DEPENDENT", "LOCAL_SINGLE_TOKEN", "CLAUSE_LEVEL"}
 DECISION_GRANULARITIES = {"FUNCTION_WORD", "WORD_ORDER", "CLAUSE_RELATION", "VERB_FRAME", "OTHER", "MORPHOLOGY", "WORD_CLASS", "AGREEMENT_DEPENDENCY", "LOCAL_PHRASE"}
-TYPE_MAP = {
-    "object": dict, "array": list, "string": str, "boolean": bool,
-    "number": (int, float), "integer": int, "null": type(None),
-}
 REQUIRED_DIAGNOSTIC_KEYS = (
     "sentence_word_count", "span_word_counts", "mean_span_length", "max_span_length",
     "marked_coverage_ratio", "unmarked_word_count", "gap_A_B", "gap_B_C", "gap_C_D",
@@ -89,72 +98,6 @@ def load_items(path: Path) -> list[dict[str, Any]]:
     if isinstance(data, dict):
         return [data]
     raise ValueError("top-level JSON must be an item array or an object with items")
-
-
-def schema_errors(value: Any, schema: dict[str, Any], path: str = "") -> list[str]:
-    """Validate the small JSON Schema subset used by the Generator contract.
-
-    This deliberately stays dependency-free so the emission boundary can run
-    the strict contract gate before an item leaves the Generator process.
-    """
-
-    errors: list[str] = []
-    where = path or "<root>"
-
-    if "const" in schema and value != schema["const"]:
-        errors.append(f"{where}: must equal {schema['const']!r}")
-    if "enum" in schema and value not in schema["enum"]:
-        errors.append(f"{where}: {value!r} not in {schema['enum']}")
-
-    types = schema.get("type")
-    if types is not None:
-        allowed = types if isinstance(types, list) else [types]
-        ok = any(
-            isinstance(value, TYPE_MAP[name])
-            and not (name in {"integer", "number"} and isinstance(value, bool))
-            for name in allowed
-        )
-        if not ok:
-            errors.append(f"{where}: expected type {allowed}, got {type(value).__name__}")
-            return errors
-
-    if isinstance(value, str) and "minLength" in schema and len(value) < schema["minLength"]:
-        errors.append(f"{where}: shorter than minLength {schema['minLength']}")
-    if isinstance(value, (int, float)) and not isinstance(value, bool):
-        if "minimum" in schema and value < schema["minimum"]:
-            errors.append(f"{where}: below minimum {schema['minimum']}")
-        if "maximum" in schema and value > schema["maximum"]:
-            errors.append(f"{where}: above maximum {schema['maximum']}")
-    if isinstance(value, list):
-        if "minItems" in schema and len(value) < schema["minItems"]:
-            errors.append(f"{where}: fewer than minItems {schema['minItems']}")
-        if "items" in schema:
-            for index, element in enumerate(value):
-                errors.extend(schema_errors(element, schema["items"], f"{where}[{index}]"))
-    if isinstance(value, dict):
-        for key in schema.get("required", []):
-            if key not in value:
-                errors.append(f"{where}: missing required property {key!r}")
-        properties = schema.get("properties", {})
-        extra = schema.get("additionalProperties", True)
-        # Always computed: when a node declares `additionalProperties` as a
-        # subschema but no `properties`, every key is an "unknown" key and the
-        # subschema is exactly what must validate it.
-        unknown = sorted(set(value) - set(properties))
-        if extra is False:
-            for key in unknown:
-                errors.append(f"{where}: additional property {key!r} is not allowed")
-        elif isinstance(extra, dict):
-            for key in unknown:
-                errors.extend(schema_errors(value[key], extra, f"{where}.{key}"))
-        for key, subschema in properties.items():
-            if key in value:
-                errors.extend(schema_errors(value[key], subschema, f"{where}.{key}"))
-        propnames = schema.get("propertyNames")
-        if isinstance(propnames, dict):
-            for key in value:
-                errors.extend(schema_errors(key, propnames, f"{where}:key({key})"))
-    return errors
 
 
 def tokens(text: str) -> list[dict[str, Any]]:
@@ -460,12 +403,16 @@ def main() -> int:
     parser.add_argument("items", type=Path)
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
-    config = load_json(CONFIG_PATH)
-    grammar = load_json(GRAMMAR_SPEC_PATH)
-    taxonomy = load_json(TAXONOMY_PATH)
-    targets = {x["id"] for x in taxonomy["primary_targets"]}
-    error_types = {x["id"] for x in grammar["tested_error_types"] if x["id"] not in {"fragment", "wrong_complementation"}}
-    results = [validate_item(item, config, targets, error_types) for item in load_items(args.items)]
+    try:
+        config = load_json(CONFIG_PATH)
+        grammar = load_json(GRAMMAR_SPEC_PATH)
+        taxonomy = load_json(TAXONOMY_PATH)
+        targets = {x["id"] for x in taxonomy["primary_targets"]}
+        error_types = {x["id"] for x in grammar["tested_error_types"] if x["id"] not in {"fragment", "wrong_complementation"}}
+        results = [validate_item(item, config, targets, error_types) for item in load_items(args.items)]
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, SchemaValidationRuntimeError) as exc:
+        print(f"SYSTEM ERROR: {exc}", file=sys.stderr)
+        return 2
     report = {
         "validator": "TOEFL ITP WE deterministic format validator v2.0",
         "config": config["config_id"],

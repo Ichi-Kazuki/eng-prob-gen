@@ -64,7 +64,7 @@ def main(output_path: Path | None = None) -> int:
         )
 
     review_contract_errors = [
-        REVIEWER_VALIDATOR.validate(item) if isinstance(item, dict) else ["item must be an object"]
+        REVIEWER_VALIDATOR.validate_contract(item)
         for item in reviews
     ]
     solver_contract_errors: list[list[str]] = []
@@ -73,7 +73,7 @@ def main(output_path: Path | None = None) -> int:
         if not isinstance(item, dict):
             errors.append("item must be an object")
         else:
-            SOLVER_VALIDATOR.validate_item(item, errors)
+            SOLVER_VALIDATOR.validate_contract(item, errors)
         solver_contract_errors.append(errors)
     dependencies_complete = exact_dependent_ids(review_ids) and exact_dependent_ids(solver_ids)
     reviews_valid = dependencies_complete and all(not errors for errors in review_contract_errors)

@@ -1,0 +1,15 @@
+{
+  "items": [
+    {
+      "item_id": "adv-schema-solver-001",
+      "section": "Structure",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "A restrictive relative clause with a non-human antecedent takes 'that'.",
+      "ambiguity_detected": false,
+      "correct_answer_leak_via_new_name": "B",
+      "internal_chain_of_thought": "step 1 ... step 2 ... therefore B",
+      "debug_generator_target": "RELATIVE_CLAUSES"
+    }
+  ]
+}

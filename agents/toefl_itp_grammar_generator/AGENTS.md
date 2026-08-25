@@ -107,15 +107,12 @@ Multiple items may be wrapped as `{"items": [...]}`.
 
 ## Validation
 
-`agents/toefl_itp_grammar_generator/scripts/validate_output.py <file>` runs
-schema-level checks only (option/marked-part counts, `correct_answer` in
-A-D and pointing at a real entry, `primary_target`/`tested_error_type`
-membership in the taxonomy, `error_scope` in the closed set,
-`difficulty` in EASY/MEDIUM/HARD). It does **not** judge grammatical
-correctness, distractor quality, or "TOEFL-ITP-likeness" — that judgment is
-out of scope for this agent and is deferred to a future Reviewer Agent.
-Dependency-free (stdlib `json` only); reads the enum source-of-truth
-directly from `specs/toefl_itp_grammar_spec.json` at runtime.
+`agents/toefl_itp_grammar_generator/scripts/validate_output.py <file>` loads
+the committed Draft 2020-12 schema with the standard `jsonschema` package,
+then runs only cross-field checks that are not structural schema rules. It
+does **not** judge grammatical correctness, distractor quality, or
+"TOEFL-ITP-likeness" — that judgment belongs to the Reviewer Agent. Exit
+codes are 0 valid, 1 candidate validation failure, and 2 runtime failure.
 
 ## Copyright / source separation
 

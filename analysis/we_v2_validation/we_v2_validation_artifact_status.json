@@ -1,0 +1,44 @@
+{
+  "artifacts": [
+    {
+      "path": "analysis/we_v2_validation/we_v2_validation_reviews.json",
+      "status": "canonical",
+      "lifecycle": "current",
+      "contract_status": "schema-valid",
+      "retained": true,
+      "source": "current validation harness regeneration; formal Reviewer records are validated without replay annotations"
+    },
+    {
+      "path": "analysis/we_v2_validation/we_v2_validation_reviews_contract_replay.json",
+      "status": "retained_copy",
+      "lifecycle": "supporting",
+      "contract_status": "schema-valid",
+      "retained": true,
+      "source": "byte-identical contract-replay verification copy of the canonical review artifact"
+    },
+    {
+      "path": "analysis/we_v2_validation/we_v2_validation_solver.json",
+      "status": "canonical",
+      "lifecycle": "current",
+      "contract_status": "schema-valid",
+      "retained": true,
+      "source": "current validation harness regeneration; formal Solver records are validated without replay annotations"
+    },
+    {
+      "path": "analysis/we_v2_validation/we_v2_validation_solver_contract_replay.json",
+      "status": "retained_copy",
+      "lifecycle": "supporting",
+      "contract_status": "schema-valid",
+      "retained": true,
+      "source": "byte-identical contract-replay verification copy of the canonical solver artifact"
+    },
+    {
+      "path": "analysis/we_v2_validation/we_v2_validation_provenance.json",
+      "status": "canonical",
+      "lifecycle": "current",
+      "contract_status": "artifact-level replay metadata; nested records contain no legacy replay annotations",
+      "retained": true,
+      "source": "current validation harness regeneration"
+    }
+  ]
+}

@@ -2,22 +2,25 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "provenance.schema.json",
   "title": "TOEFL ITP Orchestrator - per-item provenance record",
-  "description": "The record orchestrator.build_provenance_record() emits for one candidate, combining a short human-readable summary (spec section 11 example) with the full accepted_item / qa_audit split (spec section 12). This is the shape written into analysis/orchestrator_smoke_test.json, analysis/orchestrator_adversarial_test.json, and analysis/orchestrator_reject_path_test.json. Descriptive documentation; not enforced by a JSON Schema library at runtime (see accepted_item.schema.json note).",
+  "description": "The Draft 2020-12 runtime contract for one candidate provenance record, combining a short summary with the accepted_item / qa_audit split.",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "item_id", "concept_id", "section", "state", "state_history",
-    "generation_attempt", "revision_count", "generator", "reviewer", "solver",
+    "generation_attempt", "revision_count", "validation_retry_counts",
+    "system_failure_retry_counts", "generator", "reviewer", "solver",
     "consensus", "batch_slot", "versions", "accepted_item", "qa_audit"
   ],
   "properties": {
     "item_id": { "type": "string" },
     "concept_id": { "type": "string" },
     "section": { "enum": ["Structure", "Written Expression"] },
-    "state": { "type": "string" },
-    "state_history": { "type": "array", "items": { "type": "string" } },
+    "state": { "enum": ["GENERATED", "GENERATION_FAILED", "VALIDATION_FAILED", "REVIEWING", "REVISE_REQUIRED", "REJECTED", "SOLVING", "ACCEPTED", "MANUAL_REVIEW", "DISCARDED"] },
+    "state_history": { "type": "array", "items": { "enum": ["GENERATED", "GENERATION_FAILED", "VALIDATION_FAILED", "REVIEWING", "REVISE_REQUIRED", "REJECTED", "SOLVING", "ACCEPTED", "MANUAL_REVIEW", "DISCARDED"] } },
     "generation_attempt": { "type": "integer", "minimum": 1 },
     "revision_count": { "type": "integer", "minimum": 0 },
+    "validation_retry_counts": { "$ref": "#/$defs/stage_retry_counts" },
+    "system_failure_retry_counts": { "$ref": "#/$defs/stage_retry_counts" },
     "generator": {
       "type": ["object", "null"],
       "properties": { "answer": { "enum": ["A", "B", "C", "D"] } }
@@ -47,12 +50,33 @@
     },
     "versions": {
       "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spec_version", "taxonomy_version", "generator_version",
+        "reviewer_version", "solver_version", "orchestrator_version",
+        "config_version", "generator_validator_version",
+        "reviewer_validator_version", "solver_validator_version",
+        "solver_blinding_version", "schema_runtime_version", "generator_schema_version",
+        "reviewer_schema_version", "solver_schema_version",
+        "provenance_schema_version"
+      ],
       "properties": {
         "spec_version": { "type": "string" },
         "taxonomy_version": { "type": "string" },
         "generator_version": { "type": "string" },
         "reviewer_version": { "type": "string" },
-        "solver_version": { "type": "string" }
+        "solver_version": { "type": "string" },
+        "orchestrator_version": { "type": "string" },
+        "config_version": { "type": "string" },
+        "generator_validator_version": { "type": "string" },
+        "reviewer_validator_version": { "type": "string" },
+        "solver_validator_version": { "type": "string" },
+        "solver_blinding_version": { "type": "string" },
+        "schema_runtime_version": { "type": "string" },
+        "generator_schema_version": { "type": "string" },
+        "reviewer_schema_version": { "type": "string" },
+        "solver_schema_version": { "type": "string" },
+        "provenance_schema_version": { "type": "string" }
       }
     },
     "accepted_item": {
@@ -62,6 +86,22 @@
     "qa_audit": {
       "description": "See qa_audit.schema.json. Always present.",
       "type": "object"
+    },
+    "validation_trace": {
+      "type": "object",
+      "description": "Validation-batch-only history for the fixed initial cohort."
+    }
+  },
+  "$defs": {
+    "stage_retry_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generator", "reviewer", "solver"],
+      "properties": {
+        "generator": { "type": "integer", "minimum": 0 },
+        "reviewer": { "type": "integer", "minimum": 0 },
+        "solver": { "type": "integer", "minimum": 0 }
+      }
     }
   }
 }
