@@ -1,0 +1,112 @@
+{
+  "item_id": "we-v2.1-pilot-005",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "VERB_COMPLEMENTATION",
+  "subtype": "adjective-preposition collocation after responsible (responsible for, not responsible of)",
+  "secondary_features": [
+    "fixed preposition collocation",
+    "gerund complement",
+    "two-clause sentence"
+  ],
+  "tested_error_type": "wrong_preposition_collocation",
+  "difficulty": "MEDIUM",
+  "vocabulary_domain": "coastal wetland management",
+  "sentence": "Surveys show that coastal wetlands protect nearby communities from flooding, while agencies remain responsible of monitoring.",
+  "marked_parts": {
+    "A": "Surveys",
+    "B": "protect",
+    "C": "while agencies",
+    "D": "of"
+  },
+  "correct_answer": "D",
+  "error_explanation": "The adjective responsible requires the preposition for before the gerund monitoring; of is the incorrect collocation in Part D.",
+  "minimal_correction": "Change of to for.",
+  "grammar_metadata": {
+    "error_scope": "local",
+    "correction_locality": "LOCAL_SINGLE_TOKEN",
+    "decision_granularity": "VERB_FRAME",
+    "intended_error_position": "D",
+    "correct_span_type": "SINGLE_WORD"
+  },
+  "format_metadata": {
+    "target_sentence_length_region": "16-20; sampled official target 16 with conformance range 14-18",
+    "expected_span_profile": "Planner-selected local spans with surface lengths 1/1/2/1; sampled correct span SINGLE_WORD with target length 1 and distractor targets 1, 1, 1",
+    "coverage_profile": "Preferred empirical coverage: 5 marked words of 16 (0.3125), leaving 11 unmarked words",
+    "approximate_context_profile": "Whole-sentence spans with positive lexical gaps A-B 4, B-C 4, and C-D 2",
+    "span_types": {
+      "A": "SINGLE_WORD",
+      "B": "SINGLE_WORD",
+      "C": "CLAUSE_OR_CLAUSE_LIKE",
+      "D": "SINGLE_WORD"
+    },
+    "diagnostics": {
+      "sentence_word_count": 16,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 2,
+        "D": 1
+      },
+      "mean_span_length": 1.25,
+      "max_span_length": 2,
+      "marked_coverage_ratio": 0.3125,
+      "unmarked_word_count": 11,
+      "gap_A_B": 4,
+      "gap_B_C": 4,
+      "gap_C_D": 2,
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "VERB_FRAME",
+      "format_distribution_distance": 0.6985,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.168,
+        "marked_coverage_ratio": 0.716,
+        "unmarked_word_count": 0.196,
+        "mean_span_length": 0.5,
+        "max_span_length": 0.588,
+        "gap_A_B": 0.608,
+        "gap_B_C": 0.54,
+        "gap_C_D": 0.1
+      },
+      "format_band_status": "PREFERRED",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {
+        "A": [0],
+        "B": [5],
+        "C": [10, 11],
+        "D": [14]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1-25-item-pilot-20260825",
+    "microbatch_id": "we-v2.1-pilot-005",
+    "item_generation_order": 5,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "Surveys show that coastal wetlands protect nearby communities from flooding, while agencies remain responsible for monitoring.",
+    "error_form": "Surveys show that coastal wetlands protect nearby communities from flooding, while agencies remain responsible of monitoring.",
+    "minimal_correction": "Change of to for.",
+    "mutation_type": "single-token preposition substitution: for -> of after responsible",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "PASS",
+    "format_check_status": "PASS"
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "item_id": "we-v2.1-pilot-020",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "PARALLEL_STRUCTURE",
+  "subtype": "parallel verb forms in a three-item coordinated series",
+  "secondary_features": [
+    "initial infinitive phrase",
+    "academic agricultural research register",
+    "three coordinated past-tense predicates"
+  ],
+  "tested_error_type": "wrong_verb_form",
+  "difficulty": "MEDIUM",
+  "vocabulary_domain": "agricultural science and irrigation",
+  "sentence": "To evaluate irrigation efficiency, agronomists measured soil moisture, recorded crop growth, and comparing seasonal results from three farms across the valley.",
+  "marked_parts": {
+    "A": "irrigation",
+    "B": "recorded",
+    "C": "comparing",
+    "D": "farms"
+  },
+  "correct_answer": "C",
+  "error_explanation": "The three coordinated predicates must use parallel past-tense forms: measured, recorded, and compared. Comparing is a nonfinite participle and breaks the established coordination.",
+  "minimal_correction": "Change comparing to compared.",
+  "grammar_metadata": {
+    "error_scope": "local",
+    "correction_locality": "LOCAL_SINGLE_TOKEN",
+    "decision_granularity": "MORPHOLOGY",
+    "intended_error_position": "C",
+    "correct_span_type": "SINGLE_WORD"
+  },
+  "format_metadata": {
+    "target_sentence_length_region": "20-24 words; empirical planner target 22 with conformance range 20-24",
+    "expected_span_profile": "Planner-selected local spans with surface lengths 1/1/1/1; correct span is one word",
+    "coverage_profile": "4 of 21 lexical tokens marked (0.1905 coverage), within the preferred empirical band",
+    "approximate_context_profile": "17 unmarked lexical words with positive gaps A-B=5, B-C=3, and C-D=4",
+    "span_types": {
+      "A": "SINGLE_WORD",
+      "B": "SINGLE_WORD",
+      "C": "SINGLE_WORD",
+      "D": "SINGLE_WORD"
+    },
+    "diagnostics": {
+      "sentence_word_count": 21,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "mean_span_length": 1.0,
+      "max_span_length": 1,
+      "marked_coverage_ratio": 0.1905,
+      "unmarked_word_count": 17,
+      "gap_A_B": 5,
+      "gap_B_C": 3,
+      "gap_C_D": 4,
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "MORPHOLOGY",
+      "format_distribution_distance": 0.7605,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.576,
+        "marked_coverage_ratio": 0.16,
+        "unmarked_word_count": 0.66,
+        "mean_span_length": 0.156,
+        "max_span_length": 0.156,
+        "gap_A_B": 0.884,
+        "gap_B_C": 0.292,
+        "gap_C_D": 0.568
+      },
+      "format_band_status": "PREFERRED",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {
+        "A": [2],
+        "B": [8],
+        "C": [12],
+        "D": [17]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1-25-item-pilot-20260825",
+    "microbatch_id": "we-v2.1-25-item-pilot-20260825-micro-020",
+    "item_generation_order": 20,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "To evaluate irrigation efficiency, agronomists measured soil moisture, recorded crop growth, and compared seasonal results from three farms across the valley.",
+    "error_form": "To evaluate irrigation efficiency, agronomists measured soil moisture, recorded crop growth, and comparing seasonal results from three farms across the valley.",
+    "minimal_correction": "Change comparing to compared.",
+    "mutation_type": "parallel verb-form substitution: compared -> comparing",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "PASS",
+    "format_check_status": "PASS"
+  }
+}

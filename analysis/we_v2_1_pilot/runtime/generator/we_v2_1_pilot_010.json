@@ -1,0 +1,102 @@
+{
+  "item_id": "we-v2.1-pilot-010",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "VERB_FORM_VOICE",
+  "subtype": "subject-verb number agreement with a singular head noun",
+  "secondary_features": [
+    "prepositional modifier",
+    "embedded how-clause",
+    "formal environmental research register"
+  ],
+  "tested_error_type": "agreement_error",
+  "difficulty": "EASY",
+  "vocabulary_domain": "solar technology and field research",
+  "sentence": "The efficiency of solar panels depend on how consistently technicians remove dust from their surfaces during routine inspections at remote research stations.",
+  "marked_parts": {
+    "A": "efficiency",
+    "B": "depend",
+    "C": "remove dust",
+    "D": "routine inspections"
+  },
+  "correct_answer": "B",
+  "error_explanation": "The singular head noun efficiency requires the singular verb depends; the intervening plural noun panels does not control agreement.",
+  "minimal_correction": "Change depend to depends.",
+  "grammar_metadata": {
+    "error_scope": "local",
+    "correction_locality": "DEPENDENCY_BASED",
+    "decision_granularity": "AGREEMENT_DEPENDENCY",
+    "intended_error_position": "B",
+    "correct_span_type": "SINGLE_WORD"
+  },
+  "format_metadata": {
+    "target_sentence_length_region": "21-25 words; empirical planner target 22 with conformance range 20-24",
+    "expected_span_profile": "Planner-selected local spans with surface lengths 1/1/2/2; correct span is one word",
+    "coverage_profile": "6 of 22 lexical tokens marked (0.2727 coverage), within the preferred empirical band",
+    "approximate_context_profile": "16 unmarked lexical words with positive gaps A-B=3, B-C=4, and C-D=4",
+    "span_types": {
+      "A": "SINGLE_WORD",
+      "B": "SINGLE_WORD",
+      "C": "SHORT_PHRASE",
+      "D": "SHORT_PHRASE"
+    },
+    "diagnostics": {
+      "sentence_word_count": 22,
+      "span_word_counts": {"A": 1, "B": 1, "C": 2, "D": 2},
+      "mean_span_length": 1.5,
+      "max_span_length": 2,
+      "marked_coverage_ratio": 0.2727,
+      "unmarked_word_count": 16,
+      "gap_A_B": 3,
+      "gap_B_C": 4,
+      "gap_C_D": 4,
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "correction_locality": "DEPENDENCY_BASED",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "format_distribution_distance": 0.4512,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.664,
+        "marked_coverage_ratio": 0.544,
+        "unmarked_word_count": 0.588,
+        "mean_span_length": 0.784,
+        "max_span_length": 0.588,
+        "gap_A_B": 0.312,
+        "gap_B_C": 0.54,
+        "gap_C_D": 0.568
+      },
+      "format_band_status": "PREFERRED",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {"A": [1], "B": [5], "C": [10, 11], "D": [16, 17]}
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1-25-item-pilot-20260825",
+    "microbatch_id": "we-v2.1-25-item-pilot-20260825-micro-010",
+    "item_generation_order": 10,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "The efficiency of solar panels depends on how consistently technicians remove dust from their surfaces during routine inspections at remote research stations.",
+    "error_form": "The efficiency of solar panels depend on how consistently technicians remove dust from their surfaces during routine inspections at remote research stations.",
+    "minimal_correction": "Change depend to depends.",
+    "mutation_type": "subject-verb agreement substitution: depends -> depend",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "PASS",
+    "format_check_status": "PASS"
+  }
+}

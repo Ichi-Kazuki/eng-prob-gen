@@ -1,0 +1,111 @@
+{
+  "item_id": "we-v2.1-pilot-004",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "CLAUSE_STRUCTURE",
+  "subtype": "subject–verb agreement across an intervening relative clause",
+  "secondary_features": [
+    "relative clause",
+    "intervening modifier"
+  ],
+  "tested_error_type": "agreement_error",
+  "difficulty": "MEDIUM",
+  "vocabulary_domain": "botany and seed conservation",
+  "sentence": "The regional seed archive, which catalogs rare plants from remote valleys, preserve specimens for genetic studies during annual drought surveys.",
+  "marked_parts": {
+    "A": "regional seed",
+    "B": "catalogs",
+    "C": "preserve",
+    "D": "studies"
+  },
+  "correct_answer": "C",
+  "error_explanation": "The singular head noun “archive” is the subject of the main clause, so the finite verb must be singular: “preserves.” The intervening relative clause does not change that agreement.",
+  "minimal_correction": "preserve → preserves",
+  "grammar_metadata": {
+    "error_scope": "local",
+    "correction_locality": "DEPENDENCY_BASED",
+    "decision_granularity": "AGREEMENT_DEPENDENCY",
+    "intended_error_position": "C",
+    "correct_span_type": "SINGLE_WORD"
+  },
+  "format_metadata": {
+    "target_sentence_length_region": "16–20 words; planner target 20 with conformance range 18–22",
+    "expected_span_profile": "Planner-selected local spans with surface lengths 2/1/1/1; correct span is one word",
+    "coverage_profile": "25.0% marked lexical coverage, within the preferred empirical region",
+    "approximate_context_profile": "15 unmarked lexical words with nonzero context gaps between distributed spans",
+    "span_types": {
+      "A": "SHORT_PHRASE",
+      "B": "SINGLE_WORD",
+      "C": "SINGLE_WORD",
+      "D": "SINGLE_WORD"
+    },
+    "diagnostics": {
+      "sentence_word_count": 20,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "mean_span_length": 1.25,
+      "max_span_length": 2,
+      "marked_coverage_ratio": 0.25,
+      "unmarked_word_count": 15,
+      "gap_A_B": 2,
+      "gap_B_C": 5,
+      "gap_C_D": 3,
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "correction_locality": "DEPENDENCY_BASED",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "format_distribution_distance": 0.1472,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.492,
+        "marked_coverage_ratio": 0.456,
+        "unmarked_word_count": 0.528,
+        "mean_span_length": 0.5,
+        "max_span_length": 0.588,
+        "gap_A_B": 0.132,
+        "gap_B_C": 0.78,
+        "gap_C_D": 0.268
+      },
+      "format_band_status": "PREFERRED",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {
+        "A": [1, 2],
+        "B": [5],
+        "C": [11],
+        "D": [15]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1-25-item-pilot-20260825",
+    "microbatch_id": "we-v2.1-25-item-pilot-20260825-microbatch-004",
+    "item_generation_order": 4,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "The regional seed archive, which catalogs rare plants from remote valleys, preserves specimens for genetic studies during annual drought surveys.",
+    "error_form": "The regional seed archive, which catalogs rare plants from remote valleys, preserve specimens for genetic studies during annual drought surveys.",
+    "minimal_correction": "preserve → preserves",
+    "mutation_type": "agreement_error: singular subject with plural finite verb",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "PASS",
+    "format_check_status": "PASS"
+  }
+}

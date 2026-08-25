@@ -1,0 +1,112 @@
+{
+  "item_id": "we-v2.1-pilot-013",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "VERB_FORM_VOICE",
+  "subtype": "subject–verb agreement in a prepositional subordinate clause",
+  "secondary_features": [
+    "fronted because-clause",
+    "plural subject with intervening noun phrase",
+    "formal conservation-science register"
+  ],
+  "tested_error_type": "agreement_error",
+  "difficulty": "MEDIUM",
+  "vocabulary_domain": "archival conservation",
+  "sentence": "Because the archive's humidity controls were unreliable, conservators recommended that manuscripts be examined before technicians stores them in a sealed case.",
+  "marked_parts": {
+    "A": "humidity",
+    "B": "conservators",
+    "C": "manuscripts",
+    "D": "stores"
+  },
+  "correct_answer": "D",
+  "error_explanation": "The plural subject technicians requires the base-form present-tense verb store, not the singular form stores.",
+  "minimal_correction": "Change stores to store.",
+  "grammar_metadata": {
+    "error_scope": "local",
+    "correction_locality": "LOCAL_SINGLE_TOKEN",
+    "decision_granularity": "AGREEMENT_DEPENDENCY",
+    "intended_error_position": "D",
+    "correct_span_type": "SINGLE_WORD"
+  },
+  "format_metadata": {
+    "target_sentence_length_region": "21-25 words; empirical planner target 21 with conformance range 19-23",
+    "expected_span_profile": "Planner-selected local spans with surface lengths 1/1/1/1; correct span is one word",
+    "coverage_profile": "4 of 21 lexical tokens marked (0.1905 coverage), within the preferred empirical band",
+    "approximate_context_profile": "17 unmarked lexical words with positive gaps A-B=3, B-C=2, and C-D=4",
+    "span_types": {
+      "A": "SINGLE_WORD",
+      "B": "SINGLE_WORD",
+      "C": "SINGLE_WORD",
+      "D": "SINGLE_WORD"
+    },
+    "diagnostics": {
+      "sentence_word_count": 21,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "mean_span_length": 1.0,
+      "max_span_length": 1,
+      "marked_coverage_ratio": 0.1905,
+      "unmarked_word_count": 17,
+      "gap_A_B": 3,
+      "gap_B_C": 2,
+      "gap_C_D": 4,
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "format_distribution_distance": 0.7605,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.576,
+        "marked_coverage_ratio": 0.16,
+        "unmarked_word_count": 0.66,
+        "mean_span_length": 0.156,
+        "max_span_length": 0.156,
+        "gap_A_B": 0.312,
+        "gap_B_C": 0.088,
+        "gap_C_D": 0.568
+      },
+      "format_band_status": "PREFERRED",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {
+        "A": [3],
+        "B": [7],
+        "C": [10],
+        "D": [15]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1-25-item-pilot-20260825",
+    "microbatch_id": "we-v2.1-25-item-pilot-20260825-microbatch-013",
+    "item_generation_order": 13,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "Because the archive's humidity controls were unreliable, conservators recommended that manuscripts be examined before technicians store them in a sealed case.",
+    "error_form": "Because the archive's humidity controls were unreliable, conservators recommended that manuscripts be examined before technicians stores them in a sealed case.",
+    "minimal_correction": "Change stores to store.",
+    "mutation_type": "subject–verb agreement substitution: store -> stores",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "PASS",
+    "format_check_status": "PASS"
+  }
+}

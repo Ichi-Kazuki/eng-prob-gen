@@ -1,0 +1,102 @@
+{
+  "item_id": "we-v2.1-pilot-024",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "NOUN_CLAUSES",
+  "subtype": "embedded indirect question with declarative word order",
+  "secondary_features": [
+    "fronted because-clause",
+    "coastal monitoring register",
+    "modal prediction context"
+  ],
+  "tested_error_type": "wrong_word_order",
+  "difficulty": "MEDIUM",
+  "vocabulary_domain": "coastal navigation and environmental monitoring",
+  "sentence": "Because the coastal observatory records tidal fluctuations throughout winter, its researchers can predict when are harbor entrances safest for small vessels.",
+  "marked_parts": {
+    "A": "observatory",
+    "B": "winter",
+    "C": "are harbor entrances",
+    "D": "vessels"
+  },
+  "correct_answer": "C",
+  "error_explanation": "In an embedded question after predict when, the subject must precede the verb; the correct order is when harbor entrances are safest, not when are harbor entrances safest.",
+  "minimal_correction": "Change are harbor entrances to harbor entrances are.",
+  "grammar_metadata": {
+    "error_scope": "local",
+    "correction_locality": "LOCAL_SHORT_SPAN",
+    "decision_granularity": "WORD_ORDER",
+    "intended_error_position": "C",
+    "correct_span_type": "SHORT_PHRASE"
+  },
+  "format_metadata": {
+    "target_sentence_length_region": "21 words; empirical planner target 21 with conformance range 19-23",
+    "expected_span_profile": "Planner-selected local spans with surface lengths 1/1/3/1; correct span is a short phrase",
+    "coverage_profile": "6 of 21 lexical tokens marked (0.2857 coverage), within the preferred empirical band",
+    "approximate_context_profile": "15 unmarked lexical words with positive gaps A-B=4, B-C=5, and C-D=3",
+    "span_types": {
+      "A": "SINGLE_WORD",
+      "B": "SINGLE_WORD",
+      "C": "SHORT_PHRASE",
+      "D": "SINGLE_WORD"
+    },
+    "diagnostics": {
+      "sentence_word_count": 21,
+      "span_word_counts": {"A": 1, "B": 1, "C": 3, "D": 1},
+      "mean_span_length": 1.5,
+      "max_span_length": 3,
+      "marked_coverage_ratio": 0.2857,
+      "unmarked_word_count": 15,
+      "gap_A_B": 4,
+      "gap_B_C": 5,
+      "gap_C_D": 3,
+      "correct_span_word_count": 3,
+      "correct_span_type": "SHORT_PHRASE",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "decision_granularity": "WORD_ORDER",
+      "format_distribution_distance": 0.3948,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.576,
+        "marked_coverage_ratio": 0.592,
+        "unmarked_word_count": 0.528,
+        "mean_span_length": 0.784,
+        "max_span_length": 0.92,
+        "gap_A_B": 0.608,
+        "gap_B_C": 0.78,
+        "gap_C_D": 0.268
+      },
+      "format_band_status": "PREFERRED",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {"A": [3], "B": [8], "C": [14, 15, 16], "D": [20]}
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1-25-item-pilot-20260825",
+    "microbatch_id": "we-v2.1-25-item-pilot-20260825-micro-024",
+    "item_generation_order": 24,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "Because the coastal observatory records tidal fluctuations throughout winter, its researchers can predict when harbor entrances are safest for small vessels.",
+    "error_form": "Because the coastal observatory records tidal fluctuations throughout winter, its researchers can predict when are harbor entrances safest for small vessels.",
+    "minimal_correction": "Change are harbor entrances to harbor entrances are.",
+    "mutation_type": "embedded-question inversion: harbor entrances are -> are harbor entrances",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "PASS",
+    "format_check_status": "PASS"
+  }
+}

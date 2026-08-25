@@ -1,0 +1,76 @@
+{
+  "items": [
+    {
+      "sentence": "Because the archive preserves maps, researchers careful document their condition before placing them in climate-controlled storage.",
+      "marked_parts": {
+        "A": "archive",
+        "B": "careful",
+        "C": "condition",
+        "D": "storage"
+      }
+    },
+    {
+      "sentence": "Because the satellite transmitted highly reliable data, engineers reviewed the measurements with extreme careful before publishing the results to the international monitoring archive.",
+      "marked_parts": {
+        "A": "Because",
+        "B": "reliable",
+        "C": "reviewed the",
+        "D": "careful"
+      }
+    },
+    {
+      "sentence": "Because the valley's steep slopes limit mechanized farming, local cooperatives have gradual adopted terraced cultivation to preserve scarce soil during intense monsoon seasons.",
+      "marked_parts": {
+        "A": "mechanized",
+        "B": "gradual",
+        "C": "cultivation",
+        "D": "soil during"
+      }
+    },
+    {
+      "sentence": "After months of testing, researchers found the ceramic membrane resistance to moisture and chemical corrosion in humid storage conditions.",
+      "marked_parts": {
+        "A": "testing",
+        "B": "found",
+        "C": "resistance",
+        "D": "moisture"
+      }
+    },
+    {
+      "sentence": "The regional seed archive, which catalogs rare plants from remote valleys, preserve specimens for genetic studies during annual drought surveys.",
+      "marked_parts": {
+        "A": "regional seed",
+        "B": "catalogs",
+        "C": "preserve",
+        "D": "studies"
+      }
+    },
+    {
+      "sentence": "Surveys show that coastal wetlands protect nearby communities from flooding, while agencies remain responsible of monitoring.",
+      "marked_parts": {
+        "A": "Surveys",
+        "B": "protect",
+        "C": "while agencies",
+        "D": "of"
+      }
+    },
+    {
+      "sentence": "Although the observatory records seasonal changes among stellar populations, the calibration team report its findings only after independent checks of the instruments.",
+      "marked_parts": {
+        "A": "observatory",
+        "B": "among",
+        "C": "report",
+        "D": "after independent"
+      }
+    },
+    {
+      "sentence": "Because the survey maps ancient trade routes, historians compares inscriptions with artifacts that were recently recovered from a submerged harbor.",
+      "marked_parts": {
+        "A": "maps",
+        "B": "compares",
+        "C": "artifacts",
+        "D": "recently recovered"
+      }
+    }
+  ]
+}

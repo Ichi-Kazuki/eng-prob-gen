@@ -1,0 +1,111 @@
+{
+  "item_id": "we-v2.1-pilot-002",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "WORD_CLASS_FORM",
+  "subtype": "noun required after an adjective in a prepositional phrase",
+  "secondary_features": [
+    "prepositional complement",
+    "adjective-noun distinction"
+  ],
+  "tested_error_type": "incorrect_part_of_speech",
+  "difficulty": "MEDIUM",
+  "vocabulary_domain": "auroral remote sensing",
+  "sentence": "Because the satellite transmitted highly reliable data, engineers reviewed the measurements with extreme careful before publishing the results to the international monitoring archive.",
+  "marked_parts": {
+    "A": "Because",
+    "B": "reliable",
+    "C": "reviewed the",
+    "D": "careful"
+  },
+  "correct_answer": "D",
+  "error_explanation": "The prepositional phrase requires the noun care after the adjective extreme; careful is an adjective and cannot fill that noun slot in with extreme care.",
+  "minimal_correction": "careful → care",
+  "grammar_metadata": {
+    "error_scope": "local",
+    "correction_locality": "LOCAL_SINGLE_TOKEN",
+    "decision_granularity": "WORD_CLASS",
+    "intended_error_position": "D",
+    "correct_span_type": "SINGLE_WORD"
+  },
+  "format_metadata": {
+    "target_sentence_length_region": "21-25 words; empirical planner target 23; realized 23",
+    "expected_span_profile": "four locally inspectable spans; sampled profile 1, 1, 2, 1 words with a one-word correct span",
+    "coverage_profile": "0.2174 marked coverage; preferred empirical band",
+    "approximate_context_profile": "18 unmarked words with planner gaps A-B=4, B-C=2, C-D=3",
+    "span_types": {
+      "A": "SINGLE_WORD",
+      "B": "SINGLE_WORD",
+      "C": "SHORT_PHRASE",
+      "D": "SINGLE_WORD"
+    },
+    "diagnostics": {
+      "sentence_word_count": 23,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 2,
+        "D": 1
+      },
+      "mean_span_length": 1.25,
+      "max_span_length": 2,
+      "marked_coverage_ratio": 0.2174,
+      "unmarked_word_count": 18,
+      "gap_A_B": 4,
+      "gap_B_C": 2,
+      "gap_C_D": 3,
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "WORD_CLASS",
+      "format_distribution_distance": 0.5951,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.74,
+        "marked_coverage_ratio": 0.296,
+        "unmarked_word_count": 0.748,
+        "mean_span_length": 0.5,
+        "max_span_length": 0.588,
+        "gap_A_B": 0.608,
+        "gap_B_C": 0.088,
+        "gap_C_D": 0.268
+      },
+      "format_band_status": "PREFERRED",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {
+        "A": [0],
+        "B": [5],
+        "C": [8, 9],
+        "D": [13]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1-25-item-pilot-20260825",
+    "microbatch_id": "we-v2.1-25-item-pilot-20260825-micro-02",
+    "item_generation_order": 2,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "Because the satellite transmitted highly reliable data, engineers reviewed the measurements with extreme care before publishing the results to the international monitoring archive.",
+    "error_form": "Because the satellite transmitted highly reliable data, engineers reviewed the measurements with extreme careful before publishing the results to the international monitoring archive.",
+    "minimal_correction": "careful → care",
+    "mutation_type": "noun_slot_adjective_substitution_after_extreme",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "PASS",
+    "format_check_status": "PASS"
+  }
+}

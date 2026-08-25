@@ -1,0 +1,102 @@
+{
+  "item_id": "we-v2.1-pilot-012",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "VERB_FORM_VOICE",
+  "subtype": "past perfect form in an embedded that-clause",
+  "secondary_features": [
+    "fronted prepositional time phrase",
+    "possessive noun phrase",
+    "formal environmental science register"
+  ],
+  "tested_error_type": "wrong_verb_form",
+  "difficulty": "MEDIUM",
+  "vocabulary_domain": "glaciology and watershed science",
+  "sentence": "After repeated measurements confirmed the glacier's retreat, the researchers concluded that warmer winters had accelerate seasonal ice loss across the northern watershed.",
+  "marked_parts": {
+    "A": "repeated",
+    "B": "glacier's retreat",
+    "C": "concluded",
+    "D": "accelerate"
+  },
+  "correct_answer": "D",
+  "error_explanation": "The auxiliary had requires the past participle accelerated, not the base-form verb accelerate, in the embedded past perfect verb phrase.",
+  "minimal_correction": "Change accelerate to accelerated.",
+  "grammar_metadata": {
+    "error_scope": "local",
+    "correction_locality": "LOCAL_SINGLE_TOKEN",
+    "decision_granularity": "MORPHOLOGY",
+    "intended_error_position": "D",
+    "correct_span_type": "SINGLE_WORD"
+  },
+  "format_metadata": {
+    "target_sentence_length_region": "21-25 words; empirical planner target 22 with conformance range 20-24",
+    "expected_span_profile": "Planner-selected local spans with surface lengths 1/2/1/1; correct span is one word",
+    "coverage_profile": "5 of 22 lexical tokens marked (0.2273 coverage), within the preferred empirical band",
+    "approximate_context_profile": "17 unmarked lexical words with positive gaps A-B=3, B-C=2, and C-D=4",
+    "span_types": {
+      "A": "SINGLE_WORD",
+      "B": "SHORT_PHRASE",
+      "C": "SINGLE_WORD",
+      "D": "SINGLE_WORD"
+    },
+    "diagnostics": {
+      "sentence_word_count": 22,
+      "span_word_counts": {"A": 1, "B": 2, "C": 1, "D": 1},
+      "mean_span_length": 1.25,
+      "max_span_length": 2,
+      "marked_coverage_ratio": 0.2273,
+      "unmarked_word_count": 17,
+      "gap_A_B": 3,
+      "gap_B_C": 2,
+      "gap_C_D": 4,
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "MORPHOLOGY",
+      "format_distribution_distance": 0.4297,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.664,
+        "marked_coverage_ratio": 0.336,
+        "unmarked_word_count": 0.66,
+        "mean_span_length": 0.5,
+        "max_span_length": 0.588,
+        "gap_A_B": 0.312,
+        "gap_B_C": 0.088,
+        "gap_C_D": 0.568
+      },
+      "format_band_status": "PREFERRED",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {"A": [1], "B": [5, 6], "C": [9], "D": [14]}
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1-25-item-pilot-20260825",
+    "microbatch_id": "we-v2.1-25-item-pilot-20260825-micro-12",
+    "item_generation_order": 12,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "After repeated measurements confirmed the glacier's retreat, the researchers concluded that warmer winters had accelerated seasonal ice loss across the northern watershed.",
+    "error_form": "After repeated measurements confirmed the glacier's retreat, the researchers concluded that warmer winters had accelerate seasonal ice loss across the northern watershed.",
+    "minimal_correction": "Change accelerate to accelerated.",
+    "mutation_type": "past perfect participle substitution: accelerated -> accelerate",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "PASS",
+    "format_check_status": "PASS"
+  }
+}

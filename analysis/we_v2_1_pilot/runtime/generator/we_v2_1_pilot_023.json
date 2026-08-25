@@ -1,0 +1,107 @@
+{
+  "item_id": "we-v2.1-pilot-023",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "CLAUSE_STRUCTURE",
+  "subtype": "mandative that-clause with a base-form verb after insisted",
+  "secondary_features": [
+    "fronted time clause",
+    "safety engineering register",
+    "universal determiner in embedded subject"
+  ],
+  "tested_error_type": "wrong_verb_form",
+  "difficulty": "MEDIUM",
+  "vocabulary_domain": "mountain-road safety assessment",
+  "sentence": "After the survey team identified several unstable slopes, the safety board insisted that every contractor inspects the retaining walls before reopening the mountain road.",
+  "marked_parts": {
+    "A": "survey team",
+    "B": "safety board",
+    "C": "inspects",
+    "D": "mountain road"
+  },
+  "correct_answer": "C",
+  "error_explanation": "After the mandative verb insisted, the verb in the following that-clause must use the base form; every contractor inspect is required, not every contractor inspects.",
+  "minimal_correction": "Change inspects to inspect.",
+  "grammar_metadata": {
+    "error_scope": "clause_level",
+    "correction_locality": "DEPENDENCY_BASED",
+    "decision_granularity": "VERB_FRAME",
+    "intended_error_position": "C",
+    "correct_span_type": "SINGLE_WORD"
+  },
+  "format_metadata": {
+    "target_sentence_length_region": "21-25 words; empirical planner target 24 with conformance range 22-26",
+    "expected_span_profile": "Planner-selected local spans with surface lengths 2/2/1/2; correct span is one word",
+    "coverage_profile": "7 of 24 lexical tokens marked (0.2917 coverage), within the preferred empirical band",
+    "approximate_context_profile": "17 unmarked lexical words with positive gaps A-B=5, B-C=4, and C-D=6",
+    "span_types": {
+      "A": "SHORT_PHRASE",
+      "B": "SHORT_PHRASE",
+      "C": "SINGLE_WORD",
+      "D": "SHORT_PHRASE"
+    },
+    "diagnostics": {
+      "sentence_word_count": 24,
+      "span_word_counts": {"A": 2, "B": 2, "C": 1, "D": 2},
+      "mean_span_length": 1.75,
+      "max_span_length": 2,
+      "marked_coverage_ratio": 0.2917,
+      "unmarked_word_count": 17,
+      "gap_A_B": 5,
+      "gap_B_C": 4,
+      "gap_C_D": 6,
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "correction_locality": "DEPENDENCY_BASED",
+      "decision_granularity": "VERB_FRAME",
+      "format_distribution_distance": 0.9743,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.824,
+        "marked_coverage_ratio": 0.592,
+        "unmarked_word_count": 0.66,
+        "mean_span_length": 0.916,
+        "max_span_length": 0.588,
+        "gap_A_B": 0.884,
+        "gap_B_C": 0.54,
+        "gap_C_D": 0.948
+      },
+      "format_band_status": "WARNING",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "WARNING"
+      },
+      "span_token_indices": {
+        "A": [2, 3],
+        "B": [9, 10],
+        "C": [15],
+        "D": [22, 23]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1-25-item-pilot-20260825",
+    "microbatch_id": "we-v2.1-25-item-pilot-20260825-micro-023",
+    "item_generation_order": 23,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "After the survey team identified several unstable slopes, the safety board insisted that every contractor inspect the retaining walls before reopening the mountain road.",
+    "error_form": "After the survey team identified several unstable slopes, the safety board insisted that every contractor inspects the retaining walls before reopening the mountain road.",
+    "minimal_correction": "Change inspects to inspect.",
+    "mutation_type": "mandative base-form substitution: inspect -> inspects",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "PASS",
+    "format_check_status": "PASS"
+  }
+}
