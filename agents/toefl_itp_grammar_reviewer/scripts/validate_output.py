@@ -1,192 +1,147 @@
-"""Schema-level validation for TOEFL ITP Reviewer Agent output.
+"""Validate Reviewer output using its canonical schema and invariants."""
 
-Checks only the *shape* of the Reviewer's own output (required fields,
-enum membership, internal consistency such as critical_failure implying
-a non-PASS verdict). This does NOT judge whether a verdict is the
-*correct* verdict for the underlying item - that is a matter of review
-quality, exercised separately via the adversarial test process.
-
-Usage:
-    python validate_output.py <path-to-reviewer-output.json>
-
-Exit code 0 if every item passes; 1 if any item fails.
-"""
+from __future__ import annotations
 
 import json
 import sys
 from pathlib import Path
 
-VERDICTS = {"PASS", "REVISE", "REJECT"}
-CHECK_VALUES = {"PASS", "REVISE", "REJECT"}
-DIFFICULTY_TIERS = {"EASY", "MEDIUM", "HARD"}
-SECTIONS = {"Structure", "Written Expression"}
-SEVERITIES = {"CRITICAL", "MAJOR", "MINOR"}
-RISK_LEVELS = {"LOW", "MEDIUM", "HIGH"}
-INDEPENDENT_ANSWERS = {"A", "B", "C", "D", "NONE", "AMBIGUOUS"}
-GENERATOR_ANSWERS = {"A", "B", "C", "D"}
-ERROR_POSITIONS = {"A", "B", "C", "D", "NONE"}
+REPO_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO_ROOT))
 
-REQUIRED_CHECK_KEYS = {
-    "grammar_validity",
-    "answer_uniqueness",
-    "target_alignment",
-    "naturalness",
-    "toefl_style",
-    "distractor_quality",
-    "metadata_consistency",
+from shared.schema_validation import (  # noqa: E402
+    SchemaValidationRuntimeError,
+    load_schema,
+    schema_errors,
+)
+
+OUTPUT_SCHEMA_PATH = Path(__file__).resolve().parents[1] / "schema" / "reviewer_output.schema.json"
+CHECK_KEYS = {
+    "grammar_validity", "answer_uniqueness", "target_alignment", "naturalness",
+    "toefl_style", "distractor_quality", "metadata_consistency",
 }
-
+REQUIRED_CHECK_KEYS = CHECK_KEYS
 REQUIRED_TOP_KEYS = {
-    "item_id",
-    "section",
-    "verdict",
-    "critical_failure",
-    "independent_answer",
-    "generator_answer",
-    "answer_match",
-    "reviewer_difficulty",
-    "generator_difficulty",
-    "difficulty_mismatch",
-    "checks",
-    "issues",
-    "revision_requirements",
+    "item_id", "section", "verdict", "critical_failure", "independent_answer",
+    "generator_answer", "answer_match", "reviewer_difficulty", "generator_difficulty",
+    "difficulty_mismatch", "checks", "issues", "revision_requirements",
     "source_similarity_risk",
 }
-
-WE_ONLY_KEYS = {
-    "detected_error_count",
-    "detected_error_position",
-    "non_error_parts_valid",
-    "minimal_correction_valid",
-}
+ANSWER_POSITIONS = {"A", "B", "C", "D"}
+_SCHEMA: dict | None = None
 
 
-def load_items(path: Path):
+def load_items(path: Path) -> list[object]:
     data = json.loads(path.read_text(encoding="utf-8"))
     if isinstance(data, dict) and "items" in data:
+        if not isinstance(data["items"], list):
+            raise ValueError("$.items must be an array")
         return data["items"]
     if isinstance(data, list):
         return data
     if isinstance(data, dict):
         return [data]
-    raise ValueError("Unrecognized top-level JSON shape")
+    raise ValueError("top-level JSON must be an item, an array, or an object containing items")
 
 
-def validate_item(item, errors):
-    prefix = f"[{item.get('item_id', '?')}] "
+def output_schema() -> dict:
+    global _SCHEMA
+    if _SCHEMA is None:
+        _SCHEMA = load_schema(OUTPUT_SCHEMA_PATH)
+    return _SCHEMA
 
-    missing = REQUIRED_TOP_KEYS - set(item.keys())
-    if missing:
-        errors.append(prefix + f"missing required field(s): {sorted(missing)}")
 
-    section = item.get("section")
-    if section not in SECTIONS:
-        errors.append(prefix + f"section must be one of {sorted(SECTIONS)}, got {section!r}")
+def validate_semantics(item: dict) -> list[str]:
+    errors: list[str] = []
+    prefix = f"[{item['item_id']}]"
+    if item["answer_match"] is not (item["independent_answer"] == item["generator_answer"]):
+        errors.append(f"{prefix} $.answer_match: must equal independent_answer == generator_answer")
+    if item["difficulty_mismatch"] is not (
+        item["reviewer_difficulty"] != item["generator_difficulty"]
+    ):
+        errors.append(f"{prefix} $.difficulty_mismatch: must equal reviewer_difficulty != generator_difficulty")
 
-    verdict = item.get("verdict")
-    if verdict not in VERDICTS:
-        errors.append(prefix + f"verdict must be one of {sorted(VERDICTS)}, got {verdict!r}")
+    verdict = item["verdict"]
+    checks = item["checks"]
+    issues = item["issues"]
+    if verdict == "PASS":
+        if item["critical_failure"] is not False:
+            errors.append(f"{prefix} $.verdict: PASS requires critical_failure=false")
+        non_pass = sorted(key for key in CHECK_KEYS if checks[key] != "PASS")
+        if non_pass:
+            errors.append(f"{prefix} $.checks: PASS requires all checks PASS; non-PASS={non_pass}")
+        severities = [issue["severity"] for issue in issues]
+        for severity in ("CRITICAL", "MAJOR"):
+            if severity in severities:
+                errors.append(f"{prefix} $.issues: PASS forbids {severity} issues")
+        if item["revision_requirements"]:
+            errors.append(f"{prefix} $.revision_requirements: PASS requires an empty array")
+    if item["section"] == "Written Expression" and verdict == "PASS":
+        if item["detected_error_count"] != 1:
+            errors.append(f"{prefix} $.detected_error_count: PASS requires exactly 1")
+        if item["detected_error_position"] not in ANSWER_POSITIONS:
+            errors.append(f"{prefix} $.detected_error_position: PASS requires A/B/C/D")
+        if item["detected_error_position"] != item["independent_answer"]:
+            errors.append(f"{prefix} $.detected_error_position: must equal independent_answer")
+        if item["non_error_parts_valid"] is not True:
+            errors.append(f"{prefix} $.non_error_parts_valid: PASS requires true")
+        if item["minimal_correction_valid"] is not True:
+            errors.append(f"{prefix} $.minimal_correction_valid: PASS requires true")
+    if verdict == "REVISE" and not item["revision_requirements"]:
+        errors.append(f"{prefix} $.revision_requirements: REVISE requires at least one requirement")
+    return errors
 
-    if not isinstance(item.get("critical_failure"), bool):
-        errors.append(prefix + "critical_failure must be a boolean")
-    elif item["critical_failure"] is True and verdict == "PASS":
-        errors.append(prefix + "critical_failure=true is inconsistent with verdict=PASS")
 
-    if item.get("independent_answer") not in INDEPENDENT_ANSWERS:
-        errors.append(prefix + f"independent_answer must be one of {sorted(INDEPENDENT_ANSWERS)}")
-
-    if item.get("generator_answer") not in GENERATOR_ANSWERS:
-        errors.append(prefix + "generator_answer must be one of A/B/C/D")
-
-    if not isinstance(item.get("answer_match"), bool):
-        errors.append(prefix + "answer_match must be a boolean")
-
-    if item.get("reviewer_difficulty") not in DIFFICULTY_TIERS:
-        errors.append(prefix + "reviewer_difficulty must be EASY/MEDIUM/HARD")
-
-    if item.get("generator_difficulty") not in DIFFICULTY_TIERS:
-        errors.append(prefix + "generator_difficulty must be EASY/MEDIUM/HARD")
-
-    if not isinstance(item.get("difficulty_mismatch"), bool):
-        errors.append(prefix + "difficulty_mismatch must be a boolean")
-
-    checks = item.get("checks")
-    if not isinstance(checks, dict):
-        errors.append(prefix + "checks must be an object")
+def validate_contract(item: object, errors: list[str] | None = None) -> list[str]:
+    collected: list[str] = []
+    item_id = item.get("item_id", "?") if isinstance(item, dict) else "?"
+    if not isinstance(item, dict):
+        collected.append(f"[{item_id}] $: reviewer result must be an object")
     else:
-        missing_checks = REQUIRED_CHECK_KEYS - set(checks.keys())
-        if missing_checks:
-            errors.append(prefix + f"checks missing key(s): {sorted(missing_checks)}")
-        for k, v in checks.items():
-            if k in REQUIRED_CHECK_KEYS and v not in CHECK_VALUES:
-                errors.append(prefix + f"checks.{k} must be one of {sorted(CHECK_VALUES)}, got {v!r}")
-
-    issues = item.get("issues")
-    if not isinstance(issues, list):
-        errors.append(prefix + "issues must be an array")
-    else:
-        for i, issue in enumerate(issues):
-            if not isinstance(issue, dict):
-                errors.append(prefix + f"issues[{i}] must be an object")
-                continue
-            if issue.get("severity") not in SEVERITIES:
-                errors.append(prefix + f"issues[{i}].severity must be one of {sorted(SEVERITIES)}")
-            if not isinstance(issue.get("category"), str) or not issue["category"].strip():
-                errors.append(prefix + f"issues[{i}].category must be a non-empty string")
-            if not isinstance(issue.get("description"), str) or not issue["description"].strip():
-                errors.append(prefix + f"issues[{i}].description must be a non-empty string")
-
-    if not isinstance(item.get("revision_requirements"), list):
-        errors.append(prefix + "revision_requirements must be an array")
-
-    if item.get("source_similarity_risk") not in RISK_LEVELS:
-        errors.append(prefix + f"source_similarity_risk must be one of {sorted(RISK_LEVELS)}")
-
-    if section == "Written Expression":
-        missing_we = WE_ONLY_KEYS - set(item.keys())
-        if missing_we:
-            errors.append(prefix + f"Written Expression item missing field(s): {sorted(missing_we)}")
-        if "detected_error_count" in item and not isinstance(item["detected_error_count"], int):
-            errors.append(prefix + "detected_error_count must be an integer")
-        if "detected_error_position" in item and item["detected_error_position"] not in ERROR_POSITIONS:
-            errors.append(prefix + f"detected_error_position must be one of {sorted(ERROR_POSITIONS)}")
-        if "non_error_parts_valid" in item and not isinstance(item["non_error_parts_valid"], bool):
-            errors.append(prefix + "non_error_parts_valid must be a boolean")
-        if "minimal_correction_valid" in item and not isinstance(item["minimal_correction_valid"], bool):
-            errors.append(prefix + "minimal_correction_valid must be a boolean")
+        structural = schema_errors(item, output_schema())
+        collected.extend(f"[{item_id}] {OUTPUT_SCHEMA_PATH.name}: {error}" for error in structural)
+        if not structural:
+            collected.extend(validate_semantics(item))
+    if errors is not None:
+        errors.extend(collected)
+    return collected
 
 
-def main():
+validate = validate_contract
+validate_item = validate_contract
+
+
+def main() -> int:
     if len(sys.argv) != 2:
         print(__doc__)
-        sys.exit(2)
-
-    path = Path(sys.argv[1])
-    items = load_items(path)
-
-    errors = []
-    section_counts = {"Structure": 0, "Written Expression": 0}
-    verdict_counts = {"PASS": 0, "REVISE": 0, "REJECT": 0}
-
-    for item in items:
-        section = item.get("section")
-        if section in section_counts:
-            section_counts[section] += 1
-        verdict = item.get("verdict")
-        if verdict in verdict_counts:
-            verdict_counts[verdict] += 1
-        validate_item(item, errors)
-
-    print(f"Checked {len(items)} item(s): sections={section_counts} verdicts={verdict_counts}")
+        return 2
+    try:
+        items = load_items(Path(sys.argv[1]))
+        errors: list[str] = []
+        sections = {"Structure": 0, "Written Expression": 0}
+        verdicts = {"PASS": 0, "REVISE": 0, "REJECT": 0}
+        for item in items:
+            if isinstance(item, dict):
+                if item.get("section") in sections:
+                    sections[item["section"]] += 1
+                if item.get("verdict") in verdicts:
+                    verdicts[item["verdict"]] += 1
+            validate_contract(item, errors)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, SchemaValidationRuntimeError) as exc:
+        print(f"SYSTEM ERROR: {exc}", file=sys.stderr)
+        return 2
+    except ValueError as exc:
+        print(f"[?] $: {exc}")
+        return 1
+    print(f"Checked {len(items)} item(s): sections={sections} verdicts={verdicts}")
     if errors:
         print(f"\n{len(errors)} validation error(s):")
-        for e in errors:
-            print(f"  - {e}")
-        sys.exit(1)
-
-    print("All items passed reviewer-output schema validation.")
-    sys.exit(0)
+        for error in errors:
+            print(f"  - {error}")
+        return 1
+    print("All items passed Draft 2020-12 schema and semantic validation.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

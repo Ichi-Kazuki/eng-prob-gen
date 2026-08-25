@@ -35,9 +35,23 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from shared.json_io import (  # noqa: E402
+    JsonPersistenceError,
+    atomic_write_json,
+    exclusive_file_lock,
+    read_json,
+)
+from shared.schema_validation import (  # noqa: E402
+    SchemaValidationRuntimeError,
+    load_schema,
+    schema_errors,
+)
+
 __all__ = [
     "State",
     "TERMINAL_STATES",
+    "ALLOWED_TRANSITIONS",
     "Candidate",
     "ConsensusResult",
     "FailureInfo",
@@ -63,6 +77,7 @@ __all__ = [
     "build_manual_review_entry",
     "append_manual_review_queue",
     "parse_agent_json",
+    "validate_final_record",
 ]
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -87,6 +102,27 @@ class State:
 
 
 TERMINAL_STATES = {State.REJECTED, State.ACCEPTED, State.MANUAL_REVIEW, State.DISCARDED}
+
+ALLOWED_TRANSITIONS = {
+    State.GENERATED: {State.REVIEWING, State.VALIDATION_FAILED, State.GENERATION_FAILED},
+    State.GENERATION_FAILED: {State.GENERATED, State.MANUAL_REVIEW},
+    State.VALIDATION_FAILED: {
+        State.GENERATED, State.REVIEWING, State.SOLVING, State.DISCARDED, State.MANUAL_REVIEW,
+    },
+    State.REVIEWING: {
+        State.SOLVING, State.REVISE_REQUIRED, State.REJECTED, State.DISCARDED,
+        State.VALIDATION_FAILED, State.GENERATION_FAILED,
+    },
+    State.REVISE_REQUIRED: {State.GENERATED, State.DISCARDED},
+    State.SOLVING: {
+        State.ACCEPTED, State.MANUAL_REVIEW, State.DISCARDED,
+        State.VALIDATION_FAILED, State.GENERATION_FAILED,
+    },
+    State.REJECTED: set(),
+    State.ACCEPTED: set(),
+    State.MANUAL_REVIEW: set(),
+    State.DISCARDED: set(),
+}
 
 STRUCTURE_ALLOWLIST = ["item_id", "section", "stem", "options"]
 WE_ALLOWLIST = ["item_id", "section", "sentence", "marked_parts"]
@@ -196,7 +232,9 @@ def parse_agent_json(raw_text: str, stage: str) -> dict:
         raise SystemCallError(f"{stage}: output was not valid JSON: {e}") from e
 
 
-def run_schema_validator(script_relpath: str, items: list[dict]) -> tuple[bool, str]:
+def run_schema_validator(
+    script_relpath: str, items: list[dict], timeout_seconds: float = 60
+) -> tuple[bool, str]:
     """Shell out to an agent's own validate_output.py (never reimplement
     schema checks in the Orchestrator itself). Returns (ok, combined_output).
     Raises SystemCallError if the validator script itself cannot be run
@@ -217,18 +255,30 @@ def run_schema_validator(script_relpath: str, items: list[dict]) -> tuple[bool, 
             [sys.executable, str(script_path), tmp_path],
             capture_output=True,
             text=True,
-            timeout=60,
+            timeout=timeout_seconds,
         )
+    except subprocess.TimeoutExpired as e:
+        raise SystemCallError(
+            f"validator {script_relpath} timed out after {timeout_seconds}s; "
+            f"stdout={e.stdout or ''}; stderr={e.stderr or ''}"
+        ) from e
     except OSError as e:
         raise SystemCallError(f"failed to invoke validator {script_relpath}: {e}") from e
     finally:
         Path(tmp_path).unlink(missing_ok=True)
 
-    ok = proc.returncode == 0
-    return ok, (proc.stdout + proc.stderr)
+    output = proc.stdout + proc.stderr
+    if proc.returncode == 0:
+        return True, output
+    if proc.returncode == 1:
+        return False, output
+    raise SystemCallError(
+        f"validator {script_relpath} exited unexpectedly with code "
+        f"{proc.returncode}: {output}"
+    )
 
 
-def blind_for_solver(config: dict, item: dict) -> dict:
+def blind_for_solver(config: dict, item: dict, timeout_seconds: float = 60) -> dict:
     """Blind a single candidate item using the EXISTING
     create_solver_input.py script (spec section 7: 'Orchestratorが独自に
     metadata削除処理を再実装しない'). Returns the blinded dict."""
@@ -250,19 +300,29 @@ def blind_for_solver(config: dict, item: dict) -> dict:
             [sys.executable, str(script_path), in_path, out_path],
             capture_output=True,
             text=True,
-            timeout=60,
+            timeout=timeout_seconds,
         )
         if proc.returncode != 0:
             raise SystemCallError(f"blinding script failed: {proc.stdout}{proc.stderr}")
-        blinded = json.loads(Path(out_path).read_text(encoding="utf-8"))
+        try:
+            blinded = json.loads(Path(out_path).read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as e:
+            raise SystemCallError(f"blinding script produced invalid JSON: {e}") from e
+    except subprocess.TimeoutExpired as e:
+        raise SystemCallError(
+            f"blinding script {script_path} timed out after {timeout_seconds}s; "
+            f"stdout={e.stdout or ''}; stderr={e.stderr or ''}"
+        ) from e
     except OSError as e:
         raise SystemCallError(f"failed to invoke blinding script: {e}") from e
     finally:
         Path(in_path).unlink(missing_ok=True)
         Path(out_path).unlink(missing_ok=True)
 
-    items = blinded.get("items", [])
-    if len(items) != 1:
+    if not isinstance(blinded, dict) or not isinstance(blinded.get("items"), list):
+        raise SystemCallError("blinding script returned malformed JSON: expected an items array")
+    items = blinded["items"]
+    if len(items) != 1 or not isinstance(items[0], dict):
         raise SystemCallError("blinding script returned unexpected item count")
     return items[0]
 
@@ -420,6 +480,14 @@ class Candidate:
     updated_at: str = field(default_factory=now_iso)
 
     def transition(self, new_state: str, note: Optional[str] = None) -> None:
+        if new_state not in ALLOWED_TRANSITIONS:
+            raise ValueError(f"unknown candidate state: {new_state}")
+        allowed = ALLOWED_TRANSITIONS.get(self.state, set())
+        if new_state not in allowed:
+            raise ValueError(
+                f"invalid Candidate transition {self.state} -> {new_state}; "
+                f"allowed={sorted(allowed)}"
+            )
         self.state = new_state
         self.state_history.append(new_state)
         self.updated_at = now_iso()
@@ -432,7 +500,12 @@ def process_generation_output(candidate: Candidate, config: dict) -> Candidate:
     validator. Schema-shape failure -> VALIDATION_FAILED (content-shape,
     not quality). Cannot invoke the validator at all -> GENERATION_FAILED
     (system failure)."""
-    assert candidate.generator_item is not None
+    if candidate.state != State.GENERATED:
+        raise ValueError(
+            f"process_generation_output requires state GENERATED, got {candidate.state}"
+        )
+    if candidate.generator_item is None:
+        raise ValueError("process_generation_output requires generator_item")
     try:
         ok, output = run_schema_validator(
             config["paths"]["generator_validate_script"], [candidate.generator_item]
@@ -456,7 +529,12 @@ def process_review_output(candidate: Candidate, config: dict) -> Candidate:
     max_revision_cycles, then DISCARDED. REJECT ends this candidate
     immediately - it is never patched, only replaced by a fresh item_id
     (spec section 5/9)."""
-    assert candidate.reviewer_item is not None
+    if candidate.state != State.REVIEWING:
+        raise ValueError(
+            f"process_review_output requires state REVIEWING, got {candidate.state}"
+        )
+    if candidate.reviewer_item is None:
+        raise ValueError("process_review_output requires reviewer_item")
     max_cycles = config["retry_policy"]["max_revision_cycles"]
 
     try:
@@ -692,21 +770,64 @@ def build_manual_review_entry(candidate: Candidate) -> dict:
     }
 
 
+FINAL_SCHEMA_PATHS = {
+    "accepted_item": REPO_ROOT / "orchestrator" / "schemas" / "accepted_item.schema.json",
+    "qa_audit": REPO_ROOT / "orchestrator" / "schemas" / "qa_audit.schema.json",
+    "provenance": REPO_ROOT / "orchestrator" / "schemas" / "provenance.schema.json",
+}
+
+
+def validate_final_record(record: dict) -> list[str]:
+    """Validate the complete final artifact at the finalization boundary."""
+    errors: list[str] = []
+    try:
+        provenance_schema = load_schema(FINAL_SCHEMA_PATHS["provenance"])
+        qa_schema = load_schema(FINAL_SCHEMA_PATHS["qa_audit"])
+        accepted_schema = load_schema(FINAL_SCHEMA_PATHS["accepted_item"])
+        errors.extend(f"provenance.schema.json: {error}" for error in schema_errors(record, provenance_schema))
+        if isinstance(record.get("qa_audit"), dict):
+            errors.extend(f"qa_audit.schema.json: {error}" for error in schema_errors(record["qa_audit"], qa_schema))
+        if record.get("accepted_item") is not None:
+            errors.extend(
+                f"accepted_item.schema.json: {error}"
+                for error in schema_errors(record["accepted_item"], accepted_schema)
+            )
+    except SchemaValidationRuntimeError:
+        raise
+    return errors
+
+
 def append_manual_review_queue(config: dict, entries: list[dict]) -> Path:
-    path = REPO_ROOT / config["paths"]["manual_review_queue"]
-    existing: list[dict] = []
-    if path.exists():
-        try:
-            existing = json.loads(path.read_text(encoding="utf-8")).get("items", [])
-        except json.JSONDecodeError:
+    configured = Path(config["paths"]["manual_review_queue"])
+    path = configured if configured.is_absolute() else REPO_ROOT / configured
+    with exclusive_file_lock(path):
+        if path.exists():
+            document = read_json(path)
+            if not isinstance(document, dict) or not isinstance(document.get("items"), list):
+                raise JsonPersistenceError(
+                    f"manual review queue {path} must be an object containing an items array"
+                )
+            existing = document["items"]
+        else:
             existing = []
-    existing_ids = {e["item_id"] for e in existing}
-    for entry in entries:
-        if entry["item_id"] not in existing_ids:
-            existing.append(entry)
-    path.write_text(
-        json.dumps({"items": existing}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+        existing_ids: set[str] = set()
+        for entry in existing:
+            if not isinstance(entry, dict) or not isinstance(entry.get("item_id"), str):
+                raise JsonPersistenceError(
+                    f"manual review queue {path} contains an entry without a valid item_id"
+                )
+            if entry["item_id"] in existing_ids:
+                raise JsonPersistenceError(
+                    f"manual review queue {path} contains duplicate item_id {entry['item_id']!r}"
+                )
+            existing_ids.add(entry["item_id"])
+        for entry in entries:
+            if not isinstance(entry, dict) or not isinstance(entry.get("item_id"), str):
+                raise JsonPersistenceError("new manual review entry has no valid item_id")
+            if entry["item_id"] not in existing_ids:
+                existing.append(entry)
+                existing_ids.add(entry["item_id"])
+        atomic_write_json(path, {"items": existing})
     return path
 
 

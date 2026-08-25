@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "qa_audit.schema.json",
   "title": "TOEFL ITP Orchestrator - qa_audit (internal-only, never shipped to the site)",
-  "description": "Full pipeline history for one candidate: Reviewer verdict, Solver answer, revision history, issues, timestamps, and agent/spec version stamps. Kept separate from accepted_item.schema.json by construction - orchestrator.build_qa_audit() never receives or copies fields into the public accepted_item, and vice versa. Descriptive documentation of orchestrator.build_qa_audit()'s output shape; not enforced by a JSON Schema library at runtime (see accepted_item.schema.json note).",
+  "description": "Runtime Draft 2020-12 contract for full pipeline history. It is validated separately from the public accepted_item contract.",
   "type": "object",
   "additionalProperties": false,
   "required": [

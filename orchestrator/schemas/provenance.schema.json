@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "provenance.schema.json",
   "title": "TOEFL ITP Orchestrator - per-item provenance record",
-  "description": "The record orchestrator.build_provenance_record() emits for one candidate, combining a short human-readable summary (spec section 11 example) with the full accepted_item / qa_audit split (spec section 12). This is the shape written into analysis/orchestrator_smoke_test.json, analysis/orchestrator_adversarial_test.json, and analysis/orchestrator_reject_path_test.json. Descriptive documentation; not enforced by a JSON Schema library at runtime (see accepted_item.schema.json note).",
+  "description": "Runtime Draft 2020-12 contract for the record emitted by orchestrator.build_provenance_record(). The accepted_item and qa_audit members are validated against their own canonical contracts at finalization.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -62,6 +62,11 @@
     "qa_audit": {
       "description": "See qa_audit.schema.json. Always present.",
       "type": "object"
+    },
+    "validation_trace": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Validation-batch-only replay trace."
     }
   }
 }

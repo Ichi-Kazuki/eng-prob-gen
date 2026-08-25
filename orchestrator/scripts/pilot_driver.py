@@ -67,10 +67,14 @@ from orchestrator import (  # noqa: E402
     ConsensusResult,
     FailureInfo,
     State,
+    SystemCallError,
+    TERMINAL_STATES,
+    validate_final_record,
     blind_for_solver,
     build_generator_feedback,
     build_manual_review_entry,
     build_provenance_record,
+    leakage_guard,
     load_config,
     load_items_by_id,
     load_versions,
@@ -79,6 +83,7 @@ from orchestrator import (  # noqa: E402
     process_solver_stage,
     strip_internal_test_keys,
 )
+from shared.json_io import atomic_write_json  # noqa: E402
 
 PILOT_DIR = REPO_ROOT / "analysis" / "pilot"
 STATE_PATH = PILOT_DIR / "candidates_state.json"
@@ -171,8 +176,13 @@ def state_tally(candidates: dict[str, Candidate]) -> dict[str, int]:
 def cmd_init(structure_path: str, we_path: str) -> None:
     config = load_config()
     gen_items: dict[str, dict] = {}
-    gen_items.update(load_items_by_id(Path(structure_path), "structure generator round1"))
-    gen_items.update(load_items_by_id(Path(we_path), "we generator round1"))
+    structure_items = load_items_by_id(Path(structure_path), "structure generator round1")
+    written_expression_items = load_items_by_id(Path(we_path), "we generator round1")
+    duplicates = sorted(set(structure_items) & set(written_expression_items))
+    if duplicates:
+        raise ValueError(f"duplicate initial item_id across pilot batches: {duplicates}")
+    gen_items.update(structure_items)
+    gen_items.update(written_expression_items)
 
     candidates: dict[str, Candidate] = {}
     for item_id, gitem in gen_items.items():
@@ -218,15 +228,13 @@ def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
         c = candidates[item_id]
         feedback_items.append(build_generator_feedback(c.reviewer_item))
     feedback_path = PILOT_DIR / f"round_feedback_{round_label}.json"
-    if feedback_items:
-        feedback_path.write_text(json.dumps({"items": feedback_items}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    atomic_write_json(feedback_path, {"items": feedback_items})
 
     print(f"Reviewer round '{round_label}' applied to {sum(len(v) for v in routed.values())} candidates.")
     for state, ids in routed.items():
         if ids:
             print(f"  {state} ({len(ids)}): {sorted(ids)}")
-    if feedback_items:
-        print(f"Wrote {len(feedback_items)} REVISE feedback record(s) (issues+revision_requirements only) to {feedback_path}")
+    print(f"Wrote {len(feedback_items)} REVISE feedback record(s) (issues+revision_requirements only) to {feedback_path}")
     print(f"Current tally: {state_tally(candidates)}")
 
 
@@ -244,6 +252,7 @@ def cmd_apply_revision(generator_path: str) -> None:
             continue
         c.generator_item = strip_internal_test_keys(gitem)
         c.generation_attempt += 1
+        c.transition(State.GENERATED, "Reviewer-requested revision regenerated")
         c = process_generation_output(c, config)
         updated.append(item_id)
 
@@ -266,12 +275,24 @@ def cmd_prepare_solver_batch() -> None:
     for item_id, c in solving.items():
         try:
             blinded = blind_for_solver(config, c.generator_item)
-            batch.append(blinded)
-        except Exception as e:  # noqa: BLE001
+        except SystemCallError as e:
+            c.solver_input = None
             errors.append(f"{item_id}: {e}")
+            continue
+        ok, problems = leakage_guard(blinded, c.section)
+        c.leakage_check = {
+            "ok": ok, "problems": problems, "blinded_keys": sorted(blinded.keys())
+        }
+        if not ok:
+            c.solver_input = None
+            c.transition(State.MANUAL_REVIEW, f"leakage guard failed before Solver: {problems}")
+            errors.append(f"{item_id}: leakage guard failed: {problems}")
+            continue
+        c.solver_input = blinded
+        batch.append(blinded)
 
     out_path = PILOT_DIR / "solver_input_batch.json"
-    out_path.write_text(json.dumps({"items": batch}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    atomic_write_json(out_path, {"items": batch})
     print(f"Blinded {len(batch)} candidate(s) currently in SOLVING -> {out_path}")
     if errors:
         print("Blinding errors:")
@@ -288,7 +309,7 @@ def cmd_apply_solver(solver_path: str) -> None:
     routed: dict[str, list[str]] = {}
     missing = []
     for item_id, c in candidates.items():
-        if c.state != State.SOLVING:
+        if c.state != State.SOLVING or c.solver_input is None:
             continue
         s_item = solver_items.get(item_id)
         if s_item is None:
@@ -311,6 +332,15 @@ def cmd_finalize() -> None:
     versions = load_versions(config)
     candidates = load_state()
 
+    nonterminal = sorted(
+        (candidate.item_id, candidate.state)
+        for candidate in candidates.values()
+        if candidate.state not in TERMINAL_STATES
+    )
+    if nonterminal:
+        detail = ", ".join(f"{item_id}={state}" for item_id, state in nonterminal)
+        raise ValueError(f"pilot finalize refused; nonterminal candidates remain: {detail}")
+
     tracker = BatchIntegrityTracker()
     provenance_records = []
     accepted_items = []
@@ -331,20 +361,21 @@ def cmd_finalize() -> None:
         elif c.state in (State.REJECTED, State.DISCARDED, State.VALIDATION_FAILED, State.GENERATION_FAILED):
             failure_items.append(rec)
 
-    (PILOT_DIR / "pilot_provenance.json").write_text(
-        json.dumps({"pipeline_version": config["pipeline_version"], "items": provenance_records,
-                     "batch_summary": tracker.summary()}, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
-    (PILOT_DIR / "pilot_accepted_items.json").write_text(
-        json.dumps({"items": accepted_items}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8",
-    )
-    (PILOT_DIR / "pilot_manual_review.json").write_text(
-        json.dumps({"items": manual_review_entries}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8",
-    )
-    (PILOT_DIR / "pilot_failure_items.json").write_text(
-        json.dumps({"items": failure_items}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8",
-    )
+    for record in provenance_records:
+        final_errors = validate_final_record(record)
+        if final_errors:
+            raise ValueError(
+                f"final artifact schema validation failed for {record['item_id']}: "
+                + "; ".join(final_errors)
+            )
+    atomic_write_json(PILOT_DIR / "pilot_provenance.json", {
+        "pipeline_version": config["pipeline_version"],
+        "items": provenance_records,
+        "batch_summary": tracker.summary(),
+    })
+    atomic_write_json(PILOT_DIR / "pilot_accepted_items.json", {"items": accepted_items})
+    atomic_write_json(PILOT_DIR / "pilot_manual_review.json", {"items": manual_review_entries})
+    atomic_write_json(PILOT_DIR / "pilot_failure_items.json", {"items": failure_items})
 
     if manual_review_entries:
         from orchestrator import append_manual_review_queue

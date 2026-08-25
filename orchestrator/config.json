@@ -3,7 +3,9 @@
   "retry_policy": {
     "max_revision_cycles": 2,
     "max_generation_validation_retries": 2,
-    "max_system_failure_retries": 3
+    "max_system_failure_retries": 3,
+    "stage_failure_policy": "live_agent_integration_only",
+    "replay_driver_behavior": "stage failures are surfaced; rerun with corrected external output"
   },
   "auto_accept": {
     "allowed_solver_confidence": ["HIGH", "MEDIUM"],

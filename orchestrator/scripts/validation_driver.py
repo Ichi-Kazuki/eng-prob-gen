@@ -21,6 +21,8 @@ from orchestrator import (  # noqa: E402
     FailureInfo,
     REPO_ROOT,
     State,
+    SystemCallError,
+    TERMINAL_STATES,
     blind_for_solver,
     build_generator_feedback,
     build_manual_review_entry,
@@ -28,11 +30,14 @@ from orchestrator import (  # noqa: E402
     load_config,
     load_items_by_id,
     load_versions,
+    leakage_guard,
     process_generation_output,
     process_review_output,
     process_solver_stage,
     strip_internal_test_keys,
+    validate_final_record,
 )
+from shared.json_io import atomic_write_json  # noqa: E402
 
 VALIDATION_DIR = REPO_ROOT / "analysis" / "validation"
 STATE_PATH = VALIDATION_DIR / "validation_candidates_state.json"
@@ -171,10 +176,10 @@ def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
         routed.setdefault(c.state, []).append(item_id)
     save_state(candidates)
     feedback = [build_generator_feedback(c.reviewer_item) for c in candidates.values() if c.state == State.REVISE_REQUIRED]
-    if feedback:
-        (VALIDATION_DIR / f"validation_round_feedback_{round_label}.json").write_text(
-            json.dumps({"items": feedback}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-        )
+    atomic_write_json(
+        VALIDATION_DIR / f"validation_round_feedback_{round_label}.json",
+        {"items": feedback},
+    )
     print(f"Applied Reviewer {round_label}: { {k: len(v) for k, v in routed.items()} }")
     print(f"State tally: {state_tally(candidates)}")
 
@@ -192,6 +197,7 @@ def cmd_apply_revision(generator_path: str) -> None:
         c.generator_item = item
         c.generation_attempt += 1
         c.generation_history.append({"attempt": c.generation_attempt, "item": item})
+        c.transition(State.GENERATED, "Reviewer-requested revision regenerated")
         c = process_generation_output(c, config)
         candidates[item_id] = c
         updated.append(item_id)
@@ -207,13 +213,25 @@ def cmd_prepare_solver_batch() -> None:
     for c in candidates.values():
         if c.state != State.SOLVING:
             continue
-        blinded = blind_for_solver(config, c.generator_item)
+        try:
+            blinded = blind_for_solver(config, c.generator_item)
+        except SystemCallError as exc:
+            c.solver_input = None
+            c.failure = FailureInfo(kind="system", stage="solver", detail=f"blinding: {exc}")
+            c.transition(State.GENERATION_FAILED, f"system failure during blinding: {exc}")
+            continue
+        ok, problems = leakage_guard(blinded, c.section)
+        c.leakage_check = {
+            "ok": ok, "problems": problems, "blinded_keys": sorted(blinded.keys())
+        }
+        if not ok:
+            c.solver_input = None
+            c.transition(State.MANUAL_REVIEW, f"leakage guard failed before Solver: {problems}")
+            continue
         c.solver_input = blinded
         batch.append(blinded)
     save_state(candidates)
-    (VALIDATION_DIR / "validation_solver_input_batch.json").write_text(
-        json.dumps({"items": batch}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+    atomic_write_json(VALIDATION_DIR / "validation_solver_input_batch.json", {"items": batch})
     print(f"Prepared blinded Solver batch: {len(batch)}")
 
 
@@ -222,7 +240,7 @@ def cmd_apply_solver(solver_path: str) -> None:
     candidates = load_state()
     solver_items = load_items_by_id(Path(solver_path), "solver output")
     for item_id, c in candidates.items():
-        if c.state == State.SOLVING and item_id in solver_items:
+        if c.state == State.SOLVING and c.solver_input is not None and item_id in solver_items:
             c.solver_item = strip_internal_test_keys(solver_items[item_id])
             c = process_solver_stage(c, config, c.solver_item)
             candidates[item_id] = c
@@ -235,6 +253,14 @@ def cmd_finalize() -> None:
     config = load_config()
     versions = load_versions(config)
     candidates = load_state()
+    nonterminal = sorted(
+        (candidate.item_id, candidate.state)
+        for candidate in candidates.values()
+        if candidate.state not in TERMINAL_STATES
+    )
+    if nonterminal:
+        detail = ", ".join(f"{item_id}={state}" for item_id, state in nonterminal)
+        raise ValueError(f"validation finalize refused; nonterminal candidates remain: {detail}")
     tracker = BatchIntegrityTracker()
     provenance = []
     accepted = []
@@ -266,10 +292,17 @@ def cmd_finalize() -> None:
         "items": provenance,
         "batch_summary": tracker.summary(),
     }
-    (VALIDATION_DIR / "validation_provenance.json").write_text(json.dumps(wrapper, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    (VALIDATION_DIR / "validation_accepted_items.json").write_text(json.dumps({"items": accepted}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    (VALIDATION_DIR / "validation_manual_review.json").write_text(json.dumps({"items": manual}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    (VALIDATION_DIR / "validation_failure_items.json").write_text(json.dumps({"items": failures}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    for record in provenance:
+        final_errors = validate_final_record(record)
+        if final_errors:
+            raise ValueError(
+                f"final artifact schema validation failed for {record['item_id']}: "
+                + "; ".join(final_errors)
+            )
+    atomic_write_json(VALIDATION_DIR / "validation_provenance.json", wrapper)
+    atomic_write_json(VALIDATION_DIR / "validation_accepted_items.json", {"items": accepted})
+    atomic_write_json(VALIDATION_DIR / "validation_manual_review.json", {"items": manual})
+    atomic_write_json(VALIDATION_DIR / "validation_failure_items.json", {"items": failures})
     print(f"Finalized {len(candidates)} initial candidates")
     print(f"State tally: {state_tally(candidates)}")
 
