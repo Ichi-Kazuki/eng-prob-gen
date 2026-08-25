@@ -80,6 +80,8 @@ from orchestrator import (  # noqa: E402
     process_generation_output,
     process_review_output,
     process_solver_stage,
+    record_stage_failure,
+    retry_failed_stage,
     save_candidate_state,
     strip_internal_test_keys,
 )
@@ -151,6 +153,13 @@ def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
 
     routed: dict[str, list[str]] = {"SOLVING": [], "REVISE_REQUIRED": [], "REJECTED": [], "DISCARDED": [], "VALIDATION_FAILED": [], "GENERATION_FAILED": [], "skipped_not_reviewing": []}
     for item_id, c in candidates.items():
+        if (
+            c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
+            and c.failure is not None
+            and c.failure.stage == "reviewer"
+            and item_id in reviewer_items
+        ):
+            c = retry_failed_stage(c, config)
         if c.state != State.REVIEWING:
             continue
         if item_id not in reviewer_items:
@@ -186,12 +195,31 @@ def cmd_apply_revision(generator_path: str) -> None:
     skipped = []
     for item_id, gitem in revised_items.items():
         c = candidates.get(item_id)
-        if c is None or c.state != State.REVISE_REQUIRED:
+        is_revision = c is not None and c.state == State.REVISE_REQUIRED
+        is_generator_retry = (
+            c is not None
+            and c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
+            and c.failure is not None
+            and c.failure.stage == "generator"
+        )
+        if c is None or not (is_revision or is_generator_retry):
             skipped.append(item_id)
             continue
+        if is_generator_retry:
+            c = retry_failed_stage(c, config)
+        else:
+            # A revision is a quality-driven new Generator attempt. It is
+            # intentionally distinct from transient failure retry counters.
+            c.reviewer_item = None
+            c.solver_item = None
+            c.solver_input = None
+            c.leakage_check = None
+            c.consensus = None
+            c.failure = None
+            c.transition(State.GENERATED, "Reviewer-requested revision regenerated")
         c.generator_item = strip_internal_test_keys(gitem)
-        c.generation_attempt += 1
-        c.transition(State.GENERATED, "Reviewer-requested revision regenerated")
+        if is_revision:
+            c.generation_attempt += 1
         c = process_generation_output(c, config)
         updated.append(item_id)
 
@@ -207,7 +235,16 @@ def cmd_apply_revision(generator_path: str) -> None:
 def cmd_prepare_solver_batch() -> None:
     config = load_config()
     candidates = load_state()
-    solving = {i: c for i, c in candidates.items() if c.state == State.SOLVING}
+    solving = {}
+    for item_id, c in candidates.items():
+        if (
+            c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
+            and c.failure is not None
+            and c.failure.stage == "solver"
+        ):
+            c = retry_failed_stage(c, config)
+        if c.state == State.SOLVING:
+            solving[item_id] = c
 
     batch = []
     errors = []
@@ -216,6 +253,13 @@ def cmd_prepare_solver_batch() -> None:
             blinded = blind_for_solver(config, c.generator_item)
         except SystemCallError as e:
             c.solver_input = None
+            record_stage_failure(
+                c,
+                config,
+                kind="system",
+                stage="solver",
+                detail=f"during blinding: {e}",
+            )
             errors.append(f"{item_id}: {e}")
             continue
         ok, problems = leakage_guard(blinded, c.section)
@@ -252,6 +296,14 @@ def cmd_apply_solver(solver_path: str) -> None:
     routed: dict[str, list[str]] = {}
     missing = []
     for item_id, c in candidates.items():
+        if (
+            c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
+            and c.failure is not None
+            and c.failure.stage == "solver"
+            and c.solver_input is not None
+            and item_id in solver_items
+        ):
+            c = retry_failed_stage(c, config)
         if c.state != State.SOLVING or c.solver_input is None:
             continue
         s_item = solver_items.get(item_id)

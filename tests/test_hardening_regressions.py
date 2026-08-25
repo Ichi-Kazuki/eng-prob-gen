@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import importlib.util
 import json
 import subprocess
 import sys
@@ -279,6 +280,246 @@ class StateAndDriverRegressions(unittest.TestCase):
         tracker.record_planned(candidate.generator_item, candidate.planned_slot)
         summary = tracker.summary()
         self.assertEqual(summary["planned"]["correct_answer_position"], {"C": 1})
+
+    def test_reviewer_system_failure_retries_and_reaches_solving(self) -> None:
+        generator = fixture("analysis/generator_smoke_test.json", 0)
+        reviewer = fixture("analysis/reviewer_smoke_test.json", 0)
+        candidate = core.Candidate(generator["item_id"], generator["item_id"], generator["section"])
+        candidate.state = core.State.REVIEWING
+        candidate.state_history = [core.State.GENERATED, core.State.REVIEWING]
+        candidate.generator_item = generator
+        candidate.reviewer_item = reviewer
+
+        with mock.patch.object(
+            core,
+            "run_schema_validator",
+            side_effect=[core.SystemCallError("temporary reviewer outage"), (True, "")],
+        ):
+            candidate = core.process_review_output(candidate, core.load_config())
+            self.assertEqual(candidate.state, core.State.GENERATION_FAILED)
+            self.assertEqual(candidate.system_failure_retries["reviewer"], 1)
+            candidate = core.retry_failed_stage(candidate, core.load_config())
+            self.assertIsNone(candidate.failure)
+            candidate = core.process_review_output(candidate, core.load_config())
+
+        self.assertEqual(candidate.state, core.State.SOLVING)
+        self.assertIsNone(candidate.failure)
+        self.assertEqual(candidate.revision_count, 0)
+
+    def test_solver_system_failure_retries_same_solver_stage(self) -> None:
+        generator = fixture("analysis/generator_smoke_test.json", 0)
+        reviewer = fixture("analysis/reviewer_smoke_test.json", 0)
+        solver = fixture("analysis/solver_smoke_test.json", 0)
+        solver_input = {
+            "item_id": generator["item_id"],
+            "section": generator["section"],
+            "stem": generator["stem"],
+            "options": generator["options"],
+        }
+        candidate = core.Candidate(generator["item_id"], generator["item_id"], generator["section"])
+        candidate.state = core.State.SOLVING
+        candidate.state_history = [core.State.GENERATED, core.State.REVIEWING, core.State.SOLVING]
+        candidate.generator_item = generator
+        candidate.reviewer_item = reviewer
+
+        with mock.patch.object(
+            core,
+            "run_schema_validator",
+            side_effect=[core.SystemCallError("temporary solver outage"), (True, "")],
+        ):
+            candidate = core.process_solver_stage(
+                candidate, core.load_config(), solver, precomputed_solver_input=solver_input
+            )
+            self.assertEqual(candidate.state, core.State.GENERATION_FAILED)
+            self.assertEqual(candidate.system_failure_retries["solver"], 1)
+            candidate = core.retry_failed_stage(candidate, core.load_config())
+            candidate = core.process_solver_stage(
+                candidate,
+                core.load_config(),
+                solver,
+                precomputed_solver_input=candidate.solver_input,
+            )
+
+        self.assertEqual(candidate.state, core.State.ACCEPTED)
+        self.assertIsNone(candidate.failure)
+
+    def test_retry_limit_routes_to_manual_review(self) -> None:
+        generator = fixture("analysis/generator_smoke_test.json", 0)
+        reviewer = fixture("analysis/reviewer_smoke_test.json", 0)
+        candidate = core.Candidate(generator["item_id"], generator["item_id"], generator["section"])
+        candidate.state = core.State.REVIEWING
+        candidate.state_history = [core.State.GENERATED, core.State.REVIEWING]
+        candidate.generator_item = generator
+        candidate.reviewer_item = reviewer
+        config = copy.deepcopy(core.load_config())
+        config["retry_policy"]["max_system_failure_retries"] = 1
+
+        with mock.patch.object(
+            core,
+            "run_schema_validator",
+            side_effect=core.SystemCallError("persistent reviewer outage"),
+        ):
+            candidate = core.process_review_output(candidate, config)
+            candidate = core.retry_failed_stage(candidate, config)
+            candidate = core.process_review_output(candidate, config)
+
+        self.assertEqual(candidate.state, core.State.MANUAL_REVIEW)
+        self.assertEqual(candidate.system_failure_retries["reviewer"], 2)
+        self.assertIsNotNone(candidate.failure)
+
+    def test_validation_failure_retries_without_changing_revision_count(self) -> None:
+        generator = fixture("analysis/generator_smoke_test.json", 0)
+        reviewer = fixture("analysis/reviewer_smoke_test.json", 0)
+        candidate = core.Candidate(generator["item_id"], generator["item_id"], generator["section"])
+        candidate.state = core.State.REVIEWING
+        candidate.state_history = [core.State.GENERATED, core.State.REVIEWING]
+        candidate.generator_item = generator
+        candidate.reviewer_item = reviewer
+
+        with mock.patch.object(
+            core,
+            "run_schema_validator",
+            side_effect=[(False, "schema mismatch"), (True, "")],
+        ):
+            candidate = core.process_review_output(candidate, core.load_config())
+            self.assertEqual(candidate.state, core.State.VALIDATION_FAILED)
+            self.assertEqual(candidate.validation_failure_retries["reviewer"], 1)
+            candidate = core.retry_failed_stage(candidate, core.load_config())
+            candidate = core.process_review_output(candidate, core.load_config())
+
+        self.assertEqual(candidate.state, core.State.SOLVING)
+        self.assertEqual(candidate.revision_count, 0)
+        self.assertIsNone(candidate.failure)
+
+    def test_both_drivers_rearm_a_persisted_reviewer_failure(self) -> None:
+        generator = fixture("analysis/generator_smoke_test.json", 0)
+        reviewer = fixture("analysis/reviewer_smoke_test.json", 0)
+        reviewer_path = ROOT / "analysis/reviewer_smoke_test.json"
+
+        for driver, directory_name in (
+            (pilot_driver, "PILOT_DIR"),
+            (validation_driver, "VALIDATION_DIR"),
+        ):
+            with self.subTest(driver=driver.__name__), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                state_path = root / "candidates_state.json"
+                candidate = core.Candidate(
+                    generator["item_id"], generator["item_id"], generator["section"]
+                )
+                candidate.state = core.State.REVIEWING
+                candidate.state_history = [core.State.GENERATED, core.State.REVIEWING]
+                candidate.generator_item = generator
+                candidate.reviewer_item = reviewer
+
+                with mock.patch.object(
+                    core,
+                    "run_schema_validator",
+                    side_effect=core.SystemCallError("temporary reviewer outage"),
+                ):
+                    candidate = core.process_review_output(candidate, core.load_config())
+                with mock.patch.object(driver, directory_name, root), \
+                     mock.patch.object(driver, "STATE_PATH", state_path):
+                    driver.save_state({candidate.item_id: candidate})
+                    with mock.patch.object(core, "run_schema_validator", return_value=(True, "")):
+                        driver.cmd_apply_review(str(reviewer_path), "retry")
+                    self.assertEqual(driver.load_state()[candidate.item_id].state, core.State.SOLVING)
+                    self.assertIsNone(driver.load_state()[candidate.item_id].failure)
+
+
+class CandidatePersistenceInvariantRegressions(unittest.TestCase):
+    def assert_corrupt_state_rejected(self, payload: dict, message: str) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "candidates_state.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            with self.assertRaisesRegex(JsonPersistenceError, message):
+                core.load_candidate_state(path)
+
+    def base_solver_candidate(self) -> core.Candidate:
+        generator = fixture("analysis/generator_smoke_test.json", 0)
+        reviewer = fixture("analysis/reviewer_smoke_test.json", 0)
+        candidate = core.Candidate(generator["item_id"], generator["item_id"], generator["section"])
+        candidate.state = core.State.SOLVING
+        candidate.state_history = [core.State.GENERATED, core.State.REVIEWING, core.State.SOLVING]
+        candidate.generator_item = generator
+        candidate.reviewer_item = reviewer
+        return candidate
+
+    def test_solving_with_revise_verdict_is_rejected_on_load(self) -> None:
+        candidate = self.base_solver_candidate()
+        candidate.reviewer_item = copy.deepcopy(candidate.reviewer_item)
+        candidate.reviewer_item["verdict"] = "REVISE"
+        self.assert_corrupt_state_rejected(
+            {candidate.item_id: core.candidate_to_dict(candidate)},
+            "reviewer verdict PASS",
+        )
+
+    def test_state_history_tail_must_match_current_state(self) -> None:
+        candidate = self.base_solver_candidate()
+        data = core.candidate_to_dict(candidate)
+        data["state_history"] = [core.State.GENERATED, core.State.REVIEWING]
+        self.assert_corrupt_state_rejected(
+            {candidate.item_id: data},
+            "does not match current state",
+        )
+
+    def test_invalid_state_transition_is_rejected_on_load(self) -> None:
+        candidate = self.base_solver_candidate()
+        data = core.candidate_to_dict(candidate)
+        data["state_history"] = [core.State.GENERATED, core.State.ACCEPTED, core.State.SOLVING]
+        self.assert_corrupt_state_rejected(
+            {candidate.item_id: data},
+            "invalid state transition",
+        )
+
+
+class GenericGeneratorValidatorRegressions(unittest.TestCase):
+    @staticmethod
+    def validator_module():
+        path = ROOT / "agents/toefl_itp_grammar_generator/scripts/validate_output.py"
+        spec = importlib.util.spec_from_file_location("generic_generator_validator", path)
+        module = importlib.util.module_from_spec(spec)
+        assert spec is not None and spec.loader is not None
+        spec.loader.exec_module(module)
+        return module
+
+    def test_custom_primary_targets_only(self) -> None:
+        module = self.validator_module()
+        item = fixture("analysis/generator_smoke_test.json", 0)
+        self.assertEqual(
+            module.validate_contract(item, primary_targets={item["primary_target"]}),
+            [],
+        )
+
+    def test_custom_tested_error_types_only(self) -> None:
+        module = self.validator_module()
+        item = fixture("analysis/generator_smoke_test.json", 3)
+        self.assertEqual(
+            module.validate_contract(item, tested_error_types={item["tested_error_type"]}),
+            [],
+        )
+        errors = module.validate_contract(item, tested_error_types=set())
+        self.assertTrue(any("tested_error_type" in error for error in errors))
+
+    def test_custom_primary_targets_and_tested_error_types(self) -> None:
+        module = self.validator_module()
+        item = fixture("analysis/generator_smoke_test.json", 3)
+        self.assertEqual(
+            module.validate_contract(
+                item,
+                primary_targets={item["primary_target"]},
+                tested_error_types={item["tested_error_type"]},
+            ),
+            [],
+        )
+
+    def test_both_taxonomy_arguments_unspecified_use_defaults(self) -> None:
+        module = self.validator_module()
+        for index in (0, 3):
+            with self.subTest(index=index):
+                self.assertEqual(
+                    module.validate_contract(fixture("analysis/generator_smoke_test.json", index)),
+                    [],
+                )
 
 
 class PersistenceAndSubprocessRegressions(unittest.TestCase):

@@ -102,7 +102,13 @@ def validate_contract(
             structural = schema_errors(item, _schema(section))
             collected.extend(f"[{item_id}] {SECTION_SCHEMAS[section].name}: {error}" for error in structural)
             if not structural:
-                targets, error_types = primary_targets or load_taxonomy_values()
+                default_targets, default_error_types = load_taxonomy_values()
+                targets = default_targets if primary_targets is None else set(primary_targets)
+                error_types = (
+                    default_error_types
+                    if tested_error_types is None
+                    else set(tested_error_types)
+                )
                 collected.extend(validate_semantics(item, targets, error_types))
     if errors is not None:
         errors.extend(collected)

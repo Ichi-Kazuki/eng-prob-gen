@@ -50,11 +50,13 @@ from shared.schema_validation import (  # noqa: E402
 
 __all__ = [
     "State",
+    "VALID_STATES",
     "TERMINAL_STATES",
     "ALLOWED_TRANSITIONS",
     "Candidate",
     "candidate_to_dict",
     "dict_to_candidate",
+    "validate_candidate_invariants",
     "load_candidate_state",
     "save_candidate_state",
     "ConsensusResult",
@@ -75,6 +77,8 @@ __all__ = [
     "process_generation_output",
     "process_review_output",
     "process_solver_stage",
+    "record_stage_failure",
+    "retry_failed_stage",
     "build_accepted_item",
     "build_qa_audit",
     "build_provenance_record",
@@ -105,11 +109,33 @@ class State:
     DISCARDED = "DISCARDED"
 
 
+VALID_STATES = frozenset({
+    State.GENERATED,
+    State.GENERATION_FAILED,
+    State.VALIDATION_FAILED,
+    State.REVIEWING,
+    State.REVISE_REQUIRED,
+    State.REJECTED,
+    State.SOLVING,
+    State.ACCEPTED,
+    State.MANUAL_REVIEW,
+    State.DISCARDED,
+})
+
 TERMINAL_STATES = {State.REJECTED, State.ACCEPTED, State.MANUAL_REVIEW, State.DISCARDED}
+
+RETRY_STAGES = ("generator", "reviewer", "solver")
+STAGE_RETRY_STATES = {
+    "generator": State.GENERATED,
+    "reviewer": State.REVIEWING,
+    "solver": State.SOLVING,
+}
 
 ALLOWED_TRANSITIONS = {
     State.GENERATED: {State.REVIEWING, State.VALIDATION_FAILED, State.GENERATION_FAILED},
-    State.GENERATION_FAILED: {State.GENERATED, State.MANUAL_REVIEW},
+    State.GENERATION_FAILED: {
+        State.GENERATED, State.REVIEWING, State.SOLVING, State.MANUAL_REVIEW,
+    },
     State.VALIDATION_FAILED: {
         State.GENERATED, State.REVIEWING, State.SOLVING, State.DISCARDED, State.MANUAL_REVIEW,
     },
@@ -117,7 +143,10 @@ ALLOWED_TRANSITIONS = {
         State.SOLVING, State.REVISE_REQUIRED, State.REJECTED, State.DISCARDED,
         State.VALIDATION_FAILED, State.GENERATION_FAILED,
     },
-    State.REVISE_REQUIRED: {State.GENERATED, State.DISCARDED},
+    # REVIEWING is retained for compatibility with older persisted replay
+    # states that recorded the regenerated output without the intermediate
+    # GENERATED marker. New drivers use GENERATED explicitly.
+    State.REVISE_REQUIRED: {State.GENERATED, State.REVIEWING, State.DISCARDED},
     State.SOLVING: {
         State.ACCEPTED, State.MANUAL_REVIEW, State.DISCARDED,
         State.VALIDATION_FAILED, State.GENERATION_FAILED,
@@ -518,6 +547,10 @@ class Candidate:
     state_history: list[str] = field(default_factory=lambda: [State.GENERATED])
     generation_attempt: int = 1
     revision_count: int = 0
+    # Transient retries are kept separate from revision_count.  The keys are
+    # stage names so a Reviewer failure cannot consume the Solver budget.
+    system_failure_retries: dict[str, int] = field(default_factory=dict)
+    validation_failure_retries: dict[str, int] = field(default_factory=dict)
     generator_item: Optional[dict] = None
     reviewer_item: Optional[dict] = None
     solver_item: Optional[dict] = None
@@ -564,6 +597,8 @@ def candidate_to_dict(candidate: Candidate) -> dict:
         "state_history": candidate.state_history,
         "generation_attempt": candidate.generation_attempt,
         "revision_count": candidate.revision_count,
+        "system_failure_retries": candidate.system_failure_retries,
+        "validation_failure_retries": candidate.validation_failure_retries,
         "generator_item": candidate.generator_item,
         "reviewer_item": candidate.reviewer_item,
         "solver_item": candidate.solver_item,
@@ -591,6 +626,12 @@ def candidate_to_dict(candidate: Candidate) -> dict:
 
 def dict_to_candidate(data: dict) -> Candidate:
     """Restore a Candidate, accepting state files written before hardening."""
+    if not isinstance(data, dict):
+        raise ValueError("candidate state entry must be an object")
+    required = ("item_id", "concept_id", "section", "state")
+    missing = [key for key in required if key not in data]
+    if missing:
+        raise ValueError(f"candidate state entry is missing required field(s): {', '.join(missing)}")
     candidate = Candidate(
         item_id=data["item_id"],
         concept_id=data["concept_id"],
@@ -600,6 +641,8 @@ def dict_to_candidate(data: dict) -> Candidate:
     candidate.state_history = data.get("state_history", [candidate.state])
     candidate.generation_attempt = data.get("generation_attempt", 1)
     candidate.revision_count = data.get("revision_count", 0)
+    candidate.system_failure_retries = data.get("system_failure_retries", {})
+    candidate.validation_failure_retries = data.get("validation_failure_retries", {})
     candidate.generator_item = data.get("generator_item")
     candidate.reviewer_item = data.get("reviewer_item")
     candidate.solver_item = data.get("solver_item")
@@ -628,7 +671,140 @@ def dict_to_candidate(data: dict) -> Candidate:
     candidate.generation_history = data.get("generation_history", [])
     candidate.created_at = data.get("created_at", candidate.created_at)
     candidate.updated_at = data.get("updated_at", candidate.updated_at)
+    validate_candidate_invariants(candidate)
     return candidate
+
+
+def _is_nonnegative_int(value: object) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and value >= 0
+
+
+def validate_candidate_invariants(candidate: Candidate) -> None:
+    """Fail closed when a persisted Candidate is internally inconsistent.
+
+    This intentionally validates pipeline-state invariants only. Agent output
+    schema validation remains delegated to each agent's validator at the
+    stage boundary, while persisted cross-stage identity and routing rules
+    are checked here before a driver can continue from disk.
+    """
+    errors: list[str] = []
+
+    if not isinstance(candidate.item_id, str) or not candidate.item_id:
+        errors.append("item_id must be a non-empty string")
+    if not isinstance(candidate.concept_id, str) or not candidate.concept_id:
+        errors.append("concept_id must be a non-empty string")
+    if not isinstance(candidate.section, str) or not candidate.section:
+        errors.append("section must be a non-empty string")
+
+    if candidate.state not in VALID_STATES:
+        errors.append(f"state {candidate.state!r} is not a valid State value")
+
+    history = candidate.state_history
+    if not isinstance(history, list) or not history:
+        errors.append("state_history must be a non-empty list")
+    else:
+        invalid_history_states = [state for state in history if state not in VALID_STATES]
+        if invalid_history_states:
+            errors.append(f"state_history contains invalid state(s): {invalid_history_states!r}")
+        if history[-1] != candidate.state:
+            errors.append(
+                f"state_history last state {history[-1]!r} does not match current state {candidate.state!r}"
+            )
+        for previous, current in zip(history, history[1:]):
+            if previous in VALID_STATES and current not in ALLOWED_TRANSITIONS[previous]:
+                errors.append(f"invalid state transition in state_history: {previous} -> {current}")
+
+    if not _is_nonnegative_int(candidate.generation_attempt) or candidate.generation_attempt < 1:
+        errors.append("generation_attempt must be an integer >= 1")
+    if not _is_nonnegative_int(candidate.revision_count):
+        errors.append("revision_count must be an integer >= 0")
+
+    for field_name in ("system_failure_retries", "validation_failure_retries"):
+        counters = getattr(candidate, field_name)
+        if not isinstance(counters, dict):
+            errors.append(f"{field_name} must be an object keyed by stage")
+            continue
+        for stage, count in counters.items():
+            if stage not in RETRY_STAGES:
+                errors.append(f"{field_name} contains unknown stage {stage!r}")
+            if not _is_nonnegative_int(count):
+                errors.append(f"{field_name}[{stage!r}] must be an integer >= 0")
+
+    for stage, item in (
+        ("generator", candidate.generator_item),
+        ("reviewer", candidate.reviewer_item),
+        ("solver", candidate.solver_item),
+        ("solver_input", candidate.solver_input),
+    ):
+        if item is not None:
+            if not isinstance(item, dict):
+                errors.append(f"{stage} item must be an object")
+                continue
+            if item.get("item_id") != candidate.item_id:
+                errors.append(
+                    f"{stage}.item_id={item.get('item_id')!r} does not match candidate.item_id={candidate.item_id!r}"
+                )
+            if item.get("section") != candidate.section:
+                errors.append(
+                    f"{stage}.section={item.get('section')!r} does not match candidate.section={candidate.section!r}"
+                )
+
+    failure = candidate.failure
+    if failure is not None:
+        if failure.kind not in {"system", "content"}:
+            errors.append(f"failure.kind {failure.kind!r} is invalid")
+        if failure.stage not in RETRY_STAGES:
+            errors.append(f"failure.stage {failure.stage!r} is invalid")
+        if not isinstance(failure.detail, str):
+            errors.append("failure.detail must be a string")
+        if candidate.state not in {State.GENERATION_FAILED, State.VALIDATION_FAILED, State.MANUAL_REVIEW}:
+            errors.append(f"failure is not allowed in state {candidate.state}")
+        if candidate.state == State.GENERATION_FAILED and failure.kind != "system":
+            errors.append("GENERATION_FAILED requires a system failure")
+        if candidate.state == State.VALIDATION_FAILED and failure.kind != "content":
+            errors.append("VALIDATION_FAILED requires a content/validation failure")
+    elif candidate.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}:
+        errors.append(f"{candidate.state} requires failure metadata")
+
+    if candidate.state == State.SOLVING:
+        if candidate.generator_item is None:
+            errors.append("SOLVING requires generator_item")
+        if candidate.reviewer_item is None:
+            errors.append("SOLVING requires reviewer_item")
+        elif candidate.reviewer_item.get("verdict") != "PASS":
+            errors.append("SOLVING requires reviewer verdict PASS")
+
+    if candidate.solver_input is not None:
+        ok, problems = leakage_guard(candidate.solver_input, candidate.section)
+        if not ok:
+            errors.append("solver_input leakage/shape invariant failed: " + "; ".join(problems))
+
+    if candidate.state == State.ACCEPTED:
+        if candidate.generator_item is None or candidate.reviewer_item is None or candidate.solver_item is None:
+            errors.append("ACCEPTED requires generator_item, reviewer_item, and solver_item")
+        if candidate.solver_input is None:
+            errors.append("ACCEPTED requires solver_input")
+        if not isinstance(candidate.leakage_check, dict) or candidate.leakage_check.get("ok") is not True:
+            errors.append("ACCEPTED requires a successful leakage_check")
+        if candidate.consensus is None:
+            errors.append("ACCEPTED requires consensus metadata")
+        else:
+            if candidate.consensus.auto_accept is not True or candidate.consensus.routing != State.ACCEPTED:
+                errors.append("ACCEPTED requires auto_accept consensus routing")
+        if candidate.reviewer_item is not None and candidate.reviewer_item.get("verdict") != "PASS":
+            errors.append("ACCEPTED requires reviewer verdict PASS")
+
+    if candidate.consensus is not None:
+        if candidate.consensus.routing not in {State.ACCEPTED, State.MANUAL_REVIEW, State.DISCARDED}:
+            errors.append(f"consensus.routing {candidate.consensus.routing!r} is invalid")
+        if not isinstance(candidate.consensus.auto_accept, bool):
+            errors.append("consensus.auto_accept must be boolean")
+
+    if errors:
+        raise ValueError(
+            f"Candidate {candidate.item_id!r} invariant validation failed: "
+            + "; ".join(errors)
+        )
 
 
 def load_candidate_state(path: Path) -> dict[str, Candidate]:
@@ -639,7 +815,12 @@ def load_candidate_state(path: Path) -> dict[str, Candidate]:
     for item_id, data in document.items():
         if not isinstance(data, dict):
             raise JsonPersistenceError(f"candidate state {path} entry {item_id!r} must be an object")
-        candidate = dict_to_candidate(data)
+        try:
+            candidate = dict_to_candidate(data)
+        except (KeyError, TypeError, ValueError) as exc:
+            raise JsonPersistenceError(
+                f"candidate state {path} entry {item_id!r} failed invariant validation: {exc}"
+            ) from exc
         if candidate.item_id != item_id:
             raise JsonPersistenceError(
                 f"candidate state {path} key {item_id!r} does not match item_id {candidate.item_id!r}"
@@ -667,11 +848,129 @@ def _identity_errors(candidate: Candidate, item: object, stage: str) -> list[str
     return errors
 
 
-def _reject_identity(candidate: Candidate, stage: str, item: object, errors: list[str]) -> Candidate:
-    detail = "; ".join(errors)
-    candidate.failure = FailureInfo(kind="content", stage=stage, detail=detail)
-    candidate.transition(State.VALIDATION_FAILED, f"{stage} identity invariant failed: {detail}")
+def _retry_limit(config: dict, kind: str) -> int:
+    policy = config.get("retry_policy", {})
+    key = (
+        "max_system_failure_retries"
+        if kind == "system"
+        else "max_generation_validation_retries"
+    )
+    limit = policy.get(key)
+    if not isinstance(limit, int) or isinstance(limit, bool) or limit < 0:
+        raise ValueError(f"retry_policy.{key} must be an integer >= 0")
+    return limit
+
+
+def record_stage_failure(
+    candidate: Candidate,
+    config: dict,
+    *,
+    kind: str,
+    stage: str,
+    detail: str,
+) -> Candidate:
+    """Record a stage failure and route it according to the shared retry policy.
+
+    The first ``max_*`` failures leave the candidate in the stage-agnostic
+    failure state. Once that budget is consumed, the candidate is routed to
+    MANUAL_REVIEW. The counters are cumulative per stage and are deliberately
+    independent of revision_count and generation_attempt.
+    """
+    if kind not in {"system", "content"}:
+        raise ValueError(f"unknown failure kind: {kind!r}")
+    if stage not in RETRY_STAGES:
+        raise ValueError(f"unknown failure stage: {stage!r}")
+
+    counters = (
+        candidate.system_failure_retries
+        if kind == "system"
+        else candidate.validation_failure_retries
+    )
+    count = counters.get(stage, 0) + 1
+    counters[stage] = count
+    candidate.failure = FailureInfo(kind=kind, stage=stage, detail=str(detail))
+    failed_state = State.GENERATION_FAILED if kind == "system" else State.VALIDATION_FAILED
+    candidate.transition(failed_state, f"{stage} {kind} failure ({count}/{_retry_limit(config, kind)}): {detail}")
+
+    if count > _retry_limit(config, kind):
+        candidate.transition(
+            State.MANUAL_REVIEW,
+            f"{stage} {kind} retry limit exceeded; routed to MANUAL_REVIEW",
+        )
     return candidate
+
+
+def retry_failed_stage(candidate: Candidate, config: dict) -> Candidate:
+    """Re-arm a retryable failed Candidate for the exact failed stage.
+
+    Drivers call this immediately before supplying the next external agent
+    output. It is safe to call only for a failure state whose retry budget is
+    still available. Successful stage processing clears ``failure``; this
+    helper clears it before the rerun so stale failure metadata cannot survive
+    a successful retry.
+    """
+    if candidate.state not in {State.GENERATION_FAILED, State.VALIDATION_FAILED}:
+        raise ValueError(
+            f"retry_failed_stage requires a retryable failure state, got {candidate.state}"
+        )
+    if candidate.failure is None:
+        raise ValueError("retry_failed_stage requires failure metadata")
+
+    stage = candidate.failure.stage
+    kind = candidate.failure.kind
+    counters = (
+        candidate.system_failure_retries
+        if kind == "system"
+        else candidate.validation_failure_retries
+    )
+    count = counters.get(stage, 0)
+    limit = _retry_limit(config, kind)
+    if count > limit:
+        candidate.transition(
+            State.MANUAL_REVIEW,
+            f"{stage} {kind} retry limit exceeded; routed to MANUAL_REVIEW",
+        )
+        return candidate
+
+    target = STAGE_RETRY_STATES[stage]
+    candidate.transition(target, f"retrying {stage} after {kind} failure ({count}/{limit})")
+    candidate.failure = None
+
+    # A generator retry invalidates all downstream artifacts. A Reviewer
+    # retry invalidates Solver/consensus artifacts. Solver retries may reuse
+    # the already-blinded input, but never reuse a stale Solver verdict.
+    if stage == "generator":
+        candidate.reviewer_item = None
+        candidate.solver_item = None
+        candidate.solver_input = None
+        candidate.leakage_check = None
+        candidate.consensus = None
+    elif stage == "reviewer":
+        candidate.solver_item = None
+        candidate.solver_input = None
+        candidate.leakage_check = None
+        candidate.consensus = None
+    else:
+        candidate.solver_item = None
+        candidate.consensus = None
+    return candidate
+
+
+def _reject_identity(
+    candidate: Candidate,
+    config: dict,
+    stage: str,
+    item: object,
+    errors: list[str],
+) -> Candidate:
+    detail = "; ".join(errors)
+    return record_stage_failure(
+        candidate,
+        config,
+        kind="content",
+        stage=stage,
+        detail=f"{stage} identity invariant failed: {detail}",
+    )
 
 
 def process_generation_output(candidate: Candidate, config: dict) -> Candidate:
@@ -687,21 +986,26 @@ def process_generation_output(candidate: Candidate, config: dict) -> Candidate:
         raise ValueError("process_generation_output requires generator_item")
     identity_errors = _identity_errors(candidate, candidate.generator_item, "generator")
     if identity_errors:
-        return _reject_identity(candidate, "generator", candidate.generator_item, identity_errors)
+        return _reject_identity(candidate, config, "generator", candidate.generator_item, identity_errors)
     try:
         ok, output = run_schema_validator(
             config["paths"]["generator_validate_script"], [candidate.generator_item]
         )
     except SystemCallError as e:
-        candidate.failure = FailureInfo(kind="system", stage="generator", detail=str(e))
-        candidate.transition(State.GENERATION_FAILED, f"system failure: {e}")
-        return candidate
+        return record_stage_failure(
+            candidate, config, kind="system", stage="generator", detail=str(e)
+        )
 
     if not ok:
-        candidate.failure = FailureInfo(kind="content", stage="generator", detail=output.strip())
-        candidate.transition(State.VALIDATION_FAILED, "generator output failed schema validation")
-        return candidate
+        return record_stage_failure(
+            candidate,
+            config,
+            kind="content",
+            stage="generator",
+            detail=output.strip(),
+        )
 
+    candidate.failure = None
     candidate.transition(State.REVIEWING, "generator output passed schema validation")
     return candidate
 
@@ -719,7 +1023,7 @@ def process_review_output(candidate: Candidate, config: dict) -> Candidate:
         raise ValueError("process_review_output requires reviewer_item")
     identity_errors = _identity_errors(candidate, candidate.reviewer_item, "reviewer")
     if identity_errors:
-        return _reject_identity(candidate, "reviewer", candidate.reviewer_item, identity_errors)
+        return _reject_identity(candidate, config, "reviewer", candidate.reviewer_item, identity_errors)
     max_cycles = config["retry_policy"]["max_revision_cycles"]
 
     try:
@@ -727,15 +1031,20 @@ def process_review_output(candidate: Candidate, config: dict) -> Candidate:
             config["paths"]["reviewer_validate_script"], [candidate.reviewer_item]
         )
     except SystemCallError as e:
-        candidate.failure = FailureInfo(kind="system", stage="reviewer", detail=str(e))
-        candidate.transition(State.GENERATION_FAILED, f"system failure: {e}")
-        return candidate
+        return record_stage_failure(
+            candidate, config, kind="system", stage="reviewer", detail=str(e)
+        )
     if not ok:
-        candidate.failure = FailureInfo(kind="content", stage="reviewer", detail=output.strip())
-        candidate.transition(State.VALIDATION_FAILED, "reviewer output failed schema validation")
-        return candidate
+        return record_stage_failure(
+            candidate,
+            config,
+            kind="content",
+            stage="reviewer",
+            detail=output.strip(),
+        )
 
     verdict = candidate.reviewer_item["verdict"]
+    candidate.failure = None
 
     if verdict == "PASS":
         candidate.transition(State.SOLVING, "reviewer PASS -> proceeding to Solver")
@@ -784,10 +1093,16 @@ def process_solver_stage(
 
     for stage, item in (("generator", candidate.generator_item), ("reviewer", candidate.reviewer_item)):
         if item is None:
-            return _reject_identity(candidate, stage, item, [f"{stage} item is required before Solver"])
+            return _reject_identity(
+                candidate,
+                config,
+                stage,
+                item,
+                [f"{stage} item is required before Solver"],
+            )
         identity_errors = _identity_errors(candidate, item, stage)
         if identity_errors:
-            return _reject_identity(candidate, stage, item, identity_errors)
+            return _reject_identity(candidate, config, stage, item, identity_errors)
 
     if precomputed_solver_input is not None:
         blinded = precomputed_solver_input
@@ -795,14 +1110,18 @@ def process_solver_stage(
         try:
             blinded = blind_for_solver(config, candidate.generator_item)
         except SystemCallError as e:
-            candidate.failure = FailureInfo(kind="system", stage="solver", detail=str(e))
-            candidate.transition(State.GENERATION_FAILED, f"system failure during blinding: {e}")
-            return candidate
+            return record_stage_failure(
+                candidate,
+                config,
+                kind="system",
+                stage="solver",
+                detail=f"during blinding: {e}",
+            )
 
     candidate.solver_input = blinded
     input_identity_errors = _identity_errors(candidate, blinded, "solver_input")
     if input_identity_errors:
-        return _reject_identity(candidate, "solver", blinded, input_identity_errors)
+        return _reject_identity(candidate, config, "solver", blinded, input_identity_errors)
     ok, problems = leakage_guard(blinded, candidate.section)
     candidate.leakage_check = {"ok": ok, "problems": problems, "blinded_keys": sorted(blinded.keys())}
     if not ok:
@@ -814,22 +1133,27 @@ def process_solver_stage(
 
     identity_errors = _identity_errors(candidate, solver_item, "solver")
     if identity_errors:
-        return _reject_identity(candidate, "solver", solver_item, identity_errors)
+        return _reject_identity(candidate, config, "solver", solver_item, identity_errors)
 
     try:
         val_ok, output = run_schema_validator(
             config["paths"]["solver_validate_script"], [solver_item]
         )
     except SystemCallError as e:
-        candidate.failure = FailureInfo(kind="system", stage="solver", detail=str(e))
-        candidate.transition(State.GENERATION_FAILED, f"system failure: {e}")
-        return candidate
+        return record_stage_failure(
+            candidate, config, kind="system", stage="solver", detail=str(e)
+        )
     if not val_ok:
-        candidate.failure = FailureInfo(kind="content", stage="solver", detail=output.strip())
-        candidate.transition(State.VALIDATION_FAILED, "solver output failed schema validation")
-        return candidate
+        return record_stage_failure(
+            candidate,
+            config,
+            kind="content",
+            stage="solver",
+            detail=output.strip(),
+        )
 
     candidate.solver_item = solver_item
+    candidate.failure = None
     result = evaluate_consensus(candidate.generator_item, candidate.reviewer_item, solver_item, config)
     candidate.consensus = result
     candidate.transition(result.routing, f"consensus routing: {result.disagreement_reasons or 'auto_accept'}")

@@ -1,13 +1,13 @@
 # Retry policy boundary
 
-`max_revision_cycles` is enforced by the replay state machine.
+`max_revision_cycles` remains the quality-driven Reviewer `REVISE` budget and
+is kept separate from transient stage retries.
 
-`max_generation_validation_retries` and `max_system_failure_retries` remain
-configuration for a future live Generator/Reviewer/Solver integration. The
-current pilot and validation drivers replay JSON produced outside the process,
-so they do not synthesize retries for unavailable live agents. Stage failures
-are surfaced and leave the candidate non-finalizable until corrected external
-output is supplied.
+`Candidate` persists stage-specific `system_failure_retries` and
+`validation_failure_retries`. `pilot_driver.py` and `validation_driver.py`
+re-arm the failed Generator, Reviewer, or Solver stage while its configured
+budget remains. A successful retry clears the active `failure` metadata. Once
+the relevant retry limit is exceeded, the candidate is routed to
+`MANUAL_REVIEW`.
 
-This is recorded in `orchestrator/config.json` as
-`stage_failure_policy: live_agent_integration_only`.
+Transient retries do not change `revision_count` or `generation_attempt`.
