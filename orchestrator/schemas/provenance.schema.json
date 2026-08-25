@@ -67,6 +67,16 @@
       "type": "object",
       "additionalProperties": true,
       "description": "Validation-batch-only replay trace."
+    },
+    "candidate_provenance": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Pilot artifact trace retained for the original candidate and any replacement/revision context."
+    },
+    "failure_classification": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Pilot artifact failure classification details."
     }
   }
 }

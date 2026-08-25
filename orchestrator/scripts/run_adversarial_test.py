@@ -32,6 +32,7 @@ from orchestrator import (  # noqa: E402
     State,
     build_provenance_record,
     load_config,
+    load_items_by_id,
     load_versions,
     process_generation_output,
     process_review_output,
@@ -44,18 +45,13 @@ SOLVER_FIXTURE = REPO_ROOT / "analysis" / "solver_adversarial_test.json"
 OUTPUT_PATH = REPO_ROOT / "analysis" / "orchestrator_adversarial_test.json"
 
 
-def load_items(path: Path) -> dict:
-    data = json.loads(path.read_text(encoding="utf-8"))
-    return {item["item_id"]: item for item in data["items"]}
-
-
 def main() -> int:
     config = load_config()
     versions = load_versions(config)
 
-    candidate_items = load_items(CANDIDATE_FIXTURE)
-    reviewer_items = load_items(REVIEWER_RESULTS_FIXTURE)
-    solver_items = load_items(SOLVER_FIXTURE)  # deliberately never fed to process_solver_stage below
+    candidate_items = load_items_by_id(CANDIDATE_FIXTURE, CANDIDATE_FIXTURE.name)
+    reviewer_items = load_items_by_id(REVIEWER_RESULTS_FIXTURE, REVIEWER_RESULTS_FIXTURE.name)
+    solver_items = load_items_by_id(SOLVER_FIXTURE, SOLVER_FIXTURE.name)  # deliberately never fed to process_solver_stage below
 
     records = []
     solver_skip_log = []

@@ -36,6 +36,7 @@ from orchestrator import (  # noqa: E402
     State,
     build_provenance_record,
     load_config,
+    load_items_by_id,
     load_versions,
     process_generation_output,
     process_review_output,
@@ -47,17 +48,12 @@ REVIEWER_RESULTS_FIXTURE = REPO_ROOT / "analysis" / "reviewer_reject_test_result
 OUTPUT_PATH = REPO_ROOT / "analysis" / "orchestrator_reject_path_test.json"
 
 
-def load_items(path: Path) -> dict:
-    data = json.loads(path.read_text(encoding="utf-8"))
-    return {item["item_id"]: item for item in data["items"]}
-
-
 def main() -> int:
     config = load_config()
     versions = load_versions(config)
 
-    candidate_items = load_items(CANDIDATE_FIXTURE)
-    reviewer_items = load_items(REVIEWER_RESULTS_FIXTURE)
+    candidate_items = load_items_by_id(CANDIDATE_FIXTURE, CANDIDATE_FIXTURE.name)
+    reviewer_items = load_items_by_id(REVIEWER_RESULTS_FIXTURE, REVIEWER_RESULTS_FIXTURE.name)
 
     records = []
     for item_id, raw_item in candidate_items.items():

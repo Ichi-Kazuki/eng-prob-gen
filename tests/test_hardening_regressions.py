@@ -177,6 +177,36 @@ class StateAndDriverRegressions(unittest.TestCase):
             self.assertEqual(batch["items"], [])
             self.assertEqual(candidate.state, core.State.MANUAL_REVIEW)
 
+    def test_pilot_prepare_solver_persists_input_across_process_boundary(self) -> None:
+        generator = fixture("analysis/generator_smoke_test.json", 0)
+        reviewer = fixture("analysis/reviewer_smoke_test.json", 0)
+        solver_path = ROOT / "analysis/solver_smoke_test.json"
+        candidate = core.Candidate(
+            item_id=generator["item_id"],
+            concept_id=generator["item_id"],
+            section=generator["section"],
+        )
+        candidate.state = core.State.SOLVING
+        candidate.state_history = [core.State.GENERATED, core.State.REVIEWING, core.State.SOLVING]
+        candidate.generator_item = generator
+        candidate.reviewer_item = reviewer
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with mock.patch.object(pilot_driver, "PILOT_DIR", root), \
+                 mock.patch.object(pilot_driver, "STATE_PATH", root / "candidates_state.json"):
+                pilot_driver.save_state({candidate.item_id: candidate})
+                pilot_driver.cmd_prepare_solver_batch()
+                reloaded = pilot_driver.load_state()[candidate.item_id]
+                self.assertIsNotNone(reloaded.solver_input)
+                self.assertEqual(reloaded.solver_input["item_id"], candidate.item_id)
+                pilot_driver.cmd_apply_solver(str(solver_path))
+                final = pilot_driver.load_state()[candidate.item_id]
+
+            self.assertEqual(final.state, core.State.ACCEPTED)
+            self.assertIsNotNone(final.solver_item)
+            self.assertIsNotNone(final.solver_input)
+
     def test_finalize_rejects_transient_state_in_both_drivers(self) -> None:
         candidate = core.Candidate("transient-001", "transient-001", "Structure")
         candidate.state = core.State.SOLVING
@@ -186,6 +216,69 @@ class StateAndDriverRegressions(unittest.TestCase):
         with mock.patch.object(validation_driver, "load_state", return_value={candidate.item_id: candidate}):
             with self.assertRaisesRegex(ValueError, "nonterminal"):
                 validation_driver.cmd_finalize()
+
+    def test_stage_identity_mismatches_fail_closed(self) -> None:
+        generator_a = fixture("analysis/generator_smoke_test.json", 0)
+        generator_b = fixture("analysis/generator_smoke_test.json", 1)
+        reviewer_a = fixture("analysis/reviewer_smoke_test.json", 0)
+        solver_a = fixture("analysis/solver_smoke_test.json", 0)
+
+        review_candidate = core.Candidate("gen-struct-001", "gen-struct-001", "Structure")
+        review_candidate.state = core.State.REVIEWING
+        review_candidate.generator_item = generator_a
+        review_candidate.reviewer_item = copy.deepcopy(reviewer_a)
+        review_candidate.reviewer_item["item_id"] = generator_b["item_id"]
+        review_candidate = core.process_review_output(review_candidate, core.load_config())
+        self.assertEqual(review_candidate.state, core.State.VALIDATION_FAILED)
+        self.assertEqual(review_candidate.failure.kind, "content")
+
+        section_candidate = core.Candidate("gen-struct-001", "gen-struct-001", "Structure")
+        section_candidate.state = core.State.REVIEWING
+        section_candidate.generator_item = generator_a
+        section_candidate.reviewer_item = copy.deepcopy(reviewer_a)
+        section_candidate.reviewer_item["section"] = "Written Expression"
+        section_candidate = core.process_review_output(section_candidate, core.load_config())
+        self.assertEqual(section_candidate.state, core.State.VALIDATION_FAILED)
+        self.assertIn("section", section_candidate.failure.detail)
+
+        generator_candidate = core.Candidate("gen-struct-001", "gen-struct-001", "Structure")
+        generator_candidate.generator_item = copy.deepcopy(generator_b)
+        generator_candidate.generator_item["item_id"] = "other-item"
+        generator_candidate = core.process_generation_output(generator_candidate, core.load_config())
+        self.assertEqual(generator_candidate.state, core.State.VALIDATION_FAILED)
+
+        solver_candidate = core.Candidate("gen-struct-001", "gen-struct-001", "Structure")
+        solver_candidate.state = core.State.SOLVING
+        solver_candidate.state_history = [core.State.GENERATED, core.State.REVIEWING, core.State.SOLVING]
+        solver_candidate.generator_item = generator_a
+        solver_candidate.reviewer_item = reviewer_a
+        mismatched_solver = copy.deepcopy(solver_a)
+        mismatched_solver["item_id"] = "other-solver-item"
+        solver_candidate = core.process_solver_stage(
+            solver_candidate,
+            core.load_config(),
+            mismatched_solver,
+            precomputed_solver_input={
+                "item_id": "gen-struct-001",
+                "section": "Structure",
+                "stem": generator_a["stem"],
+                "options": generator_a["options"],
+            },
+        )
+        self.assertEqual(solver_candidate.state, core.State.VALIDATION_FAILED)
+        self.assertEqual(solver_candidate.failure.kind, "content")
+
+    def test_batch_planned_distribution_keeps_initial_slot_after_revision(self) -> None:
+        original = fixture("analysis/generator_smoke_test.json", 0)
+        revised = copy.deepcopy(original)
+        revised["correct_answer"] = "B"
+        candidate = core.Candidate(original["item_id"], original["item_id"], original["section"])
+        candidate.generator_item = revised
+        candidate.planned_slot = core.derive_slot_requirements(original)
+        tracker = core.BatchIntegrityTracker()
+        tracker.record_planned(candidate.generator_item, candidate.planned_slot)
+        summary = tracker.summary()
+        self.assertEqual(summary["planned"]["correct_answer_position"], {"C": 1})
 
 
 class PersistenceAndSubprocessRegressions(unittest.TestCase):
@@ -219,6 +312,126 @@ class PersistenceAndSubprocessRegressions(unittest.TestCase):
             with self.assertRaises(core.SystemCallError) as exit_error:
                 core.run_schema_validator(script, [{}])
         self.assertIn("exit", str(exit_error.exception))
+
+    def test_validator_exit_code_two_is_not_content_failure(self) -> None:
+        script = "agents/toefl_itp_grammar_generator/scripts/validate_output.py"
+        with mock.patch.object(
+            core.subprocess,
+            "run",
+            return_value=subprocess.CompletedProcess(
+                ["python"], 2, stdout="", stderr="SYSTEM ERROR: validator boom"
+            ),
+        ):
+            with self.assertRaises(core.SystemCallError):
+                core.run_schema_validator(script, [{}])
+
+
+class WrittenExpressionV2Regressions(unittest.TestCase):
+    GENERATOR_VALIDATOR = "agents/toefl_itp_we_generator_v2/scripts/validate_output.py"
+    REVIEWER_VALIDATOR = "agents/toefl_itp_we_reviewer_v2/scripts/validate_output.py"
+
+    def test_generator_v2_malformed_types_are_content_failures(self) -> None:
+        base = fixture("analysis/we_v2/we_v2_smoke_items.json", 0)
+        cases = []
+        for field in ("qa_metadata", "format_metadata", "grammar_metadata", "marked_parts"):
+            invalid = copy.deepcopy(base)
+            invalid[field] = []
+            cases.append(invalid)
+        invalid = copy.deepcopy(base)
+        invalid["sentence"] = None
+        cases.append(invalid)
+        invalid = copy.deepcopy(base)
+        invalid["marked_parts"]["A"] = 123
+        cases.append(invalid)
+        invalid = copy.deepcopy(base)
+        invalid["format_metadata"]["diagnostics"] = []
+        cases.append(invalid)
+        invalid = copy.deepcopy(base)
+        invalid["format_metadata"]["diagnostics"] = {}
+        cases.append(invalid)
+
+        for invalid in cases:
+            with self.subTest(case=invalid):
+                result = run_validator(self.GENERATOR_VALIDATOR, invalid)
+                self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                self.assertNotIn("SYSTEM ERROR", result.stderr)
+
+    def test_generator_v2_schema_required_unknown_nested_and_valid_fixture(self) -> None:
+        base = fixture("analysis/we_v2/we_v2_smoke_items.json", 0)
+        missing = copy.deepcopy(base)
+        del missing["format_metadata"]["diagnostics"]
+        unknown = copy.deepcopy(base)
+        unknown["unexpected"] = True
+        nested = copy.deepcopy(base)
+        nested["format_metadata"]["span_types"]["A"] = 123
+        for invalid, needle in (
+            (missing, "missing required property 'diagnostics'"),
+            (unknown, "additional property 'unexpected' is not allowed"),
+            (nested, "span_types.A"),
+        ):
+            with self.subTest(needle=needle):
+                result = run_validator(self.GENERATOR_VALIDATOR, invalid)
+                self.assertEqual(result.returncode, 1)
+                self.assertIn(needle, result.stdout)
+        valid = subprocess.run(
+            [sys.executable, str(ROOT / self.GENERATOR_VALIDATOR), str(ROOT / "analysis/we_v2/we_v2_smoke_items.json")],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(valid.returncode, 0, valid.stdout + valid.stderr)
+
+    def test_reviewer_v2_pass_invariants_and_schema_fail_closed(self) -> None:
+        base = fixture("analysis/we_v2/we_v2_smoke_review.json", 0)
+        cases = []
+        invalid = copy.deepcopy(base)
+        invalid["answer_match"] = False
+        cases.append(invalid)
+        invalid = copy.deepcopy(base)
+        invalid["detected_error_position"] = "B"
+        cases.append(invalid)
+        invalid = copy.deepcopy(base)
+        invalid["non_error_parts_valid"] = False
+        cases.append(invalid)
+        invalid = copy.deepcopy(base)
+        invalid["minimal_correction_valid"] = False
+        cases.append(invalid)
+        invalid = copy.deepcopy(base)
+        invalid["revision_requirements"] = ["fix"]
+        cases.append(invalid)
+        invalid = copy.deepcopy(base)
+        invalid["unknown"] = True
+        cases.append(invalid)
+        invalid = copy.deepcopy(base)
+        invalid["checks"]["grammar_validity"] = 123
+        cases.append(invalid)
+        for invalid in cases:
+            with self.subTest(case=invalid):
+                result = run_validator(self.REVIEWER_VALIDATOR, invalid)
+                self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                self.assertNotIn("SYSTEM ERROR", result.stderr)
+        valid = subprocess.run(
+            [sys.executable, str(ROOT / self.REVIEWER_VALIDATOR), str(ROOT / "analysis/we_v2/we_v2_smoke_review.json")],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(valid.returncode, 0, valid.stdout + valid.stderr)
+
+
+class RepositoryHygieneRegressions(unittest.TestCase):
+    def test_acceptance_tests_do_not_modify_real_manual_review_queue(self) -> None:
+        queue = ROOT / "analysis/manual_review_queue.json"
+        before = queue.read_bytes() if queue.exists() else None
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "orchestrator/scripts/run_acceptance_tests.py")],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        after = queue.read_bytes() if queue.exists() else None
+        self.assertEqual(after, before)
 
 
 if __name__ == "__main__":

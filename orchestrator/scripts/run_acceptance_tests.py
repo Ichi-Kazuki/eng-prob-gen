@@ -21,6 +21,7 @@ Usage:
 import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -240,7 +241,7 @@ def main() -> int:
           f"accept_count={adversarial_data['accept_count']}/{adversarial_data['total_count']}")
 
     # -- #11 retry limit ------------------------------------------------------
-    candidate = Candidate(item_id="retry-test-001", concept_id="retry-test-001", section="Structure")
+    candidate = Candidate(item_id="synthetic-struct-001", concept_id="synthetic-struct-001", section="Structure")
     candidate.generator_item = base_generator_item("Structure")
     candidate.state = State.REVIEWING
     for cycle in range(3):
@@ -312,13 +313,17 @@ def main() -> int:
         "Produced by run_acceptance_tests.py to demonstrate manual-review-queue "
         "mechanics; not a real candidate awaiting human review."
     )
-    queue_path = append_manual_review_queue(config, [mr_entry])
-    queue_data = json.loads(queue_path.read_text(encoding="utf-8"))
-    check("15", "MANUAL_REVIEW items are queued to analysis/manual_review_queue.json with actionable fields",
-          mr_candidate.state == State.MANUAL_REVIEW
-          and any(e["item_id"] == "synthetic-struct-001" and e["possible_actions"] == ["ACCEPT", "REGENERATE", "DISCARD"]
-                  for e in queue_data["items"]),
-          f"queue_path={queue_path}")
+    with tempfile.TemporaryDirectory(prefix="acceptance-queue-") as temp_dir:
+        test_config = dict(config)
+        test_config["paths"] = dict(config["paths"])
+        test_config["paths"]["manual_review_queue"] = str(Path(temp_dir) / "manual_review_queue.json")
+        queue_path = append_manual_review_queue(test_config, [mr_entry])
+        queue_data = json.loads(queue_path.read_text(encoding="utf-8"))
+        check("15", "MANUAL_REVIEW items are queued to an isolated temporary queue with actionable fields",
+              mr_candidate.state == State.MANUAL_REVIEW
+              and any(e["item_id"] == "synthetic-struct-001" and e["possible_actions"] == ["ACCEPT", "REGENERATE", "DISCARD"]
+                      for e in queue_data["items"]),
+              f"queue_path={queue_path}")
 
     print()
     passed = sum(1 for (_n, _d, ok, _det) in RESULTS if ok)

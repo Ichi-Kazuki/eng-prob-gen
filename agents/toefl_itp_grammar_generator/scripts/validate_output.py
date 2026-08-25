@@ -131,6 +131,9 @@ def main() -> int:
     except ValueError as exc:
         print(f"[?] $: {exc}")
         return 1
+    except Exception as exc:
+        print(f"SYSTEM ERROR: unexpected validator exception: {type(exc).__name__}: {exc}", file=sys.stderr)
+        return 2
     print(f"Checked {len(items)} item(s): {counts}")
     if errors:
         print(f"\n{len(errors)} validation error(s):")

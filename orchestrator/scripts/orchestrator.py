@@ -53,6 +53,10 @@ __all__ = [
     "TERMINAL_STATES",
     "ALLOWED_TRANSITIONS",
     "Candidate",
+    "candidate_to_dict",
+    "dict_to_candidate",
+    "load_candidate_state",
+    "save_candidate_state",
     "ConsensusResult",
     "FailureInfo",
     "SystemCallError",
@@ -168,7 +172,51 @@ def load_versions(config: dict) -> dict:
     v["generator_version"] = compute_agent_version(config, "generator_agent_md")
     v["reviewer_version"] = compute_agent_version(config, "reviewer_agent_md")
     v["solver_version"] = compute_agent_version(config, "solver_agent_md")
+    v["validator_versions"] = {
+        "generator": _hash_repo_file(config["paths"]["generator_validate_script"]),
+        "reviewer": _hash_repo_file(config["paths"]["reviewer_validate_script"]),
+        "solver": _hash_repo_file(config["paths"]["solver_validate_script"]),
+        "we_generator_v2": _hash_repo_file(
+            "agents/toefl_itp_we_generator_v2/scripts/validate_output.py"
+        ),
+        "we_reviewer_v2": _hash_repo_file(
+            "agents/toefl_itp_we_reviewer_v2/scripts/validate_output.py"
+        ),
+    }
+    v["schema_versions"] = {
+        "generator_structure": _hash_repo_file(
+            "agents/toefl_itp_grammar_generator/schema/structure_item.schema.json"
+        ),
+        "generator_written_expression": _hash_repo_file(
+            "agents/toefl_itp_grammar_generator/schema/written_expression_item.schema.json"
+        ),
+        "we_generator_v2": _hash_repo_file(
+            "agents/toefl_itp_we_generator_v2/schema/written_expression_item_v2.schema.json"
+        ),
+        "reviewer": _hash_repo_file(
+            "agents/toefl_itp_grammar_reviewer/schema/reviewer_output.schema.json"
+        ),
+        "we_reviewer_v2": _hash_repo_file(
+            "agents/toefl_itp_we_reviewer_v2/schema/reviewer_output_v2.schema.json"
+        ),
+        "solver": _hash_repo_file(
+            "agents/toefl_itp_grammar_solver/schema/solver_output.schema.json"
+        ),
+    }
+    v["orchestrator_version"] = _hash_repo_file("orchestrator/scripts/orchestrator.py")
+    v["solver_blinding_version"] = _hash_repo_file(
+        config["paths"]["solver_blinding_script"]
+    )
+    v["config_version"] = _hash_repo_file("orchestrator/config.json")
     return v
+
+
+def _hash_repo_file(path: str) -> str:
+    file_path = Path(path)
+    if not file_path.is_absolute():
+        file_path = REPO_ROOT / file_path
+    digest = hashlib.sha256(file_path.read_bytes()).hexdigest()
+    return f"sha256:{digest}"
 
 
 def load_items_by_id(path: Path, label: str = "") -> dict[str, dict]:
@@ -331,6 +379,8 @@ def leakage_guard(blinded_item: dict, section: str) -> tuple[bool, list[str]]:
     """Defense-in-depth check on top of create_solver_input.py's own
     allowlist: verify the blinded item carries ONLY the allowlisted keys
     for its section before it is ever handed to the Solver."""
+    if section not in {"Structure", "Written Expression"}:
+        return False, [f"unsupported section: {section!r}"]
     allowlist = set(STRUCTURE_ALLOWLIST if section == "Structure" else WE_ALLOWLIST)
     actual = set(blinded_item.keys())
     leaked = sorted(actual - allowlist)
@@ -473,9 +523,14 @@ class Candidate:
     solver_item: Optional[dict] = None
     solver_input: Optional[dict] = None
     leakage_check: Optional[dict] = None
+    # The first Generator output's slot is retained for batch accounting even
+    # when a later revision changes the current item's metadata.
+    planned_slot: Optional[dict] = None
     consensus: Optional[ConsensusResult] = None
     failure: Optional[FailureInfo] = None
     notes: list[str] = field(default_factory=list)
+    review_history: list[dict] = field(default_factory=list)
+    generation_history: list[dict] = field(default_factory=list)
     created_at: str = field(default_factory=now_iso)
     updated_at: str = field(default_factory=now_iso)
 
@@ -495,6 +550,130 @@ class Candidate:
             self.notes.append(note)
 
 
+def candidate_to_dict(candidate: Candidate) -> dict:
+    """Serialize a Candidate for both live drivers' state files.
+
+    Keeping this beside Candidate prevents Pilot and Validation state from
+    drifting as fields are added to the pipeline state machine.
+    """
+    return {
+        "item_id": candidate.item_id,
+        "concept_id": candidate.concept_id,
+        "section": candidate.section,
+        "state": candidate.state,
+        "state_history": candidate.state_history,
+        "generation_attempt": candidate.generation_attempt,
+        "revision_count": candidate.revision_count,
+        "generator_item": candidate.generator_item,
+        "reviewer_item": candidate.reviewer_item,
+        "solver_item": candidate.solver_item,
+        "solver_input": candidate.solver_input,
+        "leakage_check": candidate.leakage_check,
+        "planned_slot": candidate.planned_slot,
+        "consensus": None if candidate.consensus is None else {
+            "auto_accept": candidate.consensus.auto_accept,
+            "routing": candidate.consensus.routing,
+            "failed_conditions": candidate.consensus.failed_conditions,
+            "disagreement_reasons": candidate.consensus.disagreement_reasons,
+        },
+        "failure": None if candidate.failure is None else {
+            "kind": candidate.failure.kind,
+            "stage": candidate.failure.stage,
+            "detail": candidate.failure.detail,
+        },
+        "notes": candidate.notes,
+        "review_history": candidate.review_history,
+        "generation_history": candidate.generation_history,
+        "created_at": candidate.created_at,
+        "updated_at": candidate.updated_at,
+    }
+
+
+def dict_to_candidate(data: dict) -> Candidate:
+    """Restore a Candidate, accepting state files written before hardening."""
+    candidate = Candidate(
+        item_id=data["item_id"],
+        concept_id=data["concept_id"],
+        section=data["section"],
+    )
+    candidate.state = data["state"]
+    candidate.state_history = data.get("state_history", [candidate.state])
+    candidate.generation_attempt = data.get("generation_attempt", 1)
+    candidate.revision_count = data.get("revision_count", 0)
+    candidate.generator_item = data.get("generator_item")
+    candidate.reviewer_item = data.get("reviewer_item")
+    candidate.solver_item = data.get("solver_item")
+    candidate.solver_input = data.get("solver_input")
+    candidate.leakage_check = data.get("leakage_check")
+    candidate.planned_slot = data.get("planned_slot")
+    if candidate.planned_slot is None and candidate.generator_item is not None:
+        # Backward-compatible fallback for state files created before the
+        # original-slot field existed. New runs capture it at initialization.
+        candidate.planned_slot = derive_slot_requirements(candidate.generator_item)
+    consensus = data.get("consensus")
+    if consensus is not None:
+        candidate.consensus = ConsensusResult(
+            auto_accept=consensus["auto_accept"],
+            routing=consensus["routing"],
+            failed_conditions=consensus.get("failed_conditions", []),
+            disagreement_reasons=consensus.get("disagreement_reasons", []),
+        )
+    failure = data.get("failure")
+    if failure is not None:
+        candidate.failure = FailureInfo(
+            kind=failure["kind"], stage=failure["stage"], detail=failure["detail"]
+        )
+    candidate.notes = data.get("notes", [])
+    candidate.review_history = data.get("review_history", [])
+    candidate.generation_history = data.get("generation_history", [])
+    candidate.created_at = data.get("created_at", candidate.created_at)
+    candidate.updated_at = data.get("updated_at", candidate.updated_at)
+    return candidate
+
+
+def load_candidate_state(path: Path) -> dict[str, Candidate]:
+    document = read_json(path)
+    if not isinstance(document, dict):
+        raise JsonPersistenceError(f"candidate state {path} must be an object keyed by item_id")
+    candidates: dict[str, Candidate] = {}
+    for item_id, data in document.items():
+        if not isinstance(data, dict):
+            raise JsonPersistenceError(f"candidate state {path} entry {item_id!r} must be an object")
+        candidate = dict_to_candidate(data)
+        if candidate.item_id != item_id:
+            raise JsonPersistenceError(
+                f"candidate state {path} key {item_id!r} does not match item_id {candidate.item_id!r}"
+            )
+        candidates[item_id] = candidate
+    return candidates
+
+
+def save_candidate_state(path: Path, candidates: dict[str, Candidate]) -> None:
+    atomic_write_json(path, {item_id: candidate_to_dict(candidate) for item_id, candidate in candidates.items()})
+
+
+def _identity_errors(candidate: Candidate, item: object, stage: str) -> list[str]:
+    if not isinstance(item, dict):
+        return [f"{stage} item must be an object"]
+    errors = []
+    if item.get("item_id") != candidate.item_id:
+        errors.append(
+            f"{stage}.item_id={item.get('item_id')!r} does not match candidate.item_id={candidate.item_id!r}"
+        )
+    if item.get("section") != candidate.section:
+        errors.append(
+            f"{stage}.section={item.get('section')!r} does not match candidate.section={candidate.section!r}"
+        )
+    return errors
+
+
+def _reject_identity(candidate: Candidate, stage: str, item: object, errors: list[str]) -> Candidate:
+    detail = "; ".join(errors)
+    candidate.failure = FailureInfo(kind="content", stage=stage, detail=detail)
+    candidate.transition(State.VALIDATION_FAILED, f"{stage} identity invariant failed: {detail}")
+    return candidate
+
+
 def process_generation_output(candidate: Candidate, config: dict) -> Candidate:
     """Validate the Generator's candidate item against its own schema
     validator. Schema-shape failure -> VALIDATION_FAILED (content-shape,
@@ -506,6 +685,9 @@ def process_generation_output(candidate: Candidate, config: dict) -> Candidate:
         )
     if candidate.generator_item is None:
         raise ValueError("process_generation_output requires generator_item")
+    identity_errors = _identity_errors(candidate, candidate.generator_item, "generator")
+    if identity_errors:
+        return _reject_identity(candidate, "generator", candidate.generator_item, identity_errors)
     try:
         ok, output = run_schema_validator(
             config["paths"]["generator_validate_script"], [candidate.generator_item]
@@ -535,6 +717,9 @@ def process_review_output(candidate: Candidate, config: dict) -> Candidate:
         )
     if candidate.reviewer_item is None:
         raise ValueError("process_review_output requires reviewer_item")
+    identity_errors = _identity_errors(candidate, candidate.reviewer_item, "reviewer")
+    if identity_errors:
+        return _reject_identity(candidate, "reviewer", candidate.reviewer_item, identity_errors)
     max_cycles = config["retry_policy"]["max_revision_cycles"]
 
     try:
@@ -582,7 +767,10 @@ def process_review_output(candidate: Candidate, config: dict) -> Candidate:
 
 
 def process_solver_stage(
-    candidate: Candidate, config: dict, solver_item: Optional[dict]
+    candidate: Candidate,
+    config: dict,
+    solver_item: Optional[dict],
+    precomputed_solver_input: Optional[dict] = None,
 ) -> Candidate:
     """Only reachable from state SOLVING (i.e. only after Reviewer PASS).
     Blinds the item via the real create_solver_input.py, runs the leakage
@@ -594,14 +782,27 @@ def process_solver_stage(
             "not SOLVING - refusing to call Solver on a non-PASS item"
         )
 
-    try:
-        blinded = blind_for_solver(config, candidate.generator_item)
-    except SystemCallError as e:
-        candidate.failure = FailureInfo(kind="system", stage="solver", detail=str(e))
-        candidate.transition(State.GENERATION_FAILED, f"system failure during blinding: {e}")
-        return candidate
+    for stage, item in (("generator", candidate.generator_item), ("reviewer", candidate.reviewer_item)):
+        if item is None:
+            return _reject_identity(candidate, stage, item, [f"{stage} item is required before Solver"])
+        identity_errors = _identity_errors(candidate, item, stage)
+        if identity_errors:
+            return _reject_identity(candidate, stage, item, identity_errors)
+
+    if precomputed_solver_input is not None:
+        blinded = precomputed_solver_input
+    else:
+        try:
+            blinded = blind_for_solver(config, candidate.generator_item)
+        except SystemCallError as e:
+            candidate.failure = FailureInfo(kind="system", stage="solver", detail=str(e))
+            candidate.transition(State.GENERATION_FAILED, f"system failure during blinding: {e}")
+            return candidate
 
     candidate.solver_input = blinded
+    input_identity_errors = _identity_errors(candidate, blinded, "solver_input")
+    if input_identity_errors:
+        return _reject_identity(candidate, "solver", blinded, input_identity_errors)
     ok, problems = leakage_guard(blinded, candidate.section)
     candidate.leakage_check = {"ok": ok, "problems": problems, "blinded_keys": sorted(blinded.keys())}
     if not ok:
@@ -610,6 +811,10 @@ def process_solver_stage(
 
     if solver_item is None:
         raise ValueError("solver_item must be supplied once a candidate reaches SOLVING")
+
+    identity_errors = _identity_errors(candidate, solver_item, "solver")
+    if identity_errors:
+        return _reject_identity(candidate, "solver", solver_item, identity_errors)
 
     try:
         val_ok, output = run_schema_validator(
@@ -688,6 +893,12 @@ def build_accepted_item(candidate: Candidate, versions: dict) -> Optional[dict]:
 
 def build_qa_audit(candidate: Candidate, versions: dict) -> dict:
     """Internal-only record. Never shipped to the site / Question DB."""
+    solver_input_hash = None
+    if candidate.solver_input is not None:
+        canonical = json.dumps(
+            candidate.solver_input, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")
+        solver_input_hash = f"sha256:{hashlib.sha256(canonical).hexdigest()}"
     return {
         "item_id": candidate.item_id,
         "concept_id": candidate.concept_id,
@@ -697,6 +908,7 @@ def build_qa_audit(candidate: Candidate, versions: dict) -> dict:
         "revision_count": candidate.revision_count,
         "reviewer": candidate.reviewer_item,
         "solver": candidate.solver_item,
+        "solver_input_sha256": solver_input_hash,
         "leakage_check": candidate.leakage_check,
         "consensus": None if candidate.consensus is None else {
             "auto_accept": candidate.consensus.auto_accept,
@@ -856,8 +1068,23 @@ class BatchIntegrityTracker:
             dims["tested_error_type"] = generator_item.get("tested_error_type")
         return dims
 
-    def record_planned(self, generator_item: dict) -> None:
-        self._bump(self.planned, self._dims(generator_item))
+    @staticmethod
+    def _dims_from_slot(slot: dict) -> dict[str, str]:
+        dims = {
+            "primary_target": slot.get("primary_target"),
+            "difficulty": slot.get("difficulty"),
+            "correct_answer_position": slot.get("correct_answer_position"),
+            "vocabulary_domain": slot.get("vocabulary_domain"),
+        }
+        if slot.get("section") == "Written Expression":
+            dims["tested_error_type"] = slot.get("tested_error_type")
+        return dims
+
+    def record_planned(self, generator_item: dict, planned_slot: Optional[dict] = None) -> None:
+        self._bump(
+            self.planned,
+            self._dims_from_slot(planned_slot) if planned_slot is not None else self._dims(generator_item),
+        )
 
     def record_accepted(self, generator_item: dict) -> None:
         self._bump(self.actual, self._dims(generator_item))

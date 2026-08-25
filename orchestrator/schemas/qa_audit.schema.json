@@ -25,6 +25,11 @@
       "description": "Full Solver Agent output object (see agents/toefl_itp_grammar_solver/schema/solver_output.schema.json), or null if the candidate never reached SOLVING.",
       "type": ["object", "null"]
     },
+    "solver_input_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^(sha256:[0-9a-f]{64})?$",
+      "description": "Hash of the exact allowlisted Solver input used for the Solver call."
+    },
     "leakage_check": {
       "type": ["object", "null"],
       "properties": {

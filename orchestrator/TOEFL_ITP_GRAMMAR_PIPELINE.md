@@ -289,6 +289,13 @@ output file. It is purely descriptive; it never blocks an
 `ACCEPT`/`DISCARD` decision (quality takes priority over distribution, per
 spec section 14's closing line).
 
+The `planned` side means the original slot assigned at the first Generator
+attempt. It is captured on `Candidate` before any revision, so a revision that
+changes target, difficulty, or answer position cannot rewrite the batch's
+planned distribution. The current item remains the source for `actual_accepted`
+and for `batch_slot`, which is the latest slot to carry forward to a fresh
+Generator call.
+
 `orchestrator.derive_slot_requirements(generator_item)` produces the slot a
 fresh Generator call should target when a candidate is `DISCARDED` or
 `REJECTED` — e.g. `{"primary_target": "RELATIVE_CLAUSES", "difficulty":

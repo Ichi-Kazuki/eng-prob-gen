@@ -18,6 +18,7 @@ import json
 import math
 import re
 import sys
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -105,26 +106,38 @@ def worst_band(bands: list[str]) -> str:
     return max(bands, key=lambda item: rank[item]) if bands else "EXTREME"
 
 
-def official_item_samples() -> dict[str, list[float]]:
+@lru_cache(maxsize=1)
+def official_format_data() -> dict[str, Any]:
     official_path = ROOT / "analysis" / "we_format" / "written_expression_format_official.json"
-    data = load_json(official_path)
-    items = data["items"]
+    return load_json(official_path)
+
+
+@lru_cache(maxsize=1)
+def official_item_samples() -> dict[str, list[float]]:
+    items = official_format_data()["items"]
     return {
         "sentence_word_count": [x["sentence_word_count"] for x in items],
         "marked_coverage_ratio": [x["marked_coverage_ratio"] for x in items],
         "unmarked_word_count": [x["unmarked_word_count"] for x in items],
         "mean_span_length": [x["mean_marked_span_length"] for x in items],
         "max_span_length": [x["max_marked_span_length"] for x in items],
+        "gap_A_B": [x["gap_A_B"] for x in items],
+        "gap_B_C": [x["gap_B_C"] for x in items],
+        "gap_C_D": [x["gap_C_D"] for x in items],
     }
 
 
 def format_diagnostics(item: dict[str, Any], config: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
     errors: list[str] = []
-    sentence = item.get("sentence", "")
+    sentence = item.get("sentence")
+    if not isinstance(sentence, str):
+        return {}, ["sentence must be a string"]
     sentence_tokens = tokens(sentence)
     parts = item.get("marked_parts")
     if not isinstance(parts, dict) or set(parts) != set(LABELS):
         return {}, ["marked_parts must have exactly A/B/C/D"]
+    if any(not isinstance(parts[label], str) for label in LABELS):
+        return {}, ["marked_parts.A/B/C/D must all be strings"]
 
     indices: dict[str, list[int]] = {}
     span_errors: dict[str, list[str]] = {}
@@ -160,9 +173,16 @@ def format_diagnostics(item: dict[str, Any], config: dict[str, Any]) -> tuple[di
     mean_length = marked_count / 4 if marked_count else 0.0
     max_length = max(counts.values()) if counts else 0
     grammar = item.get("grammar_metadata", {})
+    if not isinstance(grammar, dict):
+        return {}, ["grammar_metadata must be an object"]
     correct = item.get("correct_answer")
     correct_count = counts.get(correct, 0)
-    declared_types = item.get("format_metadata", {}).get("span_types", {})
+    format_metadata = item.get("format_metadata", {})
+    if not isinstance(format_metadata, dict):
+        return {}, ["format_metadata must be an object"]
+    declared_types = format_metadata.get("span_types", {})
+    if not isinstance(declared_types, dict):
+        return {}, ["format_metadata.span_types must be an object"]
     for label in LABELS:
         declared = declared_types.get(label)
         count = counts[label]
@@ -199,7 +219,7 @@ def format_diagnostics(item: dict[str, Any], config: dict[str, Any]) -> tuple[di
         profile[name] = nearest_rank_percentile(value, samples[name])
         metric_bands[name] = band(value, thresholds[name])
     for name, value in gaps.items():
-        profile[name] = nearest_rank_percentile(value, [x[name] for x in load_json(ROOT / "analysis" / "we_format" / "written_expression_format_official.json")["items"]])
+        profile[name] = nearest_rank_percentile(value, samples[name])
         metric_bands[name] = band(value, thresholds[name])
 
     distance_terms: list[float] = []
@@ -239,30 +259,20 @@ def format_diagnostics(item: dict[str, Any], config: dict[str, Any]) -> tuple[di
 
 
 def validate_item(item: dict[str, Any], config: dict[str, Any], targets: set[str], error_types: set[str]) -> dict[str, Any]:
+    """Run semantic and deterministic checks on a schema-safe item.
+
+    The defensive type guards keep the standalone format CLI fail-closed on
+    malformed input too, while the formal required/type/enum/property
+    contract remains exclusively in written_expression_item_v2.schema.json.
+    """
     errors: list[str] = []
     if not isinstance(item, dict):
         return {"item_id": "?", "valid": False, "errors": ["item must be an object"]}
     item_id = item.get("item_id", "?")
-    required = {
-        "item_id", "section", "agent_version", "primary_target", "subtype", "secondary_features",
-        "tested_error_type", "difficulty", "vocabulary_domain", "sentence", "marked_parts",
-        "correct_answer", "error_explanation", "minimal_correction", "grammar_metadata",
-        "format_metadata", "provenance", "qa_metadata",
-    }
-    missing = sorted(required - set(item))
-    errors.extend(f"missing required field: {name}" for name in missing)
-    if item.get("section") != "Written Expression":
-        errors.append("section must be Written Expression")
-    if item.get("agent_version") != "Written Expression Generator v2.0":
-        errors.append("agent_version must be Written Expression Generator v2.0")
     if item.get("primary_target") not in targets:
         errors.append("primary_target is not in the grammar taxonomy")
     if item.get("tested_error_type") not in error_types:
         errors.append("tested_error_type is not in the grammar taxonomy")
-    if item.get("correct_answer") not in LABELS:
-        errors.append("correct_answer must be A/B/C/D")
-    if item.get("qa_metadata", {}).get("clean_sentence_validated") is not True:
-        errors.append("qa_metadata.clean_sentence_validated must be true")
     grammar_metadata = item.get("grammar_metadata")
     if not isinstance(grammar_metadata, dict):
         errors.append("grammar_metadata must be an object")
@@ -280,17 +290,9 @@ def validate_item(item: dict[str, Any], config: dict[str, Any], targets: set[str
     format_metadata = item.get("format_metadata")
     if not isinstance(format_metadata, dict):
         errors.append("format_metadata must be an object")
-    else:
-        required_format_keys = {"target_sentence_length_region", "expected_span_profile", "coverage_profile", "approximate_context_profile", "span_types", "diagnostics"}
-        errors.extend(f"missing format_metadata field: {key}" for key in sorted(required_format_keys - set(format_metadata)))
-        if not isinstance(format_metadata.get("diagnostics"), dict):
-            errors.append("format_metadata.diagnostics must be an object")
     provenance = item.get("provenance")
     if not isinstance(provenance, dict):
         errors.append("provenance must be an object")
-    else:
-        required_provenance_keys = {"agent_version", "prompt_hash", "spec_version", "format_spec_version", "generation_batch_id", "microbatch_id", "item_generation_order", "invocation_id", "runtime_model"}
-        errors.extend(f"missing provenance field: {key}" for key in sorted(required_provenance_keys - set(provenance)))
     qa = item.get("qa_metadata")
     if not isinstance(qa, dict):
         errors.append("qa_metadata must be an object")
@@ -298,15 +300,13 @@ def validate_item(item: dict[str, Any], config: dict[str, Any], targets: set[str
         for key in ("clean_form", "error_form", "minimal_correction", "mutation_type", "grammar_check_status", "format_check_status"):
             if not isinstance(qa.get(key), str) or not qa[key]:
                 errors.append(f"qa_metadata.{key} must be a nonempty string")
-        if qa.get("grammar_check_status") not in {"PASS", "FAIL", "AMBIGUOUS"}:
-            errors.append("qa_metadata.grammar_check_status is invalid")
-        if qa.get("format_check_status") not in {"PASS", "WARN", "FAIL"}:
-            errors.append("qa_metadata.format_check_status is invalid")
 
     diagnostics, diagnostic_errors = format_diagnostics(item, config)
     errors.extend(diagnostic_errors)
-    declared = item.get("format_metadata", {}).get("diagnostics", {})
-    if diagnostics and declared:
+    declared = format_metadata.get("diagnostics") if isinstance(format_metadata, dict) else None
+    if diagnostics and not isinstance(declared, dict):
+        errors.append("format_metadata.diagnostics must be an object containing deterministic diagnostics")
+    elif diagnostics and isinstance(declared, dict):
         for key in (
             "sentence_word_count", "span_word_counts", "mean_span_length", "max_span_length",
             "marked_coverage_ratio", "unmarked_word_count", "gap_A_B", "gap_B_C", "gap_C_D",
@@ -314,8 +314,14 @@ def validate_item(item: dict[str, Any], config: dict[str, Any], targets: set[str
             "decision_granularity", "format_distribution_distance", "format_percentile_profile",
             "format_band_status", "metric_band_status", "span_token_indices",
         ):
-            if key in declared and key in diagnostics and declared[key] != diagnostics[key]:
-                if isinstance(declared[key], float) and abs(declared[key] - diagnostics[key]) < 0.00011:
+            declared_value = declared.get(key)
+            expected_value = diagnostics.get(key)
+            if declared_value != expected_value:
+                if (
+                    isinstance(declared_value, float)
+                    and isinstance(expected_value, (int, float))
+                    and abs(declared_value - expected_value) < 0.00011
+                ):
                     continue
                 errors.append(f"format_metadata.diagnostics.{key} does not match deterministic calculation")
 
@@ -327,22 +333,36 @@ def main() -> int:
     parser.add_argument("items", type=Path)
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
-    config = load_json(CONFIG_PATH)
-    grammar = load_json(GRAMMAR_SPEC_PATH)
-    taxonomy = load_json(TAXONOMY_PATH)
-    targets = {x["id"] for x in taxonomy["primary_targets"]}
-    error_types = {x["id"] for x in grammar["tested_error_types"] if x["id"] not in {"fragment", "wrong_complementation"}}
-    results = [validate_item(item, config, targets, error_types) for item in load_items(args.items)]
-    report = {
-        "validator": "TOEFL ITP WE deterministic format validator v2.0",
-        "config": config["config_id"],
-        "item_count": len(results),
-        "valid_count": sum(result["valid"] for result in results),
-        "invalid_count": sum(not result["valid"] for result in results),
-        "items": results,
-    }
-    if args.report:
-        args.report.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    try:
+        config = load_json(CONFIG_PATH)
+        grammar = load_json(GRAMMAR_SPEC_PATH)
+        taxonomy = load_json(TAXONOMY_PATH)
+        targets = {x["id"] for x in taxonomy["primary_targets"]}
+        error_types = {
+            x["id"]
+            for x in grammar["tested_error_types"]
+            if x["id"] not in {"fragment", "wrong_complementation"}
+        }
+        results = [validate_item(item, config, targets, error_types) for item in load_items(args.items)]
+        report = {
+            "validator": "TOEFL ITP WE deterministic format validator v2.0",
+            "config": config["config_id"],
+            "item_count": len(results),
+            "valid_count": sum(result["valid"] for result in results),
+            "invalid_count": sum(not result["valid"] for result in results),
+            "items": results,
+        }
+        if args.report:
+            args.report.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    except ValueError as exc:
+        print(f"CONTENT ERROR: {exc}")
+        return 1
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        print(f"SYSTEM ERROR: {exc}", file=sys.stderr)
+        return 2
+    except Exception as exc:
+        print(f"SYSTEM ERROR: unexpected validator exception: {type(exc).__name__}: {exc}", file=sys.stderr)
+        return 2
     print(json.dumps(report, indent=2, ensure_ascii=False))
     return 0 if report["invalid_count"] == 0 else 1
 

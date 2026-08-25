@@ -40,7 +40,25 @@
         "taxonomy_version": "1.1",
         "generator_version": "sha256:3567f2b6e246",
         "reviewer_version": "sha256:e4142013a3cb",
-        "solver_version": "sha256:df1200bed2b1"
+        "solver_version": "sha256:df1200bed2b1",
+        "validator_versions": {
+          "generator": "sha256:a4fca97cb350aa9934f6db701097afaf776351940a673f76114cb49bbb499bae",
+          "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+          "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+          "we_generator_v2": "sha256:990fef282f86089a70e21dd850c4b02de5a28099832ab44d5360230c134c0115",
+          "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+        },
+        "schema_versions": {
+          "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+          "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+          "we_generator_v2": "sha256:4ee91a40bb9fb5a22cd79513fcebcba9aec4a4ec53c6954a59c18738a4ab3a77",
+          "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+          "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+          "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+        },
+        "orchestrator_version": "sha256:a823d19dad71eb63ece7547feb498ee020e9be86db0c7c79d1874ed7fce68ec3",
+        "solver_blinding_version": "sha256:570ae1c0c270df289b103e72d7226af312834ea7787b9136a2b32cd5d1d40432",
+        "config_version": "sha256:30f2dfc7e8a7989da442f8d1755a236c23e31f183533732b1c0bf0b5655c9920"
       },
       "accepted_item": {
         "item_id": "gen-struct-001",
@@ -119,6 +137,7 @@
           "reason": "Only 'who discovered the new coral species' works: the gap is the subject of the relative clause and the antecedent is a person, so it needs the subject relative pronoun 'who' plus a verb agreeing with it. A uses 'which', wrong for a human antecedent. B uses 'discover', which does not agree with the implied third-person singular subject. D omits the relative pronoun, which is only possible when the gap is an object, not a subject; without it the sentence has two finite verbs ('discovered'...'has spent') with no connector.",
           "ambiguity_detected": false
         },
+        "solver_input_sha256": "sha256:01d8e77f5ddd42b31a41ba6ec26d6a76f341af9138db575879f7514d047fd726",
         "leakage_check": {
           "ok": true,
           "problems": [],
@@ -146,11 +165,29 @@
           "taxonomy_version": "1.1",
           "generator_version": "sha256:3567f2b6e246",
           "reviewer_version": "sha256:e4142013a3cb",
-          "solver_version": "sha256:df1200bed2b1"
+          "solver_version": "sha256:df1200bed2b1",
+          "validator_versions": {
+            "generator": "sha256:a4fca97cb350aa9934f6db701097afaf776351940a673f76114cb49bbb499bae",
+            "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+            "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+            "we_generator_v2": "sha256:990fef282f86089a70e21dd850c4b02de5a28099832ab44d5360230c134c0115",
+            "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+          },
+          "schema_versions": {
+            "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+            "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+            "we_generator_v2": "sha256:4ee91a40bb9fb5a22cd79513fcebcba9aec4a4ec53c6954a59c18738a4ab3a77",
+            "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+            "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+            "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+          },
+          "orchestrator_version": "sha256:a823d19dad71eb63ece7547feb498ee020e9be86db0c7c79d1874ed7fce68ec3",
+          "solver_blinding_version": "sha256:570ae1c0c270df289b103e72d7226af312834ea7787b9136a2b32cd5d1d40432",
+          "config_version": "sha256:30f2dfc7e8a7989da442f8d1755a236c23e31f183533732b1c0bf0b5655c9920"
         },
         "timestamps": {
-          "created": "2026-08-24T03:08:55.966933+00:00",
-          "updated": "2026-08-24T03:08:56.518668+00:00"
+          "created": "2026-08-25T06:12:00.410164+00:00",
+          "updated": "2026-08-25T06:12:01.974786+00:00"
         }
       }
     },
@@ -192,7 +229,25 @@
         "taxonomy_version": "1.1",
         "generator_version": "sha256:3567f2b6e246",
         "reviewer_version": "sha256:e4142013a3cb",
-        "solver_version": "sha256:df1200bed2b1"
+        "solver_version": "sha256:df1200bed2b1",
+        "validator_versions": {
+          "generator": "sha256:a4fca97cb350aa9934f6db701097afaf776351940a673f76114cb49bbb499bae",
+          "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+          "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+          "we_generator_v2": "sha256:990fef282f86089a70e21dd850c4b02de5a28099832ab44d5360230c134c0115",
+          "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+        },
+        "schema_versions": {
+          "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+          "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+          "we_generator_v2": "sha256:4ee91a40bb9fb5a22cd79513fcebcba9aec4a4ec53c6954a59c18738a4ab3a77",
+          "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+          "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+          "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+        },
+        "orchestrator_version": "sha256:a823d19dad71eb63ece7547feb498ee020e9be86db0c7c79d1874ed7fce68ec3",
+        "solver_blinding_version": "sha256:570ae1c0c270df289b103e72d7226af312834ea7787b9136a2b32cd5d1d40432",
+        "config_version": "sha256:30f2dfc7e8a7989da442f8d1755a236c23e31f183533732b1c0bf0b5655c9920"
       },
       "accepted_item": {
         "item_id": "gen-struct-002",
@@ -271,6 +326,7 @@
           "reason": "'were raised significantly' is the only option that is both passive (matching the 'by the federal government' agent phrase) and correctly agrees with the plural subject 'tariffs' in past tense. B lacks the passive auxiliary. C uses the singular auxiliary 'was' against a plural subject. D is present tense, inconsistent with 'During the early twentieth century'.",
           "ambiguity_detected": false
         },
+        "solver_input_sha256": "sha256:ef8c1d0c9f1ba4b587f8c686ff044cf5d72e90db43907d1d6755f18f3b355f1d",
         "leakage_check": {
           "ok": true,
           "problems": [],
@@ -298,11 +354,29 @@
           "taxonomy_version": "1.1",
           "generator_version": "sha256:3567f2b6e246",
           "reviewer_version": "sha256:e4142013a3cb",
-          "solver_version": "sha256:df1200bed2b1"
+          "solver_version": "sha256:df1200bed2b1",
+          "validator_versions": {
+            "generator": "sha256:a4fca97cb350aa9934f6db701097afaf776351940a673f76114cb49bbb499bae",
+            "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+            "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+            "we_generator_v2": "sha256:990fef282f86089a70e21dd850c4b02de5a28099832ab44d5360230c134c0115",
+            "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+          },
+          "schema_versions": {
+            "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+            "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+            "we_generator_v2": "sha256:4ee91a40bb9fb5a22cd79513fcebcba9aec4a4ec53c6954a59c18738a4ab3a77",
+            "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+            "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+            "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+          },
+          "orchestrator_version": "sha256:a823d19dad71eb63ece7547feb498ee020e9be86db0c7c79d1874ed7fce68ec3",
+          "solver_blinding_version": "sha256:570ae1c0c270df289b103e72d7226af312834ea7787b9136a2b32cd5d1d40432",
+          "config_version": "sha256:30f2dfc7e8a7989da442f8d1755a236c23e31f183533732b1c0bf0b5655c9920"
         },
         "timestamps": {
-          "created": "2026-08-24T03:08:56.518782+00:00",
-          "updated": "2026-08-24T03:08:57.137364+00:00"
+          "created": "2026-08-25T06:12:01.974970+00:00",
+          "updated": "2026-08-25T06:12:03.380833+00:00"
         }
       }
     },
@@ -340,7 +414,25 @@
         "taxonomy_version": "1.1",
         "generator_version": "sha256:3567f2b6e246",
         "reviewer_version": "sha256:e4142013a3cb",
-        "solver_version": "sha256:df1200bed2b1"
+        "solver_version": "sha256:df1200bed2b1",
+        "validator_versions": {
+          "generator": "sha256:a4fca97cb350aa9934f6db701097afaf776351940a673f76114cb49bbb499bae",
+          "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+          "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+          "we_generator_v2": "sha256:990fef282f86089a70e21dd850c4b02de5a28099832ab44d5360230c134c0115",
+          "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+        },
+        "schema_versions": {
+          "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+          "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+          "we_generator_v2": "sha256:4ee91a40bb9fb5a22cd79513fcebcba9aec4a4ec53c6954a59c18738a4ab3a77",
+          "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+          "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+          "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+        },
+        "orchestrator_version": "sha256:a823d19dad71eb63ece7547feb498ee020e9be86db0c7c79d1874ed7fce68ec3",
+        "solver_blinding_version": "sha256:570ae1c0c270df289b103e72d7226af312834ea7787b9136a2b32cd5d1d40432",
+        "config_version": "sha256:30f2dfc7e8a7989da442f8d1755a236c23e31f183533732b1c0bf0b5655c9920"
       },
       "accepted_item": null,
       "qa_audit": {
@@ -388,6 +480,7 @@
           "source_similarity_risk": "LOW"
         },
         "solver": null,
+        "solver_input_sha256": null,
         "leakage_check": null,
         "consensus": null,
         "failure": null,
@@ -400,11 +493,29 @@
           "taxonomy_version": "1.1",
           "generator_version": "sha256:3567f2b6e246",
           "reviewer_version": "sha256:e4142013a3cb",
-          "solver_version": "sha256:df1200bed2b1"
+          "solver_version": "sha256:df1200bed2b1",
+          "validator_versions": {
+            "generator": "sha256:a4fca97cb350aa9934f6db701097afaf776351940a673f76114cb49bbb499bae",
+            "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+            "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+            "we_generator_v2": "sha256:990fef282f86089a70e21dd850c4b02de5a28099832ab44d5360230c134c0115",
+            "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+          },
+          "schema_versions": {
+            "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+            "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+            "we_generator_v2": "sha256:4ee91a40bb9fb5a22cd79513fcebcba9aec4a4ec53c6954a59c18738a4ab3a77",
+            "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+            "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+            "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+          },
+          "orchestrator_version": "sha256:a823d19dad71eb63ece7547feb498ee020e9be86db0c7c79d1874ed7fce68ec3",
+          "solver_blinding_version": "sha256:570ae1c0c270df289b103e72d7226af312834ea7787b9136a2b32cd5d1d40432",
+          "config_version": "sha256:30f2dfc7e8a7989da442f8d1755a236c23e31f183533732b1c0bf0b5655c9920"
         },
         "timestamps": {
-          "created": "2026-08-24T03:08:57.137450+00:00",
-          "updated": "2026-08-24T03:08:57.420124+00:00"
+          "created": "2026-08-25T06:12:03.381015+00:00",
+          "updated": "2026-08-25T06:12:04.332305+00:00"
         }
       }
     },
@@ -448,7 +559,25 @@
         "taxonomy_version": "1.1",
         "generator_version": "sha256:3567f2b6e246",
         "reviewer_version": "sha256:e4142013a3cb",
-        "solver_version": "sha256:df1200bed2b1"
+        "solver_version": "sha256:df1200bed2b1",
+        "validator_versions": {
+          "generator": "sha256:a4fca97cb350aa9934f6db701097afaf776351940a673f76114cb49bbb499bae",
+          "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+          "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+          "we_generator_v2": "sha256:990fef282f86089a70e21dd850c4b02de5a28099832ab44d5360230c134c0115",
+          "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+        },
+        "schema_versions": {
+          "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+          "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+          "we_generator_v2": "sha256:4ee91a40bb9fb5a22cd79513fcebcba9aec4a4ec53c6954a59c18738a4ab3a77",
+          "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+          "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+          "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+        },
+        "orchestrator_version": "sha256:a823d19dad71eb63ece7547feb498ee020e9be86db0c7c79d1874ed7fce68ec3",
+        "solver_blinding_version": "sha256:570ae1c0c270df289b103e72d7226af312834ea7787b9136a2b32cd5d1d40432",
+        "config_version": "sha256:30f2dfc7e8a7989da442f8d1755a236c23e31f183533732b1c0bf0b5655c9920"
       },
       "accepted_item": {
         "item_id": "gen-we-001",
@@ -529,6 +658,7 @@
           "suggested_correction": "unusual",
           "ambiguity_detected": false
         },
+        "solver_input_sha256": "sha256:b008f2e3f463c5734f39dcd5b77b44dee20ca1301f7541e5beb7714148f37163",
         "leakage_check": {
           "ok": true,
           "problems": [],
@@ -556,11 +686,29 @@
           "taxonomy_version": "1.1",
           "generator_version": "sha256:3567f2b6e246",
           "reviewer_version": "sha256:e4142013a3cb",
-          "solver_version": "sha256:df1200bed2b1"
+          "solver_version": "sha256:df1200bed2b1",
+          "validator_versions": {
+            "generator": "sha256:a4fca97cb350aa9934f6db701097afaf776351940a673f76114cb49bbb499bae",
+            "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+            "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+            "we_generator_v2": "sha256:990fef282f86089a70e21dd850c4b02de5a28099832ab44d5360230c134c0115",
+            "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+          },
+          "schema_versions": {
+            "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+            "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+            "we_generator_v2": "sha256:4ee91a40bb9fb5a22cd79513fcebcba9aec4a4ec53c6954a59c18738a4ab3a77",
+            "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+            "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+            "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+          },
+          "orchestrator_version": "sha256:a823d19dad71eb63ece7547feb498ee020e9be86db0c7c79d1874ed7fce68ec3",
+          "solver_blinding_version": "sha256:570ae1c0c270df289b103e72d7226af312834ea7787b9136a2b32cd5d1d40432",
+          "config_version": "sha256:30f2dfc7e8a7989da442f8d1755a236c23e31f183533732b1c0bf0b5655c9920"
         },
         "timestamps": {
-          "created": "2026-08-24T03:08:57.420206+00:00",
-          "updated": "2026-08-24T03:08:57.984120+00:00"
+          "created": "2026-08-25T06:12:04.332383+00:00",
+          "updated": "2026-08-25T06:12:05.826735+00:00"
         }
       }
     },
@@ -604,7 +752,25 @@
         "taxonomy_version": "1.1",
         "generator_version": "sha256:3567f2b6e246",
         "reviewer_version": "sha256:e4142013a3cb",
-        "solver_version": "sha256:df1200bed2b1"
+        "solver_version": "sha256:df1200bed2b1",
+        "validator_versions": {
+          "generator": "sha256:a4fca97cb350aa9934f6db701097afaf776351940a673f76114cb49bbb499bae",
+          "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+          "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+          "we_generator_v2": "sha256:990fef282f86089a70e21dd850c4b02de5a28099832ab44d5360230c134c0115",
+          "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+        },
+        "schema_versions": {
+          "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+          "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+          "we_generator_v2": "sha256:4ee91a40bb9fb5a22cd79513fcebcba9aec4a4ec53c6954a59c18738a4ab3a77",
+          "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+          "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+          "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+        },
+        "orchestrator_version": "sha256:a823d19dad71eb63ece7547feb498ee020e9be86db0c7c79d1874ed7fce68ec3",
+        "solver_blinding_version": "sha256:570ae1c0c270df289b103e72d7226af312834ea7787b9136a2b32cd5d1d40432",
+        "config_version": "sha256:30f2dfc7e8a7989da442f8d1755a236c23e31f183533732b1c0bf0b5655c9920"
       },
       "accepted_item": {
         "item_id": "gen-we-002",
@@ -685,6 +851,7 @@
           "suggested_correction": "has",
           "ambiguity_detected": false
         },
+        "solver_input_sha256": "sha256:7233c24b4104ab24c47b823a77d7a2a0aceef65481b185b8cffd19b83f56967a",
         "leakage_check": {
           "ok": true,
           "problems": [],
@@ -712,11 +879,29 @@
           "taxonomy_version": "1.1",
           "generator_version": "sha256:3567f2b6e246",
           "reviewer_version": "sha256:e4142013a3cb",
-          "solver_version": "sha256:df1200bed2b1"
+          "solver_version": "sha256:df1200bed2b1",
+          "validator_versions": {
+            "generator": "sha256:a4fca97cb350aa9934f6db701097afaf776351940a673f76114cb49bbb499bae",
+            "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+            "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+            "we_generator_v2": "sha256:990fef282f86089a70e21dd850c4b02de5a28099832ab44d5360230c134c0115",
+            "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+          },
+          "schema_versions": {
+            "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+            "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+            "we_generator_v2": "sha256:4ee91a40bb9fb5a22cd79513fcebcba9aec4a4ec53c6954a59c18738a4ab3a77",
+            "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+            "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+            "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+          },
+          "orchestrator_version": "sha256:a823d19dad71eb63ece7547feb498ee020e9be86db0c7c79d1874ed7fce68ec3",
+          "solver_blinding_version": "sha256:570ae1c0c270df289b103e72d7226af312834ea7787b9136a2b32cd5d1d40432",
+          "config_version": "sha256:30f2dfc7e8a7989da442f8d1755a236c23e31f183533732b1c0bf0b5655c9920"
         },
         "timestamps": {
-          "created": "2026-08-24T03:08:57.984267+00:00",
-          "updated": "2026-08-24T03:08:58.585745+00:00"
+          "created": "2026-08-25T06:12:05.826896+00:00",
+          "updated": "2026-08-25T06:12:07.374652+00:00"
         }
       }
     },
@@ -760,7 +945,25 @@
         "taxonomy_version": "1.1",
         "generator_version": "sha256:3567f2b6e246",
         "reviewer_version": "sha256:e4142013a3cb",
-        "solver_version": "sha256:df1200bed2b1"
+        "solver_version": "sha256:df1200bed2b1",
+        "validator_versions": {
+          "generator": "sha256:a4fca97cb350aa9934f6db701097afaf776351940a673f76114cb49bbb499bae",
+          "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+          "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+          "we_generator_v2": "sha256:990fef282f86089a70e21dd850c4b02de5a28099832ab44d5360230c134c0115",
+          "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+        },
+        "schema_versions": {
+          "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+          "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+          "we_generator_v2": "sha256:4ee91a40bb9fb5a22cd79513fcebcba9aec4a4ec53c6954a59c18738a4ab3a77",
+          "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+          "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+          "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+        },
+        "orchestrator_version": "sha256:a823d19dad71eb63ece7547feb498ee020e9be86db0c7c79d1874ed7fce68ec3",
+        "solver_blinding_version": "sha256:570ae1c0c270df289b103e72d7226af312834ea7787b9136a2b32cd5d1d40432",
+        "config_version": "sha256:30f2dfc7e8a7989da442f8d1755a236c23e31f183533732b1c0bf0b5655c9920"
       },
       "accepted_item": {
         "item_id": "gen-we-003",
@@ -841,6 +1044,7 @@
           "suggested_correction": "more",
           "ambiguity_detected": false
         },
+        "solver_input_sha256": "sha256:3e67fa522ae0cf3d0e351222b769705590b5d039e7ab5d45235d6238df0003c2",
         "leakage_check": {
           "ok": true,
           "problems": [],
@@ -868,11 +1072,29 @@
           "taxonomy_version": "1.1",
           "generator_version": "sha256:3567f2b6e246",
           "reviewer_version": "sha256:e4142013a3cb",
-          "solver_version": "sha256:df1200bed2b1"
+          "solver_version": "sha256:df1200bed2b1",
+          "validator_versions": {
+            "generator": "sha256:a4fca97cb350aa9934f6db701097afaf776351940a673f76114cb49bbb499bae",
+            "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+            "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+            "we_generator_v2": "sha256:990fef282f86089a70e21dd850c4b02de5a28099832ab44d5360230c134c0115",
+            "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+          },
+          "schema_versions": {
+            "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+            "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+            "we_generator_v2": "sha256:4ee91a40bb9fb5a22cd79513fcebcba9aec4a4ec53c6954a59c18738a4ab3a77",
+            "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+            "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+            "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+          },
+          "orchestrator_version": "sha256:a823d19dad71eb63ece7547feb498ee020e9be86db0c7c79d1874ed7fce68ec3",
+          "solver_blinding_version": "sha256:570ae1c0c270df289b103e72d7226af312834ea7787b9136a2b32cd5d1d40432",
+          "config_version": "sha256:30f2dfc7e8a7989da442f8d1755a236c23e31f183533732b1c0bf0b5655c9920"
         },
         "timestamps": {
-          "created": "2026-08-24T03:08:58.585833+00:00",
-          "updated": "2026-08-24T03:08:59.192872+00:00"
+          "created": "2026-08-25T06:12:07.374824+00:00",
+          "updated": "2026-08-25T06:12:08.980514+00:00"
         }
       }
     }

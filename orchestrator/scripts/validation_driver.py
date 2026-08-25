@@ -17,7 +17,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from orchestrator import (  # noqa: E402
     BatchIntegrityTracker,
     Candidate,
-    ConsensusResult,
     FailureInfo,
     REPO_ROOT,
     State,
@@ -27,13 +26,16 @@ from orchestrator import (  # noqa: E402
     build_generator_feedback,
     build_manual_review_entry,
     build_provenance_record,
+    derive_slot_requirements,
     load_config,
+    load_candidate_state,
     load_items_by_id,
     load_versions,
     leakage_guard,
     process_generation_output,
     process_review_output,
     process_solver_stage,
+    save_candidate_state,
     strip_internal_test_keys,
     validate_final_record,
 )
@@ -43,84 +45,15 @@ VALIDATION_DIR = REPO_ROOT / "analysis" / "validation"
 STATE_PATH = VALIDATION_DIR / "validation_candidates_state.json"
 
 
-def candidate_to_dict(c: Candidate) -> dict:
-    return {
-        "item_id": c.item_id,
-        "concept_id": c.concept_id,
-        "section": c.section,
-        "state": c.state,
-        "state_history": c.state_history,
-        "generation_attempt": c.generation_attempt,
-        "revision_count": c.revision_count,
-        "generator_item": c.generator_item,
-        "reviewer_item": c.reviewer_item,
-        "solver_item": c.solver_item,
-        "solver_input": c.solver_input,
-        "leakage_check": c.leakage_check,
-        "consensus": None if c.consensus is None else {
-            "auto_accept": c.consensus.auto_accept,
-            "routing": c.consensus.routing,
-            "failed_conditions": c.consensus.failed_conditions,
-            "disagreement_reasons": c.consensus.disagreement_reasons,
-        },
-        "failure": None if c.failure is None else {
-            "kind": c.failure.kind,
-            "stage": c.failure.stage,
-            "detail": c.failure.detail,
-        },
-        "notes": c.notes,
-        "created_at": c.created_at,
-        "updated_at": c.updated_at,
-        "review_history": getattr(c, "review_history", []),
-        "generation_history": getattr(c, "generation_history", []),
-    }
-
-
-def dict_to_candidate(d: dict) -> Candidate:
-    c = Candidate(item_id=d["item_id"], concept_id=d["concept_id"], section=d["section"])
-    c.state = d["state"]
-    c.state_history = d["state_history"]
-    c.generation_attempt = d["generation_attempt"]
-    c.revision_count = d["revision_count"]
-    c.generator_item = d["generator_item"]
-    c.reviewer_item = d["reviewer_item"]
-    c.solver_item = d["solver_item"]
-    c.solver_input = d.get("solver_input")
-    c.leakage_check = d.get("leakage_check")
-    if d.get("consensus") is not None:
-        c.consensus = ConsensusResult(
-            auto_accept=d["consensus"]["auto_accept"],
-            routing=d["consensus"]["routing"],
-            failed_conditions=d["consensus"]["failed_conditions"],
-            disagreement_reasons=d["consensus"]["disagreement_reasons"],
-        )
-    if d.get("failure") is not None:
-        c.failure = FailureInfo(
-            kind=d["failure"]["kind"],
-            stage=d["failure"]["stage"],
-            detail=d["failure"]["detail"],
-        )
-    c.notes = d.get("notes", [])
-    c.created_at = d.get("created_at", c.created_at)
-    c.updated_at = d.get("updated_at", c.updated_at)
-    c.review_history = d.get("review_history", [])
-    c.generation_history = d.get("generation_history", [])
-    return c
-
-
 def load_state() -> dict[str, Candidate]:
     if not STATE_PATH.exists():
         raise SystemExit(f"No state file at {STATE_PATH}; run init first.")
-    data = json.loads(STATE_PATH.read_text(encoding="utf-8"))
-    return {item_id: dict_to_candidate(d) for item_id, d in data.items()}
+    return load_candidate_state(STATE_PATH)
 
 
 def save_state(candidates: dict[str, Candidate]) -> None:
     VALIDATION_DIR.mkdir(parents=True, exist_ok=True)
-    STATE_PATH.write_text(
-        json.dumps({i: candidate_to_dict(c) for i, c in candidates.items()}, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
+    save_candidate_state(STATE_PATH, candidates)
 
 
 def state_tally(candidates: dict[str, Candidate]) -> dict[str, int]:
@@ -146,13 +79,15 @@ def cmd_init(*batch_paths: str) -> None:
     if sections != {"Structure": 45, "Written Expression": 75}:
         raise ValueError(f"initial section counts mismatch: {sections}")
 
-    (VALIDATION_DIR / "validation_initial_items.json").write_text(
-        json.dumps({"items": list(gen_items.values())}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    atomic_write_json(
+        VALIDATION_DIR / "validation_initial_items.json",
+        {"items": list(gen_items.values())},
     )
     candidates: dict[str, Candidate] = {}
     for item_id, item in gen_items.items():
         c = Candidate(item_id=item_id, concept_id=item_id, section=item.get("section", "unknown"))
         c.generator_item = item
+        c.planned_slot = derive_slot_requirements(item)
         c.generation_history = [{"attempt": 1, "item": item}]
         c = process_generation_output(c, config)
         candidates[item_id] = c
@@ -242,7 +177,12 @@ def cmd_apply_solver(solver_path: str) -> None:
     for item_id, c in candidates.items():
         if c.state == State.SOLVING and c.solver_input is not None and item_id in solver_items:
             c.solver_item = strip_internal_test_keys(solver_items[item_id])
-            c = process_solver_stage(c, config, c.solver_item)
+            c = process_solver_stage(
+                c,
+                config,
+                c.solver_item,
+                precomputed_solver_input=c.solver_input,
+            )
             candidates[item_id] = c
     save_state(candidates)
     print(f"Applied Solver outputs: {len(solver_items)} supplied")
@@ -268,12 +208,12 @@ def cmd_finalize() -> None:
     failures = []
     for c in candidates.values():
         if c.generator_item is not None:
-            tracker.record_planned(c.generator_item)
+            tracker.record_planned(c.generator_item, c.planned_slot)
         rec = build_provenance_record(c, versions)
         rec["validation_trace"] = {
             "initial_candidate": True,
-            "generation_history": getattr(c, "generation_history", []),
-            "review_history": getattr(c, "review_history", []),
+            "generation_history": c.generation_history,
+            "review_history": c.review_history,
         }
         provenance.append(rec)
         if c.state == State.ACCEPTED:

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -43,6 +44,18 @@ def load_schema(path: Path) -> dict[str, Any]:
     return document
 
 
+@lru_cache(maxsize=64)
+def _cached_validator(schema_json: str):
+    """Build a validator once per schema document within a process."""
+    _require_runtime()
+    schema = json.loads(schema_json)
+    try:
+        Draft202012Validator.check_schema(schema)
+        return Draft202012Validator(schema)
+    except SchemaError as exc:
+        raise SchemaValidationRuntimeError(f"invalid Draft 2020-12 schema: {exc.message}") from exc
+
+
 def _path(parts: tuple[object, ...], root: str = "$") -> str:
     result = root
     for part in parts:
@@ -64,11 +77,8 @@ def _message(error: Any) -> list[str]:
 def schema_errors(value: Any, schema: dict[str, Any], path: str = "$") -> list[str]:
     """Return stable path-prefixed errors; invalid schemas raise runtime errors."""
     _require_runtime()
-    try:
-        Draft202012Validator.check_schema(schema)
-        validator = Draft202012Validator(schema)
-    except SchemaError as exc:
-        raise SchemaValidationRuntimeError(f"invalid Draft 2020-12 schema: {exc.message}") from exc
+    serialized_schema = json.dumps(schema, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    validator = _cached_validator(serialized_schema)
     errors: list[str] = []
     for error in sorted(
         validator.iter_errors(value),
