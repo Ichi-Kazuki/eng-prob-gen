@@ -1,0 +1,3009 @@
+{
+  "artifact": "WE v2.1.1 grammar pilot sealed generator answer key",
+  "sealed_until_blind_review_complete": true,
+  "run": {
+    "batch_id": "we-v2.1.1-grammar-pilot-20260825",
+    "generator_version": "Written Expression Generator v2.1.1",
+    "item_schema_version_literal": "Written Expression Generator v2.1",
+    "generated_at_utc": "2026-08-25T13:47:19.876352+00:00",
+    "generation_unit": "one fresh item per microbatch",
+    "sentence_first": true,
+    "fresh_generation": true,
+    "historical_exact_sentence_matches": 0,
+    "initial_generation_attempts": 25,
+    "initial_generation_failures": 0,
+    "initial_generation_failure_rate": 0.0,
+    "regenerated_count": 0,
+    "reviewer_runtime_available": false,
+    "solver_runtime_available": false,
+    "synthetic_reviewer_solver_judgment_generated": false,
+    "version_lock": {
+      "locked_generator_version": "Written Expression Generator v2.1.1",
+      "item_schema_version_literal": "Written Expression Generator v2.1",
+      "paths": {
+        "generator_prompt": {
+          "path": ".claude/agents/toefl-itp-we-generator-v2.md",
+          "sha256": "sha256:088d30211539721afa61dea436aba95e2308b47b5a463b685e04997290229e0f"
+        },
+        "generator_instructions": {
+          "path": "agents/toefl_itp_we_generator_v2/AGENTS.md",
+          "sha256": "sha256:1f98b42768720a5f13769f2a1c831f26412399c9c79978114fa29253c8225888"
+        },
+        "generator_schema": {
+          "path": "agents/toefl_itp_we_generator_v2/schema/written_expression_item_v2.schema.json",
+          "sha256": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0"
+        },
+        "format_planner": {
+          "path": "agents/toefl_itp_we_generator_v2/scripts/format_planner.py",
+          "sha256": "sha256:d665cc80b7eb03ccda14ae11aebb3f0aeffecbbdc88a7d184abae0dea0feacd5"
+        },
+        "format_validator": {
+          "path": "agents/toefl_itp_we_generator_v2/scripts/validate_format.py",
+          "sha256": "sha256:e2c01982fdcf227c33bd87d8796777ec85a15d3bdcb38d6b03b3c864cb714d57"
+        },
+        "format_config": {
+          "path": "agents/toefl_itp_we_generator_v2/config/we_v2_format_config.json",
+          "sha256": "sha256:3d740c542e122bc7624fa67f9eefa48615725d0ba467ffd2ed68f0cdf7d537ce"
+        },
+        "grammar_spec": {
+          "path": "specs/toefl_itp_grammar_spec.json",
+          "sha256": "sha256:b4a803f8482cb75d01be05b0ffb17d04d02a2faa39166d1a18d038da770f5279"
+        },
+        "format_spec": {
+          "path": "specs/toefl_itp_we_format_spec_addendum.json",
+          "sha256": "sha256:56873dada674d530ec35003d0e16486b2127af3469e6846258b7f77c57c75b97"
+        },
+        "taxonomy": {
+          "path": "analysis/grammar_taxonomy.json",
+          "sha256": "sha256:5aa3566c49f20b75fcbb532fca21c75addf288e38f3403278b6c4f30007ec729"
+        },
+        "reviewer_contract": {
+          "path": "agents/toefl_itp_we_reviewer_v2/schema/reviewer_output_v2.schema.json",
+          "sha256": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f"
+        },
+        "solver_contract": {
+          "path": "agents/toefl_itp_grammar_solver/schema/solver_output.schema.json",
+          "sha256": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+        }
+      }
+    }
+  },
+  "items": [
+    {
+      "blind_id": "blind-001",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-001",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "tested_error_type": "agreement_error",
+      "mutation_metadata": {
+        "clean_form": "The network of underground sensors detects seasonal shifts in soil moisture across three agricultural terraces during the spring survey this year.",
+        "error_form": "The network of underground sensors detect seasonal shifts in soil moisture across three agricultural terraces during the spring survey this year.",
+        "mutation_type": "singular subject with plural finite-verb substitution: detects -> detect",
+        "minimal_correction": "Change detect to detects."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 20,
+          "lower": 18,
+          "upper": 22,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 5,
+          "gap_B_C": 4,
+          "gap_C_D": 3
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "C",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The singular head noun network requires detects, not detect.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "The network",
+        "B": "detect",
+        "C": "moisture",
+        "D": "terraces"
+      },
+      "sentence": "The network of underground sensors detect seasonal shifts in soil moisture across three agricultural terraces during the spring survey this year.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          5
+        ],
+        "changed_error_token_indices": [
+          5
+        ],
+        "marked_correct_token_indices": [
+          5
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-002",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-002",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "RELATIVE_CLAUSES",
+      "tested_error_type": "incorrect_relative_marker",
+      "mutation_metadata": {
+        "clean_form": "The marine archive preserves specimens that researchers examined before the curators cataloged them for a regional biodiversity database during the annual cataloging cycle.",
+        "error_form": "The marine archive preserves specimens who researchers examined before the curators cataloged them for a regional biodiversity database during the annual cataloging cycle.",
+        "mutation_type": "object relative pronoun substitution: whom -> who",
+        "minimal_correction": "Change who to whom."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 25,
+          "lower": 23,
+          "upper": 27,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 2,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          2,
+          1,
+          1
+        ],
+        "answer_position": "C",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The relative pronoun is the object of examined, so whom is required in formal written English.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "who",
+        "B": "the curators",
+        "C": "them",
+        "D": "database"
+      },
+      "sentence": "The marine archive preserves specimens who researchers examined before the curators cataloged them for a regional biodiversity database during the annual cataloging cycle.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          5
+        ],
+        "changed_error_token_indices": [
+          5
+        ],
+        "marked_correct_token_indices": [
+          5
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-003",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-003",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_metadata": {
+        "clean_form": "Researchers analyzing pollen samples identified grains preserved in sediments that accumulated near the valley lake after repeated floods during spring fieldwork.",
+        "error_form": "Researchers analyzing pollen samples identified grains preserving in sediments that accumulated near the valley lake after repeated floods during spring fieldwork.",
+        "mutation_type": "reduced passive participle substitution: preserved -> preserving",
+        "minimal_correction": "Change preserving to preserved."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 21,
+          "lower": 19,
+          "upper": 23,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 4,
+          "gap_C_D": 3
+        },
+        "distractor_word_counts": [
+          1,
+          2,
+          3
+        ],
+        "answer_position": "D",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The grains receive the action of being preserved, so the past participle preserved is required.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "analyzing pollen",
+        "B": "preserving",
+        "C": "accumulated",
+        "D": "lake"
+      },
+      "sentence": "Researchers analyzing pollen samples identified grains preserving in sediments that accumulated near the valley lake after repeated floods during spring fieldwork.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          6
+        ],
+        "changed_error_token_indices": [
+          6
+        ],
+        "marked_correct_token_indices": [
+          6
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-004",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-004",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "NOUN_CLAUSES",
+      "tested_error_type": "wrong_word_order",
+      "mutation_metadata": {
+        "clean_form": "The committee recorded why the northern bridge required reinforcement after engineers inspected its foundations during the autumn survey before winter maintenance.",
+        "error_form": "The committee recorded why did the northern bridge required reinforcement after engineers inspected its foundations during the autumn survey before winter maintenance.",
+        "mutation_type": "embedded-question inversion insertion: why the bridge required -> why did the bridge require",
+        "minimal_correction": "Remove did and use required after bridge."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 23,
+          "lower": 21,
+          "upper": 25,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 5,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          2,
+          2,
+          1
+        ],
+        "answer_position": "C",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "An embedded question keeps statement order and does not use the auxiliary did before its subject.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "WORD_ORDER",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "did",
+        "B": "reinforcement",
+        "C": "foundations",
+        "D": "before winter"
+      },
+      "sentence": "The committee recorded why did the northern bridge required reinforcement after engineers inspected its foundations during the autumn survey before winter maintenance.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [],
+        "changed_error_token_indices": [
+          4
+        ],
+        "marked_correct_token_indices": [
+          4
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-005",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-005",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "tested_error_type": "incorrect_subordinator",
+      "mutation_metadata": {
+        "clean_form": "Although the desert station received little rainfall, its groundwater levels remained stable because nearby rock layers retained winter snowmelt each year.",
+        "error_form": "Despite the desert station received little rainfall, its groundwater levels remained stable because nearby rock layers retained winter snowmelt each year.",
+        "mutation_type": "finite-clause connector substitution: Although -> Despite",
+        "minimal_correction": "Change Despite to Although."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 21,
+          "lower": 19,
+          "upper": 23,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "CLAUSE_OR_CLAUSE_LIKE",
+          "target_word_count": 3,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 2,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The following unit contains a finite clause, so Although rather than the noun-phrase connector Despite is required.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "CLAUSE_RELATION",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "Despite",
+        "B": "received little",
+        "C": "groundwater",
+        "D": "nearby"
+      },
+      "sentence": "Despite the desert station received little rainfall, its groundwater levels remained stable because nearby rock layers retained winter snowmelt each year.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          0
+        ],
+        "changed_error_token_indices": [
+          0
+        ],
+        "marked_correct_token_indices": [
+          0
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-006",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-006",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "WORD_CLASS_FORM",
+      "tested_error_type": "incorrect_part_of_speech",
+      "mutation_metadata": {
+        "clean_form": "The irrigation study carefully measures how salinity affects crops growing beside the eastern canal during dry months in prolonged drought periods.",
+        "error_form": "The irrigation study careful measures how salinity affects crops growing beside the eastern canal during dry months in prolonged drought periods.",
+        "mutation_type": "single-token adjective-for-adverb substitution: carefully -> careful",
+        "minimal_correction": "Change careful to carefully."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 22,
+          "lower": 20,
+          "upper": 24,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 3,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "A",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The verb measures needs the adverb carefully, not the adjective careful.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "WORD_CLASS",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "careful",
+        "B": "crops",
+        "C": "eastern",
+        "D": "prolonged drought"
+      },
+      "sentence": "The irrigation study careful measures how salinity affects crops growing beside the eastern canal during dry months in prolonged drought periods.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          3
+        ],
+        "changed_error_token_indices": [
+          3
+        ],
+        "marked_correct_token_indices": [
+          3
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-007",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-007",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "wrong_preposition_collocation",
+      "mutation_metadata": {
+        "clean_form": "The new policy enables small clinics to comply with updated reporting rules without hiring additional administrative staff during annual site inspections.",
+        "error_form": "The new policy enables small clinics to comply to updated reporting rules without hiring additional administrative staff during annual site inspections.",
+        "mutation_type": "verb-preposition collocation substitution: comply with -> comply to",
+        "minimal_correction": "Change comply to to comply with."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 20,
+          "lower": 18,
+          "upper": 22,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 2,
+          "gap_C_D": 3
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "D",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The verb comply takes the preposition with in this construction.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "B",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "enables",
+        "B": "comply to",
+        "C": "rules",
+        "D": "staff"
+      },
+      "sentence": "The new policy enables small clinics to comply to updated reporting rules without hiring additional administrative staff during annual site inspections.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          8
+        ],
+        "changed_error_token_indices": [
+          8
+        ],
+        "marked_correct_token_indices": [
+          7,
+          8
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-008",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-008",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "tested_error_type": "wrong_degree_form",
+      "mutation_metadata": {
+        "clean_form": "The revised filtration method is more reliable than the earlier procedure during prolonged periods of heavy sediment in repeated controlled trials.",
+        "error_form": "The revised filtration method is most reliable than the earlier procedure during prolonged periods of heavy sediment in repeated controlled trials.",
+        "mutation_type": "comparative/superlative substitution: more reliable -> most reliable",
+        "minimal_correction": "Change most reliable to more reliable."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 21,
+          "lower": 19,
+          "upper": 23,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 5,
+          "gap_B_C": 2,
+          "gap_C_D": 3
+        },
+        "distractor_word_counts": [
+          2,
+          1,
+          4
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "A comparison between two methods requires the comparative more reliable, not the superlative most reliable.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "most reliable",
+        "B": "prolonged periods",
+        "C": "sediment",
+        "D": "trials"
+      },
+      "sentence": "The revised filtration method is most reliable than the earlier procedure during prolonged periods of heavy sediment in repeated controlled trials.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          5
+        ],
+        "changed_error_token_indices": [
+          5
+        ],
+        "marked_correct_token_indices": [
+          5,
+          6
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-009",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-009",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_metadata": {
+        "clean_form": "The research vessel will map the seafloor, collect water samples, and record currents near the island chain during annual marine surveys.",
+        "error_form": "The research vessel will map the seafloor, collecting water samples, and record currents near the island chain during annual marine surveys.",
+        "mutation_type": "parallel verb-form substitution: collect -> collecting",
+        "minimal_correction": "Change collecting to collect."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 23,
+          "lower": 21,
+          "upper": 25,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 3,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 5,
+          "gap_B_C": 4,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The three coordinated verbs follow will, so each must be in the base form.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "The research",
+        "B": "collecting",
+        "C": "currents",
+        "D": "chain"
+      },
+      "sentence": "The research vessel will map the seafloor, collecting water samples, and record currents near the island chain during annual marine surveys.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          7
+        ],
+        "changed_error_token_indices": [
+          7
+        ],
+        "marked_correct_token_indices": [
+          7
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-010",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-010",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "incorrect_reference",
+      "mutation_metadata": {
+        "clean_form": "The telescope photographed the comet after the comet crossed the horizon above the observatory at dawn during the annual dawn observation period.",
+        "error_form": "The telescope photographed the comet after it crossed the horizon above the observatory at dawn during the annual dawn observation period.",
+        "mutation_type": "ambiguous-pronoun substitution: the comet -> it",
+        "minimal_correction": "Replace it with the comet."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 24,
+          "lower": 22,
+          "upper": 26,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 5,
+          "gap_B_C": 2,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          1,
+          2,
+          2
+        ],
+        "answer_position": "C",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The pronoun it creates an unclear antecedent because both telescope and comet are available referents.",
+      "grammar_metadata": {
+        "error_scope": "cross_clause",
+        "correction_locality": "SEMANTIC_OR_CONTEXT_DEPENDENT",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "telescope",
+        "B": "it",
+        "C": "horizon",
+        "D": "at dawn"
+      },
+      "sentence": "The telescope photographed the comet after it crossed the horizon above the observatory at dawn during the annual dawn observation period.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          6,
+          7
+        ],
+        "changed_error_token_indices": [
+          6
+        ],
+        "marked_correct_token_indices": [
+          6
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-011",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-011",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "tested_error_type": "agreement_error",
+      "mutation_metadata": {
+        "clean_form": "There are several factors that influence how rapidly wetlands recover after seasonal flooding in the lower river basin throughout spring flooding.",
+        "error_form": "There is several factors that influence how rapidly wetlands recover after seasonal flooding in the lower river basin throughout spring flooding.",
+        "mutation_type": "existential agreement substitution: are -> is",
+        "minimal_correction": "Change is to are."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 21,
+          "lower": 19,
+          "upper": 23,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 4,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          1,
+          2,
+          1
+        ],
+        "answer_position": "A",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The plural noun factors requires are in the existential there construction.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "is",
+        "B": "influence how",
+        "C": "seasonal",
+        "D": "basin"
+      },
+      "sentence": "There is several factors that influence how rapidly wetlands recover after seasonal flooding in the lower river basin throughout spring flooding.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          1
+        ],
+        "changed_error_token_indices": [
+          1
+        ],
+        "marked_correct_token_indices": [
+          1
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-012",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-012",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "INVERSION",
+      "tested_error_type": "wrong_word_order",
+      "mutation_metadata": {
+        "clean_form": "Not until the archive reopened did visitors learn that the collection had survived the fire in the eastern wing for visiting scholars.",
+        "error_form": "Not until the archive reopened visitors did learn that the collection had survived the fire in the eastern wing for visiting scholars.",
+        "mutation_type": "negative-fronting inversion reversal: did visitors learn -> visitors did learn",
+        "minimal_correction": "Reorder visitors did learn as did visitors learn."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 21,
+          "lower": 19,
+          "upper": 23,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 4,
+          "gap_C_D": 2
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The fronted negative phrase Not until requires the auxiliary did before the subject visitors.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "WORD_ORDER",
+        "intended_error_position": "B",
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE"
+      },
+      "marked_parts": {
+        "A": "Not",
+        "B": "visitors did learn",
+        "C": "survived",
+        "D": "fire"
+      },
+      "sentence": "Not until the archive reopened visitors did learn that the collection had survived the fire in the eastern wing for visiting scholars.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 2,
+        "changed_clean_token_indices": [
+          6
+        ],
+        "changed_error_token_indices": [
+          5
+        ],
+        "marked_correct_token_indices": [
+          5,
+          6,
+          7
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-013",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-013",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "incorrect_part_of_speech",
+      "mutation_metadata": {
+        "clean_form": "The committee considered the proposal beneficial for communities located near the reservoir after reviewing the projected costs.",
+        "error_form": "The committee considered the proposal benefit for communities located near the reservoir after reviewing the projected costs.",
+        "mutation_type": "object-complement noun-for-adjective substitution: beneficial -> benefit",
+        "minimal_correction": "Change benefit to beneficial."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "CLAUSE_OR_CLAUSE_LIKE",
+          "target_word_count": 4,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 2,
+          "gap_B_C": 3,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          2,
+          1,
+          2
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "Considered requires the adjective beneficial as the complement describing the proposal.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "considered",
+        "B": "benefit",
+        "C": "the reservoir",
+        "D": "costs"
+      },
+      "sentence": "The committee considered the proposal benefit for communities located near the reservoir after reviewing the projected costs.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          5
+        ],
+        "changed_error_token_indices": [
+          5
+        ],
+        "marked_correct_token_indices": [
+          5
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-014",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-014",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "incorrect_part_of_speech",
+      "mutation_metadata": {
+        "clean_form": "A network of sensors detected unusual vibrations beneath the bridge during the overnight inspection by structural engineers.",
+        "error_form": "An network of sensors detected unusual vibrations beneath the bridge during the overnight inspection by structural engineers.",
+        "mutation_type": "indefinite-article substitution before consonant sound: A network -> An network",
+        "minimal_correction": "Change An network to A network."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 16,
+          "lower": 14,
+          "upper": 18,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 3,
+          "gap_C_D": 6
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The noun network begins with a consonant sound, so it takes A rather than An.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "An network",
+        "B": "detected",
+        "C": "bridge",
+        "D": "engineers"
+      },
+      "sentence": "An network of sensors detected unusual vibrations beneath the bridge during the overnight inspection by structural engineers.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          0
+        ],
+        "changed_error_token_indices": [
+          0
+        ],
+        "marked_correct_token_indices": [
+          0,
+          1
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-015",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-015",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "WORD_ORDER_MODIFICATION",
+      "tested_error_type": "wrong_word_order",
+      "mutation_metadata": {
+        "clean_form": "The university opened a research center for coastal engineering near the renovated harbor last year after securing regional funding.",
+        "error_form": "The university opened a research center for coastal near engineering the renovated harbor last year after securing regional funding.",
+        "mutation_type": "noun-modifier order reversal: coastal engineering near the -> coastal near engineering the",
+        "minimal_correction": "Reorder coastal near engineering the as coastal engineering near the."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 18,
+          "lower": 16,
+          "upper": 20,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 1,
+          "gap_B_C": 3,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          1,
+          2,
+          1
+        ],
+        "answer_position": "A",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The prepositional phrase near the renovated harbor modifies the center and must follow the engineering noun phrase.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "WORD_ORDER",
+        "intended_error_position": "B",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "center",
+        "B": "coastal near engineering",
+        "C": "last",
+        "D": "funding"
+      },
+      "sentence": "The university opened a research center for coastal near engineering the renovated harbor last year after securing regional funding.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 2,
+        "changed_clean_token_indices": [
+          9
+        ],
+        "changed_error_token_indices": [
+          8
+        ],
+        "marked_correct_token_indices": [
+          7,
+          8,
+          9
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-016",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-016",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "ADVERBIAL_CLAUSES",
+      "tested_error_type": "wrong_word_order",
+      "mutation_metadata": {
+        "clean_form": "While the seedlings were exposed to cold air, the greenhouse maintained a stable temperature throughout the night near the mountain field station.",
+        "error_form": "While the seedlings exposed were to cold air, the greenhouse maintained a stable temperature throughout the night near the mountain field station.",
+        "mutation_type": "adverbial-clause subject/verb order reversal: the seedlings were exposed -> exposed the seedlings",
+        "minimal_correction": "Reorder exposed the seedlings as the seedlings were exposed."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 24,
+          "lower": 22,
+          "upper": 26,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 3,
+          "gap_C_D": 2
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          2
+        ],
+        "answer_position": "D",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The subject seedlings must precede the passive verb phrase were exposed in the while-clause.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "WORD_ORDER",
+        "intended_error_position": "A",
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE"
+      },
+      "marked_parts": {
+        "A": "exposed were",
+        "B": "the greenhouse",
+        "C": "temperature",
+        "D": "night"
+      },
+      "sentence": "While the seedlings exposed were to cold air, the greenhouse maintained a stable temperature throughout the night near the mountain field station.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 2,
+        "changed_clean_token_indices": [
+          4
+        ],
+        "changed_error_token_indices": [
+          3
+        ],
+        "marked_correct_token_indices": [
+          3,
+          4
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-017",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-017",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "NOUN_CLAUSES",
+      "tested_error_type": "wrong_word_order",
+      "mutation_metadata": {
+        "clean_form": "Scientists determined whether the new compound dissolves completely before testing it in a second solution under controlled laboratory conditions.",
+        "error_form": "Scientists determined whether does the new compound dissolves completely before testing it in a second solution under controlled laboratory conditions.",
+        "mutation_type": "embedded-question auxiliary insertion: whether the compound dissolves -> whether does the compound dissolve",
+        "minimal_correction": "Remove does and retain dissolves after compound."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 19,
+          "lower": 17,
+          "upper": 21,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 6,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          1,
+          2,
+          1
+        ],
+        "answer_position": "D",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The whether-clause uses statement order and does not insert does before its subject.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "WORD_ORDER",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "does",
+        "B": "completely",
+        "C": "a second",
+        "D": "conditions"
+      },
+      "sentence": "Scientists determined whether does the new compound dissolves completely before testing it in a second solution under controlled laboratory conditions.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [],
+        "changed_error_token_indices": [
+          3
+        ],
+        "marked_correct_token_indices": [
+          3
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-018",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-018",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "WORD_CLASS_FORM",
+      "tested_error_type": "incorrect_part_of_speech",
+      "mutation_metadata": {
+        "clean_form": "The historian described the settlement's gradual expansion in a chapter about regional trade across the inland plateau.",
+        "error_form": "The historian described the settlement's gradually expansion in a chapter about regional trade across the inland plateau.",
+        "mutation_type": "noun-modifier adverb-for-adjective substitution: gradual -> gradually",
+        "minimal_correction": "Change gradually to gradual."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 16,
+          "lower": 14,
+          "upper": 18,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 4,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "A",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The noun expansion requires the attributive adjective gradual, not the adverb gradually.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "WORD_CLASS",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "The historian",
+        "B": "gradually",
+        "C": "chapter",
+        "D": "inland"
+      },
+      "sentence": "The historian described the settlement's gradually expansion in a chapter about regional trade across the inland plateau.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          5
+        ],
+        "changed_error_token_indices": [
+          5
+        ],
+        "marked_correct_token_indices": [
+          5
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-019",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-019",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_metadata": {
+        "clean_form": "The field station postponed repairing the water pump until replacement parts arrived from the mainland before the winter freeze.",
+        "error_form": "The field station postponed to repair the water pump until replacement parts arrived from the mainland before the winter freeze.",
+        "mutation_type": "gerund-for-infinitive complement substitution: repairing -> to repair",
+        "minimal_correction": "Change to repair to repairing."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 21,
+          "lower": 19,
+          "upper": 23,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 2,
+          "gap_C_D": 5
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          2
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "Postponed is followed by a gerund, repairing, rather than an infinitive.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "to repair",
+        "B": "replacement",
+        "C": "arrived",
+        "D": "winter"
+      },
+      "sentence": "The field station postponed to repair the water pump until replacement parts arrived from the mainland before the winter freeze.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          4
+        ],
+        "changed_error_token_indices": [
+          4,
+          5
+        ],
+        "marked_correct_token_indices": [
+          4,
+          5
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-020",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-020",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "tested_error_type": "agreement_error",
+      "mutation_metadata": {
+        "clean_form": "A series of controlled experiments reveals how the catalyst changes under different pressures in the reactor during repeated heating cycles.",
+        "error_form": "A series of controlled experiments reveal how the catalyst changes under different pressures in the reactor during repeated heating cycles.",
+        "mutation_type": "singular head agreement substitution: reveals -> reveal",
+        "minimal_correction": "Change reveal to reveals."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 21,
+          "lower": 19,
+          "upper": 23,
+          "region": "21-25",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 2,
+          "gap_C_D": 6
+        },
+        "distractor_word_counts": [
+          3,
+          1,
+          1
+        ],
+        "answer_position": "D",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The head of the subject is the singular noun series, which requires reveals.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "A series",
+        "B": "reveal",
+        "C": "catalyst",
+        "D": "reactor"
+      },
+      "sentence": "A series of controlled experiments reveal how the catalyst changes under different pressures in the reactor during repeated heating cycles.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          5
+        ],
+        "changed_error_token_indices": [
+          5
+        ],
+        "marked_correct_token_indices": [
+          5
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-021",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-021",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "tested_error_type": "agreement_error",
+      "mutation_metadata": {
+        "clean_form": "The report identifies two pathways that reduce erosion and improve water retention on steep cultivated slopes after heavy rain.",
+        "error_form": "The report identifies two pathways that reduce erosion and improves water retention on steep cultivated slopes after heavy rain.",
+        "mutation_type": "parallel agreement substitution: improve -> improves",
+        "minimal_correction": "Change improves to improve."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 3,
+          "gap_C_D": 3
+        },
+        "distractor_word_counts": [
+          1,
+          2,
+          2
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The verbs joined by and share the plural subject pathways, so improve must match reduce.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "two pathways",
+        "B": "improves",
+        "C": "steep",
+        "D": "heavy"
+      },
+      "sentence": "The report identifies two pathways that reduce erosion and improves water retention on steep cultivated slopes after heavy rain.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          9
+        ],
+        "changed_error_token_indices": [
+          9
+        ],
+        "marked_correct_token_indices": [
+          9
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-022",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-022",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "incorrect_reference",
+      "mutation_metadata": {
+        "clean_form": "After the curator labeled the artifact, the artifact was returned to the storage cabinet beside the conservation laboratory.",
+        "error_form": "After the curator labeled the artifact, it was returned to the storage cabinet beside the conservation laboratory.",
+        "mutation_type": "ambiguous-pronoun substitution: the artifact -> it",
+        "minimal_correction": "Replace it with the artifact."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 4,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          1,
+          2,
+          1
+        ],
+        "answer_position": "D",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The pronoun it has two possible nearby noun antecedents, so the repeated artifact is required for an unambiguous item sentence.",
+      "grammar_metadata": {
+        "error_scope": "cross_clause",
+        "correction_locality": "SEMANTIC_OR_CONTEXT_DEPENDENT",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "the curator",
+        "B": "it",
+        "C": "storage",
+        "D": "laboratory"
+      },
+      "sentence": "After the curator labeled the artifact, it was returned to the storage cabinet beside the conservation laboratory.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          6,
+          7
+        ],
+        "changed_error_token_indices": [
+          6
+        ],
+        "marked_correct_token_indices": [
+          6
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-023",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-023",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "VERB_FORM_VOICE",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_metadata": {
+        "clean_form": "The meteorological team had completed the coastal readings before the storm reached the island and disrupted the radio equipment.",
+        "error_form": "The meteorological team has completed the coastal readings before the storm reached the island and disrupted the radio equipment.",
+        "mutation_type": "past-perfect auxiliary substitution: had completed -> has completed",
+        "minimal_correction": "Change has completed to had completed."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 18,
+          "lower": 16,
+          "upper": 20,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 1,
+          "gap_B_C": 3,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "A",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The earlier completed action in a past narrative requires had completed rather than the present perfect has completed.",
+      "grammar_metadata": {
+        "error_scope": "cross_clause",
+        "correction_locality": "CLAUSE_LEVEL",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "A",
+        "correct_span_type": "CLAUSE_OR_CLAUSE_LIKE"
+      },
+      "marked_parts": {
+        "A": "has completed",
+        "B": "readings",
+        "C": "reached",
+        "D": "disrupted"
+      },
+      "sentence": "The meteorological team has completed the coastal readings before the storm reached the island and disrupted the radio equipment.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          3
+        ],
+        "changed_error_token_indices": [
+          3
+        ],
+        "marked_correct_token_indices": [
+          3,
+          4
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-024",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-024",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_metadata": {
+        "clean_form": "The archive's digital catalog allows researchers to locate rare maps without consulting several separate inventories maintained by earlier curators.",
+        "error_form": "The archive's digital catalog allows researchers locating rare maps without consulting several separate inventories maintained by earlier curators.",
+        "mutation_type": "allow-complement gerund substitution: to locate -> locating",
+        "minimal_correction": "Change locating to to locate."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 5,
+          "gap_C_D": 4
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "D",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "Allow followed by an object takes the to-infinitive, to locate, not the bare gerund form locating.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "The archive's",
+        "B": "locating",
+        "C": "separate",
+        "D": "curators"
+      },
+      "sentence": "The archive's digital catalog allows researchers locating rare maps without consulting several separate inventories maintained by earlier curators.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          6,
+          7
+        ],
+        "changed_error_token_indices": [
+          6
+        ],
+        "marked_correct_token_indices": [
+          6
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    },
+    {
+      "blind_id": "blind-025",
+      "generator_item_id": "we-v2.1.1-grammar-pilot-025",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "tested_error_type": "wrong_degree_form",
+      "mutation_metadata": {
+        "clean_form": "The planning model is sufficiently flexible to incorporate revised population estimates from districts beyond the original survey area.",
+        "error_form": "The planning model is too flexible to incorporate revised population estimates from districts beyond the original survey area.",
+        "mutation_type": "degree-marker substitution: sufficiently flexible -> too flexible",
+        "minimal_correction": "Change too flexible to sufficiently flexible."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "region": "16-20",
+          "source": "official.items[].sentence_word_count"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "official.items[].correct_span_type / correct_span_word_count"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 2,
+          "gap_C_D": 3
+        },
+        "distractor_word_counts": [
+          1,
+          1,
+          1
+        ],
+        "answer_position": "B",
+        "derived_empirical_counts": {
+          "correct_span_type": {
+            "SINGLE_WORD": 98,
+            "SHORT_PHRASE": 12,
+            "CLAUSE_OR_CLAUSE_LIKE": 15
+          },
+          "correct_answer": {
+            "D": 33,
+            "C": 31,
+            "A": 24,
+            "B": 37
+          },
+          "span_word_count": {
+            "1": 375,
+            "4": 3,
+            "2": 106,
+            "3": 16
+          },
+          "gap_A_B": {
+            "3": 30,
+            "4": 44,
+            "5": 25,
+            "1": 9,
+            "6": 2,
+            "2": 15
+          },
+          "gap_B_C": {
+            "4": 23,
+            "3": 39,
+            "5": 37,
+            "2": 12,
+            "7": 1,
+            "6": 8,
+            "1": 5
+          },
+          "gap_C_D": {
+            "1": 6,
+            "3": 29,
+            "5": 20,
+            "4": 46,
+            "6": 9,
+            "7": 2,
+            "2": 13
+          }
+        }
+      },
+      "answer_explanation": "The intended meaning requires the positive degree expression sufficiently flexible to license the following infinitive.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "CLAUSE_RELATION",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "too flexible",
+        "B": "population",
+        "C": "districts",
+        "D": "survey"
+      },
+      "sentence": "The planning model is too flexible to incorporate revised population estimates from districts beyond the original survey area.",
+      "deterministic_integrity": {
+        "status": "PASS",
+        "one_surface_edit": true,
+        "surface_edit_opcode_count": 1,
+        "changed_clean_token_indices": [
+          4
+        ],
+        "changed_error_token_indices": [
+          4
+        ],
+        "marked_correct_token_indices": [
+          4,
+          5
+        ],
+        "all_surface_edits_accounted_for": true,
+        "one_intended_marked_locus": true,
+        "no_external_mutation": true,
+        "clean_form_equals_error_form": false
+      }
+    }
+  ]
+}

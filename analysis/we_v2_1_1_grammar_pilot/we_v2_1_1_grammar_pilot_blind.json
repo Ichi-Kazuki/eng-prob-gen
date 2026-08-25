@@ -1,0 +1,254 @@
+{
+  "items": [
+    {
+      "blind_id": "blind-001",
+      "sentence": "The network of underground sensors detect seasonal shifts in soil moisture across three agricultural terraces during the spring survey this year.",
+      "marked_parts": {
+        "A": "The network",
+        "B": "detect",
+        "C": "moisture",
+        "D": "terraces"
+      }
+    },
+    {
+      "blind_id": "blind-002",
+      "sentence": "The marine archive preserves specimens who researchers examined before the curators cataloged them for a regional biodiversity database during the annual cataloging cycle.",
+      "marked_parts": {
+        "A": "who",
+        "B": "the curators",
+        "C": "them",
+        "D": "database"
+      }
+    },
+    {
+      "blind_id": "blind-003",
+      "sentence": "Researchers analyzing pollen samples identified grains preserving in sediments that accumulated near the valley lake after repeated floods during spring fieldwork.",
+      "marked_parts": {
+        "A": "analyzing pollen",
+        "B": "preserving",
+        "C": "accumulated",
+        "D": "lake"
+      }
+    },
+    {
+      "blind_id": "blind-004",
+      "sentence": "The committee recorded why did the northern bridge required reinforcement after engineers inspected its foundations during the autumn survey before winter maintenance.",
+      "marked_parts": {
+        "A": "did",
+        "B": "reinforcement",
+        "C": "foundations",
+        "D": "before winter"
+      }
+    },
+    {
+      "blind_id": "blind-005",
+      "sentence": "Despite the desert station received little rainfall, its groundwater levels remained stable because nearby rock layers retained winter snowmelt each year.",
+      "marked_parts": {
+        "A": "Despite",
+        "B": "received little",
+        "C": "groundwater",
+        "D": "nearby"
+      }
+    },
+    {
+      "blind_id": "blind-006",
+      "sentence": "The irrigation study careful measures how salinity affects crops growing beside the eastern canal during dry months in prolonged drought periods.",
+      "marked_parts": {
+        "A": "careful",
+        "B": "crops",
+        "C": "eastern",
+        "D": "prolonged drought"
+      }
+    },
+    {
+      "blind_id": "blind-007",
+      "sentence": "The new policy enables small clinics to comply to updated reporting rules without hiring additional administrative staff during annual site inspections.",
+      "marked_parts": {
+        "A": "enables",
+        "B": "comply to",
+        "C": "rules",
+        "D": "staff"
+      }
+    },
+    {
+      "blind_id": "blind-008",
+      "sentence": "The revised filtration method is most reliable than the earlier procedure during prolonged periods of heavy sediment in repeated controlled trials.",
+      "marked_parts": {
+        "A": "most reliable",
+        "B": "prolonged periods",
+        "C": "sediment",
+        "D": "trials"
+      }
+    },
+    {
+      "blind_id": "blind-009",
+      "sentence": "The research vessel will map the seafloor, collecting water samples, and record currents near the island chain during annual marine surveys.",
+      "marked_parts": {
+        "A": "The research",
+        "B": "collecting",
+        "C": "currents",
+        "D": "chain"
+      }
+    },
+    {
+      "blind_id": "blind-010",
+      "sentence": "The telescope photographed the comet after it crossed the horizon above the observatory at dawn during the annual dawn observation period.",
+      "marked_parts": {
+        "A": "telescope",
+        "B": "it",
+        "C": "horizon",
+        "D": "at dawn"
+      }
+    },
+    {
+      "blind_id": "blind-011",
+      "sentence": "There is several factors that influence how rapidly wetlands recover after seasonal flooding in the lower river basin throughout spring flooding.",
+      "marked_parts": {
+        "A": "is",
+        "B": "influence how",
+        "C": "seasonal",
+        "D": "basin"
+      }
+    },
+    {
+      "blind_id": "blind-012",
+      "sentence": "Not until the archive reopened visitors did learn that the collection had survived the fire in the eastern wing for visiting scholars.",
+      "marked_parts": {
+        "A": "Not",
+        "B": "visitors did learn",
+        "C": "survived",
+        "D": "fire"
+      }
+    },
+    {
+      "blind_id": "blind-013",
+      "sentence": "The committee considered the proposal benefit for communities located near the reservoir after reviewing the projected costs.",
+      "marked_parts": {
+        "A": "considered",
+        "B": "benefit",
+        "C": "the reservoir",
+        "D": "costs"
+      }
+    },
+    {
+      "blind_id": "blind-014",
+      "sentence": "An network of sensors detected unusual vibrations beneath the bridge during the overnight inspection by structural engineers.",
+      "marked_parts": {
+        "A": "An network",
+        "B": "detected",
+        "C": "bridge",
+        "D": "engineers"
+      }
+    },
+    {
+      "blind_id": "blind-015",
+      "sentence": "The university opened a research center for coastal near engineering the renovated harbor last year after securing regional funding.",
+      "marked_parts": {
+        "A": "center",
+        "B": "coastal near engineering",
+        "C": "last",
+        "D": "funding"
+      }
+    },
+    {
+      "blind_id": "blind-016",
+      "sentence": "While the seedlings exposed were to cold air, the greenhouse maintained a stable temperature throughout the night near the mountain field station.",
+      "marked_parts": {
+        "A": "exposed were",
+        "B": "the greenhouse",
+        "C": "temperature",
+        "D": "night"
+      }
+    },
+    {
+      "blind_id": "blind-017",
+      "sentence": "Scientists determined whether does the new compound dissolves completely before testing it in a second solution under controlled laboratory conditions.",
+      "marked_parts": {
+        "A": "does",
+        "B": "completely",
+        "C": "a second",
+        "D": "conditions"
+      }
+    },
+    {
+      "blind_id": "blind-018",
+      "sentence": "The historian described the settlement's gradually expansion in a chapter about regional trade across the inland plateau.",
+      "marked_parts": {
+        "A": "The historian",
+        "B": "gradually",
+        "C": "chapter",
+        "D": "inland"
+      }
+    },
+    {
+      "blind_id": "blind-019",
+      "sentence": "The field station postponed to repair the water pump until replacement parts arrived from the mainland before the winter freeze.",
+      "marked_parts": {
+        "A": "to repair",
+        "B": "replacement",
+        "C": "arrived",
+        "D": "winter"
+      }
+    },
+    {
+      "blind_id": "blind-020",
+      "sentence": "A series of controlled experiments reveal how the catalyst changes under different pressures in the reactor during repeated heating cycles.",
+      "marked_parts": {
+        "A": "A series",
+        "B": "reveal",
+        "C": "catalyst",
+        "D": "reactor"
+      }
+    },
+    {
+      "blind_id": "blind-021",
+      "sentence": "The report identifies two pathways that reduce erosion and improves water retention on steep cultivated slopes after heavy rain.",
+      "marked_parts": {
+        "A": "two pathways",
+        "B": "improves",
+        "C": "steep",
+        "D": "heavy"
+      }
+    },
+    {
+      "blind_id": "blind-022",
+      "sentence": "After the curator labeled the artifact, it was returned to the storage cabinet beside the conservation laboratory.",
+      "marked_parts": {
+        "A": "the curator",
+        "B": "it",
+        "C": "storage",
+        "D": "laboratory"
+      }
+    },
+    {
+      "blind_id": "blind-023",
+      "sentence": "The meteorological team has completed the coastal readings before the storm reached the island and disrupted the radio equipment.",
+      "marked_parts": {
+        "A": "has completed",
+        "B": "readings",
+        "C": "reached",
+        "D": "disrupted"
+      }
+    },
+    {
+      "blind_id": "blind-024",
+      "sentence": "The archive's digital catalog allows researchers locating rare maps without consulting several separate inventories maintained by earlier curators.",
+      "marked_parts": {
+        "A": "The archive's",
+        "B": "locating",
+        "C": "separate",
+        "D": "curators"
+      }
+    },
+    {
+      "blind_id": "blind-025",
+      "sentence": "The planning model is too flexible to incorporate revised population estimates from districts beyond the original survey area.",
+      "marked_parts": {
+        "A": "too flexible",
+        "B": "population",
+        "C": "districts",
+        "D": "survey"
+      }
+    }
+  ]
+}
