@@ -345,7 +345,7 @@ def main() -> int:
         }
         results = [validate_item(item, config, targets, error_types) for item in load_items(args.items)]
         report = {
-            "validator": "TOEFL ITP WE deterministic format validator v2.0",
+            "validator": "TOEFL ITP WE deterministic format validator v2.1",
             "config": config["config_id"],
             "item_count": len(results),
             "valid_count": sum(result["valid"] for result in results),

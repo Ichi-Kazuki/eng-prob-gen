@@ -1,6 +1,6 @@
 {
   "config_id": "TOEFL_ITP_WE_V2_FORMAT_CONFIG",
-  "config_version": "2.0.0",
+  "config_version": "2.1.0",
   "source_of_truth": {
     "format_analysis": "analysis/we_format/written_expression_format_official.json",
     "format_spec": "specs/toefl_itp_we_format_spec_addendum.json",
@@ -57,7 +57,33 @@
     "correct_span_types": {"SINGLE_WORD": 0.784, "SHORT_PHRASE": 0.096, "CLAUSE_OR_CLAUSE_LIKE": 0.12},
     "correction_locality": {"DEPENDENCY_BASED": 0.152, "LOCAL_SHORT_SPAN": 0.104, "SEMANTIC_OR_CONTEXT_DEPENDENT": 0.088, "LOCAL_SINGLE_TOKEN": 0.224, "CLAUSE_LEVEL": 0.432},
     "decision_granularity": {"FUNCTION_WORD": 0.208, "WORD_ORDER": 0.048, "CLAUSE_RELATION": 0.064, "VERB_FRAME": 0.352, "OTHER": 0.056, "MORPHOLOGY": 0.12, "WORD_CLASS": 0.032, "AGREEMENT_DEPENDENCY": 0.112, "LOCAL_PHRASE": 0.008},
-    "use": "Reference distribution for sampling and batch diagnostics only; never a hard quota for a small batch."
+    "use": "Historical v2 guidance retained for diagnostics; v2.1 derives sampling from the official artifact at runtime rather than consuming hand-copied probabilities."
+  },
+  "v2_1_policy": {
+    "implementation": "agents/toefl_itp_we_generator_v2/scripts/format_planner.py",
+    "sampling_source": "analysis/we_format/written_expression_format_official.json",
+    "sentence_length": {
+      "method": "empirical_draw_from_items_sentence_word_count",
+      "conformance": "realized clean sentence must be inside sampled target +/- 2 range",
+      "post_generation_padding": false
+    },
+    "correct_span_type": {
+      "method": "empirical_draw_from_items_correct_span_type",
+      "length_method": "conditional empirical draw from items_correct_span_word_count_by_type",
+      "grammar_override": "preserve the grammar-required minimal local span; do not force shortening"
+    },
+    "span_candidates": {
+      "scope": "whole_sentence",
+      "normal_max_word_count": 4,
+      "preferred_word_counts": [1, 2],
+      "zero_gap_normal_case": false,
+      "same_phrase_multiple_distractors": false
+    },
+    "gap_sampling": {
+      "method": "empirical_draw_from_items_gap_A_B_gap_B_C_gap_C_D",
+      "normal_min_gap": 1
+    },
+    "band_policy": "unchanged; official empirical bands remain diagnostics, not quotas"
   },
   "normal_generation_safety": {
     "coverage_100_percent": "forbidden_as_normal_pattern",

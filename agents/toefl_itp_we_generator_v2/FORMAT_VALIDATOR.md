@@ -1,4 +1,4 @@
-# WE v2 deterministic format validator
+# WE v2.1 deterministic format validator
 
 `scripts/validate_format.py` is independent of the LLM Generator and Reviewer. It applies the addendum tokenization rule and calculates span alignment, overlap/order, word counts, marked coverage, unmarked context, three gaps, correct-span size/type, empirical percentile profile, and format band.
 

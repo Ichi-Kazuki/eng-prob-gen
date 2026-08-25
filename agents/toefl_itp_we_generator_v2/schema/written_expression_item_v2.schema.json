@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "written_expression_item_v2.schema.json",
-  "title": "TOEFL ITP Written Expression Generator v2.0 item",
+  "title": "TOEFL ITP Written Expression Generator v2.1 item (v2.0-compatible)",
   "description": "Sentence-first WE item contract. Grammar validity remains a Reviewer responsibility; format geometry is independently checked by the deterministic validator.",
   "type": "object",
   "additionalProperties": false,
@@ -14,7 +14,7 @@
   "properties": {
     "item_id": {"type": "string", "minLength": 1},
     "section": {"const": "Written Expression"},
-    "agent_version": {"const": "Written Expression Generator v2.0"},
+    "agent_version": {"enum": ["Written Expression Generator v2.0", "Written Expression Generator v2.1"]},
     "primary_target": {"type": "string", "minLength": 1},
     "subtype": {"type": "string", "minLength": 1},
     "secondary_features": {"type": "array", "items": {"type": "string", "minLength": 1}},
@@ -103,7 +103,7 @@
       "type": "object", "additionalProperties": false,
       "required": ["agent_version", "prompt_hash", "spec_version", "format_spec_version", "generation_batch_id", "microbatch_id", "item_generation_order", "invocation_id", "runtime_model"],
       "properties": {
-        "agent_version": {"const": "Written Expression Generator v2.0"},
+        "agent_version": {"enum": ["Written Expression Generator v2.0", "Written Expression Generator v2.1"]},
         "prompt_hash": {"type": ["string", "null"]},
         "spec_version": {"type": "string", "minLength": 1},
         "format_spec_version": {"type": "string", "minLength": 1},
@@ -127,5 +127,39 @@
         "format_check_status": {"enum": ["PASS", "WARN", "FAIL"]}
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "agent_version": {"const": "Written Expression Generator v2.0"}
+        }
+      },
+      "then": {
+        "properties": {
+          "provenance": {
+            "properties": {
+              "agent_version": {"const": "Written Expression Generator v2.0"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "agent_version": {"const": "Written Expression Generator v2.1"}
+        }
+      },
+      "then": {
+        "properties": {
+          "provenance": {
+            "properties": {
+              "agent_version": {"const": "Written Expression Generator v2.1"}
+            }
+          }
+        }
+      }
+    }
+  ]
 }
