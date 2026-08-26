@@ -82,9 +82,43 @@
             "correction_locality": {"type": "string", "minLength": 1},
             "decision_granularity": {"type": "string", "minLength": 1},
             "format_distribution_distance": {"type": "number", "minimum": 0},
-            "format_percentile_profile": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}},
+            "format_percentile_profile": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "sentence_word_count", "marked_coverage_ratio", "unmarked_word_count",
+                "mean_span_length", "max_span_length", "gap_A_B", "gap_B_C", "gap_C_D"
+              ],
+              "properties": {
+                "sentence_word_count": {"type": "number", "minimum": 0, "maximum": 1},
+                "marked_coverage_ratio": {"type": "number", "minimum": 0, "maximum": 1},
+                "unmarked_word_count": {"type": "number", "minimum": 0, "maximum": 1},
+                "mean_span_length": {"type": "number", "minimum": 0, "maximum": 1},
+                "max_span_length": {"type": "number", "minimum": 0, "maximum": 1},
+                "gap_A_B": {"type": "number", "minimum": 0, "maximum": 1},
+                "gap_B_C": {"type": "number", "minimum": 0, "maximum": 1},
+                "gap_C_D": {"type": "number", "minimum": 0, "maximum": 1}
+              }
+            },
             "format_band_status": {"enum": ["PREFERRED", "WARNING", "EXTREME"]},
-            "metric_band_status": {"type": "object", "additionalProperties": {"enum": ["PREFERRED", "WARNING", "EXTREME"]}},
+            "metric_band_status": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "sentence_word_count", "marked_coverage_ratio", "unmarked_word_count",
+                "mean_span_length", "max_span_length", "gap_A_B", "gap_B_C", "gap_C_D"
+              ],
+              "properties": {
+                "sentence_word_count": {"enum": ["PREFERRED", "WARNING", "EXTREME"]},
+                "marked_coverage_ratio": {"enum": ["PREFERRED", "WARNING", "EXTREME"]},
+                "unmarked_word_count": {"enum": ["PREFERRED", "WARNING", "EXTREME"]},
+                "mean_span_length": {"enum": ["PREFERRED", "WARNING", "EXTREME"]},
+                "max_span_length": {"enum": ["PREFERRED", "WARNING", "EXTREME"]},
+                "gap_A_B": {"enum": ["PREFERRED", "WARNING", "EXTREME"]},
+                "gap_B_C": {"enum": ["PREFERRED", "WARNING", "EXTREME"]},
+                "gap_C_D": {"enum": ["PREFERRED", "WARNING", "EXTREME"]}
+              }
+            },
             "span_token_indices": {
               "type": "object", "additionalProperties": false,
               "required": ["A", "B", "C", "D"],

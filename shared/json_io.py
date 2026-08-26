@@ -382,6 +382,7 @@ def exclusive_file_lock(path: Path) -> Iterator[None]:
     # Windows byte-range locking requires a real byte at the lock offset.
     # Keep the lock file binary and seed it once before taking byte 0.
     handle = lock_path.open("a+b")
+    lock_acquired = False
     try:
         if sys.platform == "win32":
             handle.seek(0, os.SEEK_END)
@@ -392,19 +393,23 @@ def exclusive_file_lock(path: Path) -> Iterator[None]:
             _lock_windows(handle, "LK_LOCK")
         else:
             _lock_posix(handle, "LOCK_EX")
+        lock_acquired = True
         yield
     finally:
-        try:
-            if sys.platform == "win32":
-                handle.seek(0)
-                _lock_windows(handle, "LK_UNLCK")
-            else:
-                try:
-                    _lock_posix(handle, "LOCK_UN")
-                except OSError:
-                    # Preserve the historical best-effort unlock behavior.
-                    pass
-        finally:
+        if lock_acquired:
+            try:
+                if sys.platform == "win32":
+                    handle.seek(0)
+                    _lock_windows(handle, "LK_UNLCK")
+                else:
+                    try:
+                        _lock_posix(handle, "LOCK_UN")
+                    except OSError:
+                        # Preserve the historical best-effort unlock behavior.
+                        pass
+            finally:
+                handle.close()
+        else:
             handle.close()
 
 

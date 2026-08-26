@@ -454,6 +454,8 @@ def cmd_finalize() -> None:
         }
         provenance.append(rec)
         if c.state == State.ACCEPTED:
+            if c.generator_item is None:
+                raise ValueError(f"accepted candidate {c.item_id} is missing generator_item")
             accepted.append(rec["accepted_item"])
             tracker.record_accepted(c.generator_item)
         elif c.state == State.MANUAL_REVIEW:

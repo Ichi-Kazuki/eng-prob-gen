@@ -22,16 +22,17 @@ jobs:
           cache: pip
           cache-dependency-path: |
             requirements.txt
+            requirements.lock
             pyproject.toml
       - name: Install dependencies
         run: |
-          python -m pip install --disable-pip-version-check -r requirements.txt
+          python -m pip install --disable-pip-version-check -r requirements.txt -c requirements.lock
           python -m pip install --disable-pip-version-check "ruff>=0.6,<1" "mypy>=1.11,<2" "pip-audit>=2.7,<3" "coverage>=7.6,<8"
           python -m pip check
       - name: Compile Python sources
         run: python -m compileall -q agents orchestrator runtime shared scripts tests
       - name: Ruff static checks
-        run: python -m ruff check orchestrator/scripts shared runtime scripts agents/toefl_itp_we_generator_v2/scripts/format_planner.py tests
+        run: python -m ruff check orchestrator/scripts shared runtime scripts agents tests
       - name: Minimum static type check
         run: python -m mypy --config-file pyproject.toml
       - name: Dependency audit

@@ -33,7 +33,10 @@ python_version = "3.11"
 files = [
   "shared",
   "runtime",
+  "orchestrator/scripts/orchestrator.py",
   "orchestrator/scripts/driver_helpers.py",
+  "orchestrator/scripts/pilot_driver.py",
+  "orchestrator/scripts/validation_driver.py",
   "scripts/run_live_e2e.py",
 ]
 ignore_missing_imports = true

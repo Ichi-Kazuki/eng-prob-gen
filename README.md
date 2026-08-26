@@ -36,9 +36,14 @@ If an artifact write fails, rerun the same command. `rebuild_feedback` reconstru
 Use Python 3.11 or later:
 
 ```bash
-python -m pip install -r requirements.txt
+python -m pip install -r requirements.txt -c requirements.lock
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
+
+`requirements.lock` pins the runtime dependency closure used for replay
+diagnostics. The immutable run manifest records the Python/platform snapshot
+and SHA-256 digests of both dependency files; environment differences are
+reported separately from the executable pipeline fingerprint.
 
 CI also runs `pip check`, Ruff, a scoped mypy check, pip-audit, coverage measurement, and Python bytecode compilation on Ubuntu and Windows.
 

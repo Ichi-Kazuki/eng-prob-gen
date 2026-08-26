@@ -329,6 +329,17 @@ compares the checked-out pipeline with that snapshot and refuses to continue
 on drift. Provenance reports use the persisted manifest snapshot, not values
 reloaded from the checkout at finalization time.
 
+The current run-manifest schema is version 3. It also stores an immutable
+`environment` snapshot: Python version and implementation, platform, the
+`jsonschema` and related runtime dependency versions, and SHA-256 digests of
+`requirements.txt` and `requirements.lock`. This is diagnostic provenance and
+is intentionally excluded from `pipeline_fingerprint`; `ensure_pipeline_snapshot_current()`
+continues to gate executable/configuration drift, while a host-environment
+difference can be reported without silently rewriting a persisted run or
+making it non-portable by default. Version-2 manifests are legacy data and are
+rejected until an explicit migration is performed; they are never upgraded in
+place.
+
 ## 13. Batch integrity (spec section 14)
 
 `orchestrator.BatchIntegrityTracker` records planned vs. actually-`ACCEPTED`

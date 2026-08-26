@@ -24,14 +24,17 @@ module implements.
 from __future__ import annotations
 
 import hashlib
+import importlib.metadata
 import json
 import copy
+import os
+import platform
 import subprocess
 import sys
 import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from typing import Iterable, Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -85,7 +88,10 @@ __all__ = [
     "BatchIntegrityTracker",
     "REPO_ROOT",
     "load_config",
+    "resolve_repo_path",
     "configured_runtime_root",
+    "current_environment_snapshot",
+    "current_environment_mismatches",
     "load_versions",
     "pipeline_fingerprint",
     "build_run_manifest",
@@ -136,7 +142,7 @@ SOLVER_BATCH_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "solver_inpu
 REVIEWER_BATCH_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "reviewer_input_batch.schema.json"
 MANUAL_REVIEW_QUEUE_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "manual_review_queue.schema.json"
 STATE_SCHEMA_VERSION = 2
-RUN_MANIFEST_SCHEMA_VERSION = 2
+RUN_MANIFEST_SCHEMA_VERSION = 3
 STATE_MANIFEST_KEY = "run_manifest"
 ACCEPTANCE_POLICY_SCHEMA_VERSION = 1
 ACCEPTANCE_POLICY_FIELDS = (
@@ -228,8 +234,56 @@ def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def resolve_repo_path(raw_path: str | os.PathLike[str], *, field: str = "repo-local path") -> Path:
+    """Resolve a config-driven path while preserving the repository boundary.
+
+    The explicit Windows-path checks are intentional: a config containing a
+    Windows drive path must be rejected even when inspected on POSIX, where
+    ``pathlib.Path`` would otherwise treat it as an ordinary filename.
+    ``resolve()`` closes the remaining symlink escape for existing parents.
+    """
+
+    try:
+        raw = os.fspath(raw_path)
+    except TypeError as exc:
+        raise ValueError(f"{field} must be a non-empty string path") from exc
+    if not isinstance(raw, str) or not raw.strip() or "\x00" in raw:
+        raise ValueError(f"{field} must be a non-empty string path")
+
+    candidate = Path(raw)
+    windows_candidate = PureWindowsPath(raw)
+    if (
+        candidate.is_absolute()
+        or bool(candidate.drive)
+        or windows_candidate.is_absolute()
+        or bool(windows_candidate.drive)
+        or ".." in candidate.parts
+        or ".." in windows_candidate.parts
+    ):
+        raise ValueError(f"{field} must be a relative path below the repository root")
+
+    repo_root = REPO_ROOT.resolve()
+    resolved = (repo_root / candidate).resolve()
+    if not resolved.is_relative_to(repo_root):
+        raise ValueError(f"{field} must remain below the repository root")
+    return resolved
+
+
+def _validate_config_paths(config: dict) -> None:
+    paths = config.get("paths")
+    if not isinstance(paths, dict):
+        raise ValueError("config.paths must be an object")
+    for name, raw_path in paths.items():
+        resolve_repo_path(raw_path, field=f"config.paths.{name}")
+
+
 def load_config() -> dict:
-    return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    if not isinstance(config, dict):
+        raise ValueError("orchestrator config must be an object")
+    _validate_config_paths(config)
+    configured_runtime_root(config)
+    return config
 
 
 def configured_runtime_root(config: dict | None = None) -> Path:
@@ -244,14 +298,7 @@ def configured_runtime_root(config: dict | None = None) -> Path:
     raw_root = config.get("runtime_root", "runs")
     if not isinstance(raw_root, str) or not raw_root.strip():
         raise ValueError("runtime_root must be a non-empty relative path")
-    root = Path(raw_root)
-    if root.is_absolute() or root.drive or ".." in root.parts:
-        raise ValueError("runtime_root must remain below the repository root")
-    repo_root = REPO_ROOT.resolve()
-    resolved_root = (repo_root / root).resolve()
-    if not resolved_root.is_relative_to(repo_root):
-        raise ValueError("runtime_root must remain below the repository root")
-    return resolved_root
+    return resolve_repo_path(raw_root, field="runtime_root")
 
 
 def _git_commit_sha() -> str | None:
@@ -274,7 +321,7 @@ def _git_commit_sha() -> str | None:
 
 
 def load_spec_versions(config: dict) -> dict:
-    spec_path = REPO_ROOT / config["paths"]["spec_json"]
+    spec_path = resolve_repo_path(config["paths"]["spec_json"], field="config.paths.spec_json")
     spec = json.loads(spec_path.read_text(encoding="utf-8"))
     return {
         "spec_version": spec.get("spec_version", "unknown"),
@@ -286,12 +333,13 @@ def compute_agent_version(config: dict, key: str) -> str:
     """Content-hash the agent's prompt file so the recorded version changes
     automatically whenever the agent's instructions change, with no manual
     version bump to forget (spec section 13)."""
-    path = REPO_ROOT / config["paths"][key]
+    path = resolve_repo_path(config["paths"][key], field=f"config.paths.{key}")
     digest = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
     return f"sha256:{digest}"
 
 
 def load_versions(config: dict) -> dict:
+    _validate_config_paths(config)
     v = load_spec_versions(config)
     v["generator_version"] = compute_agent_version(config, "generator_agent_md")
     v["reviewer_version"] = compute_agent_version(config, "reviewer_agent_md")
@@ -358,12 +406,56 @@ def load_versions(config: dict) -> dict:
     return v
 
 
-def _hash_repo_file(path: str) -> str:
-    file_path = Path(path)
-    if not file_path.is_absolute():
-        file_path = REPO_ROOT / file_path
+def _hash_repo_file(path: str | os.PathLike[str]) -> str:
+    file_path = resolve_repo_path(path)
     digest = hashlib.sha256(file_path.read_bytes()).hexdigest()
     return f"sha256:{digest}"
+
+
+RUNTIME_DEPENDENCY_NAMES = (
+    "jsonschema",
+    "attrs",
+    "jsonschema-specifications",
+    "referencing",
+    "rpds-py",
+    "typing-extensions",
+)
+
+
+def current_environment_snapshot() -> dict:
+    """Capture environment diagnostics without making them host-portable keys."""
+
+    dependency_versions: dict[str, str] = {}
+    for distribution_name in RUNTIME_DEPENDENCY_NAMES:
+        try:
+            dependency_versions[distribution_name] = importlib.metadata.version(distribution_name)
+        except importlib.metadata.PackageNotFoundError:
+            dependency_versions[distribution_name] = "unavailable"
+    return {
+        "python_version": platform.python_version(),
+        "python_implementation": platform.python_implementation(),
+        "platform": platform.platform(aliased=True),
+        "jsonschema_version": dependency_versions["jsonschema"],
+        "dependency_versions": dependency_versions,
+        "requirements_sha256": _hash_repo_file("requirements.txt"),
+        "lockfile_sha256": _hash_repo_file("requirements.lock"),
+    }
+
+
+def current_environment_mismatches(manifest: dict) -> list[str]:
+    """Report environment drift separately from the executable snapshot gate."""
+
+    expected = manifest.get("environment")
+    if not isinstance(expected, dict):
+        return ["environment"]
+    actual = current_environment_snapshot()
+    mismatches: list[str] = []
+    for key in ("python_version", "python_implementation", "platform", "jsonschema_version", "requirements_sha256", "lockfile_sha256"):
+        if expected.get(key) != actual.get(key):
+            mismatches.append(f"environment.{key}")
+    if expected.get("dependency_versions") != actual.get("dependency_versions"):
+        mismatches.append("environment.dependency_versions")
+    return mismatches
 
 
 def _manifest_file_hashes(config: dict) -> dict:
@@ -493,6 +585,8 @@ def build_run_manifest(config: dict) -> dict:
     """Create the immutable run snapshot persisted at ``init`` time."""
     if not isinstance(config, dict):
         raise ValueError("run manifest config must be an object")
+    _validate_config_paths(config)
+    configured_runtime_root(config)
     versions = load_versions(config)
     hashes = _manifest_file_hashes(config)
     manifest = {
@@ -504,6 +598,11 @@ def build_run_manifest(config: dict) -> dict:
         "hashes": hashes,
         # This is non-secret policy/config input used for replay validation.
         "config_snapshot": copy.deepcopy(config),
+        # Environment is immutable provenance/diagnostics.  It is deliberately
+        # not part of pipeline_fingerprint, so a replay on another host can
+        # report environment drift without silently changing code/config
+        # snapshot semantics or becoming unportable by default.
+        "environment": current_environment_snapshot(),
     }
     manifest["pipeline_fingerprint"] = pipeline_fingerprint(
         config, versions=versions, hashes=hashes
@@ -515,16 +614,22 @@ def validate_run_manifest(manifest: object) -> dict:
     """Validate manifest structure and its self-authenticating ID/hash."""
     if not isinstance(manifest, dict):
         raise ValueError("run manifest must be an object")
+    manifest_version = manifest.get("manifest_schema_version")
+    if manifest_version == 2:
+        raise ValueError(
+            "run manifest schema version 2 is legacy and requires explicit migration; "
+            "it will not be silently upgraded"
+        )
+    if manifest_version is not None and manifest_version != RUN_MANIFEST_SCHEMA_VERSION:
+        raise ValueError("run manifest schema version is unsupported")
     required = {
         "manifest_schema_version", "created_at", "git_commit_sha", "pipeline_version",
-        "versions", "hashes", "config_snapshot", "pipeline_fingerprint",
+        "versions", "hashes", "config_snapshot", "environment", "pipeline_fingerprint",
         "manifest_sha256", "manifest_id",
     }
     missing = sorted(required - set(manifest))
     if missing:
         raise ValueError(f"run manifest is missing required field(s): {', '.join(missing)}")
-    if manifest["manifest_schema_version"] != RUN_MANIFEST_SCHEMA_VERSION:
-        raise ValueError("run manifest schema version is unsupported")
     if not isinstance(manifest["created_at"], str) or not manifest["created_at"].strip():
         raise ValueError("run manifest created_at must be a non-empty string")
     if manifest["git_commit_sha"] is not None and (
@@ -539,6 +644,13 @@ def validate_run_manifest(manifest: object) -> dict:
         raise ValueError("run manifest versions and hashes must be objects")
     if not isinstance(manifest["config_snapshot"], dict):
         raise ValueError("run manifest config_snapshot must be an object")
+    try:
+        _validate_config_paths(manifest["config_snapshot"])
+        configured_runtime_root(manifest["config_snapshot"])
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"run manifest config_snapshot has invalid repo-local paths: {exc}") from exc
+    if not isinstance(manifest["environment"], dict):
+        raise ValueError("run manifest environment must be an object")
     if not isinstance(manifest["pipeline_fingerprint"], str):
         raise ValueError("run manifest pipeline_fingerprint must be a sha256 digest")
     if manifest["pipeline_fingerprint"] != manifest_pipeline_fingerprint(manifest):
@@ -756,7 +868,7 @@ def run_schema_validator(
     Raises SystemCallError if the validator script itself cannot be run
     (missing file, interpreter crash) - that is a system failure, distinct
     from the validator reporting content-shape errors with exit code 1."""
-    script_path = REPO_ROOT / script_relpath
+    script_path = resolve_repo_path(script_relpath, field="validator script")
     if not script_path.exists():
         raise SystemCallError(f"validator script not found: {script_relpath}")
 
@@ -773,11 +885,13 @@ def run_schema_validator(
             text=True,
             timeout=timeout_seconds,
         )
-    except subprocess.TimeoutExpired as e:
+    except subprocess.TimeoutExpired as exc:
+        stdout = exc.stdout.decode(errors="replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
+        stderr = exc.stderr.decode(errors="replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
         raise SystemCallError(
             f"validator {script_relpath} timed out after {timeout_seconds}s; "
-            f"stdout={e.stdout or ''}; stderr={e.stderr or ''}"
-        ) from e
+            f"stdout={stdout}; stderr={stderr}"
+        ) from exc
     except OSError as e:
         raise SystemCallError(f"failed to invoke validator {script_relpath}: {e}") from e
     finally:
@@ -2116,13 +2230,22 @@ def process_review_output(candidate: Candidate, config: dict) -> Candidate:
         )
     if candidate.reviewer_item is None:
         raise ValueError("process_review_output requires reviewer_item")
+    if candidate.generator_item is None:
+        return _reject_identity(
+            candidate,
+            config,
+            "generator",
+            None,
+            ["generator item is required before Reviewer output"],
+        )
+    generator_item = candidate.generator_item
     try:
         if candidate.reviewer_input is None:
-            candidate.reviewer_input = canonical_reviewer_input(candidate.generator_item)
+            candidate.reviewer_input = canonical_reviewer_input(generator_item)
             candidate.reviewer_input_sha256 = _reviewer_input_sha256(candidate.reviewer_input)
         else:
             blind_errors = reviewer_input_errors(
-                candidate.generator_item,
+                generator_item,
                 candidate.reviewer_input,
                 candidate.reviewer_input_sha256,
             )
@@ -2133,7 +2256,7 @@ def process_review_output(candidate: Candidate, config: dict) -> Candidate:
             candidate,
             config,
             "reviewer",
-            candidate.generator_item,
+            generator_item,
             [f"canonical Reviewer input could not be derived: {exc}"],
         )
     identity_errors = _identity_errors(candidate, candidate.reviewer_item, "reviewer")
@@ -2208,15 +2331,18 @@ def process_solver_stage(
             "not SOLVING - refusing to call Solver on a non-PASS item"
         )
 
-    for stage, item in (("generator", candidate.generator_item), ("reviewer", candidate.reviewer_item)):
-        if item is None:
-            return _reject_identity(
-                candidate,
-                config,
-                stage,
-                item,
-                [f"{stage} item is required before Solver"],
-            )
+    generator_item = candidate.generator_item
+    reviewer_item = candidate.reviewer_item
+    if generator_item is None or reviewer_item is None:
+        missing_stage = "generator" if generator_item is None else "reviewer"
+        return _reject_identity(
+            candidate,
+            config,
+            missing_stage,
+            generator_item if generator_item is None else reviewer_item,
+            [f"{missing_stage} item is required before Solver"],
+        )
+    for stage, item in (("generator", generator_item), ("reviewer", reviewer_item)):
         identity_errors = _identity_errors(candidate, item, stage)
         if identity_errors:
             return _reject_identity(candidate, config, stage, item, identity_errors)
@@ -2227,7 +2353,7 @@ def process_solver_stage(
     # a tampered payload cannot make a VALIDATION_FAILED state itself
     # impossible to persist on the next process boundary.
     try:
-        expected_solver_input = canonicalize_solver_input(config, candidate.generator_item)
+        expected_solver_input = canonicalize_solver_input(config, generator_item)
     except (TypeError, ValueError, KeyError) as exc:
         candidate.solver_input = None
         return record_stage_failure(
@@ -2246,7 +2372,7 @@ def process_solver_stage(
         blinded = candidate.solver_input
     else:
         try:
-            blinded = blind_for_solver(config, candidate.generator_item)
+            blinded = blind_for_solver(config, generator_item)
         except SystemCallError as exc:
             candidate.solver_input = None
             return record_stage_failure(
@@ -2309,7 +2435,7 @@ def process_solver_stage(
 
     candidate.solver_item = solver_item
     candidate.failure = None
-    result = evaluate_consensus(candidate.generator_item, candidate.reviewer_item, solver_item, config)
+    result = evaluate_consensus(generator_item, reviewer_item, solver_item, config)
     candidate.consensus = result
     candidate.acceptance_policy = (
         acceptance_policy_record(config) if result.routing == State.ACCEPTED else None
@@ -2674,18 +2800,26 @@ def append_manual_review_queue(
 ) -> Path:
     if not isinstance(config, dict) or not isinstance(entries, list):
         raise JsonPersistenceError("manual review queue append requires a config object and entry list")
-    configured = Path(config["paths"]["manual_review_queue"])
-    path = configured if configured.is_absolute() else REPO_ROOT / configured
-    # A missing pipeline marker is the historical direct-library API. Live
-    # drivers pass a manifest-backed config and therefore take the strict path.
-    # Callers migrating old records can opt into this compatibility path
-    # explicitly; a current config may never silently downgrade to it.
-    if legacy_mode is None:
-        legacy_mode = not isinstance(config.get("pipeline_version"), str)
-    if legacy_mode and isinstance(config.get("pipeline_version"), str):
-        raise JsonPersistenceError(
-            "legacy manual-review append requires an unversioned compatibility config"
-        )
+    legacy = legacy_mode is True
+    try:
+        configured = config["paths"]["manual_review_queue"]
+        if legacy:
+            if isinstance(config.get("pipeline_version"), str):
+                raise ValueError(
+                    "legacy manual-review append requires an unversioned compatibility config"
+                )
+            legacy_path = Path(configured)
+            if not legacy_path.is_absolute():
+                path = resolve_repo_path(configured, field="config.paths.manual_review_queue")
+            else:
+                # Absolute paths are available only to the explicitly opted-in
+                # historical API; current production configs always use the
+                # strict repository-relative resolver below.
+                path = legacy_path.resolve()
+        else:
+            path = resolve_repo_path(configured, field="config.paths.manual_review_queue")
+    except (KeyError, TypeError, ValueError, OSError) as exc:
+        raise JsonPersistenceError(f"invalid manual-review queue path: {exc}") from exc
     with exclusive_file_lock(path):
         if path.exists():
             document = read_json(path)
@@ -2698,7 +2832,7 @@ def append_manual_review_queue(
             existing = []
         existing_ids: set[str] = set()
         for entry in existing:
-            validation_errors = validate_manual_review_entry(entry, legacy_mode=legacy_mode)
+            validation_errors = validate_manual_review_entry(entry, legacy_mode=legacy)
             if validation_errors:
                 raise JsonPersistenceError(
                     f"manual review queue {path} contains an invalid entry: "
@@ -2712,7 +2846,7 @@ def append_manual_review_queue(
         incoming_by_id: dict[str, dict] = {}
         incoming_order: list[str] = []
         for entry in entries:
-            validation_errors = validate_manual_review_entry(entry, legacy_mode=legacy_mode)
+            validation_errors = validate_manual_review_entry(entry, legacy_mode=legacy)
             if validation_errors:
                 raise JsonPersistenceError(
                     "new manual review entry failed schema validation: "
@@ -2755,7 +2889,7 @@ class BatchIntegrityTracker:
         self.actual: dict[str, dict[str, int]] = {}
 
     @staticmethod
-    def _dims(generator_item: dict) -> dict[str, str]:
+    def _dims(generator_item: dict) -> dict[str, str | None]:
         dims = {
             "primary_target": generator_item.get("primary_target"),
             "difficulty": generator_item.get("difficulty"),
@@ -2767,7 +2901,7 @@ class BatchIntegrityTracker:
         return dims
 
     @staticmethod
-    def _dims_from_slot(slot: dict) -> dict[str, str]:
+    def _dims_from_slot(slot: dict) -> dict[str, str | None]:
         dims = {
             "primary_target": slot.get("primary_target"),
             "difficulty": slot.get("difficulty"),
@@ -2788,7 +2922,7 @@ class BatchIntegrityTracker:
         self._bump(self.actual, self._dims(generator_item))
 
     @staticmethod
-    def _bump(target: dict[str, dict[str, int]], dims: dict[str, str]) -> None:
+    def _bump(target: dict[str, dict[str, int]], dims: dict[str, str | None]) -> None:
         for dim, value in dims.items():
             if value is None:
                 continue

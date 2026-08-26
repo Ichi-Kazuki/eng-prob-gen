@@ -6,10 +6,10 @@
   "additionalProperties": false,
   "required": [
     "manifest_schema_version", "created_at", "git_commit_sha", "pipeline_version",
-    "versions", "hashes", "config_snapshot", "pipeline_fingerprint", "manifest_sha256", "manifest_id"
+    "versions", "hashes", "config_snapshot", "environment", "pipeline_fingerprint", "manifest_sha256", "manifest_id"
   ],
   "properties": {
-    "manifest_schema_version": { "const": 2 },
+    "manifest_schema_version": { "const": 3 },
     "created_at": { "type": "string", "minLength": 1 },
     "git_commit_sha": {
       "anyOf": [
@@ -21,6 +21,7 @@
     "versions": { "type": "object" },
     "hashes": { "$ref": "#/$defs/hash_groups" },
     "config_snapshot": { "type": "object" },
+    "environment": { "$ref": "#/$defs/environment_snapshot" },
     "pipeline_fingerprint": { "$ref": "#/$defs/hash" },
     "manifest_sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
     "manifest_id": { "type": "string", "pattern": "^run-manifest-[0-9a-f]{24}$" }
@@ -46,6 +47,27 @@
         "policy_inputs": { "$ref": "#/$defs/hash_group" }
       },
       "additionalProperties": false
+    },
+    "environment_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "python_version", "python_implementation", "platform", "jsonschema_version",
+        "dependency_versions", "requirements_sha256", "lockfile_sha256"
+      ],
+      "properties": {
+        "python_version": { "type": "string", "minLength": 1 },
+        "python_implementation": { "type": "string", "minLength": 1 },
+        "platform": { "type": "string", "minLength": 1 },
+        "jsonschema_version": { "type": "string", "minLength": 1 },
+        "dependency_versions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
+        "requirements_sha256": { "$ref": "#/$defs/hash" },
+        "lockfile_sha256": { "$ref": "#/$defs/hash" }
+      }
     }
   }
 }

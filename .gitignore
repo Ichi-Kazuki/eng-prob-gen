@@ -30,3 +30,4 @@ ocr/
 
 # Local lock files (committed source lockfiles remain trackable)
 *.lock
+!requirements.lock

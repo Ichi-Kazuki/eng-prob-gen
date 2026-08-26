@@ -427,12 +427,14 @@ class FinalizationConsistencyTests(unittest.TestCase):
             (pilot_driver, "PILOT_DIR", "pilot_finalize_manifest.json"),
             (validation_driver, "VALIDATION_DIR", "validation_finalize_manifest.json"),
         ):
-            with self.subTest(driver=driver.__name__), tempfile.TemporaryDirectory() as directory:
+            with self.subTest(driver=driver.__name__), tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory(
+                dir=core.REPO_ROOT
+            ) as queue_directory:
                 root = Path(directory)
                 state_path = root / "state.json"
-                queue_path = root / "manual_review_queue.json"
+                queue_path = Path(queue_directory) / "manual_review_queue.json"
                 config = core.load_config()
-                config["paths"]["manual_review_queue"] = str(queue_path)
+                config["paths"]["manual_review_queue"] = str(queue_path.relative_to(core.REPO_ROOT))
                 candidate = manual_review_candidate()
                 with mock.patch.object(driver, directory_name, root), \
                      mock.patch.object(driver, "STATE_PATH", state_path), \
@@ -476,6 +478,35 @@ class AtomicJsonDurabilityTests(unittest.TestCase):
              mock.patch.object(json_io, "_fsync_parent_directory", wraps=json_io._fsync_parent_directory) as directory_fsync:
             json_io.atomic_write_json(Path(directory) / "document.json", {"ok": True})
         directory_fsync.assert_called_once()
+
+
+class FileLockRegressionTests(unittest.TestCase):
+    def test_windows_lock_acquisition_failure_does_not_attempt_unlock_or_mask_error(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "state.json"
+            with mock.patch.object(json_io.sys, "platform", "win32"), mock.patch.object(
+                json_io, "_lock_windows", side_effect=OSError("lock acquisition failed")
+            ) as lock:
+                with self.assertRaisesRegex(OSError, "lock acquisition failed"):
+                    with json_io.exclusive_file_lock(path):
+                        self.fail("lock acquisition unexpectedly succeeded")
+            self.assertEqual(lock.call_count, 1)
+            self.assertEqual(lock.call_args.args[1], "LK_LOCK")
+
+    def test_windows_successful_lock_still_unlocks_and_closes_normally(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "state.json"
+            calls: list[str] = []
+
+            def fake_lock(_handle: object, mode_name: str) -> None:
+                calls.append(mode_name)
+
+            with mock.patch.object(json_io.sys, "platform", "win32"), mock.patch.object(
+                json_io, "_lock_windows", side_effect=fake_lock
+            ):
+                with json_io.exclusive_file_lock(path):
+                    pass
+            self.assertEqual(calls, ["LK_LOCK", "LK_UNLCK"])
 
 
 if __name__ == "__main__":

@@ -186,6 +186,37 @@ def _merge_enum(left: Any, right: Any) -> Any:
     return left
 
 
+def _enum_constraint_intersection(
+    *nodes: Mapping[str, Any],
+) -> tuple[bool, list[Any]]:
+    """Return every visible enum constraint's conjunction without mutation.
+
+    Structural ``allOf`` branches are projected into ``working`` before the
+    ordinary node is processed.  A later ``const`` must therefore inspect
+    both that projected node and the raw/partially-built ordinary node; using
+    only ``value`` loses an enum that originated in ``allOf``.
+    """
+
+    constraints: list[list[Any]] = []
+    for node in nodes:
+        if "enum" not in node:
+            continue
+        enum = node["enum"]
+        if not isinstance(enum, list):
+            # The canonical schema is invalid, but an empty conjunction is
+            # safer than accidentally widening a malformed constraint.
+            return True, []
+        constraints.append(enum)
+
+    if not constraints:
+        return False, []
+
+    intersection = copy.deepcopy(constraints[0])
+    for constraint in constraints[1:]:
+        intersection = [candidate for candidate in intersection if candidate in constraint]
+    return True, intersection
+
+
 def _merge_structural_nodes(
     left: JsonObject,
     right: JsonObject,
@@ -396,12 +427,12 @@ def _project_node(value: Any, path: str, records: list[JsonObject], *, root: boo
             )
             continue
         if key == "const":
-            if "enum" in working or "enum" in value:
+            has_enum, existing = _enum_constraint_intersection(working, value, base)
+            if has_enum:
                 # Intersecting an existing enum with const preserves the
-                # conjunction exactly.
-                existing = base.get("enum", value.get("enum"))
-                if not isinstance(existing, list):
-                    existing = []
+                # conjunction exactly.  The enum may have come from an
+                # allOf branch (working), the raw ordinary node (value), or
+                # an earlier ordinary key (base).
                 base["enum"] = [original] if original in existing else []
                 _record(
                     records,

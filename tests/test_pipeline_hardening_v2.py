@@ -88,6 +88,13 @@ class RunManifestRegressionTests(unittest.TestCase):
             )
         self.assertEqual(record["run_manifest_sha256"], manifest["manifest_sha256"])
 
+    def test_legacy_manifest_version_is_rejected_without_silent_upgrade(self) -> None:
+        manifest = core.build_run_manifest(core.load_config())
+        manifest["manifest_schema_version"] = 2
+        manifest.pop("environment")
+        with self.assertRaisesRegex(ValueError, "legacy.*explicit migration"):
+            core.validate_run_manifest(manifest)
+
     def test_legacy_state_without_manifest_remains_readable(self) -> None:
         candidate = core.Candidate("legacy-001", "legacy-001", "Structure")
         with tempfile.TemporaryDirectory() as directory:

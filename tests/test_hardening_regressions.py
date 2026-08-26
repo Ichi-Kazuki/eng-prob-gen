@@ -75,6 +75,7 @@ def _queue_append_worker(queue_path: str, item_id: str) -> None:
     core.append_manual_review_queue(
         {"paths": {"manual_review_queue": queue_path}},
         [{"item_id": item_id, "routing_reason": "concurrent-test"}],
+        legacy_mode=True,
     )
 
 
@@ -820,16 +821,16 @@ class PersistenceAndSubprocessRegressions(unittest.TestCase):
             queue = Path(directory) / "queue.json"
             config = {"paths": {"manual_review_queue": str(queue)}}
             entry = {"item_id": "queue-001"}
-            core.append_manual_review_queue(config, [entry, entry])
+            core.append_manual_review_queue(config, [entry, entry], legacy_mode=True)
             updated = {"item_id": "queue-001", "routing_reason": "retry_exhaustion"}
-            core.append_manual_review_queue(config, [updated])
+            core.append_manual_review_queue(config, [updated], legacy_mode=True)
             queued = json.loads(queue.read_text(encoding="utf-8"))["items"]
             self.assertEqual(len(queued), 1)
             self.assertEqual(queued[0], updated)
             original = "{broken"
             queue.write_text(original, encoding="utf-8")
             with self.assertRaises(JsonPersistenceError):
-                core.append_manual_review_queue(config, [{"item_id": "queue-002"}])
+                core.append_manual_review_queue(config, [{"item_id": "queue-002"}], legacy_mode=True)
             self.assertEqual(queue.read_text(encoding="utf-8"), original)
 
     def test_manual_review_entry_preserves_internal_routing_metadata(self) -> None:

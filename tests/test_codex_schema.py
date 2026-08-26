@@ -18,6 +18,7 @@ from shared.schema_validation import load_schema, schema_errors
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATOR_SCHEMA = ROOT / "agents" / "toefl_itp_we_generator_v2" / "schema" / "written_expression_item_v2.schema.json"
+GENERATOR_FIXTURE = ROOT / "analysis" / "we_v2" / "we_v2_smoke_items.json"
 SOLVER_SCHEMA = ROOT / "agents" / "toefl_itp_grammar_solver" / "schema" / "solver_output.schema.json"
 SOLVER_VALIDATOR = ROOT / "agents" / "toefl_itp_grammar_solver" / "scripts" / "validate_output.py"
 
@@ -86,6 +87,26 @@ class CodexSchemaAdapterTests(unittest.TestCase):
         self.assertEqual(canonical_errors, [])
         self.assertEqual(transport_errors, [])
 
+    def test_canonical_valid_we_v2_generator_item_passes_transport_schema(self) -> None:
+        fixture = json.loads(GENERATOR_FIXTURE.read_text(encoding="utf-8"))
+        valid_item = fixture["items"][0]
+        canonical_schema = load_schema(GENERATOR_SCHEMA)
+        transport_schema = build_codex_transport_schema(GENERATOR_SCHEMA)
+
+        canonical_errors = schema_errors(valid_item, canonical_schema)
+        transport_errors = schema_errors(valid_item, transport_schema)
+
+        self.assertEqual(canonical_errors, [])
+        self.assertEqual(transport_errors, [])
+        for name in ("format_percentile_profile", "metric_band_status"):
+            diagnostics_schema = canonical_schema["properties"]["format_metadata"]["properties"]["diagnostics"]
+            field_schema = diagnostics_schema["properties"][name]
+            self.assertFalse(field_schema["additionalProperties"])
+            self.assertEqual(set(field_schema["required"]), {
+                "sentence_word_count", "marked_coverage_ratio", "unmarked_word_count",
+                "mean_span_length", "max_span_length", "gap_A_B", "gap_B_C", "gap_C_D",
+            })
+
     def test_transport_valid_conditional_adversary_is_rejected_by_canonical_validator(self) -> None:
         canonical = load_schema(SOLVER_SCHEMA)
         transport = build_codex_transport_schema(SOLVER_SCHEMA)
@@ -136,6 +157,41 @@ class CodexSchemaAdapterTests(unittest.TestCase):
         self.assertEqual(schema_errors(sample, artifact.schema), [])
         keywords = {entry["keyword"] for entry in artifact.provenance["removed_or_relaxed_keywords"]}
         self.assertTrue({"allOf", "if", "then", "else"}.issubset(keywords))
+
+    def test_const_intersects_enum_in_base_and_does_not_mutate_source(self) -> None:
+        for const, expected in (("A", ["A"]), ("C", [])):
+            with self.subTest(const=const):
+                canonical = {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["value"],
+                    "properties": {
+                        "value": {"type": "string", "enum": ["A", "B"], "const": const}
+                    },
+                }
+                original = copy.deepcopy(canonical)
+                transport = build_codex_transport_schema(canonical)
+                self.assertEqual(transport["properties"]["value"]["enum"], expected)
+                self.assertEqual(canonical, original)
+
+    def test_const_intersects_enum_flattened_from_allof(self) -> None:
+        for const, expected in (("A", ["A"]), ("C", [])):
+            with self.subTest(const=const):
+                canonical = {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["value"],
+                    "properties": {
+                        "value": {
+                            "allOf": [{"enum": ["A", "B"]}],
+                            "const": const,
+                        }
+                    },
+                }
+                original = copy.deepcopy(canonical)
+                transport = build_codex_transport_schema(canonical)
+                self.assertEqual(transport["properties"]["value"]["enum"], expected)
+                self.assertEqual(canonical, original)
 
 
 if __name__ == "__main__":

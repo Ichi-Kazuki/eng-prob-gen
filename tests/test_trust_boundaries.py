@@ -154,6 +154,10 @@ class PipelineSnapshotBoundaryTests(unittest.TestCase):
         self.assertIn("solver_blinding_cli", manifest["hashes"]["validators"])
         self.assertIn("taxonomy", manifest["hashes"]["policy_inputs"])
         self.assertIn("pilot", manifest["hashes"]["drivers"])
+        self.assertEqual(core.current_environment_mismatches(manifest), [])
+        self.assertEqual(manifest["environment"]["jsonschema_version"], "4.25.1")
+        self.assertTrue(manifest["environment"]["requirements_sha256"].startswith("sha256:"))
+        self.assertTrue(manifest["environment"]["lockfile_sha256"].startswith("sha256:"))
 
 
 class ManualReviewQueueBoundaryTests(unittest.TestCase):
@@ -177,9 +181,9 @@ class ManualReviewQueueBoundaryTests(unittest.TestCase):
     def test_production_append_validates_full_entry_and_rejects_legacy_shape(self) -> None:
         entry = self._current_entry()
         config = copy.deepcopy(core.load_config())
-        with tempfile.TemporaryDirectory() as directory:
+        with tempfile.TemporaryDirectory(dir=core.REPO_ROOT) as directory:
             queue = Path(directory) / "queue.json"
-            config["paths"]["manual_review_queue"] = str(queue)
+            config["paths"]["manual_review_queue"] = str(queue.relative_to(core.REPO_ROOT))
             core.append_manual_review_queue(config, [entry])
             before = queue.read_bytes()
 
@@ -196,6 +200,13 @@ class ManualReviewQueueBoundaryTests(unittest.TestCase):
             with self.assertRaises(JsonPersistenceError):
                 core.append_manual_review_queue(config, [legacy])
             self.assertEqual(queue.read_bytes(), before)
+
+    def test_current_manual_review_queue_rejects_absolute_path(self) -> None:
+        config = copy.deepcopy(core.load_config())
+        with tempfile.TemporaryDirectory() as directory:
+            config["paths"]["manual_review_queue"] = str(Path(directory) / "queue.json")
+            with self.assertRaises(JsonPersistenceError):
+                core.append_manual_review_queue(config, [self._current_entry()])
 
     def test_explicit_queue_migration_rejects_malformed_or_duplicate_legacy_entries(self) -> None:
         entry = self._current_entry()
@@ -245,6 +256,10 @@ class ReviewerBatchDriverBoundaryTests(unittest.TestCase):
 
 
 class RuntimeRootContainmentTests(unittest.TestCase):
+    def test_repo_local_relative_path_is_accepted(self) -> None:
+        resolved = core.resolve_repo_path("specs/toefl_itp_grammar_spec.json")
+        self.assertEqual(resolved, (core.REPO_ROOT / "specs/toefl_itp_grammar_spec.json").resolve())
+
     def test_normal_relative_runtime_root_is_accepted(self) -> None:
         configured = core.configured_runtime_root({"runtime_root": "runs/test"})
         self.assertEqual(configured, (core.REPO_ROOT / "runs/test").resolve())
@@ -256,6 +271,21 @@ class RuntimeRootContainmentTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             with self.assertRaises(ValueError):
                 core.configured_runtime_root({"runtime_root": directory})
+
+    def test_repo_local_paths_reject_traversal_absolute_and_windows_drive_paths(self) -> None:
+        for raw_path in ("../outside.json", str(Path(tempfile.gettempdir()) / "outside.json"), r"C:\outside.json"):
+            with self.subTest(raw_path=raw_path), self.assertRaises(ValueError):
+                core.resolve_repo_path(raw_path)
+
+    def test_existing_production_config_loads_through_path_validation(self) -> None:
+        config = core.load_config()
+        self.assertEqual(config["paths"]["manual_review_queue"], "runs/manual_review_queue.json")
+
+    def test_config_driven_resource_paths_use_the_same_containment(self) -> None:
+        config = copy.deepcopy(core.load_config())
+        config["paths"]["spec_json"] = "../outside.json"
+        with self.assertRaises(ValueError):
+            core.load_versions(config)
 
     def test_symlink_to_outside_runtime_root_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as outside, tempfile.TemporaryDirectory(
@@ -269,6 +299,17 @@ class RuntimeRootContainmentTests(unittest.TestCase):
             relative = link.relative_to(core.REPO_ROOT)
             with self.assertRaises(ValueError):
                 core.configured_runtime_root({"runtime_root": str(relative)})
+
+    def test_symlink_to_outside_repo_resource_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as outside, tempfile.TemporaryDirectory(dir=core.REPO_ROOT) as inside:
+            link = Path(inside) / "escape.json"
+            try:
+                link.symlink_to(Path(outside) / "resource.json")
+            except (OSError, NotImplementedError) as exc:
+                self.skipTest(f"file symlinks are unavailable: {exc}")
+            relative = link.relative_to(core.REPO_ROOT)
+            with self.assertRaises(ValueError):
+                core.resolve_repo_path(relative)
 
     def test_symlink_to_path_inside_repo_is_accepted(self) -> None:
         with tempfile.TemporaryDirectory(dir=core.REPO_ROOT) as inside:

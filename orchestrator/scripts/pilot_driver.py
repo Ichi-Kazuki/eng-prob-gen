@@ -391,16 +391,16 @@ def cmd_prepare_solver_batch() -> None:
         for item_id, c in solving.items():
             try:
                 blinded = c.solver_input if c.solver_input is not None else blind_for_solver(config, c.generator_item)
-            except SystemCallError as e:
+            except SystemCallError as exc:
                 c.solver_input = None
                 record_stage_failure(
                     c,
                     config,
                     kind="system",
                     stage="solver",
-                    detail=f"during blinding: {e}",
+                    detail=f"during blinding: {exc}",
                 )
-                errors.append(f"{item_id}: {e}")
+                errors.append(f"{item_id}: {exc}")
                 continue
             ok, problems = leakage_guard(blinded, c.section)
             c.leakage_check = {
@@ -434,8 +434,8 @@ def cmd_prepare_solver_batch() -> None:
     print(f"Blinded {len(batch)} candidate(s) currently in SOLVING -> {out_path}")
     if errors:
         print("Blinding errors:")
-        for e in errors:
-            print(f"  {e}")
+        for error in errors:
+            print(f"  {error}")
     print(f"item_ids: {sorted(solving.keys())}")
 
 
@@ -541,6 +541,8 @@ def cmd_finalize() -> None:
         rec = build_provenance_record(c, versions, run_manifest=run_manifest)
         provenance_records.append(rec)
         if c.state == State.ACCEPTED:
+            if c.generator_item is None:
+                raise ValueError(f"accepted candidate {c.item_id} is missing generator_item")
             accepted_items.append(rec["accepted_item"])
             tracker.record_accepted(c.generator_item)
         elif c.state == State.MANUAL_REVIEW:

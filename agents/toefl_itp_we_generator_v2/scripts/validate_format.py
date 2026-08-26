@@ -154,7 +154,6 @@ def format_diagnostics(item: dict[str, Any], config: dict[str, Any]) -> tuple[di
         errors.extend(f"{label}: {message}" for message in idx_errors)
 
     starts = [indices[label][0] for label in LABELS if indices[label]]
-    ends = [indices[label][-1] for label in LABELS if indices[label]]
     if len(starts) == 4 and starts != sorted(starts):
         errors.append("marked spans are not in sentence order A-B-C-D")
     for before, after in zip(LABELS, LABELS[1:]):

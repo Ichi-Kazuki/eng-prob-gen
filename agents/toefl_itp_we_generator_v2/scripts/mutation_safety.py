@@ -1185,8 +1185,6 @@ def audit_mutation(
     elif template.template_id.startswith("parallel."):
         reasons.extend(_parallel_guard(clean_form, error_form, mutation_type))
 
-    changed_clean = surface_details["changed_clean_tokens"]
-    changed_error = surface_details["changed_error_tokens"]
     changed_error_indices = surface_details["changed_error_indices"]
     changed_error_boundaries = surface_details["changed_error_boundaries"]
     if item is not None and item.get("sentence") != error_form:

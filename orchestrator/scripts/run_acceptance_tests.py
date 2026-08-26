@@ -307,10 +307,12 @@ def main() -> int:
 
     from orchestrator import build_manual_review_entry
     mr_entry = build_manual_review_entry(mr_candidate)
-    with tempfile.TemporaryDirectory(prefix="acceptance-queue-") as temp_dir:
+    with tempfile.TemporaryDirectory(prefix="acceptance-queue-", dir=REPO_ROOT) as temp_dir:
         test_config = dict(config)
         test_config["paths"] = dict(config["paths"])
-        test_config["paths"]["manual_review_queue"] = str(Path(temp_dir) / "manual_review_queue.json")
+        test_config["paths"]["manual_review_queue"] = str(
+            (Path(temp_dir) / "manual_review_queue.json").relative_to(REPO_ROOT)
+        )
         queue_path = append_manual_review_queue(test_config, [mr_entry])
         queue_data = json.loads(queue_path.read_text(encoding="utf-8"))
         check("15", "MANUAL_REVIEW items are queued to an isolated temporary queue with actionable fields",

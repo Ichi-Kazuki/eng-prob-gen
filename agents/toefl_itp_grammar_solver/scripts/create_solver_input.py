@@ -23,11 +23,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
-from shared.solver_blinding import (  # noqa: E402
-    STRUCTURE_ALLOWLIST,
-    WRITTEN_EXPRESSION_ALLOWLIST,
-    canonical_solver_input,
-)
+from shared.solver_blinding import canonical_solver_input  # noqa: E402
 
 
 def load_items(path: Path):
