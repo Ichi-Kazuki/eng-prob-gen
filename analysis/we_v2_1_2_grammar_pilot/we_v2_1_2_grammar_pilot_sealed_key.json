@@ -1,0 +1,1752 @@
+{
+  "artifact": "WE v2.1.2 grammar pilot sealed generator answer key",
+  "sealed_until_blind_review_complete": true,
+  "run": {
+    "batch_id": "we-v2.1.2-25-item-grammar-resmoke-20260826",
+    "generator_version": "Written Expression Generator v2.1.2",
+    "item_schema_version_literal": "Written Expression Generator v2.1",
+    "generated_at_utc": "2026-08-26T01:22:29.427160+00:00",
+    "generation_unit": "fresh offline safety-smoke item pair",
+    "generation_runtime_available": false,
+    "fresh_generation": true,
+    "historical_exact_sentence_matches": 0,
+    "initial_generation_attempts": 25,
+    "initial_generation_failures": 0,
+    "regenerated_count": 0,
+    "reviewer_runtime_available": false,
+    "solver_runtime_available": false,
+    "synthetic_reviewer_solver_judgment_generated": false,
+    "format_logic_locked_to": "WE v2.1.1",
+    "version_lock": {
+      "locked_generator_version": "Written Expression Generator v2.1.2",
+      "item_schema_version_literal": "Written Expression Generator v2.1",
+      "paths": {
+        "generator_prompt": {
+          "path": ".claude/agents/toefl-itp-we-generator-v2.md",
+          "sha256": "sha256:50a8cba7d1eb11876a13d6d37176c0697f19377fd82693058426546f529a88d7"
+        },
+        "generator_instructions": {
+          "path": "agents/toefl_itp_we_generator_v2/AGENTS.md",
+          "sha256": "sha256:c62a707507bd776d3677e3fe5b8f9d2264f4cfea5cfd3422b999cd906798d342"
+        },
+        "mutation_safety": {
+          "path": "agents/toefl_itp_we_generator_v2/scripts/mutation_safety.py",
+          "sha256": "sha256:00ab46408c2b549f7bf84c6781349c42c375ebc650d67a2e59bd53d8c9edc87e"
+        },
+        "generator_schema": {
+          "path": "agents/toefl_itp_we_generator_v2/schema/written_expression_item_v2.schema.json",
+          "sha256": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0"
+        },
+        "format_planner": {
+          "path": "agents/toefl_itp_we_generator_v2/scripts/format_planner.py",
+          "sha256": "sha256:49eba7546a350eb2059208087993565859ae04e1c3bb0a1556e89eaed2c91089"
+        },
+        "format_validator": {
+          "path": "agents/toefl_itp_we_generator_v2/scripts/validate_format.py",
+          "sha256": "sha256:dd4d7c3f6f73d04aa8106d0b14872b25c1cd381244647701198fd4eb9502e37c"
+        },
+        "format_config": {
+          "path": "agents/toefl_itp_we_generator_v2/config/we_v2_format_config.json",
+          "sha256": "sha256:24801aaf1b62b808ebb14aff554df9825fea971fdc7bcc696bbb7f9579e8824b"
+        },
+        "grammar_spec": {
+          "path": "specs/toefl_itp_grammar_spec.json",
+          "sha256": "sha256:b4a803f8482cb75d01be05b0ffb17d04d02a2faa39166d1a18d038da770f5279"
+        },
+        "format_spec": {
+          "path": "specs/toefl_itp_we_format_spec_addendum.json",
+          "sha256": "sha256:56873dada674d530ec35003d0e16486b2127af3469e6846258b7f77c57c75b97"
+        },
+        "taxonomy": {
+          "path": "analysis/grammar_taxonomy.json",
+          "sha256": "sha256:5aa3566c49f20b75fcbb532fca21c75addf288e38f3403278b6c4f30007ec729"
+        },
+        "reviewer_contract": {
+          "path": "agents/toefl_itp_we_reviewer_v2/schema/reviewer_output_v2.schema.json",
+          "sha256": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f"
+        },
+        "solver_contract": {
+          "path": "agents/toefl_itp_grammar_solver/schema/solver_output.schema.json",
+          "sha256": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99"
+        }
+      }
+    }
+  },
+  "items": [
+    {
+      "blind_id": "blind-001",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-001",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "tested_error_type": "agreement_error",
+      "mutation_metadata": {
+        "clean_form": "During the winter expedition, the observatory records subtle changes in atmospheric pressure across the northern plateau each morning.",
+        "error_form": "During the winter expedition, the observatory record subtle changes in atmospheric pressure across the northern plateau each morning.",
+        "mutation_type": "finite agreement substitution: records -> record",
+        "minimal_correction": "Change record to records."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 18,
+          "lower": 16,
+          "upper": 20,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 2,
+          "gap_B_C": 4,
+          "gap_C_D": 3
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The singular subject observatory requires records, not record.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "expedition",
+        "B": "record",
+        "C": "pressure",
+        "D": "plateau"
+      },
+      "sentence": "During the winter expedition, the observatory record subtle changes in atmospheric pressure across the northern plateau each morning.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-001",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-002",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-002",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "incorrect_part_of_speech",
+      "mutation_metadata": {
+        "clean_form": "An ancient observatory preserves fragile star charts in climate-controlled cabinets near the western dome throughout the year.",
+        "error_form": "A ancient observatory preserves fragile star charts in climate-controlled cabinets near the western dome throughout the year.",
+        "mutation_type": "article substitution: An -> A",
+        "minimal_correction": "Change A to An."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 6,
+          "gap_C_D": 2
+        },
+        "answer_position": "A"
+      },
+      "answer_explanation": "The vowel sound at the start of ancient requires An, not A.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "A ancient",
+        "B": "charts",
+        "C": "dome",
+        "D": "year"
+      },
+      "sentence": "A ancient observatory preserves fragile star charts in climate-controlled cabinets near the western dome throughout the year.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-002",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-003",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-003",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "WORD_CLASS_FORM",
+      "tested_error_type": "incorrect_part_of_speech",
+      "mutation_metadata": {
+        "clean_form": "At the remote station, technicians carefully measure mineral density before recording the results in a shared laboratory ledger.",
+        "error_form": "At the remote station, technicians careful measure mineral density before recording the results in a shared laboratory ledger.",
+        "mutation_type": "adverb-to-adjective substitution: carefully -> careful",
+        "minimal_correction": "Change careful to carefully."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 18,
+          "lower": 16,
+          "upper": 20,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 1,
+          "gap_B_C": 2,
+          "gap_C_D": 8
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The verb measure requires the adverb carefully to describe manner.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "WORD_CLASS",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "station",
+        "B": "careful",
+        "C": "density",
+        "D": "ledger"
+      },
+      "sentence": "At the remote station, technicians careful measure mineral density before recording the results in a shared laboratory ledger.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-003",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-004",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-004",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "RELATIVE_CLAUSES",
+      "tested_error_type": "incorrect_relative_marker",
+      "mutation_metadata": {
+        "clean_form": "The archive preserves specimens that the researcher examined before the curator returned them to a regional collection.",
+        "error_form": "The archive preserves specimens who the researcher examined before the curator returned them to a regional collection.",
+        "mutation_type": "object relative marker substitution: that -> who",
+        "minimal_correction": "Change who to that."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 1,
+          "gap_B_C": 5,
+          "gap_C_D": 5
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The relative marker refers to specimens as an object, so who is not the appropriate form.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "preserves",
+        "B": "who",
+        "C": "curator",
+        "D": "collection"
+      },
+      "sentence": "The archive preserves specimens who the researcher examined before the curator returned them to a regional collection.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-004",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-005",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-005",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_metadata": {
+        "clean_form": "Researchers found ceramic fragments preserved beneath the riverbank after the flood receded during the autumn survey.",
+        "error_form": "Researchers found ceramic fragments preserving beneath the riverbank after the flood receded during the autumn survey.",
+        "mutation_type": "reduced passive participle substitution: preserved -> preserving",
+        "minimal_correction": "Change preserving to preserved."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 16,
+          "lower": 14,
+          "upper": 18,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 7
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The fragments are passively preserved beneath the riverbank, so preserved is required.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "found",
+        "B": "preserving",
+        "C": "riverbank",
+        "D": "survey"
+      },
+      "sentence": "Researchers found ceramic fragments preserving beneath the riverbank after the flood receded during the autumn survey.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-005",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-006",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-006",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_metadata": {
+        "clean_form": "The digital catalog allows visitors to locate rare manuscripts without consulting the separate inventory maintained by the archive.",
+        "error_form": "The digital catalog allows visitors locating rare manuscripts without consulting the separate inventory maintained by the archive.",
+        "mutation_type": "allow-complement substitution: to locate -> locating",
+        "minimal_correction": "Change locating to to locate."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 2,
+          "gap_B_C": 6,
+          "gap_C_D": 3
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "Allow visitors requires the infinitive to locate in this complement frame.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "catalog",
+        "B": "locating",
+        "C": "inventory",
+        "D": "archive"
+      },
+      "sentence": "The digital catalog allows visitors locating rare manuscripts without consulting the separate inventory maintained by the archive.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-006",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-007",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-007",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "wrong_preposition_collocation",
+      "mutation_metadata": {
+        "clean_form": "The revised policy requires local clinics to comply with reporting standards during annual inspections by regional auditors.",
+        "error_form": "The revised policy requires local clinics to comply to reporting standards during annual inspections by regional auditors.",
+        "mutation_type": "verb-preposition substitution: comply with -> comply to",
+        "minimal_correction": "Change comply to to comply with."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 4,
+          "gap_C_D": 2
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The verb comply takes the preposition with, not to, before reporting standards.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "B",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "policy",
+        "B": "comply to",
+        "C": "inspections",
+        "D": "auditors"
+      },
+      "sentence": "The revised policy requires local clinics to comply to reporting standards during annual inspections by regional auditors.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-007",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-008",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-008",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "NOUN_CLAUSES",
+      "tested_error_type": "wrong_word_order",
+      "mutation_metadata": {
+        "clean_form": "The survey revealed how the current moved through the channel after the engineers adjusted the underwater gate.",
+        "error_form": "The survey revealed how moved the current through the channel after the engineers adjusted the underwater gate.",
+        "mutation_type": "embedded-question word order reversal: how the current moved -> how moved the current",
+        "minimal_correction": "Change how moved the current to how the current moved."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 3,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 2,
+          "gap_B_C": 5,
+          "gap_C_D": 3
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "An embedded question uses statement order, how the current moved, rather than the reversed order.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "WORD_ORDER",
+        "intended_error_position": "B",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "survey",
+        "B": "moved the current",
+        "C": "engineers",
+        "D": "gate"
+      },
+      "sentence": "The survey revealed how moved the current through the channel after the engineers adjusted the underwater gate.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-008",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-009",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-009",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "tested_error_type": "agreement_error",
+      "mutation_metadata": {
+        "clean_form": "A series of controlled observations reveals seasonal changes in the river's temperature during extended drought conditions.",
+        "error_form": "A series of controlled observations reveal seasonal changes in the river's temperature during extended drought conditions.",
+        "mutation_type": "singular head agreement substitution: reveals -> reveal",
+        "minimal_correction": "Change reveal to reveals."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 16,
+          "lower": 14,
+          "upper": 18,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 1,
+          "gap_B_C": 5,
+          "gap_C_D": 3
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The singular head noun series requires reveals, even though observations is plural.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "controlled",
+        "B": "reveal",
+        "C": "temperature",
+        "D": "conditions"
+      },
+      "sentence": "A series of controlled observations reveal seasonal changes in the river's temperature during extended drought conditions.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-009",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-010",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-010",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "agreement_error",
+      "mutation_metadata": {
+        "clean_form": "The laboratory compared many samples from the upper valley before selecting representative specimens for chemical analysis.",
+        "error_form": "The laboratory compared much samples from the upper valley before selecting representative specimens for chemical analysis.",
+        "mutation_type": "count quantifier substitution: many -> much",
+        "minimal_correction": "Change much to many."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 16,
+          "lower": 14,
+          "upper": 18,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 1,
+          "gap_B_C": 7,
+          "gap_C_D": 2
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "Samples is a plural count noun, so many rather than much is required.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "B",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "laboratory",
+        "B": "much samples",
+        "C": "specimens",
+        "D": "analysis"
+      },
+      "sentence": "The laboratory compared much samples from the upper valley before selecting representative specimens for chemical analysis.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-010",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-011",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-011",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "wrong_preposition_collocation",
+      "mutation_metadata": {
+        "clean_form": "The stability of the bridge depends on regular inspections after heavy rainfall along the mountain road.",
+        "error_form": "The stability of the bridge depends of regular inspections after heavy rainfall along the mountain road.",
+        "mutation_type": "verb-preposition substitution: depends on -> depends of",
+        "minimal_correction": "Change depends of to depends on."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 16,
+          "lower": 14,
+          "upper": 18,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 0,
+          "gap_B_C": 4,
+          "gap_C_D": 3
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The verb depend selects the preposition on, not of.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "B",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "bridge",
+        "B": "depends of",
+        "C": "rainfall",
+        "D": "road"
+      },
+      "sentence": "The stability of the bridge depends of regular inspections after heavy rainfall along the mountain road.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-011",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-012",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-012",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_metadata": {
+        "clean_form": "The committee recommended that the museum preserve the mural in a temperature-controlled gallery near the central archive.",
+        "error_form": "The committee recommended that the museum preserves the mural in a temperature-controlled gallery near the central archive.",
+        "mutation_type": "mandative base-form substitution: preserve -> preserves",
+        "minimal_correction": "Change preserves to preserve."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 5,
+          "gap_C_D": 3
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The mandative that-clause after recommended takes the base form preserve.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "committee",
+        "B": "preserves",
+        "C": "gallery",
+        "D": "archive"
+      },
+      "sentence": "The committee recommended that the museum preserves the mural in a temperature-controlled gallery near the central archive.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-012",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-013",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-013",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "tested_error_type": "wrong_degree_form",
+      "mutation_metadata": {
+        "clean_form": "The revised filter is more reliable than the earlier device during repeated trials in the coastal laboratory.",
+        "error_form": "The revised filter is most reliable than the earlier device during repeated trials in the coastal laboratory.",
+        "mutation_type": "comparative/superlative substitution: more reliable -> most reliable",
+        "minimal_correction": "Change most reliable to more reliable."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 2,
+          "gap_C_D": 3
+        },
+        "answer_position": "A"
+      },
+      "answer_explanation": "The explicit than comparison requires comparative more reliable, not superlative most reliable.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "most reliable",
+        "B": "device",
+        "C": "trials",
+        "D": "laboratory"
+      },
+      "sentence": "The revised filter is most reliable than the earlier device during repeated trials in the coastal laboratory.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-013",
+        "status": "PASS",
+        "template_class": "NEEDS_GUARD",
+        "template_id": "degree.comparative_superlative_explicit_than",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-014",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-014",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_metadata": {
+        "clean_form": "The engineers plan to measure soil moisture and compare the results during the afternoon field survey.",
+        "error_form": "The engineers plan to measure soil moisture and comparing the results during the afternoon field survey.",
+        "mutation_type": "parallel base-form substitution: compare -> comparing",
+        "minimal_correction": "Change comparing to compare."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 16,
+          "lower": 14,
+          "upper": 18,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 6,
+          "gap_B_C": 1,
+          "gap_C_D": 4
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The infinitive plan coordinates measure and compare, so comparing breaks the forced parallel form.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "engineers",
+        "B": "comparing",
+        "C": "results",
+        "D": "survey"
+      },
+      "sentence": "The engineers plan to measure soil moisture and comparing the results during the afternoon field survey.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-014",
+        "status": "PASS",
+        "template_class": "NEEDS_GUARD",
+        "template_id": "parallel.base_form_to_ing",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-015",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-015",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "tested_error_type": "agreement_error",
+      "mutation_metadata": {
+        "clean_form": "Neither the instruments nor the calibration record explains the unusual readings recorded during the midnight inspection.",
+        "error_form": "Neither the instruments nor the calibration record explain the unusual readings recorded during the midnight inspection.",
+        "mutation_type": "nearest-subject agreement substitution: explains -> explain",
+        "minimal_correction": "Change explain to explains."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 16,
+          "lower": 14,
+          "upper": 18,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 4,
+          "gap_B_C": 2,
+          "gap_C_D": 4
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The nearer singular subject record requires explains in the neither-nor construction.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "instruments",
+        "B": "explain",
+        "C": "readings",
+        "D": "inspection"
+      },
+      "sentence": "Neither the instruments nor the calibration record explain the unusual readings recorded during the midnight inspection.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-015",
+        "status": "PASS",
+        "template_class": "NEEDS_GUARD",
+        "template_id": "parallel.agreement_form_mismatch",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-016",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-016",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "VERB_FORM_VOICE",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_metadata": {
+        "clean_form": "By the time the storm arrived, the crew had completed the coastal measurements and secured the instruments.",
+        "error_form": "By the time the storm arrived, the crew has completed the coastal measurements and secured the instruments.",
+        "mutation_type": "past-perfect substitution: had completed -> has completed",
+        "minimal_correction": "Change has completed to had completed."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 17,
+          "lower": 15,
+          "upper": 19,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 4,
+          "gap_C_D": 1
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The completed action precedes the past event arrived, so had completed is required.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "B",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "storm",
+        "B": "has completed",
+        "C": "secured",
+        "D": "instruments"
+      },
+      "sentence": "By the time the storm arrived, the crew has completed the coastal measurements and secured the instruments.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-016",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-017",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-017",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_metadata": {
+        "clean_form": "The committee postponed reviewing the survey results until the laboratory completed its final analysis.",
+        "error_form": "The committee postponed to review the survey results until the laboratory completed its final analysis.",
+        "mutation_type": "gerund-to-infinitive substitution: reviewing -> to review",
+        "minimal_correction": "Change to review to reviewing."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 15,
+          "lower": 13,
+          "upper": 17,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 0,
+          "gap_B_C": 5,
+          "gap_C_D": 3
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "Postpone selects a gerund complement, so reviewing is required.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "B",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "postponed",
+        "B": "to review",
+        "C": "laboratory",
+        "D": "analysis"
+      },
+      "sentence": "The committee postponed to review the survey results until the laboratory completed its final analysis.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-017",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-018",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-018",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "incorrect_part_of_speech",
+      "mutation_metadata": {
+        "clean_form": "The composite remained stable under pressure during the extended heating test in the materials laboratory.",
+        "error_form": "The composite remained stability under pressure during the extended heating test in the materials laboratory.",
+        "mutation_type": "predicate adjective substitution: stable -> stability",
+        "minimal_correction": "Change stability to stable."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 15,
+          "lower": 13,
+          "upper": 17,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 1,
+          "gap_B_C": 5,
+          "gap_C_D": 4
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The linking verb remained requires the predicate adjective stable, not the noun stability.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "WORD_CLASS",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "composite",
+        "B": "stability",
+        "C": "heating",
+        "D": "laboratory"
+      },
+      "sentence": "The composite remained stability under pressure during the extended heating test in the materials laboratory.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-018",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-019",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-019",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "agreement_error",
+      "mutation_metadata": {
+        "clean_form": "These instruments detect faint signals from the deep-water sensors during the overnight calibration exercise.",
+        "error_form": "This instruments detect faint signals from the deep-water sensors during the overnight calibration exercise.",
+        "mutation_type": "demonstrative number substitution: These -> This",
+        "minimal_correction": "Change This to These."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 14,
+          "lower": 12,
+          "upper": 16,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 2,
+          "gap_B_C": 3,
+          "gap_C_D": 3
+        },
+        "answer_position": "A"
+      },
+      "answer_explanation": "The plural noun instruments requires the plural demonstrative These.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "A",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "This instruments",
+        "B": "signals",
+        "C": "sensors",
+        "D": "calibration"
+      },
+      "sentence": "This instruments detect faint signals from the deep-water sensors during the overnight calibration exercise.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-019",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-020",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-020",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "NONFINITE_VERB_PHRASES",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_metadata": {
+        "clean_form": "The updated procedure requires analysts to record every sample before the final report is released.",
+        "error_form": "The updated procedure requires analysts to records every sample before the final report is released.",
+        "mutation_type": "infinitival base-form substitution: record -> records",
+        "minimal_correction": "Change records to record."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 15,
+          "lower": 13,
+          "upper": 17,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 1,
+          "gap_C_D": 3
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The infinitive to must be followed by the base form record.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "procedure",
+        "B": "records",
+        "C": "sample",
+        "D": "report"
+      },
+      "sentence": "The updated procedure requires analysts to records every sample before the final report is released.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-020",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-021",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-021",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "tested_error_type": "agreement_error",
+      "mutation_metadata": {
+        "clean_form": "The instruments have produced consistent readings throughout the prolonged field trial near the eastern boundary.",
+        "error_form": "The instruments has produced consistent readings throughout the prolonged field trial near the eastern boundary.",
+        "mutation_type": "plural auxiliary substitution: have produced -> has produced",
+        "minimal_correction": "Change has produced to have produced."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 15,
+          "lower": 13,
+          "upper": 17,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 2,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 0,
+          "gap_B_C": 1,
+          "gap_C_D": 8
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The plural subject instruments requires have produced.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "B",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "instruments",
+        "B": "has produced",
+        "C": "readings",
+        "D": "boundary"
+      },
+      "sentence": "The instruments has produced consistent readings throughout the prolonged field trial near the eastern boundary.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-021",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-022",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-022",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "RELATIVE_CLAUSES",
+      "tested_error_type": "incorrect_relative_marker",
+      "mutation_metadata": {
+        "clean_form": "The laboratory method that the chemist tested reduced contamination in the final preparation stage.",
+        "error_form": "The laboratory method who the chemist tested reduced contamination in the final preparation stage.",
+        "mutation_type": "object relative marker substitution: that -> who",
+        "minimal_correction": "Change who to that."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 14,
+          "lower": 12,
+          "upper": 16,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 0,
+          "gap_B_C": 4,
+          "gap_C_D": 4
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The relative marker refers to method as an object, so that rather than who is required.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "method",
+        "B": "who",
+        "C": "contamination",
+        "D": "stage"
+      },
+      "sentence": "The laboratory method who the chemist tested reduced contamination in the final preparation stage.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-022",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-023",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-023",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "tested_error_type": "wrong_degree_form",
+      "mutation_metadata": {
+        "clean_form": "The new coating is more durable than the earlier material during prolonged exposure to saltwater.",
+        "error_form": "The new coating is durabler than the earlier material during prolonged exposure to saltwater.",
+        "mutation_type": "invalid comparative morphology: more durable -> durabler",
+        "minimal_correction": "Change durabler to more durable."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 14,
+          "lower": 12,
+          "upper": 16,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 3,
+          "gap_B_C": 2,
+          "gap_C_D": 1
+        },
+        "answer_position": "A"
+      },
+      "answer_explanation": "The adjective durable takes more in the comparative, not the invalid inflection durabler.",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "MORPHOLOGY",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "durabler",
+        "B": "material",
+        "C": "exposure",
+        "D": "saltwater"
+      },
+      "sentence": "The new coating is durabler than the earlier material during prolonged exposure to saltwater.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-023",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "degree.invalid_comparative_morphology",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-024",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-024",
+      "correct_answer": "B",
+      "intended_answer": "B",
+      "primary_target": "NOUN_CLAUSES",
+      "tested_error_type": "wrong_word_order",
+      "mutation_metadata": {
+        "clean_form": "The field report explains when the sensors are most active during the polar night near the remote observatory.",
+        "error_form": "The field report explains when are the sensors most active during the polar night near the remote observatory.",
+        "mutation_type": "embedded-question inversion insertion: when the sensors are most active -> when are the sensors most active",
+        "minimal_correction": "Change when are the sensors most active to when the sensors are most active."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 18,
+          "lower": 16,
+          "upper": 20,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SHORT_PHRASE",
+          "target_word_count": 3,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 2,
+          "gap_B_C": 1,
+          "gap_C_D": 7
+        },
+        "answer_position": "B"
+      },
+      "answer_explanation": "The embedded question requires when the sensors are most active, not when are the sensors most active.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "WORD_ORDER",
+        "intended_error_position": "B",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "marked_parts": {
+        "A": "report",
+        "B": "are the sensors",
+        "C": "active",
+        "D": "observatory"
+      },
+      "sentence": "The field report explains when are the sensors most active during the polar night near the remote observatory.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-024",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    },
+    {
+      "blind_id": "blind-025",
+      "generator_item_id": "we-v2.1.2-grammar-pilot-025",
+      "correct_answer": "A",
+      "intended_answer": "A",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "tested_error_type": "incorrect_subordinator",
+      "mutation_metadata": {
+        "clean_form": "Although the station received little sunlight, its solar panels supplied enough power for the instruments throughout the winter.",
+        "error_form": "Despite the station received little sunlight, its solar panels supplied enough power for the instruments throughout the winter.",
+        "mutation_type": "finite-clause connector substitution: Although -> Despite",
+        "minimal_correction": "Change Despite to Although."
+      },
+      "generation_plan": {
+        "sentence": {
+          "target": 18,
+          "lower": 16,
+          "upper": 20,
+          "source": "fresh safety-smoke realization"
+        },
+        "correct_span": {
+          "type": "SINGLE_WORD",
+          "target_word_count": 1,
+          "source": "locked v2.1.1 format diagnostics"
+        },
+        "gap_targets": {
+          "gap_A_B": 2,
+          "gap_B_C": 4,
+          "gap_C_D": 8
+        },
+        "answer_position": "A"
+      },
+      "answer_explanation": "Despite cannot directly introduce the finite clause the station received; Although is required.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "CLAUSE_RELATION",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "marked_parts": {
+        "A": "Despite",
+        "B": "received",
+        "C": "panels",
+        "D": "winter"
+      },
+      "sentence": "Despite the station received little sunlight, its solar panels supplied enough power for the instruments throughout the winter.",
+      "deterministic_mutation_safety": {
+        "item_id": "we-v2.1.2-grammar-pilot-025",
+        "status": "PASS",
+        "template_class": "SAFE",
+        "template_id": "unclassified.safe_surface_mutation",
+        "reasons": [],
+        "metadata_consistent": true,
+        "surface_integrity": true,
+        "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+        "invariants": {
+          "clean_sentence_grammatical": null,
+          "mutated_sentence_ungrammatical": null,
+          "exactly_one_grammatical_defect": null,
+          "declared_marked_span_contains_defect": true,
+          "minimal_repair_restores_grammaticality": null,
+          "no_plausible_alternate_parse": null,
+          "defect_is_grammatical_not_semantic": null
+        }
+      }
+    }
+  ]
+}

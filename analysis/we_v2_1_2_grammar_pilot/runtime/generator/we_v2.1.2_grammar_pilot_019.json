@@ -1,0 +1,120 @@
+{
+  "item_id": "we-v2.1.2-grammar-pilot-019",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "REFERENCE_AND_DETERMINERS",
+  "subtype": "demonstrative determiner number",
+  "secondary_features": [
+    "fresh v2.1.2 mutation-safety smoke",
+    "single local mutation"
+  ],
+  "tested_error_type": "agreement_error",
+  "difficulty": "MEDIUM",
+  "vocabulary_domain": "fresh academic fieldwork",
+  "sentence": "This instruments detect faint signals from the deep-water sensors during the overnight calibration exercise.",
+  "marked_parts": {
+    "A": "This instruments",
+    "B": "signals",
+    "C": "sensors",
+    "D": "calibration"
+  },
+  "correct_answer": "A",
+  "error_explanation": "The plural noun instruments requires the plural demonstrative These.",
+  "minimal_correction": "Change This to These.",
+  "grammar_metadata": {
+    "error_scope": "local",
+    "correction_locality": "LOCAL_SHORT_SPAN",
+    "decision_granularity": "FUNCTION_WORD",
+    "intended_error_position": "A",
+    "correct_span_type": "SHORT_PHRASE"
+  },
+  "format_metadata": {
+    "span_types": {
+      "A": "SHORT_PHRASE",
+      "B": "SINGLE_WORD",
+      "C": "SINGLE_WORD",
+      "D": "SINGLE_WORD"
+    },
+    "target_sentence_length_region": "12-16; sampled fresh target 14",
+    "expected_span_profile": "Four local spans; correct-span type SHORT_PHRASE",
+    "coverage_profile": "{'A': 2, 'B': 1, 'C': 1, 'D': 1} marked lexical span profile",
+    "approximate_context_profile": "gaps 2/3/3",
+    "diagnostics": {
+      "sentence_word_count": 14,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "mean_span_length": 1.25,
+      "max_span_length": 2,
+      "marked_coverage_ratio": 0.3571,
+      "unmarked_word_count": 9,
+      "gap_A_B": 2,
+      "gap_B_C": 3,
+      "gap_C_D": 3,
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "decision_granularity": "FUNCTION_WORD",
+      "format_distribution_distance": 1.1065,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.072,
+        "marked_coverage_ratio": 0.888,
+        "unmarked_word_count": 0.072,
+        "mean_span_length": 0.5,
+        "max_span_length": 0.588,
+        "gap_A_B": 0.132,
+        "gap_B_C": 0.292,
+        "gap_C_D": 0.268
+      },
+      "format_band_status": "WARNING",
+      "metric_band_status": {
+        "sentence_word_count": "WARNING",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "WARNING",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {
+        "A": [
+          0,
+          1
+        ],
+        "B": [
+          4
+        ],
+        "C": [
+          8
+        ],
+        "D": [
+          12
+        ]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1.2-25-item-grammar-resmoke-20260826",
+    "microbatch_id": "we-v2.1.2-grammar-pilot-019",
+    "item_generation_order": 19,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "These instruments detect faint signals from the deep-water sensors during the overnight calibration exercise.",
+    "error_form": "This instruments detect faint signals from the deep-water sensors during the overnight calibration exercise.",
+    "minimal_correction": "Change This to These.",
+    "mutation_type": "demonstrative number substitution: These -> This",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "AMBIGUOUS",
+    "format_check_status": "PASS"
+  }
+}

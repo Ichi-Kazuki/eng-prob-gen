@@ -1,11 +1,11 @@
 ---
 name: toefl-itp-we-generator-v2
-description: TOEFL ITP Written Expression専用のGenerator v2.1.1。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。
+description: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。
 tools: Read, Write, Glob, Grep, Bash
-version: v2.1.1
+version: v2.1.2
 ---
 
-# TOEFL ITP Written Expression Generator v2.1.1
+# TOEFL ITP Written Expression Generator v2.1.2
 
 このAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。
 
@@ -160,10 +160,46 @@ provenanceで取得できない `prompt_hash`, `invocation_id`, `runtime_model` 
 - DB insert、Website接続、25/40/120問へのscale
 - ReviewerのPASS/REVISE/REJECT判定の代行
 
-## v2.1.1 scope boundary
+## v2.1.2 grammar mutation safety patch
 
-v2.1.1の変更は `grammar generation logic unchanged, format planner + span-selection policy only`
-に限定する。mutation templates、`tested_error_type` logic、grammar validity checks、
-one-error checks、Reviewer contract、Solver contract、Orchestrator、Grammar Specification、
-JSON Schemaのfield meaning、Format Specificationのobserved values、Format band thresholdsは
-変更しない。
+The v2.1.2 change is limited to grammar mutation safety.  All v2.1.1 format
+planning and geometry behavior remains locked.  Before emitting any item, the
+Generator must apply the following mutation gates:
+
+1. Maintain a clean sentence that is grammatical, then inject exactly one
+   morphosyntactic defect.  Meaning change, semantic oddity, discourse
+   ambiguity, or stylistic preference is never sufficient.
+2. Quarantine the old noun-phrase-to-pronoun substitution family
+   (`the noun phrase -> it/he/she/they`) unless the error is formally
+   defensible by number/person disagreement, determiner or demonstrative form,
+   or an invalid antecedent relation.  Multiple nearby nouns are not evidence.
+3. Reject semantic-only degree substitutions, including
+   `sufficiently X -> too X` and `enough X -> too X`.  Degree mutations require
+   a morphosyntactic trigger, such as `more reliable than -> most reliable than`
+   or invalid comparative morphology.
+4. Treat base-form-to-`-ing` parallel mutations as guarded templates.  Reject
+   the mutation if the `-ing` phrase can be read as a supplementary or
+   adverbial participial clause, or as a reduced modifier.  Use it only when
+   coordination structurally forces the mutated element to match the other
+   conjuncts.
+5. After every mutation, require: grammatical clean form; genuinely
+   ungrammatical error form; exactly one grammatical defect; defect inside the
+   declared span; minimal repair; no plausible alternate parse; and a defect
+   that is grammatical rather than semantic/pragmatic.  If any gate is
+   uncertain, reject and regenerate.
+6. Cross-check `clean_form`, `error_form`, `mutation_type`,
+   `minimal_correction`, and `answer_explanation` against the same local
+   mutation.  Direction and lexical forms must agree; stale or contradictory
+   metadata is a hard failure.
+
+The deterministic companion implementation is
+`agents/toefl_itp_we_generator_v2/scripts/mutation_safety.py`.  It classifies
+targeted families as `SAFE`, `NEEDS_GUARD`, or `QUARANTINE` and remains
+independent of the format planner and geometry validator.
+
+## v2.1.2 scope boundary
+
+The v2.1.1 format planner and geometry policy remain locked.  The only new
+runtime surface in v2.1.2 is grammar mutation safety and its deterministic
+metadata audit; the JSON Schema/output-field contract remains unchanged.
+The preserved v2.1.1 format-lock phrase is `grammar generation logic unchanged, format planner + span-selection policy only`.

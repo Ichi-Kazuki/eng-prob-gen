@@ -1,0 +1,119 @@
+{
+  "item_id": "we-v2.1.2-grammar-pilot-025",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "CONNECTORS_CONJUNCTIONS",
+  "subtype": "finite concessive clause connector",
+  "secondary_features": [
+    "fresh v2.1.2 mutation-safety smoke",
+    "single local mutation"
+  ],
+  "tested_error_type": "incorrect_subordinator",
+  "difficulty": "MEDIUM",
+  "vocabulary_domain": "fresh academic fieldwork",
+  "sentence": "Despite the station received little sunlight, its solar panels supplied enough power for the instruments throughout the winter.",
+  "marked_parts": {
+    "A": "Despite",
+    "B": "received",
+    "C": "panels",
+    "D": "winter"
+  },
+  "correct_answer": "A",
+  "error_explanation": "Despite cannot directly introduce the finite clause the station received; Although is required.",
+  "minimal_correction": "Change Despite to Although.",
+  "grammar_metadata": {
+    "error_scope": "clause_level",
+    "correction_locality": "LOCAL_SINGLE_TOKEN",
+    "decision_granularity": "CLAUSE_RELATION",
+    "intended_error_position": "A",
+    "correct_span_type": "SINGLE_WORD"
+  },
+  "format_metadata": {
+    "span_types": {
+      "A": "SINGLE_WORD",
+      "B": "SINGLE_WORD",
+      "C": "SINGLE_WORD",
+      "D": "SINGLE_WORD"
+    },
+    "target_sentence_length_region": "16-20; sampled fresh target 18",
+    "expected_span_profile": "Four local spans; correct-span type SINGLE_WORD",
+    "coverage_profile": "{'A': 1, 'B': 1, 'C': 1, 'D': 1} marked lexical span profile",
+    "approximate_context_profile": "gaps 2/4/8",
+    "diagnostics": {
+      "sentence_word_count": 18,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "mean_span_length": 1.0,
+      "max_span_length": 1,
+      "marked_coverage_ratio": 0.2222,
+      "unmarked_word_count": 14,
+      "gap_A_B": 2,
+      "gap_B_C": 4,
+      "gap_C_D": 8,
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "CLAUSE_RELATION",
+      "format_distribution_distance": 0.6532,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.36,
+        "marked_coverage_ratio": 0.336,
+        "unmarked_word_count": 0.464,
+        "mean_span_length": 0.156,
+        "max_span_length": 0.156,
+        "gap_A_B": 0.132,
+        "gap_B_C": 0.54,
+        "gap_C_D": 1.0
+      },
+      "format_band_status": "EXTREME",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "EXTREME"
+      },
+      "span_token_indices": {
+        "A": [
+          0
+        ],
+        "B": [
+          3
+        ],
+        "C": [
+          8
+        ],
+        "D": [
+          17
+        ]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1.2-25-item-grammar-resmoke-20260826",
+    "microbatch_id": "we-v2.1.2-grammar-pilot-025",
+    "item_generation_order": 25,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "Although the station received little sunlight, its solar panels supplied enough power for the instruments throughout the winter.",
+    "error_form": "Despite the station received little sunlight, its solar panels supplied enough power for the instruments throughout the winter.",
+    "minimal_correction": "Change Despite to Although.",
+    "mutation_type": "finite-clause connector substitution: Although -> Despite",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "AMBIGUOUS",
+    "format_check_status": "PASS"
+  }
+}

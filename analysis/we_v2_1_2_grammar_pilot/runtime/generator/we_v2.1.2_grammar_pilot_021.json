@@ -1,0 +1,120 @@
+{
+  "item_id": "we-v2.1.2-grammar-pilot-021",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "CLAUSE_STRUCTURE",
+  "subtype": "plural subject auxiliary agreement",
+  "secondary_features": [
+    "fresh v2.1.2 mutation-safety smoke",
+    "single local mutation"
+  ],
+  "tested_error_type": "agreement_error",
+  "difficulty": "MEDIUM",
+  "vocabulary_domain": "fresh academic fieldwork",
+  "sentence": "The instruments has produced consistent readings throughout the prolonged field trial near the eastern boundary.",
+  "marked_parts": {
+    "A": "instruments",
+    "B": "has produced",
+    "C": "readings",
+    "D": "boundary"
+  },
+  "correct_answer": "B",
+  "error_explanation": "The plural subject instruments requires have produced.",
+  "minimal_correction": "Change has produced to have produced.",
+  "grammar_metadata": {
+    "error_scope": "clause_level",
+    "correction_locality": "LOCAL_SHORT_SPAN",
+    "decision_granularity": "AGREEMENT_DEPENDENCY",
+    "intended_error_position": "B",
+    "correct_span_type": "SHORT_PHRASE"
+  },
+  "format_metadata": {
+    "span_types": {
+      "A": "SINGLE_WORD",
+      "B": "SHORT_PHRASE",
+      "C": "SINGLE_WORD",
+      "D": "SINGLE_WORD"
+    },
+    "target_sentence_length_region": "13-17; sampled fresh target 15",
+    "expected_span_profile": "Four local spans; correct-span type SHORT_PHRASE",
+    "coverage_profile": "{'A': 1, 'B': 2, 'C': 1, 'D': 1} marked lexical span profile",
+    "approximate_context_profile": "gaps 0/1/8",
+    "diagnostics": {
+      "sentence_word_count": 15,
+      "span_word_counts": {
+        "A": 1,
+        "B": 2,
+        "C": 1,
+        "D": 1
+      },
+      "mean_span_length": 1.25,
+      "max_span_length": 2,
+      "marked_coverage_ratio": 0.3333,
+      "unmarked_word_count": 10,
+      "gap_A_B": 0,
+      "gap_B_C": 1,
+      "gap_C_D": 8,
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "format_distribution_distance": 0.897,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.108,
+        "marked_coverage_ratio": 0.824,
+        "unmarked_word_count": 0.124,
+        "mean_span_length": 0.5,
+        "max_span_length": 0.588,
+        "gap_A_B": 0.0,
+        "gap_B_C": 0.02,
+        "gap_C_D": 1.0
+      },
+      "format_band_status": "EXTREME",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "EXTREME",
+        "gap_B_C": "EXTREME",
+        "gap_C_D": "EXTREME"
+      },
+      "span_token_indices": {
+        "A": [
+          1
+        ],
+        "B": [
+          2,
+          3
+        ],
+        "C": [
+          5
+        ],
+        "D": [
+          14
+        ]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1.2-25-item-grammar-resmoke-20260826",
+    "microbatch_id": "we-v2.1.2-grammar-pilot-021",
+    "item_generation_order": 21,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "The instruments have produced consistent readings throughout the prolonged field trial near the eastern boundary.",
+    "error_form": "The instruments has produced consistent readings throughout the prolonged field trial near the eastern boundary.",
+    "minimal_correction": "Change has produced to have produced.",
+    "mutation_type": "plural auxiliary substitution: have produced -> has produced",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "AMBIGUOUS",
+    "format_check_status": "PASS"
+  }
+}

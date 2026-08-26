@@ -1,8 +1,8 @@
-# TOEFL ITP Written Expression Generator v2.1.1
+# TOEFL ITP Written Expression Generator v2.1.2
 
-v2.1.1 is the current runtime implementation label. The JSON Schema and
+v2.1.2 is the current runtime implementation label. The JSON Schema and
 output-field contract remain the v2.1 contract because this release is a
-format-only patch; it does not introduce a schema-version bump.
+grammar-mutation-safety patch; it does not introduce a schema-version bump.
 
 このディレクトリは、既存の `agents/toefl_itp_grammar_generator/` と完全に分離されたWE専用v2実装である。
 
@@ -17,7 +17,7 @@ format plan conformance → sentence全体からのcandidate span列挙 → geom
 → deterministic format diagnostics で固定する。既存v1.1のfull-sentence partition outputを
 入力テンプレートとして再利用しない。
 
-## v2.1.1 format policy
+## v2.1.1 format policy (locked in v2.1.2)
 
 - sentence target は `analysis/we_format/written_expression_format_official.json` の
   `items[].sentence_word_count` を empirical sampling する。固定20語、固定13語、または
@@ -41,9 +41,27 @@ format plan conformance → sentence全体からのcandidate span列挙 → geom
   修正できる場合はgrammar locusを固定してreselectionし、sentence planが短い場合はclean
   sentence generationへ戻る。
 
-## v2.1.1 scope boundary
+## v2.1.2 grammar mutation safety
 
-`grammar generation logic unchanged, format planner + span-selection policy only`。
-mutation templates、`tested_error_type` logic、grammar validity checks、one-error checks、
-Reviewer / Solver / Orchestrator、Grammar Specification、JSON Schemaのfield meaning、Format
-Specificationのobserved values、Format band thresholdsは変更しない。
+The v2.1.2 patch changes grammar mutation safety only.  Before emission, the
+Generator must quarantine ambiguous noun-phrase-to-pronoun substitutions,
+reject semantic-only degree changes such as `sufficiently X -> too X` and
+`enough X -> too X`, and guard base-form-to-`-ing` parallel mutations against
+supplementary/adverbial participial and reduced-modifier alternate parses.
+
+Every mutation must pass the strong one-error invariant: grammatical clean
+sentence, genuinely ungrammatical mutated sentence, exactly one grammatical
+defect, defect inside the declared span, minimal repair, no plausible
+alternate parse, and no semantic-only oddity.  The clean/error forms,
+mutation type, minimal correction, and answer explanation must describe the
+same direction and local defect.  Uncertainty is a reject/regenerate result.
+
+Use `scripts/mutation_safety.py` for the deterministic template classes and
+metadata audit.  Its targeted template catalog is explicitly classified as
+`SAFE`, `NEEDS_GUARD`, or `QUARANTINE`.
+
+## v2.1.2 scope boundary
+
+The format planner and all v2.1.1 geometry policy remain unchanged.  The only
+new runtime surface is the grammar mutation safety guard and its deterministic
+metadata audit; the JSON Schema/output-field contract remains unchanged.

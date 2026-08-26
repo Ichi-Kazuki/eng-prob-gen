@@ -1,0 +1,119 @@
+{
+  "item_id": "we-v2.1.2-grammar-pilot-006",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "VERB_COMPLEMENTATION",
+  "subtype": "allow plus object plus infinitive",
+  "secondary_features": [
+    "fresh v2.1.2 mutation-safety smoke",
+    "single local mutation"
+  ],
+  "tested_error_type": "wrong_verb_form",
+  "difficulty": "EASY",
+  "vocabulary_domain": "fresh academic fieldwork",
+  "sentence": "The digital catalog allows visitors locating rare manuscripts without consulting the separate inventory maintained by the archive.",
+  "marked_parts": {
+    "A": "catalog",
+    "B": "locating",
+    "C": "inventory",
+    "D": "archive"
+  },
+  "correct_answer": "B",
+  "error_explanation": "Allow visitors requires the infinitive to locate in this complement frame.",
+  "minimal_correction": "Change locating to to locate.",
+  "grammar_metadata": {
+    "error_scope": "local",
+    "correction_locality": "LOCAL_SINGLE_TOKEN",
+    "decision_granularity": "VERB_FRAME",
+    "intended_error_position": "B",
+    "correct_span_type": "SINGLE_WORD"
+  },
+  "format_metadata": {
+    "span_types": {
+      "A": "SINGLE_WORD",
+      "B": "SINGLE_WORD",
+      "C": "SINGLE_WORD",
+      "D": "SINGLE_WORD"
+    },
+    "target_sentence_length_region": "15-19; sampled fresh target 17",
+    "expected_span_profile": "Four local spans; correct-span type SINGLE_WORD",
+    "coverage_profile": "{'A': 1, 'B': 1, 'C': 1, 'D': 1} marked lexical span profile",
+    "approximate_context_profile": "gaps 2/6/3",
+    "diagnostics": {
+      "sentence_word_count": 17,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "mean_span_length": 1.0,
+      "max_span_length": 1,
+      "marked_coverage_ratio": 0.2353,
+      "unmarked_word_count": 13,
+      "gap_A_B": 2,
+      "gap_B_C": 6,
+      "gap_C_D": 3,
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "VERB_FRAME",
+      "format_distribution_distance": 0.7015,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.268,
+        "marked_coverage_ratio": 0.36,
+        "unmarked_word_count": 0.396,
+        "mean_span_length": 0.156,
+        "max_span_length": 0.156,
+        "gap_A_B": 0.132,
+        "gap_B_C": 0.96,
+        "gap_C_D": 0.268
+      },
+      "format_band_status": "WARNING",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "WARNING",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {
+        "A": [
+          2
+        ],
+        "B": [
+          5
+        ],
+        "C": [
+          12
+        ],
+        "D": [
+          16
+        ]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1.2-25-item-grammar-resmoke-20260826",
+    "microbatch_id": "we-v2.1.2-grammar-pilot-006",
+    "item_generation_order": 6,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "The digital catalog allows visitors to locate rare manuscripts without consulting the separate inventory maintained by the archive.",
+    "error_form": "The digital catalog allows visitors locating rare manuscripts without consulting the separate inventory maintained by the archive.",
+    "minimal_correction": "Change locating to to locate.",
+    "mutation_type": "allow-complement substitution: to locate -> locating",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "AMBIGUOUS",
+    "format_check_status": "PASS"
+  }
+}

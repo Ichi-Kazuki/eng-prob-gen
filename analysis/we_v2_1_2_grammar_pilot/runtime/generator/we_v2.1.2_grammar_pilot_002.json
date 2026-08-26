@@ -1,0 +1,120 @@
+{
+  "item_id": "we-v2.1.2-grammar-pilot-002",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "REFERENCE_AND_DETERMINERS",
+  "subtype": "indefinite article before vowel sound",
+  "secondary_features": [
+    "fresh v2.1.2 mutation-safety smoke",
+    "single local mutation"
+  ],
+  "tested_error_type": "incorrect_part_of_speech",
+  "difficulty": "EASY",
+  "vocabulary_domain": "fresh academic fieldwork",
+  "sentence": "A ancient observatory preserves fragile star charts in climate-controlled cabinets near the western dome throughout the year.",
+  "marked_parts": {
+    "A": "A ancient",
+    "B": "charts",
+    "C": "dome",
+    "D": "year"
+  },
+  "correct_answer": "A",
+  "error_explanation": "The vowel sound at the start of ancient requires An, not A.",
+  "minimal_correction": "Change A to An.",
+  "grammar_metadata": {
+    "error_scope": "local",
+    "correction_locality": "LOCAL_SHORT_SPAN",
+    "decision_granularity": "FUNCTION_WORD",
+    "intended_error_position": "A",
+    "correct_span_type": "SHORT_PHRASE"
+  },
+  "format_metadata": {
+    "span_types": {
+      "A": "SHORT_PHRASE",
+      "B": "SINGLE_WORD",
+      "C": "SINGLE_WORD",
+      "D": "SINGLE_WORD"
+    },
+    "target_sentence_length_region": "15-19; sampled fresh target 17",
+    "expected_span_profile": "Four local spans; correct-span type SHORT_PHRASE",
+    "coverage_profile": "{'A': 2, 'B': 1, 'C': 1, 'D': 1} marked lexical span profile",
+    "approximate_context_profile": "gaps 4/6/2",
+    "diagnostics": {
+      "sentence_word_count": 17,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "mean_span_length": 1.25,
+      "max_span_length": 2,
+      "marked_coverage_ratio": 0.2941,
+      "unmarked_word_count": 12,
+      "gap_A_B": 4,
+      "gap_B_C": 6,
+      "gap_C_D": 2,
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "decision_granularity": "FUNCTION_WORD",
+      "format_distribution_distance": 0.5098,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.268,
+        "marked_coverage_ratio": 0.648,
+        "unmarked_word_count": 0.3,
+        "mean_span_length": 0.5,
+        "max_span_length": 0.588,
+        "gap_A_B": 0.608,
+        "gap_B_C": 0.96,
+        "gap_C_D": 0.1
+      },
+      "format_band_status": "WARNING",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "WARNING",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {
+        "A": [
+          0,
+          1
+        ],
+        "B": [
+          6
+        ],
+        "C": [
+          13
+        ],
+        "D": [
+          16
+        ]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1.2-25-item-grammar-resmoke-20260826",
+    "microbatch_id": "we-v2.1.2-grammar-pilot-002",
+    "item_generation_order": 2,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "An ancient observatory preserves fragile star charts in climate-controlled cabinets near the western dome throughout the year.",
+    "error_form": "A ancient observatory preserves fragile star charts in climate-controlled cabinets near the western dome throughout the year.",
+    "minimal_correction": "Change A to An.",
+    "mutation_type": "article substitution: An -> A",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "AMBIGUOUS",
+    "format_check_status": "PASS"
+  }
+}

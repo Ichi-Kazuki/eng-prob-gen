@@ -1,0 +1,121 @@
+{
+  "item_id": "we-v2.1.2-grammar-pilot-008",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "NOUN_CLAUSES",
+  "subtype": "embedded question word order",
+  "secondary_features": [
+    "fresh v2.1.2 mutation-safety smoke",
+    "single local mutation"
+  ],
+  "tested_error_type": "wrong_word_order",
+  "difficulty": "EASY",
+  "vocabulary_domain": "fresh academic fieldwork",
+  "sentence": "The survey revealed how moved the current through the channel after the engineers adjusted the underwater gate.",
+  "marked_parts": {
+    "A": "survey",
+    "B": "moved the current",
+    "C": "engineers",
+    "D": "gate"
+  },
+  "correct_answer": "B",
+  "error_explanation": "An embedded question uses statement order, how the current moved, rather than the reversed order.",
+  "minimal_correction": "Change how moved the current to how the current moved.",
+  "grammar_metadata": {
+    "error_scope": "clause_level",
+    "correction_locality": "LOCAL_SHORT_SPAN",
+    "decision_granularity": "WORD_ORDER",
+    "intended_error_position": "B",
+    "correct_span_type": "SHORT_PHRASE"
+  },
+  "format_metadata": {
+    "span_types": {
+      "A": "SINGLE_WORD",
+      "B": "SHORT_PHRASE",
+      "C": "SINGLE_WORD",
+      "D": "SINGLE_WORD"
+    },
+    "target_sentence_length_region": "15-19; sampled fresh target 17",
+    "expected_span_profile": "Four local spans; correct-span type SHORT_PHRASE",
+    "coverage_profile": "{'A': 1, 'B': 3, 'C': 1, 'D': 1} marked lexical span profile",
+    "approximate_context_profile": "gaps 2/5/3",
+    "diagnostics": {
+      "sentence_word_count": 17,
+      "span_word_counts": {
+        "A": 1,
+        "B": 3,
+        "C": 1,
+        "D": 1
+      },
+      "mean_span_length": 1.5,
+      "max_span_length": 3,
+      "marked_coverage_ratio": 0.3529,
+      "unmarked_word_count": 11,
+      "gap_A_B": 2,
+      "gap_B_C": 5,
+      "gap_C_D": 3,
+      "correct_span_word_count": 3,
+      "correct_span_type": "SHORT_PHRASE",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "decision_granularity": "WORD_ORDER",
+      "format_distribution_distance": 0.8381,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.268,
+        "marked_coverage_ratio": 0.864,
+        "unmarked_word_count": 0.196,
+        "mean_span_length": 0.784,
+        "max_span_length": 0.92,
+        "gap_A_B": 0.132,
+        "gap_B_C": 0.78,
+        "gap_C_D": 0.268
+      },
+      "format_band_status": "PREFERRED",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {
+        "A": [
+          1
+        ],
+        "B": [
+          4,
+          5,
+          6
+        ],
+        "C": [
+          12
+        ],
+        "D": [
+          16
+        ]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1.2-25-item-grammar-resmoke-20260826",
+    "microbatch_id": "we-v2.1.2-grammar-pilot-008",
+    "item_generation_order": 8,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "The survey revealed how the current moved through the channel after the engineers adjusted the underwater gate.",
+    "error_form": "The survey revealed how moved the current through the channel after the engineers adjusted the underwater gate.",
+    "minimal_correction": "Change how moved the current to how the current moved.",
+    "mutation_type": "embedded-question word order reversal: how the current moved -> how moved the current",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "AMBIGUOUS",
+    "format_check_status": "PASS"
+  }
+}

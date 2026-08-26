@@ -1,0 +1,254 @@
+{
+  "items": [
+    {
+      "blind_id": "blind-001",
+      "sentence": "During the winter expedition, the observatory record subtle changes in atmospheric pressure across the northern plateau each morning.",
+      "marked_parts": {
+        "A": "expedition",
+        "B": "record",
+        "C": "pressure",
+        "D": "plateau"
+      }
+    },
+    {
+      "blind_id": "blind-002",
+      "sentence": "A ancient observatory preserves fragile star charts in climate-controlled cabinets near the western dome throughout the year.",
+      "marked_parts": {
+        "A": "A ancient",
+        "B": "charts",
+        "C": "dome",
+        "D": "year"
+      }
+    },
+    {
+      "blind_id": "blind-003",
+      "sentence": "At the remote station, technicians careful measure mineral density before recording the results in a shared laboratory ledger.",
+      "marked_parts": {
+        "A": "station",
+        "B": "careful",
+        "C": "density",
+        "D": "ledger"
+      }
+    },
+    {
+      "blind_id": "blind-004",
+      "sentence": "The archive preserves specimens who the researcher examined before the curator returned them to a regional collection.",
+      "marked_parts": {
+        "A": "preserves",
+        "B": "who",
+        "C": "curator",
+        "D": "collection"
+      }
+    },
+    {
+      "blind_id": "blind-005",
+      "sentence": "Researchers found ceramic fragments preserving beneath the riverbank after the flood receded during the autumn survey.",
+      "marked_parts": {
+        "A": "found",
+        "B": "preserving",
+        "C": "riverbank",
+        "D": "survey"
+      }
+    },
+    {
+      "blind_id": "blind-006",
+      "sentence": "The digital catalog allows visitors locating rare manuscripts without consulting the separate inventory maintained by the archive.",
+      "marked_parts": {
+        "A": "catalog",
+        "B": "locating",
+        "C": "inventory",
+        "D": "archive"
+      }
+    },
+    {
+      "blind_id": "blind-007",
+      "sentence": "The revised policy requires local clinics to comply to reporting standards during annual inspections by regional auditors.",
+      "marked_parts": {
+        "A": "policy",
+        "B": "comply to",
+        "C": "inspections",
+        "D": "auditors"
+      }
+    },
+    {
+      "blind_id": "blind-008",
+      "sentence": "The survey revealed how moved the current through the channel after the engineers adjusted the underwater gate.",
+      "marked_parts": {
+        "A": "survey",
+        "B": "moved the current",
+        "C": "engineers",
+        "D": "gate"
+      }
+    },
+    {
+      "blind_id": "blind-009",
+      "sentence": "A series of controlled observations reveal seasonal changes in the river's temperature during extended drought conditions.",
+      "marked_parts": {
+        "A": "controlled",
+        "B": "reveal",
+        "C": "temperature",
+        "D": "conditions"
+      }
+    },
+    {
+      "blind_id": "blind-010",
+      "sentence": "The laboratory compared much samples from the upper valley before selecting representative specimens for chemical analysis.",
+      "marked_parts": {
+        "A": "laboratory",
+        "B": "much samples",
+        "C": "specimens",
+        "D": "analysis"
+      }
+    },
+    {
+      "blind_id": "blind-011",
+      "sentence": "The stability of the bridge depends of regular inspections after heavy rainfall along the mountain road.",
+      "marked_parts": {
+        "A": "bridge",
+        "B": "depends of",
+        "C": "rainfall",
+        "D": "road"
+      }
+    },
+    {
+      "blind_id": "blind-012",
+      "sentence": "The committee recommended that the museum preserves the mural in a temperature-controlled gallery near the central archive.",
+      "marked_parts": {
+        "A": "committee",
+        "B": "preserves",
+        "C": "gallery",
+        "D": "archive"
+      }
+    },
+    {
+      "blind_id": "blind-013",
+      "sentence": "The revised filter is most reliable than the earlier device during repeated trials in the coastal laboratory.",
+      "marked_parts": {
+        "A": "most reliable",
+        "B": "device",
+        "C": "trials",
+        "D": "laboratory"
+      }
+    },
+    {
+      "blind_id": "blind-014",
+      "sentence": "The engineers plan to measure soil moisture and comparing the results during the afternoon field survey.",
+      "marked_parts": {
+        "A": "engineers",
+        "B": "comparing",
+        "C": "results",
+        "D": "survey"
+      }
+    },
+    {
+      "blind_id": "blind-015",
+      "sentence": "Neither the instruments nor the calibration record explain the unusual readings recorded during the midnight inspection.",
+      "marked_parts": {
+        "A": "instruments",
+        "B": "explain",
+        "C": "readings",
+        "D": "inspection"
+      }
+    },
+    {
+      "blind_id": "blind-016",
+      "sentence": "By the time the storm arrived, the crew has completed the coastal measurements and secured the instruments.",
+      "marked_parts": {
+        "A": "storm",
+        "B": "has completed",
+        "C": "secured",
+        "D": "instruments"
+      }
+    },
+    {
+      "blind_id": "blind-017",
+      "sentence": "The committee postponed to review the survey results until the laboratory completed its final analysis.",
+      "marked_parts": {
+        "A": "postponed",
+        "B": "to review",
+        "C": "laboratory",
+        "D": "analysis"
+      }
+    },
+    {
+      "blind_id": "blind-018",
+      "sentence": "The composite remained stability under pressure during the extended heating test in the materials laboratory.",
+      "marked_parts": {
+        "A": "composite",
+        "B": "stability",
+        "C": "heating",
+        "D": "laboratory"
+      }
+    },
+    {
+      "blind_id": "blind-019",
+      "sentence": "This instruments detect faint signals from the deep-water sensors during the overnight calibration exercise.",
+      "marked_parts": {
+        "A": "This instruments",
+        "B": "signals",
+        "C": "sensors",
+        "D": "calibration"
+      }
+    },
+    {
+      "blind_id": "blind-020",
+      "sentence": "The updated procedure requires analysts to records every sample before the final report is released.",
+      "marked_parts": {
+        "A": "procedure",
+        "B": "records",
+        "C": "sample",
+        "D": "report"
+      }
+    },
+    {
+      "blind_id": "blind-021",
+      "sentence": "The instruments has produced consistent readings throughout the prolonged field trial near the eastern boundary.",
+      "marked_parts": {
+        "A": "instruments",
+        "B": "has produced",
+        "C": "readings",
+        "D": "boundary"
+      }
+    },
+    {
+      "blind_id": "blind-022",
+      "sentence": "The laboratory method who the chemist tested reduced contamination in the final preparation stage.",
+      "marked_parts": {
+        "A": "method",
+        "B": "who",
+        "C": "contamination",
+        "D": "stage"
+      }
+    },
+    {
+      "blind_id": "blind-023",
+      "sentence": "The new coating is durabler than the earlier material during prolonged exposure to saltwater.",
+      "marked_parts": {
+        "A": "durabler",
+        "B": "material",
+        "C": "exposure",
+        "D": "saltwater"
+      }
+    },
+    {
+      "blind_id": "blind-024",
+      "sentence": "The field report explains when are the sensors most active during the polar night near the remote observatory.",
+      "marked_parts": {
+        "A": "report",
+        "B": "are the sensors",
+        "C": "active",
+        "D": "observatory"
+      }
+    },
+    {
+      "blind_id": "blind-025",
+      "sentence": "Despite the station received little sunlight, its solar panels supplied enough power for the instruments throughout the winter.",
+      "marked_parts": {
+        "A": "Despite",
+        "B": "received",
+        "C": "panels",
+        "D": "winter"
+      }
+    }
+  ]
+}

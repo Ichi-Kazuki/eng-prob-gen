@@ -1,0 +1,97 @@
+{
+  "scope": [
+    "incorrect_reference",
+    "wrong_degree_form",
+    "parallel wrong_verb_form"
+  ],
+  "templates": [
+    {
+      "template_id": "reference.ambiguous_pronoun_substitution",
+      "tested_error_type": "incorrect_reference",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "classification": "QUARANTINE",
+      "guard": "formal_reference_evidence_required",
+      "rationale": "A nearby noun is not evidence of a grammatical reference error."
+    },
+    {
+      "template_id": "reference.number_disagreement",
+      "tested_error_type": "incorrect_reference",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "classification": "SAFE",
+      "guard": "number_mismatch_required",
+      "rationale": "Objective number disagreement is a formally testable defect."
+    },
+    {
+      "template_id": "reference.person_disagreement",
+      "tested_error_type": "incorrect_reference",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "classification": "SAFE",
+      "guard": "person_mismatch_required",
+      "rationale": "Objective person disagreement is a formally testable defect."
+    },
+    {
+      "template_id": "reference.demonstrative_determiner_form",
+      "tested_error_type": "incorrect_reference",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "classification": "SAFE",
+      "guard": "determiner_form_required",
+      "rationale": "A demonstrative/determiner form must be licensed by the noun phrase."
+    },
+    {
+      "template_id": "reference.invalid_antecedent_relation",
+      "tested_error_type": "incorrect_reference",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "classification": "NEEDS_GUARD",
+      "guard": "formally_invalid_antecedent_relation_required",
+      "rationale": "The antecedent relation must be formally impossible, not merely unclear."
+    },
+    {
+      "template_id": "degree.comparative_superlative_explicit_than",
+      "tested_error_type": "wrong_degree_form",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "classification": "NEEDS_GUARD",
+      "guard": "explicit_comparative_trigger_required",
+      "rationale": "Most X than is invalid only because an explicit comparative trigger is present."
+    },
+    {
+      "template_id": "degree.invalid_comparative_morphology",
+      "tested_error_type": "wrong_degree_form",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "classification": "SAFE",
+      "guard": "morphological_defect_required",
+      "rationale": "The mutation must damage comparative/superlative morphology."
+    },
+    {
+      "template_id": "degree.semantic_marker_substitution",
+      "tested_error_type": "wrong_degree_form",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "classification": "QUARANTINE",
+      "guard": "morphosyntax_required",
+      "rationale": "Sufficiently/too and enough/too substitutions can both be grammatical."
+    },
+    {
+      "template_id": "parallel.base_form_to_ing",
+      "tested_error_type": "wrong_verb_form",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "classification": "NEEDS_GUARD",
+      "guard": "forced_coordination_and_no_alternate_parse",
+      "rationale": "An -ing phrase after a comma can survive as a participial clause."
+    },
+    {
+      "template_id": "parallel.agreement_form_mismatch",
+      "tested_error_type": "agreement_error",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "classification": "NEEDS_GUARD",
+      "guard": "coordination_scope_required",
+      "rationale": "Agreement mutations must identify the coordinated subject/verb scope."
+    },
+    {
+      "template_id": "degree.unclassified_mutation",
+      "tested_error_type": "wrong_degree_form",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "classification": "QUARANTINE",
+      "guard": "morphosyntax_required",
+      "rationale": "Unclassified degree mutations cannot be accepted without a morphosyntactic trigger."
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "item_id": "we-v2.1.2-grammar-pilot-009",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "CLAUSE_STRUCTURE",
+  "subtype": "singular head noun agreement",
+  "secondary_features": [
+    "fresh v2.1.2 mutation-safety smoke",
+    "single local mutation"
+  ],
+  "tested_error_type": "agreement_error",
+  "difficulty": "EASY",
+  "vocabulary_domain": "fresh academic fieldwork",
+  "sentence": "A series of controlled observations reveal seasonal changes in the river's temperature during extended drought conditions.",
+  "marked_parts": {
+    "A": "controlled",
+    "B": "reveal",
+    "C": "temperature",
+    "D": "conditions"
+  },
+  "correct_answer": "B",
+  "error_explanation": "The singular head noun series requires reveals, even though observations is plural.",
+  "minimal_correction": "Change reveal to reveals.",
+  "grammar_metadata": {
+    "error_scope": "clause_level",
+    "correction_locality": "LOCAL_SINGLE_TOKEN",
+    "decision_granularity": "AGREEMENT_DEPENDENCY",
+    "intended_error_position": "B",
+    "correct_span_type": "SINGLE_WORD"
+  },
+  "format_metadata": {
+    "span_types": {
+      "A": "SINGLE_WORD",
+      "B": "SINGLE_WORD",
+      "C": "SINGLE_WORD",
+      "D": "SINGLE_WORD"
+    },
+    "target_sentence_length_region": "14-18; sampled fresh target 16",
+    "expected_span_profile": "Four local spans; correct-span type SINGLE_WORD",
+    "coverage_profile": "{'A': 1, 'B': 1, 'C': 1, 'D': 1} marked lexical span profile",
+    "approximate_context_profile": "gaps 1/5/3",
+    "diagnostics": {
+      "sentence_word_count": 16,
+      "span_word_counts": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "mean_span_length": 1.0,
+      "max_span_length": 1,
+      "marked_coverage_ratio": 0.25,
+      "unmarked_word_count": 12,
+      "gap_A_B": 1,
+      "gap_B_C": 5,
+      "gap_C_D": 3,
+      "correct_span_word_count": 1,
+      "correct_span_type": "SINGLE_WORD",
+      "correction_locality": "LOCAL_SINGLE_TOKEN",
+      "decision_granularity": "AGREEMENT_DEPENDENCY",
+      "format_distribution_distance": 0.7878,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.168,
+        "marked_coverage_ratio": 0.456,
+        "unmarked_word_count": 0.3,
+        "mean_span_length": 0.156,
+        "max_span_length": 0.156,
+        "gap_A_B": 0.036,
+        "gap_B_C": 0.78,
+        "gap_C_D": 0.268
+      },
+      "format_band_status": "WARNING",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "WARNING",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {
+        "A": [
+          3
+        ],
+        "B": [
+          5
+        ],
+        "C": [
+          11
+        ],
+        "D": [
+          15
+        ]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1.2-25-item-grammar-resmoke-20260826",
+    "microbatch_id": "we-v2.1.2-grammar-pilot-009",
+    "item_generation_order": 9,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "A series of controlled observations reveals seasonal changes in the river's temperature during extended drought conditions.",
+    "error_form": "A series of controlled observations reveal seasonal changes in the river's temperature during extended drought conditions.",
+    "minimal_correction": "Change reveal to reveals.",
+    "mutation_type": "singular head agreement substitution: reveals -> reveal",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "AMBIGUOUS",
+    "format_check_status": "PASS"
+  }
+}

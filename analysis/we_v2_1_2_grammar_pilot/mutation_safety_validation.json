@@ -1,0 +1,481 @@
+{
+  "item_count": 25,
+  "valid_count": 25,
+  "items": [
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-001",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-002",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-003",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-004",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-005",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-006",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-007",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-008",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-009",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-010",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-011",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-012",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-013",
+      "status": "PASS",
+      "template_class": "NEEDS_GUARD",
+      "template_id": "degree.comparative_superlative_explicit_than",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-014",
+      "status": "PASS",
+      "template_class": "NEEDS_GUARD",
+      "template_id": "parallel.base_form_to_ing",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-015",
+      "status": "PASS",
+      "template_class": "NEEDS_GUARD",
+      "template_id": "parallel.agreement_form_mismatch",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-016",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-017",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-018",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-019",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-020",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-021",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-022",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-023",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "degree.invalid_comparative_morphology",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-024",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-grammar-pilot-025",
+      "status": "PASS",
+      "template_class": "SAFE",
+      "template_id": "unclassified.safe_surface_mutation",
+      "reasons": [],
+      "metadata_consistent": true,
+      "surface_integrity": true,
+      "grammar_evidence_status": "REQUIRES_EXTERNAL_REVIEW",
+      "invariants": {
+        "clean_sentence_grammatical": null,
+        "mutated_sentence_ungrammatical": null,
+        "exactly_one_grammatical_defect": null,
+        "declared_marked_span_contains_defect": true,
+        "minimal_repair_restores_grammaticality": null,
+        "no_plausible_alternate_parse": null,
+        "defect_is_grammatical_not_semantic": null
+      }
+    }
+  ]
+}

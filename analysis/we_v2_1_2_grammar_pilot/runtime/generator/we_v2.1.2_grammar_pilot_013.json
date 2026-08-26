@@ -1,0 +1,120 @@
+{
+  "item_id": "we-v2.1.2-grammar-pilot-013",
+  "section": "Written Expression",
+  "agent_version": "Written Expression Generator v2.1",
+  "primary_target": "COMPARATIVES_DEGREE",
+  "subtype": "comparative required before than",
+  "secondary_features": [
+    "fresh v2.1.2 mutation-safety smoke",
+    "single local mutation"
+  ],
+  "tested_error_type": "wrong_degree_form",
+  "difficulty": "MEDIUM",
+  "vocabulary_domain": "fresh academic fieldwork",
+  "sentence": "The revised filter is most reliable than the earlier device during repeated trials in the coastal laboratory.",
+  "marked_parts": {
+    "A": "most reliable",
+    "B": "device",
+    "C": "trials",
+    "D": "laboratory"
+  },
+  "correct_answer": "A",
+  "error_explanation": "The explicit than comparison requires comparative more reliable, not superlative most reliable.",
+  "minimal_correction": "Change most reliable to more reliable.",
+  "grammar_metadata": {
+    "error_scope": "local",
+    "correction_locality": "LOCAL_SHORT_SPAN",
+    "decision_granularity": "MORPHOLOGY",
+    "intended_error_position": "A",
+    "correct_span_type": "SHORT_PHRASE"
+  },
+  "format_metadata": {
+    "span_types": {
+      "A": "SHORT_PHRASE",
+      "B": "SINGLE_WORD",
+      "C": "SINGLE_WORD",
+      "D": "SINGLE_WORD"
+    },
+    "target_sentence_length_region": "15-19; sampled fresh target 17",
+    "expected_span_profile": "Four local spans; correct-span type SHORT_PHRASE",
+    "coverage_profile": "{'A': 2, 'B': 1, 'C': 1, 'D': 1} marked lexical span profile",
+    "approximate_context_profile": "gaps 3/2/3",
+    "diagnostics": {
+      "sentence_word_count": 17,
+      "span_word_counts": {
+        "A": 2,
+        "B": 1,
+        "C": 1,
+        "D": 1
+      },
+      "mean_span_length": 1.25,
+      "max_span_length": 2,
+      "marked_coverage_ratio": 0.2941,
+      "unmarked_word_count": 12,
+      "gap_A_B": 3,
+      "gap_B_C": 2,
+      "gap_C_D": 3,
+      "correct_span_word_count": 2,
+      "correct_span_type": "SHORT_PHRASE",
+      "correction_locality": "LOCAL_SHORT_SPAN",
+      "decision_granularity": "MORPHOLOGY",
+      "format_distribution_distance": 0.5098,
+      "format_percentile_profile": {
+        "sentence_word_count": 0.268,
+        "marked_coverage_ratio": 0.648,
+        "unmarked_word_count": 0.3,
+        "mean_span_length": 0.5,
+        "max_span_length": 0.588,
+        "gap_A_B": 0.312,
+        "gap_B_C": 0.088,
+        "gap_C_D": 0.268
+      },
+      "format_band_status": "PREFERRED",
+      "metric_band_status": {
+        "sentence_word_count": "PREFERRED",
+        "marked_coverage_ratio": "PREFERRED",
+        "unmarked_word_count": "PREFERRED",
+        "mean_span_length": "PREFERRED",
+        "max_span_length": "PREFERRED",
+        "gap_A_B": "PREFERRED",
+        "gap_B_C": "PREFERRED",
+        "gap_C_D": "PREFERRED"
+      },
+      "span_token_indices": {
+        "A": [
+          4,
+          5
+        ],
+        "B": [
+          9
+        ],
+        "C": [
+          12
+        ],
+        "D": [
+          16
+        ]
+      }
+    }
+  },
+  "provenance": {
+    "agent_version": "Written Expression Generator v2.1",
+    "prompt_hash": null,
+    "spec_version": "1.0.0",
+    "format_spec_version": "1.0.0",
+    "generation_batch_id": "we-v2.1.2-25-item-grammar-resmoke-20260826",
+    "microbatch_id": "we-v2.1.2-grammar-pilot-013",
+    "item_generation_order": 13,
+    "invocation_id": null,
+    "runtime_model": null
+  },
+  "qa_metadata": {
+    "clean_form": "The revised filter is more reliable than the earlier device during repeated trials in the coastal laboratory.",
+    "error_form": "The revised filter is most reliable than the earlier device during repeated trials in the coastal laboratory.",
+    "minimal_correction": "Change most reliable to more reliable.",
+    "mutation_type": "comparative/superlative substitution: more reliable -> most reliable",
+    "clean_sentence_validated": true,
+    "grammar_check_status": "AMBIGUOUS",
+    "format_check_status": "PASS"
+  }
+}

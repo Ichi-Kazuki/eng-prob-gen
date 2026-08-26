@@ -1,5 +1,30 @@
 # WE Generator v2 changelog
 
+## v2.1.2 — 2026-08-26
+
+Grammar mutation safety patch; format logic unchanged.
+
+### Changed
+
+- quarantined ambiguous noun-phrase-to-pronoun substitutions unless a formal
+  reference defect is present;
+- rejected semantic-only degree substitutions and guarded comparative forms
+  with explicit syntactic triggers;
+- guarded base-form-to-`-ing` parallel mutations against supplementary,
+  adverbial-participial, and reduced-modifier alternate parses;
+- added fail-closed metadata consistency and local surface-mutation checks;
+- added the targeted mutation-template catalog with `SAFE`, `NEEDS_GUARD`,
+  and `QUARANTINE` classifications;
+- added A–G regression fixtures and a fresh 25-item smoke artifact builder.
+
+### Scope boundary
+
+The format planner, sentence-length sampling, span geometry, distractor
+syntactic-coherence scoring, Format Specification, format-band thresholds,
+Reviewer, Solver, Orchestrator, Schema contract, and Grammar Specification
+are unchanged.
+The v2.1.1 format-lock phrase remains: `grammar generation logic unchanged, format planner + span-selection policy only`.
+
 ## v2.1.1 — 2026-08-25
 
 Format-only minor patch: `distractor span syntactic-coherence scoring only`.
