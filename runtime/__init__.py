@@ -15,6 +15,7 @@ from .codex_schema import (
     build_codex_transport_artifact,
     build_codex_transport_schema,
 )
+from .freeze import FreezeDriftError, RunFreeze, create_run_freeze
 
 __all__ = [
     "AgentRuntime",
@@ -28,4 +29,7 @@ __all__ = [
     "CodexTransportSchemaError",
     "build_codex_transport_artifact",
     "build_codex_transport_schema",
+    "FreezeDriftError",
+    "RunFreeze",
+    "create_run_freeze",
 ]

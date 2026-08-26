@@ -14,12 +14,14 @@ does not have Claude's named-agent option.
 from __future__ import annotations
 
 import json
+import ctypes
 import os
 import re
 import signal
 import shutil
 import subprocess
 import tempfile
+import time
 import uuid
 from dataclasses import dataclass, field, replace
 from contextlib import contextmanager
@@ -34,6 +36,10 @@ from runtime.codex_schema import (  # noqa: E402
 
 SandboxMode = Literal["read-only", "workspace-write", "danger-full-access"]
 Runner = Callable[..., subprocess.CompletedProcess[str]]
+FreezeGuard = Callable[[str, str], None]
+
+PROCESS_CLEANUP_GRACE_SECONDS = 3.0
+TERMINATION_COMMAND_TIMEOUT_SECONDS = 1.0
 
 
 class RuntimeInvocationError(RuntimeError):
@@ -70,10 +76,12 @@ class InvocationRequest:
     sandbox: SandboxMode | None = None
     tools: str = ""
     max_budget_usd: str | None = None
-    timeout_seconds: int = 300
+    timeout_seconds: float = 300
     artifact_dir: Path = Path(".")
     isolate_workspace: bool = False
     retain_workspace_on_failure: bool = False
+    reasoning_effort: str | None = None
+    freeze_guard: FreezeGuard | None = None
 
 
 @dataclass
@@ -104,6 +112,12 @@ class InvocationResult:
     transport_schema_path: Path | None = None
     transport_schema_provenance_path: Path | None = None
     transport_schema_provenance: dict[str, Any] | None = None
+    requested_timeout_seconds: float | None = None
+    timeout_triggered_at: str | None = None
+    termination_started_at: str | None = None
+    termination_completed_at: str | None = None
+    termination_method: str | None = None
+    cleanup_duration_seconds: float | None = None
 
 
 class AgentRuntime(Protocol):
@@ -309,7 +323,19 @@ class _SubprocessRuntime:
             raw_stderr_path=stderr_path,
             output_last_message_path=last_message_path,
             input_keys=list(request.input_keys),
+            requested_timeout_seconds=request.timeout_seconds,
         )
+
+    @staticmethod
+    @contextmanager
+    def _freeze_guard(request: InvocationRequest) -> Iterator[None]:
+        if request.freeze_guard is not None:
+            request.freeze_guard("before", request.stage)
+        try:
+            yield
+        finally:
+            if request.freeze_guard is not None:
+                request.freeze_guard("after", request.stage)
 
     @staticmethod
     def _prepare_isolated_workspace(
@@ -359,7 +385,25 @@ class _SubprocessRuntime:
                 if result.workspace_path is not None:
                     shutil.rmtree(result.workspace_path, ignore_errors=True)
 
-    def _run(self, request: InvocationRequest, result: InvocationResult, command: list[str], *, stdin: str | None = None) -> subprocess.CompletedProcess[str]:
+    def _run(
+        self,
+        request: InvocationRequest,
+        result: InvocationResult,
+        command: list[str],
+        *,
+        stdin: str | None = None,
+    ) -> subprocess.CompletedProcess[str]:
+        with self._freeze_guard(request):
+            return self._run_unchecked(request, result, command, stdin=stdin)
+
+    def _run_unchecked(
+        self,
+        request: InvocationRequest,
+        result: InvocationResult,
+        command: list[str],
+        *,
+        stdin: str | None = None,
+    ) -> subprocess.CompletedProcess[str]:
         result.command = tuple(command)
         try:
             if self._runner is subprocess.run:
@@ -379,7 +423,8 @@ class _SubprocessRuntime:
             result.raw_stderr = _text(exc.stderr) or self._read_artifact(result.raw_stderr_path)
             result.exit_code = None
             result.completed_at = _now_iso()
-            result.error_category = "infrastructure"
+            result.timeout_triggered_at = result.timeout_triggered_at or _now_iso()
+            result.error_category = "HARNESS_TIMEOUT"
             diagnostic = (result.raw_stderr or result.raw_stdout).strip()
             suffix = f"; last diagnostic: {diagnostic[-800:]}" if diagnostic else ""
             result.error_detail = f"{request.stage}: CLI timeout after {request.timeout_seconds}s{suffix}"
@@ -403,25 +448,87 @@ class _SubprocessRuntime:
             return ""
 
     @classmethod
-    def _terminate_process_tree(cls, pid: int, *, force: bool = False) -> None:
+    def _terminate_process_tree(
+        cls,
+        pid: int,
+        *,
+        force: bool = False,
+        timeout_seconds: float | None = None,
+    ) -> str:
         """Terminate only the process tree created for this invocation."""
         if os.name == "nt":
+            timeout = timeout_seconds if timeout_seconds is not None else TERMINATION_COMMAND_TIMEOUT_SECONDS
+            method = "taskkill /PID /T /F"
             try:
-                subprocess.run(
+                completed = subprocess.run(
                     ["taskkill", "/PID", str(pid), "/T", "/F"],
                     capture_output=True,
                     text=True,
                     encoding="utf-8",
                     errors="replace",
-                    timeout=10,
+                    timeout=max(0.01, timeout),
                 )
-            except (OSError, subprocess.TimeoutExpired):
-                pass
-            return
+            except subprocess.TimeoutExpired:
+                return method + " (timeout)"
+            except OSError:
+                return method + " (error)"
+            if completed.returncode != 0:
+                return method + f" (exit {completed.returncode})"
+            return method
         try:
             sig = getattr(signal, "SIGKILL", signal.SIGTERM) if force else signal.SIGTERM
             cls._signal_process_group(pid, sig)
         except (OSError, ProcessLookupError):
+            pass
+        return "process-group SIGKILL" if force else "process-group SIGTERM"
+
+    @staticmethod
+    def _create_windows_job() -> int | None:
+        """Create a Job Object used as a bounded tree-kill fallback."""
+        if os.name != "nt":
+            return None
+        try:
+            kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+            kernel32.CreateJobObjectW.argtypes = [ctypes.c_void_p, ctypes.c_wchar_p]
+            kernel32.CreateJobObjectW.restype = ctypes.c_void_p
+            handle = kernel32.CreateJobObjectW(None, None)
+            return int(handle) if handle else None
+        except (AttributeError, OSError):
+            return None
+
+    @staticmethod
+    def _assign_windows_job(job_handle: int | None, process_handle: int) -> bool:
+        if job_handle is None or os.name != "nt":
+            return False
+        try:
+            kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+            kernel32.AssignProcessToJobObject.argtypes = [ctypes.c_void_p, ctypes.c_void_p]
+            kernel32.AssignProcessToJobObject.restype = ctypes.c_int
+            return bool(kernel32.AssignProcessToJobObject(job_handle, process_handle))
+        except (AttributeError, OSError):
+            return False
+
+    @staticmethod
+    def _terminate_windows_job(job_handle: int | None) -> bool:
+        if job_handle is None or os.name != "nt":
+            return False
+        try:
+            kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+            kernel32.TerminateJobObject.argtypes = [ctypes.c_void_p, ctypes.c_uint]
+            kernel32.TerminateJobObject.restype = ctypes.c_int
+            return bool(kernel32.TerminateJobObject(job_handle, 1))
+        except (AttributeError, OSError):
+            return False
+
+    @staticmethod
+    def _close_windows_job(job_handle: int | None) -> None:
+        if job_handle is None or os.name != "nt":
+            return
+        try:
+            kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+            kernel32.CloseHandle.argtypes = [ctypes.c_void_p]
+            kernel32.CloseHandle(job_handle)
+        except (AttributeError, OSError):
             pass
 
     @staticmethod
@@ -442,12 +549,14 @@ class _SubprocessRuntime:
         start_new_session = os.name != "nt"
         stdout_path = result.raw_stdout_path
         stderr_path = result.raw_stderr_path
+        job_handle: int | None = None
         try:
             if stdout_path is None or stderr_path is None:
                 raise OSError("runtime artifact paths were not allocated")
             stdout_path.parent.mkdir(parents=True, exist_ok=True)
             stderr_path.parent.mkdir(parents=True, exist_ok=True)
             with stdout_path.open("w", encoding="utf-8") as stdout_file, stderr_path.open("w", encoding="utf-8") as stderr_file:
+                job_handle = self._create_windows_job()
                 process = subprocess.Popen(
                     command,
                     cwd=str(request.cwd) if request.cwd is not None else None,
@@ -460,25 +569,77 @@ class _SubprocessRuntime:
                     creationflags=creationflags,
                     start_new_session=start_new_session,
                 )
+                process_handle = getattr(process, "handle", getattr(process, "_handle", None))
+                if job_handle is not None and (
+                    process_handle is None or not self._assign_windows_job(job_handle, int(process_handle))
+                ):
+                    self._close_windows_job(job_handle)
+                    job_handle = None
                 try:
                     process.communicate(input=stdin, timeout=request.timeout_seconds)
                 except subprocess.TimeoutExpired as exc:
-                    self._terminate_process_tree(process.pid)
-                    try:
-                        process.wait(timeout=5)
-                    except subprocess.TimeoutExpired:
-                        if os.name != "nt":
-                            self._terminate_process_tree(process.pid, force=True)
+                    result.timeout_triggered_at = _now_iso()
+                    cleanup_started = time.monotonic()
+                    result.termination_started_at = _now_iso()
+                    cleanup_deadline = cleanup_started + PROCESS_CLEANUP_GRACE_SECONDS
+                    methods: list[str] = []
+
+                    if process.stdin is not None:
                         try:
-                            process.kill()
-                        except ProcessLookupError:
+                            process.stdin.close()
+                        except OSError:
                             pass
-                        process.wait()
-                    else:
+
+                    remaining = cleanup_deadline - time.monotonic()
+                    if process.poll() is None and remaining > 0:
+                        methods.append(
+                            self._terminate_process_tree(
+                                process.pid,
+                                timeout_seconds=min(TERMINATION_COMMAND_TIMEOUT_SECONDS, remaining),
+                            )
+                        )
+
+                    if job_handle is not None:
+                        if self._terminate_windows_job(job_handle):
+                            methods.append("TerminateJobObject")
+                        else:
+                            methods.append("TerminateJobObject (error)")
+
+                    remaining = cleanup_deadline - time.monotonic()
+                    if process.poll() is None and remaining > 0:
+                        try:
+                            process.wait(timeout=remaining)
+                        except subprocess.TimeoutExpired:
+                            pass
+
+                    if process.poll() is None and time.monotonic() < cleanup_deadline:
                         if os.name != "nt":
-                            # A parent may exit after SIGTERM while a child
-                            # that ignores it keeps the process group alive.
-                            self._terminate_process_tree(process.pid, force=True)
+                            remaining = cleanup_deadline - time.monotonic()
+                            methods.append(
+                                self._terminate_process_tree(
+                                    process.pid,
+                                    force=True,
+                                    timeout_seconds=remaining,
+                                )
+                            )
+                        else:
+                            try:
+                                process.kill()
+                                methods.append("process.kill")
+                            except ProcessLookupError:
+                                pass
+                        remaining = cleanup_deadline - time.monotonic()
+                        if remaining > 0:
+                            try:
+                                process.wait(timeout=remaining)
+                            except subprocess.TimeoutExpired:
+                                pass
+
+                    if process.poll() is None:
+                        methods.append("cleanup_deadline_exceeded")
+                    result.termination_method = "; ".join(methods) or "process-already-exited"
+                    result.termination_completed_at = _now_iso()
+                    result.cleanup_duration_seconds = round(time.monotonic() - cleanup_started, 6)
                     raise subprocess.TimeoutExpired(command, request.timeout_seconds) from exc
             stdout = stdout_path.read_text(encoding="utf-8", errors="replace")
             stderr = stderr_path.read_text(encoding="utf-8", errors="replace")
@@ -487,6 +648,8 @@ class _SubprocessRuntime:
             raise
         except OSError:
             raise
+        finally:
+            self._close_windows_job(job_handle)
 
     def _complete(self, request: InvocationRequest, result: InvocationResult, proc: subprocess.CompletedProcess[str]) -> InvocationResult:
         result.raw_stdout = _text(proc.stdout)
@@ -749,7 +912,7 @@ class CodexRuntime(_SubprocessRuntime):
                 command.extend(["--model", request.model])
             elif self.model and self.model != "default":
                 command.extend(["--model", self.model])
-            reasoning_effort = os.environ.get("WE_E2E_CODEX_REASONING_EFFORT")
+            reasoning_effort = request.reasoning_effort or os.environ.get("WE_E2E_CODEX_REASONING_EFFORT")
             if reasoning_effort:
                 command.extend(["--config", f'model_reasoning_effort="{reasoning_effort}"'])
             cwd = effective_request.cwd

@@ -24,6 +24,15 @@ Transport-schema provenance records both schema hashes and explicitly requires
 canonical validation. Runtime facts, raw stdout/stderr paths, and the
 transport provenance are stored in the separate provenance sidecar.
 
+Each live run creates `runtime/freeze/freeze_manifest.json` before the first
+agent call and snapshots the canonical schemas under
+`runtime/freeze/snapshots/canonical-schemas/`. Generator, Reviewer, and Solver
+boundaries verify the manifest before and after every invocation; protected-file
+drift fails closed as `FREEZE_DRIFT`. Real subprocess timeouts terminate the
+Windows process tree with bounded `taskkill`/Job Object cleanup (or a bounded
+POSIX process-group escalation) and persist separate timeout, termination, and
+cleanup timestamps.
+
 An isolated workspace is owned by the adapter that creates it and is removed
 after every invocation, including launch, timeout, parsing, and validation
 failures. `InvocationRequest.retain_workspace_on_failure` is an explicit

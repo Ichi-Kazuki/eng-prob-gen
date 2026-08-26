@@ -69,6 +69,11 @@ from runtime.adapters import (  # noqa: E402
     InvocationResult,
     RuntimeInvocationError,
 )
+from runtime.freeze import (  # noqa: E402
+    FreezeDriftError,
+    RunFreeze,
+    create_run_freeze,
+)
 
 
 GENERATOR_AGENT = "toefl-itp-we-generator-v2"
@@ -259,6 +264,13 @@ def sidecar(
         "start_timestamp": invocation.started_at,
         "end_timestamp": invocation.completed_at,
         "elapsed_seconds": _elapsed_seconds(invocation.started_at, invocation.completed_at),
+        "requested_timeout_seconds": invocation.requested_timeout_seconds,
+        "timeout_triggered_timestamp": invocation.timeout_triggered_at,
+        "termination_start_timestamp": invocation.termination_started_at,
+        "termination_end_timestamp": invocation.termination_completed_at,
+        "termination_method": invocation.termination_method,
+        "cleanup_duration_seconds": invocation.cleanup_duration_seconds,
+        "total_elapsed_seconds": _elapsed_seconds(invocation.started_at, invocation.completed_at),
         "exit_code": invocation.exit_code,
         "process_exit_code": invocation.exit_code,
         "exact_command_argv": command,
@@ -279,6 +291,8 @@ def sidecar(
         "transport_schema_path": _relative_path(invocation.transport_schema_path),
         "transport_schema_provenance_path": _relative_path(invocation.transport_schema_provenance_path),
         "transport_schema_provenance": copy.deepcopy(invocation.transport_schema_provenance),
+        "freeze_manifest_path": _relative_path(_RUN_FREEZE.manifest_path) if _RUN_FREEZE is not None else None,
+        "freeze_manifest_sha256": _RUN_FREEZE.manifest_sha256 if _RUN_FREEZE is not None else None,
     }
     if classification is not None:
         record["classification"] = classification
@@ -293,15 +307,103 @@ def sidecar(
 
 
 _RUNTIME: AgentRuntime | None = None
+_RUNTIME_MODEL_OVERRIDE: str | None = None
+_RUN_FREEZE: RunFreeze | None = None
 
 
-def configure_runtime() -> AgentRuntime:
+def _schema_for_stage(stage: str, fallback: Path) -> Path:
+    if _RUN_FREEZE is None:
+        return fallback
+    return _RUN_FREEZE.schema_snapshots.get(stage, fallback)
+
+
+def _agent_definition_for_agent(agent: str, fallback: Path) -> Path:
+    if _RUN_FREEZE is None:
+        return fallback
+    return _RUN_FREEZE.agent_snapshots.get(agent, fallback)
+
+
+def _freeze_protected_files() -> dict[str, dict[str, Path]]:
+    return {
+        "generator": {
+            "agent_definition": GENERATOR_AGENT_PATH,
+            "canonical_schema": GENERATOR_SCHEMA_PATH,
+            "validator": ROOT / GENERATOR_VALIDATOR,
+            "mutation_safety": ROOT / "agents/toefl_itp_we_generator_v2/scripts/mutation_safety.py",
+            "format_validator": ROOT / "agents/toefl_itp_we_generator_v2/scripts/validate_format.py",
+            "format_planner": ROOT / "agents/toefl_itp_we_generator_v2/scripts/format_planner.py",
+        },
+        "reviewer": {
+            "agent_definition": REVIEWER_AGENT_PATH,
+            "canonical_schema": REVIEWER_SCHEMA_PATH,
+            "validator": ROOT / REVIEWER_VALIDATOR,
+        },
+        "solver": {
+            "agent_definition": SOLVER_AGENT_PATH,
+            "canonical_schema": SOLVER_SCHEMA_PATH,
+            "validator": ROOT / SOLVER_VALIDATOR,
+        },
+        "orchestrator": {
+            "live_harness": Path(__file__).resolve(),
+            "orchestrator": ROOT / "orchestrator/scripts/orchestrator.py",
+            "driver_helpers": ROOT / "orchestrator/scripts/driver_helpers.py",
+            "runtime_adapters": ROOT / "runtime/adapters.py",
+            "codex_schema": ROOT / "runtime/codex_schema.py",
+            "freeze_runtime": ROOT / "runtime/freeze.py",
+            "schema_validation": ROOT / "shared/schema_validation.py",
+            "reviewer_blinding": ROOT / "shared/reviewer_blinding.py",
+            "solver_blinding": ROOT / "shared/solver_blinding.py",
+            "config": ROOT / "orchestrator/config.json",
+        },
+    }
+
+
+def _create_run_freeze(
+    runtime: AgentRuntime,
+    *,
+    model: str,
+    reasoning_effort: str,
+    sandbox: str,
+    timeout_seconds: float,
+) -> RunFreeze:
+    return create_run_freeze(
+        RUNTIME / "freeze",
+        repo_root=ROOT,
+        protected_file_groups=_freeze_protected_files(),
+        canonical_schemas={
+            "generator": GENERATOR_SCHEMA_PATH,
+            "reviewer": REVIEWER_SCHEMA_PATH,
+            "solver": SOLVER_SCHEMA_PATH,
+        },
+        agent_instructions={
+            GENERATOR_AGENT: GENERATOR_AGENT_PATH,
+            REVIEWER_AGENT: REVIEWER_AGENT_PATH,
+            SOLVER_AGENT: SOLVER_AGENT_PATH,
+        },
+        provider=runtime.provider,
+        codex_cli_version=runtime.cli_version,
+        model=model,
+        reasoning_effort=reasoning_effort,
+        sandbox=sandbox,
+        timeout_seconds=timeout_seconds,
+    )
+
+
+def configure_runtime(
+    *,
+    provider_override: str | None = None,
+    model_override: str | None = None,
+) -> AgentRuntime:
     """Select a provider without changing any pipeline stage implementation."""
 
-    global _RUNTIME
-    requested = os.environ.get("WE_E2E_RUNTIME", os.environ.get("WE_E2E_PROVIDER", "claude")).strip().lower()
+    global _RUNTIME, _RUNTIME_MODEL_OVERRIDE
+    _RUNTIME_MODEL_OVERRIDE = model_override
+    requested = (
+        provider_override
+        or os.environ.get("WE_E2E_RUNTIME", os.environ.get("WE_E2E_PROVIDER", "claude"))
+    ).strip().lower()
     if requested in {"codex", "codex-cli"}:
-        _RUNTIME = CodexRuntime(model=os.environ.get("WE_E2E_CODEX_MODEL"))
+        _RUNTIME = CodexRuntime(model=model_override or os.environ.get("WE_E2E_CODEX_MODEL"))
     elif requested in {"claude", "claude-code", "claude-code-cli"}:
         _RUNTIME = ClaudeRuntime(model=MODEL)
     else:
@@ -324,6 +426,10 @@ def invoke(
     formal_schema_path: Path,
     transport_schema: dict | None = None,
     system_directive: str | None = None,
+    *,
+    reasoning_effort_override: str | None = None,
+    sandbox_override: str | None = None,
+    timeout_override: float | None = None,
 ) -> InvocationResult:
     agent_paths = {
         GENERATOR_AGENT: GENERATOR_AGENT_PATH,
@@ -336,30 +442,48 @@ def invoke(
     request = InvocationRequest(
         stage=stage,
         agent_name=agent,
-        agent_definition=agent_paths[agent],
+        agent_definition=_agent_definition_for_agent(agent, agent_paths[agent]),
         prompt=prompt,
         input_keys=tuple(input_keys),
-        formal_output_schema=formal_schema_path,
+        formal_output_schema=_schema_for_stage(stage, formal_schema_path),
         transport_output_schema=transport_schema,
         system_directive=system_directive,
-        model=MODEL if runtime.provider == "claude-code-cli" else os.environ.get("WE_E2E_CODEX_MODEL"),
+        model=(
+            MODEL
+            if runtime.provider == "claude-code-cli"
+            else (_RUNTIME_MODEL_OVERRIDE or os.environ.get("WE_E2E_CODEX_MODEL"))
+        ),
         cwd=ROOT,
         # Codex has no Claude-style empty tools switch. A read-only isolated
         # workspace makes the Reviewer/Solver blind boundary enforceable even
         # if a Codex tool is selected by the model.
-        sandbox="read-only" if runtime.provider == "codex" else None,
+        sandbox=sandbox_override or ("read-only" if runtime.provider == "codex" else None),
         tools=tools,
         max_budget_usd=PER_CALL_BUDGET if runtime.provider == "claude-code-cli" else None,
-        timeout_seconds=CLI_TIMEOUT_SECONDS,
+        timeout_seconds=timeout_override if timeout_override is not None else CLI_TIMEOUT_SECONDS,
         artifact_dir=LOGS,
         isolate_workspace=stage in {"reviewer", "solver"},
+        reasoning_effort=(
+            reasoning_effort_override
+            if reasoning_effort_override is not None
+            else os.environ.get("WE_E2E_CODEX_REASONING_EFFORT")
+        ),
+        freeze_guard=None,
     )
+    if _RUN_FREEZE is not None:
+        _RUN_FREEZE.verify("before", stage)
     try:
-        return runtime.invoke(request)
+        result = runtime.invoke(request)
     except RuntimeInvocationError as exc:
+        if _RUN_FREEZE is not None:
+            _RUN_FREEZE.verify("after", stage)
         error = LiveInvocationError(exc.category, exc.detail)
         error.invocation = exc.result
         raise error from exc
+    else:
+        if _RUN_FREEZE is not None:
+            _RUN_FREEZE.verify("after", stage)
+        return result
 
 
 def nested_forbidden(value: Any, forbidden: set[str], path: str = "$") -> list[str]:
@@ -420,7 +544,7 @@ def validate_generator_finalization(item: dict) -> tuple[bool, list[str]]:
     return not errors, [f"generator: {error}" for error in errors]
 
 
-def reviewer_runtime_schema() -> dict:
+def reviewer_runtime_schema(canonical_schema_path: Path = REVIEWER_SCHEMA_PATH) -> dict:
     """The live Reviewer response contract, before Orchestrator comparison fields.
 
     The checked-in formal schema intentionally requires ``generator_answer``
@@ -429,7 +553,7 @@ def reviewer_runtime_schema() -> dict:
     derived response schema with only those two required fields removed.  The
     formal checked-in schema itself is never edited.
     """
-    schema = copy.deepcopy(load_schema(REVIEWER_SCHEMA_PATH))
+    schema = copy.deepcopy(load_schema(canonical_schema_path))
     schema["required"] = [
         key for key in schema.get("required", [])
         if key not in {"generator_answer", "answer_match"}
@@ -512,14 +636,20 @@ def get_single_item(parsed: Any, stage: str) -> dict:
     return parsed
 
 
-def formal_reviewer(raw: dict, generator_item: dict, order: int, batch_id: str) -> dict:
+def adapt_reviewer_structural(
+    raw: dict,
+    generator_item: dict,
+    order: int,
+    batch_id: str,
+    runtime_schema: dict | None = None,
+) -> dict:
     """Adapt a blind Reviewer record without changing its judgment.
 
     The live response already uses the v2 Reviewer contract except for the two
     comparison fields that cannot be exposed during the blind call.  Validate
-    that response first, copy it unchanged, and attach only those
-    post-invocation comparison fields.  The existing Reviewer validator then
-    rejects semantic contradictions such as PASS with a failed check.
+    only its structural shape, copy it unchanged, and attach only those
+    post-invocation comparison fields.  Semantic consistency is deliberately
+    left to the checked-in Reviewer validator.
     """
     del order, batch_id  # provenance is supplied by the Reviewer response
     forbidden = sorted(nested_forbidden(raw, REVIEWER_FORBIDDEN_OUTPUT_KEYS))
@@ -534,7 +664,7 @@ def formal_reviewer(raw: dict, generator_item: dict, order: int, batch_id: str) 
         raise LiveInvocationError("schema", f"reviewer: required live field(s) missing: {missing}")
     # The canonical schema's only absent fields are post-stage fields. A
     # dedicated runtime schema check keeps this adapter structural.
-    raw_errors = schema_errors(raw, reviewer_runtime_schema())
+    raw_errors = schema_errors(raw, runtime_schema or reviewer_runtime_schema())
     if raw_errors:
         raise LiveInvocationError("schema", "; ".join(f"reviewer: {error}" for error in raw_errors))
     if raw.get("item_id") != generator_item.get("item_id") or raw.get("section") != generator_item.get("section"):
@@ -546,6 +676,19 @@ def formal_reviewer(raw: dict, generator_item: dict, order: int, batch_id: str) 
     formal = copy.deepcopy(raw)
     formal["generator_answer"] = generator_answer
     formal["answer_match"] = formal["independent_answer"] == generator_answer
+    return formal
+
+
+def formal_reviewer(
+    raw: dict,
+    generator_item: dict,
+    order: int,
+    batch_id: str,
+    runtime_schema: dict | None = None,
+) -> dict:
+    """Perform structural adaptation, then run the canonical Reviewer validator."""
+
+    formal = adapt_reviewer_structural(raw, generator_item, order, batch_id, runtime_schema)
     formal_ok, formal_errors = validate_existing_contract(formal, REVIEWER_VALIDATOR, "reviewer")
     if not formal_ok:
         raise LiveInvocationError("schema", "; ".join(formal_errors))
@@ -580,7 +723,11 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
                 system_directive=generator_system_directive(),
             )
             candidate_item = get_single_item(generator_invocation.parsed, "generator")
-            generator_ok, generator_errors = validate_schema_only(candidate_item, GENERATOR_SCHEMA_PATH, "generator")
+            generator_ok, generator_errors = validate_schema_only(
+                candidate_item,
+                _schema_for_stage("generator", GENERATOR_SCHEMA_PATH),
+                "generator",
+            )
             if not generator_ok:
                 raise LiveInvocationError("schema", "; ".join(generator_errors))
             if candidate_item.get("item_id") != item_id:
@@ -628,12 +775,18 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
     try:
         reviewer_invocation = invoke(
             REVIEWER_AGENT, "reviewer", reviewer_prompt(reviewer_input), list(reviewer_input), "",
-            REVIEWER_SCHEMA_PATH,
-            reviewer_runtime_schema(),
+            _schema_for_stage("reviewer", REVIEWER_SCHEMA_PATH),
+            reviewer_runtime_schema(_schema_for_stage("reviewer", REVIEWER_SCHEMA_PATH)),
             reviewer_system_directive(),
         )
         raw_reviewer = get_single_item(reviewer_invocation.parsed, "reviewer")
-        reviewer = formal_reviewer(raw_reviewer, generated, order, batch_id)
+        reviewer = formal_reviewer(
+            raw_reviewer,
+            generated,
+            order,
+            batch_id,
+            reviewer_runtime_schema(_schema_for_stage("reviewer", REVIEWER_SCHEMA_PATH)),
+        )
         reviewer_ok, reviewer_errors = validate_existing_contract(reviewer, REVIEWER_VALIDATOR, "reviewer")
         if not reviewer_ok:
             raise LiveInvocationError("schema", "; ".join(reviewer_errors))
@@ -1091,7 +1244,135 @@ def report_existing_run() -> int:
     return 0 if e2e_succeeded(metrics) else 1
 
 
-def main() -> int:
+def _write_freeze_drift_artifact(error: FreezeDriftError) -> None:
+    atomic_write_json(
+        OUT / "freeze_drift.json",
+        {
+            "status": "FREEZE_DRIFT",
+            "category": error.category,
+            "phase": error.phase,
+            "stage": error.stage,
+            "mismatches": list(error.mismatches),
+            "detail": str(error),
+            "freeze_manifest_path": _relative_path(error.manifest_path),
+            "quality_acceptance_rate": None,
+        },
+    )
+
+
+def run_generator_probe() -> int:
+    """Run exactly one frozen Generator call and no Reviewer/Solver calls."""
+
+    global _RUN_FREEZE
+    for directory in (FORMAL, PROVENANCE, INPUTS, LOGS):
+        directory.mkdir(parents=True, exist_ok=True)
+    batch_id = "we-v2.1.3-hardened-generator-probe-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    runtime = configure_runtime(provider_override="codex", model_override="gpt-5.6-luna")
+    _RUN_FREEZE = _create_run_freeze(
+        runtime,
+        model="gpt-5.6-luna",
+        reasoning_effort="medium",
+        sandbox="read-only",
+        timeout_seconds=300,
+    )
+    item_id = f"{batch_id}-001"
+    invocation: InvocationResult | None = None
+    canonical_errors: list[str] = []
+    finalization_errors: list[str] = []
+    generated: dict | None = None
+    error: LiveInvocationError | None = None
+    try:
+        invocation = invoke(
+            GENERATOR_AGENT,
+            "generator",
+            generator_prompt(item_id, 1, batch_id),
+            [],
+            "Read,Glob,Grep",
+            GENERATOR_SCHEMA_PATH,
+            system_directive=generator_system_directive(),
+            reasoning_effort_override="medium",
+            sandbox_override="read-only",
+            timeout_override=300,
+        )
+        generated = get_single_item(invocation.parsed, "generator")
+        schema_ok, canonical_errors = validate_schema_only(
+            generated,
+            _RUN_FREEZE.schema_snapshots["generator"],
+            "generator",
+        )
+        if schema_ok:
+            final_ok, finalization_errors = validate_generator_finalization(generated)
+            if not final_ok:
+                canonical_errors.extend(finalization_errors)
+        if generated.get("item_id") != item_id:
+            canonical_errors.append(
+                f"generator: item_id mismatch; expected {item_id!r}, got {generated.get('item_id')!r}"
+            )
+        atomic_write_json(FORMAL / "generator_outputs.json", {"items": [generated]})
+    except LiveInvocationError as exc:
+        error = exc
+        invocation = exc.invocation
+    except FreezeDriftError as exc:
+        _write_freeze_drift_artifact(exc)
+        print(json.dumps({"status": "FREEZE_DRIFT", "detail": str(exc)}, ensure_ascii=False, indent=2))
+        return 2
+
+    if invocation is None:
+        invocation = InvocationResult(
+            "generator",
+            GENERATOR_AGENT,
+            str(uuid.uuid4()),
+            now_iso(),
+            provider=runtime.provider,
+            model="gpt-5.6-luna",
+            cli_version=runtime.cli_version,
+            requested_timeout_seconds=300,
+        )
+    record = sidecar(
+        invocation,
+        input_payload={},
+        contract_validated=not canonical_errors and error is None,
+        formal_output_exists=generated is not None and not canonical_errors,
+        leakage=[],
+        error=error,
+    )
+    atomic_write_json(PROVENANCE / "runtime_provenance.json", {"items": [record]})
+    result = {
+        "status": "SUCCESS" if generated is not None and not canonical_errors and error is None else "PROBE_FAILURE",
+        "category": None if error is None else error.category,
+        "detail": None if error is None else error.detail,
+        "batch_id": batch_id,
+        "live_generator_invocation_count": 1,
+        "reviewer_invocation_count": 0,
+        "solver_invocation_count": 0,
+        "canonical_validation": {
+            "passed": not canonical_errors,
+            "errors": canonical_errors,
+            "schema_snapshot": _relative_path(_RUN_FREEZE.schema_snapshots["generator"]),
+            "schema_hash": _RUN_FREEZE.manifest["canonical_schema_hashes"]["generator"],
+        },
+        "finalization_validation": {"passed": not finalization_errors, "errors": finalization_errors},
+        "freeze_manifest": {
+            "path": _relative_path(_RUN_FREEZE.manifest_path),
+            "sha256": _RUN_FREEZE.manifest_sha256,
+        },
+        "quality_acceptance_rate": None,
+        "note": "Infrastructure probe only; no Reviewer/Solver calls and no quality acceptance rate calculated.",
+    }
+    atomic_write_json(OUT / "generator_probe.json", result)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0 if result["status"] == "SUCCESS" else 1
+
+
+def main(argv: list[str] | None = None) -> int:
+    argv = sys.argv[1:] if argv is None else argv
+    if "--generator-probe" in argv:
+        try:
+            return run_generator_probe()
+        except FreezeDriftError as exc:
+            _write_freeze_drift_artifact(exc)
+            print(json.dumps({"status": "FREEZE_DRIFT", "detail": str(exc)}, ensure_ascii=False, indent=2))
+            return 2
     if os.environ.get("WE_E2E_REPORT_ONLY") == "1":
         return report_existing_run()
     for directory in (FORMAL, PROVENANCE, INPUTS, LOGS):
@@ -1099,20 +1380,33 @@ def main() -> int:
     batch_id = "we-v2.1.3-live-e2e-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     config = live_config()
     runtime = configure_runtime()
+    global _RUN_FREEZE
+    _RUN_FREEZE = _create_run_freeze(
+        runtime,
+        model=MODEL if runtime.provider == "claude-code-cli" else (_RUNTIME_MODEL_OVERRIDE or os.environ.get("WE_E2E_CODEX_MODEL", "default")),
+        reasoning_effort=os.environ.get("WE_E2E_CODEX_REASONING_EFFORT", "unset"),
+        sandbox="read-only" if runtime.provider == "codex" else "native",
+        timeout_seconds=CLI_TIMEOUT_SECONDS,
+    )
     print(f"runtime provider: {runtime.provider} ({runtime.cli_version})", flush=True)
     generator_items: list = []
     reviewer_items: list = []
     solver_items: list = []
     provenance_records: list = []
     outcomes: list = []
-    for order in range(1, 11):
-        process_one(order, batch_id, config, generator_items, reviewer_items, solver_items, provenance_records, outcomes)
-        atomic_write_json(FORMAL / "generator_outputs.json", {"items": generator_items})
-        atomic_write_json(FORMAL / "reviewer_outputs.json", {"items": reviewer_items})
-        atomic_write_json(FORMAL / "solver_outputs.json", {"items": solver_items})
-        atomic_write_json(PROVENANCE / "runtime_provenance.json", {"items": provenance_records})
-        latest = outcomes[-1] if outcomes else {"state": "UNKNOWN"}
-        print(f"completed microbatch {order}/10: {latest.get('item_id')} -> {latest.get('state')}", flush=True)
+    try:
+        for order in range(1, 11):
+            process_one(order, batch_id, config, generator_items, reviewer_items, solver_items, provenance_records, outcomes)
+            atomic_write_json(FORMAL / "generator_outputs.json", {"items": generator_items})
+            atomic_write_json(FORMAL / "reviewer_outputs.json", {"items": reviewer_items})
+            atomic_write_json(FORMAL / "solver_outputs.json", {"items": solver_items})
+            atomic_write_json(PROVENANCE / "runtime_provenance.json", {"items": provenance_records})
+            latest = outcomes[-1] if outcomes else {"state": "UNKNOWN"}
+            print(f"completed microbatch {order}/10: {latest.get('item_id')} -> {latest.get('state')}", flush=True)
+    except FreezeDriftError as exc:
+        _write_freeze_drift_artifact(exc)
+        print(json.dumps({"status": "FREEZE_DRIFT", "detail": str(exc)}, ensure_ascii=False, indent=2))
+        return 2
     tests = run_existing_tests()
     metrics = build_metrics(generator_items, reviewer_items, solver_items, provenance_records, outcomes, tests, batch_id)
     decision, decision_reason = final_decision(metrics)
