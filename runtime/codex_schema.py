@@ -501,6 +501,15 @@ def _project_node(value: Any, path: str, records: list[JsonObject], *, root: boo
                 replacement="false",
                 reason="Codex Structured Outputs requires additionalProperties:false on every object",
             )
+        if "properties" not in working:
+            working["properties"] = {}
+            _record(
+                records,
+                path=f"{path}.properties",
+                keyword="properties",
+                action="added",
+                reason="explicit empty properties map makes a closed empty object unambiguous to Codex",
+            )
         properties = working.get("properties")
         if isinstance(properties, dict):
             current_required = working.get("required")

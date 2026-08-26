@@ -62,6 +62,17 @@ class RuntimeAdapterTests(unittest.TestCase):
             runtime = CodexRuntime(executable="codex", model="mock-model", runner=runner, cli_version="codex-cli 0.0-test")
             result = runtime.invoke(request(Path(directory)))
             self.assertTrue(result.output_last_message_path and result.output_last_message_path.exists())
+            self.assertTrue(result.transport_schema_path and result.transport_schema_path.exists())
+            transport = json.loads(result.transport_schema_path.read_text(encoding="utf-8"))
+            self.assertNotIn("allOf", json.dumps(transport))
+            self.assertTrue(
+                result.transport_schema_provenance_path
+                and result.transport_schema_provenance_path.exists()
+            )
+            self.assertEqual(
+                result.transport_schema_provenance["canonical_schema_path"],
+                str(SOLVER_SCHEMA),
+            )
 
         command, kwargs = calls[0]
         self.assertEqual(command[0:2], ["codex", "exec"])
@@ -70,19 +81,8 @@ class RuntimeAdapterTests(unittest.TestCase):
         self.assertEqual(command[command.index("--sandbox") + 1], "read-only")
         self.assertIn("--output-schema", command)
         transport_path = Path(command[command.index("--output-schema") + 1])
-        self.assertTrue(result.transport_schema_path and result.transport_schema_path.exists())
         self.assertNotEqual(transport_path.resolve(), SOLVER_SCHEMA.resolve())
-        transport = json.loads(result.transport_schema_path.read_text(encoding="utf-8"))
-        self.assertNotIn("allOf", json.dumps(transport))
         self.assertEqual(transport_path.name, result.transport_schema_path.name)
-        self.assertTrue(
-            result.transport_schema_provenance_path
-            and result.transport_schema_provenance_path.exists()
-        )
-        self.assertEqual(
-            result.transport_schema_provenance["canonical_schema_path"],
-            str(SOLVER_SCHEMA),
-        )
         self.assertIn("--output-last-message", command)
         self.assertEqual(command[-1], "-")
         self.assertEqual(kwargs["input"].split("AUTHORITATIVE AGENT INSTRUCTIONS", 1)[0], "")
