@@ -144,9 +144,10 @@ in state `SOLVING`).
 
 ## 6. Solver blinding (spec section 7)
 
-`orchestrator.blind_for_solver()` shells out to the existing
-`agents/toefl_itp_grammar_solver/scripts/create_solver_input.py` — the
-Orchestrator does not re-implement metadata stripping. On top of that,
+`orchestrator.blind_for_solver()` uses the shared pure function in
+`shared/solver_blinding.py`; the existing CLI remains a compatibility
+wrapper. The Orchestrator does not duplicate metadata stripping.
+On top of that,
 `orchestrator.leakage_guard()` re-checks the blinded item's keys are
 *exactly* the section's allowlist (`item_id, section, stem, options` for
 Structure; `item_id, section, sentence, marked_parts` for Written
@@ -161,8 +162,9 @@ delivery):
    Reviewer agent with the raw Generator item, feed its JSON output to
    `process_review_output()`.
 2. after `process_review_output()` reaches `SOLVING` → call
-   `blind_for_solver()`, then call the Solver agent with the blinded
-   item, feed its JSON output to `process_solver_stage()`.
+   `blind_for_solver()`, then call the Solver agent with the canonical
+   blinded item, feed its JSON output to `process_solver_stage()`. The stage
+   boundary re-derives and compares the canonical payload before consensus.
 3. on `REVISE_REQUIRED` → call the Generator agent again with
    `build_generator_feedback(reviewer_item)`, feed the new candidate back
    into `process_generation_output()`.
@@ -234,6 +236,8 @@ This is a permanent regression fixture — see `run_smoke_test.py` and
   "solver": {"answer": "C", "confidence": "HIGH"},
   "consensus": true,
   "batch_slot": {"...": "..."},
+  "planned_slot": {"...": "..."},
+  "final_slot": {"...": "..."},
   "versions": {"spec_version": "...", "taxonomy_version": "...", "generator_version": "...", ...},
   "accepted_item": { "...": "public-facing fields only, see section 11 below" },
   "qa_audit": { "...": "full internal detail, see section 11 below" }
@@ -293,14 +297,16 @@ The `planned` side means the original slot assigned at the first Generator
 attempt. It is captured on `Candidate` before any revision, so a revision that
 changes target, difficulty, or answer position cannot rewrite the batch's
 planned distribution. The current item remains the source for `actual_accepted`
-and for `batch_slot`, which is the latest slot to carry forward to a fresh
-Generator call.
+and for `batch_slot`, which is retained as a backward-compatible alias for
+`planned_slot`. `final_slot` is derived from the final Generator item after
+revisions and is the latest slot to carry forward to a fresh Generator call.
 
 `orchestrator.derive_slot_requirements(generator_item)` produces the slot a
 fresh Generator call should target when a candidate is `DISCARDED` or
 `REJECTED` — e.g. `{"primary_target": "RELATIVE_CLAUSES", "difficulty":
 "HARD", "correct_answer_position": "B", "vocabulary_domain": "..."}` — and
-is attached as `batch_slot` on every provenance record.
+is attached as `final_slot` on every provenance record; `batch_slot` and
+`planned_slot` preserve the original allocation.
 
 ## 14. Human review queue (spec section 15)
 

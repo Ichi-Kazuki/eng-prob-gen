@@ -52,7 +52,15 @@
     },
     "batch_slot": {
       "type": ["object", "null"],
-      "description": "Slot requirements (primary_target/difficulty/correct_answer_position/vocabulary_domain[/tested_error_type/error_scope]) to hand to a fresh Generator call if this candidate is discarded or rejected (spec section 14)."
+      "description": "Backward-compatible alias for planned_slot: the slot assigned at initial Candidate generation."
+    },
+    "planned_slot": {
+      "type": ["object", "null"],
+      "description": "The slot assigned when the initial Candidate was generated. This is the canonical meaning of the backward-compatible batch_slot field."
+    },
+    "final_slot": {
+      "type": ["object", "null"],
+      "description": "Slot requirements derived from the final Generator item after any revision."
     },
     "versions": {
       "type": "object",

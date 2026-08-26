@@ -8,9 +8,8 @@ solver_answer with its own guess. Its only job is to:
   - sequence Generator -> Reviewer -> Solver calls in the right order
   - validate each agent's output shape by SHELLING OUT to that agent's own
     existing validate_output.py (never re-implementing schema checks)
-  - blind candidate items for the Solver by shelling out to the existing
-    agents/toefl_itp_grammar_solver/scripts/create_solver_input.py
-    (never re-implementing metadata stripping)
+  - blind candidate items for the Solver through the shared, pure
+    allowlist projection also used by the compatibility CLI
   - enforce retry/revision limits and state transitions
   - compute the AUTO_ACCEPT consensus rule mechanically from the three
     agents' own reported fields (no majority vote, no "probably right")
@@ -26,7 +25,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import subprocess
 import sys
 import tempfile
@@ -46,6 +44,11 @@ from shared.schema_validation import (  # noqa: E402
     SchemaValidationRuntimeError,
     load_schema,
     schema_errors,
+)
+from shared.solver_blinding import (  # noqa: E402
+    STRUCTURE_ALLOWLIST,
+    WRITTEN_EXPRESSION_ALLOWLIST,
+    canonical_solver_input as _canonical_solver_input,
 )
 
 __all__ = [
@@ -71,8 +74,10 @@ __all__ = [
     "run_schema_validator",
     "blind_for_solver",
     "canonicalize_solver_input",
+    "canonical_solver_input_errors",
     "leakage_guard",
     "build_generator_feedback",
+    "build_review_feedback_from_state",
     "derive_slot_requirements",
     "evaluate_consensus",
     "process_generation_output",
@@ -159,8 +164,9 @@ ALLOWED_TRANSITIONS = {
     State.DISCARDED: set(),
 }
 
-STRUCTURE_ALLOWLIST = ["item_id", "section", "stem", "options"]
-WE_ALLOWLIST = ["item_id", "section", "sentence", "marked_parts"]
+# These names are retained for the leakage guard's existing API.  The
+# canonical field lists themselves are owned by shared.solver_blinding.
+WE_ALLOWLIST = WRITTEN_EXPRESSION_ALLOWLIST
 
 # Fields the Generator revision loop may see. Deliberately excludes
 # independent_answer / checks / verdict / generator_answer / answer_match /
@@ -235,7 +241,10 @@ def load_versions(config: dict) -> dict:
         ),
     }
     v["orchestrator_version"] = _hash_repo_file("orchestrator/scripts/orchestrator.py")
-    v["solver_blinding_version"] = _hash_repo_file(
+    # The policy now lives in shared code; keep a separate CLI hash so the
+    # audit trail can distinguish policy changes from wrapper changes.
+    v["solver_blinding_version"] = _hash_repo_file("shared/solver_blinding.py")
+    v["solver_blinding_cli_version"] = _hash_repo_file(
         config["paths"]["solver_blinding_script"]
     )
     v["config_version"] = _hash_repo_file("orchestrator/config.json")
@@ -381,63 +390,49 @@ def run_schema_validator(
 
 
 def blind_for_solver(config: dict, item: dict, timeout_seconds: float = 60) -> dict:
-    """Blind a single candidate item using the EXISTING
-    create_solver_input.py script (spec section 7: 'Orchestratorが独自に
-    metadata削除処理を再実装しない'). Returns the blinded dict."""
-    script_path = REPO_ROOT / config["paths"]["solver_blinding_script"]
-    if not script_path.exists():
-        raise SystemCallError("solver blinding script not found")
+    """Return a single candidate's canonical Solver payload.
 
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".json", delete=False, encoding="utf-8"
-    ) as tmp_in:
-        json.dump({"items": [item]}, tmp_in, ensure_ascii=False)
-        in_path = tmp_in.name
-    out_fd, out_path = tempfile.mkstemp(suffix=".json")
-    os.close(out_fd)
-    Path(out_path).unlink()  # let the script create it fresh
-
+    The compatibility signature is retained, but production logic is the
+    shared pure projection rather than the CLI wrapper.
+    """
+    del config, timeout_seconds
     try:
-        proc = subprocess.run(
-            [sys.executable, str(script_path), in_path, out_path],
-            capture_output=True,
-            text=True,
-            timeout=timeout_seconds,
-        )
-        if proc.returncode != 0:
-            raise SystemCallError(f"blinding script failed: {proc.stdout}{proc.stderr}")
-        try:
-            blinded = json.loads(Path(out_path).read_text(encoding="utf-8"))
-        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as e:
-            raise SystemCallError(f"blinding script produced invalid JSON: {e}") from e
-    except subprocess.TimeoutExpired as e:
-        raise SystemCallError(
-            f"blinding script {script_path} timed out after {timeout_seconds}s; "
-            f"stdout={e.stdout or ''}; stderr={e.stderr or ''}"
-        ) from e
-    except OSError as e:
-        raise SystemCallError(f"failed to invoke blinding script: {e}") from e
-    finally:
-        Path(in_path).unlink(missing_ok=True)
-        Path(out_path).unlink(missing_ok=True)
-
-    if not isinstance(blinded, dict) or not isinstance(blinded.get("items"), list):
-        raise SystemCallError("blinding script returned malformed JSON: expected an items array")
-    items = blinded["items"]
-    if len(items) != 1 or not isinstance(items[0], dict):
-        raise SystemCallError("blinding script returned unexpected item count")
-    return items[0]
+        return _canonical_solver_input(item)
+    except (TypeError, ValueError, KeyError) as exc:
+        raise SystemCallError(f"solver blinding failed: {exc}") from exc
 
 
 def canonicalize_solver_input(config: dict, item: dict) -> dict:
-    """Return the canonical blind payload using the production blinding path.
+    """Return the canonical blind payload using the shared pure function.
 
-    Persisted-state validation calls this helper instead of rebuilding the
-    allowlist locally.  That keeps state-load checks on the same contract as
-    live Solver retries and prevents policy drift.
+    The historical ``config`` argument is retained for API compatibility;
+    canonicalization itself has no external dependency or mutable state.
     """
+    del config
+    return _canonical_solver_input(item)
 
-    return blind_for_solver(config, item)
+
+def canonical_solver_input_errors(
+    config: dict, generator_item: object, solver_input: object
+) -> list[str]:
+    """Return invariant errors for a selected Solver payload.
+
+    Drivers use this shared check before writing a Solver batch. It returns
+    errors instead of treating a mismatch as a usable fallback; callers must
+    route the Candidate away from Solver.
+    """
+    if not isinstance(generator_item, dict):
+        return ["canonical Solver input could not be derived: generator item must be an object"]
+    try:
+        expected = canonicalize_solver_input(config, generator_item)
+    except (TypeError, ValueError, KeyError) as exc:
+        return [f"canonical Solver input could not be derived: {exc}"]
+    if solver_input != expected:
+        return [
+            "solver input does not match the canonical blinded payload "
+            "derived from the current generator_item"
+        ]
+    return []
 
 
 def leakage_guard(blinded_item: dict, section: str) -> tuple[bool, list[str]]:
@@ -446,6 +441,8 @@ def leakage_guard(blinded_item: dict, section: str) -> tuple[bool, list[str]]:
     for its section before it is ever handed to the Solver."""
     if section not in {"Structure", "Written Expression"}:
         return False, [f"unsupported section: {section!r}"]
+    if not isinstance(blinded_item, dict):
+        return False, ["Solver input must be an object"]
     allowlist = set(STRUCTURE_ALLOWLIST if section == "Structure" else WE_ALLOWLIST)
     actual = set(blinded_item.keys())
     leaked = sorted(actual - allowlist)
@@ -465,6 +462,52 @@ def build_generator_feedback(reviewer_item: dict) -> dict:
         "issues": reviewer_item.get("issues", []),
         "revision_requirements": reviewer_item.get("revision_requirements", []),
     }
+
+
+def build_review_feedback_from_state(
+    candidates: dict[str, "Candidate"], round_label: str
+) -> dict:
+    """Rebuild one Reviewer round's Generator feedback from Candidate state.
+
+    Reviewer history is the durable source of truth.  Only records explicitly
+    routed to ``REVISE_REQUIRED`` are emitted, so rebuilding a round does not
+    accidentally include a stale candidate that was already in that state.
+    Older state files did not record the routed state; for those records the
+    validated Reviewer verdict is used as a compatibility fallback.
+    """
+    if not isinstance(round_label, str) or not round_label.strip():
+        raise ValueError("round_label must be a non-empty string")
+
+    feedback: list[dict] = []
+    for candidate in candidates.values():
+        for history_entry in reversed(candidate.review_history):
+            if not isinstance(history_entry, dict) or history_entry.get("round") != round_label:
+                continue
+            reviewer_item = history_entry.get("output")
+            if not isinstance(reviewer_item, dict):
+                raise ValueError(
+                    f"candidate {candidate.item_id!r} has malformed Reviewer history "
+                    f"for round {round_label!r}"
+                )
+            if (
+                reviewer_item.get("item_id") != candidate.item_id
+                or reviewer_item.get("section") != candidate.section
+            ):
+                raise ValueError(
+                    f"candidate {candidate.item_id!r} has mismatched Reviewer history "
+                    f"for round {round_label!r}"
+                )
+            routed_state = history_entry.get("routed_state")
+            is_revision = routed_state == State.REVISE_REQUIRED
+            if routed_state is None:
+                # State files written before routed_state was introduced are
+                # still readable.  A Reviewer REVISE verdict is the only
+                # safe legacy signal for reconstructing this artifact.
+                is_revision = reviewer_item.get("verdict") == "REVISE"
+            if is_revision:
+                feedback.append(build_generator_feedback(reviewer_item))
+            break
+    return {"items": feedback}
 
 
 def derive_slot_requirements(generator_item: dict) -> dict:
@@ -765,6 +808,32 @@ def validate_candidate_invariants(candidate: Candidate) -> None:
                 errors.append(f"{field_name} contains unknown stage {stage!r}")
             if not _is_nonnegative_int(count):
                 errors.append(f"{field_name}[{stage!r}] must be an integer >= 0")
+
+    review_history = candidate.review_history
+    if not isinstance(review_history, list):
+        errors.append("review_history must be a list")
+    else:
+        for index, history_entry in enumerate(review_history):
+            if not isinstance(history_entry, dict):
+                errors.append(f"review_history[{index}] must be an object")
+                continue
+            if not isinstance(history_entry.get("round"), str) or not history_entry["round"].strip():
+                errors.append(f"review_history[{index}].round must be a non-empty string")
+            reviewer_output = history_entry.get("output")
+            if not isinstance(reviewer_output, dict):
+                errors.append(f"review_history[{index}].output must be an object")
+            else:
+                if reviewer_output.get("item_id") != candidate.item_id:
+                    errors.append(
+                        f"review_history[{index}].output.item_id does not match candidate.item_id"
+                    )
+                if reviewer_output.get("section") != candidate.section:
+                    errors.append(
+                        f"review_history[{index}].output.section does not match candidate.section"
+                    )
+            routed_state = history_entry.get("routed_state")
+            if routed_state is not None and routed_state not in VALID_STATES:
+                errors.append(f"review_history[{index}].routed_state is invalid")
 
     for stage, item in (
         ("generator", candidate.generator_item),
@@ -1187,9 +1256,11 @@ def process_solver_stage(
     precomputed_solver_input: Optional[dict] = None,
 ) -> Candidate:
     """Only reachable from state SOLVING (i.e. only after Reviewer PASS).
-    Blinds the item via the real create_solver_input.py, runs the leakage
-    guard, validates the (caller-supplied) solver_item against its schema,
-    then applies the mechanical consensus rule."""
+    Derives the canonical allowlisted payload, runs the leakage guard,
+    validates the (caller-supplied) solver_item against its schema, then
+    applies the mechanical consensus rule.  Any caller-supplied or persisted
+    payload that differs from the current Generator item is rejected before
+    Solver validation or consensus."""
     if candidate.state != State.SOLVING:
         raise ValueError(
             f"process_solver_stage called on candidate in state {candidate.state}, "
@@ -1209,35 +1280,67 @@ def process_solver_stage(
         if identity_errors:
             return _reject_identity(candidate, config, stage, item, identity_errors)
 
+    # Compute the canonical payload at this boundary for every path: a
+    # caller-supplied precomputed payload, a persisted retry payload, and a
+    # fresh blind.  Equality is checked before storing the selected payload so
+    # a tampered payload cannot make a VALIDATION_FAILED state itself
+    # impossible to persist on the next process boundary.
+    try:
+        expected_solver_input = canonicalize_solver_input(config, candidate.generator_item)
+    except (TypeError, ValueError, KeyError) as exc:
+        candidate.solver_input = None
+        return record_stage_failure(
+            candidate,
+            config,
+            kind="content",
+            stage="solver",
+            detail=f"canonical Solver input could not be derived: {exc}",
+        )
+
     if precomputed_solver_input is not None:
         blinded = precomputed_solver_input
     elif candidate.solver_input is not None:
-        # A transient Solver retry must use the exact allowlisted payload that
-        # was persisted for the previous Solver call.  Quality-driven
-        # generator/reviewer transitions clear solver_input before reaching
-        # this path, so a changed generator item cannot reuse stale input.
+        # A transient Solver retry may reuse the exact persisted payload, but
+        # only after it is compared with the current Generator item above.
         blinded = candidate.solver_input
     else:
         try:
             blinded = blind_for_solver(config, candidate.generator_item)
-        except SystemCallError as e:
+        except SystemCallError as exc:
+            candidate.solver_input = None
             return record_stage_failure(
                 candidate,
                 config,
                 kind="system",
                 stage="solver",
-                detail=f"during blinding: {e}",
+                detail=f"during blinding: {exc}",
             )
 
-    candidate.solver_input = blinded
+    if blinded != expected_solver_input:
+        candidate.solver_input = None
+        return _reject_identity(
+            candidate,
+            config,
+            "solver",
+            blinded,
+            [
+                "solver input does not match the canonical blinded payload "
+                "derived from the current generator_item"
+            ],
+        )
+
     input_identity_errors = _identity_errors(candidate, blinded, "solver_input")
     if input_identity_errors:
+        candidate.solver_input = None
         return _reject_identity(candidate, config, "solver", blinded, input_identity_errors)
     ok, problems = leakage_guard(blinded, candidate.section)
     candidate.leakage_check = {"ok": ok, "problems": problems, "blinded_keys": sorted(blinded.keys())}
     if not ok:
+        candidate.solver_input = None
         candidate.transition(State.MANUAL_REVIEW, f"leakage guard failed: {problems}")
         return candidate
+
+    candidate.solver_input = blinded
 
     if solver_item is None:
         raise ValueError("solver_item must be supplied once a candidate reaches SOLVING")
@@ -1367,7 +1470,13 @@ def build_qa_audit(candidate: Candidate, versions: dict) -> dict:
 def build_provenance_record(candidate: Candidate, versions: dict) -> dict:
     accepted = build_accepted_item(candidate, versions)
     audit = build_qa_audit(candidate, versions)
-    slot = derive_slot_requirements(candidate.generator_item) if candidate.generator_item else None
+    planned_slot = candidate.planned_slot
+    if planned_slot is None and candidate.generator_item is not None:
+        # Direct replay callers from before planned_slot was introduced did
+        # not populate the field.  Treat their first/current item as the
+        # initial slot while keeping persisted revised Candidates explicit.
+        planned_slot = derive_slot_requirements(candidate.generator_item)
+    final_slot = derive_slot_requirements(candidate.generator_item) if candidate.generator_item else None
     return {
         "item_id": candidate.item_id,
         "concept_id": candidate.concept_id,
@@ -1390,7 +1499,11 @@ def build_provenance_record(candidate: Candidate, versions: dict) -> dict:
             "confidence": candidate.solver_item.get("confidence"),
         },
         "consensus": candidate.state == State.ACCEPTED,
-        "batch_slot": slot,
+        # ``batch_slot`` is retained as the compatibility name and now has a
+        # stable, explicit meaning: the slot assigned at initial generation.
+        "batch_slot": planned_slot,
+        "planned_slot": planned_slot,
+        "final_slot": final_slot,
         "versions": versions,
         "accepted_item": accepted,
         "qa_audit": audit,
@@ -1463,6 +1576,8 @@ FINAL_SCHEMA_PATHS = {
 def validate_final_record(record: dict) -> list[str]:
     """Validate the complete final artifact at the finalization boundary."""
     errors: list[str] = []
+    if "planned_slot" in record and record.get("batch_slot") != record.get("planned_slot"):
+        errors.append("batch_slot must equal planned_slot when both are present")
     try:
         provenance_schema = load_schema(FINAL_SCHEMA_PATHS["provenance"])
         qa_schema = load_schema(FINAL_SCHEMA_PATHS["qa_audit"])

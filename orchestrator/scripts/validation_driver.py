@@ -5,6 +5,10 @@ This is intentionally a thin validation-only wrapper around the same
 validation state and artifacts under ``analysis/validation`` and records all
 Reviewer rounds so the initial 120 candidates can be evaluated without
 replacement-candidate dilution.
+
+``rebuild_feedback <round_label>`` regenerates a round artifact from the
+persisted Candidate Reviewer history if the original artifact write failed.
+``init ... --force-reset`` is required to replace an existing state file.
 """
 
 from __future__ import annotations
@@ -22,9 +26,10 @@ from orchestrator import (  # noqa: E402
     SystemCallError,
     TERMINAL_STATES,
     blind_for_solver,
-    build_generator_feedback,
     build_manual_review_entry,
     build_provenance_record,
+    build_review_feedback_from_state,
+    canonical_solver_input_errors,
     derive_slot_requirements,
     load_config,
     load_candidate_state,
@@ -73,7 +78,7 @@ def state_tally(candidates: dict[str, Candidate]) -> dict[str, int]:
     return tally
 
 
-def cmd_init(*batch_paths: str) -> None:
+def cmd_init(*batch_paths: str, force_reset: bool = False) -> None:
     if len(batch_paths) != 3:
         raise SystemExit("init requires exactly three batch JSON paths")
     config = load_config()
@@ -88,11 +93,12 @@ def cmd_init(*batch_paths: str) -> None:
     sections = {s: sum(1 for x in gen_items.values() if x.get("section") == s) for s in ("Structure", "Written Expression")}
     if sections != {"Structure": 45, "Written Expression": 75}:
         raise ValueError(f"initial section counts mismatch: {sections}")
+    if STATE_PATH.exists() and not force_reset:
+        raise SystemExit(
+            f"Refusing to initialize: existing state file at {STATE_PATH}. "
+            "Use init ... --force-reset only when an intentional reset is required."
+        )
 
-    atomic_write_json(
-        VALIDATION_DIR / "validation_initial_items.json",
-        {"items": list(gen_items.values())},
-    )
     candidates: dict[str, Candidate] = {}
     for item_id, item in gen_items.items():
         c = Candidate(item_id=item_id, concept_id=item_id, section=item.get("section", "unknown"))
@@ -102,6 +108,15 @@ def cmd_init(*batch_paths: str) -> None:
         c = process_generation_output(c, config)
         candidates[item_id] = c
     with exclusive_file_lock(STATE_PATH):
+        if STATE_PATH.exists() and not force_reset:
+            raise SystemExit(
+                f"Refusing to initialize: existing state file at {STATE_PATH}. "
+                "Use init ... --force-reset only when an intentional reset is required."
+            )
+        atomic_write_json(
+            VALIDATION_DIR / "validation_initial_items.json",
+            {"items": list(gen_items.values())},
+        )
         save_state(candidates)
     print(f"Loaded exactly {len(candidates)} initial candidates: {sections}")
     print(f"State tally: {state_tally(candidates)}")
@@ -123,20 +138,36 @@ def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
             if c.state != State.REVIEWING or item_id not in reviewer_items:
                 continue
             reviewer_item = strip_internal_test_keys(reviewer_items[item_id])
-            c.review_history.append({"round": round_label, "output": reviewer_item})
             c.reviewer_item = reviewer_item
             c = process_review_output(c, config)
+            c.review_history.append({
+                "round": round_label,
+                "output": reviewer_item,
+                "routed_state": c.state,
+            })
             routed.setdefault(c.state, []).append(item_id)
-        feedback = [
-            build_generator_feedback(candidates[item_id].reviewer_item)
-            for item_id in routed.get(State.REVISE_REQUIRED, [])
-        ]
+        # Compute from the same locked snapshot that is being persisted so a
+        # failed artifact write can reproduce this exact feedback later.
+        feedback_document = build_review_feedback_from_state(candidates, round_label)
     atomic_write_json(
         VALIDATION_DIR / f"validation_round_feedback_{round_label}.json",
-        {"items": feedback},
+        feedback_document,
     )
     print(f"Applied Reviewer {round_label}: { {k: len(v) for k, v in routed.items()} }")
     print(f"State tally: {state_tally(candidates)}")
+
+
+def cmd_rebuild_feedback(round_label: str) -> None:
+    """Idempotently rebuild one Reviewer round's feedback from Candidate state."""
+    with exclusive_file_lock(STATE_PATH):
+        candidates = load_state()
+        feedback_document = build_review_feedback_from_state(candidates, round_label)
+    feedback_path = VALIDATION_DIR / f"validation_round_feedback_{round_label}.json"
+    atomic_write_json(feedback_path, feedback_document)
+    print(
+        f"Rebuilt {len(feedback_document['items'])} REVISE feedback record(s) "
+        f"for round '{round_label}' at {feedback_path}"
+    )
 
 
 def cmd_apply_revision(generator_path: str) -> None:
@@ -213,6 +244,17 @@ def cmd_prepare_solver_batch() -> None:
             if not ok:
                 c.solver_input = None
                 c.transition(State.MANUAL_REVIEW, f"leakage guard failed before Solver: {problems}")
+                continue
+            canonical_errors = canonical_solver_input_errors(config, c.generator_item, blinded)
+            if canonical_errors:
+                c.solver_input = None
+                record_stage_failure(
+                    c,
+                    config,
+                    kind="content",
+                    stage="solver",
+                    detail="; ".join(canonical_errors),
+                )
                 continue
             c.solver_input = blinded
             batch.append(blinded)
@@ -310,9 +352,15 @@ def main() -> int:
         return 1
     cmd, args = sys.argv[1], sys.argv[2:]
     if cmd == "init":
-        cmd_init(*args)
+        force_reset = args.count("--force-reset")
+        if force_reset > 1:
+            raise SystemExit("init accepts --force-reset at most once")
+        args = [arg for arg in args if arg != "--force-reset"]
+        cmd_init(*args, force_reset=bool(force_reset))
     elif cmd == "apply_review":
         cmd_apply_review(*args)
+    elif cmd == "rebuild_feedback":
+        cmd_rebuild_feedback(*args)
     elif cmd == "apply_revision":
         cmd_apply_revision(*args)
     elif cmd == "prepare_solver_batch":

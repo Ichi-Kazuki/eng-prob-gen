@@ -28,14 +28,18 @@ Subcommands (each reads/writes analysis/pilot/candidates_state.json):
       writes analysis/pilot/round_feedback_<round_label>.json (allowlisted
       Generator feedback for any REVISE_REQUIRED candidates).
 
+  rebuild_feedback <round_label>
+      Rebuild the round feedback artifact idempotently from persisted
+      Candidate Reviewer history after an earlier artifact write failed.
+
   apply_revision <generator_output.json>
       Feed a revised Generator output file to process_generation_output()
       for every candidate currently in REVISE_REQUIRED, moving it back to
       REVIEWING (or VALIDATION_FAILED) for the next Reviewer round.
 
   prepare_solver_batch
-      Blind every candidate currently in SOLVING via the existing
-      create_solver_input.py (through orchestrator.blind_for_solver()) and
+      Blind every candidate currently in SOLVING via the shared pure
+      projection (through orchestrator.blind_for_solver()) and
       write the combined batch to analysis/pilot/solver_input_batch.json.
 
   apply_solver <solver_output.json>
@@ -51,6 +55,7 @@ Subcommands (each reads/writes analysis/pilot/candidates_state.json):
       existing append_manual_review_queue().
 
 Usage: python orchestrator/scripts/pilot_driver.py <subcommand> [args...]
+       init ... --force-reset  (explicitly replace an existing state file)
 """
 
 from __future__ import annotations
@@ -68,9 +73,10 @@ from orchestrator import (  # noqa: E402
     TERMINAL_STATES,
     validate_final_record,
     blind_for_solver,
-    build_generator_feedback,
     build_manual_review_entry,
     build_provenance_record,
+    build_review_feedback_from_state,
+    canonical_solver_input_errors,
     derive_slot_requirements,
     leakage_guard,
     load_config,
@@ -122,7 +128,7 @@ def state_tally(candidates: dict[str, Candidate]) -> dict[str, int]:
 # Subcommands
 # ---------------------------------------------------------------------------
 
-def cmd_init(structure_path: str, we_path: str) -> None:
+def cmd_init(structure_path: str, we_path: str, *, force_reset: bool = False) -> None:
     config = load_config()
     gen_items: dict[str, dict] = {}
     structure_items = load_items_by_id(Path(structure_path), "structure generator round1")
@@ -132,6 +138,11 @@ def cmd_init(structure_path: str, we_path: str) -> None:
         raise ValueError(f"duplicate initial item_id across pilot batches: {duplicates}")
     gen_items.update(structure_items)
     gen_items.update(written_expression_items)
+    if STATE_PATH.exists() and not force_reset:
+        raise SystemExit(
+            f"Refusing to initialize: existing state file at {STATE_PATH}. "
+            "Use init ... --force-reset only when an intentional reset is required."
+        )
 
     candidates: dict[str, Candidate] = {}
     for item_id, gitem in gen_items.items():
@@ -143,6 +154,15 @@ def cmd_init(structure_path: str, we_path: str) -> None:
         candidates[item_id] = c
 
     with exclusive_file_lock(STATE_PATH):
+        if STATE_PATH.exists() and not force_reset:
+            raise SystemExit(
+                f"Refusing to initialize: existing state file at {STATE_PATH}. "
+                "Use init ... --force-reset only when an intentional reset is required."
+            )
+        atomic_write_json(
+            PILOT_DIR / "pilot_initial_items.json",
+            {"items": list(gen_items.values())},
+        )
         save_state(candidates)
 
     ready = sorted(i for i, c in candidates.items() if c.state == State.REVIEWING)
@@ -175,23 +195,41 @@ def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
             if item_id not in reviewer_items:
                 routed["skipped_not_reviewing"].append(item_id)
                 continue
-            c.reviewer_item = strip_internal_test_keys(reviewer_items[item_id])
+            reviewer_item = strip_internal_test_keys(reviewer_items[item_id])
+            c.reviewer_item = reviewer_item
             c = process_review_output(c, config)
+            c.review_history.append({
+                "round": round_label,
+                "output": reviewer_item,
+                "routed_state": c.state,
+            })
             routed.setdefault(c.state, []).append(item_id)
-
-        feedback_items = [
-            build_generator_feedback(candidates[item_id].reviewer_item)
-            for item_id in routed.get("REVISE_REQUIRED", [])
-        ]
+        # Build from the same locked in-memory snapshot that is about to be
+        # persisted. If the following artifact write fails, this exact
+        # document remains reproducible from state.
+        feedback_document = build_review_feedback_from_state(candidates, round_label)
     feedback_path = PILOT_DIR / f"round_feedback_{round_label}.json"
-    atomic_write_json(feedback_path, {"items": feedback_items})
+    atomic_write_json(feedback_path, feedback_document)
 
     print(f"Reviewer round '{round_label}' applied to {sum(len(v) for v in routed.values())} candidates.")
     for state, ids in routed.items():
         if ids:
             print(f"  {state} ({len(ids)}): {sorted(ids)}")
-    print(f"Wrote {len(feedback_items)} REVISE feedback record(s) (issues+revision_requirements only) to {feedback_path}")
+    print(f"Wrote {len(feedback_document['items'])} REVISE feedback record(s) (issues+revision_requirements only) to {feedback_path}")
     print(f"Current tally: {state_tally(candidates)}")
+
+
+def cmd_rebuild_feedback(round_label: str) -> None:
+    """Idempotently rebuild one round's feedback from persisted Candidate state."""
+    with exclusive_file_lock(STATE_PATH):
+        candidates = load_state()
+        feedback_document = build_review_feedback_from_state(candidates, round_label)
+    feedback_path = PILOT_DIR / f"round_feedback_{round_label}.json"
+    atomic_write_json(feedback_path, feedback_document)
+    print(
+        f"Rebuilt {len(feedback_document['items'])} REVISE feedback record(s) "
+        f"for round '{round_label}' at {feedback_path}"
+    )
 
 
 def cmd_apply_revision(generator_path: str) -> None:
@@ -277,6 +315,18 @@ def cmd_prepare_solver_batch() -> None:
                 c.solver_input = None
                 c.transition(State.MANUAL_REVIEW, f"leakage guard failed before Solver: {problems}")
                 errors.append(f"{item_id}: leakage guard failed: {problems}")
+                continue
+            canonical_errors = canonical_solver_input_errors(config, c.generator_item, blinded)
+            if canonical_errors:
+                c.solver_input = None
+                record_stage_failure(
+                    c,
+                    config,
+                    kind="content",
+                    stage="solver",
+                    detail="; ".join(canonical_errors),
+                )
+                errors.append(f"{item_id}: {'; '.join(canonical_errors)}")
                 continue
             c.solver_input = blinded
             batch.append(blinded)
@@ -398,9 +448,15 @@ def main() -> int:
     cmd = sys.argv[1]
     args = sys.argv[2:]
     if cmd == "init":
-        cmd_init(*args)
+        force_reset = args.count("--force-reset")
+        if force_reset > 1:
+            raise SystemExit("init accepts --force-reset at most once")
+        args = [arg for arg in args if arg != "--force-reset"]
+        cmd_init(*args, force_reset=bool(force_reset))
     elif cmd == "apply_review":
         cmd_apply_review(*args)
+    elif cmd == "rebuild_feedback":
+        cmd_rebuild_feedback(*args)
     elif cmd == "apply_revision":
         cmd_apply_revision(*args)
     elif cmd == "prepare_solver_batch":

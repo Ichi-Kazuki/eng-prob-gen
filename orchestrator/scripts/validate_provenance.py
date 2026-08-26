@@ -75,6 +75,8 @@ def validate_contract(record: object, errors: list[str] | None = None) -> list[s
             collected.append(f"{prefix} $.accepted_item: non-null iff state is ACCEPTED")
         if record.get("consensus") is not (state == "ACCEPTED"):
             collected.append(f"{prefix} $.consensus: must equal state == ACCEPTED")
+        if "planned_slot" in record and record.get("batch_slot") != record.get("planned_slot"):
+            collected.append(f"{prefix} $.batch_slot: must equal planned_slot when both are present")
         history = record.get("state_history")
         if not isinstance(history, list) or not history or history[-1] != state:
             collected.append(f"{prefix} $.state_history: last entry must equal state")

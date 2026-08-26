@@ -22,8 +22,12 @@ import json
 import sys
 from pathlib import Path
 
-STRUCTURE_ALLOWLIST = ["item_id", "section", "stem", "options"]
-WRITTEN_EXPRESSION_ALLOWLIST = ["item_id", "section", "sentence", "marked_parts"]
+sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
+from shared.solver_blinding import (  # noqa: E402
+    STRUCTURE_ALLOWLIST,
+    WRITTEN_EXPRESSION_ALLOWLIST,
+    canonical_solver_input,
+)
 
 
 def load_items(path: Path):
@@ -38,19 +42,9 @@ def load_items(path: Path):
 
 
 def blind_item(item: dict) -> dict:
-    section = item.get("section")
-    if section == "Structure":
-        allowlist = STRUCTURE_ALLOWLIST
-    elif section == "Written Expression":
-        allowlist = WRITTEN_EXPRESSION_ALLOWLIST
-    else:
-        raise ValueError(f"Unknown section {section!r} for item {item.get('item_id', '?')}")
-
-    missing = [k for k in allowlist if k not in item]
-    if missing:
-        raise ValueError(f"item {item.get('item_id', '?')} is missing required field(s) for blinding: {missing}")
-
-    return {k: item[k] for k in allowlist}
+    # Keep this public wrapper for callers that imported the historical CLI
+    # helper; the canonical implementation lives in shared code.
+    return canonical_solver_input(item)
 
 
 def main():
