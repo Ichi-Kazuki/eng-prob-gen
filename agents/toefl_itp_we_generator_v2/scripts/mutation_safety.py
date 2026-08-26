@@ -431,6 +431,83 @@ def _surface_edit_is_local(clean: str, error: str) -> tuple[bool, dict[str, Any]
     }
 
 
+def finalization_integrity_errors(item: Mapping[str, Any]) -> list[str]:
+    """Validate the serialized Generator record at the finalization boundary.
+
+    These checks intentionally inspect only the formal emitted item.  They do
+    not consult an intermediate mutation object or make a grammar judgment.
+    The record is not eligible for downstream review unless the emitted
+    sentence is the declared error form and the observed clean/error edit is
+    owned by the declared correct span.
+    """
+
+    errors: list[str] = []
+    if not isinstance(item, Mapping):
+        return ["formal Generator record must be an object"]
+
+    sentence = item.get("sentence")
+    qa = item.get("qa_metadata")
+    if not isinstance(sentence, str) or not sentence.strip():
+        errors.append("formal emitted sentence must be a nonempty string")
+    if not isinstance(qa, Mapping):
+        return errors + ["qa_metadata must be an object"]
+
+    clean = qa.get("clean_form")
+    error = qa.get("error_form")
+    if not isinstance(clean, str) or not clean.strip():
+        errors.append("qa_metadata.clean_form must be a nonempty string")
+    if not isinstance(error, str) or not error.strip():
+        errors.append("qa_metadata.error_form must be a nonempty string")
+    if not isinstance(clean, str) or not isinstance(error, str):
+        return errors
+
+    if sentence != error:
+        errors.append("formal emitted sentence must exactly match qa_metadata.error_form")
+    if clean == error:
+        errors.append("qa_metadata.clean_form and qa_metadata.error_form must differ")
+
+    surface_ok, surface_details = _surface_edit_is_local(clean, error)
+    if not surface_ok:
+        errors.append(
+            "the actual clean_form/error_form surface difference must be one local mutation"
+        )
+
+    changed_error_indices = surface_details["changed_error_indices"]
+    changed_error_boundaries = set(surface_details["changed_error_boundaries"])
+    if not changed_error_indices:
+        errors.append("the formal clean_form/error_form pair has no observable surface difference")
+
+    answer = item.get("correct_answer")
+    marked = item.get("marked_parts")
+    if answer not in LABELS or not isinstance(marked, Mapping):
+        errors.append("correct_answer and marked_parts are required to verify the declared correct span")
+        return errors
+    marked_span = marked.get(answer)
+    if not isinstance(sentence, str) or not isinstance(marked_span, str) or not marked_span.strip():
+        errors.append("the declared correct span must be a nonempty string in the final sentence")
+        return errors
+
+    occurrences = lexical_token_spans(sentence, marked_span, casefold=True)
+    if len(occurrences) != 1:
+        if not occurrences:
+            errors.append("the declared correct span is not uniquely present in the formal emitted sentence")
+        else:
+            errors.append("the declared correct span occurs more than once in the formal emitted sentence")
+        return errors
+
+    start, end = occurrences[0]
+    if not changed_error_indices:
+        return errors
+    if not all(
+        start <= index <= end if index in changed_error_boundaries else start <= index < end
+        for index in changed_error_indices
+    ):
+        errors.append(
+            "the actual clean_form/error_form surface difference is outside the declared correct span"
+        )
+    return errors
+
+
 def _metadata_audit(
     clean: str,
     error: str,

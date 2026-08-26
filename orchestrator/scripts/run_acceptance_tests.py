@@ -309,10 +309,6 @@ def main() -> int:
 
     from orchestrator import build_manual_review_entry
     mr_entry = build_manual_review_entry(mr_candidate)
-    mr_entry["_synthetic_test_entry"] = (
-        "Produced by run_acceptance_tests.py to demonstrate manual-review-queue "
-        "mechanics; not a real candidate awaiting human review."
-    )
     with tempfile.TemporaryDirectory(prefix="acceptance-queue-") as temp_dir:
         test_config = dict(config)
         test_config["paths"] = dict(config["paths"])

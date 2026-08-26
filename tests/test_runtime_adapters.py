@@ -221,6 +221,78 @@ class RuntimeAdapterTests(unittest.TestCase):
         self.assertTrue(ok, errors)
         self.assertEqual(errors, [])
 
+    def test_live_harness_finalization_validation_uses_formal_sentence(self) -> None:
+        harness_path = ROOT / "scripts" / "run_live_e2e.py"
+        spec = importlib.util.spec_from_file_location("we_live_harness_finalization_test", harness_path)
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        harness = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(harness)
+        item = {
+            "sentence": "The river valleys reveals patterns during winter surveys.",
+            "correct_answer": "D",
+            "marked_parts": {"A": "The", "B": "river", "C": "valleys", "D": "reveals"},
+            "qa_metadata": {
+                "clean_form": "The river valleys reveals patterns during winter surveys.",
+                "error_form": "The river valleys reveal patterns during winter surveys.",
+            },
+        }
+        ok, errors = harness.validate_generator_finalization(item)
+        self.assertFalse(ok)
+        self.assertIn("qa_metadata.error_form", " ".join(errors))
+
+        item["sentence"] = item["qa_metadata"]["error_form"]
+        item["marked_parts"]["D"] = "reveal"
+        ok, errors = harness.validate_generator_finalization(item)
+        self.assertTrue(ok, errors)
+
+    def test_live_e2e_reviewer_error_metrics_are_distinct(self) -> None:
+        harness_path = ROOT / "scripts" / "run_live_e2e.py"
+        spec = importlib.util.spec_from_file_location("we_live_harness_metrics_test", harness_path)
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        harness = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(harness)
+
+        def reviewer(item_id: str, count: int, *, one_error: str, grammar: str = "PASS", answer: str = "A") -> dict:
+            return {
+                "item_id": item_id,
+                "detected_error_count": count,
+                "grammar_validity": grammar,
+                "independent_answer": answer,
+                "checks": {
+                    "one_error_only": one_error,
+                    "answer_uniqueness": "PASS" if answer != "AMBIGUOUS" else "AMBIGUOUS",
+                },
+            }
+
+        metrics = harness.build_metrics(
+            [],
+            [
+                reviewer("zero", 0, one_error="FAIL"),
+                reviewer("multiple", 2, one_error="FAIL"),
+                reviewer("ambiguous", 1, one_error="AMBIGUOUS"),
+                reviewer("valid", 1, one_error="PASS"),
+            ],
+            [],
+            [],
+            [],
+            {"passed": True},
+            "metrics-test",
+        )
+        self.assertEqual(
+            metrics["requested_metrics"]["reviewer_error_status_counts"],
+            {
+                "one_genuine_error": 1,
+                "zero_genuine_errors": 1,
+                "multiple_errors": 1,
+                "ambiguous_one_error": 1,
+            },
+        )
+        self.assertEqual(metrics["gates"]["reviewer_zero_genuine_errors"]["count"], 1)
+        self.assertEqual(metrics["gates"]["reviewer_multiple_error"]["count"], 1)
+        self.assertEqual(metrics["gates"]["reviewer_ambiguous_one_error"]["count"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

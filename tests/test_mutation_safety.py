@@ -19,6 +19,7 @@ from mutation_safety import (  # noqa: E402
     STRONG_INVARIANT_NAMES,
     TemplateClass,
     audit_mutation,
+    finalization_integrity_errors,
     template_audit_records,
     validate_item as validate_mutation_item,
 )
@@ -50,6 +51,36 @@ def check(
 
 
 class MutationSafetyFixtures(unittest.TestCase):
+    @staticmethod
+    def _finalization_fixture(*, final_sentence: str) -> dict:
+        clean = "The river valleys reveals patterns during winter surveys."
+        error = "The river valleys reveal patterns during winter surveys."
+        return {
+            "sentence": final_sentence,
+            "correct_answer": "D",
+            "marked_parts": {
+                "A": "The",
+                "B": "river",
+                "C": "valleys",
+                "D": "reveal" if final_sentence == error else "reveals",
+            },
+            "qa_metadata": {"clean_form": clean, "error_form": error},
+        }
+
+    def test_finalization_rejects_clean_sentence_serialized_as_formal_error(self) -> None:
+        fixture = self._finalization_fixture(
+            final_sentence="The river valleys reveals patterns during winter surveys."
+        )
+        errors = finalization_integrity_errors(fixture)
+        self.assertTrue(errors)
+        self.assertIn("must exactly match qa_metadata.error_form", " ".join(errors))
+
+    def test_finalization_accepts_formal_sentence_equal_to_error_form(self) -> None:
+        fixture = self._finalization_fixture(
+            final_sentence="The river valleys reveal patterns during winter surveys."
+        )
+        self.assertEqual(finalization_integrity_errors(fixture), [])
+
     def test_A_clear_comet_antecedent_rejects_pronoun_substitution(self) -> None:
         result = check(
             "The telescope photographed the comet after the comet crossed the horizon.",

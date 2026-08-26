@@ -1,8 +1,8 @@
-# TOEFL ITP Written Expression Generator v2.1.2
+# TOEFL ITP Written Expression Generator v2.1.3
 
-v2.1.2 is the current runtime implementation label. The JSON Schema and
+v2.1.3 is the current runtime implementation label. The JSON Schema and
 output-field contract remain the v2.1 contract because this release is a
-grammar-mutation-safety patch; it does not introduce a schema-version bump.
+finalization-integrity patch; it does not introduce a schema-version bump.
 
 このディレクトリは、既存の `agents/toefl_itp_grammar_generator/` と完全に分離されたWE専用v2実装である。
 
@@ -60,7 +60,21 @@ Use `scripts/mutation_safety.py` for the deterministic template classes and
 metadata audit.  Its targeted template catalog is explicitly classified as
 `SAFE`, `NEEDS_GUARD`, or `QUARANTINE`.
 
-## v2.1.2 scope boundary
+## v2.1.3 finalization integrity
+
+At final serialization, validate the formal emitted record itself before it
+can reach Reviewer. The following invariants are mandatory:
+
+- `sentence == qa_metadata.error_form`;
+- `qa_metadata.clean_form != qa_metadata.error_form`; and
+- the actual clean/error surface difference is present inside the declared
+  correct marked span in the final emitted sentence.
+
+These checks must use the serialized formal record, not an intermediate
+mutation object. A failure is a regenerate/reject result and must not be
+passed to Reviewer.
+
+## v2.1.3 scope boundary
 
 The format planner and all v2.1.1 geometry policy remain unchanged.  The only
 new runtime surface is the grammar mutation safety guard and its deterministic

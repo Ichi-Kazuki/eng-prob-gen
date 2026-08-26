@@ -32,6 +32,7 @@ from validate_format import (  # noqa: E402
 )
 from mutation_safety import (  # noqa: E402
     evidence_provenance_errors,
+    finalization_integrity_errors,
     validate_item as validate_mutation_item,
 )
 
@@ -219,6 +220,14 @@ def load_external_evidence(path: Path) -> dict[str, Mapping[str, Any]]:
     return evidence_by_item
 
 
+def validate_finalization_integrity(item: object) -> list[str]:
+    """Validate only the serialized Generator finalization invariants."""
+
+    if not isinstance(item, dict):
+        return ["formal Generator record must be an object"]
+    return finalization_integrity_errors(item)
+
+
 def validate_contract(
     item: object,
     config: dict[str, Any],
@@ -247,6 +256,11 @@ def validate_contract(
     # required/type/enum/additional-property checks remain in the schema.
     result = validate_item(item, config, targets, error_types)
     result["errors"].extend(mode_errors)
+    if validation_mode == "current":
+        result["errors"].extend(
+            f"finalization_integrity: {reason}"
+            for reason in validate_finalization_integrity(item)
+        )
     if mutation_safety_required(item, validation_mode=validation_mode):
         bound_evidence: Mapping[str, bool] | None = None
         if external_evidence is not None:

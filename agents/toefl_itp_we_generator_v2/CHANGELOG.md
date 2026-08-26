@@ -1,5 +1,26 @@
 # WE Generator v2 changelog
 
+## v2.1.3 — 2026-08-26
+
+Finalization/serialization integrity patch; grammar mutation and format logic
+unchanged.
+
+### Changed
+
+- require the formal emitted `sentence` to equal `qa_metadata.error_form`;
+- require distinct `clean_form` and `error_form` values;
+- verify the observed clean/error surface difference is inside the declared
+  correct marked span in the formal emitted sentence;
+- reject the finalized record before Reviewer when any integrity check fails;
+- distinguish zero genuine errors, multiple errors, and ambiguous one-error
+  Reviewer outcomes in Live E2E aggregation.
+
+### Scope boundary
+
+Grammar mutation templates, format planner, format bands, Grammar/Format
+Specifications, taxonomy, Reviewer grammar logic, and Solver grammar logic
+are unchanged.
+
 ## v2.1.2 — 2026-08-26
 
 Grammar mutation safety patch; format logic unchanged.

@@ -160,13 +160,24 @@ before publishing `solver_input_batch.json`. The batch retains the historical
 state. Solver application refuses a missing, stale, or tampered batch, so the
 artifact is a rebuildable projection rather than a second source of truth.
 
+Reviewer phase 1 uses the same boundary discipline. The pure allowlist
+projection in `shared/reviewer_blinding.py` accepts only `item_id`, `section`,
+and the question surface (`stem`/`options` or `sentence`/`marked_parts`). The
+drivers persist the deterministic, state-bound projection in
+`reviewer_input_batch.json` (or the validation equivalent). Reviewer output is
+accepted only after that batch is present and still matches the persisted
+Candidate state. Phase 1 independent judgment is therefore a separate input
+boundary from phase 2 comparison against the Generator answer.
+
 **Live call sites** (where a future live run wires in real Agent-tool
 calls, replacing the fixture lookups used by the replay scripts in this
 delivery):
 
 1. after `process_generation_output()` reaches `REVIEWING` → call the
-   Reviewer agent with the raw Generator item, feed its JSON output to
-   `process_review_output()`.
+   Reviewer agent with the canonical `reviewer_input_batch.json` payload,
+   feed its JSON output to `process_review_output()` only after the batch
+   integrity check passes. The raw Generator item remains internal state for
+   the later comparison phase.
 2. after `process_review_output()` reaches `SOLVING` → call
    `blind_for_solver()`, then call the Solver agent with the canonical
    blinded item, feed its JSON output to `process_solver_stage()`. The stage
@@ -309,6 +320,15 @@ Reviewer/Solver field into `accepted_item`.
   moment an agent's prompt is edited, with no manual version bump to
   remember or forget.
 
+Each live run also persists a complete `pipeline_fingerprint` in its run
+manifest at `init` time. It covers the config, grammar/taxonomy inputs, all
+Generator/Reviewer/Solver prompts and validators, the Orchestrator, shared
+blinding/tokenization/persistence code, and the Written Expression v2
+mutation-safety/format contracts. Every continuation and finalization command
+compares the checked-out pipeline with that snapshot and refuses to continue
+on drift. Provenance reports use the persisted manifest snapshot, not values
+reloaded from the checkout at finalization time.
+
 ## 13. Batch integrity (spec section 14)
 
 `orchestrator.BatchIntegrityTracker` records planned vs. actually-`ACCEPTED`
@@ -354,6 +374,13 @@ is attached as `final_slot` on every provenance record; `batch_slot` and
 No UI is built (out of scope this round, per instructions); a human
 chooses one of the three `possible_actions` out of band.
 
+The checked-in queue is current-format data validated by
+`orchestrator/schemas/manual_review_queue.schema.json`; append operations
+validate the complete entry, not only `item_id`. Historical records must be
+converted explicitly with `migrate_manual_review_queue()` before they can be
+combined with current records. Synthetic acceptance-test entries use a
+temporary queue and are never written to the checked-in production queue.
+
 ## 15. Failure handling (spec section 16)
 
 `orchestrator.SystemCallError` is raised for **system** failures: an agent
@@ -384,7 +411,7 @@ failure, no exception).
 | `orchestrator/scripts/run_smoke_test.py` | Replays the 6 existing Generator/Reviewer/Solver smoke fixtures. | `analysis/orchestrator_smoke_test.json` |
 | `orchestrator/scripts/run_adversarial_test.py` | Replays the 5 deliberately-broken Reviewer adversarial fixtures. | `analysis/orchestrator_adversarial_test.json` |
 | `orchestrator/scripts/run_reject_path_test.py` | Replays the 2 existing Reviewer REJECT fixtures. | `analysis/orchestrator_reject_path_test.json` |
-| `orchestrator/scripts/run_acceptance_tests.py` | Runs the three scripts above plus direct unit tests of `evaluate_consensus`, retry limits, leakage guard, and failure classification; prints a pass/fail table against the 14 acceptance criteria (spec section 21). | console + populates `analysis/manual_review_queue.json` |
+| `orchestrator/scripts/run_acceptance_tests.py` | Runs the three scripts above plus direct unit tests of `evaluate_consensus`, retry limits, leakage guard, and failure classification; prints a pass/fail table against the 14 acceptance criteria (spec section 21). | console + isolated temporary queue |
 | `orchestrator/scripts/validate_provenance.py` | Shape-checks the Orchestrator's own output (same pattern as the other agents' `validate_output.py`). | console |
 
 Run order: `run_smoke_test.py`, `run_adversarial_test.py`,

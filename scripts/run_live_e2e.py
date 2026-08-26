@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the WE Generator v2.1.2 -> Reviewer v2 -> Solver -> Orchestrator smoke.
+"""Run the WE Generator v2.1.3 -> Reviewer v2 -> Solver -> Orchestrator smoke.
 
 This driver is deliberately an integration harness, not a second Generator,
 Reviewer, Solver, or grammar implementation. It invokes the checked-in agent
@@ -9,10 +9,11 @@ validators, and delegates routing/consensus to the existing Orchestrator
 engine. Set ``WE_E2E_RUNTIME=codex`` for Codex CLI or leave it unset to retain
 the existing Claude Code CLI behavior.
 
-The WE Generator is structurally schema-checked at the stage boundary.  Its
-v2.1.2 production validator additionally requires an out-of-band grammar
-evidence artifact; no such artifact is fabricated by this smoke.  Grammar
-quality is independently exercised by the live Reviewer, as requested.
+The WE Generator is schema-checked and finalization-integrity-checked at the
+stage boundary.  Its v2.1.3 production validator additionally requires an
+out-of-band grammar evidence artifact; no such artifact is fabricated by this
+smoke.  Grammar quality is independently exercised by the live Reviewer, as
+requested.
 """
 
 from __future__ import annotations
@@ -32,7 +33,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-OUT = ROOT / "runs" / "we_v2_1_2_live_e2e"
+OUT = ROOT / "runs" / "we_v2_1_3_live_e2e"
 if os.environ.get("WE_E2E_OUTPUT_DIR"):
     configured_out = Path(os.environ["WE_E2E_OUTPUT_DIR"])
     OUT = configured_out if configured_out.is_absolute() else ROOT / configured_out
@@ -46,7 +47,16 @@ sys.path.insert(0, str(ROOT / "orchestrator" / "scripts"))
 import orchestrator as orch  # noqa: E402
 
 from shared.schema_validation import load_schema, schema_errors  # noqa: E402
-from shared.solver_blinding import canonical_solver_input  # noqa: E402
+from shared.reviewer_blinding import (  # noqa: E402
+    canonical_reviewer_input,
+    reviewer_allowlist,
+    reviewer_input_errors,
+    reviewer_input_sha256,
+)
+from shared.solver_blinding import (  # noqa: E402
+    WRITTEN_EXPRESSION_ALLOWLIST,
+    canonical_solver_input,
+)
 from runtime.adapters import (  # noqa: E402
     AgentRuntime,
     ClaudeRuntime,
@@ -90,8 +100,6 @@ REVIEWER_FORBIDDEN_OUTPUT_KEYS = {
     "primary_target", "subtype", "secondary_features", "tested_error_type",
     "difficulty", "error_scope", "grammar_metadata", "qa_metadata",
 }
-REVIEWER_INPUT_FIELDS = ("item_id", "section", "sentence", "marked_parts")
-SOLVER_INPUT_FIELDS = ("item_id", "section", "sentence", "marked_parts")
 SOLVER_FORBIDDEN_FIELDS = {
     "correct_answer", "intended_answer", "mutation_metadata", "generation_plan",
     "answer_explanation", "error_explanation", "minimal_correction",
@@ -354,16 +362,6 @@ def invoke(
         raise error from exc
 
 
-def only_fields(item: dict, fields: tuple[str, ...], *, stage: str) -> tuple[dict, list[str]]:
-    if not isinstance(item, dict):
-        raise LiveInvocationError("schema", f"{stage}: candidate must be an object")
-    missing = [key for key in fields if key not in item]
-    if missing:
-        raise LiveInvocationError("schema", f"{stage}: candidate missing allowed input field(s): {missing}")
-    projection = {key: copy.deepcopy(item[key]) for key in fields}
-    return projection, []
-
-
 def nested_forbidden(value: Any, forbidden: set[str], path: str = "$") -> list[str]:
     found: list[str] = []
     if isinstance(value, dict):
@@ -401,6 +399,27 @@ def validate_existing_contract(item: dict, validator_path: str, stage: str) -> t
     return not errors, [f"{stage}: {error}" for error in errors]
 
 
+def validate_generator_finalization(item: dict) -> tuple[bool, list[str]]:
+    """Check the parsed formal Generator item before any Reviewer call."""
+
+    validator_path = GENERATOR_VALIDATOR
+    module = _VALIDATOR_MODULES.get(validator_path)
+    if module is None:
+        path = ROOT / validator_path
+        module_name = "we_live_generator_finalization_validator"
+        spec = importlib.util.spec_from_file_location(module_name, path)
+        if spec is None or spec.loader is None:
+            return False, [f"generator: cannot load finalization validator {path}"]
+        scripts_path = str(path.parent)
+        if scripts_path not in sys.path:
+            sys.path.insert(0, scripts_path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _VALIDATOR_MODULES[validator_path] = module
+    errors = module.validate_finalization_integrity(item)
+    return not errors, [f"generator: {error}" for error in errors]
+
+
 def reviewer_runtime_schema() -> dict:
     """The live Reviewer response contract, before Orchestrator comparison fields.
 
@@ -425,7 +444,7 @@ def generator_prompt(item_id: str, order: int, batch_id: str) -> str:
 
 Follow the authoritative Generator instruction supplied by the runtime. Do
 not copy an existing fixture and do not write files. Produce exactly one fresh
-Written Expression Part B item for the frozen v2.1.2 contract. The item_id
+Written Expression Part B item for the frozen v2.1.3 runtime contract. The item_id
 must be exactly {json.dumps(item_id)}; this is microbatch item {order} in batch
 {json.dumps(batch_id)}. Return one JSON object only, matching the supplied
 canonical Generator schema; do not use markdown or an items wrapper. Keep all
@@ -727,7 +746,7 @@ def candidate_from_generator(item: dict) -> orch.Candidate:
 
 
 def process_one(order: int, batch_id: str, config: dict, generator_formal: list, reviewer_formal: list, solver_formal: list, provenance_records: list, outcomes: list) -> None:
-    item_id = f"we-v2.1.2-live-{batch_id[-8:]}-{order:03d}"
+    item_id = f"we-v2.1.3-live-{batch_id[-8:]}-{order:03d}"
     reviewer_invocation: InvocationResult | None = None
     solver_invocation: InvocationResult | None = None
     generated: dict | None = None
@@ -745,6 +764,11 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
                 raise LiveInvocationError("schema", "; ".join(generator_errors))
             if candidate_item.get("item_id") != item_id:
                 raise LiveInvocationError("schema", f"generator: item_id mismatch; expected {item_id!r}, got {candidate_item.get('item_id')!r}")
+            # Finalization must inspect the formal object returned by the
+            # runtime. An intermediate mutation object is not authoritative.
+            generator_ok, generator_errors = validate_generator_finalization(candidate_item)
+            if not generator_ok:
+                raise LiveInvocationError("schema", "; ".join(generator_errors))
             generated = candidate_item
             generator_formal.append(generated)
             provenance_records.append(sidecar(generator_invocation, input_payload={}, contract_validated=True, formal_output_exists=True, leakage=[]))
@@ -772,7 +796,13 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
 
     candidate = candidate_from_generator(generated)
     candidate.transition(orch.State.REVIEWING, "Generator structural schema passed")
-    reviewer_input, reviewer_leakage = only_fields(generated, REVIEWER_INPUT_FIELDS, stage="reviewer")
+    try:
+        reviewer_input = canonical_reviewer_input(generated)
+    except (TypeError, ValueError, KeyError) as exc:
+        raise LiveInvocationError("schema", f"reviewer: canonical blind payload failed: {exc}") from exc
+    reviewer_leakage = reviewer_input_errors(generated, reviewer_input, reviewer_input_sha256(reviewer_input))
+    if reviewer_leakage:
+        raise LiveInvocationError("schema", "reviewer: canonical blind payload failed: " + "; ".join(reviewer_leakage))
     write_json(INPUTS / f"{order:03d}_reviewer.json", reviewer_input)
     try:
         reviewer_invocation = invoke(
@@ -870,6 +900,30 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
     })
 
 
+def reviewer_error_status(item: dict) -> str:
+    """Classify Reviewer error-count outcomes without conflating categories."""
+
+    count = item.get("detected_error_count")
+    if not isinstance(count, int) or isinstance(count, bool):
+        return "ambiguous_one_error"
+    if count == 0:
+        return "zero_genuine_errors"
+    if count > 1:
+        return "multiple_errors"
+
+    checks = item.get("checks") if isinstance(item.get("checks"), dict) else {}
+    one_error_status = checks.get("one_error_only")
+    answer_status = checks.get("answer_uniqueness")
+    if (
+        item.get("grammar_validity") != "PASS"
+        or one_error_status != "PASS"
+        or answer_status != "PASS"
+        or item.get("independent_answer") == "AMBIGUOUS"
+    ):
+        return "ambiguous_one_error"
+    return "one_genuine_error"
+
+
 def build_metrics(generator_items: list, reviewer_items: list, solver_items: list, provenance_records: list, outcomes: list, tests: dict, batch_id: str) -> dict:
     by_gen = {item.get("item_id"): item for item in generator_items if isinstance(item, dict)}
     by_review = {item.get("item_id"): item for item in reviewer_items if isinstance(item, dict)}
@@ -884,11 +938,20 @@ def build_metrics(generator_items: list, reviewer_items: list, solver_items: lis
         1 for item_id, item in by_solver.items()
         if item_id in by_review and item.get("solver_answer") != by_review[item_id].get("independent_answer")
     )
-    reviewer_genuine_failure = sum(
-        1 for item in reviewer_items
-        if item.get("grammar_validity") != "PASS" or item.get("detected_error_count") != 1
-    )
-    reviewer_multiple_error = sum(1 for item in reviewer_items if item.get("detected_error_count") != 1)
+    reviewer_statuses = [reviewer_error_status(item) for item in reviewer_items]
+    reviewer_status_counts = {
+        status: reviewer_statuses.count(status)
+        for status in (
+            "one_genuine_error",
+            "zero_genuine_errors",
+            "multiple_errors",
+            "ambiguous_one_error",
+        )
+    }
+    reviewer_genuine_failure = sum(status != "one_genuine_error" for status in reviewer_statuses)
+    reviewer_zero_genuine_errors = reviewer_status_counts["zero_genuine_errors"]
+    reviewer_multiple_error = reviewer_status_counts["multiple_errors"]
+    reviewer_ambiguous_one_error = reviewer_status_counts["ambiguous_one_error"]
     solver_none = sum(1 for item in solver_items if item.get("solver_answer") == "NONE")
     solver_ambiguous = sum(1 for item in solver_items if item.get("solver_answer") == "AMBIGUOUS")
     leakage_count = sum(len(item.get("forbidden_input_fields_present", [])) for item in provenance_records)
@@ -991,7 +1054,9 @@ def build_metrics(generator_items: list, reviewer_items: list, solver_items: lis
             "solver_live_invocation": {"passed": sum(x.get("live_invocation") is True for x in solver_sidecars), "required": 10, "ok": sum(x.get("live_invocation") is True for x in solver_sidecars) == 10},
             "answer_leakage": {"count": leakage_count, "required": 0, "ok": leakage_count == 0},
             "reviewer_genuine_error_failure": {"count": reviewer_genuine_failure, "required": 0, "ok": reviewer_genuine_failure == 0},
+            "reviewer_zero_genuine_errors": {"count": reviewer_zero_genuine_errors, "required": 0, "ok": reviewer_zero_genuine_errors == 0},
             "reviewer_multiple_error": {"count": reviewer_multiple_error, "required": 0, "ok": reviewer_multiple_error == 0},
+            "reviewer_ambiguous_one_error": {"count": reviewer_ambiguous_one_error, "required": 0, "ok": reviewer_ambiguous_one_error == 0},
             "solver_none": {"count": solver_none, "required": 0, "ok": solver_none == 0},
             "solver_ambiguous": {"count": solver_ambiguous, "maximum": 1, "ok": solver_ambiguous <= 1},
             "generator_solver_agreement": {"passed": agreement, "required": 9, "denominator": 10, "ok": agreement >= 9},
@@ -1004,8 +1069,8 @@ def build_metrics(generator_items: list, reviewer_items: list, solver_items: lis
             "codex_live_invocation_count": sum(record.get("provider") == "codex" and record.get("live_invocation") is True for record in provenance_records),
             "reviewer_solver_contract_validity": stage_contracts,
             "blinding": {
-                "reviewer_allowlist": list(REVIEWER_INPUT_FIELDS),
-                "solver_allowlist": list(SOLVER_INPUT_FIELDS),
+                "reviewer_allowlist": list(reviewer_allowlist("Written Expression")),
+                "solver_allowlist": list(WRITTEN_EXPRESSION_ALLOWLIST),
                 "reviewer_invocation_count": len(reviewer_input_records),
                 "solver_invocation_count": len(solver_input_records),
                 "forbidden_fields_present": leakage_count,
@@ -1017,6 +1082,7 @@ def build_metrics(generator_items: list, reviewer_items: list, solver_items: lis
                 "ok": agreement >= 9 if len(by_solver) == 10 else False,
             },
             "reviewer_findings": reviewer_findings,
+            "reviewer_error_status_counts": reviewer_status_counts,
             "orchestrator_decisions": {
                 "state_counts": state_counts,
                 "items": orchestrator_decisions,
@@ -1064,7 +1130,7 @@ def final_decision(metrics: dict) -> tuple[str, str]:
     runtime_failure_categories |= {"infrastructure", "auth", "CLI", "agent invocation", "parsing"}
     if live_gate_failed and runtime_categories & runtime_failure_categories:
         return "E", "The runtime could not provide the required complete live pipeline; see classified invocation failures."
-    reviewer_keys = {"reviewer_contract", "reviewer_live_invocation", "answer_leakage", "reviewer_genuine_error_failure", "reviewer_multiple_error"}
+    reviewer_keys = {"reviewer_contract", "reviewer_live_invocation", "answer_leakage", "reviewer_genuine_error_failure", "reviewer_zero_genuine_errors", "reviewer_multiple_error", "reviewer_ambiguous_one_error"}
     if any(not gates[key]["ok"] for key in reviewer_keys):
         return "B", "Reviewer contract, blinded invocation, or independent grammar gates failed."
     solver_keys = {"solver_contract", "solver_live_invocation", "solver_none", "solver_ambiguous", "generator_solver_agreement", "reviewer_solver_structural_conflict"}
@@ -1078,7 +1144,7 @@ def final_decision(metrics: dict) -> tuple[str, str]:
 def write_report(metrics: dict, decision: str, decision_reason: str) -> None:
     gates = metrics["gates"]
     lines = [
-        "# WE v2.1.2 Live E2E Report",
+        "# WE v2.1.3 Live E2E Report",
         "",
         f"- Batch: `{metrics['batch_id']}`",
         f"- Scope: 10 requested fresh items, one item per microbatch; recorded outcomes: {len(metrics.get('outcomes', []))}",
@@ -1144,15 +1210,15 @@ def write_report(metrics: dict, decision: str, decision_reason: str) -> None:
         "- Formal Reviewer output: `runtime/formal/reviewer_outputs.json`",
         "- Formal Solver output: `runtime/formal/solver_outputs.json`",
         "- Runtime provenance sidecar: `runtime/provenance/runtime_provenance.json`",
-        "- Machine-readable report: `we_v2_1_2_live_e2e.json`",
+        "- Machine-readable report: `we_v2_1_3_live_e2e.json`",
         "",
     ])
-    (OUT / "WE_V2_1_2_LIVE_E2E_REPORT.md").write_text("\n".join(lines), encoding="utf-8")
+    (OUT / "WE_V2_1_3_LIVE_E2E_REPORT.md").write_text("\n".join(lines), encoding="utf-8")
 
 
 def report_existing_run() -> int:
     """Rebuild summary/report fields without making another live call."""
-    metrics_path = OUT / "we_v2_1_2_live_e2e.json"
+    metrics_path = OUT / "we_v2_1_3_live_e2e.json"
     provenance_path = PROVENANCE / "runtime_provenance.json"
     if not metrics_path.exists() or not provenance_path.exists():
         print(f"Cannot report existing run; missing {metrics_path} or {provenance_path}", file=sys.stderr)
@@ -1196,7 +1262,7 @@ def main() -> int:
         return report_existing_run()
     for directory in (FORMAL, PROVENANCE, INPUTS, LOGS):
         directory.mkdir(parents=True, exist_ok=True)
-    batch_id = "we-v2.1.2-live-e2e-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    batch_id = "we-v2.1.3-live-e2e-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     config = live_config()
     runtime = configure_runtime()
     print(f"runtime provider: {runtime.provider} ({runtime.cli_version})", flush=True)
@@ -1217,7 +1283,7 @@ def main() -> int:
     metrics = build_metrics(generator_items, reviewer_items, solver_items, provenance_records, outcomes, tests, batch_id)
     decision, decision_reason = final_decision(metrics)
     metrics["final_decision"] = {"code": decision, "label": {"A": "Live Reviewer/Solver pipeline ready", "B": "Reviewer issue", "C": "Solver issue", "D": "Orchestrator issue", "E": "Runtime infrastructure unavailable"}[decision], "reason": decision_reason}
-    write_json(OUT / "we_v2_1_2_live_e2e.json", metrics)
+    write_json(OUT / "we_v2_1_3_live_e2e.json", metrics)
     write_report(metrics, decision, decision_reason)
     print(json.dumps({"batch_id": batch_id, "gates": metrics["gates"], "existing_tests": tests}, ensure_ascii=False, indent=2))
     return 0 if tests.get("passed") and all(gate.get("ok") for gate in metrics["gates"].values()) else 1

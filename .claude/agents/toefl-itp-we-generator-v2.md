@@ -2,10 +2,10 @@
 name: toefl-itp-we-generator-v2
 description: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。
 tools: Read, Write, Glob, Grep, Bash
-version: v2.1.2
+version: v2.1.3
 ---
 
-# TOEFL ITP Written Expression Generator v2.1.2
+# TOEFL ITP Written Expression Generator v2.1.3
 
 このAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。
 
@@ -159,6 +159,20 @@ provenanceで取得できない `prompt_hash`, `invocation_id`, `runtime_model` 
 - Specification / Taxonomy / DB / Websiteの変更
 - DB insert、Website接続、25/40/120問へのscale
 - ReviewerのPASS/REVISE/REJECT判定の代行
+
+## v2.1.3 finalization integrity patch
+
+Before the formal record is emitted, validate the serialized record itself.
+The final record must satisfy all of these invariants:
+
+1. `sentence == qa_metadata.error_form`.
+2. `qa_metadata.clean_form != qa_metadata.error_form`.
+3. The actual surface difference between the clean and error forms is inside
+   the declared correct marked span in the final sentence.
+
+Use the formal emitted sentence for this check. Do not validate an
+intermediate mutation object and then serialize a different sentence. If any
+invariant fails, reject/regenerate the item before invoking Reviewer.
 
 ## v2.1.2 grammar mutation safety patch
 
