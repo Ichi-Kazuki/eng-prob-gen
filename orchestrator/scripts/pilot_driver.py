@@ -15,7 +15,7 @@ grammar/quality judgement of its own - it only:
     invocation of this script is a fresh process and the actual agent calls
     happen between invocations (via the Agent tool, not from Python)
 
-Subcommands (each reads/writes analysis/pilot/candidates_state.json):
+Subcommands (each reads/writes runs/pilot/candidates_state.json):
 
   init <structure_gen.json> <we_gen.json>
       Merge + validate the initial Generator output, create Candidates,
@@ -25,7 +25,7 @@ Subcommands (each reads/writes analysis/pilot/candidates_state.json):
   apply_review <reviewer_output.json> <round_label>
       Feed a Reviewer output file (item_id-keyed) to process_review_output()
       for every candidate currently in REVIEWING. Prints routing summary and
-      writes analysis/pilot/round_feedback_<round_label>.json (allowlisted
+      writes runs/pilot/round_feedback_<round_label>.json (allowlisted
       Generator feedback for any REVISE_REQUIRED candidates).
 
   rebuild_feedback <round_label>
@@ -41,7 +41,7 @@ Subcommands (each reads/writes analysis/pilot/candidates_state.json):
       Blind every candidate currently in SOLVING via the shared pure
       projection (through orchestrator.blind_for_solver()), commit Candidate
       state first, and then rebuild the state-bound batch artifact at
-      analysis/pilot/solver_input_batch.json.
+      runs/pilot/solver_input_batch.json.
 
   apply_solver <solver_output.json>
       Feed a Solver output file to process_solver_stage() for every
@@ -50,10 +50,10 @@ Subcommands (each reads/writes analysis/pilot/candidates_state.json):
   finalize
       Build provenance/accepted/manual-review/failure artifacts for ALL
       candidates (terminal and non-terminal) and write them to
-      analysis/pilot/pilot_provenance.json, pilot_accepted_items.json,
+      runs/pilot/pilot_provenance.json, pilot_accepted_items.json,
       pilot_manual_review.json, pilot_failure_items.json through a staged
       run bundle. Also appends MANUAL_REVIEW entries to
-      analysis/manual_review_queue.json via the existing
+      runs/manual_review_queue.json via the existing
       append_manual_review_queue(), before committing the completion marker.
 
 Usage: python orchestrator/scripts/pilot_driver.py <subcommand> [args...]
@@ -67,9 +67,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from orchestrator import (  # noqa: E402
-    REPO_ROOT,
     BatchIntegrityTracker,
+    build_run_manifest,
     Candidate,
+    config_from_run_manifest,
+    configured_runtime_root,
+    current_version_mismatches,
     State,
     SystemCallError,
     TERMINAL_STATES,
@@ -85,8 +88,10 @@ from orchestrator import (  # noqa: E402
     leakage_guard,
     load_config,
     load_candidate_state,
+    load_state_manifest,
     load_items_by_id,
     load_versions,
+    manifest_versions,
     process_generation_output,
     process_review_output,
     process_solver_stage,
@@ -105,8 +110,9 @@ from shared.json_io import (  # noqa: E402
     publish_json_bundle,
     read_json,
 )
+from driver_helpers import apply_generation_result, apply_review_result  # noqa: E402
 
-PILOT_DIR = REPO_ROOT / "analysis" / "pilot"
+PILOT_DIR = configured_runtime_root() / "pilot"
 STATE_PATH = PILOT_DIR / "candidates_state.json"
 
 
@@ -116,9 +122,20 @@ def load_state() -> dict[str, Candidate]:
     return load_candidate_state(STATE_PATH)
 
 
-def save_state(candidates: dict[str, Candidate]) -> None:
+def load_state_config() -> dict:
+    if not STATE_PATH.exists():
+        return load_config()
+    manifest = load_state_manifest(STATE_PATH)
+    return config_from_run_manifest(manifest) if manifest is not None else load_config()
+
+
+def save_state(candidates: dict[str, Candidate], run_manifest: dict | None = None) -> None:
     PILOT_DIR.mkdir(parents=True, exist_ok=True)
-    save_candidate_state(STATE_PATH, candidates)
+    if run_manifest is None and STATE_PATH.exists():
+        run_manifest = load_state_manifest(STATE_PATH)
+    if run_manifest is None:
+        run_manifest = build_run_manifest(load_config())
+    save_candidate_state(STATE_PATH, candidates, run_manifest=run_manifest)
 
 
 def state_transaction():
@@ -139,6 +156,7 @@ def state_tally(candidates: dict[str, Candidate]) -> dict[str, int]:
 
 def cmd_init(structure_path: str, we_path: str, *, force_reset: bool = False) -> None:
     config = load_config()
+    run_manifest = build_run_manifest(config)
     gen_items: dict[str, dict] = {}
     structure_items = load_items_by_id(Path(structure_path), "structure generator round1")
     written_expression_items = load_items_by_id(Path(we_path), "we generator round1")
@@ -157,9 +175,8 @@ def cmd_init(structure_path: str, we_path: str, *, force_reset: bool = False) ->
     for item_id, gitem in gen_items.items():
         gitem = strip_internal_test_keys(gitem)
         c = Candidate(item_id=item_id, concept_id=item_id, section=gitem.get("section", "unknown"))
-        c.generator_item = gitem
         c.planned_slot = derive_slot_requirements(gitem)
-        c = process_generation_output(c, config)
+        c = apply_generation_result(c, gitem, config, process_generation_output)
         candidates[item_id] = c
 
     with exclusive_file_lock(STATE_PATH):
@@ -172,7 +189,7 @@ def cmd_init(structure_path: str, we_path: str, *, force_reset: bool = False) ->
             PILOT_DIR / "pilot_initial_items.json",
             {"items": list(gen_items.values())},
         )
-        save_state(candidates)
+        save_state(candidates, run_manifest=run_manifest)
 
     ready = sorted(i for i, c in candidates.items() if c.state == State.REVIEWING)
     failed = sorted(i for i, c in candidates.items() if c.state != State.REVIEWING)
@@ -186,7 +203,7 @@ def cmd_init(structure_path: str, we_path: str, *, force_reset: bool = False) ->
 
 
 def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
-    config = load_config()
+    config = load_state_config()
     reviewer_items = load_items_by_id(Path(reviewer_path), f"reviewer round {round_label}")
 
     routed: dict[str, list[str]] = {"SOLVING": [], "REVISE_REQUIRED": [], "REJECTED": [], "DISCARDED": [], "VALIDATION_FAILED": [], "GENERATION_FAILED": [], "skipped_not_reviewing": []}
@@ -204,14 +221,7 @@ def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
             if item_id not in reviewer_items:
                 routed["skipped_not_reviewing"].append(item_id)
                 continue
-            reviewer_item = strip_internal_test_keys(reviewer_items[item_id])
-            c.reviewer_item = reviewer_item
-            c = process_review_output(c, config)
-            c.review_history.append({
-                "round": round_label,
-                "output": reviewer_item,
-                "routed_state": c.state,
-            })
+            c = apply_review_result(c, reviewer_items[item_id], round_label, config, process_review_output)
             routed.setdefault(c.state, []).append(item_id)
         # Build from the same locked in-memory snapshot that is about to be
         # persisted. If the following artifact write fails, this exact
@@ -242,7 +252,7 @@ def cmd_rebuild_feedback(round_label: str) -> None:
 
 
 def cmd_apply_revision(generator_path: str) -> None:
-    config = load_config()
+    config = load_state_config()
     revised_items = load_items_by_id(Path(generator_path), "generator revision round")
 
     updated = []
@@ -272,10 +282,9 @@ def cmd_apply_revision(generator_path: str) -> None:
                 c.consensus = None
                 c.failure = None
                 c.transition(State.GENERATED, "Reviewer-requested revision regenerated")
-            c.generator_item = strip_internal_test_keys(gitem)
             if is_revision:
                 c.generation_attempt += 1
-            c = process_generation_output(c, config)
+            c = apply_generation_result(c, gitem, config, process_generation_output)
             updated.append(item_id)
 
     print(f"Applied revision to {len(updated)} candidate(s): {sorted(updated)}")
@@ -287,7 +296,7 @@ def cmd_apply_revision(generator_path: str) -> None:
 
 
 def cmd_prepare_solver_batch() -> None:
-    config = load_config()
+    config = load_state_config()
     batch = []
     errors = []
     out_path = PILOT_DIR / "solver_input_batch.json"
@@ -355,7 +364,7 @@ def cmd_prepare_solver_batch() -> None:
 
 
 def cmd_apply_solver(solver_path: str) -> None:
-    config = load_config()
+    config = load_state_config()
     solver_items = load_items_by_id(Path(solver_path), "solver output")
 
     routed: dict[str, list[str]] = {}
@@ -402,8 +411,13 @@ def cmd_apply_solver(solver_path: str) -> None:
 
 
 def cmd_finalize() -> None:
-    config = load_config()
-    versions = load_versions(config)
+    config = load_state_config()
+    run_manifest = load_state_manifest(STATE_PATH) if STATE_PATH.exists() else None
+    versions = (
+        load_versions(config)
+        if run_manifest is None
+        else manifest_versions(run_manifest)
+    )
     candidates = load_state()
 
     nonterminal = sorted(
@@ -424,7 +438,7 @@ def cmd_finalize() -> None:
     for item_id, c in candidates.items():
         if c.generator_item is not None:
             tracker.record_planned(c.generator_item, c.planned_slot)
-        rec = build_provenance_record(c, versions)
+        rec = build_provenance_record(c, versions, run_manifest=run_manifest)
         provenance_records.append(rec)
         if c.state == State.ACCEPTED:
             accepted_items.append(rec["accepted_item"])
@@ -447,6 +461,7 @@ def cmd_finalize() -> None:
         "provenance": ("pilot_provenance.json", {
             "pipeline_version": config["pipeline_version"],
             "finalize_id": run_id,
+            "run_manifest": run_manifest,
             "items": provenance_records,
             "batch_summary": tracker.summary(),
         }),
@@ -459,6 +474,8 @@ def cmd_finalize() -> None:
     with exclusive_file_lock(STATE_PATH):
         if finalization_id(load_state(), versions) != run_id:
             raise ValueError("pilot finalize snapshot is stale; rerun finalize")
+        if run_manifest is not None and load_state_manifest(STATE_PATH) != run_manifest:
+            raise ValueError("pilot run manifest changed; refusing mixed finalization")
         manifest = publish_json_bundle(
             PILOT_DIR,
             artifacts,
@@ -476,6 +493,10 @@ def cmd_finalize() -> None:
     print(f"State tally: {state_tally(candidates)}")
     print(f"ACCEPTED: {len(accepted_items)}  MANUAL_REVIEW: {len(manual_review_entries)}  failure_items: {len(failure_items)}")
     print(f"Finalize id: {run_id}")
+    if run_manifest is not None:
+        mismatches = current_version_mismatches(run_manifest)
+        if mismatches:
+            print(f"WARNING: current files differ from the run snapshot: {', '.join(mismatches)}")
     print("Wrote: pilot_provenance.json, pilot_accepted_items.json, pilot_manual_review.json, pilot_failure_items.json")
 
 

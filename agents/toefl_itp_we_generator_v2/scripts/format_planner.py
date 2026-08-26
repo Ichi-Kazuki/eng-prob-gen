@@ -10,6 +10,7 @@ constants.
 from __future__ import annotations
 
 import itertools
+import copy
 import json
 import math
 import random
@@ -232,7 +233,7 @@ def official_profile(source_text: str = str(OFFICIAL_SOURCE)) -> dict[str, Any]:
 def get_official_profile(source: Path = OFFICIAL_SOURCE) -> dict[str, Any]:
     """Return a defensive, cached view of the official empirical profile."""
 
-    return official_profile(str(source.resolve()))
+    return copy.deepcopy(official_profile(str(source.resolve())))
 
 
 def empirical_probabilities(counts: dict[Any, int]) -> dict[Any, float]:

@@ -391,3 +391,11 @@ Run order: `run_smoke_test.py`, `run_adversarial_test.py`,
 `run_reject_path_test.py`, then `run_acceptance_tests.py` (which also
 re-runs the first three as subprocesses so it always reflects current
 code).
+
+## 17. Current live-run storage
+
+The live pilot and validation drivers persist state and derived outputs under
+`runs/pilot/` and `runs/validation/`. Historical replay outputs listed above
+remain under `analysis/` and are not live runtime inputs. New runs include an
+immutable version manifest in the state document and are complete only after
+their atomic completion manifest is published.

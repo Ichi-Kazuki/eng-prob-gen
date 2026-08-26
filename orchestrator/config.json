@@ -1,5 +1,6 @@
 {
   "pipeline_version": "1.0.0",
+  "runtime_root": "runs",
   "retry_policy": {
     "max_revision_cycles": 2,
     "max_generation_validation_retries": 2,
@@ -20,6 +21,6 @@
     "reviewer_validate_script": "agents/toefl_itp_grammar_reviewer/scripts/validate_output.py",
     "solver_validate_script": "agents/toefl_itp_grammar_solver/scripts/validate_output.py",
     "solver_blinding_script": "agents/toefl_itp_grammar_solver/scripts/create_solver_input.py",
-    "manual_review_queue": "analysis/manual_review_queue.json"
+    "manual_review_queue": "runs/manual_review_queue.json"
   }
 }

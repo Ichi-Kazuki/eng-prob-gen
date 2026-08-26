@@ -10,7 +10,7 @@ have a disagreeing Solver, so those branches are tested directly against
 evaluate_consensus with small synthetic inputs rather than through a full
 fixture replay).
 
-Populates analysis/manual_review_queue.json with any MANUAL_REVIEW items
+Populates runs/manual_review_queue.json with any MANUAL_REVIEW items
 produced (from the synthetic disagreement cases, since none of the current
 real fixtures produce a disagreement).
 

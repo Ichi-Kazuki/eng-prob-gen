@@ -76,6 +76,14 @@
       "description": "See accepted_item.schema.json. Null unless state == ACCEPTED.",
       "type": ["object", "null"]
     },
+    "run_manifest_id": {
+      "type": "string",
+      "pattern": "^run-manifest-[0-9a-f]{24}$"
+    },
+    "run_manifest_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
     "qa_audit": {
       "description": "See qa_audit.schema.json. Always present.",
       "type": "object"

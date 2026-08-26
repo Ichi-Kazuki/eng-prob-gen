@@ -2,7 +2,7 @@
 
 This is intentionally a thin validation-only wrapper around the same
 ``orchestrator.py`` functions used by ``pilot_driver.py``.  It keeps the
-validation state and artifacts under ``analysis/validation`` and records all
+validation state and artifacts under ``runs/validation`` and records all
 Reviewer rounds so the initial 120 candidates can be evaluated without
 replacement-candidate dilution.
 
@@ -23,8 +23,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from orchestrator import (  # noqa: E402
     BatchIntegrityTracker,
+    build_run_manifest,
     Candidate,
-    REPO_ROOT,
+    config_from_run_manifest,
+    configured_runtime_root,
+    current_version_mismatches,
     State,
     SystemCallError,
     TERMINAL_STATES,
@@ -38,8 +41,10 @@ from orchestrator import (  # noqa: E402
     finalization_id,
     load_config,
     load_candidate_state,
+    load_state_manifest,
     load_items_by_id,
     load_versions,
+    manifest_versions,
     leakage_guard,
     process_generation_output,
     process_review_output,
@@ -60,8 +65,9 @@ from shared.json_io import (  # noqa: E402
     publish_json_bundle,
     read_json,
 )
+from driver_helpers import apply_generation_result, apply_review_result  # noqa: E402
 
-VALIDATION_DIR = REPO_ROOT / "analysis" / "validation"
+VALIDATION_DIR = configured_runtime_root() / "validation"
 STATE_PATH = VALIDATION_DIR / "validation_candidates_state.json"
 
 
@@ -71,9 +77,20 @@ def load_state() -> dict[str, Candidate]:
     return load_candidate_state(STATE_PATH)
 
 
-def save_state(candidates: dict[str, Candidate]) -> None:
+def load_state_config() -> dict:
+    if not STATE_PATH.exists():
+        return load_config()
+    manifest = load_state_manifest(STATE_PATH)
+    return config_from_run_manifest(manifest) if manifest is not None else load_config()
+
+
+def save_state(candidates: dict[str, Candidate], run_manifest: dict | None = None) -> None:
     VALIDATION_DIR.mkdir(parents=True, exist_ok=True)
-    save_candidate_state(STATE_PATH, candidates)
+    if run_manifest is None and STATE_PATH.exists():
+        run_manifest = load_state_manifest(STATE_PATH)
+    if run_manifest is None:
+        run_manifest = build_run_manifest(load_config())
+    save_candidate_state(STATE_PATH, candidates, run_manifest=run_manifest)
 
 
 def state_transaction():
@@ -92,6 +109,7 @@ def cmd_init(*batch_paths: str, force_reset: bool = False) -> None:
     if len(batch_paths) != 3:
         raise SystemExit("init requires exactly three batch JSON paths")
     config = load_config()
+    run_manifest = build_run_manifest(config)
     gen_items: dict[str, dict] = {}
     for path in batch_paths:
         for item_id, item in load_items_by_id(Path(path), Path(path).name).items():
@@ -112,10 +130,8 @@ def cmd_init(*batch_paths: str, force_reset: bool = False) -> None:
     candidates: dict[str, Candidate] = {}
     for item_id, item in gen_items.items():
         c = Candidate(item_id=item_id, concept_id=item_id, section=item.get("section", "unknown"))
-        c.generator_item = item
         c.planned_slot = derive_slot_requirements(item)
-        c.generation_history = [{"attempt": 1, "item": item}]
-        c = process_generation_output(c, config)
+        c = apply_generation_result(c, item, config, process_generation_output)
         candidates[item_id] = c
     with exclusive_file_lock(STATE_PATH):
         if STATE_PATH.exists() and not force_reset:
@@ -127,13 +143,13 @@ def cmd_init(*batch_paths: str, force_reset: bool = False) -> None:
             VALIDATION_DIR / "validation_initial_items.json",
             {"items": list(gen_items.values())},
         )
-        save_state(candidates)
+        save_state(candidates, run_manifest=run_manifest)
     print(f"Loaded exactly {len(candidates)} initial candidates: {sections}")
     print(f"State tally: {state_tally(candidates)}")
 
 
 def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
-    config = load_config()
+    config = load_state_config()
     reviewer_items = load_items_by_id(Path(reviewer_path), f"reviewer {round_label}")
     routed: dict[str, list[str]] = {}
     with state_transaction() as candidates:
@@ -147,14 +163,7 @@ def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
                 c = retry_failed_stage(c, config)
             if c.state != State.REVIEWING or item_id not in reviewer_items:
                 continue
-            reviewer_item = strip_internal_test_keys(reviewer_items[item_id])
-            c.reviewer_item = reviewer_item
-            c = process_review_output(c, config)
-            c.review_history.append({
-                "round": round_label,
-                "output": reviewer_item,
-                "routed_state": c.state,
-            })
+            c = apply_review_result(c, reviewer_items[item_id], round_label, config, process_review_output)
             routed.setdefault(c.state, []).append(item_id)
         # Compute from the same locked snapshot that is being persisted so a
         # failed artifact write can reproduce this exact feedback later.
@@ -181,7 +190,7 @@ def cmd_rebuild_feedback(round_label: str) -> None:
 
 
 def cmd_apply_revision(generator_path: str) -> None:
-    config = load_config()
+    config = load_state_config()
     revised_items = load_items_by_id(Path(generator_path), "generator revision")
     updated = []
     with state_transaction() as candidates:
@@ -206,12 +215,9 @@ def cmd_apply_revision(generator_path: str) -> None:
                 c.consensus = None
                 c.failure = None
                 c.transition(State.GENERATED, "Reviewer-requested revision regenerated")
-            item = strip_internal_test_keys(raw)
-            c.generator_item = item
             if is_revision:
                 c.generation_attempt += 1
-            c.generation_history.append({"attempt": c.generation_attempt, "item": item})
-            c = process_generation_output(c, config)
+            c = apply_generation_result(c, raw, config, process_generation_output)
             candidates[item_id] = c
             updated.append(item_id)
     print(f"Applied revisions: {len(updated)}")
@@ -219,7 +225,7 @@ def cmd_apply_revision(generator_path: str) -> None:
 
 
 def cmd_prepare_solver_batch() -> None:
-    config = load_config()
+    config = load_state_config()
     batch = []
     out_path = VALIDATION_DIR / "validation_solver_input_batch.json"
     with state_transaction() as candidates:
@@ -278,7 +284,7 @@ def cmd_prepare_solver_batch() -> None:
 
 
 def cmd_apply_solver(solver_path: str) -> None:
-    config = load_config()
+    config = load_state_config()
     solver_items = load_items_by_id(Path(solver_path), "solver output")
     with state_transaction() as candidates:
         try:
@@ -314,8 +320,13 @@ def cmd_apply_solver(solver_path: str) -> None:
 
 
 def cmd_finalize() -> None:
-    config = load_config()
-    versions = load_versions(config)
+    config = load_state_config()
+    run_manifest = load_state_manifest(STATE_PATH) if STATE_PATH.exists() else None
+    versions = (
+        load_versions(config)
+        if run_manifest is None
+        else manifest_versions(run_manifest)
+    )
     candidates = load_state()
     nonterminal = sorted(
         (candidate.item_id, candidate.state)
@@ -333,7 +344,7 @@ def cmd_finalize() -> None:
     for c in candidates.values():
         if c.generator_item is not None:
             tracker.record_planned(c.generator_item, c.planned_slot)
-        rec = build_provenance_record(c, versions)
+        rec = build_provenance_record(c, versions, run_manifest=run_manifest)
         rec["validation_trace"] = {
             "initial_candidate": True,
             "generation_history": c.generation_history,
@@ -353,6 +364,7 @@ def cmd_finalize() -> None:
         "initial_candidate_count": len(candidates),
         "replacement_candidates_included": 0,
         "versions": versions,
+        "run_manifest": run_manifest,
         "items": provenance,
         "batch_summary": tracker.summary(),
     }
@@ -376,6 +388,8 @@ def cmd_finalize() -> None:
     with exclusive_file_lock(STATE_PATH):
         if finalization_id(load_state(), versions) != run_id:
             raise ValueError("validation finalize snapshot is stale; rerun finalize")
+        if run_manifest is not None and load_state_manifest(STATE_PATH) != run_manifest:
+            raise ValueError("validation run manifest changed; refusing mixed finalization")
         manifest = publish_json_bundle(
             VALIDATION_DIR,
             artifacts,
@@ -387,6 +401,10 @@ def cmd_finalize() -> None:
     print(f"Finalized {len(candidates)} initial candidates")
     print(f"State tally: {state_tally(candidates)}")
     print(f"Finalize id: {run_id}")
+    if run_manifest is not None:
+        mismatches = current_version_mismatches(run_manifest)
+        if mismatches:
+            print(f"WARNING: current files differ from the run snapshot: {', '.join(mismatches)}")
 
 
 def main() -> int:

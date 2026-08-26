@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "run_manifest.schema.json",
+  "title": "TOEFL ITP immutable run manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest_schema_version", "created_at", "git_commit_sha", "pipeline_version",
+    "versions", "hashes", "config_snapshot", "manifest_sha256", "manifest_id"
+  ],
+  "properties": {
+    "manifest_schema_version": { "const": 1 },
+    "created_at": { "type": "string", "minLength": 1 },
+    "git_commit_sha": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+      ]
+    },
+    "pipeline_version": { "type": "string", "minLength": 1 },
+    "versions": { "type": "object" },
+    "hashes": { "$ref": "#/$defs/hash_groups" },
+    "config_snapshot": { "type": "object" },
+    "manifest_sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "manifest_id": { "type": "string", "pattern": "^run-manifest-[0-9a-f]{24}$" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "hash_group": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/hash" }
+    },
+    "hash_groups": {
+      "type": "object",
+      "required": ["config", "prompts", "schemas", "validators", "orchestrator_source", "shared_modules"],
+      "properties": {
+        "config": { "$ref": "#/$defs/hash" },
+        "prompts": { "$ref": "#/$defs/hash_group" },
+        "schemas": { "$ref": "#/$defs/hash_group" },
+        "validators": { "$ref": "#/$defs/hash_group" },
+        "orchestrator_source": { "$ref": "#/$defs/hash" },
+        "shared_modules": { "$ref": "#/$defs/hash_group" },
+        "runtime_modules": { "$ref": "#/$defs/hash_group" },
+        "policy_inputs": { "$ref": "#/$defs/hash_group" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

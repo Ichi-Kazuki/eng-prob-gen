@@ -15,7 +15,7 @@ solver_answer with its own guess. Its only job is to:
     agents' own reported fields (no majority vote, no "probably right")
   - record provenance and split it into a public accepted_item vs an
     internal qa_audit record
-  - queue disagreements for human decision (analysis/manual_review_queue.json)
+  - queue disagreements for human decision (runs/manual_review_queue.json)
 
 See orchestrator/TOEFL_ITP_GRAMMAR_PIPELINE.md for the full protocol this
 module implements.
@@ -74,7 +74,15 @@ __all__ = [
     "BatchIntegrityTracker",
     "REPO_ROOT",
     "load_config",
+    "configured_runtime_root",
     "load_versions",
+    "build_run_manifest",
+    "validate_run_manifest",
+    "load_state_bundle",
+    "load_state_manifest",
+    "config_from_run_manifest",
+    "manifest_versions",
+    "current_version_mismatches",
     "load_items_by_id",
     "strip_internal_test_keys",
     "run_schema_validator",
@@ -104,6 +112,9 @@ __all__ = [
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = Path(__file__).resolve().parents[1] / "config.json"
 SOLVER_BATCH_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "solver_input_batch.schema.json"
+STATE_SCHEMA_VERSION = 2
+RUN_MANIFEST_SCHEMA_VERSION = 1
+STATE_MANIFEST_KEY = "run_manifest"
 
 
 # ---------------------------------------------------------------------------
@@ -193,6 +204,43 @@ def load_config() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
 
 
+def configured_runtime_root(config: dict | None = None) -> Path:
+    """Resolve the configured generated-output root below the repository.
+
+    Runtime output is intentionally constrained to a repository-relative
+    directory so a malformed config cannot redirect persistence to an arbitrary
+    location. Tests and callers may still replace their driver-specific output
+    constants when using temporary directories.
+    """
+    config = load_config() if config is None else config
+    raw_root = config.get("runtime_root", "runs")
+    if not isinstance(raw_root, str) or not raw_root.strip():
+        raise ValueError("runtime_root must be a non-empty relative path")
+    root = Path(raw_root)
+    if root.is_absolute() or ".." in root.parts:
+        raise ValueError("runtime_root must remain below the repository root")
+    return REPO_ROOT / root
+
+
+def _git_commit_sha() -> str | None:
+    """Return the checked-out commit when the source tree is a Git checkout."""
+    try:
+        proc = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=10,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    sha = proc.stdout.strip()
+    return sha if proc.returncode == 0 and len(sha) == 40 else None
+
+
 def load_spec_versions(config: dict) -> dict:
     spec_path = REPO_ROOT / config["paths"]["spec_json"]
     spec = json.loads(spec_path.read_text(encoding="utf-8"))
@@ -270,6 +318,170 @@ def _hash_repo_file(path: str) -> str:
         file_path = REPO_ROOT / file_path
     digest = hashlib.sha256(file_path.read_bytes()).hexdigest()
     return f"sha256:{digest}"
+
+
+def _manifest_file_hashes(config: dict) -> dict:
+    """Hash every executable contract that can affect a run.
+
+    The short legacy fields in ``load_versions`` remain unchanged for old
+    artifact compatibility. The manifest stores full SHA-256 values under
+    explicit categories so a new run has an unambiguous immutable snapshot.
+    """
+    prompt_paths = {
+        "generator": config["paths"]["generator_agent_md"],
+        "reviewer": config["paths"]["reviewer_agent_md"],
+        "solver": config["paths"]["solver_agent_md"],
+    }
+    schema_paths = {
+        "generator_structure": "agents/toefl_itp_grammar_generator/schema/structure_item.schema.json",
+        "generator_written_expression": "agents/toefl_itp_grammar_generator/schema/written_expression_item.schema.json",
+        "we_generator_v2": "agents/toefl_itp_we_generator_v2/schema/written_expression_item_v2.schema.json",
+        "reviewer": "agents/toefl_itp_grammar_reviewer/schema/reviewer_output.schema.json",
+        "we_reviewer_v2": "agents/toefl_itp_we_reviewer_v2/schema/reviewer_output_v2.schema.json",
+        "solver": "agents/toefl_itp_grammar_solver/schema/solver_output.schema.json",
+        "grammar_evidence": "agents/toefl_itp_we_generator_v2/schema/grammar_evidence.schema.json",
+        "solver_input_batch": "orchestrator/schemas/solver_input_batch.schema.json",
+        "run_manifest": "orchestrator/schemas/run_manifest.schema.json",
+    }
+    validator_paths = {
+        "generator": config["paths"]["generator_validate_script"],
+        "reviewer": config["paths"]["reviewer_validate_script"],
+        "solver": config["paths"]["solver_validate_script"],
+        "we_generator_v2": "agents/toefl_itp_we_generator_v2/scripts/validate_output.py",
+        "we_reviewer_v2": "agents/toefl_itp_we_reviewer_v2/scripts/validate_output.py",
+    }
+    shared_paths = {
+        "driver_helpers": "orchestrator/scripts/driver_helpers.py",
+        "json_io": "shared/json_io.py",
+        "schema_validation": "shared/schema_validation.py",
+        "solver_blinding": "shared/solver_blinding.py",
+        "tokenization": "shared/tokenization.py",
+    }
+    runtime_paths = {
+        "adapters": "runtime/adapters.py",
+        "codex_schema": "runtime/codex_schema.py",
+    }
+    policy_input_paths = {
+        "specification": config["paths"]["spec_json"],
+        "we_format_spec": "specs/toefl_itp_we_format_spec_addendum.json",
+        "we_format_config": "agents/toefl_itp_we_generator_v2/config/we_v2_format_config.json",
+        "we_format_planner": "agents/toefl_itp_we_generator_v2/scripts/format_planner.py",
+        "we_official_profile": "analysis/we_format/written_expression_format_official.json",
+    }
+
+    def hash_group(paths: dict[str, str]) -> dict[str, str]:
+        return {name: _hash_repo_file(path) for name, path in paths.items()}
+
+    return {
+        "config": _hash_repo_file("orchestrator/config.json"),
+        "prompts": hash_group(prompt_paths),
+        "schemas": hash_group(schema_paths),
+        "validators": hash_group(validator_paths),
+        "orchestrator_source": _hash_repo_file("orchestrator/scripts/orchestrator.py"),
+        "shared_modules": hash_group(shared_paths),
+        "runtime_modules": hash_group(runtime_paths),
+        "policy_inputs": hash_group(policy_input_paths),
+    }
+
+
+def _manifest_payload(manifest: dict) -> dict:
+    payload = copy.deepcopy(manifest)
+    payload.pop("manifest_id", None)
+    payload.pop("manifest_sha256", None)
+    return payload
+
+
+def _finalize_run_manifest(manifest: dict) -> dict:
+    payload = _manifest_payload(manifest)
+    digest = canonical_json_sha256(payload)
+    finalized = copy.deepcopy(payload)
+    finalized["manifest_sha256"] = digest
+    finalized["manifest_id"] = "run-manifest-" + digest.split(":", 1)[1][:24]
+    return finalized
+
+
+def build_run_manifest(config: dict) -> dict:
+    """Create the immutable run snapshot persisted at ``init`` time."""
+    if not isinstance(config, dict):
+        raise ValueError("run manifest config must be an object")
+    manifest = {
+        "manifest_schema_version": RUN_MANIFEST_SCHEMA_VERSION,
+        "created_at": now_iso(),
+        "git_commit_sha": _git_commit_sha(),
+        "pipeline_version": config.get("pipeline_version"),
+        "versions": load_versions(config),
+        "hashes": _manifest_file_hashes(config),
+        # This is non-secret policy/config input used for replay validation.
+        "config_snapshot": copy.deepcopy(config),
+    }
+    return _finalize_run_manifest(manifest)
+
+
+def validate_run_manifest(manifest: object) -> dict:
+    """Validate manifest structure and its self-authenticating ID/hash."""
+    if not isinstance(manifest, dict):
+        raise ValueError("run manifest must be an object")
+    required = {
+        "manifest_schema_version", "created_at", "git_commit_sha", "pipeline_version",
+        "versions", "hashes", "config_snapshot", "manifest_sha256", "manifest_id",
+    }
+    missing = sorted(required - set(manifest))
+    if missing:
+        raise ValueError(f"run manifest is missing required field(s): {', '.join(missing)}")
+    if manifest["manifest_schema_version"] != RUN_MANIFEST_SCHEMA_VERSION:
+        raise ValueError("run manifest schema version is unsupported")
+    if not isinstance(manifest["created_at"], str) or not manifest["created_at"].strip():
+        raise ValueError("run manifest created_at must be a non-empty string")
+    if manifest["git_commit_sha"] is not None and (
+        not isinstance(manifest["git_commit_sha"], str)
+        or len(manifest["git_commit_sha"]) != 40
+        or any(c not in "0123456789abcdef" for c in manifest["git_commit_sha"])
+    ):
+        raise ValueError("run manifest git_commit_sha is malformed")
+    if not isinstance(manifest["pipeline_version"], str) or not manifest["pipeline_version"].strip():
+        raise ValueError("run manifest pipeline_version must be a non-empty string")
+    if not isinstance(manifest["versions"], dict) or not isinstance(manifest["hashes"], dict):
+        raise ValueError("run manifest versions and hashes must be objects")
+    if not isinstance(manifest["config_snapshot"], dict):
+        raise ValueError("run manifest config_snapshot must be an object")
+    try:
+        manifest_schema = load_schema(REPO_ROOT / "orchestrator" / "schemas" / "run_manifest.schema.json")
+        structural_errors = schema_errors(manifest, manifest_schema)
+    except SchemaValidationRuntimeError as exc:
+        raise ValueError(f"run manifest schema could not be validated: {exc}") from exc
+    if structural_errors:
+        raise ValueError("run manifest schema validation failed: " + "; ".join(structural_errors))
+    expected = _finalize_run_manifest(manifest)
+    if manifest.get("manifest_sha256") != expected["manifest_sha256"]:
+        raise ValueError("run manifest hash mismatch")
+    if manifest.get("manifest_id") != expected["manifest_id"]:
+        raise ValueError("run manifest ID mismatch")
+    return copy.deepcopy(manifest)
+
+
+def manifest_versions(manifest: dict) -> dict:
+    return copy.deepcopy(validate_run_manifest(manifest)["versions"])
+
+
+def config_from_run_manifest(manifest: dict) -> dict:
+    return copy.deepcopy(validate_run_manifest(manifest)["config_snapshot"])
+
+
+def current_version_mismatches(manifest: dict, config: dict | None = None) -> list[str]:
+    """Report drift for diagnostics without changing the persisted snapshot."""
+    config = load_config() if config is None else config
+    expected = _manifest_file_hashes(config)
+    actual = manifest.get("hashes", {})
+    mismatches: list[str] = []
+    for group, values in expected.items():
+        if group in {"config", "orchestrator_source"}:
+            if actual.get(group) != values:
+                mismatches.append(group)
+            continue
+        for name, value in values.items():
+            if actual.get(group, {}).get(name) != value:
+                mismatches.append(f"{group}.{name}")
+    return mismatches
 
 
 def load_items_by_id(path: Path, label: str = "") -> dict[str, dict]:
@@ -716,7 +928,12 @@ def candidate_to_dict(candidate: Candidate) -> dict:
     }
 
 
-def dict_to_candidate(data: dict) -> Candidate:
+def dict_to_candidate(
+    data: dict,
+    config: dict | None = None,
+    *,
+    legacy_mode: bool = False,
+) -> Candidate:
     """Restore a Candidate, accepting state files written before hardening."""
     if not isinstance(data, dict):
         raise ValueError("candidate state entry must be an object")
@@ -763,7 +980,7 @@ def dict_to_candidate(data: dict) -> Candidate:
     candidate.generation_history = data.get("generation_history", [])
     candidate.created_at = data.get("created_at", candidate.created_at)
     candidate.updated_at = data.get("updated_at", candidate.updated_at)
-    validate_candidate_invariants(candidate)
+    validate_candidate_invariants(candidate, config=config, legacy_mode=legacy_mode)
     return candidate
 
 
@@ -771,7 +988,12 @@ def _is_nonnegative_int(value: object) -> bool:
     return isinstance(value, int) and not isinstance(value, bool) and value >= 0
 
 
-def validate_candidate_invariants(candidate: Candidate) -> None:
+def validate_candidate_invariants(
+    candidate: Candidate,
+    config: dict | None = None,
+    *,
+    legacy_mode: bool = False,
+) -> None:
     """Fail closed when a persisted Candidate is internally inconsistent.
 
     This intentionally validates pipeline-state invariants only. Agent output
@@ -780,6 +1002,7 @@ def validate_candidate_invariants(candidate: Candidate) -> None:
     are checked here before a driver can continue from disk.
     """
     errors: list[str] = []
+    config = load_config() if config is None else config
 
     if not isinstance(candidate.item_id, str) or not candidate.item_id:
         errors.append("item_id must be a non-empty string")
@@ -802,6 +1025,8 @@ def validate_candidate_invariants(candidate: Candidate) -> None:
             errors.append(
                 f"state_history last state {history[-1]!r} does not match current state {candidate.state!r}"
             )
+        if history[0] != State.GENERATED:
+            errors.append("state_history must start with GENERATED")
         for previous, current in zip(history, history[1:]):
             if previous in VALID_STATES and current not in ALLOWED_TRANSITIONS[previous]:
                 errors.append(f"invalid state transition in state_history: {previous} -> {current}")
@@ -884,6 +1109,19 @@ def validate_candidate_invariants(candidate: Candidate) -> None:
     elif candidate.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}:
         errors.append(f"{candidate.state} requires failure metadata")
 
+    if candidate.state in {State.GENERATED, State.REVIEWING, State.SOLVING, State.REVISE_REQUIRED}:
+        if candidate.generator_item is None and not (legacy_mode and candidate.state == State.GENERATED):
+            errors.append(f"{candidate.state} requires generator_item")
+
+    if candidate.state == State.REVISE_REQUIRED:
+        if candidate.reviewer_item is None or candidate.reviewer_item.get("verdict") != "REVISE":
+            errors.append("REVISE_REQUIRED requires reviewer verdict REVISE")
+        requirements = None if candidate.reviewer_item is None else candidate.reviewer_item.get("revision_requirements")
+        if not isinstance(requirements, list) or not requirements:
+            errors.append("REVISE_REQUIRED requires non-empty revision_requirements")
+        if candidate.consensus is not None and candidate.consensus.auto_accept:
+            errors.append("REVISE_REQUIRED cannot contain an auto-accepted consensus")
+
     if candidate.state == State.SOLVING:
         if candidate.generator_item is None:
             errors.append("SOLVING requires generator_item")
@@ -904,7 +1142,7 @@ def validate_candidate_invariants(candidate: Candidate) -> None:
             elif isinstance(candidate.generator_item, dict):
                 try:
                     expected_solver_input = canonicalize_solver_input(
-                        load_config(), candidate.generator_item
+                        config, candidate.generator_item
                     )
                 except Exception as exc:  # fail closed if the production blinder is unavailable
                     errors.append(f"solver_input canonicalization failed: {type(exc).__name__}: {exc}")
@@ -938,7 +1176,7 @@ def validate_candidate_invariants(candidate: Candidate) -> None:
                     candidate.generator_item,
                     candidate.reviewer_item,
                     candidate.solver_item,
-                    load_config(),
+                    config,
                 )
             except Exception as exc:  # persisted state must never fail open
                 errors.append(
@@ -967,6 +1205,43 @@ def validate_candidate_invariants(candidate: Candidate) -> None:
                         "persisted consensus metadata does not match recomputed consensus"
                     )
 
+    if candidate.state == State.REJECTED:
+        reviewer_rejected = (
+            isinstance(candidate.reviewer_item, dict)
+            and candidate.reviewer_item.get("verdict") == "REJECT"
+        )
+        consensus_rejected = (
+            isinstance(candidate.consensus, ConsensusResult)
+            and candidate.consensus.routing == State.REJECTED
+        )
+        failure_evidence = candidate.failure is not None and bool(candidate.failure.detail.strip())
+        if not (reviewer_rejected or consensus_rejected or failure_evidence):
+            errors.append("REJECTED requires reviewer, consensus, or failure evidence")
+
+    if candidate.state == State.MANUAL_REVIEW:
+        has_consensus = isinstance(candidate.consensus, ConsensusResult)
+        has_failure = candidate.failure is not None
+        has_leakage = isinstance(candidate.leakage_check, dict)
+        has_routing_note = any(
+            isinstance(note, str) and ("MANUAL_REVIEW" in note or "manual review" in note.lower())
+            for note in candidate.notes
+        )
+        if not (has_consensus or has_failure or has_leakage or has_routing_note):
+            errors.append(
+                "MANUAL_REVIEW requires routing evidence in consensus, failure, leakage_check, or notes"
+            )
+
+    if candidate.state == State.DISCARDED:
+        consensus_discarded = (
+            isinstance(candidate.consensus, ConsensusResult)
+            and candidate.consensus.routing == State.DISCARDED
+        )
+        discard_note = any(
+            isinstance(note, str) and "discard" in note.lower() for note in candidate.notes
+        )
+        if not (consensus_discarded or discard_note):
+            errors.append("DISCARDED requires discard consensus or discard reason")
+
     if candidate.consensus is not None:
         if candidate.consensus.routing not in {State.ACCEPTED, State.MANUAL_REVIEW, State.DISCARDED}:
             errors.append(f"consensus.routing {candidate.consensus.routing!r} is invalid")
@@ -980,16 +1255,42 @@ def validate_candidate_invariants(candidate: Candidate) -> None:
         )
 
 
-def load_candidate_state(path: Path) -> dict[str, Candidate]:
+def load_state_bundle(path: Path) -> tuple[dict[str, Candidate], dict | None]:
+    """Load a state document and its immutable run manifest.
+
+    Version 2 state uses ``{state_schema_version, run_manifest, candidates}``.
+    A legacy root object keyed by item_id remains readable and is explicitly
+    treated as a legacy run without a snapshot.
+    """
     document = read_json(path)
     if not isinstance(document, dict):
-        raise JsonPersistenceError(f"candidate state {path} must be an object keyed by item_id")
+        raise JsonPersistenceError(f"candidate state {path} must be an object")
+    if "candidates" in document or STATE_MANIFEST_KEY in document or "state_schema_version" in document:
+        if document.get("state_schema_version") != STATE_SCHEMA_VERSION:
+            raise JsonPersistenceError(f"candidate state {path} has an unsupported schema version")
+        if STATE_MANIFEST_KEY not in document:
+            raise JsonPersistenceError(f"candidate state {path} is missing its run manifest")
+        try:
+            manifest = validate_run_manifest(document[STATE_MANIFEST_KEY])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise JsonPersistenceError(f"candidate state {path} has an invalid run manifest: {exc}") from exc
+        document = document.get("candidates")
+        if not isinstance(document, dict):
+            raise JsonPersistenceError(f"candidate state {path}.candidates must be an object keyed by item_id")
+        config = config_from_run_manifest(manifest)
+        legacy_mode = False
+    else:
+        # Historical state files are intentionally supported without rewriting
+        # them. Their ACCEPTED validation uses the current legacy policy.
+        manifest = None
+        config = load_config()
+        legacy_mode = True
     candidates: dict[str, Candidate] = {}
     for item_id, data in document.items():
         if not isinstance(data, dict):
             raise JsonPersistenceError(f"candidate state {path} entry {item_id!r} must be an object")
         try:
-            candidate = dict_to_candidate(data)
+            candidate = dict_to_candidate(data, config=config, legacy_mode=legacy_mode)
         except (KeyError, TypeError, ValueError) as exc:
             raise JsonPersistenceError(
                 f"candidate state {path} entry {item_id!r} failed invariant validation: {exc}"
@@ -999,11 +1300,38 @@ def load_candidate_state(path: Path) -> dict[str, Candidate]:
                 f"candidate state {path} key {item_id!r} does not match item_id {candidate.item_id!r}"
             )
         candidates[item_id] = candidate
-    return candidates
+    return candidates, manifest
 
 
-def save_candidate_state(path: Path, candidates: dict[str, Candidate]) -> None:
-    atomic_write_json(path, {item_id: candidate_to_dict(candidate) for item_id, candidate in candidates.items()})
+def load_candidate_state(path: Path) -> dict[str, Candidate]:
+    return load_state_bundle(path)[0]
+
+
+def save_candidate_state(
+    path: Path,
+    candidates: dict[str, Candidate],
+    run_manifest: dict | None = None,
+) -> None:
+    serialized = {item_id: candidate_to_dict(candidate) for item_id, candidate in candidates.items()}
+    if run_manifest is None:
+        # Direct library callers and historical fixture builders retain the
+        # old root-object format. Live drivers always pass a manifest.
+        atomic_write_json(path, serialized)
+        return
+    validated = validate_run_manifest(run_manifest)
+    atomic_write_json(
+        path,
+        {
+            "state_schema_version": STATE_SCHEMA_VERSION,
+            STATE_MANIFEST_KEY: validated,
+            "candidates": serialized,
+        },
+    )
+
+
+def load_state_manifest(path: Path) -> dict | None:
+    """Return a validated run manifest, or None for a legacy state file."""
+    return load_state_bundle(path)[1]
 
 
 def solver_batch_state_fingerprint(candidates: dict[str, Candidate]) -> str:
@@ -1571,7 +1899,11 @@ def build_qa_audit(candidate: Candidate, versions: dict) -> dict:
     }
 
 
-def build_provenance_record(candidate: Candidate, versions: dict) -> dict:
+def build_provenance_record(
+    candidate: Candidate,
+    versions: dict,
+    run_manifest: dict | None = None,
+) -> dict:
     accepted = build_accepted_item(candidate, versions)
     audit = build_qa_audit(candidate, versions)
     planned_slot = candidate.planned_slot
@@ -1581,7 +1913,7 @@ def build_provenance_record(candidate: Candidate, versions: dict) -> dict:
         # initial slot while keeping persisted revised Candidates explicit.
         planned_slot = derive_slot_requirements(candidate.generator_item)
     final_slot = derive_slot_requirements(candidate.generator_item) if candidate.generator_item else None
-    return {
+    record = {
         "item_id": candidate.item_id,
         "concept_id": candidate.concept_id,
         "section": candidate.section,
@@ -1612,6 +1944,11 @@ def build_provenance_record(candidate: Candidate, versions: dict) -> dict:
         "accepted_item": accepted,
         "qa_audit": audit,
     }
+    if run_manifest is not None:
+        validated_manifest = validate_run_manifest(run_manifest)
+        record["run_manifest_id"] = validated_manifest["manifest_id"]
+        record["run_manifest_sha256"] = validated_manifest["manifest_sha256"]
+    return record
 
 
 # ---------------------------------------------------------------------------

@@ -1,10 +1,21 @@
 # Python bytecode and caches
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local environments
+.venv/
+venv/
 
 # Local analysis/dependency staging and render/OCR scratch output
 .analysis_tmp_deps/
 tmp/
+runs/
+artifacts/
 render/
 ocr/
 *.render/

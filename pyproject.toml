@@ -1,0 +1,49 @@
+[project]
+name = "itp-prob-gen"
+version = "0.1.0"
+description = "Fail-closed TOEFL ITP grammar item generation pipeline"
+requires-python = ">=3.11"
+dependencies = [
+  "jsonschema==4.25.1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "coverage>=7.6,<8",
+  "mypy>=1.11,<2",
+  "ruff>=0.6,<1",
+]
+analysis = [
+  "Pillow>=10,<13",
+]
+security = [
+  "pip-audit>=2.7,<3",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+files = [
+  "shared/schema_validation.py",
+  "shared/solver_blinding.py",
+  "orchestrator/scripts/driver_helpers.py",
+]
+ignore_missing_imports = true
+check_untyped_defs = true
+warn_unused_ignores = false
+follow_imports = "skip"
+
+[tool.coverage.run]
+branch = true
+source = ["orchestrator/scripts", "shared", "runtime"]
+
+[tool.coverage.report]
+skip_empty = true
+fail_under = 0
