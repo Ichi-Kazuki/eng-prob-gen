@@ -588,7 +588,65 @@ class ProductionValidationRouting(unittest.TestCase):
         legacy = copy.deepcopy(item)
         legacy["agent_version"] = "Written Expression Generator v2.0"
         legacy["provenance"]["agent_version"] = "Written Expression Generator v2.0"
-        self.assertFalse(module.mutation_safety_required(legacy))
+        self.assertTrue(module.mutation_safety_required(legacy))
+        self.assertFalse(
+            module.mutation_safety_required(legacy, validation_mode="legacy_v20")
+        )
+
+    def test_v20_downgrade_cannot_bypass_current_validation(self) -> None:
+        module = self.validator_module()
+        item = json.loads(
+            (ROOT / "analysis" / "we_v2_1_2_grammar_pilot" / "runtime" / "generator" / "we_v2.1.2_grammar_pilot_001.json").read_text(encoding="utf-8")
+        )
+        item["agent_version"] = "Written Expression Generator v2.0"
+        item["provenance"]["agent_version"] = "Written Expression Generator v2.0"
+        config = module.load_json(module.CONFIG_PATH)
+        grammar = module.load_json(module.GRAMMAR_SPEC_PATH)
+        taxonomy = module.load_json(module.TAXONOMY_PATH)
+        targets = {entry["id"] for entry in taxonomy["primary_targets"]}
+        error_types = {
+            entry["id"]
+            for entry in grammar["tested_error_types"]
+            if entry["id"] not in {"fragment", "wrong_complementation"}
+        }
+
+        with mock.patch.object(module, "validate_mutation_item", wraps=module.validate_mutation_item) as checked:
+            result = module.validate_contract(item, config, targets, error_types)
+        self.assertTrue(checked.called)
+        self.assertFalse(result["valid"])
+        self.assertTrue(any("current validation requires" in error for error in result["errors"]))
+
+        with mock.patch.object(module, "validate_mutation_item") as skipped:
+            legacy_result = module.validate_contract(
+                item,
+                config,
+                targets,
+                error_types,
+                validation_mode="legacy_v20",
+            )
+        self.assertFalse(skipped.called)
+        self.assertFalse(any("current validation requires" in error for error in legacy_result["errors"]))
+
+    def test_provenance_agent_version_mismatch_is_rejected(self) -> None:
+        module = self.validator_module()
+        item = json.loads(
+            (ROOT / "analysis" / "we_v2_1_2_grammar_pilot" / "runtime" / "generator" / "we_v2.1.2_grammar_pilot_001.json").read_text(encoding="utf-8")
+        )
+        item["provenance"]["agent_version"] = "Written Expression Generator v2.0"
+        config = module.load_json(module.CONFIG_PATH)
+        grammar = module.load_json(module.GRAMMAR_SPEC_PATH)
+        taxonomy = module.load_json(module.TAXONOMY_PATH)
+        result = module.validate_contract(
+            item,
+            config,
+            {entry["id"] for entry in taxonomy["primary_targets"]},
+            {entry["id"] for entry in grammar["tested_error_types"]},
+        )
+        self.assertFalse(result["valid"])
+        self.assertTrue(
+            any("provenance.agent_version must exactly match" in error for error in result["errors"])
+            or any("provenance" in error for error in result["errors"])
+        )
 
     def test_v21_batch_ids_cannot_opt_out_of_mutation_safety(self) -> None:
         module = self.validator_module()

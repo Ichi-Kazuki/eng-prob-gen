@@ -32,7 +32,7 @@ import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
+from typing import Iterable, Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from shared.json_io import (  # noqa: E402
@@ -64,6 +64,11 @@ __all__ = [
     "validate_candidate_invariants",
     "load_candidate_state",
     "save_candidate_state",
+    "acceptance_policy_record",
+    "validate_acceptance_policy_record",
+    "expected_stage_item_ids",
+    "validate_stage_item_ids",
+    "state_snapshot_digest",
     "solver_batch_state_fingerprint",
     "build_solver_batch_artifact",
     "validate_solver_batch_artifact",
@@ -115,6 +120,11 @@ SOLVER_BATCH_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "solver_inpu
 STATE_SCHEMA_VERSION = 2
 RUN_MANIFEST_SCHEMA_VERSION = 1
 STATE_MANIFEST_KEY = "run_manifest"
+ACCEPTANCE_POLICY_SCHEMA_VERSION = 1
+ACCEPTANCE_POLICY_FIELDS = (
+    "allowed_solver_confidence",
+    "block_source_similarity_risk",
+)
 
 
 # ---------------------------------------------------------------------------
@@ -544,6 +554,65 @@ def strip_internal_test_keys(item: dict) -> dict:
     return {k: v for k, v in item.items() if not k.startswith(INTERNAL_TEST_KEY_PREFIX)}
 
 
+def expected_stage_item_ids(candidates: dict[str, "Candidate"], stage: str) -> set[str]:
+    """Return the exact items awaiting one external stage.
+
+    Retryable stage-failure states are included because the next output for
+    that same stage is the explicit retry operation.  No other state is
+    eligible for silent partial application.
+    """
+    target_state = {
+        "reviewer": State.REVIEWING,
+        "solver": State.SOLVING,
+        "revision": State.REVISE_REQUIRED,
+    }.get(stage)
+    if target_state is None:
+        raise ValueError(f"unknown batch stage: {stage!r}")
+    expected = {
+        item_id for item_id, candidate in candidates.items()
+        if candidate.state == target_state
+    }
+    if stage == "revision":
+        retry_stage = "generator"
+    else:
+        retry_stage = stage
+    expected.update(
+        item_id
+        for item_id, candidate in candidates.items()
+        if (
+            candidate.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
+            and candidate.failure is not None
+            and candidate.failure.stage == retry_stage
+            and (stage != "solver" or candidate.solver_input is not None)
+        )
+    )
+    return expected
+
+
+def validate_stage_item_ids(
+    candidates: dict[str, "Candidate"],
+    supplied_item_ids: Iterable[str],
+    stage: str,
+    *,
+    allow_partial: bool = False,
+) -> list[str]:
+    """Validate a stage output against its pending item set.
+
+    Missing or unexpected records are accepted only through an explicit
+    partial-mode opt-in. The normal pipeline always uses exact-set mode.
+    """
+    expected = expected_stage_item_ids(candidates, stage)
+    actual = set(supplied_item_ids)
+    missing = sorted(expected - actual)
+    unexpected = sorted(actual - expected)
+    errors: list[str] = []
+    if missing and not allow_partial:
+        errors.append(f"{stage} output is missing expected item_id(s): {missing}")
+    if unexpected and not allow_partial:
+        errors.append(f"{stage} output contains unexpected item_id(s): {unexpected}")
+    return errors
+
+
 # ---------------------------------------------------------------------------
 # Failure classification (spec section 16)
 # ---------------------------------------------------------------------------
@@ -757,6 +826,102 @@ def derive_slot_requirements(generator_item: dict) -> dict:
 # Consensus rule (spec sections 8-9)
 # ---------------------------------------------------------------------------
 
+
+def _acceptance_policy_payload(config: dict) -> dict:
+    """Return the minimal policy projection that controls AUTO_ACCEPT.
+
+    The full run config remains in the run manifest.  Candidate state stores
+    only the policy fields that affect consensus so acceptance can be replayed
+    independently of future, unrelated config changes.
+    """
+    auto_accept = config.get("auto_accept")
+    if not isinstance(auto_accept, dict):
+        raise ValueError("auto_accept config must be an object")
+    payload: dict[str, object] = {
+        "policy_schema_version": ACCEPTANCE_POLICY_SCHEMA_VERSION,
+    }
+    for field_name in ACCEPTANCE_POLICY_FIELDS:
+        values = auto_accept.get(field_name)
+        if (
+            not isinstance(values, list)
+            or not values
+            or any(not isinstance(value, str) or not value.strip() for value in values)
+        ):
+            raise ValueError(f"auto_accept.{field_name} must be a non-empty list of strings")
+        # Consensus uses sets, so order is not semantically meaningful.  A
+        # canonical sorted projection makes the stored policy hash stable.
+        payload[field_name] = sorted(set(values))
+    return payload
+
+
+def acceptance_policy_record(config: dict) -> dict:
+    """Build the signed-by-binding (but not cryptographically authenticated)
+    policy record stored when a Candidate becomes ACCEPTED."""
+    payload = _acceptance_policy_payload(config)
+    return {
+        **payload,
+        "policy_sha256": canonical_json_sha256(payload),
+    }
+
+
+def validate_acceptance_policy_record(
+    record: object, expected_config: dict | None = None
+) -> list[str]:
+    """Validate a stored acceptance policy and optionally bind it to a run.
+
+    The run manifest is the immutable binding for current-format state.  A
+    self-consistent but different policy is therefore still rejected when an
+    expected run config is supplied.
+    """
+    if not isinstance(record, dict):
+        return ["acceptance_policy must be an object"]
+    expected_keys = set(ACCEPTANCE_POLICY_FIELDS) | {
+        "policy_schema_version",
+        "policy_sha256",
+    }
+    unexpected = sorted(set(record) - expected_keys)
+    missing = sorted(expected_keys - set(record))
+    errors = [f"acceptance_policy contains unexpected field(s): {unexpected}"] if unexpected else []
+    if missing:
+        errors.append(f"acceptance_policy is missing field(s): {', '.join(missing)}")
+    if record.get("policy_schema_version") != ACCEPTANCE_POLICY_SCHEMA_VERSION:
+        errors.append("acceptance_policy has an unsupported policy_schema_version")
+    for field_name in ACCEPTANCE_POLICY_FIELDS:
+        values = record.get(field_name)
+        if (
+            not isinstance(values, list)
+            or not values
+            or any(not isinstance(value, str) or not value.strip() for value in values)
+            or values != sorted(set(values))
+        ):
+            errors.append(
+                f"acceptance_policy.{field_name} must be a non-empty sorted list of unique strings"
+            )
+    payload = {key: record.get(key) for key in ("policy_schema_version", *ACCEPTANCE_POLICY_FIELDS)}
+    if record.get("policy_sha256") != canonical_json_sha256(payload):
+        errors.append("acceptance_policy policy_sha256 mismatch")
+    if expected_config is not None:
+        try:
+            expected = acceptance_policy_record(expected_config)
+        except (TypeError, ValueError, KeyError) as exc:
+            errors.append(f"expected acceptance policy could not be built: {exc}")
+        else:
+            if record != expected:
+                errors.append("acceptance_policy does not match the persisted run policy snapshot")
+    return errors
+
+
+def _config_with_acceptance_policy(config: dict, record: dict) -> dict:
+    """Return a copy of config whose consensus inputs are the stored policy."""
+    errors = validate_acceptance_policy_record(record)
+    if errors:
+        raise ValueError("invalid acceptance policy: " + "; ".join(errors))
+    replay_config = copy.deepcopy(config)
+    replay_config["auto_accept"] = {
+        field_name: list(record[field_name]) for field_name in ACCEPTANCE_POLICY_FIELDS
+    }
+    return replay_config
+
 @dataclass
 class ConsensusResult:
     auto_accept: bool
@@ -864,6 +1029,13 @@ class Candidate:
     # when a later revision changes the current item's metadata.
     planned_slot: Optional[dict] = None
     consensus: Optional[ConsensusResult] = None
+    # Set only when the consensus decision routes to ACCEPTED.  This is the
+    # exact policy projection used for that decision, bound to the run
+    # manifest when the state uses the current persistence format.
+    acceptance_policy: Optional[dict] = None
+    # Unversioned historical state can be read for migration/replay, but must
+    # remain visibly distinct from a fully evidenced current-format run.
+    legacy_compatibility: bool = False
     failure: Optional[FailureInfo] = None
     notes: list[str] = field(default_factory=list)
     review_history: list[dict] = field(default_factory=list)
@@ -915,6 +1087,8 @@ def candidate_to_dict(candidate: Candidate) -> dict:
             "failed_conditions": candidate.consensus.failed_conditions,
             "disagreement_reasons": candidate.consensus.disagreement_reasons,
         },
+        "acceptance_policy": candidate.acceptance_policy,
+        "legacy_compatibility": candidate.legacy_compatibility,
         "failure": None if candidate.failure is None else {
             "kind": candidate.failure.kind,
             "stage": candidate.failure.stage,
@@ -941,6 +1115,8 @@ def dict_to_candidate(
     missing = [key for key in required if key not in data]
     if missing:
         raise ValueError(f"candidate state entry is missing required field(s): {', '.join(missing)}")
+    if not legacy_mode and "state_history" not in data:
+        raise ValueError("current-format candidate state entry is missing state_history")
     candidate = Candidate(
         item_id=data["item_id"],
         concept_id=data["concept_id"],
@@ -970,6 +1146,10 @@ def dict_to_candidate(
             failed_conditions=consensus.get("failed_conditions", []),
             disagreement_reasons=consensus.get("disagreement_reasons", []),
         )
+    candidate.acceptance_policy = data.get("acceptance_policy")
+    candidate.legacy_compatibility = data.get("legacy_compatibility", False)
+    if legacy_mode:
+        candidate.legacy_compatibility = True
     failure = data.get("failure")
     if failure is not None:
         candidate.failure = FailureInfo(
@@ -1010,6 +1190,8 @@ def validate_candidate_invariants(
         errors.append("concept_id must be a non-empty string")
     if not isinstance(candidate.section, str) or not candidate.section:
         errors.append("section must be a non-empty string")
+    if not isinstance(candidate.legacy_compatibility, bool):
+        errors.append("legacy_compatibility must be boolean")
 
     if candidate.state not in VALID_STATES:
         errors.append(f"state {candidate.state!r} is not a valid State value")
@@ -1025,8 +1207,11 @@ def validate_candidate_invariants(
             errors.append(
                 f"state_history last state {history[-1]!r} does not match current state {candidate.state!r}"
             )
-        if history[0] != State.GENERATED:
+        if not legacy_mode and history[0] != State.GENERATED:
             errors.append("state_history must start with GENERATED")
+        # An unversioned state document is readable only through the
+        # compatibility path.  Its truncated history is deliberately not
+        # upgraded into a claim of complete transition provenance.
         for previous, current in zip(history, history[1:]):
             if previous in VALID_STATES and current not in ALLOWED_TRANSITIONS[previous]:
                 errors.append(f"invalid state transition in state_history: {previous} -> {current}")
@@ -1153,6 +1338,9 @@ def validate_candidate_invariants(
                             "derived from generator_item"
                         )
 
+    if candidate.state != State.ACCEPTED and candidate.acceptance_policy is not None:
+        errors.append("acceptance_policy is only allowed for ACCEPTED candidates")
+
     if candidate.state == State.ACCEPTED:
         if candidate.generator_item is None or candidate.reviewer_item is None or candidate.solver_item is None:
             errors.append("ACCEPTED requires generator_item, reviewer_item, and solver_item")
@@ -1165,6 +1353,23 @@ def validate_candidate_invariants(
         if candidate.reviewer_item is not None and candidate.reviewer_item.get("verdict") != "PASS":
             errors.append("ACCEPTED requires reviewer verdict PASS")
 
+        replay_config = config
+        if candidate.acceptance_policy is None:
+            if not legacy_mode:
+                errors.append("current-format ACCEPTED state requires acceptance_policy metadata")
+        else:
+            policy_errors = validate_acceptance_policy_record(
+                candidate.acceptance_policy,
+                None if legacy_mode else config,
+            )
+            errors.extend(policy_errors)
+            if not policy_errors:
+                try:
+                    replay_config = _config_with_acceptance_policy(
+                        config, candidate.acceptance_policy
+                    )
+                except (TypeError, ValueError, KeyError) as exc:
+                    errors.append(f"stored acceptance policy cannot be replayed: {exc}")
         if (
             isinstance(candidate.generator_item, dict)
             and isinstance(candidate.reviewer_item, dict)
@@ -1176,7 +1381,7 @@ def validate_candidate_invariants(
                     candidate.generator_item,
                     candidate.reviewer_item,
                     candidate.solver_item,
-                    config,
+                    replay_config,
                 )
             except Exception as exc:  # persisted state must never fail open
                 errors.append(
@@ -1312,6 +1517,29 @@ def save_candidate_state(
     candidates: dict[str, Candidate],
     run_manifest: dict | None = None,
 ) -> None:
+    if not isinstance(candidates, dict):
+        raise JsonPersistenceError("candidate state must be an object keyed by item_id")
+    validation_config = load_config()
+    legacy_mode = run_manifest is None
+    if run_manifest is not None:
+        try:
+            validated_manifest = validate_run_manifest(run_manifest)
+            validation_config = config_from_run_manifest(validated_manifest)
+        except (KeyError, TypeError, ValueError) as exc:
+            raise JsonPersistenceError(f"candidate state run manifest is invalid: {exc}") from exc
+    for item_id, candidate in candidates.items():
+        if not isinstance(item_id, str) or not isinstance(candidate, Candidate):
+            raise JsonPersistenceError("candidate state entries must be Candidate objects keyed by string item_id")
+        if candidate.item_id != item_id:
+            raise JsonPersistenceError(
+                f"candidate state key {item_id!r} does not match item_id {candidate.item_id!r}"
+            )
+        try:
+            validate_candidate_invariants(candidate, config=validation_config, legacy_mode=legacy_mode)
+        except (TypeError, ValueError) as exc:
+            raise JsonPersistenceError(
+                f"candidate state entry {item_id!r} failed invariant validation: {exc}"
+            ) from exc
     serialized = {item_id: candidate_to_dict(candidate) for item_id, candidate in candidates.items()}
     if run_manifest is None:
         # Direct library callers and historical fixture builders retain the
@@ -1334,6 +1562,27 @@ def load_state_manifest(path: Path) -> dict | None:
     return load_state_bundle(path)[1]
 
 
+def state_snapshot_digest(
+    candidates: dict[str, Candidate], run_manifest: dict | None = None
+) -> str:
+    """Digest the canonical persisted Candidate projection.
+
+    The same digest binds final artifacts and Solver batches to the exact
+    state snapshot from which they were derived. Finalization may include the
+    immutable run manifest as well, because the manifest is part of the
+    versioned state document even when candidate fields are unchanged.
+    """
+    state_projection: dict[str, object] = {
+        "candidates": {
+            item_id: candidate_to_dict(candidates[item_id])
+            for item_id in sorted(candidates)
+        }
+    }
+    if run_manifest is not None:
+        state_projection[STATE_MANIFEST_KEY] = validate_run_manifest(run_manifest)
+    return canonical_json_sha256(state_projection)
+
+
 def solver_batch_state_fingerprint(candidates: dict[str, Candidate]) -> str:
     """Fingerprint the persisted candidate document used to build a batch.
 
@@ -1342,11 +1591,7 @@ def solver_batch_state_fingerprint(candidates: dict[str, Candidate]) -> str:
     Solver input changes.  The state file remains the source of truth; this is
     only a binding for the derived artifact.
     """
-    state_projection = {
-        item_id: candidate_to_dict(candidates[item_id])
-        for item_id in sorted(candidates)
-    }
-    return canonical_json_sha256(state_projection)
+    return state_snapshot_digest(candidates)
 
 
 def build_solver_batch_artifact(
@@ -1802,6 +2047,9 @@ def process_solver_stage(
     candidate.failure = None
     result = evaluate_consensus(candidate.generator_item, candidate.reviewer_item, solver_item, config)
     candidate.consensus = result
+    candidate.acceptance_policy = (
+        acceptance_policy_record(config) if result.routing == State.ACCEPTED else None
+    )
     candidate.transition(result.routing, f"consensus routing: {result.disagreement_reasons or 'auto_accept'}")
     return candidate
 
@@ -1888,6 +2136,8 @@ def build_qa_audit(candidate: Candidate, versions: dict) -> dict:
             "failed_conditions": candidate.consensus.failed_conditions,
             "disagreement_reasons": candidate.consensus.disagreement_reasons,
         },
+        "acceptance_policy": candidate.acceptance_policy,
+        "legacy_compatibility": candidate.legacy_compatibility,
         "failure": None if candidate.failure is None else {
             "kind": candidate.failure.kind,
             "stage": candidate.failure.stage,
@@ -1935,6 +2185,8 @@ def build_provenance_record(
             "confidence": candidate.solver_item.get("confidence"),
         },
         "consensus": candidate.state == State.ACCEPTED,
+        "acceptance_policy": candidate.acceptance_policy,
+        "legacy_compatibility": candidate.legacy_compatibility,
         # ``batch_slot`` is retained as the compatibility name and now has a
         # stable, explicit meaning: the slot assigned at initial generation.
         "batch_slot": planned_slot,

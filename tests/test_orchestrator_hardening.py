@@ -289,7 +289,7 @@ class FeedbackRegenerationTests(unittest.TestCase):
                     driver.save_state({candidate.item_id: candidate})
                     with mock.patch.object(driver, "atomic_write_json", side_effect=OSError("disk full")):
                         with self.assertRaises(OSError):
-                            driver.cmd_apply_review(str(reviewer_path), "rebuild")
+                            driver.cmd_apply_review(str(reviewer_path), "rebuild", allow_partial=True)
 
                     saved = driver.load_state()[candidate.item_id]
                     self.assertEqual(saved.state, core.State.REVISE_REQUIRED)
@@ -360,11 +360,11 @@ class SolverArtifactConsistencyTests(unittest.TestCase):
                     stale_errors = core.validate_solver_batch_artifact(stale, current, core.load_config())
                     self.assertTrue(any("stale" in error for error in stale_errors))
                     with self.assertRaisesRegex(ValueError, "stale"):
-                        driver.cmd_apply_solver(str(solver_path))
+                        driver.cmd_apply_solver(str(solver_path), allow_partial=True)
 
                     # A fresh process can recover solely from committed state.
                     driver.cmd_prepare_solver_batch()
-                    driver.cmd_apply_solver(str(solver_path))
+                    driver.cmd_apply_solver(str(solver_path), allow_partial=True)
                     self.assertEqual(driver.load_state()[candidate.item_id].state, core.State.ACCEPTED)
 
     def test_state_save_failure_does_not_publish_a_new_solver_artifact_in_both_drivers(self) -> None:

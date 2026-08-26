@@ -97,6 +97,35 @@ def _is_sha256(value: object) -> bool:
     )
 
 
+def _artifact_set_sha256(files: Mapping[str, Mapping[str, str]]) -> str:
+    return canonical_json_sha256({
+        "files": dict(files),
+        "required_artifacts": sorted(files),
+    })
+
+
+def _validate_artifact_identity(
+    value: object, finalize_id: str, state_digest: object
+) -> None:
+    """Validate optional run-level identity fields in one artifact payload."""
+    if state_digest is None:
+        return
+    if not _is_sha256(state_digest):
+        raise JsonPersistenceError("state_digest must be a sha256 digest")
+    if not isinstance(value, dict):
+        raise JsonPersistenceError(
+            "state-bound finalization artifacts must be JSON objects"
+        )
+    if value.get("finalize_id") != finalize_id:
+        raise JsonPersistenceError(
+            "state-bound finalization artifact has a mismatched finalize_id"
+        )
+    if value.get("state_digest") != state_digest:
+        raise JsonPersistenceError(
+            "state-bound finalization artifact has a mismatched state_digest"
+        )
+
+
 def publish_json_bundle(
     directory: Path,
     artifacts: Mapping[str, tuple[str, object]],
@@ -125,7 +154,10 @@ def publish_json_bundle(
         raise ValueError("at least one artifact is required")
     if not manifest_name or Path(manifest_name).name != manifest_name:
         raise ValueError(f"manifest filename must be a basename: {manifest_name!r}")
-    reserved_metadata_keys = {"manifest_version", "status", "finalize_id", "files", "started_at"}
+    reserved_metadata_keys = {
+        "manifest_version", "status", "finalize_id", "files", "started_at",
+        "required_artifacts", "artifact_set_sha256",
+    }
     if metadata is not None and reserved_metadata_keys.intersection(metadata):
         raise ValueError("finalization metadata contains a reserved manifest key")
 
@@ -134,6 +166,22 @@ def publish_json_bundle(
     manifest_files: dict[str, dict[str, str]] = {}
     artifact_filenames: set[str] = set()
     try:
+        # Invalidate any previous COMPLETE marker before staging. If an
+        # artifact cannot even be serialized, a stale complete marker must not
+        # be mistaken for the new finalization attempt.
+        provisional = {
+            "manifest_version": 1,
+            "status": "IN_PROGRESS",
+            "finalize_id": finalize_id,
+            "files": {},
+            "required_artifacts": [],
+            "artifact_set_sha256": _artifact_set_sha256({}),
+            "started_at": datetime.now(timezone.utc).isoformat(),
+        }
+        if metadata is not None:
+            provisional.update(dict(metadata))
+        atomic_write_json(manifest_path, provisional)
+
         for artifact_key, (filename, value) in artifacts.items():
             if not isinstance(artifact_key, str) or not artifact_key.strip():
                 raise ValueError("artifact key must be a non-empty string")
@@ -142,6 +190,11 @@ def publish_json_bundle(
             if filename in artifact_filenames or filename == manifest_name:
                 raise ValueError(f"artifact filename is duplicated or reserved: {filename!r}")
             artifact_filenames.add(filename)
+            _validate_artifact_identity(
+                value,
+                finalize_id,
+                None if metadata is None else metadata.get("state_digest"),
+            )
             staged_path = staging_dir / filename
             atomic_write_json(staged_path, value)
             manifest_files[artifact_key] = {
@@ -155,6 +208,7 @@ def publish_json_bundle(
             "finalize_id": finalize_id,
             "files": manifest_files,
             "required_artifacts": sorted(manifest_files),
+            "artifact_set_sha256": _artifact_set_sha256(manifest_files),
             "started_at": datetime.now(timezone.utc).isoformat(),
         }
         if metadata is not None:
@@ -184,6 +238,7 @@ def complete_json_bundle(
         raise ValueError(f"manifest filename must be a basename: {manifest_name!r}")
     files = manifest.get("files")
     required_artifacts = manifest.get("required_artifacts")
+    artifact_set_sha256 = manifest.get("artifact_set_sha256")
     if (
         manifest.get("manifest_version") != 1
         or manifest.get("status") != "IN_PROGRESS"
@@ -193,6 +248,8 @@ def complete_json_bundle(
         or not all(isinstance(key, str) for key in required_artifacts)
         or not all(isinstance(key, str) for key in files)
         or set(required_artifacts) != set(files)
+        or not _is_sha256(artifact_set_sha256)
+        or artifact_set_sha256 != _artifact_set_sha256(files)
     ):
         raise JsonPersistenceError("finalization manifest is not an in-progress bundle")
     current_manifest = read_json(target_dir / manifest_name)
@@ -213,6 +270,10 @@ def complete_json_bundle(
         if not path.is_file() or _file_sha256(path) != expected_hash:
             raise JsonPersistenceError(
                 f"finalization artifact {path} is missing or does not match the staged hash"
+            )
+        if "state_digest" in manifest:
+            _validate_artifact_identity(
+                read_json(path), manifest.get("finalize_id"), manifest.get("state_digest")
             )
 
     completed = dict(manifest)
@@ -241,6 +302,7 @@ def validate_complete_json_bundle(
         return ["finalization manifest is absent or not COMPLETE"]
     files = manifest.get("files")
     required_artifacts = manifest.get("required_artifacts")
+    artifact_set_sha256 = manifest.get("artifact_set_sha256")
     if (
         not isinstance(files, dict)
         or not files
@@ -248,6 +310,8 @@ def validate_complete_json_bundle(
         or not all(isinstance(key, str) for key in required_artifacts)
         or not all(isinstance(key, str) for key in files)
         or set(required_artifacts) != set(files)
+        or not _is_sha256(artifact_set_sha256)
+        or artifact_set_sha256 != _artifact_set_sha256(files)
     ):
         return ["finalization manifest contains no files"]
     errors: list[str] = []
@@ -269,6 +333,15 @@ def validate_complete_json_bundle(
             errors.append(f"finalization artifact {path} is missing")
         elif _file_sha256(path) != expected_hash:
             errors.append(f"finalization artifact {path} does not match the manifest hash")
+        elif "state_digest" in manifest:
+            try:
+                _validate_artifact_identity(
+                    read_json(path), manifest.get("finalize_id"), manifest.get("state_digest")
+                )
+            except (JsonPersistenceError, TypeError, ValueError) as exc:
+                errors.append(
+                    f"finalization artifact {path} has inconsistent state identity: {exc}"
+                )
     return errors
 
 

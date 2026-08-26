@@ -22,20 +22,22 @@ Subcommands (each reads/writes runs/pilot/candidates_state.json):
       run process_generation_output(). Prints which item_ids are ready for
       Reviewer round 1 and which failed schema validation.
 
-  apply_review <reviewer_output.json> <round_label>
+  apply_review <reviewer_output.json> <round_label> [--allow-partial]
       Feed a Reviewer output file (item_id-keyed) to process_review_output()
-      for every candidate currently in REVIEWING. Prints routing summary and
-      writes runs/pilot/round_feedback_<round_label>.json (allowlisted
-      Generator feedback for any REVISE_REQUIRED candidates).
+      for every expected candidate. Output IDs must match the pending batch by
+      default; ``--allow-partial`` is an explicit compatibility opt-in. Prints
+      routing summary and writes runs/pilot/round_feedback_<round_label>.json
+      (allowlisted Generator feedback for any REVISE_REQUIRED candidates).
 
   rebuild_feedback <round_label>
       Rebuild the round feedback artifact idempotently from persisted
       Candidate Reviewer history after an earlier artifact write failed.
 
-  apply_revision <generator_output.json>
+  apply_revision <generator_output.json> [--allow-partial]
       Feed a revised Generator output file to process_generation_output()
-      for every candidate currently in REVISE_REQUIRED, moving it back to
-      REVIEWING (or VALIDATION_FAILED) for the next Reviewer round.
+      for every expected candidate, moving it back to REVIEWING (or
+      VALIDATION_FAILED) for the next Reviewer round. Partial application
+      requires the explicit ``--allow-partial`` opt-in.
 
   prepare_solver_batch
       Blind every candidate currently in SOLVING via the shared pure
@@ -43,18 +45,21 @@ Subcommands (each reads/writes runs/pilot/candidates_state.json):
       state first, and then rebuild the state-bound batch artifact at
       runs/pilot/solver_input_batch.json.
 
-  apply_solver <solver_output.json>
+  apply_solver <solver_output.json> [--allow-partial]
       Feed a Solver output file to process_solver_stage() for every
-      candidate currently in SOLVING. Prints final state tally.
+      candidate currently in SOLVING. Output IDs must match the pending batch
+      by default; partial application requires ``--allow-partial``. Prints
+      final state tally.
 
   finalize
-      Build provenance/accepted/manual-review/failure artifacts for ALL
-      candidates (terminal and non-terminal) and write them to
+      Build provenance/accepted/manual-review/failure artifacts for the
+      completed current-format terminal candidate set and write them to
       runs/pilot/pilot_provenance.json, pilot_accepted_items.json,
       pilot_manual_review.json, pilot_failure_items.json through a staged
       run bundle. Also appends MANUAL_REVIEW entries to
       runs/manual_review_queue.json via the existing
       append_manual_review_queue(), before committing the completion marker.
+      Unversioned legacy state must be migrated before finalization.
 
 Usage: python orchestrator/scripts/pilot_driver.py <subcommand> [args...]
        init ... --force-reset  (explicitly replace an existing state file)
@@ -76,6 +81,7 @@ from orchestrator import (  # noqa: E402
     State,
     SystemCallError,
     TERMINAL_STATES,
+    state_snapshot_digest,
     validate_final_record,
     blind_for_solver,
     build_manual_review_entry,
@@ -100,6 +106,7 @@ from orchestrator import (  # noqa: E402
     save_candidate_state,
     strip_internal_test_keys,
     validate_solver_batch_artifact,
+    validate_stage_item_ids,
 )
 from shared.json_io import (  # noqa: E402
     JsonPersistenceError,
@@ -202,12 +209,19 @@ def cmd_init(structure_path: str, we_path: str, *, force_reset: bool = False) ->
             print(f"  {i}: state={c.state} failure={c.failure}")
 
 
-def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
+def cmd_apply_review(
+    reviewer_path: str, round_label: str, *, allow_partial: bool = False
+) -> None:
     config = load_state_config()
     reviewer_items = load_items_by_id(Path(reviewer_path), f"reviewer round {round_label}")
 
-    routed: dict[str, list[str]] = {"SOLVING": [], "REVISE_REQUIRED": [], "REJECTED": [], "DISCARDED": [], "VALIDATION_FAILED": [], "GENERATION_FAILED": [], "skipped_not_reviewing": []}
+    routed: dict[str, list[str]] = {}
     with state_transaction() as candidates:
+        batch_errors = validate_stage_item_ids(
+            candidates, reviewer_items, "reviewer", allow_partial=allow_partial
+        )
+        if batch_errors:
+            raise ValueError("refusing Reviewer output: " + "; ".join(batch_errors))
         for item_id, c in candidates.items():
             if (
                 c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
@@ -216,10 +230,7 @@ def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
                 and item_id in reviewer_items
             ):
                 c = retry_failed_stage(c, config)
-            if c.state != State.REVIEWING:
-                continue
-            if item_id not in reviewer_items:
-                routed["skipped_not_reviewing"].append(item_id)
+            if c.state != State.REVIEWING or item_id not in reviewer_items:
                 continue
             c = apply_review_result(c, reviewer_items[item_id], round_label, config, process_review_output)
             routed.setdefault(c.state, []).append(item_id)
@@ -230,7 +241,8 @@ def cmd_apply_review(reviewer_path: str, round_label: str) -> None:
     feedback_path = PILOT_DIR / f"round_feedback_{round_label}.json"
     atomic_write_json(feedback_path, feedback_document)
 
-    print(f"Reviewer round '{round_label}' applied to {sum(len(v) for v in routed.values())} candidates.")
+    applied_count = sum(len(ids) for ids in routed.values())
+    print(f"Reviewer round '{round_label}' applied: {applied_count} (supplied: {len(reviewer_items)}).")
     for state, ids in routed.items():
         if ids:
             print(f"  {state} ({len(ids)}): {sorted(ids)}")
@@ -251,13 +263,17 @@ def cmd_rebuild_feedback(round_label: str) -> None:
     )
 
 
-def cmd_apply_revision(generator_path: str) -> None:
+def cmd_apply_revision(generator_path: str, *, allow_partial: bool = False) -> None:
     config = load_state_config()
     revised_items = load_items_by_id(Path(generator_path), "generator revision round")
 
     updated = []
-    skipped = []
     with state_transaction() as candidates:
+        batch_errors = validate_stage_item_ids(
+            candidates, revised_items, "revision", allow_partial=allow_partial
+        )
+        if batch_errors:
+            raise ValueError("refusing Generator revision output: " + "; ".join(batch_errors))
         for item_id, gitem in revised_items.items():
             c = candidates.get(item_id)
             is_revision = c is not None and c.state == State.REVISE_REQUIRED
@@ -268,8 +284,9 @@ def cmd_apply_revision(generator_path: str) -> None:
                 and c.failure.stage == "generator"
             )
             if c is None or not (is_revision or is_generator_retry):
-                skipped.append(item_id)
-                continue
+                if allow_partial:
+                    continue
+                raise ValueError(f"revision item_id {item_id!r} is not currently eligible")
             if is_generator_retry:
                 c = retry_failed_stage(c, config)
             else:
@@ -288,8 +305,6 @@ def cmd_apply_revision(generator_path: str) -> None:
             updated.append(item_id)
 
     print(f"Applied revision to {len(updated)} candidate(s): {sorted(updated)}")
-    if skipped:
-        print(f"Skipped (not in REVISE_REQUIRED, or no matching candidate): {sorted(skipped)}")
     ready = sorted(i for i in updated if candidates[i].state == State.REVIEWING)
     print(f"Ready for next Reviewer round ({len(ready)}): {ready}")
     print(f"Current tally: {state_tally(candidates)}")
@@ -363,13 +378,17 @@ def cmd_prepare_solver_batch() -> None:
     print(f"item_ids: {sorted(solving.keys())}")
 
 
-def cmd_apply_solver(solver_path: str) -> None:
+def cmd_apply_solver(solver_path: str, *, allow_partial: bool = False) -> None:
     config = load_state_config()
     solver_items = load_items_by_id(Path(solver_path), "solver output")
 
     routed: dict[str, list[str]] = {}
-    missing = []
     with state_transaction() as candidates:
+        batch_errors = validate_stage_item_ids(
+            candidates, solver_items, "solver", allow_partial=allow_partial
+        )
+        if batch_errors:
+            raise ValueError("refusing Solver output: " + "; ".join(batch_errors))
         try:
             batch_artifact = read_json(PILOT_DIR / "solver_input_batch.json")
         except JsonPersistenceError as exc:
@@ -393,8 +412,9 @@ def cmd_apply_solver(solver_path: str) -> None:
                 continue
             s_item = solver_items.get(item_id)
             if s_item is None:
-                missing.append(item_id)
-                continue
+                if allow_partial:
+                    continue
+                raise ValueError(f"solver output is missing expected item_id {item_id!r}")
             c = process_solver_stage(
                 c,
                 config,
@@ -402,11 +422,10 @@ def cmd_apply_solver(solver_path: str) -> None:
                 precomputed_solver_input=c.solver_input,
             )
             routed.setdefault(c.state, []).append(item_id)
-    print(f"Solver output applied. Routing:")
+    applied_count = sum(len(ids) for ids in routed.values())
+    print(f"Solver output applied: {applied_count} (supplied: {len(solver_items)}). Routing:")
     for state, ids in routed.items():
         print(f"  {state} ({len(ids)}): {sorted(ids)}")
-    if missing:
-        print(f"MISSING solver record for SOLVING candidates: {sorted(missing)}")
     print(f"Current tally: {state_tally(candidates)}")
 
 
@@ -419,6 +438,15 @@ def cmd_finalize() -> None:
         else manifest_versions(run_manifest)
     )
     candidates = load_state()
+
+    legacy_candidates = sorted(
+        candidate.item_id for candidate in candidates.values() if candidate.legacy_compatibility
+    )
+    if legacy_candidates:
+        raise ValueError(
+            "pilot finalize refused; legacy compatibility state requires migration to the "
+            f"current state format: {legacy_candidates}"
+        )
 
     nonterminal = sorted(
         (candidate.item_id, candidate.state)
@@ -457,31 +485,41 @@ def cmd_finalize() -> None:
                 + "; ".join(final_errors)
             )
     run_id = finalization_id(candidates, versions)
+    state_digest = state_snapshot_digest(candidates, run_manifest=run_manifest)
     artifacts = {
         "provenance": ("pilot_provenance.json", {
             "pipeline_version": config["pipeline_version"],
             "finalize_id": run_id,
+            "state_digest": state_digest,
             "run_manifest": run_manifest,
             "items": provenance_records,
             "batch_summary": tracker.summary(),
         }),
-        "accepted": ("pilot_accepted_items.json", {"finalize_id": run_id, "items": accepted_items}),
-        "manual_review": ("pilot_manual_review.json", {"finalize_id": run_id, "items": manual_review_entries}),
-        "failures": ("pilot_failure_items.json", {"finalize_id": run_id, "items": failure_items}),
+        "accepted": ("pilot_accepted_items.json", {"finalize_id": run_id, "state_digest": state_digest, "items": accepted_items}),
+        "manual_review": ("pilot_manual_review.json", {"finalize_id": run_id, "state_digest": state_digest, "items": manual_review_entries}),
+        "failures": ("pilot_failure_items.json", {"finalize_id": run_id, "state_digest": state_digest, "items": failure_items}),
     }
     # Re-check and hold the state lock while publishing. A concurrent stage
     # update must make this snapshot stale rather than producing a mixed run.
     with exclusive_file_lock(STATE_PATH):
-        if finalization_id(load_state(), versions) != run_id:
+        current_candidates = load_state()
+        current_manifest = load_state_manifest(STATE_PATH) if run_manifest is not None else None
+        if (
+            finalization_id(current_candidates, versions) != run_id
+            or state_snapshot_digest(current_candidates, run_manifest=current_manifest) != state_digest
+        ):
             raise ValueError("pilot finalize snapshot is stale; rerun finalize")
-        if run_manifest is not None and load_state_manifest(STATE_PATH) != run_manifest:
+        if run_manifest is not None and current_manifest != run_manifest:
             raise ValueError("pilot run manifest changed; refusing mixed finalization")
         manifest = publish_json_bundle(
             PILOT_DIR,
             artifacts,
             finalize_id=run_id,
             manifest_name="pilot_finalize_manifest.json",
-            metadata={"manual_review_item_ids": sorted(entry["item_id"] for entry in manual_review_entries)},
+            metadata={
+                "state_digest": state_digest,
+                "manual_review_item_ids": sorted(entry["item_id"] for entry in manual_review_entries),
+            },
         )
 
         if manual_review_entries:
@@ -513,15 +551,27 @@ def main() -> int:
         args = [arg for arg in args if arg != "--force-reset"]
         cmd_init(*args, force_reset=bool(force_reset))
     elif cmd == "apply_review":
-        cmd_apply_review(*args)
+        allow_partial = args.count("--allow-partial")
+        if allow_partial > 1:
+            raise SystemExit("apply_review accepts --allow-partial at most once")
+        args = [arg for arg in args if arg != "--allow-partial"]
+        cmd_apply_review(*args, allow_partial=bool(allow_partial))
     elif cmd == "rebuild_feedback":
         cmd_rebuild_feedback(*args)
     elif cmd == "apply_revision":
-        cmd_apply_revision(*args)
+        allow_partial = args.count("--allow-partial")
+        if allow_partial > 1:
+            raise SystemExit("apply_revision accepts --allow-partial at most once")
+        args = [arg for arg in args if arg != "--allow-partial"]
+        cmd_apply_revision(*args, allow_partial=bool(allow_partial))
     elif cmd == "prepare_solver_batch":
         cmd_prepare_solver_batch()
     elif cmd == "apply_solver":
-        cmd_apply_solver(*args)
+        allow_partial = args.count("--allow-partial")
+        if allow_partial > 1:
+            raise SystemExit("apply_solver accepts --allow-partial at most once")
+        args = [arg for arg in args if arg != "--allow-partial"]
+        cmd_apply_solver(*args, allow_partial=bool(allow_partial))
     elif cmd == "finalize":
         cmd_finalize()
     else:

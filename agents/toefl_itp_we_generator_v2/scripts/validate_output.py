@@ -40,17 +40,53 @@ OUTPUT_SCHEMA_PATH = Path(__file__).resolve().parents[1] / "schema" / "written_e
 EVIDENCE_SCHEMA_PATH = Path(__file__).resolve().parents[1] / "schema" / "grammar_evidence.schema.json"
 _SCHEMA: dict[str, Any] | None = None
 MUTATION_SAFETY_AGENT_VERSION = "Written Expression Generator v2.1"
+LEGACY_AGENT_VERSION = "Written Expression Generator v2.0"
+LEGACY_VALIDATION_FLAG = "--legacy-v20"
 
 
-def mutation_safety_required(item: dict[str, Any]) -> bool:
-    """Require mutation safety for every current-generator item.
+def mutation_safety_required(
+    item: dict[str, Any], *, validation_mode: str = "current"
+) -> bool:
+    """Require mutation safety unless an explicit legacy profile is selected.
 
-    Provenance batch IDs are ordinary producer-supplied metadata and are not
-    an authenticity boundary.  They therefore cannot opt an item out of the
-    current safety and grammar-status checks.
+    ``agent_version`` is producer-supplied metadata.  It is useful for
+    diagnostics, but it is not an authenticity boundary and must not decide
+    which checks the current validator performs.  The only weaker path is the
+    explicitly requested legacy v2.0 profile.
     """
 
-    return item.get("agent_version") == MUTATION_SAFETY_AGENT_VERSION
+    if validation_mode not in {"current", "legacy_v20"}:
+        raise ValueError(f"unsupported validation mode: {validation_mode!r}")
+    return validation_mode == "current"
+
+
+def _validation_mode_errors(item: dict[str, Any], validation_mode: str) -> list[str]:
+    """Return version/profile errors without delegating policy to the item."""
+    agent_version = item.get("agent_version")
+    provenance = item.get("provenance")
+    errors: list[str] = []
+    if not isinstance(provenance, Mapping):
+        return ["provenance must be an object"]
+    if provenance.get("agent_version") != agent_version:
+        errors.append(
+            "provenance.agent_version must exactly match top-level agent_version"
+        )
+
+    if validation_mode == "current":
+        if agent_version != MUTATION_SAFETY_AGENT_VERSION:
+            errors.append(
+                "current validation requires "
+                f"agent_version {MUTATION_SAFETY_AGENT_VERSION!r}; "
+                f"got {agent_version!r}. Use {LEGACY_VALIDATION_FLAG} only for v2.0 artifacts."
+            )
+    elif validation_mode == "legacy_v20":
+        if agent_version != LEGACY_AGENT_VERSION:
+            errors.append(
+                f"{LEGACY_VALIDATION_FLAG} accepts only agent_version {LEGACY_AGENT_VERSION!r}"
+            )
+    else:
+        raise ValueError(f"unsupported validation mode: {validation_mode!r}")
+    return errors
 
 
 def output_schema() -> dict[str, Any]:
@@ -189,6 +225,8 @@ def validate_contract(
     targets: set[str],
     error_types: set[str],
     external_evidence: Mapping[str, Any] | None = None,
+    *,
+    validation_mode: str = "current",
 ) -> dict[str, Any]:
     item_id = item.get("item_id", "?") if isinstance(item, dict) else "?"
     if not isinstance(item, dict):
@@ -203,10 +241,13 @@ def validate_contract(
             "diagnostics": {},
         }
 
+    mode_errors = _validation_mode_errors(item, validation_mode)
+
     # This function owns semantic and deterministic checks only. Structural
     # required/type/enum/additional-property checks remain in the schema.
     result = validate_item(item, config, targets, error_types)
-    if mutation_safety_required(item):
+    result["errors"].extend(mode_errors)
+    if mutation_safety_required(item, validation_mode=validation_mode):
         bound_evidence: Mapping[str, bool] | None = None
         if external_evidence is not None:
             candidate_evidence = external_evidence.get("evidence")
@@ -265,15 +306,23 @@ def validate_contract(
 
 
 def main() -> int:
-    if len(sys.argv) not in {2, 3}:
-        print("Usage: python validate_output.py <items.json> [grammar_evidence.json]")
+    args = sys.argv[1:]
+    validation_mode = "current"
+    if args and args[0] == LEGACY_VALIDATION_FLAG:
+        validation_mode = "legacy_v20"
+        args = args[1:]
+    if len(args) not in {1, 2}:
+        print(
+            "Usage: python validate_output.py [--legacy-v20] "
+            "<items.json> [grammar_evidence.json]"
+        )
         return 2
     try:
-        path = Path(sys.argv[1])
+        path = Path(args[0])
         config = load_json(CONFIG_PATH)
         grammar = load_json(GRAMMAR_SPEC_PATH)
         taxonomy = load_json(TAXONOMY_PATH)
-        evidence_by_item = load_external_evidence(Path(sys.argv[2])) if len(sys.argv) == 3 else {}
+        evidence_by_item = load_external_evidence(Path(args[1])) if len(args) == 2 else {}
         targets = {x["id"] for x in taxonomy["primary_targets"]}
         error_types = {
             x["id"]
@@ -292,6 +341,7 @@ def main() -> int:
                     if isinstance(item, dict)
                     else None
                 ),
+                validation_mode=validation_mode,
             )
             for item in items
         ]

@@ -261,6 +261,7 @@ class StateAndDriverRegressions(unittest.TestCase):
     def test_leakage_failure_is_not_written_to_solver_batch(self) -> None:
         candidate = core.Candidate("leak-001", "leak-001", "Structure")
         candidate.state = core.State.SOLVING
+        candidate.state_history = [core.State.GENERATED, core.State.REVIEWING, core.State.SOLVING]
         candidate.generator_item = {"item_id": "leak-001", "section": "Structure"}
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -300,7 +301,7 @@ class StateAndDriverRegressions(unittest.TestCase):
                 reloaded = pilot_driver.load_state()[candidate.item_id]
                 self.assertIsNotNone(reloaded.solver_input)
                 self.assertEqual(reloaded.solver_input["item_id"], candidate.item_id)
-                pilot_driver.cmd_apply_solver(str(solver_path))
+                pilot_driver.cmd_apply_solver(str(solver_path), allow_partial=True)
                 final = pilot_driver.load_state()[candidate.item_id]
 
             self.assertEqual(final.state, core.State.ACCEPTED)
@@ -375,7 +376,7 @@ class StateAndDriverRegressions(unittest.TestCase):
                  mock.patch.object(validation_driver, "STATE_PATH", state_path):
                 validation_driver.save_state({stale.item_id: stale, current.item_id: current})
                 validation_driver.cmd_apply_review(
-                    str(ROOT / "analysis/reviewer_smoke_test.json"), "round-test"
+                    str(ROOT / "analysis/reviewer_smoke_test.json"), "round-test", allow_partial=True
                 )
                 feedback = json.loads(
                     (root / "validation_round_feedback_round-test.json").read_text(encoding="utf-8")
@@ -596,7 +597,7 @@ class StateAndDriverRegressions(unittest.TestCase):
                      mock.patch.object(driver, "STATE_PATH", state_path):
                     driver.save_state({candidate.item_id: candidate})
                     with mock.patch.object(core, "run_schema_validator", return_value=(True, "")):
-                        driver.cmd_apply_review(str(reviewer_path), "retry")
+                        driver.cmd_apply_review(str(reviewer_path), "retry", allow_partial=True)
                     self.assertEqual(driver.load_state()[candidate.item_id].state, core.State.SOLVING)
                     self.assertIsNone(driver.load_state()[candidate.item_id].failure)
 
@@ -931,7 +932,12 @@ class WrittenExpressionV2Regressions(unittest.TestCase):
                 self.assertEqual(result.returncode, 1)
                 self.assertIn(needle, result.stdout)
         valid = subprocess.run(
-            [sys.executable, str(ROOT / self.GENERATOR_VALIDATOR), str(ROOT / "analysis/we_v2/we_v2_smoke_items.json")],
+            [
+                sys.executable,
+                str(ROOT / self.GENERATOR_VALIDATOR),
+                "--legacy-v20",
+                str(ROOT / "analysis/we_v2/we_v2_smoke_items.json"),
+            ],
             cwd=ROOT,
             capture_output=True,
             text=True,

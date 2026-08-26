@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT / "agents" / "toefl_itp_we_generator_v2" / "scripts"
 
 import orchestrator as core  # noqa: E402
 from runtime.adapters import ClaudeRuntime, CodexRuntime, InvocationRequest  # noqa: E402
+from shared.json_io import JsonPersistenceError  # noqa: E402
 from shared.solver_blinding import canonical_solver_input  # noqa: E402
 from format_planner import get_official_profile  # noqa: E402
 
@@ -96,6 +97,7 @@ class RunManifestRegressionTests(unittest.TestCase):
             loaded, manifest = core.load_state_bundle(path)
         self.assertIsNone(manifest)
         self.assertEqual(loaded[candidate.item_id].state, core.State.GENERATED)
+        self.assertTrue(loaded[candidate.item_id].legacy_compatibility)
 
     def test_corrupt_manifest_hash_and_id_fail_closed(self) -> None:
         manifest = core.build_run_manifest(core.load_config())
@@ -114,7 +116,8 @@ class RunManifestRegressionTests(unittest.TestCase):
                     core.load_candidate_state(path)
 
     def test_run_snapshot_policy_is_used_for_accepted_validation(self) -> None:
-        manifest = core.build_run_manifest(core.load_config())
+        config = core.load_config()
+        manifest = core.build_run_manifest(config)
         candidate = accepted_candidate()
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "state.json"
@@ -124,6 +127,37 @@ class RunManifestRegressionTests(unittest.TestCase):
             with mock.patch.object(core, "load_config", return_value=changed):
                 loaded = core.load_candidate_state(path)
         self.assertEqual(loaded[candidate.item_id].state, core.State.ACCEPTED)
+        self.assertEqual(
+            loaded[candidate.item_id].acceptance_policy,
+            core.acceptance_policy_record(config),
+        )
+
+    def test_current_format_truncated_history_is_rejected(self) -> None:
+        config = core.load_config()
+        manifest = core.build_run_manifest(config)
+        candidate = accepted_candidate()
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "state.json"
+            core.save_candidate_state(path, {candidate.item_id: candidate}, run_manifest=manifest)
+            document = json.loads(path.read_text(encoding="utf-8"))
+            document["candidates"][candidate.item_id]["state_history"] = [core.State.ACCEPTED]
+            path.write_text(json.dumps(document), encoding="utf-8")
+            with self.assertRaisesRegex(JsonPersistenceError, "start with GENERATED"):
+                core.load_candidate_state(path)
+
+    def test_current_format_tampered_acceptance_policy_is_rejected(self) -> None:
+        config = core.load_config()
+        manifest = core.build_run_manifest(config)
+        candidate = accepted_candidate()
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "state.json"
+            core.save_candidate_state(path, {candidate.item_id: candidate}, run_manifest=manifest)
+            document = json.loads(path.read_text(encoding="utf-8"))
+            policy = document["candidates"][candidate.item_id]["acceptance_policy"]
+            policy["allowed_solver_confidence"] = ["LOW"]
+            path.write_text(json.dumps(document), encoding="utf-8")
+            with self.assertRaisesRegex(JsonPersistenceError, "acceptance_policy"):
+                core.load_candidate_state(path)
 
 
 class PersistedStateSemanticInvariantTests(unittest.TestCase):

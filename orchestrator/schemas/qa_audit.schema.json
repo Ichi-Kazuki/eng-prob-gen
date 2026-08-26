@@ -56,6 +56,17 @@
         "disagreement_reasons": { "type": "array", "items": { "type": "string" } }
       }
     },
+    "acceptance_policy": {
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/acceptance_policy" }
+      ],
+      "description": "The policy projection and hash used to route an ACCEPTED candidate."
+    },
+    "legacy_compatibility": {
+      "type": "boolean",
+      "description": "True when this record came through the unversioned legacy-state compatibility path."
+    },
     "failure": {
       "type": ["object", "null"],
       "properties": {
@@ -93,6 +104,26 @@
         "solver": { "type": "integer", "minimum": 0 }
       },
       "required": ["generator", "reviewer", "solver"]
+    },
+    "acceptance_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_schema_version", "policy_sha256", "allowed_solver_confidence",
+        "block_source_similarity_risk"
+      ],
+      "properties": {
+        "policy_schema_version": { "const": 1 },
+        "policy_sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "allowed_solver_confidence": {
+          "type": "array", "items": { "type": "string", "minLength": 1 },
+          "minItems": 1, "uniqueItems": true
+        },
+        "block_source_similarity_risk": {
+          "type": "array", "items": { "type": "string", "minLength": 1 },
+          "minItems": 1, "uniqueItems": true
+        }
+      }
     }
   }
 }
