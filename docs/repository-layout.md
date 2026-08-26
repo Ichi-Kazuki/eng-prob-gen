@@ -12,6 +12,7 @@ answer-bearing material.
 | `agents/` | Agent definitions, prompts, schemas, and validators | Source-controlled |
 | `.claude/` | Claude agent entry points | Source-controlled; never copied wholesale to a Solver workspace |
 | `orchestrator/` | State machine, live drivers, configs, schemas, and developer test runners | Source-controlled |
+| `scripts/` | Reusable developer utilities and the live E2E harness | Source-controlled; runtime output goes to `runs/` |
 | `shared/` | Shared persistence, validation, tokenization, and Solver blinding code | Source-controlled |
 | `runtime/` | Provider-neutral Claude/Codex adapters | Source-controlled |
 | `tests/` | Unit/integration/regression tests and intentionally small fixtures | Source-controlled |
@@ -63,6 +64,9 @@ kept outside the public checkout. Test-only answer keys may live under
 `tests/fixtures/` with an explicit test name and must never be used as live
 runtime input. Historical answer-bearing artifacts currently retained under
 `analysis/` are archives/replay evidence, not Solver inputs.
+
+The reusable OCR/crop utilities formerly found in `tmp/` now live in
+`scripts/`; their input images and OCR outputs remain disposable local data.
 
 ## Reference material and copyright review
 
