@@ -6,6 +6,7 @@ import copy
 import importlib.util
 import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -639,8 +640,15 @@ class ProductionValidationRouting(unittest.TestCase):
         )
         item["qa_metadata"]["grammar_check_status"] = "PASS"
         evidence = {
+            "item_id": item["item_id"],
             "content_hash": module.grammar_evidence_content_hash(item),
             "evidence": {name: True for name in STRONG_INVARIANT_NAMES},
+            "evidence_producer": "test-grammar-runtime",
+            "evidence_producer_version": "1.0.0",
+            "invocation_id": "test-invocation-001",
+            "created_at": "2026-08-26T00:00:00+00:00",
+            "evidence_method": "deterministic-test-parser",
+            "model_identifier": "test-model",
         }
         config = module.load_json(module.CONFIG_PATH)
         grammar = module.load_json(module.GRAMMAR_SPEC_PATH)
@@ -661,8 +669,15 @@ class ProductionValidationRouting(unittest.TestCase):
         )
         item["qa_metadata"]["grammar_check_status"] = "PASS"
         evidence = {
+            "item_id": item["item_id"],
             "content_hash": module.grammar_evidence_content_hash(item),
             "evidence": {name: True for name in STRONG_INVARIANT_NAMES},
+            "evidence_producer": "test-grammar-runtime",
+            "evidence_producer_version": "1.0.0",
+            "invocation_id": "test-invocation-002",
+            "created_at": "2026-08-26T00:00:00+00:00",
+            "evidence_method": "deterministic-test-parser",
+            "model_identifier": "test-model",
         }
         item["qa_metadata"]["error_form"] = item["qa_metadata"]["error_form"].replace("record", "records")
         config = module.load_json(module.CONFIG_PATH)
@@ -678,11 +693,104 @@ class ProductionValidationRouting(unittest.TestCase):
         self.assertFalse(result["valid"])
         self.assertTrue(any("not bound to the exact item content" in error for error in result["errors"]))
 
+    def test_external_grammar_evidence_item_identity_is_checked_when_present(self) -> None:
+        module = self.validator_module()
+        item = json.loads(
+            (ROOT / "analysis" / "we_v2_1_2_grammar_pilot" / "runtime" / "generator" / "we_v2.1.2_grammar_pilot_001.json").read_text(encoding="utf-8")
+        )
+        item["qa_metadata"]["grammar_check_status"] = "PASS"
+        evidence = {
+            "item_id": "different-item",
+            "content_hash": module.grammar_evidence_content_hash(item),
+            "evidence": {name: True for name in STRONG_INVARIANT_NAMES},
+            "evidence_producer": "test-grammar-runtime",
+            "evidence_producer_version": "1.0.0",
+            "invocation_id": "test-invocation-identity",
+            "created_at": "2026-08-26T00:00:00+00:00",
+            "evidence_method": "deterministic-test-parser",
+            "model_identifier": "test-model",
+        }
+        config = module.load_json(module.CONFIG_PATH)
+        grammar = module.load_json(module.GRAMMAR_SPEC_PATH)
+        taxonomy = module.load_json(module.TAXONOMY_PATH)
+        targets = {entry["id"] for entry in taxonomy["primary_targets"]}
+        error_types = {
+            entry["id"]
+            for entry in grammar["tested_error_types"]
+            if entry["id"] not in {"fragment", "wrong_complementation"}
+        }
+        result = module.validate_contract(item, config, targets, error_types, evidence)
+        self.assertFalse(result["valid"])
+        self.assertTrue(any("item_id does not match" in error for error in result["errors"]))
+
     def test_external_evidence_loader_requires_content_hash(self) -> None:
         module = self.validator_module()
         with self.assertRaisesRegex(ValueError, "requires a nonempty content_hash"):
             with mock.patch.object(module, "load_json", return_value={"items": [{"item_id": "x", "evidence": {"a": True}}]}):
                 module.load_external_evidence(Path("unused.json"))
+
+    def test_external_evidence_requires_and_preserves_audit_provenance(self) -> None:
+        module = self.validator_module()
+        item = json.loads(
+            (ROOT / "analysis" / "we_v2_1_2_grammar_pilot" / "runtime" / "generator" / "we_v2.1.2_grammar_pilot_001.json").read_text(encoding="utf-8")
+        )
+        evidence = {
+            "item_id": item["item_id"],
+            "content_hash": module.grammar_evidence_content_hash(item),
+            "evidence": {name: True for name in STRONG_INVARIANT_NAMES},
+            "evidence_producer": "test-grammar-runtime",
+            "evidence_producer_version": "1.0.0",
+            "invocation_id": "test-invocation-provenance",
+            "created_at": "2026-08-26T00:00:00+00:00",
+            "evidence_method": "deterministic-test-parser",
+            "model_identifier": "test-model",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "evidence.json"
+            path.write_text(json.dumps({"items": [evidence]}), encoding="utf-8")
+            loaded = module.load_external_evidence(path)
+        self.assertEqual(loaded[item["item_id"]]["invocation_id"], "test-invocation-provenance")
+        self.assertEqual(loaded[item["item_id"]]["evidence_producer"], "test-grammar-runtime")
+
+        missing_provenance = dict(evidence)
+        missing_provenance.pop("invocation_id")
+        config = module.load_json(module.CONFIG_PATH)
+        grammar = module.load_json(module.GRAMMAR_SPEC_PATH)
+        taxonomy = module.load_json(module.TAXONOMY_PATH)
+        targets = {entry["id"] for entry in taxonomy["primary_targets"]}
+        error_types = {
+            entry["id"]
+            for entry in grammar["tested_error_types"]
+            if entry["id"] not in {"fragment", "wrong_complementation"}
+        }
+        result = module.validate_contract(
+            item,
+            config,
+            targets,
+            error_types,
+            missing_provenance,
+        )
+        self.assertFalse(result["valid"])
+        self.assertTrue(any("provenance is invalid" in error for error in result["errors"]))
+
+    def test_external_evidence_loader_rejects_malformed_provenance(self) -> None:
+        module = self.validator_module()
+        record = {
+            "item_id": "x",
+            "content_hash": "sha256:" + "0" * 64,
+            "evidence": {name: True for name in STRONG_INVARIANT_NAMES},
+            "evidence_producer": "runtime",
+            "evidence_producer_version": "1.0.0",
+            "invocation_id": "invocation",
+            "created_at": "not-a-timestamp",
+            "evidence_method": "parser",
+            "model_identifier": "model",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "evidence.json"
+            path.write_text(json.dumps({"items": [record]}), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "invalid provenance"):
+                module.load_external_evidence(path)
 
     def test_top_level_minimal_correction_must_match_qa_metadata(self) -> None:
         item = {

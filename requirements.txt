@@ -1,1 +1,3 @@
+# Direct runtime dependency. Keep this exact pin in sync with the supported
+# Python/CI runtime; pip resolves its transitive dependencies normally.
 jsonschema==4.25.1

@@ -30,10 +30,14 @@ from validate_format import (  # noqa: E402
     load_json,
     validate_item,
 )
-from mutation_safety import validate_item as validate_mutation_item  # noqa: E402
+from mutation_safety import (  # noqa: E402
+    evidence_provenance_errors,
+    validate_item as validate_mutation_item,
+)
 
 
 OUTPUT_SCHEMA_PATH = Path(__file__).resolve().parents[1] / "schema" / "written_expression_item_v2.schema.json"
+EVIDENCE_SCHEMA_PATH = Path(__file__).resolve().parents[1] / "schema" / "grammar_evidence.schema.json"
 _SCHEMA: dict[str, Any] | None = None
 MUTATION_SAFETY_AGENT_VERSION = "Written Expression Generator v2.1"
 
@@ -110,6 +114,10 @@ def load_external_evidence(path: Path) -> dict[str, Mapping[str, Any]]:
                 raise ValueError(
                     f"grammar evidence for {item_id} must include content_hash and evidence"
                 )
+            if "item_id" in value and value["item_id"] != item_id:
+                raise ValueError(
+                    f"grammar evidence key {item_id!r} conflicts with record item_id {value['item_id']!r}"
+                )
             records.append({"item_id": item_id, **value})
     else:
         raise ValueError("grammar evidence must be an object or an object with an items array")
@@ -118,28 +126,60 @@ def load_external_evidence(path: Path) -> dict[str, Mapping[str, Any]]:
     for record in records:
         if not isinstance(record, dict) or not isinstance(record.get("item_id"), str):
             raise ValueError("each grammar evidence record requires a string item_id")
-        content_hash = record.get("content_hash", record.get("item_content_hash"))
+        hash_values = [
+            record[field]
+            for field in ("content_hash", "item_content_hash")
+            if field in record
+        ]
+        if len(hash_values) > 1 and any(value != hash_values[0] for value in hash_values[1:]):
+            raise ValueError(f"grammar evidence for {record['item_id']} has conflicting content hashes")
+        content_hash = hash_values[0] if hash_values else None
         if not isinstance(content_hash, str) or not content_hash:
             raise ValueError(
                 f"grammar evidence for {record['item_id']} requires a nonempty content_hash"
             )
-        evidence = record.get(
-            "evidence",
-            record.get(
-                "external_evidence",
-                record.get("grammar_evidence", record.get("invariants")),
-            ),
-        )
+        evidence_values = [
+            record[field]
+            for field in ("evidence", "external_evidence", "grammar_evidence", "invariants")
+            if field in record
+        ]
+        if len(evidence_values) > 1 and any(value != evidence_values[0] for value in evidence_values[1:]):
+            raise ValueError(f"grammar evidence for {record['item_id']} has conflicting evidence fields")
+        evidence = evidence_values[0] if evidence_values else None
         if not isinstance(evidence, dict) or not all(
             isinstance(value, bool) for value in evidence.values()
         ):
             raise ValueError(f"grammar evidence for {record['item_id']} must be an object of booleans")
         if record["item_id"] in evidence_by_item:
             raise ValueError(f"duplicate grammar evidence item_id: {record['item_id']}")
-        evidence_by_item[record["item_id"]] = {
+        normalized = {
+            "item_id": record["item_id"],
             "content_hash": content_hash,
             "evidence": evidence,
         }
+        for field in (
+            "evidence_producer",
+            "evidence_producer_version",
+            "invocation_id",
+            "created_at",
+            "evidence_method",
+            "model_identifier",
+        ):
+            if field in record:
+                normalized[field] = record[field]
+        provenance_errors = evidence_provenance_errors(normalized)
+        if provenance_errors:
+            raise ValueError(
+                f"grammar evidence for {record['item_id']} has invalid provenance: "
+                + "; ".join(provenance_errors)
+            )
+        structural_errors = schema_errors(normalized, load_schema(EVIDENCE_SCHEMA_PATH))
+        if structural_errors:
+            raise ValueError(
+                f"grammar evidence for {record['item_id']} failed schema validation: "
+                + "; ".join(structural_errors)
+            )
+        evidence_by_item[record["item_id"]] = normalized
     return evidence_by_item
 
 
@@ -172,10 +212,31 @@ def validate_contract(
             candidate_evidence = external_evidence.get("evidence")
             supplied_hash = external_evidence.get("content_hash")
             expected_hash = grammar_evidence_content_hash(item)
+            provenance_errors = evidence_provenance_errors(external_evidence)
+            if "item_id" in external_evidence and external_evidence.get("item_id") != item_id:
+                provenance_errors.append("item_id does not match the validated item")
+            if provenance_errors:
+                result["errors"].append(
+                    "mutation_safety: external grammar evidence provenance is invalid: "
+                    + "; ".join(provenance_errors)
+                )
+            result.setdefault("diagnostics", {})["grammar_evidence_provenance"] = {
+                field: external_evidence.get(field)
+                for field in (
+                    "evidence_producer",
+                    "evidence_producer_version",
+                    "invocation_id",
+                    "created_at",
+                    "evidence_method",
+                    "model_identifier",
+                )
+                if field in external_evidence
+            }
             if (
                 isinstance(candidate_evidence, Mapping)
                 and all(isinstance(value, bool) for value in candidate_evidence.values())
                 and supplied_hash == expected_hash
+                and not provenance_errors
             ):
                 bound_evidence = candidate_evidence
             else:
@@ -219,6 +280,7 @@ def main() -> int:
             for x in grammar["tested_error_types"]
             if x["id"] not in {"fragment", "wrong_complementation"}
         }
+        items = load_items(path)
         results = [
             validate_contract(
                 item,
@@ -231,8 +293,19 @@ def main() -> int:
                     else None
                 ),
             )
-            for item in load_items(path)
+            for item in items
         ]
+        input_item_ids = {
+            item.get("item_id")
+            for item in items
+            if isinstance(item, dict) and isinstance(item.get("item_id"), str)
+        }
+        unknown_evidence_ids = sorted(set(evidence_by_item) - input_item_ids)
+        if unknown_evidence_ids:
+            raise ValueError(
+                "grammar evidence contains records for unknown item_id(s): "
+                + ", ".join(unknown_evidence_ids)
+            )
     except ValueError as exc:
         print(f"CONTENT ERROR: {exc}")
         return 1

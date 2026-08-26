@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
+import shutil
 import tempfile
 from contextlib import contextmanager
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterator
+from typing import Any, Iterator, Mapping
 
 
 class JsonPersistenceError(RuntimeError):
@@ -19,6 +22,41 @@ def read_json(path: Path) -> object:
         return json.loads(Path(path).read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise JsonPersistenceError(f"cannot read JSON {path}: {exc}") from exc
+
+
+def canonical_json_sha256(value: object) -> str:
+    """Return a stable digest for JSON-compatible values."""
+    try:
+        payload = json.dumps(
+            value,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    except (TypeError, ValueError) as exc:
+        raise JsonPersistenceError(f"cannot hash non-JSON value: {exc}") from exc
+    return "sha256:" + hashlib.sha256(payload).hexdigest()
+
+
+def _fsync_parent_directory(parent: Path) -> None:
+    """Make a successful ``os.replace`` durable on POSIX filesystems.
+
+    Windows does not expose the same directory-fsync contract and continues
+    to use the existing file-level durability path.  On POSIX, failure to
+    fsync the directory is surfaced rather than silently claiming durability.
+    """
+    if os.name == "nt":
+        return
+    flags = os.O_RDONLY
+    directory_flag = getattr(os, "O_DIRECTORY", 0)
+    try:
+        directory_fd = os.open(str(parent), flags | directory_flag)
+    except OSError:
+        raise
+    try:
+        os.fsync(directory_fd)
+    finally:
+        os.close(directory_fd)
 
 
 def atomic_write_json(path: Path, value: object) -> None:
@@ -33,9 +71,205 @@ def atomic_write_json(path: Path, value: object) -> None:
             handle.flush()
             os.fsync(handle.fileno())
         os.replace(temp_path, target)
+        _fsync_parent_directory(target.parent)
     except (OSError, TypeError, ValueError) as exc:
-        temp_path.unlink(missing_ok=True)
+        try:
+            temp_path.unlink(missing_ok=True)
+        except OSError:
+            pass
         raise JsonPersistenceError(f"cannot atomically write JSON {target}: {exc}") from exc
+
+
+def _file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return "sha256:" + digest.hexdigest()
+
+
+def _is_sha256(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == len("sha256:") + 64
+        and value.startswith("sha256:")
+        and all(character in "0123456789abcdef" for character in value[len("sha256:"):])
+    )
+
+
+def publish_json_bundle(
+    directory: Path,
+    artifacts: Mapping[str, tuple[str, object]],
+    *,
+    finalize_id: str,
+    manifest_name: str = "finalization_manifest.json",
+    metadata: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Stage and publish a group of JSON artifacts with an in-progress marker.
+
+    The individual files retain their historical names and JSON shapes.  The
+    manifest is the run-level commit record: it is first written as
+    ``IN_PROGRESS`` and becomes ``COMPLETE`` only after every staged file has
+    been atomically moved into place and any caller-supplied side effects (for
+    example the manual-review queue update) have succeeded.
+
+    A crash can therefore leave old complete files or an in-progress manifest,
+    but never a marker that vouches for a partial new generation.  Callers
+    must invoke :func:`complete_json_bundle` after all external side effects.
+    """
+    target_dir = Path(directory)
+    target_dir.mkdir(parents=True, exist_ok=True)
+    if not isinstance(finalize_id, str) or not finalize_id.strip():
+        raise ValueError("finalize_id must be a non-empty string")
+    if not artifacts:
+        raise ValueError("at least one artifact is required")
+    if not manifest_name or Path(manifest_name).name != manifest_name:
+        raise ValueError(f"manifest filename must be a basename: {manifest_name!r}")
+    reserved_metadata_keys = {"manifest_version", "status", "finalize_id", "files", "started_at"}
+    if metadata is not None and reserved_metadata_keys.intersection(metadata):
+        raise ValueError("finalization metadata contains a reserved manifest key")
+
+    staging_dir = Path(tempfile.mkdtemp(prefix=".finalize-", dir=target_dir))
+    manifest_path = target_dir / manifest_name
+    manifest_files: dict[str, dict[str, str]] = {}
+    artifact_filenames: set[str] = set()
+    try:
+        for artifact_key, (filename, value) in artifacts.items():
+            if not isinstance(artifact_key, str) or not artifact_key.strip():
+                raise ValueError("artifact key must be a non-empty string")
+            if not filename or Path(filename).name != filename:
+                raise ValueError(f"artifact filename must be a basename: {filename!r}")
+            if filename in artifact_filenames or filename == manifest_name:
+                raise ValueError(f"artifact filename is duplicated or reserved: {filename!r}")
+            artifact_filenames.add(filename)
+            staged_path = staging_dir / filename
+            atomic_write_json(staged_path, value)
+            manifest_files[artifact_key] = {
+                "filename": filename,
+                "sha256": _file_sha256(staged_path),
+            }
+
+        in_progress = {
+            "manifest_version": 1,
+            "status": "IN_PROGRESS",
+            "finalize_id": finalize_id,
+            "files": manifest_files,
+            "required_artifacts": sorted(manifest_files),
+            "started_at": datetime.now(timezone.utc).isoformat(),
+        }
+        if metadata is not None:
+            in_progress.update(dict(metadata))
+        atomic_write_json(manifest_path, in_progress)
+
+        for file_info in manifest_files.values():
+            os.replace(staging_dir / file_info["filename"], target_dir / file_info["filename"])
+        _fsync_parent_directory(target_dir)
+        return in_progress
+    finally:
+        # Only the private directory created above is removed. If a publish
+        # failed midway, the manifest remains IN_PROGRESS for recovery and a
+        # subsequent run rebuilds the staging files from its source of truth.
+        shutil.rmtree(staging_dir, ignore_errors=True)
+
+
+def complete_json_bundle(
+    directory: Path,
+    manifest: Mapping[str, Any],
+    *,
+    manifest_name: str = "finalization_manifest.json",
+) -> dict[str, Any]:
+    """Verify published bundle files and atomically commit its manifest."""
+    target_dir = Path(directory)
+    if not manifest_name or Path(manifest_name).name != manifest_name:
+        raise ValueError(f"manifest filename must be a basename: {manifest_name!r}")
+    files = manifest.get("files")
+    required_artifacts = manifest.get("required_artifacts")
+    if (
+        manifest.get("manifest_version") != 1
+        or manifest.get("status") != "IN_PROGRESS"
+        or not isinstance(files, dict)
+        or not files
+        or not isinstance(required_artifacts, list)
+        or not all(isinstance(key, str) for key in required_artifacts)
+        or not all(isinstance(key, str) for key in files)
+        or set(required_artifacts) != set(files)
+    ):
+        raise JsonPersistenceError("finalization manifest is not an in-progress bundle")
+    current_manifest = read_json(target_dir / manifest_name)
+    if current_manifest != dict(manifest):
+        raise JsonPersistenceError("finalization manifest changed before completion")
+    for file_info in files.values():
+        if not isinstance(file_info, dict):
+            raise JsonPersistenceError("finalization manifest contains malformed file metadata")
+        filename = file_info.get("filename")
+        expected_hash = file_info.get("sha256")
+        if (
+            not isinstance(filename, str)
+            or Path(filename).name != filename
+            or not _is_sha256(expected_hash)
+        ):
+            raise JsonPersistenceError("finalization manifest contains incomplete file metadata")
+        path = target_dir / filename
+        if not path.is_file() or _file_sha256(path) != expected_hash:
+            raise JsonPersistenceError(
+                f"finalization artifact {path} is missing or does not match the staged hash"
+            )
+
+    completed = dict(manifest)
+    completed["status"] = "COMPLETE"
+    completed["completed_at"] = datetime.now(timezone.utc).isoformat()
+    atomic_write_json(target_dir / manifest_name, completed)
+    return completed
+
+
+def validate_complete_json_bundle(
+    directory: Path, *, manifest_name: str = "finalization_manifest.json"
+) -> list[str]:
+    """Return errors when a published JSON bundle is not a complete run."""
+    target_dir = Path(directory)
+    try:
+        manifest = read_json(target_dir / manifest_name)
+    except JsonPersistenceError as exc:
+        return [str(exc)]
+    if (
+        not isinstance(manifest, dict)
+        or manifest.get("manifest_version") != 1
+        or manifest.get("status") != "COMPLETE"
+        or not isinstance(manifest.get("finalize_id"), str)
+        or not manifest["finalize_id"].strip()
+    ):
+        return ["finalization manifest is absent or not COMPLETE"]
+    files = manifest.get("files")
+    required_artifacts = manifest.get("required_artifacts")
+    if (
+        not isinstance(files, dict)
+        or not files
+        or not isinstance(required_artifacts, list)
+        or not all(isinstance(key, str) for key in required_artifacts)
+        or not all(isinstance(key, str) for key in files)
+        or set(required_artifacts) != set(files)
+    ):
+        return ["finalization manifest contains no files"]
+    errors: list[str] = []
+    for file_info in files.values():
+        if not isinstance(file_info, dict):
+            errors.append("finalization manifest contains malformed file metadata")
+            continue
+        filename = file_info.get("filename")
+        expected_hash = file_info.get("sha256")
+        if (
+            not isinstance(filename, str)
+            or Path(filename).name != filename
+            or not _is_sha256(expected_hash)
+        ):
+            errors.append("finalization manifest contains incomplete file metadata")
+            continue
+        path = target_dir / filename
+        if not path.is_file():
+            errors.append(f"finalization artifact {path} is missing")
+        elif _file_sha256(path) != expected_hash:
+            errors.append(f"finalization artifact {path} does not match the manifest hash")
+    return errors
 
 
 @contextmanager

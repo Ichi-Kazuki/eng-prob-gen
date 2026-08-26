@@ -9,6 +9,9 @@ replacement-candidate dilution.
 ``rebuild_feedback <round_label>`` regenerates a round artifact from the
 persisted Candidate Reviewer history if the original artifact write failed.
 ``init ... --force-reset`` is required to replace an existing state file.
+Solver batches are rebuilt from committed state and are rejected when their
+state fingerprint is stale. Final artifacts use a staging directory and a
+completion manifest so an incomplete publish is not treated as a run.
 """
 
 from __future__ import annotations
@@ -29,8 +32,10 @@ from orchestrator import (  # noqa: E402
     build_manual_review_entry,
     build_provenance_record,
     build_review_feedback_from_state,
+    build_solver_batch_artifact,
     canonical_solver_input_errors,
     derive_slot_requirements,
+    finalization_id,
     load_config,
     load_candidate_state,
     load_items_by_id,
@@ -44,11 +49,16 @@ from orchestrator import (  # noqa: E402
     save_candidate_state,
     strip_internal_test_keys,
     validate_final_record,
+    validate_solver_batch_artifact,
 )
 from shared.json_io import (  # noqa: E402
+    JsonPersistenceError,
     atomic_write_json,
+    complete_json_bundle,
     exclusive_file_lock,
     exclusive_state_transaction,
+    publish_json_bundle,
+    read_json,
 )
 
 VALIDATION_DIR = REPO_ROOT / "analysis" / "validation"
@@ -211,6 +221,7 @@ def cmd_apply_revision(generator_path: str) -> None:
 def cmd_prepare_solver_batch() -> None:
     config = load_config()
     batch = []
+    out_path = VALIDATION_DIR / "validation_solver_input_batch.json"
     with state_transaction() as candidates:
         for c in candidates.values():
             if (
@@ -258,7 +269,11 @@ def cmd_prepare_solver_batch() -> None:
                 continue
             c.solver_input = blinded
             batch.append(blinded)
-        atomic_write_json(VALIDATION_DIR / "validation_solver_input_batch.json", {"items": batch})
+        # Commit the state before publishing the derived artifact. A later
+        # artifact-write failure is recoverable by rebuilding from this state.
+    committed = load_state()
+    artifact = build_solver_batch_artifact(committed, config)
+    atomic_write_json(out_path, artifact)
     print(f"Prepared blinded Solver batch: {len(batch)}")
 
 
@@ -266,6 +281,16 @@ def cmd_apply_solver(solver_path: str) -> None:
     config = load_config()
     solver_items = load_items_by_id(Path(solver_path), "solver output")
     with state_transaction() as candidates:
+        try:
+            batch_artifact = read_json(VALIDATION_DIR / "validation_solver_input_batch.json")
+        except JsonPersistenceError as exc:
+            raise ValueError(f"refusing Solver output: current Solver batch is unreadable: {exc}") from exc
+        batch_errors = validate_solver_batch_artifact(batch_artifact, candidates, config)
+        if batch_errors:
+            raise ValueError(
+                "refusing Solver output: Solver batch is missing, stale, or tampered: "
+                + "; ".join(batch_errors)
+            )
         for item_id, c in candidates.items():
             if (
                 c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
@@ -338,12 +363,30 @@ def cmd_finalize() -> None:
                 f"final artifact schema validation failed for {record['item_id']}: "
                 + "; ".join(final_errors)
             )
-    atomic_write_json(VALIDATION_DIR / "validation_provenance.json", wrapper)
-    atomic_write_json(VALIDATION_DIR / "validation_accepted_items.json", {"items": accepted})
-    atomic_write_json(VALIDATION_DIR / "validation_manual_review.json", {"items": manual})
-    atomic_write_json(VALIDATION_DIR / "validation_failure_items.json", {"items": failures})
+    run_id = finalization_id(candidates, versions)
+    wrapper["finalize_id"] = run_id
+    artifacts = {
+        "provenance": ("validation_provenance.json", wrapper),
+        "accepted": ("validation_accepted_items.json", {"finalize_id": run_id, "items": accepted}),
+        "manual_review": ("validation_manual_review.json", {"finalize_id": run_id, "items": manual}),
+        "failures": ("validation_failure_items.json", {"finalize_id": run_id, "items": failures}),
+    }
+    # Re-check and hold the state lock while publishing. A concurrent stage
+    # update must make this snapshot stale rather than producing a mixed run.
+    with exclusive_file_lock(STATE_PATH):
+        if finalization_id(load_state(), versions) != run_id:
+            raise ValueError("validation finalize snapshot is stale; rerun finalize")
+        manifest = publish_json_bundle(
+            VALIDATION_DIR,
+            artifacts,
+            finalize_id=run_id,
+            manifest_name="validation_finalize_manifest.json",
+            metadata={"manual_review_item_ids": sorted(entry["item_id"] for entry in manual)},
+        )
+        complete_json_bundle(VALIDATION_DIR, manifest, manifest_name="validation_finalize_manifest.json")
     print(f"Finalized {len(candidates)} initial candidates")
     print(f"State tally: {state_tally(candidates)}")
+    print(f"Finalize id: {run_id}")
 
 
 def main() -> int:

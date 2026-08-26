@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "solver_input_batch.schema.json",
+  "title": "TOEFL ITP canonical Solver input batch artifact",
+  "description": "A derived, state-bound Solver payload. The items remain the historical blinded Solver shape; the binding metadata prevents stale artifacts from being used.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifact_version", "state_fingerprint", "items"],
+  "properties": {
+    "artifact_version": {"const": 1},
+    "state_fingerprint": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "items": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["item_id", "section", "stem", "options"],
+            "properties": {
+              "item_id": {"type": "string", "minLength": 1},
+              "section": {"const": "Structure"},
+              "stem": {"type": "string", "minLength": 1},
+              "options": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["A", "B", "C", "D"],
+                "properties": {
+                  "A": {"type": "string", "minLength": 1},
+                  "B": {"type": "string", "minLength": 1},
+                  "C": {"type": "string", "minLength": 1},
+                  "D": {"type": "string", "minLength": 1}
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["item_id", "section", "sentence", "marked_parts"],
+            "properties": {
+              "item_id": {"type": "string", "minLength": 1},
+              "section": {"const": "Written Expression"},
+              "sentence": {"type": "string", "minLength": 1},
+              "marked_parts": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["A", "B", "C", "D"],
+                "properties": {
+                  "A": {"type": "string", "minLength": 1},
+                  "B": {"type": "string", "minLength": 1},
+                  "C": {"type": "string", "minLength": 1},
+                  "D": {"type": "string", "minLength": 1}
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

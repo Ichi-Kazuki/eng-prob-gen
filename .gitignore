@@ -5,8 +5,12 @@ __pycache__/
 # Local analysis/dependency staging and render/OCR scratch output
 .analysis_tmp_deps/
 tmp/
+render/
+ocr/
 *.render/
 *.ocr/
+*.tmp
+.finalize-*/
 
 # Local lock files (committed source lockfiles remain trackable)
 *.lock

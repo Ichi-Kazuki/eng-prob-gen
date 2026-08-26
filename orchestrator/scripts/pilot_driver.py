@@ -39,8 +39,9 @@ Subcommands (each reads/writes analysis/pilot/candidates_state.json):
 
   prepare_solver_batch
       Blind every candidate currently in SOLVING via the shared pure
-      projection (through orchestrator.blind_for_solver()) and
-      write the combined batch to analysis/pilot/solver_input_batch.json.
+      projection (through orchestrator.blind_for_solver()), commit Candidate
+      state first, and then rebuild the state-bound batch artifact at
+      analysis/pilot/solver_input_batch.json.
 
   apply_solver <solver_output.json>
       Feed a Solver output file to process_solver_stage() for every
@@ -50,9 +51,10 @@ Subcommands (each reads/writes analysis/pilot/candidates_state.json):
       Build provenance/accepted/manual-review/failure artifacts for ALL
       candidates (terminal and non-terminal) and write them to
       analysis/pilot/pilot_provenance.json, pilot_accepted_items.json,
-      pilot_manual_review.json, pilot_failure_items.json. Also appends
-      MANUAL_REVIEW entries to analysis/manual_review_queue.json via the
-      existing append_manual_review_queue().
+      pilot_manual_review.json, pilot_failure_items.json through a staged
+      run bundle. Also appends MANUAL_REVIEW entries to
+      analysis/manual_review_queue.json via the existing
+      append_manual_review_queue(), before committing the completion marker.
 
 Usage: python orchestrator/scripts/pilot_driver.py <subcommand> [args...]
        init ... --force-reset  (explicitly replace an existing state file)
@@ -76,8 +78,10 @@ from orchestrator import (  # noqa: E402
     build_manual_review_entry,
     build_provenance_record,
     build_review_feedback_from_state,
+    build_solver_batch_artifact,
     canonical_solver_input_errors,
     derive_slot_requirements,
+    finalization_id,
     leakage_guard,
     load_config,
     load_candidate_state,
@@ -90,11 +94,16 @@ from orchestrator import (  # noqa: E402
     retry_failed_stage,
     save_candidate_state,
     strip_internal_test_keys,
+    validate_solver_batch_artifact,
 )
 from shared.json_io import (  # noqa: E402
+    JsonPersistenceError,
     atomic_write_json,
+    complete_json_bundle,
     exclusive_file_lock,
     exclusive_state_transaction,
+    publish_json_bundle,
+    read_json,
 )
 
 PILOT_DIR = REPO_ROOT / "analysis" / "pilot"
@@ -281,6 +290,7 @@ def cmd_prepare_solver_batch() -> None:
     config = load_config()
     batch = []
     errors = []
+    out_path = PILOT_DIR / "solver_input_batch.json"
     with state_transaction() as candidates:
         solving = {}
         for item_id, c in candidates.items():
@@ -330,12 +340,12 @@ def cmd_prepare_solver_batch() -> None:
                 continue
             c.solver_input = blinded
             batch.append(blinded)
-
-        out_path = PILOT_DIR / "solver_input_batch.json"
-        atomic_write_json(out_path, {"items": batch})
-        # The blinded input and leakage result are part of the cross-process
-        # contract. Persist them before the command exits so apply_solver can
-        # consume the exact input handed to the Solver.
+        # The transaction commits the state first. The derived batch is
+        # rebuilt from that committed state below, so a failed artifact write
+        # cannot make an uncommitted payload look authoritative.
+    committed = load_state()
+    artifact = build_solver_batch_artifact(committed, config)
+    atomic_write_json(out_path, artifact)
     print(f"Blinded {len(batch)} candidate(s) currently in SOLVING -> {out_path}")
     if errors:
         print("Blinding errors:")
@@ -351,6 +361,16 @@ def cmd_apply_solver(solver_path: str) -> None:
     routed: dict[str, list[str]] = {}
     missing = []
     with state_transaction() as candidates:
+        try:
+            batch_artifact = read_json(PILOT_DIR / "solver_input_batch.json")
+        except JsonPersistenceError as exc:
+            raise ValueError(f"refusing Solver output: current Solver batch is unreadable: {exc}") from exc
+        batch_errors = validate_solver_batch_artifact(batch_artifact, candidates, config)
+        if batch_errors:
+            raise ValueError(
+                "refusing Solver output: Solver batch is missing, stale, or tampered: "
+                + "; ".join(batch_errors)
+            )
         for item_id, c in candidates.items():
             if (
                 c.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
@@ -422,22 +442,40 @@ def cmd_finalize() -> None:
                 f"final artifact schema validation failed for {record['item_id']}: "
                 + "; ".join(final_errors)
             )
-    atomic_write_json(PILOT_DIR / "pilot_provenance.json", {
-        "pipeline_version": config["pipeline_version"],
-        "items": provenance_records,
-        "batch_summary": tracker.summary(),
-    })
-    atomic_write_json(PILOT_DIR / "pilot_accepted_items.json", {"items": accepted_items})
-    atomic_write_json(PILOT_DIR / "pilot_manual_review.json", {"items": manual_review_entries})
-    atomic_write_json(PILOT_DIR / "pilot_failure_items.json", {"items": failure_items})
+    run_id = finalization_id(candidates, versions)
+    artifacts = {
+        "provenance": ("pilot_provenance.json", {
+            "pipeline_version": config["pipeline_version"],
+            "finalize_id": run_id,
+            "items": provenance_records,
+            "batch_summary": tracker.summary(),
+        }),
+        "accepted": ("pilot_accepted_items.json", {"finalize_id": run_id, "items": accepted_items}),
+        "manual_review": ("pilot_manual_review.json", {"finalize_id": run_id, "items": manual_review_entries}),
+        "failures": ("pilot_failure_items.json", {"finalize_id": run_id, "items": failure_items}),
+    }
+    # Re-check and hold the state lock while publishing. A concurrent stage
+    # update must make this snapshot stale rather than producing a mixed run.
+    with exclusive_file_lock(STATE_PATH):
+        if finalization_id(load_state(), versions) != run_id:
+            raise ValueError("pilot finalize snapshot is stale; rerun finalize")
+        manifest = publish_json_bundle(
+            PILOT_DIR,
+            artifacts,
+            finalize_id=run_id,
+            manifest_name="pilot_finalize_manifest.json",
+            metadata={"manual_review_item_ids": sorted(entry["item_id"] for entry in manual_review_entries)},
+        )
 
-    if manual_review_entries:
-        from orchestrator import append_manual_review_queue
-        append_manual_review_queue(config, manual_review_entries)
+        if manual_review_entries:
+            from orchestrator import append_manual_review_queue
+            append_manual_review_queue(config, manual_review_entries)
+        complete_json_bundle(PILOT_DIR, manifest, manifest_name="pilot_finalize_manifest.json")
 
     print(f"Finalized {len(candidates)} candidates.")
     print(f"State tally: {state_tally(candidates)}")
     print(f"ACCEPTED: {len(accepted_items)}  MANUAL_REVIEW: {len(manual_review_entries)}  failure_items: {len(failure_items)}")
+    print(f"Finalize id: {run_id}")
     print("Wrote: pilot_provenance.json, pilot_accepted_items.json, pilot_manual_review.json, pilot_failure_items.json")
 
 

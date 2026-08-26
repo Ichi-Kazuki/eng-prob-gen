@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "grammar_evidence.schema.json",
+  "title": "External grammar evidence record",
+  "description": "An auditable sidecar record. Provenance is attributable metadata, not cryptographic authentication; content_hash is the item binding used at the trust boundary.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_id", "content_hash", "evidence", "evidence_producer",
+    "evidence_producer_version", "invocation_id", "created_at",
+    "evidence_method", "model_identifier"
+  ],
+  "properties": {
+    "item_id": {"type": "string", "minLength": 1},
+    "content_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "evidence": {
+      "type": "object",
+      "additionalProperties": {"type": "boolean"}
+    },
+    "evidence_producer": {"type": "string", "minLength": 1},
+    "evidence_producer_version": {"type": "string", "minLength": 1},
+    "invocation_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "evidence_method": {"type": "string", "minLength": 1},
+    "model_identifier": {"type": "string", "minLength": 1}
+  }
+}

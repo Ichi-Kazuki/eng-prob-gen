@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   tests:
     strategy:
@@ -16,7 +19,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
       - name: Install dependencies
-        run: python -m pip install -r requirements.txt
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements.txt
+          python -m pip check
+      - name: Compile Python sources
+        run: python -m compileall -q agents orchestrator shared tests
       - name: Run hardening and deterministic regression tests (including persistence)
         run: python -m unittest discover -s tests -p "test_*.py" -v

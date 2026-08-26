@@ -21,6 +21,7 @@ import re
 import sys
 from collections import Counter
 from dataclasses import asdict, dataclass
+from datetime import datetime
 from difflib import SequenceMatcher
 from enum import Enum
 from pathlib import Path
@@ -122,6 +123,14 @@ STRONG_INVARIANT_NAMES = (
     "no_plausible_alternate_parse",
     "defect_is_grammatical_not_semantic",
 )
+EVIDENCE_PROVENANCE_REQUIRED_FIELDS = (
+    "evidence_producer",
+    "evidence_producer_version",
+    "invocation_id",
+    "created_at",
+    "evidence_method",
+    "model_identifier",
+)
 ARROW_RE = re.compile(r"(?P<left>[^:;\n]+?)\s*(?:->|→)\s*(?P<right>[^,;\n]+)")
 CHANGE_BODY_RE = re.compile(
     r"\b(?:change|replace)\s+(?P<body>.+?)(?:[.!?]|$)",
@@ -136,6 +145,33 @@ REORDER_RE = re.compile(
     r"\breorder\s+(?P<source>.+?)\s+as\s+(?P<target>.+?)(?:[.!?]|$)",
     re.IGNORECASE,
 )
+
+
+def evidence_provenance_errors(record: Mapping[str, Any]) -> list[str]:
+    """Validate audit provenance without treating it as cryptographic proof.
+
+    These fields make an evidence record attributable and replay-auditable.
+    They do not authenticate the producer; only the content hash binds the
+    record to the current item, and no signature/HMAC is implied here.
+    """
+    errors: list[str] = []
+    for field in EVIDENCE_PROVENANCE_REQUIRED_FIELDS:
+        value = record.get(field)
+        if not isinstance(value, str) or not value.strip():
+            errors.append(f"{field} must be a nonempty string")
+    content_hash = record.get("content_hash")
+    if not isinstance(content_hash, str) or not re.fullmatch(r"sha256:[0-9a-f]{64}", content_hash):
+        errors.append("content_hash must match sha256:<64 lowercase hexadecimal characters>")
+    created_at = record.get("created_at")
+    if isinstance(created_at, str) and created_at.strip():
+        try:
+            parsed_created_at = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
+        except ValueError:
+            errors.append("created_at must be an ISO-8601 timestamp")
+        else:
+            if parsed_created_at.tzinfo is None:
+                errors.append("created_at must include a timezone offset")
+    return errors
 
 
 class TemplateClass(str, Enum):

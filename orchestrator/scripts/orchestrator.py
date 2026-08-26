@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import copy
 import subprocess
 import sys
 import tempfile
@@ -37,6 +38,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from shared.json_io import (  # noqa: E402
     JsonPersistenceError,
     atomic_write_json,
+    canonical_json_sha256,
     exclusive_file_lock,
     read_json,
 )
@@ -62,6 +64,10 @@ __all__ = [
     "validate_candidate_invariants",
     "load_candidate_state",
     "save_candidate_state",
+    "solver_batch_state_fingerprint",
+    "build_solver_batch_artifact",
+    "validate_solver_batch_artifact",
+    "finalization_id",
     "ConsensusResult",
     "FailureInfo",
     "SystemCallError",
@@ -97,6 +103,7 @@ __all__ = [
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = Path(__file__).resolve().parents[1] / "config.json"
+SOLVER_BATCH_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "solver_input_batch.schema.json"
 
 
 # ---------------------------------------------------------------------------
@@ -238,6 +245,12 @@ def load_versions(config: dict) -> dict:
         ),
         "solver": _hash_repo_file(
             "agents/toefl_itp_grammar_solver/schema/solver_output.schema.json"
+        ),
+        "grammar_evidence": _hash_repo_file(
+            "agents/toefl_itp_we_generator_v2/schema/grammar_evidence.schema.json"
+        ),
+        "solver_input_batch": _hash_repo_file(
+            "orchestrator/schemas/solver_input_batch.schema.json"
         ),
     }
     v["orchestrator_version"] = _hash_repo_file("orchestrator/scripts/orchestrator.py")
@@ -991,6 +1004,97 @@ def load_candidate_state(path: Path) -> dict[str, Candidate]:
 
 def save_candidate_state(path: Path, candidates: dict[str, Candidate]) -> None:
     atomic_write_json(path, {item_id: candidate_to_dict(candidate) for item_id, candidate in candidates.items()})
+
+
+def solver_batch_state_fingerprint(candidates: dict[str, Candidate]) -> str:
+    """Fingerprint the persisted candidate document used to build a batch.
+
+    The complete Candidate projection is intentional: a batch must become
+    stale when any state, current Generator item, reviewer gate, or persisted
+    Solver input changes.  The state file remains the source of truth; this is
+    only a binding for the derived artifact.
+    """
+    state_projection = {
+        item_id: candidate_to_dict(candidates[item_id])
+        for item_id in sorted(candidates)
+    }
+    return canonical_json_sha256(state_projection)
+
+
+def build_solver_batch_artifact(
+    candidates: dict[str, Candidate], config: Optional[dict] = None
+) -> dict:
+    """Rebuild the Solver input artifact from already-persisted state.
+
+    This function never uses a previous batch file.  Every SOLVING candidate
+    must have a canonical, leak-free persisted payload, otherwise rebuilding
+    fails closed and the caller must not invoke the Solver.
+    """
+    config = load_config() if config is None else config
+    items: list[dict] = []
+    for item_id in sorted(candidates):
+        candidate = candidates[item_id]
+        if candidate.state != State.SOLVING:
+            continue
+        if candidate.solver_input is None:
+            raise ValueError(f"SOLVING candidate {item_id!r} has no persisted solver_input")
+        canonical_errors = canonical_solver_input_errors(
+            config, candidate.generator_item, candidate.solver_input
+        )
+        if canonical_errors:
+            raise ValueError(f"{item_id}: {'; '.join(canonical_errors)}")
+        ok, problems = leakage_guard(candidate.solver_input, candidate.section)
+        if not ok:
+            raise ValueError(f"{item_id}: solver_input leakage/shape invariant failed: {problems}")
+        items.append(copy.deepcopy(candidate.solver_input))
+
+    return {
+        "artifact_version": 1,
+        "state_fingerprint": solver_batch_state_fingerprint(candidates),
+        "items": items,
+    }
+
+
+def validate_solver_batch_artifact(
+    artifact: object, candidates: dict[str, Candidate], config: Optional[dict] = None
+) -> list[str]:
+    """Return errors if a Solver batch is absent, stale, or tampered."""
+    if not isinstance(artifact, dict):
+        return ["solver batch artifact must be an object"]
+    try:
+        structural_errors = schema_errors(artifact, load_schema(SOLVER_BATCH_SCHEMA_PATH))
+    except SchemaValidationRuntimeError:
+        raise
+    if structural_errors:
+        return [f"solver_input_batch.schema.json: {error}" for error in structural_errors]
+    if artifact.get("artifact_version") != 1:
+        return ["solver batch artifact has an unsupported or missing artifact_version"]
+    if not isinstance(artifact.get("state_fingerprint"), str):
+        return ["solver batch artifact is missing state_fingerprint"]
+    if not isinstance(artifact.get("items"), list):
+        return ["solver batch artifact is missing an items array"]
+    try:
+        expected = build_solver_batch_artifact(candidates, config)
+    except (TypeError, ValueError, KeyError) as exc:
+        return [f"current persisted state cannot produce a Solver batch: {exc}"]
+    errors: list[str] = []
+    if artifact["state_fingerprint"] != expected["state_fingerprint"]:
+        errors.append("solver batch artifact is stale relative to persisted candidate state")
+    if artifact["items"] != expected["items"]:
+        errors.append("solver batch artifact items do not match persisted canonical Solver inputs")
+    return errors
+
+
+def finalization_id(candidates: dict[str, Candidate], versions: dict) -> str:
+    """Return a repeatable identity for one finalized state/version snapshot."""
+    digest = canonical_json_sha256({
+        "versions": versions,
+        "candidates": {
+            item_id: candidate_to_dict(candidates[item_id])
+            for item_id in sorted(candidates)
+        },
+    })
+    return "finalize-" + digest.split(":", 1)[1][:24]
 
 
 def build_retry_summary(candidate: Candidate) -> dict[str, dict[str, int]]:

@@ -154,6 +154,12 @@ Structure; `item_id, section, sentence, marked_parts` for Written
 Expression) before the item is ever handed to the Solver. A leakage-guard
 failure routes to `MANUAL_REVIEW` rather than silently proceeding.
 
+The live drivers commit the Candidate state containing the canonical payload
+before publishing `solver_input_batch.json`. The batch retains the historical
+`items` array and adds an artifact version plus a fingerprint of the committed
+state. Solver application refuses a missing, stale, or tampered batch, so the
+artifact is a rebuildable projection rather than a second source of truth.
+
 **Live call sites** (where a future live run wires in real Agent-tool
 calls, replacing the fixture lookups used by the replay scripts in this
 delivery):
@@ -248,6 +254,26 @@ Schemas: `orchestrator/schemas/provenance.schema.json`,
 `accepted_item.schema.json`, `qa_audit.schema.json`. Shape-checked by
 `orchestrator/scripts/validate_provenance.py` (same pattern as the other
 agents' `validate_output.py`).
+
+Written Expression v2.1 grammar evidence is supplied out of band through
+`agents/toefl_itp_we_generator_v2/schema/grammar_evidence.schema.json`.
+Each record stores `content_hash` and audit provenance (`evidence_producer`,
+producer version, `invocation_id`, `created_at`, method, and model identifier).
+The content hash and complete invariant booleans participate in the binding
+check; provenance fields make the record attributable and replayable but are
+not cryptographic authentication. This repository does not hold signing keys
+or HMAC secrets, so missing or malformed provenance/evidence fails closed.
+
+## 10.1 Run-level finalization
+
+Pilot and Validation preserve the historical four JSON output filenames and
+their `items` arrays, adding a `finalize_id` metadata field. They first publish
+the files from a private staging directory with an `IN_PROGRESS` manifest,
+then update the manual-review queue when applicable, and finally atomically
+publish `pilot_finalize_manifest.json` or `validation_finalize_manifest.json`
+with status `COMPLETE`. Consumers should accept a bundle only after checking
+that marker and its recorded file hashes. Re-running the same state is safe;
+the manual-review queue is de-duplicated by `item_id`.
 
 ## 11. Accepted item vs. QA audit separation (spec section 12)
 
