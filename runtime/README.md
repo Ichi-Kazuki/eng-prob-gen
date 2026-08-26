@@ -9,7 +9,7 @@ The existing Claude path remains the default. Run the Codex path with:
 
 ```powershell
 $env:WE_E2E_RUNTIME = "codex"
-python analysis/we_v2_1_2_live_e2e/run_live_e2e.py
+python scripts/run_live_e2e.py
 ```
 
 Codex calls use one `codex exec --ephemeral` process per item. Reviewer and

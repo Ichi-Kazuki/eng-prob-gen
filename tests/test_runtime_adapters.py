@@ -158,7 +158,7 @@ class RuntimeAdapterTests(unittest.TestCase):
         self.assertIn("allOf", claude_schema)
 
     def test_live_harness_uses_existing_solver_validate_contract(self) -> None:
-        harness_path = ROOT / "analysis" / "we_v2_1_2_live_e2e" / "run_live_e2e.py"
+        harness_path = ROOT / "scripts" / "run_live_e2e.py"
         spec = importlib.util.spec_from_file_location("we_live_harness_contract_test", harness_path)
         self.assertIsNotNone(spec)
         self.assertIsNotNone(spec.loader)
