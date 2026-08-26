@@ -9,6 +9,10 @@ validators, and delegates routing/consensus to the existing Orchestrator
 engine. Set ``WE_E2E_RUNTIME=codex`` for Codex CLI or leave it unset to retain
 the existing Claude Code CLI behavior.
 
+The WE v2 pipeline is a compatibility harness, not the production accepted-item
+finalizer. Its `ACCEPTED` outcome is recorded as a live consensus metric only;
+it must not be passed to ``orchestrator.build_accepted_item()``.
+
 The WE Generator is schema-checked and finalization-integrity-checked at the
 stage boundary.  Its v2.1.3 production validator additionally requires an
 out-of-band grammar evidence artifact; no such artifact is fabricated by this
@@ -23,7 +27,6 @@ import hashlib
 import importlib.util
 import json
 import os
-import re
 import subprocess
 import sys
 import uuid
@@ -94,7 +97,8 @@ REVIEWER_REQUIRED = {
     "minimal_correction_valid", "marked_part_assessments", "checks", "issues",
     "revision_requirements", "source_similarity_risk", "provenance",
 }
-REVIEWER_RUNTIME_KEYS = REVIEWER_REQUIRED | {"format_diagnostics"}
+REVIEWER_POST_STAGE_KEYS = {"generator_answer", "answer_match"}
+REVIEWER_LIVE_REQUIRED = REVIEWER_REQUIRED - REVIEWER_POST_STAGE_KEYS
 REVIEWER_FORBIDDEN_OUTPUT_KEYS = {
     "correct_answer", "intended_answer", "mutation_metadata", "generation_plan",
     "answer_explanation", "error_explanation", "minimal_correction",
@@ -508,227 +512,43 @@ def get_single_item(parsed: Any, stage: str) -> dict:
     return parsed
 
 
-def _first_value(mapping: dict, keys: tuple[str, ...], default: Any = None) -> Any:
-    for key in keys:
-        if key in mapping:
-            return mapping[key]
-    return default
-
-
-def _as_dict(value: Any) -> dict[str, Any]:
-    return value if isinstance(value, dict) else {}
-
-
-def _reviewer_assessments(raw: dict) -> dict[str, str]:
-    source = raw.get("marked_part_assessments", raw.get("marked_part_assessment"))
-    if source is None:
-        for key in ("phase2_one_error_only_audit", "phase_2_one_error_only_audit", "phase2_one_error_audit"):
-            phase = raw.get(key)
-            if isinstance(phase, dict) and isinstance(phase.get("marked_part_assessments"), dict):
-                source = phase["marked_part_assessments"]
-                break
-    if not isinstance(source, dict):
-        raise LiveInvocationError("schema", "reviewer: live response has no marked-part assessment object")
-    assessments: dict[str, str] = {}
-    for label in "ABCD":
-        value = source.get(label)
-        if isinstance(value, dict):
-            value = _first_value(value, ("classification", "assessment", "status"))
-        if value not in {"ACCEPTABLE", "ERROR", "MARGINAL"}:
-            raise LiveInvocationError("schema", f"reviewer: invalid live assessment for {label}: {value!r}")
-        assessments[label] = value
-    return assessments
-
-
-def _explicit_one_error(raw: dict, assessments: dict[str, str]) -> bool:
-    checks = _as_dict(raw.get("checks"))
-    if not checks:
-        checks = _as_dict(raw.get("checks_performed"))
-    audit = _as_dict(raw.get("one_error_only_audit"))
-    if not audit:
-        for key in ("phase2_one_error_only_audit", "phase_2_one_error_only_audit", "phase2_one_error_audit"):
-            candidate = raw.get(key)
-            if isinstance(candidate, dict):
-                audit = candidate
-                break
-    values = " ".join(str(value).lower() for value in checks.values())
-    audit_values = " ".join(str(value).lower() for value in audit.values())
-    raw_values = json.dumps(raw, ensure_ascii=False).lower()
-    return (
-        sum(value == "ERROR" for value in assessments.values()) == 1
-        and (
-            raw.get("grammar_validity") == "PASS"
-            or
-            checks.get("one_error_confirmed") is True
-            or checks.get("exactly_one_error") is True
-            or any("one_error" in str(key) and value is True for key, value in checks.items())
-            or any("one_error" in str(key) and str(value).lower() == "pass" for key, value in checks.items())
-            or "exactly one" in values
-            or "single genuine error" in values
-            or "single_error" in values
-            or "only one error" in values
-            or "one_error" in values
-            or "one error found" in values
-            or raw.get("genuine_error_count") == 1
-            or audit.get("genuine_error_count") == 1
-            or "single_error" in audit_values
-            or "no secondary error" in audit_values
-            or "exactly one genuine" in raw_values
-            or "sole genuine" in raw_values
-        )
-    )
-
-
-def _project_reviewer_issues(raw: dict, error_position: str, verdict: str) -> list[dict]:
-    source = raw.get("issues", [])
-    if not isinstance(source, list):
-        raise LiveInvocationError("schema", "reviewer: live issues must be an array")
-    projected: list[dict] = []
-    for issue in source:
-        if not isinstance(issue, dict):
-            if verdict == "PASS" and isinstance(issue, str) and (
-                any(token in issue.lower() for token in ("genuine", "sole", "single", "intended"))
-                or re.search(rf"span\s*{re.escape(error_position)}\b", issue, flags=re.IGNORECASE)
-            ):
-                continue
-            raise LiveInvocationError("schema", "reviewer: live issue must be an object")
-        if issue.get("severity") == "none" and "no issue" in str(issue.get("description", "")).lower():
-            continue
-        # A live Reviewer may report the one intended grammar defect as an
-        # observation. In the formal contract, that is not a review issue when
-        # the item otherwise passes; retaining it would make PASS impossible.
-        if verdict == "PASS" and issue.get("span") == error_position:
-            continue
-        severity = issue.get("severity")
-        if severity not in {"CRITICAL", "MAJOR", "MINOR"}:
-            raise LiveInvocationError("schema", f"reviewer: live issue has no formal severity: {issue!r}")
-        description = issue.get("description")
-        if not isinstance(description, str) or not description.strip():
-            raise LiveInvocationError("schema", "reviewer: live issue has no description")
-        projected.append({
-            "severity": severity,
-            "category": str(issue.get("category", issue.get("issue_type", "review"))),
-            "description": description,
-        })
-    return projected
-
-
 def formal_reviewer(raw: dict, generator_item: dict, order: int, batch_id: str) -> dict:
-    """Project a live blind judgment into the frozen formal Reviewer contract.
+    """Adapt a blind Reviewer record without changing its judgment.
 
-    This is a deterministic field/enum projection only. It never selects an
-    answer from the Generator, evaluates English, or fills a judgment from
-    Generator metadata. The only post-call comparison fields are attached at
-    this Orchestrator boundary.
+    The live response already uses the v2 Reviewer contract except for the two
+    comparison fields that cannot be exposed during the blind call.  Validate
+    that response first, copy it unchanged, and attach only those
+    post-invocation comparison fields.  The existing Reviewer validator then
+    rejects semantic contradictions such as PASS with a failed check.
     """
-    forbidden = sorted(set(raw) & REVIEWER_FORBIDDEN_OUTPUT_KEYS)
+    del order, batch_id  # provenance is supplied by the Reviewer response
+    forbidden = sorted(nested_forbidden(raw, REVIEWER_FORBIDDEN_OUTPUT_KEYS))
     if forbidden:
         raise LiveInvocationError("schema", f"reviewer: forbidden Generator field(s) appeared in live output: {forbidden}")
-    if "generator_answer" in raw or "answer_match" in raw:
+    unexpected_post_stage = sorted(set(raw) & REVIEWER_POST_STAGE_KEYS)
+    if unexpected_post_stage:
         raise LiveInvocationError("schema", "reviewer: comparison fields must be attached after the live invocation")
 
-    assessments = _reviewer_assessments(raw)
-    error_count = sum(value == "ERROR" for value in assessments.values())
-    uniqueness_audit = _as_dict(raw.get("answer_uniqueness_audit"))
-    phase3 = _as_dict(raw.get("phase3_uniqueness_audit"))
-    phase3_answer = _as_dict(raw.get("phase3_answer_uniqueness_audit"))
-    independent_answer = _first_value(
-        raw,
-        ("independent_answer", "answer", "candidate_answer", "reviewer_answer"),
-        _first_value(
-            uniqueness_audit,
-            ("independent_candidate_answer", "candidate_answer"),
-            _first_value(
-                phase3,
-                ("final_independent_answer", "independent_candidate_before_comparison", "candidate_answer"),
-                _first_value(phase3_answer, ("final_independent_answer", "candidate_answer")),
-            ),
-        ),
-    )
-    if independent_answer is None and error_count == 1:
-        # The live Reviewer sometimes leaves the answer label implicit while
-        # explicitly classifying exactly one marked span as ERROR. Reading
-        # that label is a lossless projection of its independent assessment;
-        # it does not consult the Generator answer.
-        independent_answer = next(label for label, value in assessments.items() if value == "ERROR")
-    if independent_answer not in {"A", "B", "C", "D", "NONE", "AMBIGUOUS"}:
-        raise LiveInvocationError("schema", f"reviewer: no contract-compatible independent answer in live response: {independent_answer!r}")
-    grammar_validity = raw.get("grammar_validity")
-    format_validity = raw.get("format_validity")
-    if grammar_validity not in {"PASS", "FAIL", "AMBIGUOUS"} or format_validity not in {"PASS", "WARN", "FAIL"}:
-        raise LiveInvocationError("schema", "reviewer: live grammar_validity/format_validity are not contract enums")
-    explicit_one_error = _explicit_one_error(raw, assessments)
-    raw_text = json.dumps(raw, ensure_ascii=False).lower()
-    ambiguity_value = " ".join(
-        str(raw.get(key, "")).lower()
-        for key in ("ambiguity_assessment", "ambiguity_detected", "ambiguity_check")
-    )
-    explicit_ambiguity = (
-        "ambiguous" in ambiguity_value and "unambiguous" not in ambiguity_value
-    ) or any(token in raw_text for token in ("marginal threatens", "competing parse"))
-    answer_unique = independent_answer in {"A", "B", "C", "D"} and error_count == 1 and not explicit_ambiguity
-    checks_source = _as_dict(raw.get("checks"))
-    raw_requirements = raw.get("revision_requirements", [])
-    if not isinstance(raw_requirements, list):
-        raise LiveInvocationError("schema", "reviewer: live revision_requirements must be an array")
-    revision_requirements = [
-        value for value in raw_requirements
-        if isinstance(value, str) and value.strip()
-        and not value.strip().lower().startswith(("none", "no revision", "no requirement"))
-    ]
-    verdict = _first_value(raw, ("verdict", "final_verdict"))
-    if verdict is None and grammar_validity == "PASS" and explicit_one_error and answer_unique and not revision_requirements:
-        # The live Reviewer response format used by the runtime describes the
-        # final decision through its audited fields but may omit the formal
-        # verdict key. This is a deterministic contract projection, not a new
-        # grammar judgment: PASS is possible only when the live fields already
-        # state PASS grammar, one error, one answer, and no revision request.
-        verdict = "PASS"
-    if verdict not in {"PASS", "REVISE", "REJECT"}:
-        raise LiveInvocationError("schema", f"reviewer: live verdict is not a contract enum: {verdict!r}")
-    error_position = _first_value(raw, ("detected_error_position",), independent_answer if independent_answer in {"A", "B", "C", "D"} else "NONE")
-    if error_position not in {"A", "B", "C", "D", "NONE"}:
-        raise LiveInvocationError("schema", f"reviewer: invalid detected error position: {error_position!r}")
-    formal = {
-        "item_id": generator_item["item_id"],
-        "section": generator_item["section"],
-        "agent_version": "Written Expression Reviewer v2.0",
-        "verdict": verdict,
-        "critical_failure": _first_value(raw, ("critical_failure",), grammar_validity != "PASS" or error_count != 1),
-        "independent_answer": independent_answer,
-        "generator_answer": generator_item["correct_answer"],
-        "answer_match": independent_answer == generator_item["correct_answer"],
-        "grammar_validity": grammar_validity,
-        "format_validity": format_validity,
-        "detected_error_count": _first_value(raw, ("detected_error_count", "genuine_error_count"), error_count),
-        "detected_error_position": error_position,
-        "non_error_parts_valid": _first_value(raw, ("non_error_parts_valid",), all(value == "ACCEPTABLE" for label, value in assessments.items() if label != error_position)),
-        "minimal_correction_valid": _first_value(raw, ("minimal_correction_valid",), explicit_one_error),
-        "marked_part_assessments": assessments,
-        "checks": {
-            "grammar_validity": grammar_validity,
-            "one_error_only": "PASS" if explicit_one_error else "AMBIGUOUS",
-            "answer_uniqueness": "PASS" if answer_unique else "AMBIGUOUS",
-            "format_validity": format_validity,
-            "target_metadata": "PASS" if raw.get("target_metadata_audit") is not None or "target_metadata" in checks_source else "PASS",
-            "naturalness": _first_value(raw, ("naturalness",), "WARN"),
-            "provenance": "PASS" if isinstance(raw.get("provenance"), dict) else "WARN",
-        },
-        "format_diagnostics": raw.get("format_diagnostics", {}),
-        "issues": _project_reviewer_issues(raw, error_position, verdict),
-        "revision_requirements": revision_requirements,
-        "source_similarity_risk": _first_value(raw, ("source_similarity_risk",), "LOW"),
-        "provenance": {
-            "agent_version": "Written Expression Reviewer v2.0",
-            "prompt_hash": None,
-            "spec_version": "1.0.0",
-            "format_spec_version": "1.0.0",
-            "review_batch_id": batch_id,
-            "item_review_order": order,
-            "invocation_id": None,
-            "runtime_model": None,
-        },
-    }
+    missing = sorted(REVIEWER_LIVE_REQUIRED - set(raw))
+    if missing:
+        raise LiveInvocationError("schema", f"reviewer: required live field(s) missing: {missing}")
+    # The canonical schema's only absent fields are post-stage fields. A
+    # dedicated runtime schema check keeps this adapter structural.
+    raw_errors = schema_errors(raw, reviewer_runtime_schema())
+    if raw_errors:
+        raise LiveInvocationError("schema", "; ".join(f"reviewer: {error}" for error in raw_errors))
+    if raw.get("item_id") != generator_item.get("item_id") or raw.get("section") != generator_item.get("section"):
+        raise LiveInvocationError("schema", "reviewer: live identity does not match the blinded candidate")
+    generator_answer = generator_item.get("correct_answer")
+    if generator_answer not in {"A", "B", "C", "D"}:
+        raise LiveInvocationError("schema", "reviewer: generator candidate has no contract-compatible answer")
+
+    formal = copy.deepcopy(raw)
+    formal["generator_answer"] = generator_answer
+    formal["answer_match"] = formal["independent_answer"] == generator_answer
+    formal_ok, formal_errors = validate_existing_contract(formal, REVIEWER_VALIDATOR, "reviewer")
+    if not formal_ok:
+        raise LiveInvocationError("schema", "; ".join(formal_errors))
     return formal
 
 
@@ -912,7 +732,8 @@ def reviewer_error_status(item: dict) -> str:
     if count > 1:
         return "multiple_errors"
 
-    checks = _as_dict(item.get("checks"))
+    checks_value = item.get("checks")
+    checks = checks_value if isinstance(checks_value, dict) else {}
     one_error_status = checks.get("one_error_only")
     answer_status = checks.get("answer_uniqueness")
     if (
@@ -1046,6 +867,11 @@ def build_metrics(generator_items: list, reviewer_items: list, solver_items: lis
             "live_invocation": True,
             "synthetic_reviewer_output": False,
             "synthetic_solver_output": False,
+        },
+        "contract_boundary": {
+            "production_finalizer_compatible": False,
+            "accepted_item_published": False,
+            "reason": "WE v2 live E2E is a compatibility harness; use the production contract pipeline for accepted items.",
         },
         "gates": {
             "generator_schema": {"passed": len(by_gen), "required": 10, "ok": len(by_gen) == 10},

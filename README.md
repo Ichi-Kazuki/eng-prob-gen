@@ -10,6 +10,15 @@ The Generator proposes an item, the Reviewer independently returns `PASS`, `REVI
 
 The Solver receives only the canonical allowlisted projection (`item_id`, section, and question content). The canonical payload is deep-copied, persisted in candidate state, and re-derived and compared again at the Solver boundary. Live Reviewer/Solver calls use a disposable workspace outside the repository containing only the named agent definition and output schema. `ACCEPTED` requires the full Generator/Reviewer/Solver consensus invariant; any disagreement fails closed.
 
+The production Orchestrator and the Written Expression v2 live E2E are
+separate contract families. Production finalization consumes the legacy
+Generator/Reviewer records and publishes `answer_explanation` plus the
+Reviewer's `reviewer_difficulty`. WE v2 uses its own `error_explanation` and
+v2 Reviewer schema, and its live `ACCEPTED` metric is compatibility-harness
+evidence only; the harness does not call `build_accepted_item()` or publish a
+production accepted item. Passing a WE v2 record to the production finalizer
+is rejected explicitly.
+
 ## Pilot and validation workflows
 
 The pilot driver operates under `runs/pilot`:
@@ -32,6 +41,13 @@ python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
 CI also runs `pip check`, Ruff, a scoped mypy check, pip-audit, coverage measurement, and Python bytecode compilation on Ubuntu and Windows.
+
+The image crop/underline utilities are analysis-only tools. Install their
+optional dependency when using them:
+
+```bash
+python -m pip install ".[analysis]"
+```
 
 ## External grammar evidence
 

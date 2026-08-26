@@ -1,5 +1,8 @@
+import argparse
 import json
 from pathlib import Path
+from typing import Sequence
+
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,9 +44,10 @@ def candidates(image, y0, y1, x0, x1):
                 groups.append({'start': start, 'end': end, 'top': y, 'bottom': y, 'last_y': y})
     return [g for g in groups if g['end'] - g['start'] >= 8 and g['bottom'] - g['top'] <= 6]
 
-def inspect(name):
-    image = Image.open(OFFICIAL_IMAGE_DIR / f'{name}.png').convert('L')
-    payload = json.loads((OCR_BOX_DIR / f'{name}.json').read_text(encoding='utf-8-sig'))
+def inspect(name: str, image_dir: Path = OFFICIAL_IMAGE_DIR, ocr_box_dir: Path = OCR_BOX_DIR) -> None:
+    with Image.open(image_dir / f'{name}.png') as source_image:
+        image = source_image.convert('L')
+    payload = json.loads((ocr_box_dir / f'{name}.json').read_text(encoding='utf-8-sig'))
     for line in payload['lines']:
         words = line['words']
         if not words:
@@ -58,5 +62,16 @@ def inspect(name):
         if found:
             print('LINE', line['text'][:60], 'y', min_y, max_y, 'candidates', found)
 
+
+def main(argv: Sequence[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Inspect likely underlines in an OCR image.")
+    parser.add_argument("name", nargs="?", default="B_p4")
+    parser.add_argument("--image-dir", type=Path, default=OFFICIAL_IMAGE_DIR)
+    parser.add_argument("--ocr-box-dir", type=Path, default=OCR_BOX_DIR)
+    args = parser.parse_args(argv)
+    inspect(args.name, args.image_dir, args.ocr_box_dir)
+    return 0
+
+
 if __name__ == '__main__':
-    inspect('B_p4')
+    raise SystemExit(main())

@@ -16,13 +16,15 @@ from __future__ import annotations
 import json
 import os
 import re
+import signal
 import shutil
 import subprocess
 import tempfile
 import uuid
 from dataclasses import dataclass, field, replace
+from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Callable, Literal, Protocol
+from typing import Any, Callable, Iterator, Literal, Protocol
 
 from runtime.codex_schema import (  # noqa: E402
     build_codex_transport_artifact,
@@ -71,6 +73,7 @@ class InvocationRequest:
     timeout_seconds: int = 300
     artifact_dir: Path = Path(".")
     isolate_workspace: bool = False
+    retain_workspace_on_failure: bool = False
 
 
 @dataclass
@@ -335,6 +338,27 @@ class _SubprocessRuntime:
             shutil.copyfile(request.formal_output_schema, schema_path)
         return replace(request, cwd=workspace), schema_path
 
+    @classmethod
+    @contextmanager
+    def _isolated_request(
+        cls, request: InvocationRequest, result: InvocationResult
+    ) -> Iterator[tuple[InvocationRequest, Path | None]]:
+        """Own and dispose of the temporary workspace for one invocation.
+
+        A workspace is owned by the adapter that creates it.  It is retained
+        only when the caller explicitly opts in and the invocation fails; the
+        default is cleanup for success, validation/runtime errors, and setup
+        exceptions alike.
+        """
+        completed = False
+        try:
+            yield cls._prepare_isolated_workspace(request, result)
+            completed = True
+        finally:
+            if completed or not request.retain_workspace_on_failure:
+                if result.workspace_path is not None:
+                    shutil.rmtree(result.workspace_path, ignore_errors=True)
+
     def _run(self, request: InvocationRequest, result: InvocationResult, command: list[str], *, stdin: str | None = None) -> subprocess.CompletedProcess[str]:
         result.command = tuple(command)
         try:
@@ -378,8 +402,8 @@ class _SubprocessRuntime:
         except OSError:
             return ""
 
-    @staticmethod
-    def _terminate_process_tree(pid: int) -> None:
+    @classmethod
+    def _terminate_process_tree(cls, pid: int, *, force: bool = False) -> None:
         """Terminate only the process tree created for this invocation."""
         if os.name == "nt":
             try:
@@ -395,10 +419,21 @@ class _SubprocessRuntime:
                 pass
             return
         try:
-            killpg = getattr(os, "killpg", None)
-            if callable(killpg):
-                killpg(pid, 15)
+            sig = getattr(signal, "SIGKILL", signal.SIGTERM) if force else signal.SIGTERM
+            cls._signal_process_group(pid, sig)
         except (OSError, ProcessLookupError):
+            pass
+
+    @staticmethod
+    def _signal_process_group(pid: int, sig: int) -> None:
+        """Send a signal to a POSIX invocation group, tolerating races."""
+        killpg = getattr(os, "killpg", None)
+        if not callable(killpg):
+            raise OSError("POSIX process-group signaling is unavailable")
+        try:
+            killpg(pid, sig)
+        except (OSError, ProcessLookupError):
+            # The group may have exited between timeout detection and cleanup.
             pass
 
     def _run_process_group(self, request: InvocationRequest, result: InvocationResult, command: list[str], *, stdin: str | None = None) -> subprocess.CompletedProcess[str]:
@@ -432,8 +467,18 @@ class _SubprocessRuntime:
                     try:
                         process.wait(timeout=5)
                     except subprocess.TimeoutExpired:
-                        process.kill()
+                        if os.name != "nt":
+                            self._terminate_process_tree(process.pid, force=True)
+                        try:
+                            process.kill()
+                        except ProcessLookupError:
+                            pass
                         process.wait()
+                    else:
+                        if os.name != "nt":
+                            # A parent may exit after SIGTERM while a child
+                            # that ignores it keeps the process group alive.
+                            self._terminate_process_tree(process.pid, force=True)
                     raise subprocess.TimeoutExpired(command, request.timeout_seconds) from exc
             stdout = stdout_path.read_text(encoding="utf-8", errors="replace")
             stderr = stderr_path.read_text(encoding="utf-8", errors="replace")
@@ -509,54 +554,54 @@ class ClaudeRuntime(_SubprocessRuntime):
         result = self._new_result(request)
         if request.formal_output_schema is None:
             raise ValueError(f"{request.stage}: Claude invocation requires an output schema")
-        effective_request, isolated_schema = self._prepare_isolated_workspace(request, result)
-        if result.workspace_path is not None:
-            _assert_isolated_workspace_clean(result.workspace_path)
-        schema = request.transport_output_schema
-        if schema is None:
-            schema_source = isolated_schema or request.formal_output_schema
-            schema = json.loads(schema_source.read_text(encoding="utf-8"))
-        command = [
-            self.executable,
-            "-p",
-            "--agent",
-            request.agent_name,
-            "--tools",
-            request.tools,
-            "--output-format",
-            "json",
-            "--no-session-persistence",
-            "--permission-mode",
-            "dontAsk",
-            "--model",
-            request.model or self.model,
-        ]
-        if request.max_budget_usd is not None:
-            command.extend(["--max-budget-usd", request.max_budget_usd])
-        command.extend(["--json-schema", json.dumps(self._claude_schema(schema), ensure_ascii=False, separators=(",", ":"))])
-        if request.system_directive is not None:
-            command.extend(["--append-system-prompt", request.system_directive])
-        command.append(request.prompt)
-        proc = self._run(effective_request, result, command)
-        self._complete(effective_request, result, proc)
-        try:
-            envelope = json.loads(result.raw_stdout)
-            model_usage = envelope.get("modelUsage") if isinstance(envelope, dict) else None
-            if isinstance(model_usage, dict) and model_usage:
-                first_model = next(iter(model_usage.values()))
-                if isinstance(first_model, dict) and first_model.get("canonicalModel"):
-                    result.model = str(first_model["canonicalModel"])
-                else:
-                    result.model = str(next(iter(model_usage)))
-        except (json.JSONDecodeError, StopIteration, TypeError):
-            pass
-        try:
-            result.parsed = parse_json_text(result.raw_stdout, request.stage)
-        except ValueError as exc:
-            result.error_category = "parsing"
-            result.error_detail = str(exc)
-            raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
-        return result
+        with self._isolated_request(request, result) as (effective_request, isolated_schema):
+            if result.workspace_path is not None:
+                _assert_isolated_workspace_clean(result.workspace_path)
+            schema = request.transport_output_schema
+            if schema is None:
+                schema_source = isolated_schema or request.formal_output_schema
+                schema = json.loads(schema_source.read_text(encoding="utf-8"))
+            command = [
+                self.executable,
+                "-p",
+                "--agent",
+                request.agent_name,
+                "--tools",
+                request.tools,
+                "--output-format",
+                "json",
+                "--no-session-persistence",
+                "--permission-mode",
+                "dontAsk",
+                "--model",
+                request.model or self.model,
+            ]
+            if request.max_budget_usd is not None:
+                command.extend(["--max-budget-usd", request.max_budget_usd])
+            command.extend(["--json-schema", json.dumps(self._claude_schema(schema), ensure_ascii=False, separators=(",", ":"))])
+            if request.system_directive is not None:
+                command.extend(["--append-system-prompt", request.system_directive])
+            command.append(request.prompt)
+            proc = self._run(effective_request, result, command)
+            self._complete(effective_request, result, proc)
+            try:
+                envelope = json.loads(result.raw_stdout)
+                model_usage = envelope.get("modelUsage") if isinstance(envelope, dict) else None
+                if isinstance(model_usage, dict) and model_usage:
+                    first_model = next(iter(model_usage.values()))
+                    if isinstance(first_model, dict) and first_model.get("canonicalModel"):
+                        result.model = str(first_model["canonicalModel"])
+                    else:
+                        result.model = str(next(iter(model_usage)))
+            except (json.JSONDecodeError, StopIteration, TypeError):
+                pass
+            try:
+                result.parsed = parse_json_text(result.raw_stdout, request.stage)
+            except ValueError as exc:
+                result.error_category = "parsing"
+                result.error_detail = str(exc)
+                raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
+            return result
 
 
 class CodexRuntime(_SubprocessRuntime):
@@ -634,105 +679,105 @@ class CodexRuntime(_SubprocessRuntime):
         if request.formal_output_schema is None:
             raise ValueError(f"{request.stage}: Codex invocation requires an output schema")
 
-        effective_request, isolated_schema = self._prepare_isolated_workspace(request, result)
-        if result.workspace_path is not None:
-            _assert_isolated_workspace_clean(result.workspace_path)
+        with self._isolated_request(request, result) as (effective_request, isolated_schema):
+            if result.workspace_path is not None:
+                _assert_isolated_workspace_clean(result.workspace_path)
 
-        # Codex receives only a derived transport schema. The canonical file
-        # remains the formal contract and is never rewritten or passed to the
-        # Codex Structured Outputs endpoint. A caller-supplied transport shape
-        # is a pre-projection (used for blinded post-stage records); it is
-        # still normalized by the same Codex adapter and tied to the original
-        # canonical file in provenance.
-        try:
-            canonical_schema = request.formal_output_schema
-            source_schema: dict[str, Any] | Path = (
-                request.transport_output_schema
-                if request.transport_output_schema is not None
-                else canonical_schema
+            # Codex receives only a derived transport schema. The canonical file
+            # remains the formal contract and is never rewritten or passed to the
+            # Codex Structured Outputs endpoint. A caller-supplied transport shape
+            # is a pre-projection (used for blinded post-stage records); it is
+            # still normalized by the same Codex adapter and tied to the original
+            # canonical file in provenance.
+            try:
+                canonical_schema = request.formal_output_schema
+                source_schema: dict[str, Any] | Path = (
+                    request.transport_output_schema
+                    if request.transport_output_schema is not None
+                    else canonical_schema
+                )
+                transport_build = build_codex_transport_artifact(
+                    source_schema,
+                    canonical_schema_path=canonical_schema,
+                )
+            except (OSError, UnicodeDecodeError, json.JSONDecodeError, TypeError, ValueError) as exc:
+                result.completed_at = _now_iso()
+                result.error_category = "CODEX_SCHEMA_COMPATIBILITY_ERROR"
+                result.error_detail = f"{request.stage}: could not build Codex transport schema: {exc}"
+                self._write_process_artifacts(result)
+                raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
+
+            schema_dir = request.artifact_dir / "transport-schemas"
+            schema_dir.mkdir(parents=True, exist_ok=True)
+            transport_schema_path = schema_dir / f"{request.stage}-{result.invocation_id}.json"
+            transport_provenance_path = schema_dir / f"{request.stage}-{result.invocation_id}.provenance.json"
+            transport_schema_path.write_text(
+                json.dumps(transport_build.schema, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
             )
-            transport_build = build_codex_transport_artifact(
-                source_schema,
-                canonical_schema_path=canonical_schema,
+            transport_provenance_path.write_text(
+                json.dumps(transport_build.provenance, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
             )
-        except (OSError, UnicodeDecodeError, json.JSONDecodeError, TypeError, ValueError) as exc:
-            result.completed_at = _now_iso()
-            result.error_category = "CODEX_SCHEMA_COMPATIBILITY_ERROR"
-            result.error_detail = f"{request.stage}: could not build Codex transport schema: {exc}"
-            self._write_process_artifacts(result)
-            raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
+            result.transport_schema_path = transport_schema_path
+            result.transport_schema_provenance_path = transport_provenance_path
+            result.transport_schema_provenance = transport_build.provenance
 
-        schema_dir = request.artifact_dir / "transport-schemas"
-        schema_dir.mkdir(parents=True, exist_ok=True)
-        transport_schema_path = schema_dir / f"{request.stage}-{result.invocation_id}.json"
-        transport_provenance_path = schema_dir / f"{request.stage}-{result.invocation_id}.provenance.json"
-        transport_schema_path.write_text(
-            json.dumps(transport_build.schema, ensure_ascii=False, indent=2) + "\n",
-            encoding="utf-8",
-        )
-        transport_provenance_path.write_text(
-            json.dumps(transport_build.provenance, ensure_ascii=False, indent=2) + "\n",
-            encoding="utf-8",
-        )
-        result.transport_schema_path = transport_schema_path
-        result.transport_schema_provenance_path = transport_provenance_path
-        result.transport_schema_provenance = transport_build.provenance
+            output_schema_path: Path = transport_schema_path
+            if result.workspace_path is not None:
+                output_schema_path = result.workspace_path / "schemas" / transport_schema_path.name
+                output_schema_path.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(transport_schema_path, output_schema_path)
 
-        output_schema_path: Path = transport_schema_path
-        if result.workspace_path is not None:
-            output_schema_path = result.workspace_path / "schemas" / transport_schema_path.name
-            output_schema_path.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(transport_schema_path, output_schema_path)
+            if result.output_last_message_path is None:
+                raise RuntimeError("Codex adapter failed to allocate --output-last-message path")
+            result.output_last_message_path.parent.mkdir(parents=True, exist_ok=True)
+            result.output_last_message_path.touch()
 
-        if result.output_last_message_path is None:
-            raise RuntimeError("Codex adapter failed to allocate --output-last-message path")
-        result.output_last_message_path.parent.mkdir(parents=True, exist_ok=True)
-        result.output_last_message_path.touch()
+            command = [
+                self.executable,
+                "exec",
+                "--ephemeral",
+                "--output-schema",
+                str(output_schema_path.resolve()),
+                "--output-last-message",
+                str(result.output_last_message_path.resolve()),
+            ]
+            if request.sandbox is not None:
+                command.extend(["--sandbox", request.sandbox])
+            if request.model and request.model != "default":
+                command.extend(["--model", request.model])
+            elif self.model and self.model != "default":
+                command.extend(["--model", self.model])
+            reasoning_effort = os.environ.get("WE_E2E_CODEX_REASONING_EFFORT")
+            if reasoning_effort:
+                command.extend(["--config", f'model_reasoning_effort="{reasoning_effort}"'])
+            cwd = effective_request.cwd
+            if request.isolate_workspace:
+                command.extend(["--skip-git-repo-check"])
+            if cwd is not None:
+                command.extend(["--cd", str(cwd.resolve())])
+            command.append("-")
 
-        command = [
-            self.executable,
-            "exec",
-            "--ephemeral",
-            "--output-schema",
-            str(output_schema_path.resolve()),
-            "--output-last-message",
-            str(result.output_last_message_path.resolve()),
-        ]
-        if request.sandbox is not None:
-            command.extend(["--sandbox", request.sandbox])
-        if request.model and request.model != "default":
-            command.extend(["--model", request.model])
-        elif self.model and self.model != "default":
-            command.extend(["--model", self.model])
-        reasoning_effort = os.environ.get("WE_E2E_CODEX_REASONING_EFFORT")
-        if reasoning_effort:
-            command.extend(["--config", f'model_reasoning_effort="{reasoning_effort}"'])
-        cwd = effective_request.cwd
-        if request.isolate_workspace:
-            command.extend(["--skip-git-repo-check"])
-        if cwd is not None:
-            command.extend(["--cd", str(cwd.resolve())])
-        command.append("-")
+            proc = self._run(effective_request, result, command, stdin=self._prompt(request))
+            self._complete(effective_request, result, proc)
 
-        proc = self._run(effective_request, result, command, stdin=self._prompt(request))
-        self._complete(effective_request, result, proc)
-
-        try:
-            last_message = result.output_last_message_path.read_text(encoding="utf-8")
-        except (OSError, UnicodeDecodeError) as exc:
-            result.error_category = "infrastructure"
-            result.error_detail = f"{request.stage}: Codex --output-last-message could not be read: {exc}"
-            raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
-        try:
-            result.parsed = parse_json_text(last_message, request.stage)
-        except ValueError as exc:
-            result.error_category = "parsing"
-            result.error_detail = str(exc)
-            raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
-        try:
-            result.parsed = normalize_codex_output_for_canonical(result.parsed, request.formal_output_schema)
-        except (OSError, UnicodeDecodeError, json.JSONDecodeError, TypeError, ValueError) as exc:
-            result.error_category = "CODEX_SCHEMA_COMPATIBILITY_ERROR"
-            result.error_detail = f"{request.stage}: could not normalize Codex output for canonical validation: {exc}"
-            raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
-        return result
+            try:
+                last_message = result.output_last_message_path.read_text(encoding="utf-8")
+            except (OSError, UnicodeDecodeError) as exc:
+                result.error_category = "infrastructure"
+                result.error_detail = f"{request.stage}: Codex --output-last-message could not be read: {exc}"
+                raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
+            try:
+                result.parsed = parse_json_text(last_message, request.stage)
+            except ValueError as exc:
+                result.error_category = "parsing"
+                result.error_detail = str(exc)
+                raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
+            try:
+                result.parsed = normalize_codex_output_for_canonical(result.parsed, request.formal_output_schema)
+            except (OSError, UnicodeDecodeError, json.JSONDecodeError, TypeError, ValueError) as exc:
+                result.error_category = "CODEX_SCHEMA_COMPATIBILITY_ERROR"
+                result.error_detail = f"{request.stage}: could not normalize Codex output for canonical validation: {exc}"
+                raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
+            return result

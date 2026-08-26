@@ -244,5 +244,63 @@ class ReviewerBatchDriverBoundaryTests(unittest.TestCase):
                         driver.cmd_apply_review(str(reviewer_path), "missing-batch", allow_partial=True)
 
 
+class RuntimeRootContainmentTests(unittest.TestCase):
+    def test_normal_relative_runtime_root_is_accepted(self) -> None:
+        configured = core.configured_runtime_root({"runtime_root": "runs/test"})
+        self.assertEqual(configured, (core.REPO_ROOT / "runs/test").resolve())
+        self.assertTrue(configured.is_relative_to(core.REPO_ROOT.resolve()))
+
+    def test_parent_and_absolute_runtime_roots_are_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            core.configured_runtime_root({"runtime_root": "../outside"})
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaises(ValueError):
+                core.configured_runtime_root({"runtime_root": directory})
+
+    def test_symlink_to_outside_runtime_root_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as outside, tempfile.TemporaryDirectory(
+            dir=core.REPO_ROOT
+        ) as inside:
+            link = Path(inside) / "escape"
+            try:
+                link.symlink_to(Path(outside), target_is_directory=True)
+            except (OSError, NotImplementedError) as exc:
+                self.skipTest(f"directory symlinks are unavailable: {exc}")
+            relative = link.relative_to(core.REPO_ROOT)
+            with self.assertRaises(ValueError):
+                core.configured_runtime_root({"runtime_root": str(relative)})
+
+    def test_symlink_to_path_inside_repo_is_accepted(self) -> None:
+        with tempfile.TemporaryDirectory(dir=core.REPO_ROOT) as inside:
+            target = Path(inside) / "target"
+            target.mkdir()
+            link = Path(inside) / "alias"
+            try:
+                link.symlink_to(target, target_is_directory=True)
+            except (OSError, NotImplementedError) as exc:
+                self.skipTest(f"directory symlinks are unavailable: {exc}")
+            relative = link.relative_to(core.REPO_ROOT) / "nested"
+            configured = core.configured_runtime_root({"runtime_root": str(relative)})
+            self.assertTrue(configured.is_relative_to(core.REPO_ROOT.resolve()))
+
+
+class ContractFamilyBoundaryTests(unittest.TestCase):
+    def test_we_v2_accepted_record_cannot_enter_production_finalizer(self) -> None:
+        candidate = core.Candidate("we-v2-boundary", "we-v2-boundary", "Written Expression")
+        candidate.state = core.State.ACCEPTED
+        candidate.generator_item = {
+            "item_id": candidate.item_id,
+            "section": candidate.section,
+            "agent_version": "Written Expression Generator v2.1",
+        }
+        candidate.reviewer_item = {
+            "item_id": candidate.item_id,
+            "section": candidate.section,
+            "agent_version": "Written Expression Reviewer v2.0",
+        }
+        with self.assertRaisesRegex(ValueError, "cannot be passed to the production"):
+            core.build_accepted_item(candidate, {"spec_version": "1", "taxonomy_version": "1"})
+
+
 if __name__ == "__main__":
     unittest.main()

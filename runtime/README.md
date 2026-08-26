@@ -23,3 +23,8 @@ recorded as relaxed, and the original canonical schema remains untouched.
 Transport-schema provenance records both schema hashes and explicitly requires
 canonical validation. Runtime facts, raw stdout/stderr paths, and the
 transport provenance are stored in the separate provenance sidecar.
+
+An isolated workspace is owned by the adapter that creates it and is removed
+after every invocation, including launch, timeout, parsing, and validation
+failures. `InvocationRequest.retain_workspace_on_failure` is an explicit
+debug-only opt-in for retaining a failed workspace; it is disabled by default.

@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+import copy
 import json
 import importlib.util
+import os
+import shutil
+import signal
 import subprocess
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 from unittest import mock
 
@@ -66,6 +71,8 @@ class RuntimeAdapterTests(unittest.TestCase):
             result = runtime.invoke(request(Path(directory)))
             self.assertTrue(result.output_last_message_path and result.output_last_message_path.exists())
             self.assertTrue(result.transport_schema_path and result.transport_schema_path.exists())
+            self.assertTrue(result.workspace_path)
+            self.assertFalse(result.workspace_path.exists())
             transport = json.loads(result.transport_schema_path.read_text(encoding="utf-8"))
             self.assertNotIn("allOf", json.dumps(transport))
             self.assertTrue(
@@ -92,6 +99,7 @@ class RuntimeAdapterTests(unittest.TestCase):
         self.assertIn(SOLVER_AGENT.read_text(encoding="utf-8"), kwargs["input"])
         self.assertNotEqual(result.raw_output, result.parsed)
         self.assertEqual(result.parsed["solver_answer"], "A")
+
 
     def test_each_codex_call_has_a_distinct_ephemeral_output_path(self) -> None:
         calls: list[list[str]] = []
@@ -158,9 +166,68 @@ class RuntimeAdapterTests(unittest.TestCase):
             error = raised.exception
             self.assertTrue(error.result.raw_stdout_path and error.result.raw_stdout_path.exists())
             self.assertTrue(error.result.raw_stderr_path and error.result.raw_stderr_path.exists())
+            self.assertTrue(error.result.workspace_path)
+            self.assertFalse(error.result.workspace_path.exists())
 
         self.assertEqual(error.category, "infrastructure")
         self.assertEqual(error.result.exit_code, 429)
+
+    def test_isolated_workspace_is_removed_after_parse_failure(self) -> None:
+        def runner(command: list[str], **kwargs):
+            output = Path(command[command.index("--output-last-message") + 1])
+            output.write_text("not-json", encoding="utf-8")
+            return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+        with tempfile.TemporaryDirectory() as directory:
+            runtime = CodexRuntime(executable="codex", runner=runner, cli_version="mock")
+            with self.assertRaises(RuntimeInvocationError) as raised:
+                runtime.invoke(request(Path(directory)))
+            self.assertTrue(raised.exception.result.workspace_path)
+            self.assertFalse(raised.exception.result.workspace_path.exists())
+
+    def test_failed_workspace_can_be_retained_only_by_explicit_opt_in(self) -> None:
+        def runner(command: list[str], **kwargs):
+            return subprocess.CompletedProcess(command, 1, stdout="", stderr="failed")
+
+        with tempfile.TemporaryDirectory() as directory:
+            invocation_request = replace(request(Path(directory)), retain_workspace_on_failure=True)
+            runtime = CodexRuntime(executable="codex", runner=runner, cli_version="mock")
+            with self.assertRaises(RuntimeInvocationError) as raised:
+                runtime.invoke(invocation_request)
+            workspace = raised.exception.result.workspace_path
+            self.assertTrue(workspace and workspace.exists())
+            shutil.rmtree(workspace, ignore_errors=True)
+
+    def test_posix_timeout_cleanup_escalates_to_process_group_sigkill(self) -> None:
+        runtime = CodexRuntime(
+            executable="codex",
+            runner=lambda *args, **kwargs: subprocess.CompletedProcess([], 0),
+            cli_version="mock",
+        )
+        calls: list[tuple[int, int]] = []
+
+        def killpg(pid: int, sig: int) -> None:
+            calls.append((pid, sig))
+
+        with mock.patch.object(os, "name", "posix"), mock.patch.object(
+            os, "killpg", side_effect=killpg, create=True
+        ):
+            runtime._terminate_process_tree(123)
+            runtime._terminate_process_tree(123, force=True)
+
+        self.assertEqual(calls[0], (123, signal.SIGTERM))
+        self.assertEqual(calls[1], (123, getattr(signal, "SIGKILL", signal.SIGTERM)))
+
+    def test_posix_process_group_cleanup_tolerates_exited_group(self) -> None:
+        runtime = CodexRuntime(
+            executable="codex",
+            runner=lambda *args, **kwargs: subprocess.CompletedProcess([], 0),
+            cli_version="mock",
+        )
+        with mock.patch.object(os, "name", "posix"), mock.patch.object(
+            os, "killpg", side_effect=ProcessLookupError, create=True
+        ):
+            runtime._terminate_process_tree(123, force=True)
 
     def test_codex_failure_categories_do_not_match_prompt_words(self) -> None:
         runtime = CodexRuntime(executable="codex", runner=lambda *args, **kwargs: subprocess.CompletedProcess([], 0), cli_version="mock")
@@ -361,6 +428,64 @@ class RuntimeAdapterTests(unittest.TestCase):
                          mock.patch.object(harness, "atomic_write_json", wraps=harness.atomic_write_json) as writer:
                         self.assertEqual(harness.report_existing_run(), expected_exit_code)
                     writer.assert_called_once_with(out / "we_v2_1_3_live_e2e.json", metrics)
+
+
+class LiveReviewerAdapterTests(unittest.TestCase):
+    @staticmethod
+    def _harness():
+        harness_path = ROOT / "scripts" / "run_live_e2e.py"
+        spec = importlib.util.spec_from_file_location("we_live_harness_reviewer_adapter_test", harness_path)
+        assert spec is not None and spec.loader is not None
+        harness = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(harness)
+        return harness
+
+    @staticmethod
+    def _records() -> tuple[dict, dict, dict]:
+        generator = json.loads(
+            (ROOT / "analysis/we_v2/we_v2_smoke_items.json").read_text(encoding="utf-8")
+        )["items"][0]
+        expected = json.loads(
+            (ROOT / "analysis/we_v2/we_v2_smoke_review.json").read_text(encoding="utf-8")
+        )["items"][0]
+        raw = copy.deepcopy(expected)
+        del raw["generator_answer"]
+        del raw["answer_match"]
+        return generator, expected, raw
+
+    def test_valid_reviewer_output_is_structurally_adapted_without_rewriting(self) -> None:
+        harness = self._harness()
+        generator, expected, raw = self._records()
+        formal = harness.formal_reviewer(raw, generator, 1, "adapter-test")
+        self.assertEqual(formal, expected)
+
+    def test_pass_with_failed_one_error_check_is_rejected(self) -> None:
+        harness = self._harness()
+        generator, _expected, raw = self._records()
+        raw["checks"]["one_error_only"] = "FAIL"
+        with self.assertRaises(harness.LiveInvocationError):
+            harness.formal_reviewer(raw, generator, 1, "adapter-test")
+
+    def test_pass_with_failed_target_metadata_check_is_rejected(self) -> None:
+        harness = self._harness()
+        generator, _expected, raw = self._records()
+        raw["checks"]["target_metadata"] = "FAIL"
+        with self.assertRaises(harness.LiveInvocationError):
+            harness.formal_reviewer(raw, generator, 1, "adapter-test")
+
+    def test_missing_verdict_is_rejected(self) -> None:
+        harness = self._harness()
+        generator, _expected, raw = self._records()
+        del raw["verdict"]
+        with self.assertRaises(harness.LiveInvocationError):
+            harness.formal_reviewer(raw, generator, 1, "adapter-test")
+
+    def test_missing_source_similarity_risk_is_rejected(self) -> None:
+        harness = self._harness()
+        generator, _expected, raw = self._records()
+        del raw["source_similarity_risk"]
+        with self.assertRaises(harness.LiveInvocationError):
+            harness.formal_reviewer(raw, generator, 1, "adapter-test")
 
 
 if __name__ == "__main__":

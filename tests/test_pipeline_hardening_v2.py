@@ -293,6 +293,7 @@ class IsolatedSolverWorkspaceTests(unittest.TestCase):
             runtime.invoke(self._request(Path(directory), "Structure"))
             runtime.invoke(self._request(Path(directory), "Written Expression"))
         self.assertEqual(len(observed), 2)
+        self.assertTrue(all(not workspace.exists() for workspace, _names in observed))
 
     def test_claude_also_uses_the_isolated_workspace(self) -> None:
         observed: list[Path] = []
@@ -316,6 +317,7 @@ class IsolatedSolverWorkspaceTests(unittest.TestCase):
             runtime = ClaudeRuntime(executable="claude", runner=runner, cli_version="mock")
             runtime.invoke(self._request(Path(directory), "Written Expression"))
         self.assertEqual(len(observed), 1)
+        self.assertFalse(observed[0].exists())
 
 
 class OfficialProfileCacheTests(unittest.TestCase):

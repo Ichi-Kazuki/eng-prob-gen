@@ -245,9 +245,13 @@ def configured_runtime_root(config: dict | None = None) -> Path:
     if not isinstance(raw_root, str) or not raw_root.strip():
         raise ValueError("runtime_root must be a non-empty relative path")
     root = Path(raw_root)
-    if root.is_absolute() or ".." in root.parts:
+    if root.is_absolute() or root.drive or ".." in root.parts:
         raise ValueError("runtime_root must remain below the repository root")
-    return REPO_ROOT / root
+    repo_root = REPO_ROOT.resolve()
+    resolved_root = (repo_root / root).resolve()
+    if not resolved_root.is_relative_to(repo_root):
+        raise ValueError("runtime_root must remain below the repository root")
+    return resolved_root
 
 
 def _git_commit_sha() -> str | None:
@@ -2326,6 +2330,15 @@ def build_accepted_item(candidate: Candidate, versions: dict) -> Optional[dict]:
         return None
     g = candidate.generator_item
     r = candidate.reviewer_item
+    if not isinstance(g, dict) or not isinstance(r, dict):
+        raise ValueError("ACCEPTED candidate is missing its production Generator/Reviewer records")
+    if (
+        g.get("agent_version") in {"Written Expression Generator v2.0", "Written Expression Generator v2.1"}
+        or r.get("agent_version") == "Written Expression Reviewer v2.0"
+    ):
+        raise ValueError(
+            "WE v2 compatibility records cannot be passed to the production accepted-item finalizer"
+        )
     base = {
         "item_id": g["item_id"],
         "section": g["section"],

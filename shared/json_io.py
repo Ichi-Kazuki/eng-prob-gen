@@ -3,14 +3,16 @@
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 import os
 import shutil
+import sys
 import tempfile
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterator, Mapping
+from typing import Any, IO, Iterator, Mapping
 
 
 class JsonPersistenceError(RuntimeError):
@@ -345,6 +347,33 @@ def validate_complete_json_bundle(
     return errors
 
 
+def _lock_windows(handle: IO[bytes], mode_name: str) -> None:
+    """Lock one byte using the Windows-only ``msvcrt`` API.
+
+    The module is loaded dynamically so Linux type-checks do not try to
+    resolve a platform-specific module.  The attribute checks also turn an
+    unexpected Windows runtime/API mismatch into an explicit persistence
+    failure instead of a partially-held lock.
+    """
+    msvcrt = importlib.import_module("msvcrt")
+    locking = getattr(msvcrt, "locking", None)
+    mode = getattr(msvcrt, mode_name, None)
+    if not callable(locking) or not isinstance(mode, int):
+        raise OSError(f"Windows file locking API is unavailable: {mode_name}")
+    locking(handle.fileno(), mode, 1)
+
+
+def _lock_posix(handle: IO[bytes], mode_name: str) -> None:
+    """Apply a POSIX advisory lock without importing POSIX-only code on Windows."""
+    import fcntl
+
+    flock = getattr(fcntl, "flock", None)
+    mode = getattr(fcntl, mode_name, None)
+    if not callable(flock) or not isinstance(mode, int):
+        raise OSError("POSIX file locking is unavailable")
+    flock(handle.fileno(), mode)
+
+
 @contextmanager
 def exclusive_file_lock(path: Path) -> Iterator[None]:
     """Best-effort cross-platform single-writer lock for one JSON file."""
@@ -354,34 +383,27 @@ def exclusive_file_lock(path: Path) -> Iterator[None]:
     # Keep the lock file binary and seed it once before taking byte 0.
     handle = lock_path.open("a+b")
     try:
-        if os.name == "nt":
-            import msvcrt
+        if sys.platform == "win32":
             handle.seek(0, os.SEEK_END)
             if handle.tell() == 0:
                 handle.write(b"\0")
                 handle.flush()
             handle.seek(0)
-            msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
-        else:  # pragma: no cover - Windows is the supported runtime here
-            import fcntl
-            flock = getattr(fcntl, "flock", None)
-            lock_ex = getattr(fcntl, "LOCK_EX", None)
-            if not callable(flock) or not isinstance(lock_ex, int):
-                raise OSError("POSIX file locking is unavailable")
-            flock(handle.fileno(), lock_ex)
+            _lock_windows(handle, "LK_LOCK")
+        else:
+            _lock_posix(handle, "LOCK_EX")
         yield
     finally:
         try:
-            if os.name == "nt":
-                import msvcrt
+            if sys.platform == "win32":
                 handle.seek(0)
-                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
-            else:  # pragma: no cover
-                import fcntl
-                flock = getattr(fcntl, "flock", None)
-                lock_un = getattr(fcntl, "LOCK_UN", None)
-                if callable(flock) and isinstance(lock_un, int):
-                    flock(handle.fileno(), lock_un)
+                _lock_windows(handle, "LK_UNLCK")
+            else:
+                try:
+                    _lock_posix(handle, "LOCK_UN")
+                except OSError:
+                    # Preserve the historical best-effort unlock behavior.
+                    pass
         finally:
             handle.close()
 
