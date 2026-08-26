@@ -1,0 +1,90 @@
+{
+  "artifact": "WE v2.1.2 12-item blind validation sample",
+  "answer_information_included": false,
+  "items": [
+    {
+      "sentence": "The sensor is most reliable than the older instrument when analysts compare accuracy under low temperatures.",
+      "A": "most",
+      "B": "older",
+      "C": "compare",
+      "D": "temperatures"
+    },
+    {
+      "sentence": "The field report explains how operates the device during seasonal flooding for engineers at the delta station.",
+      "A": "field",
+      "B": "operates the device",
+      "C": "for",
+      "D": "delta"
+    },
+    {
+      "sentence": "The thermometer was measuring by technicians after the inspection team adjusted the dial setting in the test chamber.",
+      "A": "measuring",
+      "B": "the inspection",
+      "C": "dial",
+      "D": "test"
+    },
+    {
+      "sentence": "Samples collecting from the ice shelf revealed fracture lines after researchers examined the core sample in the polar lab.",
+      "A": "collecting",
+      "B": "shelf",
+      "C": "after",
+      "D": "core"
+    },
+    {
+      "sentence": "Researchers careful document coastal maps before placing them in sealed cabinets for public study.",
+      "A": "careful",
+      "B": "before",
+      "C": "sealed",
+      "D": "study"
+    },
+    {
+      "sentence": "Researchers careful document coastal charts before placing them in secure cases for later study.",
+      "A": "careful",
+      "B": "before",
+      "C": "secure",
+      "D": "study"
+    },
+    {
+      "sentence": "Curators careful document vessel plans before placing them in sealed folders for later study.",
+      "A": "careful",
+      "B": "before",
+      "C": "sealed",
+      "D": "study"
+    },
+    {
+      "sentence": "Archivists careful document mineral maps before placing them in dry cabinets for later study.",
+      "A": "careful",
+      "B": "before",
+      "C": "dry",
+      "D": "study"
+    },
+    {
+      "sentence": "The observatory record subtle changes across the plateau each morning during autumn.",
+      "A": "record",
+      "B": "changes",
+      "C": "plateau",
+      "D": "autumn"
+    },
+    {
+      "sentence": "The archive record faint markings across the valley each morning during spring.",
+      "A": "record",
+      "B": "markings",
+      "C": "valley",
+      "D": "spring"
+    },
+    {
+      "sentence": "The laboratory record chemical traces across the basin each morning during winter.",
+      "A": "record",
+      "B": "traces",
+      "C": "basin",
+      "D": "winter"
+    },
+    {
+      "sentence": "The institute record seasonal patterns across the watershed each morning during summer.",
+      "A": "record",
+      "B": "patterns",
+      "C": "watershed",
+      "D": "summer"
+    }
+  ]
+}

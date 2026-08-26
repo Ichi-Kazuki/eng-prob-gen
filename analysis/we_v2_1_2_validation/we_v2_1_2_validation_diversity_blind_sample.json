@@ -1,0 +1,68 @@
+{
+  "items": [
+    {
+      "blind_id": "diversity-blind-001",
+      "sentence": "Each sensor sends data to the server, and their readings guide the decision during the trial.",
+      "A": "Each",
+      "B": "to",
+      "C": "their",
+      "D": "decision"
+    },
+    {
+      "blind_id": "diversity-blind-002",
+      "sentence": "The engineers made the alloy stably after they tested it under pressure in the chamber for three hours.",
+      "A": "engineers",
+      "B": "stably",
+      "C": "it",
+      "D": "the chamber"
+    },
+    {
+      "blind_id": "diversity-blind-003",
+      "sentence": "Despite the station received little sunlight, its panels supplied enough power for the instruments throughout the winter.",
+      "A": "Despite",
+      "B": "little",
+      "C": "supplied",
+      "D": "the instruments"
+    },
+    {
+      "blind_id": "diversity-blind-004",
+      "sentence": "The method who the chemist tested reduced contamination in the final preparation stage near the laboratory.",
+      "A": "who",
+      "B": "reduced",
+      "C": "final",
+      "D": "the laboratory"
+    },
+    {
+      "blind_id": "diversity-blind-005",
+      "sentence": "The research team will calibrate and comparing water samples before recording results from the spectrometer during coastal fieldwork.",
+      "A": "team",
+      "B": "comparing",
+      "C": "recording",
+      "D": "spectrometer"
+    },
+    {
+      "blind_id": "diversity-blind-006",
+      "sentence": "Not until the depot reopened the archivists did inspect the dispatch records for researchers at the harbor office last autumn.",
+      "A": "until",
+      "B": "the archivists did",
+      "C": "records",
+      "D": "the harbor"
+    },
+    {
+      "blind_id": "diversity-blind-007",
+      "sentence": "There is several instruments in the test chamber that researchers inspect before operation each morning for safety.",
+      "A": "is",
+      "B": "the",
+      "C": "researchers",
+      "D": "each"
+    },
+    {
+      "blind_id": "diversity-blind-008",
+      "sentence": "The model was as easier to interpret as the diagram after the calibration procedure removed background noise from the reference dataset.",
+      "A": "easier",
+      "B": "the diagram",
+      "C": "procedure",
+      "D": "from"
+    }
+  ]
+}

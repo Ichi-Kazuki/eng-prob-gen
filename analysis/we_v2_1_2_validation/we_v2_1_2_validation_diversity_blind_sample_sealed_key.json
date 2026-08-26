@@ -1,0 +1,127 @@
+{
+  "artifact": "WE v2.1.2 diversity-targeted 8-item blind sample sealed key",
+  "source_corpus": {
+    "path": "analysis/we_v2_1_2_validation/we_v2_1_2_75_item_validation.json",
+    "sha256": "sha256:adf81f72d52a5c34bd7c8c73c07d540e601ee216b15ca827d191907ca0a0ca0f",
+    "validation_not_reexecuted": true
+  },
+  "source_existing_12_item_sample": {
+    "path": "analysis/we_v2_1_2_validation/we_v2_1_2_validation_blind_sample_sealed_key.json",
+    "sha256": "sha256:c4c8a5c35f0715570597fc77a014d353a962811f257a56aaee88ea4c7d07fc9c",
+    "excluded_generator_item_count": 12,
+    "excluded_generator_item_ids": [
+      "we-v2.1.2-validation-001",
+      "we-v2.1.2-validation-002",
+      "we-v2.1.2-validation-003",
+      "we-v2.1.2-validation-004",
+      "we-v2.1.2-validation-006",
+      "we-v2.1.2-validation-007",
+      "we-v2.1.2-validation-008",
+      "we-v2.1.2-validation-009",
+      "we-v2.1.2-validation-011",
+      "we-v2.1.2-validation-021",
+      "we-v2.1.2-validation-026",
+      "we-v2.1.2-validation-031"
+    ]
+  },
+  "selection_policy": {
+    "purpose": "Complement grammar and mutation diversity absent from the existing 12-item blind sample.",
+    "priority_targets": [
+      "REFERENCE_AND_DETERMINERS",
+      "VERB_COMPLEMENTATION",
+      "CONNECTORS_CONJUNCTIONS",
+      "RELATIVE_CLAUSES",
+      "PARALLEL_STRUCTURE",
+      "INVERSION",
+      "quantifier/countability related target",
+      "agreement structure other than simple records -> record"
+    ],
+    "same_primary_target_tested_error_type_mutation_template_duplicates": 0,
+    "grammar_diversity_prioritized_over_band_balance": true,
+    "format_band_mix_possible": false
+  },
+  "items": [
+    {
+      "blind_id": "diversity-blind-001",
+      "generator_item_id": "we-v2.1.2-validation-066",
+      "correct_answer": "C",
+      "primary_target": "REFERENCE_AND_DETERMINERS",
+      "tested_error_type": "incorrect_reference",
+      "mutation_template": "reference number mismatch: its -> their",
+      "format_band": "PREFERRED"
+    },
+    {
+      "blind_id": "diversity-blind-002",
+      "generator_item_id": "we-v2.1.2-validation-046",
+      "correct_answer": "B",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "tested_error_type": "incorrect_part_of_speech",
+      "mutation_template": "stable -> stably",
+      "format_band": "PREFERRED"
+    },
+    {
+      "blind_id": "diversity-blind-003",
+      "generator_item_id": "we-v2.1.2-validation-036",
+      "correct_answer": "A",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "tested_error_type": "incorrect_subordinator",
+      "mutation_template": "Although -> Despite",
+      "format_band": "PREFERRED"
+    },
+    {
+      "blind_id": "diversity-blind-004",
+      "generator_item_id": "we-v2.1.2-validation-041",
+      "correct_answer": "A",
+      "primary_target": "RELATIVE_CLAUSES",
+      "tested_error_type": "incorrect_relative_marker",
+      "mutation_template": "that -> who",
+      "format_band": "PREFERRED"
+    },
+    {
+      "blind_id": "diversity-blind-005",
+      "generator_item_id": "we-v2.1.2-validation-056",
+      "correct_answer": "B",
+      "primary_target": "PARALLEL_STRUCTURE",
+      "tested_error_type": "wrong_verb_form",
+      "mutation_template": "parallel base-form mutation: compare -> comparing",
+      "format_band": "PREFERRED"
+    },
+    {
+      "blind_id": "diversity-blind-006",
+      "generator_item_id": "we-v2.1.2-validation-071",
+      "correct_answer": "B",
+      "primary_target": "INVERSION",
+      "tested_error_type": "wrong_word_order",
+      "mutation_template": "subject-auxiliary inversion after a fronted negative adverbial: did the archivists -> the archivists did",
+      "format_band": "PREFERRED"
+    },
+    {
+      "blind_id": "diversity-blind-007",
+      "generator_item_id": "we-v2.1.2-validation-061",
+      "correct_answer": "A",
+      "primary_target": "EXISTENTIAL_EXPLETIVE",
+      "tested_error_type": "agreement_error",
+      "mutation_template": "are -> is",
+      "format_band": "PREFERRED",
+      "selection_role": "quantifier/countability-related existential agreement"
+    },
+    {
+      "blind_id": "diversity-blind-008",
+      "generator_item_id": "we-v2.1.2-validation-016",
+      "correct_answer": "A",
+      "primary_target": "COMPARATIVES_DEGREE",
+      "tested_error_type": "wrong_degree_form",
+      "mutation_template": "invalid comparative morphology: easy -> easier",
+      "format_band": "PREFERRED",
+      "selection_role": "additional mutation-template diversity"
+    }
+  ],
+  "integrity": {
+    "sample_count": 8,
+    "corpus_item_ids_unique": true,
+    "overlap_with_existing_12_item_sample": 0,
+    "blind_fields_exact": ["blind_id", "sentence", "A", "B", "C", "D"],
+    "answers_present_in_blind_artifact": false,
+    "target_or_mutation_metadata_present_in_blind_artifact": false
+  }
+}
