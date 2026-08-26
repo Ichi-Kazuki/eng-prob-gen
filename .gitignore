@@ -11,6 +11,11 @@ htmlcov/
 .venv/
 venv/
 
+# Environment secrets
+.env
+.env.*
+!.env.example
+
 # Local analysis/dependency staging and render/OCR scratch output
 .analysis_tmp_deps/
 tmp/

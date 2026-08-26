@@ -23,7 +23,6 @@ migrated before finalization.
 from __future__ import annotations
 
 import copy
-import json
 import sys
 from pathlib import Path
 

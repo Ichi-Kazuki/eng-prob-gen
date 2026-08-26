@@ -18,7 +18,6 @@ sys.path.insert(0, str(ROOT / "agents" / "toefl_itp_we_generator_v2" / "scripts"
 import orchestrator as core  # noqa: E402
 from runtime.adapters import ClaudeRuntime, CodexRuntime, InvocationRequest  # noqa: E402
 from shared.json_io import JsonPersistenceError  # noqa: E402
-from shared.solver_blinding import canonical_solver_input  # noqa: E402
 from format_planner import get_official_profile  # noqa: E402
 
 

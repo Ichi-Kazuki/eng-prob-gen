@@ -31,7 +31,7 @@ jobs:
       - name: Compile Python sources
         run: python -m compileall -q agents orchestrator runtime shared scripts tests
       - name: Ruff static checks
-        run: python -m ruff check --select E9,F63,F7,F82 orchestrator/scripts shared runtime scripts agents/toefl_itp_we_generator_v2/scripts/format_planner.py tests
+        run: python -m ruff check orchestrator/scripts shared runtime scripts agents/toefl_itp_we_generator_v2/scripts/format_planner.py tests
       - name: Minimum static type check
         run: python -m mypy --config-file pyproject.toml
       - name: Dependency audit

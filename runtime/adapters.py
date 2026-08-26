@@ -106,8 +106,13 @@ class InvocationResult:
 class AgentRuntime(Protocol):
     """Common interface used by Generator, Reviewer, and Solver callers."""
 
-    provider: str
-    cli_version: str
+    @property
+    def provider(self) -> str:
+        ...
+
+    @property
+    def cli_version(self) -> str:
+        ...
 
     def invoke(self, request: InvocationRequest) -> InvocationResult:
         ...
@@ -390,7 +395,9 @@ class _SubprocessRuntime:
                 pass
             return
         try:
-            os.killpg(pid, 15)
+            killpg = getattr(os, "killpg", None)
+            if callable(killpg):
+                killpg(pid, 15)
         except (OSError, ProcessLookupError):
             pass
 

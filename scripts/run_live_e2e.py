@@ -47,6 +47,7 @@ sys.path.insert(0, str(ROOT / "orchestrator" / "scripts"))
 import orchestrator as orch  # noqa: E402
 
 from shared.schema_validation import load_schema, schema_errors  # noqa: E402
+from shared.json_io import atomic_write_json  # noqa: E402
 from shared.reviewer_blinding import (  # noqa: E402
     canonical_reviewer_input,
     reviewer_allowlist,
@@ -138,12 +139,7 @@ class LiveInvocationError(Exception):
         super().__init__(detail)
         self.category = category
         self.detail = detail
-        self.invocation = None
-
-
-def write_json(path: Path, value: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        self.invocation: InvocationResult | None = None
 
 
 def _relative_path(path: Path | None) -> str | None:
@@ -519,6 +515,10 @@ def _first_value(mapping: dict, keys: tuple[str, ...], default: Any = None) -> A
     return default
 
 
+def _as_dict(value: Any) -> dict[str, Any]:
+    return value if isinstance(value, dict) else {}
+
+
 def _reviewer_assessments(raw: dict) -> dict[str, str]:
     source = raw.get("marked_part_assessments", raw.get("marked_part_assessment"))
     if source is None:
@@ -541,14 +541,15 @@ def _reviewer_assessments(raw: dict) -> dict[str, str]:
 
 
 def _explicit_one_error(raw: dict, assessments: dict[str, str]) -> bool:
-    checks = raw.get("checks") if isinstance(raw.get("checks"), dict) else {}
-    if not checks and isinstance(raw.get("checks_performed"), dict):
-        checks = raw["checks_performed"]
-    audit = raw.get("one_error_only_audit") if isinstance(raw.get("one_error_only_audit"), dict) else {}
+    checks = _as_dict(raw.get("checks"))
+    if not checks:
+        checks = _as_dict(raw.get("checks_performed"))
+    audit = _as_dict(raw.get("one_error_only_audit"))
     if not audit:
         for key in ("phase2_one_error_only_audit", "phase_2_one_error_only_audit", "phase2_one_error_audit"):
-            if isinstance(raw.get(key), dict):
-                audit = raw[key]
+            candidate = raw.get(key)
+            if isinstance(candidate, dict):
+                audit = candidate
                 break
     values = " ".join(str(value).lower() for value in checks.values())
     audit_values = " ".join(str(value).lower() for value in audit.values())
@@ -628,9 +629,9 @@ def formal_reviewer(raw: dict, generator_item: dict, order: int, batch_id: str) 
 
     assessments = _reviewer_assessments(raw)
     error_count = sum(value == "ERROR" for value in assessments.values())
-    uniqueness_audit = raw.get("answer_uniqueness_audit") if isinstance(raw.get("answer_uniqueness_audit"), dict) else {}
-    phase3 = raw.get("phase3_uniqueness_audit") if isinstance(raw.get("phase3_uniqueness_audit"), dict) else {}
-    phase3_answer = raw.get("phase3_answer_uniqueness_audit") if isinstance(raw.get("phase3_answer_uniqueness_audit"), dict) else {}
+    uniqueness_audit = _as_dict(raw.get("answer_uniqueness_audit"))
+    phase3 = _as_dict(raw.get("phase3_uniqueness_audit"))
+    phase3_answer = _as_dict(raw.get("phase3_answer_uniqueness_audit"))
     independent_answer = _first_value(
         raw,
         ("independent_answer", "answer", "candidate_answer", "reviewer_answer"),
@@ -666,7 +667,7 @@ def formal_reviewer(raw: dict, generator_item: dict, order: int, batch_id: str) 
         "ambiguous" in ambiguity_value and "unambiguous" not in ambiguity_value
     ) or any(token in raw_text for token in ("marginal threatens", "competing parse"))
     answer_unique = independent_answer in {"A", "B", "C", "D"} and error_count == 1 and not explicit_ambiguity
-    checks_source = raw.get("checks") if isinstance(raw.get("checks"), dict) else {}
+    checks_source = _as_dict(raw.get("checks"))
     raw_requirements = raw.get("revision_requirements", [])
     if not isinstance(raw_requirements, list):
         raise LiveInvocationError("schema", "reviewer: live revision_requirements must be an array")
@@ -803,7 +804,7 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
     reviewer_leakage = reviewer_input_errors(generated, reviewer_input, reviewer_input_sha256(reviewer_input))
     if reviewer_leakage:
         raise LiveInvocationError("schema", "reviewer: canonical blind payload failed: " + "; ".join(reviewer_leakage))
-    write_json(INPUTS / f"{order:03d}_reviewer.json", reviewer_input)
+    atomic_write_json(INPUTS / f"{order:03d}_reviewer.json", reviewer_input)
     try:
         reviewer_invocation = invoke(
             REVIEWER_AGENT, "reviewer", reviewer_prompt(reviewer_input), list(reviewer_input), "",
@@ -853,7 +854,7 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
         outcomes.append({"item_id": item_id, "state": candidate.state, "state_history": candidate.state_history, "leakage": solver_leakage})
         return
     candidate.solver_input = solver_input
-    write_json(INPUTS / f"{order:03d}_solver.json", solver_input)
+    atomic_write_json(INPUTS / f"{order:03d}_solver.json", solver_input)
     try:
         solver_invocation = invoke(
             SOLVER_AGENT, "solver", solver_prompt(solver_input), list(solver_input), "",
@@ -911,7 +912,7 @@ def reviewer_error_status(item: dict) -> str:
     if count > 1:
         return "multiple_errors"
 
-    checks = item.get("checks") if isinstance(item.get("checks"), dict) else {}
+    checks = _as_dict(item.get("checks"))
     one_error_status = checks.get("one_error_only")
     answer_status = checks.get("answer_uniqueness")
     if (
@@ -978,8 +979,8 @@ def build_metrics(generator_items: list, reviewer_items: list, solver_items: lis
         outcome_failure = outcome.get("failure")
         if not outcome_failure:
             continue
-        key = (outcome_failure.get("stage"), outcome_failure.get("detail"))
-        if key in invocation_failure_keys:
+        outcome_key = (outcome_failure.get("stage"), outcome_failure.get("detail"))
+        if outcome_key in invocation_failure_keys:
             continue
         category = outcome_failure.get("category")
         if category in {"schema", "parsing"}:
@@ -993,10 +994,10 @@ def build_metrics(generator_items: list, reviewer_items: list, solver_items: lis
     failure_classification = []
     seen_failures: set[tuple[Any, ...]] = set()
     for failure in raw_failures:
-        key = (failure.get("stage"), failure.get("category"), failure.get("detail"))
-        if key in seen_failures:
+        failure_key = (failure.get("stage"), failure.get("category"), failure.get("detail"))
+        if failure_key in seen_failures:
             continue
-        seen_failures.add(key)
+        seen_failures.add(failure_key)
         failure_classification.append(failure)
     stage_contracts = {
         stage: {
@@ -1141,6 +1142,13 @@ def final_decision(metrics: dict) -> tuple[str, str]:
     return "E", "The complete acceptance pipeline was not demonstrated; see gate and failure details."
 
 
+def e2e_succeeded(metrics: dict) -> bool:
+    return (
+        metrics.get("existing_tests", {}).get("passed") is True
+        and all(gate.get("ok") is True for gate in metrics.get("gates", {}).values())
+    )
+
+
 def write_report(metrics: dict, decision: str, decision_reason: str) -> None:
     gates = metrics["gates"]
     lines = [
@@ -1252,9 +1260,9 @@ def report_existing_run() -> int:
         }[decision],
         "reason": decision_reason,
     }
-    write_json(metrics_path, metrics)
+    atomic_write_json(metrics_path, metrics)
     write_report(metrics, decision, decision_reason)
-    return 0
+    return 0 if e2e_succeeded(metrics) else 1
 
 
 def main() -> int:
@@ -1273,20 +1281,20 @@ def main() -> int:
     outcomes: list = []
     for order in range(1, 11):
         process_one(order, batch_id, config, generator_items, reviewer_items, solver_items, provenance_records, outcomes)
-        write_json(FORMAL / "generator_outputs.json", {"items": generator_items})
-        write_json(FORMAL / "reviewer_outputs.json", {"items": reviewer_items})
-        write_json(FORMAL / "solver_outputs.json", {"items": solver_items})
-        write_json(PROVENANCE / "runtime_provenance.json", {"items": provenance_records})
+        atomic_write_json(FORMAL / "generator_outputs.json", {"items": generator_items})
+        atomic_write_json(FORMAL / "reviewer_outputs.json", {"items": reviewer_items})
+        atomic_write_json(FORMAL / "solver_outputs.json", {"items": solver_items})
+        atomic_write_json(PROVENANCE / "runtime_provenance.json", {"items": provenance_records})
         latest = outcomes[-1] if outcomes else {"state": "UNKNOWN"}
         print(f"completed microbatch {order}/10: {latest.get('item_id')} -> {latest.get('state')}", flush=True)
     tests = run_existing_tests()
     metrics = build_metrics(generator_items, reviewer_items, solver_items, provenance_records, outcomes, tests, batch_id)
     decision, decision_reason = final_decision(metrics)
     metrics["final_decision"] = {"code": decision, "label": {"A": "Live Reviewer/Solver pipeline ready", "B": "Reviewer issue", "C": "Solver issue", "D": "Orchestrator issue", "E": "Runtime infrastructure unavailable"}[decision], "reason": decision_reason}
-    write_json(OUT / "we_v2_1_3_live_e2e.json", metrics)
+    atomic_write_json(OUT / "we_v2_1_3_live_e2e.json", metrics)
     write_report(metrics, decision, decision_reason)
     print(json.dumps({"batch_id": batch_id, "gates": metrics["gates"], "existing_tests": tests}, ensure_ascii=False, indent=2))
-    return 0 if tests.get("passed") and all(gate.get("ok") for gate in metrics["gates"].values()) else 1
+    return 0 if e2e_succeeded(metrics) else 1
 
 
 if __name__ == "__main__":

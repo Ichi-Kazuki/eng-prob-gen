@@ -33,13 +33,11 @@ from orchestrator import (  # noqa: E402
     append_manual_review_queue,
     blind_for_solver,
     build_generator_feedback,
-    build_provenance_record,
     evaluate_consensus,
     leakage_guard,
     load_config,
     load_versions,
     parse_agent_json,
-    process_generation_output,
     process_review_output,
     process_solver_stage,
     run_schema_validator,
@@ -135,7 +133,7 @@ def base_solver_item(answer: str = "C", **overrides) -> dict:
 
 def main() -> int:
     config = load_config()
-    versions = load_versions(config)
+    load_versions(config)
 
     # -- #12 schema validation PASS, plus drives #1/#2/#9/#10/#4/#13 -------
     smoke = run_script("orchestrator/scripts/run_smoke_test.py")

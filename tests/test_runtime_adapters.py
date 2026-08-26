@@ -8,6 +8,7 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from runtime.adapters import (
     ClaudeRuntime,
@@ -292,6 +293,74 @@ class RuntimeAdapterTests(unittest.TestCase):
         self.assertEqual(metrics["gates"]["reviewer_zero_genuine_errors"]["count"], 1)
         self.assertEqual(metrics["gates"]["reviewer_multiple_error"]["count"], 1)
         self.assertEqual(metrics["gates"]["reviewer_ambiguous_one_error"]["count"], 1)
+
+    def test_live_e2e_report_only_exit_code_matches_gates_and_uses_atomic_json(self) -> None:
+        harness_path = ROOT / "scripts" / "run_live_e2e.py"
+        spec = importlib.util.spec_from_file_location("we_live_harness_report_test", harness_path)
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        harness = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(harness)
+
+        gate_names = (
+            "generator_schema",
+            "reviewer_contract",
+            "solver_contract",
+            "reviewer_live_invocation",
+            "solver_live_invocation",
+            "answer_leakage",
+            "reviewer_genuine_error_failure",
+            "reviewer_zero_genuine_errors",
+            "reviewer_multiple_error",
+            "reviewer_ambiguous_one_error",
+            "solver_none",
+            "solver_ambiguous",
+            "generator_solver_agreement",
+            "reviewer_solver_structural_conflict",
+            "orchestrator_acceptance_logic",
+        )
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            out = root / "out"
+            formal = root / "formal"
+            provenance = root / "provenance"
+            out.mkdir()
+            formal.mkdir()
+            provenance.mkdir()
+            for filename in ("generator_outputs.json", "reviewer_outputs.json", "solver_outputs.json"):
+                (formal / filename).write_text('{"items": []}\n', encoding="utf-8")
+            (provenance / "runtime_provenance.json").write_text('{"items": []}\n', encoding="utf-8")
+            (out / "we_v2_1_3_live_e2e.json").write_text(
+                json.dumps({"batch_id": "report-test", "outcomes": []}), encoding="utf-8"
+            )
+
+            for existing_tests_passed, gates_passed, expected_exit_code in (
+                (True, True, 0),
+                (True, False, 1),
+                (False, True, 1),
+            ):
+                with self.subTest(
+                    existing_tests_passed=existing_tests_passed,
+                    gates_passed=gates_passed,
+                ):
+                    metrics = {
+                        "batch_id": "report-test",
+                        "outcomes": [],
+                        "existing_tests": {"passed": existing_tests_passed},
+                        "failure_classification": [],
+                        "gates": {
+                            name: {"ok": gates_passed}
+                            for name in gate_names
+                        },
+                    }
+                    with mock.patch.object(harness, "OUT", out), \
+                         mock.patch.object(harness, "FORMAL", formal), \
+                         mock.patch.object(harness, "PROVENANCE", provenance), \
+                         mock.patch.object(harness, "build_metrics", return_value=metrics), \
+                         mock.patch.object(harness, "atomic_write_json", wraps=harness.atomic_write_json) as writer:
+                        self.assertEqual(harness.report_existing_run(), expected_exit_code)
+                    writer.assert_called_once_with(out / "we_v2_1_3_live_e2e.json", metrics)
 
 
 if __name__ == "__main__":

@@ -31,10 +31,10 @@ ignore = ["E501"]
 [tool.mypy]
 python_version = "3.11"
 files = [
-  "shared/schema_validation.py",
-  "shared/reviewer_blinding.py",
-  "shared/solver_blinding.py",
+  "shared",
+  "runtime",
   "orchestrator/scripts/driver_helpers.py",
+  "scripts/run_live_e2e.py",
 ]
 ignore_missing_imports = true
 check_untyped_defs = true
@@ -47,4 +47,4 @@ source = ["orchestrator/scripts", "shared", "runtime"]
 
 [tool.coverage.report]
 skip_empty = true
-fail_under = 0
+fail_under = 60

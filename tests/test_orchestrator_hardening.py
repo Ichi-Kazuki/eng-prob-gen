@@ -463,10 +463,11 @@ class AtomicJsonDurabilityTests(unittest.TestCase):
             self.assertEqual(list(path.parent.glob(".*.tmp")), [])
 
     def test_windows_branch_does_not_attempt_posix_directory_fsync(self) -> None:
-        with tempfile.TemporaryDirectory() as directory, \
-             mock.patch.object(json_io.os, "name", "nt"), \
-             mock.patch.object(json_io.os, "open") as directory_open:
-            json_io._fsync_parent_directory(Path(directory))
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory)
+            with mock.patch.object(json_io.os, "name", "nt"), \
+                 mock.patch.object(json_io.os, "open") as directory_open:
+                json_io._fsync_parent_directory(parent)
         directory_open.assert_not_called()
 
     @unittest.skipIf(os.name == "nt", "POSIX directory fsync is not available on Windows")

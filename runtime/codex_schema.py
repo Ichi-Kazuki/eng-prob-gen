@@ -400,6 +400,8 @@ def _project_node(value: Any, path: str, records: list[JsonObject], *, root: boo
                 # Intersecting an existing enum with const preserves the
                 # conjunction exactly.
                 existing = base.get("enum", value.get("enum"))
+                if not isinstance(existing, list):
+                    existing = []
                 base["enum"] = [original] if original in existing else []
                 _record(
                     records,

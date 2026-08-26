@@ -105,7 +105,7 @@ def _artifact_set_sha256(files: Mapping[str, Mapping[str, str]]) -> str:
 
 
 def _validate_artifact_identity(
-    value: object, finalize_id: str, state_digest: object
+    value: object, finalize_id: object, state_digest: object
 ) -> None:
     """Validate optional run-level identity fields in one artifact payload."""
     if state_digest is None:
@@ -364,7 +364,11 @@ def exclusive_file_lock(path: Path) -> Iterator[None]:
             msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
         else:  # pragma: no cover - Windows is the supported runtime here
             import fcntl
-            fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+            flock = getattr(fcntl, "flock", None)
+            lock_ex = getattr(fcntl, "LOCK_EX", None)
+            if not callable(flock) or not isinstance(lock_ex, int):
+                raise OSError("POSIX file locking is unavailable")
+            flock(handle.fileno(), lock_ex)
         yield
     finally:
         try:
@@ -374,7 +378,10 @@ def exclusive_file_lock(path: Path) -> Iterator[None]:
                 msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
             else:  # pragma: no cover
                 import fcntl
-                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+                flock = getattr(fcntl, "flock", None)
+                lock_un = getattr(fcntl, "LOCK_UN", None)
+                if callable(flock) and isinstance(lock_un, int):
+                    flock(handle.fileno(), lock_un)
         finally:
             handle.close()
 
