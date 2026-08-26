@@ -1,0 +1,1 @@
+{"item_id":"we-v2.1.2-live-T091038Z-008","section":"Written Expression","solver_answer":"B","confidence":"HIGH","reason":"The preposition after “relied” should be “on,” not “in”: “Researchers relied on archival maps.”","ambiguity_detected":false,"suggested_correction":"Change “in” to “on”."}

@@ -1,0 +1,1 @@
+{"item_id":"we-v2.1.2-live-T083657Z-002","section":"Written Expression","solver_answer":"D","confidence":"HIGH","reason":"The phrase “responsible of” is grammatically incorrect; the adjective “responsible” takes the preposition “for.”","ambiguity_detected":false,"suggested_correction":"responsible for"}

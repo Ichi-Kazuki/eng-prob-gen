@@ -1,0 +1,11 @@
+{
+  "item_id": "we-v2.1.2-live-T091038Z-006",
+  "section": "Written Expression",
+  "sentence": "Recent field experiments conducted by ecologists indicate that several native grasses remain resistant for prolonged drought conditions across semi-arid regions of central Australia.",
+  "marked_parts": {
+    "A": "Recent field experiments",
+    "B": "indicate",
+    "C": "resistant for",
+    "D": "semi-arid"
+  }
+}

@@ -1,0 +1,1 @@
+{"item_id":"we-v2.1.2-live-T091038Z-006","section":"Written Expression","solver_answer":"C","confidence":"HIGH","reason":"The adjective “resistant” is followed by the preposition “to,” not “for.” The phrase should be “remain resistant to prolonged drought conditions.”","ambiguity_detected":false,"suggested_correction":"Change “resistant for” to “resistant to.”"}

@@ -1,0 +1,1 @@
+{"item_id":"we-v2.1.2-live-T091038Z-007","section":"Written Expression","solver_answer":"D","confidence":"HIGH","reason":"The subject \"estimates\" is plural, so the verb should be \"reveal,\" not \"reveals.\"","ambiguity_detected":false,"suggested_correction":"reveals → reveal"}

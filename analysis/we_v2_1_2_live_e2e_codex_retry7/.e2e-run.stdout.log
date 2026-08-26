@@ -1,0 +1,5 @@
+runtime provider: codex (codex-cli 0.146.0-alpha.3.1)
+completed microbatch 1/10: we-v2.1.2-live-T083657Z-001 -> ACCEPTED
+completed microbatch 2/10: we-v2.1.2-live-T083657Z-002 -> ACCEPTED
+completed microbatch 3/10: we-v2.1.2-live-T083657Z-003 -> ACCEPTED
+completed microbatch 4/10: we-v2.1.2-live-T083657Z-004 -> GENERATION_FAILED

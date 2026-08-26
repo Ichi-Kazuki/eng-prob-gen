@@ -1,0 +1,257 @@
+OpenAI Codex v0.146.0-alpha.3.1
+--------
+workdir: C:\Users\soted\Projects\itp-prob-gen
+model: gpt-5.6-luna
+provider: openai
+approval: on-request
+sandbox: read-only
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 01a03cfc-2f26-7cf2-b5d6-9e4cf8188b94
+--------
+user
+AUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):
+<agent-instructions>
+---
+name: toefl-itp-we-generator-v2
+description: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。
+tools: Read, Write, Glob, Grep, Bash
+version: v2.1.2
+---
+
+# TOEFL ITP Written Expression Generator v2.1.2
+
+このAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。
+
+## Source of truth
+
+生成前に必ず次を読む。
+
+1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`
+2. `specs/toefl_itp_we_format_spec_addendum.json`
+3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`
+4. `specs/toefl_itp_grammar_spec.json`
+5. `analysis/GRAMMAR_TAXONOMY.md`
+6. `analysis/grammar_taxonomy.json`
+7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`
+8. `analysis/we_format/written_expression_format_official.json`
+9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`
+10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`
+11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`
+
+Official item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。
+
+## Mandatory sentence-first phases
+
+各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。
+
+### PHASE 1 — Item design plan
+
+本文を書く前に次を決める。
+
+- `primary_target`
+- `subtype`
+- `tested_error_type`
+- `difficulty`
+- `vocabulary_domain`
+- `correction_locality`
+- `decision_granularity`
+- intended error locus (before any A/B/C/D placement)
+- `format_planner.py` が Official artifact から samplingした sentence target/range
+- `format_planner.py` が Official observed counts から samplingした correct-span type
+- sampled gap targets, distractor length profile, and answer-position preference
+- expected span profile / coverage profile / approximate context profile
+
+sentence length と correct-span type は固定値・hand-tuned probabilityではなく、
+`analysis/we_format/written_expression_format_official.json` の observed item/count を
+sourceにした empirical draw とする。小さなbatchへofficial quotaを機械的コピーしない。
+`correct_span_type` は `SINGLE_WORD` を中心にし、`SHORT_PHRASE` と
+`CLAUSE_OR_CLAUSE_LIKE` は Official 比率から少数 samplingする。grammar target上の
+最小自然 locus が sampled type と合わない場合は、grammar validity を優先して
+その locus を維持し、type を強制的に短縮・拡張しない。
+
+### PHASE 2 — Clean sentence first
+
+完全に正しい、natural、academic-styleのsentenceを先に作る。この時点ではmarked partsを作らず、errorも入れない。公式のmedian 20 / mean 20.05 / 16–25 words 97/125という観測を分布として参照し、全itemを20語へ固定しない。
+
+target は Official の実測値から sampling し、plan range を記録する。clean sentence
+realization後に `planned range` と `clean sentence word count` を deterministic に比較する。
+range外なら format-plan conformance failure として item をacceptしない。自然な文を
+最初から作り直し、無意味な副詞・修飾語・paddingで語数を合わせない。
+
+### PHASE 3 — Clean sentence validation
+
+`grammaticality`, `naturalness`, `semantic coherence`, `academic register`, `no accidental grammar error`をself-auditする。どれかに疑義があればそのsentenceは破棄して、clean sentenceから作り直す。
+
+### PHASE 4 — Inject exactly one genuine grammatical error
+
+clean formからerror formへ、標準英語の明確なviolationを一つだけ注入する。semantic oddity、reference ambiguity、connector semantics、tense optionality、lexical preference、style preferenceだけをerrorにしない。変更前は正しく、変更後は明確に誤りで、修正後に文法的になる必要がある。
+
+内部QA metadataに必ず次を保持する。
+
+- `clean_form`
+- `error_form`
+- `minimal_correction`
+- `mutation_type`
+
+### PHASE 5 — Error uniqueness audit
+
+次をすべて確認する。
+
+- genuine error count = exactly 1
+- intended error exists
+- intended repair is valid
+- corrected sentence is grammatical
+- no secondary error
+- alternate parseでも別解にならない
+
+NONE / multiple / marginal / alternate repairが残るitemは破棄して再生成する。
+
+### PHASE 6 — Select four local marked spans
+
+error injection後の完成sentenceからA/B/C/Dを選ぶ。4 spansはsentenceの一部であり、sentence全体を4分割しない。error locusを含むcorrect spanを先に最小local spanとして確定し、1語でdecisionを表せる場合にphrase全体をmarkedしない。残り3つはcorrect span近傍から機械的に取らず、sentence全体からgrammatical-looking local candidatesを列挙して選ぶ。random content word、意味のないboundary、長すぎる全体chunk、隣接contiguous spansを避ける。
+
+選択順序は次で固定する。
+
+1. clean sentenceを完成させる。
+2. intended error locusと、grammar上必要な最小correct spanを確定する。
+3. sentence全体から1–4語のcandidate spansを列挙する。
+4. local-span quality filterで、1語・自然な2語unitを優先する。distractorには
+   `syntactic_coherence` を加え、不完全なlocal cutをsoft penaltyする。correct spanは
+   grammar validityを優先してcoherenceで変更しない。
+5. correct spanと同じphrase内部から複数distractorを取らない。
+6. total marked words、coverage、unmarked context、max span、A–B/B–C/C–D gap、correct-span typeを含む soft geometry scoreで候補組合せを比較する。
+7. Official gap observationsからsampleした targetに近い、zero-gapでない組合せを選び、sentence orderをA/B/C/Dへ写像する。
+
+5+ word spanはnormal planning候補から除外する。grammar上どうしても必要な例外だけを
+明示的 rationale付きで許し、re-smokeではWARNING以上として記録する。これはGrammar
+Specification上の絶対禁止ではなく、v2.1.1 format policyである。
+
+surface word countとsyntactic span typeは別metadataとして保存する。`SINGLE_WORD`, `SHORT_PHRASE`, `CLAUSE_OR_CLAUSE_LIKE`を必要に応じて選ぶ。1語固定、max 2/3語のhard cap、全sentence被覆は採用しない。
+
+### PHASE 7 — WE format diagnostics
+
+`agents/toefl_itp_we_generator_v2/scripts/validate_format.py`を使い、次を機械計算する。
+
+`sentence_word_count`, `span_word_counts.A-D`, `mean_span_length`, `max_span_length`, `marked_coverage_ratio`, `unmarked_word_count`, `gap_A_B`, `gap_B_C`, `gap_C_D`, `correct_span_word_count`, `correct_span_type`, `correction_locality`, `decision_granularity`, `format_distribution_distance`, `format_percentile_profile`, `format_band_status`。
+
+公式分位bandは `agents/toefl_itp_we_generator_v2/config/we_v2_format_config.json` にある。PREFERRED/WARNING/EXTREMEはformat diagnosticsであり、grammar correctnessを上書きしない。100% coverageとunmarked context=0はnormal patternとして禁止するが、coverage 60%以上を絶対grammar rejection thresholdにはしない。
+
+emission前に `format_planner.py` の pre-emission checks を通す。sentence length、4 spanの
+word count、coverage、unmarked context、3 gaps、correct span typeを再計算する。
+planned range外、5+ word normal span、複数zero-gap、100% coverage、overlap/order failureは
+acceptしない。sentence planだけが短い場合は clean sentence generationへ戻し、span setだけ
+で救える場合は grammar locusを固定したまま span reselectionを先に試す。Format band
+thresholdsは変更しない。
+
+### PHASE 8 — Final one-error-only validation
+
+GRAMMAR CHECKとFORMAT CHECKを別々に実行し、`grammar_check_status`と`format_check_status`を保存する。format warningだけを理由にcorrectness判定やcorrect_answerを書き換えない。
+
+## Output
+
+`agents/toefl_itp_we_generator_v2/schema/written_expression_item_v2.schema.json`に従い、次を含む。
+
+- sentence
+- marked_parts A-D
+- correct_answer
+- error explanation
+- minimal correction
+- grammar metadata
+- format metadata / diagnostics
+- provenance telemetry
+- QA mutation record
+
+provenanceで取得できない `prompt_hash`, `invocation_id`, `runtime_model` はnullとし、推測して埋めない。25問以上を一つの巨大生成contextで作らない。
+
+## Prohibited actions
+
+- Structure pipelineの変更
+- WE v1.1 Agent/schema/scriptの変更・削除・上書き
+- shared grammar Generatorの改造
+- Solver / Orchestrator consensus policyの変更
+- Specification / Taxonomy / DB / Websiteの変更
+- DB insert、Website接続、25/40/120問へのscale
+- ReviewerのPASS/REVISE/REJECT判定の代行
+
+## v2.1.2 grammar mutation safety patch
+
+The v2.1.2 change is limited to grammar mutation safety.  All v2.1.1 format
+planning and geometry behavior remains locked.  Before emitting any item, the
+Generator must apply the following mutation gates:
+
+1. Maintain a clean sentence that is grammatical, then inject exactly one
+   morphosyntactic defect.  Meaning change, semantic oddity, discourse
+   ambiguity, or stylistic preference is never sufficient.
+2. Quarantine the old noun-phrase-to-pronoun substitution family
+   (`the noun phrase -> it/he/she/they`) unless the error is formally
+   defensible by number/person disagreement, determiner or demonstrative form,
+   or an invalid antecedent relation.  Multiple nearby nouns are not evidence.
+3. Reject semantic-only degree substitutions, including
+   `sufficiently X -> too X` and `enough X -> too X`.  Degree mutations require
+   a morphosyntactic trigger, such as `more reliable than -> most reliable than`
+   or invalid comparative morphology.
+4. Treat base-form-to-`-ing` parallel mutations as guarded templates.  Reject
+   the mutation if the `-ing` phrase can be read as a supplementary or
+   adverbial participial clause, or as a reduced modifier.  Use it only when
+   coordination structurally forces the mutated element to match the other
+   conjuncts.
+5. After every mutation, require: grammatical clean form; genuinely
+   ungrammatical error form; exactly one grammatical defect; defect inside the
+   declared span; minimal repair; no plausible alternate parse; and a defect
+   that is grammatical rather than semantic/pragmatic.  If any gate is
+   uncertain, reject and regenerate.
+6. Cross-check `clean_form`, `error_form`, `mutation_type`,
+   `minimal_correction`, and `answer_explanation` against the same local
+   mutation.  Direction and lexical forms must agree; stale or contradictory
+   metadata is a hard failure.
+
+The deterministic companion implementation is
+`agents/toefl_itp_we_generator_v2/scripts/mutation_safety.py`.  It classifies
+targeted families as `SAFE`, `NEEDS_GUARD`, or `QUARANTINE` and remains
+independent of the format planner and geometry validator.
+
+## v2.1.2 scope boundary
+
+The v2.1.1 format planner and geometry policy remain locked.  The only new
+runtime surface in v2.1.2 is grammar mutation safety and its deterministic
+metadata audit; the JSON Schema/output-field contract remains unchanged.
+The preserved v2.1.1 format-lock phrase is `grammar generation logic unchanged, format planner + span-selection policy only`.
+
+</agent-instructions>
+
+RUNTIME INVOCATION CONSTRAINTS:
+The final response for this invocation MUST be exactly one JSON object matching the supplied output schema. Do not return analysis, phase notes, prose, markdown fences, an items wrapper, or any extra keys. The caller will reject non-contract output.
+
+TASK-SPECIFIC INVOCATION:
+LIVE GENERATOR INVOCATION.
+
+Follow the authoritative Generator instruction supplied by the runtime. Do
+not copy an existing fixture and do not write files. Produce exactly one fresh
+Written Expression Part B item for the frozen v2.1.2 contract. The item_id
+must be exactly "we-v2.1.2-live-T073226Z-003"; this is microbatch item 3 in batch
+"we-v2.1.2-live-e2e-20260826T073226Z". Return one JSON object only, matching the supplied
+canonical Generator schema; do not use markdown or an items wrapper. Keep all
+field names, enum values, nested shapes, sentence-first phases, format rules,
+and mutation-safety rules from the authoritative instruction and schema.
+
+ERROR: {
+  "type": "error",
+  "error": {
+    "type": "invalid_request_error",
+    "code": "invalid_json_schema",
+    "message": "Invalid schema for response_format 'codex_output_schema': In context=(), 'allOf' is not permitted.",
+    "param": "text.format.schema"
+  },
+  "status": 400
+}
+ERROR: {
+  "type": "error",
+  "error": {
+    "type": "invalid_request_error",
+    "code": "invalid_json_schema",
+    "message": "Invalid schema for response_format 'codex_output_schema': In context=(), 'allOf' is not permitted.",
+    "param": "text.format.schema"
+  },
+  "status": 400
+}

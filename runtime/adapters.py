@@ -22,11 +22,11 @@ import tempfile
 import uuid
 from dataclasses import dataclass, field, replace
 from pathlib import Path
-from typing import Any, Callable, Literal, Protocol, Sequence
+from typing import Any, Callable, Literal, Protocol
 
 from runtime.codex_schema import (  # noqa: E402
-    CodexTransportSchemaError,
     build_codex_transport_artifact,
+    normalize_codex_output_for_canonical,
 )
 
 
@@ -191,7 +191,7 @@ def _assert_isolated_workspace_clean(workspace: Path) -> None:
             name in _FORBIDDEN_ISOLATION_BASENAMES
             or name.endswith("_sealed_key.json")
             or name.endswith("_calibration_key.json")
-            or "reviewer_output" in name
+            or ("reviewer_output" in name and path.parent.name.lower() != "schemas")
         ):
             forbidden.append(str(path.relative_to(workspace)))
     if forbidden:
@@ -444,7 +444,11 @@ class _SubprocessRuntime:
         result.completed_at = _now_iso()
         self._write_process_artifacts(result)
         if proc.returncode != 0:
-            diagnostic = (result.raw_stderr or result.raw_stdout).strip()[:2000]
+            # Codex writes the full prompt and tool transcript to stderr.  The
+            # actionable process error is normally at the end; using the
+            # prefix would misclassify prompt words such as "network" as a
+            # transport failure.
+            diagnostic = (result.raw_stderr or result.raw_stdout).strip()[-2000:]
             result.error_category = self._process_error_category(diagnostic)
             result.error_detail = f"{request.stage}: {self.provider} CLI exit {proc.returncode}: {diagnostic}"
             raise RuntimeInvocationError(result.error_category, result.error_detail, result)
@@ -577,7 +581,21 @@ class CodexRuntime(_SubprocessRuntime):
             return "CODEX_SCHEMA_COMPATIBILITY_ERROR"
         if any(token in lowered for token in ("unauthorized", "authentication", "api key", "invalid token", "login")):
             return "CODEX_AUTH_ERROR"
-        if any(token in lowered for token in ("network", "dns", "connection", "econn", "websocket")):
+        if any(
+            token in lowered
+            for token in (
+                "socket",
+                "websocket",
+                "dns",
+                "econn",
+                "connection refused",
+                "connection reset",
+                "failed to connect",
+                "network is unreachable",
+                "network error",
+                "error sending request",
+            )
+        ):
             return "CODEX_NETWORK_ERROR"
         if any(token in lowered for token in ("rate limit", "session limit", "too many requests", "usage limit")):
             return "infrastructure"
@@ -703,5 +721,11 @@ class CodexRuntime(_SubprocessRuntime):
         except ValueError as exc:
             result.error_category = "parsing"
             result.error_detail = str(exc)
+            raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
+        try:
+            result.parsed = normalize_codex_output_for_canonical(result.parsed, request.formal_output_schema)
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError, TypeError, ValueError) as exc:
+            result.error_category = "CODEX_SCHEMA_COMPATIBILITY_ERROR"
+            result.error_detail = f"{request.stage}: could not normalize Codex output for canonical validation: {exc}"
             raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
         return result

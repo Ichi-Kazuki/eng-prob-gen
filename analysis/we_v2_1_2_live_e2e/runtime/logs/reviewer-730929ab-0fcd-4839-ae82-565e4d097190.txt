@@ -1,0 +1,87 @@
+```json
+{
+  "item_id": "we-v2.1.2-live-T045552Z-001",
+  "section": "Written Expression",
+  "phase1_blind_grammar_audit": {
+    "sentence": "The rate of soil erosion in mountainous farming regions depend heavily on the frequency and intensity of seasonal rainfall.",
+    "identified_errors": [
+      {
+        "location": "depend",
+        "type": "subject-verb agreement",
+        "description": "The grammatical subject of the sentence is the singular noun phrase 'The rate' (of soil erosion in mountainous farming regions). The verb must agree with 'rate', not with the closer plural noun 'regions' embedded in the intervening prepositional phrases. 'depend' is the plural form and does not agree with the singular subject; it should be 'depends'."
+      }
+    ],
+    "other_observations": "No other genuine grammatical errors detected. 'erosion', 'frequency', and 'seasonal' are all used correctly as parts of well-formed noun phrases."
+  },
+  "phase2_one_error_only_audit": {
+    "zero_based_full_sentence_audit": "Exactly one genuine grammatical error found (subject-verb agreement at 'depend'). No zero-error condition applies.",
+    "alternate_parse_audit": "No alternate parse changes the subject identity; 'The rate' remains the head subject regardless of the intervening prepositional modifiers 'of soil erosion' and 'in mountainous farming regions'. Proximity to 'regions' does not create a legitimate alternate reading under standard grammar rules.",
+    "alternate_repair_audit": "The only valid repair is changing 'depend' to 'depends'. No alternate single-word repair elsewhere in the sentence resolves the agreement violation.",
+    "secondary_error_check": "No secondary errors found in A, C, or D spans.",
+    "marked_part_assessments": {
+      "A": {
+        "span": "erosion",
+        "classification": "ACCEPTABLE",
+        "rationale": "Correctly used noun within the compound noun phrase 'soil erosion'; no grammatical fault."
+      },
+      "B": {
+        "span": "depend",
+        "classification": "ERROR",
+        "rationale": "Fails to agree in number with the singular subject 'The rate'; should be 'depends'. This is the sole genuine grammatical error in the sentence."
+      },
+      "C": {
+        "span": "frequency",
+        "classification": "ACCEPTABLE",
+        "rationale": "Correctly used noun in the coordinated noun phrase 'the frequency and intensity of seasonal rainfall'; no grammatical fault."
+      },
+      "D": {
+        "span": "seasonal",
+        "classification": "ACCEPTABLE",
+        "rationale": "Correctly used adjective modifying 'rainfall'; no grammatical fault."
+      }
+    }
+  },
+  "phase3_answer_uniqueness_audit": {
+    "candidate_answer": "B",
+    "uniqueness_determination": "UNIQUE",
+    "justification": "Independent audit identifies exactly one genuine error (subject-verb agreement at span B). No other span contains a genuine error, and no alternate parse produces a competing error site or ambiguity. The corrected sentence ('...depends heavily...') is fully grammatical with no residual issues."
+  },
+  "grammar_validity": "PASS",
+  "format_validity": "WARN",
+  "phase4_format_audit": {
+    "note": "Deterministic validator output for this item was not provided in the blinded candidate input. Format dimensions cannot be independently evaluated without the precomputed validator results; format_validity is marked WARN pending receipt of validator data rather than asserting a FAIL or PASS.",
+    "sentence_length": "NOT_PROVIDED",
+    "span_count_alignment_overlap_order": "NOT_PROVIDED",
+    "span_lengths_and_types": "NOT_PROVIDED",
+    "marked_coverage": "NOT_PROVIDED",
+    "unmarked_context": "NOT_PROVIDED",
+    "gaps": "NOT_PROVIDED",
+    "correct_span_size_type": "NOT_PROVIDED",
+    "correction_locality": "single-word verb form correction; locally confined to span B if B is the intended target",
+    "decision_granularity": "NOT_PROVIDED",
+    "empirical_percentile_profile": "NOT_PROVIDED"
+  },
+  "phase5_target_metadata_audit": {
+    "note": "No Generator metadata (primary_target, subtype, tested_error_type, error_scope, correction_locality, decision_granularity, provenance) was supplied in the blinded input, per instructions. This audit is deferred to the Orchestrator's post-comparison stage.",
+    "independent_target_observation": "The tested phenomenon, based purely on blind analysis, is subject-verb agreement across an intervening prepositional-phrase chain (classic 'distractor noun' agreement error)."
+  },
+  "phase6_final_verdict": {
+    "verdict_input_only": "Independent grammar audit supports a well-formed single-error item with candidate answer B. Final REVISE/REJECT/PASS verdict depends on comparison with Generator answer and metadata, which is out of scope for this blinded response."
+  },
+  "issues": [],
+  "revision_requirements": [],
+  "format_diagnostics": {
+    "source": "deterministic_validator_not_provided",
+    "status": "INSUFFICIENT_DATA",
+    "recommendation": "Supply deterministic validator output (span geometry, coverage, percentile profile) to complete Phase 4 format audit."
+  },
+  "provenance": {
+    "reviewer": "toefl_itp_we_reviewer_v2",
+    "review_mode": "blind",
+    "input_type": "live_blinded_candidate",
+    "fields_received": ["item_id", "section", "sentence", "marked_parts"],
+    "fields_withheld_by_design": ["generator_answer", "primary_target", "subtype", "tested_error_type", "explanation", "metadata"],
+    "date_reviewed": "2026-08-26"
+  }
+}
+```

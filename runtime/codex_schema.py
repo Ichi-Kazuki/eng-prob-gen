@@ -513,7 +513,21 @@ def _project_node(value: Any, path: str, records: list[JsonObject], *, root: boo
         properties = working.get("properties")
         if isinstance(properties, dict):
             current_required = working.get("required")
-            required = list(current_required) if isinstance(current_required, list) else []
+            required: list[str] = []
+            if isinstance(current_required, list):
+                for name in current_required:
+                    if name in properties:
+                        if name not in required:
+                            required.append(name)
+                    else:
+                        _record(
+                            records,
+                            path=f"{path}.required",
+                            keyword="required",
+                            action="omitted",
+                            replacement="property must be declared",
+                            reason="Codex requires every required name to have a corresponding property definition",
+                        )
             for name, property_schema in properties.items():
                 if name not in required:
                     required.append(name)
@@ -607,6 +621,87 @@ def codex_transport_schema_errors(schema: Mapping[str, Any]) -> list[str]:
     return sorted(set(errors))
 
 
+def _resolve_local_ref(schema: Mapping[str, Any], root: Mapping[str, Any]) -> Mapping[str, Any]:
+    reference = schema.get("$ref")
+    if not isinstance(reference, str) or not reference.startswith("#/"):
+        return schema
+    current: Any = root
+    for component in reference[2:].split("/"):
+        if not isinstance(current, Mapping):
+            return schema
+        current = current.get(component.replace("~1", "/").replace("~0", "~"))
+    return current if isinstance(current, Mapping) else schema
+
+
+def _property_schema(schema: Mapping[str, Any], name: str, root: Mapping[str, Any]) -> Mapping[str, Any] | None:
+    resolved = _resolve_local_ref(schema, root)
+    properties = resolved.get("properties")
+    if isinstance(properties, Mapping) and isinstance(properties.get(name), Mapping):
+        return properties[name]
+    for keyword in ("allOf", "anyOf", "oneOf"):
+        branches = resolved.get(keyword)
+        if isinstance(branches, list):
+            for branch in branches:
+                if isinstance(branch, Mapping):
+                    found = _property_schema(branch, name, root)
+                    if found is not None:
+                        return found
+    return None
+
+
+def _schema_allows_null(schema: Mapping[str, Any], root: Mapping[str, Any]) -> bool:
+    resolved = _resolve_local_ref(schema, root)
+    schema_type = resolved.get("type")
+    if schema_type == "null" or (isinstance(schema_type, list) and "null" in schema_type):
+        return True
+    enum = resolved.get("enum")
+    if isinstance(enum, list) and None in enum:
+        return True
+    any_of = resolved.get("anyOf")
+    if isinstance(any_of, list):
+        return any(isinstance(branch, Mapping) and _schema_allows_null(branch, root) for branch in any_of)
+    return False
+
+
+def _strip_transport_nulls(value: Any, schema: Mapping[str, Any], root: Mapping[str, Any]) -> Any:
+    """Undo only the nullable encoding used for canonical-optional fields."""
+    resolved = _resolve_local_ref(schema, root)
+    if isinstance(value, dict):
+        required = resolved.get("required")
+        required_names = set(required) if isinstance(required, list) else set()
+        for name in list(value):
+            child_schema = _property_schema(resolved, name, root)
+            if (
+                value[name] is None
+                and child_schema is not None
+                and name not in required_names
+                and not _schema_allows_null(child_schema, root)
+            ):
+                del value[name]
+                continue
+            if child_schema is not None:
+                value[name] = _strip_transport_nulls(value[name], child_schema, root)
+        return value
+    if isinstance(value, list):
+        items = resolved.get("items")
+        if isinstance(items, Mapping):
+            return [_strip_transport_nulls(item, items, root) for item in value]
+    return value
+
+
+def normalize_codex_output_for_canonical(value: Any, canonical_schema: SchemaInput) -> Any:
+    """Remove Codex-only nulls before the caller runs canonical validation.
+
+    Structured Outputs requires canonical-optional properties to be present,
+    so the transport schema encodes them as nullable.  A model may choose the
+    null branch; converting that branch back to omission is a transport
+    normalization, not contract validation, and conditional canonical rules
+    still run unchanged afterward.
+    """
+    source, _, _ = _load_input(canonical_schema)
+    return _strip_transport_nulls(copy.deepcopy(value), source, source)
+
+
 def build_codex_transport_artifact(
     canonical_schema: SchemaInput,
     *,
@@ -675,4 +770,5 @@ __all__ = [
     "build_codex_transport_artifact",
     "build_codex_transport_schema",
     "codex_transport_schema_errors",
+    "normalize_codex_output_for_canonical",
 ]

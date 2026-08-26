@@ -1,0 +1,11 @@
+{
+  "item_id": "we-v2.1.2-live-T054442Z-002",
+  "section": "Written Expression",
+  "sentence": "The committee's decision to postpone the annual conference, though widely criticized, were ultimately based on sound financial reasoning.",
+  "marked_parts": {
+    "A": "postpone",
+    "B": "widely",
+    "C": "were",
+    "D": "financial"
+  }
+}

@@ -159,7 +159,11 @@ def _elapsed_seconds(started_at: str, completed_at: str | None) -> float | None:
 
 
 def _invocation_diagnostic(invocation: InvocationResult, error: LiveInvocationError | None) -> str:
-    parts = [invocation.raw_stderr, invocation.raw_stdout]
+    # Codex stderr contains the complete authoritative prompt and tool
+    # transcript.  Classification must inspect the tail where CLI errors are
+    # emitted, otherwise ordinary prompt words such as "network" can create a
+    # false CODEX_NETWORK_ERROR.
+    parts = [invocation.raw_stderr[-8000:], invocation.raw_stdout[-4000:]]
     if error is not None:
         parts.append(error.detail)
     return "\n".join(part for part in parts if part).lower()
@@ -188,8 +192,9 @@ def _classify_invocation_failure(invocation: InvocationResult, error: LiveInvoca
         return "CONTRACT_VALIDATION_ERROR"
     auth_tokens = ("unauthorized", "authentication", "api key", "invalid token", "login required", "not logged in")
     network_tokens = (
-        "socket", "websocket", "network", "dns", "connection", "econn", "stream disconnected",
-        "failed to connect", "api.openai.com", "timed out waiting for network",
+        "socket", "websocket", "dns", "econn", "connection refused", "connection reset",
+        "stream disconnected", "failed to connect", "api.openai.com", "timed out waiting for network",
+        "network is unreachable", "network error", "error sending request",
     )
     if any(token in diagnostic for token in auth_tokens):
         return "CODEX_AUTH_ERROR"

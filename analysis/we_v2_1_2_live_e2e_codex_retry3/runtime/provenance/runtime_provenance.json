@@ -1,0 +1,2394 @@
+{
+  "items": [
+    {
+      "provider": "codex",
+      "runtime_provider": "codex",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "codex_cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "model": "gpt-5.6-luna",
+      "model_identifier": "gpt-5.6-luna",
+      "invocation_id": "0a60e53e-d6e8-4f6a-9b22-ca74488c8e6e",
+      "timestamp": "2026-08-26T08:05:09.920023+00:00",
+      "invocation_timestamp": "2026-08-26T08:05:09.920023+00:00",
+      "completed_timestamp": "2026-08-26T08:10:10.173591+00:00",
+      "start_timestamp": "2026-08-26T08:05:09.920023+00:00",
+      "end_timestamp": "2026-08-26T08:10:10.173591+00:00",
+      "elapsed_seconds": 300.253568,
+      "exit_code": null,
+      "process_exit_code": null,
+      "exact_command_argv": [
+        "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe",
+        "exec",
+        "--ephemeral",
+        "--output-schema",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-0a60e53e-d6e8-4f6a-9b22-ca74488c8e6e.json",
+        "--output-last-message",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-0a60e53e-d6e8-4f6a-9b22-ca74488c8e6e.last-message.json",
+        "--sandbox",
+        "read-only",
+        "--model",
+        "gpt-5.6-luna",
+        "--cd",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen",
+        "-"
+      ],
+      "exact_command": "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe exec --ephemeral --output-schema C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-0a60e53e-d6e8-4f6a-9b22-ca74488c8e6e.json --output-last-message C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-0a60e53e-d6e8-4f6a-9b22-ca74488c8e6e.last-message.json --sandbox read-only --model gpt-5.6-luna --cd C:\\Users\\soted\\Projects\\itp-prob-gen -",
+      "live_invocation": true,
+      "contract_valid": false,
+      "contract_validated": false,
+      "formal_output_path": "runtime/formal/generator_outputs.json",
+      "formal_output_exists": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_stdout_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-0a60e53e-d6e8-4f6a-9b22-ca74488c8e6e.stdout.txt",
+      "raw_stderr_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-0a60e53e-d6e8-4f6a-9b22-ca74488c8e6e.stderr.txt",
+      "output_last_message_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-0a60e53e-d6e8-4f6a-9b22-ca74488c8e6e.last-message.json",
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-0a60e53e-d6e8-4f6a-9b22-ca74488c8e6e.stdout.txt",
+      "transport_schema_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-0a60e53e-d6e8-4f6a-9b22-ca74488c8e6e.json",
+      "transport_schema_provenance_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-0a60e53e-d6e8-4f6a-9b22-ca74488c8e6e.provenance.json",
+      "transport_schema_provenance": {
+        "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_we_generator_v2\\schema\\written_expression_item_v2.schema.json",
+        "canonical_schema_hash": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0",
+        "transport_schema_hash": "sha256:05c71e0fc61d3a3fca7dfe6d282bb7255af7c35a9e02166e6d45ecb25f70d655",
+        "removed_or_relaxed_keywords": [
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "relaxed",
+            "reason": "conditional allOf composition is enforced only by canonical validation"
+          },
+          {
+            "path": "$.allOf[0].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs does not permit allOf",
+            "replacement": "flattened structural branches / omitted conditional branches"
+          },
+          {
+            "path": "$.properties.section.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.qa_metadata.properties.clean_sentence_validated.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          }
+        ],
+        "provider": "codex",
+        "canonical_validation_still_required": true
+      },
+      "classification": "CODEX_NETWORK_ERROR",
+      "failure_classification": "CODEX_NETWORK_ERROR",
+      "failure_source": "subprocess_timeout",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI timeout after 300s; last diagnostic: d in words]\n    return len(words) >= 2 and (\n        lower[0] in CLAUSE_MARKERS\n        or any(word in {\"is\", \"are\", \"was\", \"were\", \"be\", \"been\", \"has\", \"have\", \"had\", \"does\", \"do\", \"did\"} for word in lower)\n    )\n\n\ndef _lexical_quality(sentence: str, matches: Sequence[re.Match[str]], start: int, end: int) -> float:\n    words = [match.group(0).lower() for match in matches[start:end]]\n    quality = 1.0\n    if len(words) == 1:\n        quality += 0.35\n    elif len(words) == 2:\n        quality += 0.50\n    if words[0] in {\"and\", \"or\", \"but\", \"nor\"}:\n        quality -= 0.35\n    if words[-1] in BOUNDARY_WORDS:\n        quality -= 0.40\n    # Do not make proximity to the correct span part of candidate quality.\n    # Whole-sentence enumeration and geometry scoring decide placement.\n    return quality"
+      }
+    },
+    {
+      "provider": "codex",
+      "runtime_provider": "codex",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "codex_cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "model": "gpt-5.6-luna",
+      "model_identifier": "gpt-5.6-luna",
+      "invocation_id": "09796c3c-5c34-4782-a156-a5d2d119e199",
+      "timestamp": "2026-08-26T08:10:10.208695+00:00",
+      "invocation_timestamp": "2026-08-26T08:10:10.208695+00:00",
+      "completed_timestamp": "2026-08-26T08:15:10.557865+00:00",
+      "start_timestamp": "2026-08-26T08:10:10.208695+00:00",
+      "end_timestamp": "2026-08-26T08:15:10.557865+00:00",
+      "elapsed_seconds": 300.34917,
+      "exit_code": null,
+      "process_exit_code": null,
+      "exact_command_argv": [
+        "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe",
+        "exec",
+        "--ephemeral",
+        "--output-schema",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-09796c3c-5c34-4782-a156-a5d2d119e199.json",
+        "--output-last-message",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-09796c3c-5c34-4782-a156-a5d2d119e199.last-message.json",
+        "--sandbox",
+        "read-only",
+        "--model",
+        "gpt-5.6-luna",
+        "--cd",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen",
+        "-"
+      ],
+      "exact_command": "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe exec --ephemeral --output-schema C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-09796c3c-5c34-4782-a156-a5d2d119e199.json --output-last-message C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-09796c3c-5c34-4782-a156-a5d2d119e199.last-message.json --sandbox read-only --model gpt-5.6-luna --cd C:\\Users\\soted\\Projects\\itp-prob-gen -",
+      "live_invocation": true,
+      "contract_valid": false,
+      "contract_validated": false,
+      "formal_output_path": "runtime/formal/generator_outputs.json",
+      "formal_output_exists": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_stdout_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-09796c3c-5c34-4782-a156-a5d2d119e199.stdout.txt",
+      "raw_stderr_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-09796c3c-5c34-4782-a156-a5d2d119e199.stderr.txt",
+      "output_last_message_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-09796c3c-5c34-4782-a156-a5d2d119e199.last-message.json",
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-09796c3c-5c34-4782-a156-a5d2d119e199.stdout.txt",
+      "transport_schema_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-09796c3c-5c34-4782-a156-a5d2d119e199.json",
+      "transport_schema_provenance_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-09796c3c-5c34-4782-a156-a5d2d119e199.provenance.json",
+      "transport_schema_provenance": {
+        "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_we_generator_v2\\schema\\written_expression_item_v2.schema.json",
+        "canonical_schema_hash": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0",
+        "transport_schema_hash": "sha256:05c71e0fc61d3a3fca7dfe6d282bb7255af7c35a9e02166e6d45ecb25f70d655",
+        "removed_or_relaxed_keywords": [
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "relaxed",
+            "reason": "conditional allOf composition is enforced only by canonical validation"
+          },
+          {
+            "path": "$.allOf[0].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs does not permit allOf",
+            "replacement": "flattened structural branches / omitted conditional branches"
+          },
+          {
+            "path": "$.properties.section.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.qa_metadata.properties.clean_sentence_validated.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          }
+        ],
+        "provider": "codex",
+        "canonical_validation_still_required": true
+      },
+      "classification": "CODEX_NETWORK_ERROR",
+      "failure_classification": "CODEX_NETWORK_ERROR",
+      "failure_source": "subprocess_timeout",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI timeout after 300s; last diagnostic:  collections\nfor pattern in ['analysis/we_v2_1_2_grammar_pilot/runtime/generator/*.json','analysis/we_v2_1_2_validation/we_v2_1_2_75_item_validation.json']:\n    c=collections.Counter()\n    for p in glob.glob(pattern):\n        try:d=json.load(open(p,encoding='utf-8'))\n        except:continue\n        xs=d if isinstance(d,list) else d.get('items',[d])\n        for x in xs:\n            if isinstance(x,dict):\n                q=x.get('qa_metadata',{})\n                if 'grammar_check_status' in q:c[q['grammar_check_status']]+=1\n    print(pattern,c)\n'@ | python -\" in C:\\Users\\soted\\Projects\\itp-prob-gen\n succeeded in 915ms:\nanalysis/we_v2_1_2_grammar_pilot/runtime/generator/*.json Counter({'AMBIGUOUS': 25})\nanalysis/we_v2_1_2_validation/we_v2_1_2_75_item_validation.json Counter({'AMBIGUOUS': 75})"
+      }
+    },
+    {
+      "provider": "codex",
+      "runtime_provider": "codex",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "codex_cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "model": "gpt-5.6-luna",
+      "model_identifier": "gpt-5.6-luna",
+      "invocation_id": "9c3813dd-2bd8-4864-a272-f1b0aa21e265",
+      "timestamp": "2026-08-26T08:15:10.582852+00:00",
+      "invocation_timestamp": "2026-08-26T08:15:10.582852+00:00",
+      "completed_timestamp": "2026-08-26T08:20:11.079343+00:00",
+      "start_timestamp": "2026-08-26T08:15:10.582852+00:00",
+      "end_timestamp": "2026-08-26T08:20:11.079343+00:00",
+      "elapsed_seconds": 300.496491,
+      "exit_code": null,
+      "process_exit_code": null,
+      "exact_command_argv": [
+        "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe",
+        "exec",
+        "--ephemeral",
+        "--output-schema",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-9c3813dd-2bd8-4864-a272-f1b0aa21e265.json",
+        "--output-last-message",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-9c3813dd-2bd8-4864-a272-f1b0aa21e265.last-message.json",
+        "--sandbox",
+        "read-only",
+        "--model",
+        "gpt-5.6-luna",
+        "--cd",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen",
+        "-"
+      ],
+      "exact_command": "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe exec --ephemeral --output-schema C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-9c3813dd-2bd8-4864-a272-f1b0aa21e265.json --output-last-message C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-9c3813dd-2bd8-4864-a272-f1b0aa21e265.last-message.json --sandbox read-only --model gpt-5.6-luna --cd C:\\Users\\soted\\Projects\\itp-prob-gen -",
+      "live_invocation": true,
+      "contract_valid": false,
+      "contract_validated": false,
+      "formal_output_path": "runtime/formal/generator_outputs.json",
+      "formal_output_exists": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_stdout_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-9c3813dd-2bd8-4864-a272-f1b0aa21e265.stdout.txt",
+      "raw_stderr_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-9c3813dd-2bd8-4864-a272-f1b0aa21e265.stderr.txt",
+      "output_last_message_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-9c3813dd-2bd8-4864-a272-f1b0aa21e265.last-message.json",
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-9c3813dd-2bd8-4864-a272-f1b0aa21e265.stdout.txt",
+      "transport_schema_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-9c3813dd-2bd8-4864-a272-f1b0aa21e265.json",
+      "transport_schema_provenance_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-9c3813dd-2bd8-4864-a272-f1b0aa21e265.provenance.json",
+      "transport_schema_provenance": {
+        "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_we_generator_v2\\schema\\written_expression_item_v2.schema.json",
+        "canonical_schema_hash": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0",
+        "transport_schema_hash": "sha256:05c71e0fc61d3a3fca7dfe6d282bb7255af7c35a9e02166e6d45ecb25f70d655",
+        "removed_or_relaxed_keywords": [
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "relaxed",
+            "reason": "conditional allOf composition is enforced only by canonical validation"
+          },
+          {
+            "path": "$.allOf[0].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs does not permit allOf",
+            "replacement": "flattened structural branches / omitted conditional branches"
+          },
+          {
+            "path": "$.properties.section.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.qa_metadata.properties.clean_sentence_validated.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          }
+        ],
+        "provider": "codex",
+        "canonical_validation_still_required": true
+      },
+      "classification": "CODEX_NETWORK_ERROR",
+      "failure_classification": "CODEX_NETWORK_ERROR",
+      "failure_source": "subprocess_timeout",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI timeout after 300s; last diagnostic: . It is evidence, not automatically a generation quota.\",\n      \"DERIVED RULE\": \"A generation or review constraint logically derived from an OBSERVED fact.\",\n      \"HEURISTIC\": \"A practical safety recommendation or implementation choice not directly measured by the official data.\"\n    },\n    \"requirement\": \"Every normative rule in this addendum must carry exactly one of the three labels above. OBSERVED facts must not be silently promoted to hard generation constraints.\"\n  },\n  \"source_of_truth\": {\n    \"required_sources\": [\n      \"analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md\",\n      \"analysis/we_format/written_expression_format_official.json\",\n\n2026-08-26T08:19:45.554001Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `base_instructions` at line 97 column 5"
+      }
+    },
+    {
+      "provider": "codex",
+      "runtime_provider": "codex",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "codex_cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "model": "gpt-5.6-luna",
+      "model_identifier": "gpt-5.6-luna",
+      "invocation_id": "29e1ea2a-6819-4a20-a241-778edcae25d1",
+      "timestamp": "2026-08-26T08:20:11.154115+00:00",
+      "invocation_timestamp": "2026-08-26T08:20:11.154115+00:00",
+      "completed_timestamp": "2026-08-26T08:23:36.103301+00:00",
+      "start_timestamp": "2026-08-26T08:20:11.154115+00:00",
+      "end_timestamp": "2026-08-26T08:23:36.103301+00:00",
+      "elapsed_seconds": 204.949186,
+      "exit_code": 4294967295,
+      "process_exit_code": 4294967295,
+      "exact_command_argv": [
+        "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe",
+        "exec",
+        "--ephemeral",
+        "--output-schema",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-29e1ea2a-6819-4a20-a241-778edcae25d1.json",
+        "--output-last-message",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-29e1ea2a-6819-4a20-a241-778edcae25d1.last-message.json",
+        "--sandbox",
+        "read-only",
+        "--model",
+        "gpt-5.6-luna",
+        "--cd",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen",
+        "-"
+      ],
+      "exact_command": "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe exec --ephemeral --output-schema C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-29e1ea2a-6819-4a20-a241-778edcae25d1.json --output-last-message C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-29e1ea2a-6819-4a20-a241-778edcae25d1.last-message.json --sandbox read-only --model gpt-5.6-luna --cd C:\\Users\\soted\\Projects\\itp-prob-gen -",
+      "live_invocation": true,
+      "contract_valid": false,
+      "contract_validated": false,
+      "formal_output_path": "runtime/formal/generator_outputs.json",
+      "formal_output_exists": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_stdout_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-29e1ea2a-6819-4a20-a241-778edcae25d1.stdout.txt",
+      "raw_stderr_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-29e1ea2a-6819-4a20-a241-778edcae25d1.stderr.txt",
+      "output_last_message_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-29e1ea2a-6819-4a20-a241-778edcae25d1.last-message.json",
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-29e1ea2a-6819-4a20-a241-778edcae25d1.stdout.txt",
+      "transport_schema_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-29e1ea2a-6819-4a20-a241-778edcae25d1.json",
+      "transport_schema_provenance_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-29e1ea2a-6819-4a20-a241-778edcae25d1.provenance.json",
+      "transport_schema_provenance": {
+        "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_we_generator_v2\\schema\\written_expression_item_v2.schema.json",
+        "canonical_schema_hash": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0",
+        "transport_schema_hash": "sha256:05c71e0fc61d3a3fca7dfe6d282bb7255af7c35a9e02166e6d45ecb25f70d655",
+        "removed_or_relaxed_keywords": [
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "relaxed",
+            "reason": "conditional allOf composition is enforced only by canonical validation"
+          },
+          {
+            "path": "$.allOf[0].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs does not permit allOf",
+            "replacement": "flattened structural branches / omitted conditional branches"
+          },
+          {
+            "path": "$.properties.section.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.qa_metadata.properties.clean_sentence_validated.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          }
+        ],
+        "provider": "codex",
+        "canonical_validation_still_required": true
+      },
+      "classification": "CODEX_PROCESS_ERROR",
+      "failure_classification": "CODEX_PROCESS_ERROR",
+      "failure_source": "codex_cli",
+      "failure": {
+        "category": "CODEX_PROCESS_ERROR",
+        "detail": "generator: codex CLI exit 4294967295: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03d27-c435-7cd2-b388-a8efd7e797e9\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+      }
+    },
+    {
+      "provider": "codex",
+      "runtime_provider": "codex",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "codex_cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "model": "gpt-5.6-luna",
+      "model_identifier": "gpt-5.6-luna",
+      "invocation_id": "4f80e4c5-cbf7-4026-b826-e0c0f7245424",
+      "timestamp": "2026-08-26T08:23:36.174577+00:00",
+      "invocation_timestamp": "2026-08-26T08:23:36.174577+00:00",
+      "completed_timestamp": "2026-08-26T08:26:20.993653+00:00",
+      "start_timestamp": "2026-08-26T08:23:36.174577+00:00",
+      "end_timestamp": "2026-08-26T08:26:20.993653+00:00",
+      "elapsed_seconds": 164.819076,
+      "exit_code": 4294967295,
+      "process_exit_code": 4294967295,
+      "exact_command_argv": [
+        "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe",
+        "exec",
+        "--ephemeral",
+        "--output-schema",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-4f80e4c5-cbf7-4026-b826-e0c0f7245424.json",
+        "--output-last-message",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-4f80e4c5-cbf7-4026-b826-e0c0f7245424.last-message.json",
+        "--sandbox",
+        "read-only",
+        "--model",
+        "gpt-5.6-luna",
+        "--cd",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen",
+        "-"
+      ],
+      "exact_command": "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe exec --ephemeral --output-schema C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-4f80e4c5-cbf7-4026-b826-e0c0f7245424.json --output-last-message C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-4f80e4c5-cbf7-4026-b826-e0c0f7245424.last-message.json --sandbox read-only --model gpt-5.6-luna --cd C:\\Users\\soted\\Projects\\itp-prob-gen -",
+      "live_invocation": true,
+      "contract_valid": false,
+      "contract_validated": false,
+      "formal_output_path": "runtime/formal/generator_outputs.json",
+      "formal_output_exists": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_stdout_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-4f80e4c5-cbf7-4026-b826-e0c0f7245424.stdout.txt",
+      "raw_stderr_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-4f80e4c5-cbf7-4026-b826-e0c0f7245424.stderr.txt",
+      "output_last_message_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-4f80e4c5-cbf7-4026-b826-e0c0f7245424.last-message.json",
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-4f80e4c5-cbf7-4026-b826-e0c0f7245424.stdout.txt",
+      "transport_schema_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-4f80e4c5-cbf7-4026-b826-e0c0f7245424.json",
+      "transport_schema_provenance_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-4f80e4c5-cbf7-4026-b826-e0c0f7245424.provenance.json",
+      "transport_schema_provenance": {
+        "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_we_generator_v2\\schema\\written_expression_item_v2.schema.json",
+        "canonical_schema_hash": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0",
+        "transport_schema_hash": "sha256:05c71e0fc61d3a3fca7dfe6d282bb7255af7c35a9e02166e6d45ecb25f70d655",
+        "removed_or_relaxed_keywords": [
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "relaxed",
+            "reason": "conditional allOf composition is enforced only by canonical validation"
+          },
+          {
+            "path": "$.allOf[0].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs does not permit allOf",
+            "replacement": "flattened structural branches / omitted conditional branches"
+          },
+          {
+            "path": "$.properties.section.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.qa_metadata.properties.clean_sentence_validated.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          }
+        ],
+        "provider": "codex",
+        "canonical_validation_still_required": true
+      },
+      "classification": "CODEX_NETWORK_ERROR",
+      "failure_classification": "CODEX_NETWORK_ERROR",
+      "failure_source": "codex_cli",
+      "failure": {
+        "category": "CODEX_PROCESS_ERROR",
+        "detail": "generator: codex CLI exit 4294967295: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03d2a-e4f0-7ce2-8b89-a7f3955461ee\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+      }
+    },
+    {
+      "provider": "codex",
+      "runtime_provider": "codex",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "codex_cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "model": "gpt-5.6-luna",
+      "model_identifier": "gpt-5.6-luna",
+      "invocation_id": "a3f98553-b66b-49a0-85dd-e397ed3b41f2",
+      "timestamp": "2026-08-26T08:26:21.136560+00:00",
+      "invocation_timestamp": "2026-08-26T08:26:21.136560+00:00",
+      "completed_timestamp": "2026-08-26T08:31:21.488838+00:00",
+      "start_timestamp": "2026-08-26T08:26:21.136560+00:00",
+      "end_timestamp": "2026-08-26T08:31:21.488838+00:00",
+      "elapsed_seconds": 300.352278,
+      "exit_code": null,
+      "process_exit_code": null,
+      "exact_command_argv": [
+        "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe",
+        "exec",
+        "--ephemeral",
+        "--output-schema",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-a3f98553-b66b-49a0-85dd-e397ed3b41f2.json",
+        "--output-last-message",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-a3f98553-b66b-49a0-85dd-e397ed3b41f2.last-message.json",
+        "--sandbox",
+        "read-only",
+        "--model",
+        "gpt-5.6-luna",
+        "--cd",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen",
+        "-"
+      ],
+      "exact_command": "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe exec --ephemeral --output-schema C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-a3f98553-b66b-49a0-85dd-e397ed3b41f2.json --output-last-message C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-a3f98553-b66b-49a0-85dd-e397ed3b41f2.last-message.json --sandbox read-only --model gpt-5.6-luna --cd C:\\Users\\soted\\Projects\\itp-prob-gen -",
+      "live_invocation": true,
+      "contract_valid": false,
+      "contract_validated": false,
+      "formal_output_path": "runtime/formal/generator_outputs.json",
+      "formal_output_exists": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_stdout_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-a3f98553-b66b-49a0-85dd-e397ed3b41f2.stdout.txt",
+      "raw_stderr_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-a3f98553-b66b-49a0-85dd-e397ed3b41f2.stderr.txt",
+      "output_last_message_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-a3f98553-b66b-49a0-85dd-e397ed3b41f2.last-message.json",
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-a3f98553-b66b-49a0-85dd-e397ed3b41f2.stdout.txt",
+      "transport_schema_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-a3f98553-b66b-49a0-85dd-e397ed3b41f2.json",
+      "transport_schema_provenance_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-a3f98553-b66b-49a0-85dd-e397ed3b41f2.provenance.json",
+      "transport_schema_provenance": {
+        "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_we_generator_v2\\schema\\written_expression_item_v2.schema.json",
+        "canonical_schema_hash": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0",
+        "transport_schema_hash": "sha256:05c71e0fc61d3a3fca7dfe6d282bb7255af7c35a9e02166e6d45ecb25f70d655",
+        "removed_or_relaxed_keywords": [
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "relaxed",
+            "reason": "conditional allOf composition is enforced only by canonical validation"
+          },
+          {
+            "path": "$.allOf[0].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs does not permit allOf",
+            "replacement": "flattened structural branches / omitted conditional branches"
+          },
+          {
+            "path": "$.properties.section.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.qa_metadata.properties.clean_sentence_validated.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          }
+        ],
+        "provider": "codex",
+        "canonical_validation_still_required": true
+      },
+      "classification": "CODEX_NETWORK_ERROR",
+      "failure_classification": "CODEX_NETWORK_ERROR",
+      "failure_source": "subprocess_timeout",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI timeout after 300s; last diagnostic: \"lower\": 15, \"upper\": 19, \"region\": \"16-20\", \"source\": \"official.items[].sentence_word_count\"}, \"correct_span\": {\"type\": \"SINGLE_WORD\", \"target_word_count\": 1, \"source\": \"official.items[].correct_span_type / correct_span_word_count\"}, \"gap_targets\": {\"gap_A_B\": 1, \"gap_B_C\": 5, \"gap_C_D\": 2}, \"distractor_word_counts\": [1, 1, 2], \"answer_position\": \"B\", \"derived_empirical_counts\": {\"correct_span_type\": {\"SINGLE_WORD\": 98, \"SHORT_PHRASE\": 12, \"CLAUSE_OR_CLAUSE_LIKE\": 15}, \"correct_answer\": {\"D\": 33, \"C\": 31, \"A\": 24, \"B\": 37}, \"span_word_count\": {\"1\": 375, \"4\": 3, \"2\": 106, \"3\": 16}, \"gap_A_B\": {\"3\": 30, \"4\": 44, \"5\": 25, \"1\": 9, \"6\": 2, \"2\": 15}, \"gap_B_C\": {\"4\": 23, \"3\": 39, \"5\": 37, \"2\": 12, \"7\": 1, \"6\": 8, \"1\": 5}, \"gap_C_D\": {\"1\": 6, \"3\": 29, \"5\": 20, \"4\": 46, \"6\": 9, \"7\": 2, \"2\": 13}}}"
+      }
+    },
+    {
+      "provider": "codex",
+      "runtime_provider": "codex",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "codex_cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "model": "gpt-5.6-luna",
+      "model_identifier": "gpt-5.6-luna",
+      "invocation_id": "e29780aa-c9f5-4fcb-af56-a7d0d815f845",
+      "timestamp": "2026-08-26T08:31:21.520717+00:00",
+      "invocation_timestamp": "2026-08-26T08:31:21.520717+00:00",
+      "completed_timestamp": "2026-08-26T08:34:32.424733+00:00",
+      "start_timestamp": "2026-08-26T08:31:21.520717+00:00",
+      "end_timestamp": "2026-08-26T08:34:32.424733+00:00",
+      "elapsed_seconds": 190.904016,
+      "exit_code": 4294967295,
+      "process_exit_code": 4294967295,
+      "exact_command_argv": [
+        "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe",
+        "exec",
+        "--ephemeral",
+        "--output-schema",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-e29780aa-c9f5-4fcb-af56-a7d0d815f845.json",
+        "--output-last-message",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-e29780aa-c9f5-4fcb-af56-a7d0d815f845.last-message.json",
+        "--sandbox",
+        "read-only",
+        "--model",
+        "gpt-5.6-luna",
+        "--cd",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen",
+        "-"
+      ],
+      "exact_command": "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe exec --ephemeral --output-schema C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-e29780aa-c9f5-4fcb-af56-a7d0d815f845.json --output-last-message C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-e29780aa-c9f5-4fcb-af56-a7d0d815f845.last-message.json --sandbox read-only --model gpt-5.6-luna --cd C:\\Users\\soted\\Projects\\itp-prob-gen -",
+      "live_invocation": true,
+      "contract_valid": false,
+      "contract_validated": false,
+      "formal_output_path": "runtime/formal/generator_outputs.json",
+      "formal_output_exists": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_stdout_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-e29780aa-c9f5-4fcb-af56-a7d0d815f845.stdout.txt",
+      "raw_stderr_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-e29780aa-c9f5-4fcb-af56-a7d0d815f845.stderr.txt",
+      "output_last_message_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-e29780aa-c9f5-4fcb-af56-a7d0d815f845.last-message.json",
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-e29780aa-c9f5-4fcb-af56-a7d0d815f845.stdout.txt",
+      "transport_schema_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-e29780aa-c9f5-4fcb-af56-a7d0d815f845.json",
+      "transport_schema_provenance_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-e29780aa-c9f5-4fcb-af56-a7d0d815f845.provenance.json",
+      "transport_schema_provenance": {
+        "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_we_generator_v2\\schema\\written_expression_item_v2.schema.json",
+        "canonical_schema_hash": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0",
+        "transport_schema_hash": "sha256:05c71e0fc61d3a3fca7dfe6d282bb7255af7c35a9e02166e6d45ecb25f70d655",
+        "removed_or_relaxed_keywords": [
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "relaxed",
+            "reason": "conditional allOf composition is enforced only by canonical validation"
+          },
+          {
+            "path": "$.allOf[0].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs does not permit allOf",
+            "replacement": "flattened structural branches / omitted conditional branches"
+          },
+          {
+            "path": "$.properties.section.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.qa_metadata.properties.clean_sentence_validated.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          }
+        ],
+        "provider": "codex",
+        "canonical_validation_still_required": true
+      },
+      "classification": "CODEX_PROCESS_ERROR",
+      "failure_classification": "CODEX_PROCESS_ERROR",
+      "failure_source": "codex_cli",
+      "failure": {
+        "category": "CODEX_PROCESS_ERROR",
+        "detail": "generator: codex CLI exit 4294967295: 2026-08-26T08:31:21.722395Z ERROR codex_models_manager::cache: failed to load models cache: missing field `base_instructions` at line 97 column 5\nOpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03d32-018a-7e81-8adc-4649ada42341\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tes"
+      }
+    },
+    {
+      "provider": "codex",
+      "runtime_provider": "codex",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "codex_cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "model": "gpt-5.6-luna",
+      "model_identifier": "gpt-5.6-luna",
+      "invocation_id": "2fc0d9a5-7981-4c19-a62e-b95975973721",
+      "timestamp": "2026-08-26T08:34:32.488942+00:00",
+      "invocation_timestamp": "2026-08-26T08:34:32.488942+00:00",
+      "completed_timestamp": "2026-08-26T08:36:41.292504+00:00",
+      "start_timestamp": "2026-08-26T08:34:32.488942+00:00",
+      "end_timestamp": "2026-08-26T08:36:41.292504+00:00",
+      "elapsed_seconds": 128.803562,
+      "exit_code": 4294967295,
+      "process_exit_code": 4294967295,
+      "exact_command_argv": [
+        "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe",
+        "exec",
+        "--ephemeral",
+        "--output-schema",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-2fc0d9a5-7981-4c19-a62e-b95975973721.json",
+        "--output-last-message",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-2fc0d9a5-7981-4c19-a62e-b95975973721.last-message.json",
+        "--sandbox",
+        "read-only",
+        "--model",
+        "gpt-5.6-luna",
+        "--cd",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen",
+        "-"
+      ],
+      "exact_command": "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe exec --ephemeral --output-schema C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-2fc0d9a5-7981-4c19-a62e-b95975973721.json --output-last-message C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-2fc0d9a5-7981-4c19-a62e-b95975973721.last-message.json --sandbox read-only --model gpt-5.6-luna --cd C:\\Users\\soted\\Projects\\itp-prob-gen -",
+      "live_invocation": true,
+      "contract_valid": false,
+      "contract_validated": false,
+      "formal_output_path": "runtime/formal/generator_outputs.json",
+      "formal_output_exists": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_stdout_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-2fc0d9a5-7981-4c19-a62e-b95975973721.stdout.txt",
+      "raw_stderr_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-2fc0d9a5-7981-4c19-a62e-b95975973721.stderr.txt",
+      "output_last_message_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-2fc0d9a5-7981-4c19-a62e-b95975973721.last-message.json",
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-2fc0d9a5-7981-4c19-a62e-b95975973721.stdout.txt",
+      "transport_schema_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-2fc0d9a5-7981-4c19-a62e-b95975973721.json",
+      "transport_schema_provenance_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-2fc0d9a5-7981-4c19-a62e-b95975973721.provenance.json",
+      "transport_schema_provenance": {
+        "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_we_generator_v2\\schema\\written_expression_item_v2.schema.json",
+        "canonical_schema_hash": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0",
+        "transport_schema_hash": "sha256:05c71e0fc61d3a3fca7dfe6d282bb7255af7c35a9e02166e6d45ecb25f70d655",
+        "removed_or_relaxed_keywords": [
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "relaxed",
+            "reason": "conditional allOf composition is enforced only by canonical validation"
+          },
+          {
+            "path": "$.allOf[0].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs does not permit allOf",
+            "replacement": "flattened structural branches / omitted conditional branches"
+          },
+          {
+            "path": "$.properties.section.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.qa_metadata.properties.clean_sentence_validated.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          }
+        ],
+        "provider": "codex",
+        "canonical_validation_still_required": true
+      },
+      "classification": "CODEX_NETWORK_ERROR",
+      "failure_classification": "CODEX_NETWORK_ERROR",
+      "failure_source": "codex_cli",
+      "failure": {
+        "category": "CODEX_PROCESS_ERROR",
+        "detail": "generator: codex CLI exit 4294967295: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03d34-e895-73d2-bd0e-0d80caa386da\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+      }
+    },
+    {
+      "provider": "codex",
+      "runtime_provider": "codex",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "codex_cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "model": "gpt-5.6-luna",
+      "model_identifier": "gpt-5.6-luna",
+      "invocation_id": "ca23e808-a348-4dd9-a871-fafa3df5e2e5",
+      "timestamp": "2026-08-26T08:36:41.392462+00:00",
+      "invocation_timestamp": "2026-08-26T08:36:41.392462+00:00",
+      "completed_timestamp": "2026-08-26T08:38:21.224337+00:00",
+      "start_timestamp": "2026-08-26T08:36:41.392462+00:00",
+      "end_timestamp": "2026-08-26T08:38:21.224337+00:00",
+      "elapsed_seconds": 99.831875,
+      "exit_code": 4294967295,
+      "process_exit_code": 4294967295,
+      "exact_command_argv": [
+        "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe",
+        "exec",
+        "--ephemeral",
+        "--output-schema",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-ca23e808-a348-4dd9-a871-fafa3df5e2e5.json",
+        "--output-last-message",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-ca23e808-a348-4dd9-a871-fafa3df5e2e5.last-message.json",
+        "--sandbox",
+        "read-only",
+        "--model",
+        "gpt-5.6-luna",
+        "--cd",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen",
+        "-"
+      ],
+      "exact_command": "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe exec --ephemeral --output-schema C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-ca23e808-a348-4dd9-a871-fafa3df5e2e5.json --output-last-message C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-ca23e808-a348-4dd9-a871-fafa3df5e2e5.last-message.json --sandbox read-only --model gpt-5.6-luna --cd C:\\Users\\soted\\Projects\\itp-prob-gen -",
+      "live_invocation": true,
+      "contract_valid": false,
+      "contract_validated": false,
+      "formal_output_path": "runtime/formal/generator_outputs.json",
+      "formal_output_exists": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_stdout_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-ca23e808-a348-4dd9-a871-fafa3df5e2e5.stdout.txt",
+      "raw_stderr_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-ca23e808-a348-4dd9-a871-fafa3df5e2e5.stderr.txt",
+      "output_last_message_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-ca23e808-a348-4dd9-a871-fafa3df5e2e5.last-message.json",
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-ca23e808-a348-4dd9-a871-fafa3df5e2e5.stdout.txt",
+      "transport_schema_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-ca23e808-a348-4dd9-a871-fafa3df5e2e5.json",
+      "transport_schema_provenance_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-ca23e808-a348-4dd9-a871-fafa3df5e2e5.provenance.json",
+      "transport_schema_provenance": {
+        "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_we_generator_v2\\schema\\written_expression_item_v2.schema.json",
+        "canonical_schema_hash": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0",
+        "transport_schema_hash": "sha256:05c71e0fc61d3a3fca7dfe6d282bb7255af7c35a9e02166e6d45ecb25f70d655",
+        "removed_or_relaxed_keywords": [
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "relaxed",
+            "reason": "conditional allOf composition is enforced only by canonical validation"
+          },
+          {
+            "path": "$.allOf[0].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs does not permit allOf",
+            "replacement": "flattened structural branches / omitted conditional branches"
+          },
+          {
+            "path": "$.properties.section.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.qa_metadata.properties.clean_sentence_validated.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          }
+        ],
+        "provider": "codex",
+        "canonical_validation_still_required": true
+      },
+      "classification": "CODEX_NETWORK_ERROR",
+      "failure_classification": "CODEX_NETWORK_ERROR",
+      "failure_source": "codex_cli",
+      "failure": {
+        "category": "CODEX_PROCESS_ERROR",
+        "detail": "generator: codex CLI exit 4294967295: 2026-08-26T08:36:41.818474Z ERROR codex_models_manager::cache: failed to load models cache: missing field `base_instructions` at line 97 column 5\nOpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03d36-e3a0-7491-984c-cb0a46a16712\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tes"
+      }
+    },
+    {
+      "provider": "codex",
+      "runtime_provider": "codex",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "codex_cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "model": "gpt-5.6-luna",
+      "model_identifier": "gpt-5.6-luna",
+      "invocation_id": "a27a256c-bd70-4215-8fb5-453fa497676f",
+      "timestamp": "2026-08-26T08:38:21.295489+00:00",
+      "invocation_timestamp": "2026-08-26T08:38:21.295489+00:00",
+      "completed_timestamp": "2026-08-26T08:43:21.792818+00:00",
+      "start_timestamp": "2026-08-26T08:38:21.295489+00:00",
+      "end_timestamp": "2026-08-26T08:43:21.792818+00:00",
+      "elapsed_seconds": 300.497329,
+      "exit_code": null,
+      "process_exit_code": null,
+      "exact_command_argv": [
+        "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe",
+        "exec",
+        "--ephemeral",
+        "--output-schema",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-a27a256c-bd70-4215-8fb5-453fa497676f.json",
+        "--output-last-message",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-a27a256c-bd70-4215-8fb5-453fa497676f.last-message.json",
+        "--sandbox",
+        "read-only",
+        "--model",
+        "gpt-5.6-luna",
+        "--cd",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen",
+        "-"
+      ],
+      "exact_command": "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe exec --ephemeral --output-schema C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\transport-schemas\\generator-a27a256c-bd70-4215-8fb5-453fa497676f.json --output-last-message C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry3\\runtime\\logs\\generator-a27a256c-bd70-4215-8fb5-453fa497676f.last-message.json --sandbox read-only --model gpt-5.6-luna --cd C:\\Users\\soted\\Projects\\itp-prob-gen -",
+      "live_invocation": true,
+      "contract_valid": false,
+      "contract_validated": false,
+      "formal_output_path": "runtime/formal/generator_outputs.json",
+      "formal_output_exists": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_stdout_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-a27a256c-bd70-4215-8fb5-453fa497676f.stdout.txt",
+      "raw_stderr_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-a27a256c-bd70-4215-8fb5-453fa497676f.stderr.txt",
+      "output_last_message_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-a27a256c-bd70-4215-8fb5-453fa497676f.last-message.json",
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/generator-a27a256c-bd70-4215-8fb5-453fa497676f.stdout.txt",
+      "transport_schema_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-a27a256c-bd70-4215-8fb5-453fa497676f.json",
+      "transport_schema_provenance_path": "analysis/we_v2_1_2_live_e2e_codex_retry3/runtime/logs/transport-schemas/generator-a27a256c-bd70-4215-8fb5-453fa497676f.provenance.json",
+      "transport_schema_provenance": {
+        "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_we_generator_v2\\schema\\written_expression_item_v2.schema.json",
+        "canonical_schema_hash": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0",
+        "transport_schema_hash": "sha256:05c71e0fc61d3a3fca7dfe6d282bb7255af7c35a9e02166e6d45ecb25f70d655",
+        "removed_or_relaxed_keywords": [
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "relaxed",
+            "reason": "conditional allOf composition is enforced only by canonical validation"
+          },
+          {
+            "path": "$.allOf[0].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs does not permit allOf",
+            "replacement": "flattened structural branches / omitted conditional branches"
+          },
+          {
+            "path": "$.properties.section.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.qa_metadata.properties.clean_sentence_validated.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          }
+        ],
+        "provider": "codex",
+        "canonical_validation_still_required": true
+      },
+      "classification": "CODEX_NETWORK_ERROR",
+      "failure_classification": "CODEX_NETWORK_ERROR",
+      "failure_source": "subprocess_timeout",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI timeout after 300s; last diagnostic: e; if (\"'$m) { $line = ($m | Select-Object -First 1).Line; Write-Output \"$($p.FullName): $line\" } }' in C:\\Users\\soted\\Projects\\itp-prob-gen\n succeeded in 1378ms:\n2026-08-26T08:43:08.116718Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `base_instructions` at line 97 column 5\nexec\n\"C:\\\\WINDOWS\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\" -Command \"rg --files analysis | rg 'we_v2_1_2_live_e2e' | rg '\\\\.json\"'$'\"' | Select-Object -First 30\" in C:\\Users\\soted\\Projects\\itp-prob-gen\n2026-08-26T08:43:12.790954Z ERROR codex_core::tools::router: error=Exit code: 1\nWall time: 1.1 seconds\nOutput:\n\n exited 1 in 1145ms:\n2026-08-26T08:43:12.898108Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `base_instructions` at line 97 column 5"
+      }
+    }
+  ]
+}

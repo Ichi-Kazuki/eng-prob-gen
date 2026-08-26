@@ -1,0 +1,243 @@
+{
+  "items": [
+    {
+      "provider": "codex",
+      "runtime_provider": "codex",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "codex_cli_version": "codex-cli 0.146.0-alpha.3.1",
+      "model": "gpt-5.6-luna",
+      "model_identifier": "gpt-5.6-luna",
+      "invocation_id": "34fd7506-3820-4150-8058-47317f5b9595",
+      "timestamp": "2026-08-26T08:17:02.963241+00:00",
+      "invocation_timestamp": "2026-08-26T08:17:02.963241+00:00",
+      "completed_timestamp": "2026-08-26T08:22:03.526476+00:00",
+      "start_timestamp": "2026-08-26T08:17:02.963241+00:00",
+      "end_timestamp": "2026-08-26T08:22:03.526476+00:00",
+      "elapsed_seconds": 300.563235,
+      "exit_code": null,
+      "process_exit_code": null,
+      "exact_command_argv": [
+        "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe",
+        "exec",
+        "--ephemeral",
+        "--output-schema",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry5\\runtime\\logs\\transport-schemas\\generator-34fd7506-3820-4150-8058-47317f5b9595.json",
+        "--output-last-message",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry5\\runtime\\logs\\generator-34fd7506-3820-4150-8058-47317f5b9595.last-message.json",
+        "--sandbox",
+        "read-only",
+        "--model",
+        "gpt-5.6-luna",
+        "--cd",
+        "C:\\Users\\soted\\Projects\\itp-prob-gen",
+        "-"
+      ],
+      "exact_command": "C:\\Users\\soted\\AppData\\Local\\OpenAI\\Codex\\bin\\69066b736e1e17a4\\codex.exe exec --ephemeral --output-schema C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry5\\runtime\\logs\\transport-schemas\\generator-34fd7506-3820-4150-8058-47317f5b9595.json --output-last-message C:\\Users\\soted\\Projects\\itp-prob-gen\\analysis\\we_v2_1_2_live_e2e_codex_retry5\\runtime\\logs\\generator-34fd7506-3820-4150-8058-47317f5b9595.last-message.json --sandbox read-only --model gpt-5.6-luna --cd C:\\Users\\soted\\Projects\\itp-prob-gen -",
+      "live_invocation": true,
+      "contract_valid": false,
+      "contract_validated": false,
+      "formal_output_path": "runtime/formal/generator_outputs.json",
+      "formal_output_exists": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_stdout_path": "analysis/we_v2_1_2_live_e2e_codex_retry5/runtime/logs/generator-34fd7506-3820-4150-8058-47317f5b9595.stdout.txt",
+      "raw_stderr_path": "analysis/we_v2_1_2_live_e2e_codex_retry5/runtime/logs/generator-34fd7506-3820-4150-8058-47317f5b9595.stderr.txt",
+      "output_last_message_path": "analysis/we_v2_1_2_live_e2e_codex_retry5/runtime/logs/generator-34fd7506-3820-4150-8058-47317f5b9595.last-message.json",
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e_codex_retry5/runtime/logs/generator-34fd7506-3820-4150-8058-47317f5b9595.stdout.txt",
+      "transport_schema_path": "analysis/we_v2_1_2_live_e2e_codex_retry5/runtime/logs/transport-schemas/generator-34fd7506-3820-4150-8058-47317f5b9595.json",
+      "transport_schema_provenance_path": "analysis/we_v2_1_2_live_e2e_codex_retry5/runtime/logs/transport-schemas/generator-34fd7506-3820-4150-8058-47317f5b9595.provenance.json",
+      "transport_schema_provenance": {
+        "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_we_generator_v2\\schema\\written_expression_item_v2.schema.json",
+        "canonical_schema_hash": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0",
+        "transport_schema_hash": "sha256:05c71e0fc61d3a3fca7dfe6d282bb7255af7c35a9e02166e6d45ecb25f70d655",
+        "removed_or_relaxed_keywords": [
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "relaxed",
+            "reason": "conditional allOf composition is enforced only by canonical validation"
+          },
+          {
+            "path": "$.allOf[0].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[0].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if",
+            "keyword": "if",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].if.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then",
+            "keyword": "then",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance",
+            "keyword": "provenance",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties",
+            "keyword": "properties",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version",
+            "keyword": "agent_version",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$.allOf[1].then.properties.provenance.properties.agent_version.const",
+            "keyword": "const",
+            "action": "omitted",
+            "reason": "conditional constraint is not representable in the Codex transport subset"
+          },
+          {
+            "path": "$",
+            "keyword": "allOf",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs does not permit allOf",
+            "replacement": "flattened structural branches / omitted conditional branches"
+          },
+          {
+            "path": "$.properties.section.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.additionalProperties",
+            "keyword": "additionalProperties",
+            "action": "rewritten",
+            "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+            "replacement": "false"
+          },
+          {
+            "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.properties",
+            "keyword": "properties",
+            "action": "added",
+            "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+          },
+          {
+            "path": "$.properties.qa_metadata.properties.clean_sentence_validated.const",
+            "keyword": "const",
+            "action": "rewritten",
+            "reason": "const represented as an exact singleton enum",
+            "replacement": "enum"
+          }
+        ],
+        "provider": "codex",
+        "canonical_validation_still_required": true
+      },
+      "classification": "HARNESS_TIMEOUT",
+      "failure_classification": "HARNESS_TIMEOUT",
+      "failure_source": "subprocess_timeout",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI timeout after 300s; last diagnostic: FERRED\", \"unmarked_word_count\": \"PREFERRED\", \"mean_span_length\": \"PREFERRED\", \"max_span_length\": \"PREFERRED\", \"gap_A_B\": \"PREFERRED\", \"gap_B_C\": \"PREFERRED\", \"gap_C_D\": \"PREFERRED\"}, \"span_token_indices\": {\"A\": [8], \"B\": [11], \"C\": [16, 17], \"D\": [23]}}}, \"mutation\": {\"status\": \"PASS\", \"template_class\": \"SAFE\", \"template_id\": \"unclassified.safe_surface_mutation\", \"reasons\": [], \"metadata_consistent\": true, \"surface_integrity\": true, \"grammar_evidence_status\": \"REQUIRES_EXTERNAL_REVIEW\", \"invariants\": {\"clean_sentence_grammatical\": null, \"mutated_sentence_ungrammatical\": null, \"exactly_one_grammatical_defect\": null, \"declared_marked_span_contains_defect\": true, \"minimal_repair_restores_grammaticality\": null, \"no_plausible_alternate_parse\": null, \"defect_is_grammatical_not_semantic\": null}}}"
+      }
+    }
+  ]
+}

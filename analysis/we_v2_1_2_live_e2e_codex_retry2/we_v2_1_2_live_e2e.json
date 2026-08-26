@@ -1,0 +1,403 @@
+{
+  "batch_id": "we-v2.1.2-live-e2e-20260826T073226Z",
+  "cohort_size": 10,
+  "microbatch_size": 1,
+  "runtime": {
+    "provider": "codex",
+    "model_identifier": "gpt-5.6-luna",
+    "cli_versions": [
+      "codex-cli 0.146.0-alpha.3.1"
+    ],
+    "live_invocation": true,
+    "synthetic_reviewer_output": false,
+    "synthetic_solver_output": false
+  },
+  "gates": {
+    "generator_schema": {
+      "passed": 0,
+      "required": 10,
+      "ok": false
+    },
+    "reviewer_contract": {
+      "passed": 0,
+      "required": 10,
+      "ok": false
+    },
+    "solver_contract": {
+      "passed": 0,
+      "required": 10,
+      "ok": false
+    },
+    "reviewer_live_invocation": {
+      "passed": 0,
+      "required": 10,
+      "ok": false
+    },
+    "solver_live_invocation": {
+      "passed": 0,
+      "required": 10,
+      "ok": false
+    },
+    "answer_leakage": {
+      "count": 0,
+      "required": 0,
+      "ok": true
+    },
+    "reviewer_genuine_error_failure": {
+      "count": 0,
+      "required": 0,
+      "ok": true
+    },
+    "reviewer_multiple_error": {
+      "count": 0,
+      "required": 0,
+      "ok": true
+    },
+    "solver_none": {
+      "count": 0,
+      "required": 0,
+      "ok": true
+    },
+    "solver_ambiguous": {
+      "count": 0,
+      "maximum": 1,
+      "ok": true
+    },
+    "generator_solver_agreement": {
+      "passed": 0,
+      "required": 9,
+      "denominator": 10,
+      "ok": false
+    },
+    "reviewer_solver_structural_conflict": {
+      "count": 0,
+      "maximum": 1,
+      "ok": true
+    },
+    "orchestrator_acceptance_logic": {
+      "invariant_failures": [],
+      "grammar_judgment_added": false,
+      "ok": true
+    }
+  },
+  "outcomes": [
+    {
+      "item_id": "we-v2.1.2-live-T073226Z-001",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: codex CLI exit 1: 2026-08-26T07:32:26.848998Z ERROR codex_models_manager::cache: failed to load models cache: missing field `base_instructions` at line 97 column 5\nOpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-1145-7a80-9f29-b50f74c14824\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tes"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T073226Z-002",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-1f12-7640-871b-47c4706000f1\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T073226Z-003",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-2f26-7cf2-b5d6-9e4cf8188b94\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T073226Z-004",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-4633-77e0-a0b7-463ec1be4253\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T073226Z-005",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-5543-7462-affd-2541a5e8bb44\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T073226Z-006",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-63bc-7dd3-93e3-2cb9f47fb291\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T073226Z-007",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-73f3-7cb2-bc4e-78d5cb242d98\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T073226Z-008",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-828a-7a12-ae62-50e9f9563201\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T073226Z-009",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-93fe-76a1-815f-eb170d5ff36f\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T073226Z-010",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-a375-7333-b0de-7b91ae74056a\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+      },
+      "generator_attempts": 1
+    }
+  ],
+  "failure_classification": [
+    {
+      "stage": "generator",
+      "invocation_id": "cbf8b45d-900d-4df0-ba71-5034adcffd02",
+      "category": "CODEX_PROCESS_ERROR",
+      "detail": "generator: codex CLI exit 1: 2026-08-26T07:32:26.848998Z ERROR codex_models_manager::cache: failed to load models cache: missing field `base_instructions` at line 97 column 5\nOpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-1145-7a80-9f29-b50f74c14824\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tes"
+    },
+    {
+      "stage": "generator",
+      "invocation_id": "46987e7e-e0eb-43bb-a202-6e405d066c15",
+      "category": "CODEX_PROCESS_ERROR",
+      "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-1f12-7640-871b-47c4706000f1\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+    },
+    {
+      "stage": "generator",
+      "invocation_id": "b4da1c52-b35c-4029-8033-f64a65be62fc",
+      "category": "CODEX_PROCESS_ERROR",
+      "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-2f26-7cf2-b5d6-9e4cf8188b94\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+    },
+    {
+      "stage": "generator",
+      "invocation_id": "75a6f5f6-a1c5-4951-983b-e6fdf42ab38d",
+      "category": "CODEX_PROCESS_ERROR",
+      "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-4633-77e0-a0b7-463ec1be4253\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+    },
+    {
+      "stage": "generator",
+      "invocation_id": "c69bdfe8-7d68-4e04-b0fc-dd818383a765",
+      "category": "CODEX_PROCESS_ERROR",
+      "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-5543-7462-affd-2541a5e8bb44\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+    },
+    {
+      "stage": "generator",
+      "invocation_id": "6290f498-7ee6-41bc-8ce5-f70ace113b90",
+      "category": "CODEX_PROCESS_ERROR",
+      "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-63bc-7dd3-93e3-2cb9f47fb291\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+    },
+    {
+      "stage": "generator",
+      "invocation_id": "a2306dbc-2d61-4003-8277-d3fe936289fe",
+      "category": "CODEX_PROCESS_ERROR",
+      "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-73f3-7cb2-bc4e-78d5cb242d98\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+    },
+    {
+      "stage": "generator",
+      "invocation_id": "1e9bbd12-d846-4511-96e6-f8c4444e079b",
+      "category": "CODEX_PROCESS_ERROR",
+      "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-828a-7a12-ae62-50e9f9563201\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+    },
+    {
+      "stage": "generator",
+      "invocation_id": "10388340-6e2b-47c7-a90a-b1aa84ffe9a8",
+      "category": "CODEX_PROCESS_ERROR",
+      "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-93fe-76a1-815f-eb170d5ff36f\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+    },
+    {
+      "stage": "generator",
+      "invocation_id": "69137137-7fad-4343-b78e-7cc5f6027b87",
+      "category": "CODEX_PROCESS_ERROR",
+      "detail": "generator: codex CLI exit 1: OpenAI Codex v0.146.0-alpha.3.1\n--------\nworkdir: C:\\Users\\soted\\Projects\\itp-prob-gen\nmodel: gpt-5.6-luna\nprovider: openai\napproval: on-request\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 01a03cfc-a375-7333-b0de-7b91ae74056a\n--------\nuser\nAUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):\n<agent-instructions>\n---\nname: toefl-itp-we-generator-v2\ndescription: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。\ntools: Read, Write, Glob, Grep, Bash\nversion: v2.1.2\n---\n\n# TOEFL ITP Written Expression Generator v2.1.2\n\nこのAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。\n\n## Source of truth\n\n生成前に必ず次を読む。\n\n1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`\n2. `specs/toefl_itp_we_format_spec_addendum.json`\n3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`\n4. `specs/toefl_itp_grammar_spec.json`\n5. `analysis/GRAMMAR_TAXONOMY.md`\n6. `analysis/grammar_taxonomy.json`\n7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`\n8. `analysis/we_format/written_expression_format_official.json`\n9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`\n10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`\n11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`\n\nOfficial item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。\n\n## Mandatory sentence-first phases\n\n各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。\n\n### PHASE 1 — Item design plan\n\n本文を書く前に次を決める。\n\n- `primary_target`\n- `subtype`\n- `tested_error_type`\n- `difficulty`\n- `vocabulary_domain`\n- `correction_locality`\n- `decision_granularity`\n- intended error locus (before any A/B/C/D p"
+    }
+  ],
+  "requested_metrics": {
+    "codex_live_invocation_count": 10,
+    "reviewer_solver_contract_validity": {
+      "generator": {
+        "valid": 0,
+        "invalid": 10
+      },
+      "reviewer": {
+        "valid": 0,
+        "invalid": 0
+      },
+      "solver": {
+        "valid": 0,
+        "invalid": 0
+      }
+    },
+    "blinding": {
+      "reviewer_allowlist": [
+        "item_id",
+        "section",
+        "sentence",
+        "marked_parts"
+      ],
+      "solver_allowlist": [
+        "item_id",
+        "section",
+        "sentence",
+        "marked_parts"
+      ],
+      "reviewer_invocation_count": 0,
+      "solver_invocation_count": 0,
+      "forbidden_fields_present": 0,
+      "ok": true
+    },
+    "generator_solver_agreement": {
+      "passed": 0,
+      "denominator": 0,
+      "ok": false
+    },
+    "reviewer_findings": [],
+    "orchestrator_decisions": {
+      "state_counts": {
+        "GENERATION_FAILED": 10
+      },
+      "items": [
+        {
+          "item_id": "we-v2.1.2-live-T073226Z-001",
+          "state": "GENERATION_FAILED",
+          "reviewer_verdict": null,
+          "solver_answer": null,
+          "consensus": null
+        },
+        {
+          "item_id": "we-v2.1.2-live-T073226Z-002",
+          "state": "GENERATION_FAILED",
+          "reviewer_verdict": null,
+          "solver_answer": null,
+          "consensus": null
+        },
+        {
+          "item_id": "we-v2.1.2-live-T073226Z-003",
+          "state": "GENERATION_FAILED",
+          "reviewer_verdict": null,
+          "solver_answer": null,
+          "consensus": null
+        },
+        {
+          "item_id": "we-v2.1.2-live-T073226Z-004",
+          "state": "GENERATION_FAILED",
+          "reviewer_verdict": null,
+          "solver_answer": null,
+          "consensus": null
+        },
+        {
+          "item_id": "we-v2.1.2-live-T073226Z-005",
+          "state": "GENERATION_FAILED",
+          "reviewer_verdict": null,
+          "solver_answer": null,
+          "consensus": null
+        },
+        {
+          "item_id": "we-v2.1.2-live-T073226Z-006",
+          "state": "GENERATION_FAILED",
+          "reviewer_verdict": null,
+          "solver_answer": null,
+          "consensus": null
+        },
+        {
+          "item_id": "we-v2.1.2-live-T073226Z-007",
+          "state": "GENERATION_FAILED",
+          "reviewer_verdict": null,
+          "solver_answer": null,
+          "consensus": null
+        },
+        {
+          "item_id": "we-v2.1.2-live-T073226Z-008",
+          "state": "GENERATION_FAILED",
+          "reviewer_verdict": null,
+          "solver_answer": null,
+          "consensus": null
+        },
+        {
+          "item_id": "we-v2.1.2-live-T073226Z-009",
+          "state": "GENERATION_FAILED",
+          "reviewer_verdict": null,
+          "solver_answer": null,
+          "consensus": null
+        },
+        {
+          "item_id": "we-v2.1.2-live-T073226Z-010",
+          "state": "GENERATION_FAILED",
+          "reviewer_verdict": null,
+          "solver_answer": null,
+          "consensus": null
+        }
+      ]
+    }
+  },
+  "attempts": {
+    "generator_invocations": 10,
+    "reviewer_invocations": 0,
+    "solver_invocations": 0,
+    "codex_live_invocations": 10,
+    "generator_validation_retries": 10
+  },
+  "formal_output_counts": {
+    "generator": 0,
+    "reviewer": 0,
+    "solver": 0
+  },
+  "existing_tests": {
+    "command": [
+      "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_*.py"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output_tail": "\n  2) grammar\n  3) ambiguity\n  4) semantics\n  5) unnatural_english\n  6) distractor_quality\n  7) multiple_errors\n  8) no_error\n  9) metadata_not_applicable\n  10) other\n\nmain_problem:\n  1) NONE\n  2) grammar\n  3) ambiguity\n  4) semantics\n  5) unnatural_english\n  6) distractor_quality\n  7) multiple_errors\n  8) no_error\n  9) metadata_not_applicable\n  10) other\n\nmain_problem:\n  1) NONE\n  2) grammar\n  3) ambiguity\n  4) semantics\n  5) unnatural_english\n  6) distractor_quality\n  7) multiple_errors\n  8) no_error\n  9) metadata_not_applicable\n  10) other\nReviewer round 'retry' applied to 1 candidates.\n  SOLVING (1): ['gen-struct-001']\nWrote 0 REVISE feedback record(s) (issues+revision_requirements only) to C:\\Users\\soted\\AppData\\Local\\Temp\\tmp0237491b\\round_feedback_retry.json\nCurrent tally: {'SOLVING': 1}\nApplied Reviewer retry: {'SOLVING': 1}\nState tally: {'SOLVING': 1}\nBlinded 0 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmpdkaqrt3b\\solver_input_batch.json\nBlinding errors:\n  leak-001: leakage guard failed: ['unexpected key: correct_answer']\nitem_ids: ['leak-001']\nBlinded 1 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmpqjvyasgh\\solver_input_batch.json\nitem_ids: ['gen-struct-001']\nSolver output applied. Routing:\n  ACCEPTED (1): ['gen-struct-001']\nCurrent tally: {'ACCEPTED': 1}\nBlinded 1 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmp8lpvcvwg\\solver_input_batch.json\nitem_ids: ['gen-struct-001']\nApplied Reviewer round-test: {'REVISE_REQUIRED': 1}\nState tally: {'REVISE_REQUIRED': 2}\nRebuilt 1 REVISE feedback record(s) for round 'rebuild' at C:\\Users\\soted\\AppData\\Local\\Temp\\tmp6rfm1dpt\\round_feedback_rebuild.json\nRebuilt 1 REVISE feedback record(s) for round 'rebuild' at C:\\Users\\soted\\AppData\\Local\\Temp\\tmps38f7z17\\validation_round_feedback_rebuild.json\nFinalized 1 candidates.\nState tally: {'MANUAL_REVIEW': 1}\nACCEPTED: 0  MANUAL_REVIEW: 1  failure_items: 1\nFinalize id: finalize-b621ff42795aafe7c85b53ca\nWrote: pilot_provenance.json, pilot_accepted_items.json, pilot_manual_review.json, pilot_failure_items.json\nFinalized 1 candidates.\nState tally: {'MANUAL_REVIEW': 1}\nACCEPTED: 0  MANUAL_REVIEW: 1  failure_items: 1\nFinalize id: finalize-b621ff42795aafe7c85b53ca\nWrote: pilot_provenance.json, pilot_accepted_items.json, pilot_manual_review.json, pilot_failure_items.json\nFinalized 1 initial candidates\nState tally: {'MANUAL_REVIEW': 1}\nFinalize id: finalize-df9be4dfd14451e0030b9545\nFinalized 1 initial candidates\nState tally: {'MANUAL_REVIEW': 1}\nFinalize id: finalize-df9be4dfd14451e0030b9545\nLoaded 2 candidates (2 generator records).\nReady for Reviewer round 1 (0): []\nNOT ready (schema validation issue) (2):\n  pilot-s: state=GENERATED failure=None\n  pilot-w: state=GENERATED failure=None\nLoaded 2 candidates (2 generator records).\nReady for Reviewer round 1 (0): []\nNOT ready (schema validation issue) (2):\n  pilot-s: state=GENERATED failure=None\n  pilot-w: state=GENERATED failure=None\nLoaded exactly 120 initial candidates: {'Structure': 45, 'Written Expression': 75}\nState tally: {'GENERATED': 120}\nLoaded exactly 120 initial candidates: {'Structure': 45, 'Written Expression': 75}\nState tally: {'GENERATED': 120}\nBlinded 1 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmp3c3oj1am\\solver_input_batch.json\nitem_ids: ['gen-struct-001']\nBlinded 1 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmp3c3oj1am\\solver_input_batch.json\nitem_ids: ['gen-struct-001']\nSolver output applied. Routing:\n  ACCEPTED (1): ['gen-struct-001']\nCurrent tally: {'ACCEPTED': 1}\nPrepared blinded Solver batch: 1\nPrepared blinded Solver batch: 1\nApplied Solver outputs: 6 supplied\nState tally: {'ACCEPTED': 1}\n.................................................................................................s..........................................\n----------------------------------------------------------------------\nRan 140 tests in 27.304s\n\nOK (skipped=1)"
+  },
+  "formal_output_files": {
+    "generator": "runtime/formal/generator_outputs.json",
+    "reviewer": "runtime/formal/reviewer_outputs.json",
+    "solver": "runtime/formal/solver_outputs.json"
+  },
+  "runtime_provenance_sidecar": "runtime/provenance/runtime_provenance.json",
+  "final_decision": {
+    "code": "E",
+    "label": "Runtime infrastructure unavailable",
+    "reason": "The runtime could not provide the required complete live pipeline; see classified invocation failures."
+  }
+}

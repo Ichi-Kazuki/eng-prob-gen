@@ -1,0 +1,91 @@
+```json
+{
+  "item_id": "we-v2.1.2-live-T050243Z-001",
+  "section": "Written Expression",
+  "grammar_validity": "PASS",
+  "format_validity": "PASS",
+  "phase1_blind_audit": {
+    "identified_errors": [
+      {
+        "location": "continues",
+        "description": "Subject-verb agreement error: the head noun of the subject is 'patterns' (plural, from 'The migration patterns of deep-sea anglerfish'), but the verb 'continues' is singular. The intervening relative clause 'which remain poorly documented despite decades of oceanographic research' modifies 'anglerfish' and does not change the number of the main subject. Correct form is 'continue'."
+      }
+    ],
+    "notes": "No other genuine grammatical errors detected in the sentence. 'remain' correctly agrees with 'anglerfish' (plural) within the relative clause. 'poorly documented' is a valid adjectival complement. 'isolated populations' is a well-formed noun phrase functioning as object of 'studying'."
+  },
+  "marked_part_assessments": {
+    "A": {
+      "span_text": "migration patterns",
+      "classification": "ACCEPTABLE",
+      "rationale": "Well-formed compound noun phrase serving as head of the subject; no grammatical defect."
+    },
+    "B": {
+      "span_text": "poorly documented",
+      "classification": "ACCEPTABLE",
+      "rationale": "Correctly formed adjectival phrase (adverb + past participle) functioning as subject complement after 'remain'; agrees in sense with 'anglerfish' as intended."
+    },
+    "C": {
+      "span_text": "continues",
+      "classification": "ERROR",
+      "rationale": "Subject-verb agreement violation: plural subject head 'patterns' requires 'continue', not 'continues'. This is the sole genuine grammatical error in the sentence."
+    },
+    "D": {
+      "span_text": "isolated populations",
+      "classification": "ACCEPTABLE",
+      "rationale": "Grammatically well-formed noun phrase serving as object of the gerund 'studying'; no defect."
+    }
+  },
+  "phase2_one_error_audit": {
+    "zero_based_full_sentence_audit": "Confirms exactly one genuine error (subject-verb agreement at 'continues'); removing/correcting this single item yields a fully grammatical sentence.",
+    "alternate_parse_audit": "No alternate parse exists in which 'patterns' is not the grammatical head of the subject; 'of deep-sea anglerfish' is a prepositional modifier, and the relative clause is nonrestrictive, set off by commas, modifying 'anglerfish' only. No parse yields agreement between 'anglerfish' (singular-looking but semantically plural typical usage aside) and 'continues' as intended head.",
+    "alternate_repair_audit": "The only grammatical repair is changing 'continues' to 'continue'. No alternate single-word repair elsewhere in the sentence resolves the agreement issue without altering meaning or introducing a new error.",
+    "secondary_error_check": "No secondary errors found in A, B, or D spans after isolating the C error.",
+    "conclusion": "Exactly one genuine error, uniquely locatable at span C, with a unique, well-defined repair ('continue')."
+  },
+  "phase3_uniqueness_audit": {
+    "independent_candidate_before_comparison": "C",
+    "ambiguity_assessment": "No ambiguity; no plausible alternate single-error candidate among A, B, D.",
+    "final_independent_answer": "C"
+  },
+  "phase4_format_diagnostics": {
+    "note": "Deterministic validator outputs were not provided in this blinded invocation; the following are reviewer-level qualitative format observations only, not recomputed deterministic values.",
+    "sentence_length_observation": "Sentence length appears within typical WE item range (single sentence, moderate complexity with one nonrestrictive relative clause).",
+    "span_count": 4,
+    "span_alignment_and_order": "Four spans (A, B, C, D) appear in left-to-right sentence order with no apparent overlap.",
+    "span_length_and_type": "A: noun phrase (2 words); B: adjectival phrase (2 words); C: single verb form (1 word); D: noun phrase (2 words). Spans vary appropriately in type and are non-uniform in length.",
+    "marked_coverage": "Spans are distributed across distinct syntactic zones of the sentence (subject noun phrase, relative-clause complement, main verb, gerund object), consistent with typical WE coverage patterns.",
+    "unmarked_context": "Sufficient unmarked context surrounds each span to support independent evaluation.",
+    "gaps": "Gaps exist between spans (e.g., 'of deep-sea anglerfish, which remain', 'despite decades of oceanographic research', 'to puzzle marine biologists studying'), consistent with standard WE spacing.",
+    "correct_span_type": "Span C is a single finite verb, a canonical span type for subject-verb agreement items.",
+    "correction_locality": "Correction is fully localized to span C ('continues' -> 'continue'); no edits required outside the marked span.",
+    "decision_granularity": "Item requires a single lexical/morphological decision (verb number), consistent with expected WE decision granularity."
+  },
+  "phase5_target_metadata_audit": {
+    "note": "No Generator metadata was supplied for comparison per blinded invocation instructions; this section reflects reviewer-inferred target characterization only.",
+    "inferred_primary_target": "Subject-verb agreement",
+    "inferred_subtype": "Agreement across intervening nonrestrictive relative clause (long-distance agreement)",
+    "inferred_tested_error_type": "Verb number error",
+    "inferred_error_scope": "Single word (verb form)",
+    "inferred_correction_locality": "Local to span C",
+    "inferred_decision_granularity": "Single binary decision (singular vs. plural verb form)",
+    "intended_error_position": "Span C",
+    "correct_span_type_expected": "Finite verb form"
+  },
+  "issues": [
+    "Span C ('continues') contains a genuine subject-verb agreement error relative to the plural subject head 'patterns'."
+  ],
+  "revision_requirements": [
+    "None required at the sentence-content level: the item exhibits exactly one genuine, unambiguous grammatical error at span C with a unique valid repair ('continue'). If confirmed consistent with intended metadata (target, subtype, error scope, correction locality), no revision is needed."
+  ],
+  "final_verdict_rationale": "Phase 1 through Phase 3 blind and semi-blind audits independently and consistently identify exactly one genuine grammatical error (subject-verb agreement) uniquely located at span C, with a single valid repair and no residual ambiguity or secondary errors across A, B, or D.",
+  "provenance": {
+    "reviewer_agent": "toefl_itp_we_reviewer_v2",
+    "reviewer_version": "2.0",
+    "invocation_mode": "live_blinded",
+    "input_fields_received": ["item_id", "section", "sentence", "marked_parts"],
+    "generator_metadata_used": false,
+    "generator_answer_used": false,
+    "date": "2026-08-26"
+  }
+}
+```

@@ -1,0 +1,535 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "written_expression_item_v2.schema.json",
+  "title": "TOEFL ITP Written Expression Generator v2.1 item (v2.0-compatible)",
+  "description": "Sentence-first WE item contract. Grammar validity remains a Reviewer responsibility; format geometry is independently checked by the deterministic validator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_id",
+    "section",
+    "agent_version",
+    "primary_target",
+    "subtype",
+    "secondary_features",
+    "tested_error_type",
+    "difficulty",
+    "vocabulary_domain",
+    "sentence",
+    "marked_parts",
+    "correct_answer",
+    "error_explanation",
+    "minimal_correction",
+    "grammar_metadata",
+    "format_metadata",
+    "provenance",
+    "qa_metadata"
+  ],
+  "properties": {
+    "item_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "section": {
+      "enum": [
+        "Written Expression"
+      ]
+    },
+    "agent_version": {
+      "enum": [
+        "Written Expression Generator v2.0",
+        "Written Expression Generator v2.1"
+      ]
+    },
+    "primary_target": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subtype": {
+      "type": "string",
+      "minLength": 1
+    },
+    "secondary_features": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "tested_error_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "difficulty": {
+      "enum": [
+        "EASY",
+        "MEDIUM",
+        "HARD"
+      ]
+    },
+    "vocabulary_domain": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sentence": {
+      "type": "string",
+      "minLength": 1
+    },
+    "marked_parts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "properties": {
+        "A": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B": {
+          "type": "string",
+          "minLength": 1
+        },
+        "C": {
+          "type": "string",
+          "minLength": 1
+        },
+        "D": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "correct_answer": {
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    "error_explanation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "minimal_correction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "grammar_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "error_scope",
+        "correction_locality",
+        "decision_granularity",
+        "intended_error_position",
+        "correct_span_type"
+      ],
+      "properties": {
+        "error_scope": {
+          "enum": [
+            "local",
+            "clause_level",
+            "sentence_level",
+            "cross_clause"
+          ]
+        },
+        "correction_locality": {
+          "enum": [
+            "DEPENDENCY_BASED",
+            "LOCAL_SHORT_SPAN",
+            "SEMANTIC_OR_CONTEXT_DEPENDENT",
+            "LOCAL_SINGLE_TOKEN",
+            "CLAUSE_LEVEL"
+          ]
+        },
+        "decision_granularity": {
+          "enum": [
+            "FUNCTION_WORD",
+            "WORD_ORDER",
+            "CLAUSE_RELATION",
+            "VERB_FRAME",
+            "OTHER",
+            "MORPHOLOGY",
+            "WORD_CLASS",
+            "AGREEMENT_DEPENDENCY",
+            "LOCAL_PHRASE"
+          ]
+        },
+        "intended_error_position": {
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        "correct_span_type": {
+          "enum": [
+            "SINGLE_WORD",
+            "SHORT_PHRASE",
+            "CLAUSE_OR_CLAUSE_LIKE"
+          ]
+        }
+      }
+    },
+    "format_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_sentence_length_region",
+        "expected_span_profile",
+        "coverage_profile",
+        "approximate_context_profile",
+        "span_types",
+        "diagnostics"
+      ],
+      "properties": {
+        "target_sentence_length_region": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_span_profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "coverage_profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "approximate_context_profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "span_types": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "properties": {
+            "A": {
+              "enum": [
+                "SINGLE_WORD",
+                "SHORT_PHRASE",
+                "CLAUSE_OR_CLAUSE_LIKE"
+              ]
+            },
+            "B": {
+              "enum": [
+                "SINGLE_WORD",
+                "SHORT_PHRASE",
+                "CLAUSE_OR_CLAUSE_LIKE"
+              ]
+            },
+            "C": {
+              "enum": [
+                "SINGLE_WORD",
+                "SHORT_PHRASE",
+                "CLAUSE_OR_CLAUSE_LIKE"
+              ]
+            },
+            "D": {
+              "enum": [
+                "SINGLE_WORD",
+                "SHORT_PHRASE",
+                "CLAUSE_OR_CLAUSE_LIKE"
+              ]
+            }
+          }
+        },
+        "diagnostics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sentence_word_count",
+            "span_word_counts",
+            "mean_span_length",
+            "max_span_length",
+            "marked_coverage_ratio",
+            "unmarked_word_count",
+            "gap_A_B",
+            "gap_B_C",
+            "gap_C_D",
+            "correct_span_word_count",
+            "correct_span_type",
+            "correction_locality",
+            "decision_granularity",
+            "format_distribution_distance",
+            "format_percentile_profile",
+            "format_band_status",
+            "metric_band_status",
+            "span_token_indices"
+          ],
+          "properties": {
+            "sentence_word_count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "span_word_counts": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "A",
+                "B",
+                "C",
+                "D"
+              ],
+              "properties": {
+                "A": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "B": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "C": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "D": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "mean_span_length": {
+              "type": "number",
+              "minimum": 1
+            },
+            "max_span_length": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "marked_coverage_ratio": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "unmarked_word_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "gap_A_B": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "gap_B_C": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "gap_C_D": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "correct_span_word_count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "correct_span_type": {
+              "enum": [
+                "SINGLE_WORD",
+                "SHORT_PHRASE",
+                "CLAUSE_OR_CLAUSE_LIKE"
+              ]
+            },
+            "correction_locality": {
+              "type": "string",
+              "minLength": 1
+            },
+            "decision_granularity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "format_distribution_distance": {
+              "type": "number",
+              "minimum": 0
+            },
+            "format_percentile_profile": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {},
+              "required": []
+            },
+            "format_band_status": {
+              "enum": [
+                "PREFERRED",
+                "WARNING",
+                "EXTREME"
+              ]
+            },
+            "metric_band_status": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {},
+              "required": []
+            },
+            "span_token_indices": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "A",
+                "B",
+                "C",
+                "D"
+              ],
+              "properties": {
+                "A": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "minItems": 1
+                },
+                "B": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "minItems": 1
+                },
+                "C": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "minItems": 1
+                },
+                "D": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent_version",
+        "prompt_hash",
+        "spec_version",
+        "format_spec_version",
+        "generation_batch_id",
+        "microbatch_id",
+        "item_generation_order",
+        "invocation_id",
+        "runtime_model"
+      ],
+      "properties": {
+        "agent_version": {
+          "enum": [
+            "Written Expression Generator v2.0",
+            "Written Expression Generator v2.1"
+          ]
+        },
+        "prompt_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "spec_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format_spec_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generation_batch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "microbatch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "item_generation_order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "invocation_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "runtime_model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "qa_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clean_form",
+        "error_form",
+        "minimal_correction",
+        "mutation_type",
+        "clean_sentence_validated",
+        "grammar_check_status",
+        "format_check_status"
+      ],
+      "properties": {
+        "clean_form": {
+          "type": "string",
+          "minLength": 1
+        },
+        "error_form": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minimal_correction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mutation_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "clean_sentence_validated": {
+          "enum": [
+            true
+          ]
+        },
+        "grammar_check_status": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "AMBIGUOUS"
+          ]
+        },
+        "format_check_status": {
+          "enum": [
+            "PASS",
+            "WARN",
+            "FAIL"
+          ]
+        }
+      }
+    }
+  }
+}

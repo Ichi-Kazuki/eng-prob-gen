@@ -1,0 +1,57 @@
+{
+  "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_we_reviewer_v2\\schema\\reviewer_output_v2.schema.json",
+  "canonical_schema_hash": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+  "transport_schema_hash": "sha256:6c4963fb2d2c2affbf4c0a443342e51b01a7d43863eecf5637d2cef66a560440",
+  "removed_or_relaxed_keywords": [
+    {
+      "path": "$.properties.section.const",
+      "keyword": "const",
+      "action": "rewritten",
+      "reason": "const represented as an exact singleton enum",
+      "replacement": "enum"
+    },
+    {
+      "path": "$.properties.agent_version.const",
+      "keyword": "const",
+      "action": "rewritten",
+      "reason": "const represented as an exact singleton enum",
+      "replacement": "enum"
+    },
+    {
+      "path": "$.properties.format_diagnostics.additionalProperties",
+      "keyword": "additionalProperties",
+      "action": "rewritten",
+      "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+      "replacement": "false"
+    },
+    {
+      "path": "$.properties.format_diagnostics.properties",
+      "keyword": "properties",
+      "action": "added",
+      "reason": "explicit empty properties map makes a closed empty object unambiguous to Codex"
+    },
+    {
+      "path": "$.properties.provenance.properties.agent_version.const",
+      "keyword": "const",
+      "action": "rewritten",
+      "reason": "const represented as an exact singleton enum",
+      "replacement": "enum"
+    },
+    {
+      "path": "$.required",
+      "keyword": "required",
+      "action": "rewritten",
+      "reason": "Codex Structured Outputs requires every declared object property",
+      "replacement": "format_diagnostics"
+    },
+    {
+      "path": "$.properties.format_diagnostics",
+      "keyword": "type",
+      "action": "relaxed",
+      "reason": "optional canonical property is required by Codex and null preserves its optional state",
+      "replacement": "nullable"
+    }
+  ],
+  "provider": "codex",
+  "canonical_validation_still_required": true
+}

@@ -1,0 +1,647 @@
+{
+  "batch_id": "we-v2.1.2-live-e2e-20260826T091038Z",
+  "cohort_size": 10,
+  "microbatch_size": 1,
+  "runtime": {
+    "provider": "codex",
+    "model_identifier": "gpt-5.6-luna",
+    "cli_versions": [
+      "codex-cli 0.146.0-alpha.3.1"
+    ],
+    "live_invocation": true,
+    "synthetic_reviewer_output": false,
+    "synthetic_solver_output": false
+  },
+  "gates": {
+    "generator_schema": {
+      "passed": 10,
+      "required": 10,
+      "ok": true
+    },
+    "reviewer_contract": {
+      "passed": 10,
+      "required": 10,
+      "ok": true
+    },
+    "solver_contract": {
+      "passed": 9,
+      "required": 10,
+      "ok": false
+    },
+    "reviewer_live_invocation": {
+      "passed": 10,
+      "required": 10,
+      "ok": true
+    },
+    "solver_live_invocation": {
+      "passed": 9,
+      "required": 10,
+      "ok": false
+    },
+    "answer_leakage": {
+      "count": 0,
+      "required": 0,
+      "ok": true
+    },
+    "reviewer_genuine_error_failure": {
+      "count": 1,
+      "required": 0,
+      "ok": false
+    },
+    "reviewer_multiple_error": {
+      "count": 1,
+      "required": 0,
+      "ok": false
+    },
+    "solver_none": {
+      "count": 0,
+      "required": 0,
+      "ok": true
+    },
+    "solver_ambiguous": {
+      "count": 0,
+      "maximum": 1,
+      "ok": true
+    },
+    "generator_solver_agreement": {
+      "passed": 9,
+      "required": 9,
+      "denominator": 10,
+      "ok": true
+    },
+    "reviewer_solver_structural_conflict": {
+      "count": 0,
+      "maximum": 1,
+      "ok": true
+    },
+    "orchestrator_acceptance_logic": {
+      "invariant_failures": [],
+      "grammar_judgment_added": false,
+      "ok": true
+    }
+  },
+  "outcomes": [
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-001",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "reviewer_verdict": "PASS",
+      "reviewer_answer": "A",
+      "solver_answer": "A",
+      "solver_confidence": "HIGH",
+      "consensus": {
+        "auto_accept": true,
+        "routing": "ACCEPTED",
+        "failed_conditions": [],
+        "disagreement_reasons": []
+      },
+      "leakage_check": {
+        "ok": true,
+        "problems": [],
+        "blinded_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-002",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "reviewer_verdict": "PASS",
+      "reviewer_answer": "C",
+      "solver_answer": "C",
+      "solver_confidence": "HIGH",
+      "consensus": {
+        "auto_accept": true,
+        "routing": "ACCEPTED",
+        "failed_conditions": [],
+        "disagreement_reasons": []
+      },
+      "leakage_check": {
+        "ok": true,
+        "problems": [],
+        "blinded_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-003",
+      "state": "REJECTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "REJECTED"
+      ],
+      "reviewer_verdict": "REJECT"
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-004",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "reviewer_verdict": "PASS",
+      "reviewer_answer": "D",
+      "solver_answer": "D",
+      "solver_confidence": "HIGH",
+      "consensus": {
+        "auto_accept": true,
+        "routing": "ACCEPTED",
+        "failed_conditions": [],
+        "disagreement_reasons": []
+      },
+      "leakage_check": {
+        "ok": true,
+        "problems": [],
+        "blinded_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-005",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "reviewer_verdict": "PASS",
+      "reviewer_answer": "C",
+      "solver_answer": "C",
+      "solver_confidence": "HIGH",
+      "consensus": {
+        "auto_accept": true,
+        "routing": "ACCEPTED",
+        "failed_conditions": [],
+        "disagreement_reasons": []
+      },
+      "leakage_check": {
+        "ok": true,
+        "problems": [],
+        "blinded_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-006",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "reviewer_verdict": "PASS",
+      "reviewer_answer": "C",
+      "solver_answer": "C",
+      "solver_confidence": "HIGH",
+      "consensus": {
+        "auto_accept": true,
+        "routing": "ACCEPTED",
+        "failed_conditions": [],
+        "disagreement_reasons": []
+      },
+      "leakage_check": {
+        "ok": true,
+        "problems": [],
+        "blinded_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-007",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "reviewer_verdict": "PASS",
+      "reviewer_answer": "D",
+      "solver_answer": "D",
+      "solver_confidence": "HIGH",
+      "consensus": {
+        "auto_accept": true,
+        "routing": "ACCEPTED",
+        "failed_conditions": [],
+        "disagreement_reasons": []
+      },
+      "leakage_check": {
+        "ok": true,
+        "problems": [],
+        "blinded_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-008",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "reviewer_verdict": "PASS",
+      "reviewer_answer": "B",
+      "solver_answer": "B",
+      "solver_confidence": "HIGH",
+      "consensus": {
+        "auto_accept": true,
+        "routing": "ACCEPTED",
+        "failed_conditions": [],
+        "disagreement_reasons": []
+      },
+      "leakage_check": {
+        "ok": true,
+        "problems": [],
+        "blinded_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-009",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "reviewer_verdict": "PASS",
+      "reviewer_answer": "D",
+      "solver_answer": "D",
+      "solver_confidence": "HIGH",
+      "consensus": {
+        "auto_accept": true,
+        "routing": "ACCEPTED",
+        "failed_conditions": [],
+        "disagreement_reasons": []
+      },
+      "leakage_check": {
+        "ok": true,
+        "problems": [],
+        "blinded_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-010",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "reviewer_verdict": "PASS",
+      "reviewer_answer": "D",
+      "solver_answer": "D",
+      "solver_confidence": "HIGH",
+      "consensus": {
+        "auto_accept": true,
+        "routing": "ACCEPTED",
+        "failed_conditions": [],
+        "disagreement_reasons": []
+      },
+      "leakage_check": {
+        "ok": true,
+        "problems": [],
+        "blinded_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      }
+    }
+  ],
+  "failure_classification": [],
+  "requested_metrics": {
+    "codex_live_invocation_count": 29,
+    "reviewer_solver_contract_validity": {
+      "generator": {
+        "valid": 10,
+        "invalid": 0
+      },
+      "reviewer": {
+        "valid": 10,
+        "invalid": 0
+      },
+      "solver": {
+        "valid": 9,
+        "invalid": 0
+      }
+    },
+    "blinding": {
+      "reviewer_allowlist": [
+        "item_id",
+        "section",
+        "sentence",
+        "marked_parts"
+      ],
+      "solver_allowlist": [
+        "item_id",
+        "section",
+        "sentence",
+        "marked_parts"
+      ],
+      "reviewer_invocation_count": 10,
+      "solver_invocation_count": 9,
+      "forbidden_fields_present": 0,
+      "ok": true
+    },
+    "generator_solver_agreement": {
+      "passed": 9,
+      "denominator": 9,
+      "ok": false
+    },
+    "reviewer_findings": [
+      {
+        "item_id": "we-v2.1.2-live-T091038Z-001",
+        "verdict": "PASS",
+        "independent_answer": "A",
+        "issues": [],
+        "revision_requirements": []
+      },
+      {
+        "item_id": "we-v2.1.2-live-T091038Z-002",
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "issues": [],
+        "revision_requirements": []
+      },
+      {
+        "item_id": "we-v2.1.2-live-T091038Z-003",
+        "verdict": "REJECT",
+        "independent_answer": "NONE",
+        "issues": [
+          {
+            "severity": "CRITICAL",
+            "category": "zero_genuine_errors",
+            "description": "The sentence is grammatically correct; no marked part contains a genuine grammatical error."
+          }
+        ],
+        "revision_requirements": [
+          "Introduce exactly one genuine grammatical error and mark its location with one of A-D, or revise the item as an intentional NONE case if the format permits."
+        ]
+      },
+      {
+        "item_id": "we-v2.1.2-live-T091038Z-004",
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "issues": [],
+        "revision_requirements": []
+      },
+      {
+        "item_id": "we-v2.1.2-live-T091038Z-005",
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "issues": [],
+        "revision_requirements": []
+      },
+      {
+        "item_id": "we-v2.1.2-live-T091038Z-006",
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "issues": [],
+        "revision_requirements": []
+      },
+      {
+        "item_id": "we-v2.1.2-live-T091038Z-007",
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "issues": [],
+        "revision_requirements": []
+      },
+      {
+        "item_id": "we-v2.1.2-live-T091038Z-008",
+        "verdict": "PASS",
+        "independent_answer": "B",
+        "issues": [],
+        "revision_requirements": []
+      },
+      {
+        "item_id": "we-v2.1.2-live-T091038Z-009",
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "issues": [],
+        "revision_requirements": []
+      },
+      {
+        "item_id": "we-v2.1.2-live-T091038Z-010",
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "issues": [],
+        "revision_requirements": []
+      }
+    ],
+    "orchestrator_decisions": {
+      "state_counts": {
+        "ACCEPTED": 9,
+        "REJECTED": 1
+      },
+      "items": [
+        {
+          "item_id": "we-v2.1.2-live-T091038Z-001",
+          "state": "ACCEPTED",
+          "reviewer_verdict": "PASS",
+          "solver_answer": "A",
+          "consensus": {
+            "auto_accept": true,
+            "routing": "ACCEPTED",
+            "failed_conditions": [],
+            "disagreement_reasons": []
+          }
+        },
+        {
+          "item_id": "we-v2.1.2-live-T091038Z-002",
+          "state": "ACCEPTED",
+          "reviewer_verdict": "PASS",
+          "solver_answer": "C",
+          "consensus": {
+            "auto_accept": true,
+            "routing": "ACCEPTED",
+            "failed_conditions": [],
+            "disagreement_reasons": []
+          }
+        },
+        {
+          "item_id": "we-v2.1.2-live-T091038Z-003",
+          "state": "REJECTED",
+          "reviewer_verdict": "REJECT",
+          "solver_answer": null,
+          "consensus": null
+        },
+        {
+          "item_id": "we-v2.1.2-live-T091038Z-004",
+          "state": "ACCEPTED",
+          "reviewer_verdict": "PASS",
+          "solver_answer": "D",
+          "consensus": {
+            "auto_accept": true,
+            "routing": "ACCEPTED",
+            "failed_conditions": [],
+            "disagreement_reasons": []
+          }
+        },
+        {
+          "item_id": "we-v2.1.2-live-T091038Z-005",
+          "state": "ACCEPTED",
+          "reviewer_verdict": "PASS",
+          "solver_answer": "C",
+          "consensus": {
+            "auto_accept": true,
+            "routing": "ACCEPTED",
+            "failed_conditions": [],
+            "disagreement_reasons": []
+          }
+        },
+        {
+          "item_id": "we-v2.1.2-live-T091038Z-006",
+          "state": "ACCEPTED",
+          "reviewer_verdict": "PASS",
+          "solver_answer": "C",
+          "consensus": {
+            "auto_accept": true,
+            "routing": "ACCEPTED",
+            "failed_conditions": [],
+            "disagreement_reasons": []
+          }
+        },
+        {
+          "item_id": "we-v2.1.2-live-T091038Z-007",
+          "state": "ACCEPTED",
+          "reviewer_verdict": "PASS",
+          "solver_answer": "D",
+          "consensus": {
+            "auto_accept": true,
+            "routing": "ACCEPTED",
+            "failed_conditions": [],
+            "disagreement_reasons": []
+          }
+        },
+        {
+          "item_id": "we-v2.1.2-live-T091038Z-008",
+          "state": "ACCEPTED",
+          "reviewer_verdict": "PASS",
+          "solver_answer": "B",
+          "consensus": {
+            "auto_accept": true,
+            "routing": "ACCEPTED",
+            "failed_conditions": [],
+            "disagreement_reasons": []
+          }
+        },
+        {
+          "item_id": "we-v2.1.2-live-T091038Z-009",
+          "state": "ACCEPTED",
+          "reviewer_verdict": "PASS",
+          "solver_answer": "D",
+          "consensus": {
+            "auto_accept": true,
+            "routing": "ACCEPTED",
+            "failed_conditions": [],
+            "disagreement_reasons": []
+          }
+        },
+        {
+          "item_id": "we-v2.1.2-live-T091038Z-010",
+          "state": "ACCEPTED",
+          "reviewer_verdict": "PASS",
+          "solver_answer": "D",
+          "consensus": {
+            "auto_accept": true,
+            "routing": "ACCEPTED",
+            "failed_conditions": [],
+            "disagreement_reasons": []
+          }
+        }
+      ]
+    }
+  },
+  "attempts": {
+    "generator_invocations": 10,
+    "reviewer_invocations": 10,
+    "solver_invocations": 9,
+    "codex_live_invocations": 29,
+    "generator_validation_retries": 0
+  },
+  "formal_output_counts": {
+    "generator": 10,
+    "reviewer": 10,
+    "solver": 9
+  },
+  "existing_tests": {
+    "command": [
+      "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_*.py"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output_tail": " distractor_quality\n  7) multiple_errors\n  8) no_error\n  9) metadata_not_applicable\n  10) other\n\nmain_problem:\n  1) NONE\n  2) grammar\n  3) ambiguity\n  4) semantics\n  5) unnatural_english\n  6) distractor_quality\n  7) multiple_errors\n  8) no_error\n  9) metadata_not_applicable\n  10) other\n\nmain_problem:\n  1) NONE\n  2) grammar\n  3) ambiguity\n  4) semantics\n  5) unnatural_english\n  6) distractor_quality\n  7) multiple_errors\n  8) no_error\n  9) metadata_not_applicable\n  10) other\nReviewer round 'retry' applied: 1 (supplied: 6).\n  SOLVING (1): ['gen-struct-001']\nWrote 0 REVISE feedback record(s) (issues+revision_requirements only) to C:\\Users\\soted\\AppData\\Local\\Temp\\tmpiktveri2\\round_feedback_retry.json\nCurrent tally: {'SOLVING': 1}\nApplied Reviewer retry: {'SOLVING': 1}\nState tally: {'SOLVING': 1}\nBlinded 0 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmpdj6b9kjt\\solver_input_batch.json\nBlinding errors:\n  leak-001: leakage guard failed: ['unexpected key: correct_answer']\nitem_ids: ['leak-001']\nBlinded 1 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmp85os3jym\\solver_input_batch.json\nitem_ids: ['gen-struct-001']\nSolver output applied: 1 (supplied: 6). Routing:\n  ACCEPTED (1): ['gen-struct-001']\nCurrent tally: {'ACCEPTED': 1}\nBlinded 1 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmph86sj2ku\\solver_input_batch.json\nitem_ids: ['gen-struct-001']\nApplied Reviewer round-test: {'REVISE_REQUIRED': 1}\nState tally: {'REVISE_REQUIRED': 2}\nRebuilt 1 REVISE feedback record(s) for round 'rebuild' at C:\\Users\\soted\\AppData\\Local\\Temp\\tmp_jnv70to\\round_feedback_rebuild.json\nRebuilt 1 REVISE feedback record(s) for round 'rebuild' at C:\\Users\\soted\\AppData\\Local\\Temp\\tmpiy3szu85\\validation_round_feedback_rebuild.json\nFinalized 1 candidates.\nState tally: {'MANUAL_REVIEW': 1}\nACCEPTED: 0  MANUAL_REVIEW: 1  failure_items: 1\nFinalize id: finalize-4ae374e0933129c1329c2a65\nWrote: pilot_provenance.json, pilot_accepted_items.json, pilot_manual_review.json, pilot_failure_items.json\nFinalized 1 candidates.\nState tally: {'MANUAL_REVIEW': 1}\nACCEPTED: 0  MANUAL_REVIEW: 1  failure_items: 1\nFinalize id: finalize-4ae374e0933129c1329c2a65\nWrote: pilot_provenance.json, pilot_accepted_items.json, pilot_manual_review.json, pilot_failure_items.json\nFinalized 1 initial candidates\nState tally: {'MANUAL_REVIEW': 1}\nFinalize id: finalize-2b66013f15d075d39c8b2377\nFinalized 1 initial candidates\nState tally: {'MANUAL_REVIEW': 1}\nFinalize id: finalize-2b66013f15d075d39c8b2377\nLoaded 2 candidates (2 generator records).\nReady for Reviewer round 1 (0): []\nNOT ready (schema validation issue) (2):\n  pilot-s: state=GENERATED failure=None\n  pilot-w: state=GENERATED failure=None\nLoaded 2 candidates (2 generator records).\nReady for Reviewer round 1 (0): []\nNOT ready (schema validation issue) (2):\n  pilot-s: state=GENERATED failure=None\n  pilot-w: state=GENERATED failure=None\nLoaded exactly 120 initial candidates: {'Structure': 45, 'Written Expression': 75}\nState tally: {'GENERATED': 120}\nLoaded exactly 120 initial candidates: {'Structure': 45, 'Written Expression': 75}\nState tally: {'GENERATED': 120}\nBlinded 1 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmpaoal2k3j\\solver_input_batch.json\nitem_ids: ['gen-struct-001']\nBlinded 1 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmpaoal2k3j\\solver_input_batch.json\nitem_ids: ['gen-struct-001']\nSolver output applied: 1 (supplied: 6). Routing:\n  ACCEPTED (1): ['gen-struct-001']\nCurrent tally: {'ACCEPTED': 1}\nPrepared blinded Solver batch: 1\nPrepared blinded Solver batch: 1\nApplied Solver outputs: 1 (supplied: 6)\nState tally: {'ACCEPTED': 1}\n................................................................................................................s..........................................................\n----------------------------------------------------------------------\nRan 171 tests in 72.611s\n\nOK (skipped=1)"
+  },
+  "formal_output_files": {
+    "generator": "runtime/formal/generator_outputs.json",
+    "reviewer": "runtime/formal/reviewer_outputs.json",
+    "solver": "runtime/formal/solver_outputs.json"
+  },
+  "runtime_provenance_sidecar": "runtime/provenance/runtime_provenance.json",
+  "final_decision": {
+    "code": "B",
+    "label": "Reviewer issue",
+    "reason": "Reviewer contract, blinded invocation, or independent grammar gates failed."
+  }
+}

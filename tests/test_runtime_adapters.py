@@ -15,21 +15,23 @@ from runtime.adapters import (
     InvocationRequest,
     RuntimeInvocationError,
 )
+from shared.schema_validation import load_schema, schema_errors
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SOLVER_SCHEMA = ROOT / "agents" / "toefl_itp_grammar_solver" / "schema" / "solver_output.schema.json"
+REVIEWER_SCHEMA = ROOT / "agents" / "toefl_itp_we_reviewer_v2" / "schema" / "reviewer_output_v2.schema.json"
 SOLVER_AGENT = ROOT / ".claude" / "agents" / "toefl-itp-grammar-solver.md"
 
 
-def request(tmp: Path, *, stage: str = "solver", sandbox: str = "read-only") -> InvocationRequest:
+def request(tmp: Path, *, stage: str = "solver", sandbox: str = "read-only", schema: Path = SOLVER_SCHEMA) -> InvocationRequest:
     return InvocationRequest(
         stage=stage,
         agent_name="toefl-itp-grammar-solver",
         agent_definition=SOLVER_AGENT,
         prompt='BLINDED INPUT: {"item_id":"mock-001","section":"Written Expression","sentence":"The report was completed yesterday.","marked_parts":{"A":"The","B":"report","C":"was completed","D":"yesterday"}}',
         input_keys=("item_id", "section", "sentence", "marked_parts"),
-        formal_output_schema=SOLVER_SCHEMA,
+        formal_output_schema=schema,
         system_directive="Return only the final JSON object.",
         sandbox=sandbox,  # type: ignore[arg-type]
         cwd=ROOT,
@@ -111,6 +113,39 @@ class RuntimeAdapterTests(unittest.TestCase):
             self.assertIn("--ephemeral", command)
             self.assertNotIn("resume", command)
 
+    def test_codex_isolated_workspace_allows_the_canonical_reviewer_schema(self) -> None:
+        def runner(command: list[str], **kwargs):
+            output = Path(command[command.index("--output-last-message") + 1])
+            output.write_text("{}", encoding="utf-8")
+            return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+        with tempfile.TemporaryDirectory() as directory:
+            runtime = CodexRuntime(executable="codex", runner=runner, cli_version="mock")
+            result = runtime.invoke(request(Path(directory), stage="reviewer", schema=REVIEWER_SCHEMA))
+
+        self.assertEqual(result.parsed, {})
+
+    def test_codex_normalizes_nullable_transport_optionals_before_canonical_validation(self) -> None:
+        def runner(command: list[str], **kwargs):
+            output = Path(command[command.index("--output-last-message") + 1])
+            output.write_text(json.dumps({
+                "item_id": "mock-001",
+                "section": "Structure",
+                "solver_answer": "A",
+                "confidence": "HIGH",
+                "reason": "The live solver selected A.",
+                "ambiguity_detected": False,
+                "suggested_correction": None,
+            }), encoding="utf-8")
+            return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+        with tempfile.TemporaryDirectory() as directory:
+            runtime = CodexRuntime(executable="codex", runner=runner, cli_version="mock")
+            result = runtime.invoke(request(Path(directory)))
+
+        self.assertNotIn("suggested_correction", result.parsed)
+        self.assertEqual(schema_errors(result.parsed, load_schema(SOLVER_SCHEMA)), [])
+
     def test_codex_cli_failure_is_infrastructure_and_preserves_raw_artifacts(self) -> None:
         def runner(command: list[str], **kwargs):
             return subprocess.CompletedProcess(command, 429, stdout="", stderr="usage limit exceeded")
@@ -125,6 +160,11 @@ class RuntimeAdapterTests(unittest.TestCase):
 
         self.assertEqual(error.category, "infrastructure")
         self.assertEqual(error.result.exit_code, 429)
+
+    def test_codex_failure_categories_do_not_match_prompt_words(self) -> None:
+        runtime = CodexRuntime(executable="codex", runner=lambda *args, **kwargs: subprocess.CompletedProcess([], 0), cli_version="mock")
+        self.assertEqual(runtime._process_error_category("invalid_json_schema: allOf is not permitted"), "CODEX_SCHEMA_COMPATIBILITY_ERROR")
+        self.assertEqual(runtime._process_error_category("prompt mentions network monitoring\nprocess exited unexpectedly"), "CODEX_PROCESS_ERROR")
 
     def test_claude_retains_named_agent_and_json_envelope_behavior(self) -> None:
         calls: list[list[str]] = []

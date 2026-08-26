@@ -1,0 +1,90 @@
+```json
+{
+  "item_id": "we-v2.1.2-live-T043317Z-001",
+  "section": "Written Expression",
+  "phase_1_blind_grammar_audit": {
+    "sentence_reviewed": "The concentration of pollutants in the river's sediment layers have increased significantly over the past three decades.",
+    "genuine_errors_found": [
+      {
+        "location": "have",
+        "description": "Subject-verb agreement error. The grammatical subject of the sentence is 'The concentration' (singular, head noun), not 'pollutants' or 'sediment layers' which are embedded in prepositional/possessive phrases. A singular subject requires 'has increased', not 'have increased'."
+      }
+    ],
+    "note": "Only one genuine grammatical error identified in the full sentence prior to any comparison with marked spans."
+  },
+  "phase_2_one_error_only_audit": {
+    "zero_based_full_sentence_check": "Exactly one genuine error found (subject-verb agreement at 'have'); NONE is not applicable.",
+    "alternate_parse_audit": "No plausible alternate parse makes 'pollutants' or 'sediment layers' the grammatical subject; 'of pollutants' and 'in the river's sediment layers' are clearly non-restrictive prepositional modifiers of 'concentration'. No alternate reading rescues 'have' as correct.",
+    "alternate_repair_audit": "The only valid repair is changing 'have' to 'has'. No other single-word substitution elsewhere in the sentence produces a grammatical sentence while leaving 'have' untouched.",
+    "secondary_error_check": "No secondary errors detected in A, B, or D once C is corrected."
+  },
+  "grammar_validity": "PASS",
+  "candidate_answer": "C",
+  "marked_part_assessments": {
+    "A": {
+      "text": "concentration",
+      "classification": "ACCEPTABLE",
+      "justification": "Correct singular count noun functioning appropriately as the head of the subject noun phrase; no morphological or usage error."
+    },
+    "B": {
+      "text": "pollutants",
+      "classification": "ACCEPTABLE",
+      "justification": "Correct plural noun as object of preposition 'of'; agreement and form are appropriate and it does not control the main verb."
+    },
+    "C": {
+      "text": "have",
+      "classification": "ERROR",
+      "justification": "Subject-verb agreement violation: the singular subject 'The concentration' requires 'has increased', not 'have increased'. This is the sole genuine grammatical error in the sentence, with a unique, unambiguous correction."
+    },
+    "D": {
+      "text": "decades",
+      "classification": "ACCEPTABLE",
+      "justification": "Correct plural noun following 'three'; standard collocation 'over the past three decades' is grammatically well-formed."
+    }
+  },
+  "phase_3_answer_uniqueness_audit": {
+    "independent_candidate_before_any_external_comparison": "C",
+    "zero_error_possibility": "Rejected — a genuine agreement error exists.",
+    "multiple_error_possibility": "Rejected — only one genuine error found across A/B/C/D.",
+    "ambiguity_possibility": "Rejected — no alternate parse or alternate repair competes with the C correction.",
+    "final_independent_verdict": "C"
+  },
+  "issues": [
+    {
+      "severity": "none",
+      "type": "grammar",
+      "description": "No issues beyond the intended single agreement error at span C; item is grammatically clean and unambiguous as audited."
+    }
+  ],
+  "revision_requirements": [],
+  "format_validity": "WARN",
+  "format_diagnostics": {
+    "note": "Deterministic validator output was not provided in this blinded invocation; the following are structural observations only, not a recomputation of the validator.",
+    "sentence_length": "Single sentence, moderate length (~18 words), consistent with typical WE Part B item length.",
+    "span_count": "Four marked spans (A, B, C, D) present as required.",
+    "span_alignment_and_order": "Spans appear in left-to-right order A < B < C < D within the sentence and do not overlap.",
+    "span_types": "A = noun (head noun), B = noun (object of preposition), C = verb (finite verb form), D = noun (plural count noun) — mixed span types present, consistent with format expectations.",
+    "correct_span_size_type": "C is a single-word finite verb span, an appropriate size/type for a subject-verb agreement target.",
+    "marked_coverage_and_unmarked_context": "Substantial unmarked context surrounds each span (e.g., 'in the river's sediment layers', 'significantly over the past three'), consistent with adequate distractor spacing.",
+    "correction_locality": "Correction is a single-word substitution ('have' -> 'has'), which is maximally local.",
+    "decision_granularity": "Binary per-span decision (acceptable vs. error) is clearly resolvable for each of the four spans.",
+    "empirical_percentile_profile": "Not computable without deterministic validator data; flagged as WARN pending that data.",
+    "limitation": "Full numeric distance/percentile format compliance cannot be certified without the deterministic validator's computed values, which were not supplied to this blinded review."
+  },
+  "phase_5_target_metadata_audit": {
+    "status": "NOT_APPLICABLE",
+    "reason": "No metadata (primary_target, subtype, tested_error_type, error_scope, correction_locality, decision_granularity, provenance) was supplied in this blinded candidate input; metadata audit cannot be performed and is deferred to the Orchestrator's post-comparison stage."
+  },
+  "final_verdict": "REVISE",
+  "final_verdict_rationale": "Grammar audit independently and unambiguously identifies a single genuine subject-verb agreement error at span C with a unique repair; grammar_validity is PASS. However, format_validity is WARN because deterministic format validator output was not available in this blinded invocation to confirm span geometry, percentile profile, and numeric distance compliance. Final disposition is left as REVISE pending Orchestrator attachment of generator answer/metadata and confirmation of format diagnostics from the deterministic validator; this is not a rejection of the sentence's grammatical validity.",
+  "provenance": {
+    "reviewer": "toefl_itp_we_reviewer_v2",
+    "review_mode": "blind_live_invocation",
+    "input_fields_used": ["item_id", "section", "sentence", "marked_parts"],
+    "generator_metadata_used": false,
+    "source_of_truth_files_consulted": false,
+    "consultation_note": "Format spec and empirical distribution files were not read for this live blinded pass; format_diagnostics reflects structural inspection only, not a recomputation of deterministic validator values.",
+    "timestamp_context_date": "2026-08-26"
+  }
+}
+```

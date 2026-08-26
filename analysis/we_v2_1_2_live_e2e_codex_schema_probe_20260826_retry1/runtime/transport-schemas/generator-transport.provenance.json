@@ -1,0 +1,170 @@
+{
+  "canonical_schema_path": "agents\\toefl_itp_we_generator_v2\\schema\\written_expression_item_v2.schema.json",
+  "canonical_schema_hash": "sha256:caea905de0c9dded8d2655ff35a150485f255e2222d0892ff5e3d3e402aa88e0",
+  "transport_schema_hash": "sha256:20d3d26a7f0ba02149118977aca82dcf1b33e571bc604fc1fd543f8bcacb00bc",
+  "removed_or_relaxed_keywords": [
+    {
+      "path": "$",
+      "keyword": "allOf",
+      "action": "relaxed",
+      "reason": "conditional allOf composition is enforced only by canonical validation"
+    },
+    {
+      "path": "$.allOf[0].if",
+      "keyword": "if",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].if.properties",
+      "keyword": "properties",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].if.properties.agent_version",
+      "keyword": "agent_version",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].if.properties.agent_version.const",
+      "keyword": "const",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].then",
+      "keyword": "then",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].then.properties",
+      "keyword": "properties",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].then.properties.provenance",
+      "keyword": "provenance",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].then.properties.provenance.properties",
+      "keyword": "properties",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].then.properties.provenance.properties.agent_version",
+      "keyword": "agent_version",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].then.properties.provenance.properties.agent_version.const",
+      "keyword": "const",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].if",
+      "keyword": "if",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].if.properties",
+      "keyword": "properties",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].if.properties.agent_version",
+      "keyword": "agent_version",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].if.properties.agent_version.const",
+      "keyword": "const",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].then",
+      "keyword": "then",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].then.properties",
+      "keyword": "properties",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].then.properties.provenance",
+      "keyword": "provenance",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].then.properties.provenance.properties",
+      "keyword": "properties",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].then.properties.provenance.properties.agent_version",
+      "keyword": "agent_version",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].then.properties.provenance.properties.agent_version.const",
+      "keyword": "const",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$",
+      "keyword": "allOf",
+      "action": "rewritten",
+      "reason": "Codex Structured Outputs does not permit allOf",
+      "replacement": "flattened structural branches / omitted conditional branches"
+    },
+    {
+      "path": "$.properties.section.const",
+      "keyword": "const",
+      "action": "rewritten",
+      "reason": "const represented as an exact singleton enum",
+      "replacement": "enum"
+    },
+    {
+      "path": "$.properties.format_metadata.properties.diagnostics.properties.format_percentile_profile.additionalProperties",
+      "keyword": "additionalProperties",
+      "action": "rewritten",
+      "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+      "replacement": "false"
+    },
+    {
+      "path": "$.properties.format_metadata.properties.diagnostics.properties.metric_band_status.additionalProperties",
+      "keyword": "additionalProperties",
+      "action": "rewritten",
+      "reason": "Codex Structured Outputs requires additionalProperties:false on every object",
+      "replacement": "false"
+    },
+    {
+      "path": "$.properties.qa_metadata.properties.clean_sentence_validated.const",
+      "keyword": "const",
+      "action": "rewritten",
+      "reason": "const represented as an exact singleton enum",
+      "replacement": "enum"
+    }
+  ],
+  "provider": "codex",
+  "canonical_validation_still_required": true
+}

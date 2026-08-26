@@ -1,0 +1,11 @@
+{
+  "item_id": "we-v2.1.2-live-T091038Z-010",
+  "section": "Written Expression",
+  "sentence": "The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.",
+  "marked_parts": {
+    "A": "The regional plan",
+    "B": "requires factories",
+    "C": "improve filtration systems",
+    "D": "monitoring"
+  }
+}

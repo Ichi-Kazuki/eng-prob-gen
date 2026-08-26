@@ -1,0 +1,186 @@
+{
+  "canonical_schema_path": "C:\\Users\\soted\\Projects\\itp-prob-gen\\agents\\toefl_itp_grammar_solver\\schema\\solver_output.schema.json",
+  "canonical_schema_hash": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+  "transport_schema_hash": "sha256:9139c6407f36db1ff554e818bdf102092a56fd79f88a6152373f47b050244781",
+  "removed_or_relaxed_keywords": [
+    {
+      "path": "$",
+      "keyword": "allOf",
+      "action": "relaxed",
+      "reason": "conditional allOf composition is enforced only by canonical validation"
+    },
+    {
+      "path": "$.allOf[0].if",
+      "keyword": "if",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].if.properties",
+      "keyword": "properties",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].if.properties.section",
+      "keyword": "section",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].if.properties.section.const",
+      "keyword": "const",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].if.required",
+      "keyword": "required",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].then",
+      "keyword": "then",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[0].then.required",
+      "keyword": "required",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].if",
+      "keyword": "if",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].if.properties",
+      "keyword": "properties",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].if.properties.solver_answer",
+      "keyword": "solver_answer",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].if.properties.solver_answer.enum",
+      "keyword": "enum",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].if.required",
+      "keyword": "required",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].then",
+      "keyword": "then",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].then.properties",
+      "keyword": "properties",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].then.properties.ambiguity_detected",
+      "keyword": "ambiguity_detected",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[1].then.properties.ambiguity_detected.const",
+      "keyword": "const",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[2].if",
+      "keyword": "if",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[2].if.properties",
+      "keyword": "properties",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[2].if.properties.solver_answer",
+      "keyword": "solver_answer",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[2].if.properties.solver_answer.enum",
+      "keyword": "enum",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[2].if.required",
+      "keyword": "required",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[2].then",
+      "keyword": "then",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[2].then.properties",
+      "keyword": "properties",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[2].then.properties.ambiguity_detected",
+      "keyword": "ambiguity_detected",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$.allOf[2].then.properties.ambiguity_detected.const",
+      "keyword": "const",
+      "action": "omitted",
+      "reason": "conditional constraint is not representable in the Codex transport subset"
+    },
+    {
+      "path": "$",
+      "keyword": "allOf",
+      "action": "rewritten",
+      "reason": "Codex Structured Outputs does not permit allOf",
+      "replacement": "flattened structural branches / omitted conditional branches"
+    },
+    {
+      "path": "$.required",
+      "keyword": "required",
+      "action": "rewritten",
+      "reason": "Codex Structured Outputs requires every declared object property",
+      "replacement": "suggested_correction"
+    },
+    {
+      "path": "$.properties.suggested_correction",
+      "keyword": "type",
+      "action": "relaxed",
+      "reason": "optional canonical property is required by Codex and null preserves its optional state",
+      "replacement": "nullable"
+    }
+  ],
+  "provider": "codex",
+  "canonical_validation_still_required": true
+}

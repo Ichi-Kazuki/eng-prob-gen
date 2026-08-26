@@ -1,0 +1,66 @@
+```json
+{
+  "item_id": "we-v2.1.2-live-T043317Z-003",
+  "section": "Written Expression",
+  "grammar_validity": "PASS",
+  "format_validity": "WARN",
+  "candidate_answer": "B",
+  "marked_part_assessments": {
+    "A": {
+      "text": "collected",
+      "classification": "ACCEPTABLE",
+      "rationale": "Past participle correctly used as reduced relative clause modifying 'samples' (samples [that were] collected from the riverbed). No agreement, tense, or form issue."
+    },
+    "B": {
+      "text": "confirm",
+      "classification": "ERROR",
+      "rationale": "Subject-verb agreement error. The grammatical subject of the main clause is the singular head noun 'analysis' (\"The research team's analysis ... confirm[s]\"), not the plural 'samples' embedded in the prepositional phrase 'of sediment samples collected from the riverbed'. The verb must agree with 'analysis' and take the singular form 'confirms'. This is a classic prepositional-phrase-intervening subject-verb agreement error and is the sole genuine grammatical fault in the sentence."
+    },
+    "C": {
+      "text": "increase",
+      "classification": "ACCEPTABLE",
+      "rationale": "Noun object of the verb, correctly used as a singular count noun with the article 'a' and the modifier 'gradual'. No grammatical fault."
+    },
+    "D": {
+      "text": "past",
+      "classification": "ACCEPTABLE",
+      "rationale": "Standard adjectival use in the fixed expression 'the past decade', correctly following 'over' to indicate a preceding time span. No grammatical fault."
+    }
+  },
+  "checks": {
+    "zero_based_full_sentence_audit": "One genuine error identified independently before any comparison: subject-verb agreement failure at 'confirm' (singular subject 'analysis' requires 'confirms').",
+    "alternate_parse_audit": "Considered whether 'samples' could be construed as the controlling subject via notional/proximity agreement; rejected because standard written English agreement rule attaches the verb to the head noun of the subject NP ('analysis'), not to the object of an embedded prepositional phrase. No alternate parse yields a grammatical sentence with 'confirm'.",
+    "alternate_repair_audit": "The unique minimal repair is changing 'confirm' to 'confirms'. No other single-word change among A/C/D produces a grammatical sentence; sentence is otherwise fully grammatical.",
+    "secondary_error_check": "No additional genuine errors found in A, C, or D after isolating the B error.",
+    "corrected_sentence_grammaticality": "With 'confirm' replaced by 'confirms', the sentence is fully grammatical: 'The research team's analysis of sediment samples collected from the riverbed confirms a gradual increase in mineral deposits over the past decade.'",
+    "uniqueness_check": "Exactly one genuine error (B); no ambiguity between candidates; A, C, D are all acceptable and require no correction."
+  },
+  "genuine_error_count": 1,
+  "ambiguity_assessment": "NONE",
+  "revision_requirements": [],
+  "format_diagnostics": {
+    "note": "This reviewer does not recompute deterministic validator metrics; no validator output was supplied with this blinded candidate, so span/format geometry (length, alignment, overlap, order, coverage, gaps, correction locality, decision granularity, percentile profile) could not be independently confirmed and are marked WARN pending validator data.",
+    "sentence_length_assessed": "not computed (validator data not provided)",
+    "span_count": 4,
+    "span_alignment": "not verifiable without validator output",
+    "span_overlap": "not verifiable without validator output",
+    "span_order": "A, B, C, D appear in left-to-right sentence order as listed",
+    "correct_span_type": "B marks a finite verb form, consistent with a subject-verb agreement target",
+    "correction_locality": "Single-word substitution ('confirm' -> 'confirms'); locality appears minimal and localized",
+    "decision_granularity": "Four single/short-token spans; granularity appears consistent with standard WE item format"
+  },
+  "provenance": {
+    "reviewer": "toefl_itp_we_reviewer_v2",
+    "review_mode": "blind_live_invocation",
+    "input_fields_used": ["item_id", "section", "sentence", "marked_parts"],
+    "generator_metadata_consulted": false,
+    "phases_completed": [
+      "Phase 1: Blind grammar audit",
+      "Phase 2: One-error-only audit",
+      "Phase 3: candidate_answer determined independently (comparison to generator answer deferred to Orchestrator)",
+      "Phase 4: Format audit (limited; no validator output supplied)",
+      "Phase 5: Target/metadata audit not applicable (no metadata provided in blinded input)"
+    ]
+  }
+}
+```

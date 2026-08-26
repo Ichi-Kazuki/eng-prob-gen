@@ -1,0 +1,11 @@
+{
+  "item_id": "we-v2.1.2-live-T091038Z-007",
+  "section": "Written Expression",
+  "sentence": "Although the preliminary measurements from three remote stations were inconsistent, the revised estimates of seasonal currents reveals a stable tidal pattern.",
+  "marked_parts": {
+    "A": "measurements",
+    "B": "stations",
+    "C": "estimates",
+    "D": "reveals"
+  }
+}

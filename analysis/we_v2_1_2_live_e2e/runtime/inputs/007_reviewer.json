@@ -1,0 +1,11 @@
+{
+  "item_id": "we-v2.1.2-live-T054917Z-007",
+  "section": "Written Expression",
+  "sentence": "The gradual accumulation of heavy metals in river sediments pose a serious threat to aquatic organisms living downstream.",
+  "marked_parts": {
+    "A": "heavy metals",
+    "B": "pose",
+    "C": "threat",
+    "D": "organisms living"
+  }
+}

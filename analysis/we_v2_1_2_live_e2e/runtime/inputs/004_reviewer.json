@@ -1,0 +1,11 @@
+{
+  "item_id": "we-v2.1.2-live-T054917Z-004",
+  "section": "Written Expression",
+  "sentence": "The committee responsible for allocating annual research funds meet twice a year to review new proposals submitted by faculty members.",
+  "marked_parts": {
+    "A": "responsible for",
+    "B": "meet",
+    "C": "to review",
+    "D": "submitted by"
+  }
+}

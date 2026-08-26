@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "solver_output.schema.json",
+  "title": "TOEFL ITP Independent Solver Agent - solve result item",
+  "description": "Schema-level validation of the Solver Agent's own output shape. Does not judge whether solver_answer is correct - that is exercised separately via smoke/adversarial tests, not by this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_id",
+    "section",
+    "solver_answer",
+    "confidence",
+    "reason",
+    "ambiguity_detected",
+    "suggested_correction"
+  ],
+  "properties": {
+    "item_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "section": {
+      "enum": [
+        "Structure",
+        "Written Expression"
+      ]
+    },
+    "solver_answer": {
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "AMBIGUOUS",
+        "NONE"
+      ]
+    },
+    "confidence": {
+      "enum": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ambiguity_detected": {
+      "type": "boolean"
+    },
+    "suggested_correction": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

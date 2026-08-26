@@ -1,0 +1,85 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-001",
+      "section": "Written Expression",
+      "solver_answer": "A",
+      "confidence": "HIGH",
+      "reason": "The singular subject “the sediment layer” requires the singular verb “preserves,” not “preserve.”",
+      "ambiguity_detected": false,
+      "suggested_correction": "Because the sediment layer preserves pollen grains from earlier climates, researchers can reconstruct regional vegetation patterns with remarkable precision."
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-002",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The plural subject “Researchers” requires the plural verb “have,” not “has.”",
+      "ambiguity_detected": false,
+      "suggested_correction": "Change “has identified” to “have identified.”"
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-004",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The subject \"effects\" is plural, so the verb must be \"remain,\" not \"remains.\"",
+      "ambiguity_detected": false,
+      "suggested_correction": "remain difficult"
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-005",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "“Policies” is plural, so it requires the plural verb “have,” not “has.” The corrected phrase is “policies have.”",
+      "ambiguity_detected": false,
+      "suggested_correction": "policies have"
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-006",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The adjective “resistant” is followed by the preposition “to,” not “for.” The phrase should be “remain resistant to prolonged drought conditions.”",
+      "ambiguity_detected": false,
+      "suggested_correction": "Change “resistant for” to “resistant to.”"
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-007",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The subject \"estimates\" is plural, so the verb should be \"reveal,\" not \"reveals.\"",
+      "ambiguity_detected": false,
+      "suggested_correction": "reveals → reveal"
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-008",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The preposition after “relied” should be “on,” not “in”: “Researchers relied on archival maps.”",
+      "ambiguity_detected": false,
+      "suggested_correction": "Change “in” to “on”."
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-009",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The subject is the singular noun phrase “The network of sensors,” so the verb must be singular: “detects,” not “detect.”",
+      "ambiguity_detected": false,
+      "suggested_correction": "detects"
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-010",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The verbs after \"to\" must be parallel: reduce, improve, and monitor. \"Monitoring\" is incorrect; it should be \"monitor.\"",
+      "ambiguity_detected": false,
+      "suggested_correction": "monitor"
+    }
+  ]
+}

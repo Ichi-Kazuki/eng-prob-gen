@@ -1,0 +1,1033 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-001",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject–verb agreement across an intervening phrase",
+      "secondary_features": [
+        "academic register",
+        "singular head noun with intervening prepositional phrase"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "paleoclimatology",
+      "sentence": "Because the sediment layer preserve pollen grains from earlier climates, researchers can reconstruct regional vegetation patterns with remarkable precision.",
+      "marked_parts": {
+        "A": "preserve",
+        "B": "from earlier",
+        "C": "regional vegetation",
+        "D": "remarkable precision"
+      },
+      "correct_answer": "A",
+      "error_explanation": "The singular subject “layer” requires the singular verb “preserves.”",
+      "minimal_correction": "preserve → preserves",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "A",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "Sampled target: 20 words; conformance range: 18–22 words",
+        "expected_span_profile": "One single-word span and three short-phrase spans with distributed local coverage",
+        "coverage_profile": "Moderate coverage with substantial unmarked context",
+        "approximate_context_profile": "Academic causal sentence with nonzero gaps between ordered marked spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SHORT_PHRASE",
+          "C": "SHORT_PHRASE",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 19,
+          "span_word_counts": {
+            "A": 1,
+            "B": 2,
+            "C": 2,
+            "D": 2
+          },
+          "mean_span_length": 1.75,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.3684,
+          "unmarked_word_count": 12,
+          "gap_A_B": 2,
+          "gap_B_C": 4,
+          "gap_C_D": 2,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 1.0634,
+          "format_percentile_profile": {},
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              4
+            ],
+            "B": [
+              7,
+              8
+            ],
+            "C": [
+              13,
+              14
+            ],
+            "D": [
+              17,
+              18
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "2.1.2",
+        "format_spec_version": "2.1.1",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T091038Z",
+        "microbatch_id": "we-v2.1.2-live-e2e-20260826T091038Z-micro-001",
+        "item_generation_order": 1,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Because the sediment layer preserves pollen grains from earlier climates, researchers can reconstruct regional vegetation patterns with remarkable precision.",
+        "error_form": "Because the sediment layer preserve pollen grains from earlier climates, researchers can reconstruct regional vegetation patterns with remarkable precision.",
+        "minimal_correction": "preserve → preserves",
+        "mutation_type": "subject–verb agreement: singular head noun mutated to plural verb",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-002",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject_verb_agreement",
+      "secondary_features": [
+        "present-tense academic statement",
+        "complex subject noun phrase"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "environmental engineering",
+      "sentence": "Researchers examining ancient irrigation systems has identified several design principles that modern engineers can adapt to conserve water in arid regions.",
+      "marked_parts": {
+        "A": "Researchers",
+        "B": "ancient",
+        "C": "has",
+        "D": "modern engineers"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The plural subject \"Researchers\" requires the plural auxiliary \"have\"; the singular form \"has\" is incorrect.",
+      "minimal_correction": "has -> have",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "19–23 words",
+        "expected_span_profile": "mostly single-word spans with one short phrase and separated contextual spans",
+        "coverage_profile": "moderate marked coverage with substantial unmarked context",
+        "approximate_context_profile": "academic environmental-engineering context with distributed local spans",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 21,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 2
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2381,
+          "unmarked_word_count": 16,
+          "gap_A_B": 1,
+          "gap_B_C": 2,
+          "gap_C_D": 5,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.2705,
+          "format_percentile_profile": {},
+          "format_band_status": "WARNING",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              0
+            ],
+            "B": [
+              2
+            ],
+            "C": [
+              5
+            ],
+            "D": [
+              11,
+              12
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "v2.1.2",
+        "format_spec_version": "v2.1.1-locked",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T091038Z",
+        "microbatch_id": "live-microbatch-002",
+        "item_generation_order": 2,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Researchers examining ancient irrigation systems have identified several design principles that modern engineers can adapt to conserve water in arid regions.",
+        "error_form": "Researchers examining ancient irrigation systems has identified several design principles that modern engineers can adapt to conserve water in arid regions.",
+        "minimal_correction": "has -> have",
+        "mutation_type": "SUBJECT_VERB_AGREEMENT: have -> has",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "WARN"
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-003",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "Subject–verb agreement across an intervening prepositional phrase",
+      "secondary_features": [
+        "complex noun phrase",
+        "academic register",
+        "geology context"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "EASY",
+      "vocabulary_domain": "Geology and earth science",
+      "sentence": "The collection of mineral samples from remote valleys reveals how ancient rivers shaped the region's distinctive geological landscape over thousands of years.",
+      "marked_parts": {
+        "A": "collection",
+        "B": "from",
+        "C": "reveals",
+        "D": "region's"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The singular head noun collection requires the singular verb reveals. The intervening plural noun samples does not control agreement.",
+      "minimal_correction": "reveal -> reveals",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "20–24 words",
+        "expected_span_profile": "Predominantly single-word local spans with substantial unmarked context",
+        "coverage_profile": "Low-to-central official coverage with nonzero gaps",
+        "approximate_context_profile": "Academic geology sentence with distributed local candidates",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 22,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.1818,
+          "unmarked_word_count": 18,
+          "gap_A_B": 3,
+          "gap_B_C": 2,
+          "gap_C_D": 5,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.8596,
+          "format_percentile_profile": {},
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              5
+            ],
+            "C": [
+              8
+            ],
+            "D": [
+              14
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "v2.1.2",
+        "format_spec_version": "v2.1.1-locked",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T091038Z",
+        "microbatch_id": "we-v2.1.2-live-e2e-20260826T091038Z-microbatch-003",
+        "item_generation_order": 3,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "The collection of mineral samples from remote valleys reveals how ancient rivers shaped the region's distinctive geological landscape over thousands of years.",
+        "error_form": "The collection of mineral samples from remote valleys reveal how ancient rivers shaped the region's distinctive geological landscape over thousands of years.",
+        "minimal_correction": "reveal -> reveals",
+        "mutation_type": "reveals -> reveal",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-004",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "Subject–verb agreement across an intervening prepositional phrase",
+      "secondary_features": [
+        "prepositional phrase",
+        "academic register"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "Environmental science",
+      "sentence": "The effects of intermittent summer rainfall on coastal wetlands remains difficult to predict because drainage patterns vary considerably during annual thaw.",
+      "marked_parts": {
+        "A": "The",
+        "B": "intermittent",
+        "C": "on",
+        "D": "remains difficult"
+      },
+      "correct_answer": "D",
+      "error_explanation": "The plural subject “effects” requires the plural verb “remain,” not “remains.”",
+      "minimal_correction": "remains -> remain",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "D",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25",
+        "expected_span_profile": "Primarily single-word local spans with one short phrase; distributed grammatical context",
+        "coverage_profile": "Central official-style partial coverage with substantial unmarked context",
+        "approximate_context_profile": "Academic explanatory sentence with a multiword subject and intervening prepositional modifiers",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 21,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 2
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2381,
+          "unmarked_word_count": 16,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 2,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.2705,
+          "format_percentile_profile": {},
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              0
+            ],
+            "B": [
+              3
+            ],
+            "C": [
+              6
+            ],
+            "D": [
+              9,
+              10
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "toefl_itp_we_generator_v2.1.2",
+        "format_spec_version": "we_v2.1.1_locked",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T091038Z",
+        "microbatch_id": "live-microbatch-004",
+        "item_generation_order": 4,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "The effects of intermittent summer rainfall on coastal wetlands remain difficult to predict because drainage patterns vary considerably during annual thaw.",
+        "error_form": "The effects of intermittent summer rainfall on coastal wetlands remains difficult to predict because drainage patterns vary considerably during annual thaw.",
+        "minimal_correction": "remains -> remain",
+        "mutation_type": "remain -> remains (subject–verb agreement mutation)",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-005",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject–verb agreement across an intervening adverbial and coordinated clause",
+      "secondary_features": [
+        "agreement dependency",
+        "academic register"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "urban planning",
+      "sentence": "In several countries, rapid urban growth steadily increased demand in major cities; policies has reduced pressure on local infrastructure through coordinated planning efforts.",
+      "marked_parts": {
+        "A": "In several countries",
+        "B": "steadily",
+        "C": "policies has",
+        "D": "infrastructure"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The plural subject \"policies\" requires the plural auxiliary \"have\"; the clean form is \"policies have,\" whereas \"policies has\" is ungrammatical.",
+      "minimal_correction": "policies has -> policies have",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "C",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21–25 words",
+        "expected_span_profile": "three-word opening phrase, one-word distractor, two-word agreement locus, and one-word distractor",
+        "coverage_profile": "moderate marked coverage with unmarked context retained",
+        "approximate_context_profile": "academic sentence with distributed local spans across coordinated clauses",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SHORT_PHRASE",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 23,
+          "span_word_counts": {
+            "A": 3,
+            "B": 1,
+            "C": 2,
+            "D": 1
+          },
+          "mean_span_length": 1.75,
+          "max_span_length": 3,
+          "marked_coverage_ratio": 0.3043,
+          "unmarked_word_count": 16,
+          "gap_A_B": 3,
+          "gap_B_C": 5,
+          "gap_C_D": 4,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.9155,
+          "format_percentile_profile": {},
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              0,
+              1,
+              2
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              12,
+              13
+            ],
+            "D": [
+              18
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "toefl-itp-we-generator-v2.1.2",
+        "format_spec_version": "v2.1.1-format-lock",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T091038Z",
+        "microbatch_id": "live-microbatch-005",
+        "item_generation_order": 5,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "In several countries, rapid urban growth steadily increased demand in major cities; policies have reduced pressure on local infrastructure through coordinated planning efforts.",
+        "error_form": "In several countries, rapid urban growth steadily increased demand in major cities; policies has reduced pressure on local infrastructure through coordinated planning efforts.",
+        "minimal_correction": "policies has -> policies have",
+        "mutation_type": "policies have -> policies has",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-006",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "CONNECTORS_CONJUNCTIONS",
+      "subtype": "fixed preposition collocation after an adjective",
+      "secondary_features": [
+        "academic register",
+        "prepositional phrase modification"
+      ],
+      "tested_error_type": "wrong_preposition_collocation",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "ecology",
+      "sentence": "Recent field experiments conducted by ecologists indicate that several native grasses remain resistant for prolonged drought conditions across semi-arid regions of central Australia.",
+      "marked_parts": {
+        "A": "Recent field experiments",
+        "B": "indicate",
+        "C": "resistant for",
+        "D": "semi-arid"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The adjective “resistant” requires the preposition “to” before “prolonged drought conditions”; “for” is incorrect in this collocation.",
+      "minimal_correction": "resistant for -> resistant to",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SHORT_SPAN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "C",
+        "correct_span_type": "SHORT_PHRASE"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21–25 words (empirical draw target: 23; realized: 23)",
+        "expected_span_profile": "Empirical correct-span draw: SHORT_PHRASE, 2 words; distractors: 3, 1, and 1 words",
+        "coverage_profile": "30.43% marked coverage with 16 unmarked words",
+        "approximate_context_profile": "Academic declarative sentence with distributed local spans and nonzero gaps",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SHORT_PHRASE",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 23,
+          "span_word_counts": {
+            "A": 3,
+            "B": 1,
+            "C": 2,
+            "D": 1
+          },
+          "mean_span_length": 1.75,
+          "max_span_length": 3,
+          "marked_coverage_ratio": 0.3043,
+          "unmarked_word_count": 16,
+          "gap_A_B": 3,
+          "gap_B_C": 5,
+          "gap_C_D": 4,
+          "correct_span_word_count": 2,
+          "correct_span_type": "SHORT_PHRASE",
+          "correction_locality": "LOCAL_SHORT_SPAN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.9155,
+          "format_percentile_profile": {},
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              0,
+              1,
+              2
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              12,
+              13
+            ],
+            "D": [
+              18
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "v2.1.2",
+        "format_spec_version": "v2.1.1-locked",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T091038Z",
+        "microbatch_id": "live-microbatch-006",
+        "item_generation_order": 6,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Recent field experiments conducted by ecologists indicate that several native grasses remain resistant to prolonged drought conditions across semi-arid regions of central Australia.",
+        "error_form": "Recent field experiments conducted by ecologists indicate that several native grasses remain resistant for prolonged drought conditions across semi-arid regions of central Australia.",
+        "minimal_correction": "resistant for -> resistant to",
+        "mutation_type": "resistant to -> resistant for",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-007",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject–verb agreement across an intervening prepositional phrase",
+      "secondary_features": [
+        "complex noun phrase",
+        "subordinate concessive clause",
+        "academic register"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "environmental science",
+      "sentence": "Although the preliminary measurements from three remote stations were inconsistent, the revised estimates of seasonal currents reveals a stable tidal pattern.",
+      "marked_parts": {
+        "A": "measurements",
+        "B": "stations",
+        "C": "estimates",
+        "D": "reveals"
+      },
+      "correct_answer": "D",
+      "error_explanation": "The plural subject estimates requires the plural verb reveal, not the singular form reveals.",
+      "minimal_correction": "reveals -> reveal",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21–25 words (empirical target 23; realized 21)",
+        "expected_span_profile": "Four single-word spans with a single-word agreement locus and distributed lexical gaps.",
+        "coverage_profile": "Preferred-range coverage with substantial unmarked context.",
+        "approximate_context_profile": "Academic sentence with a concessive subordinate clause, intervening prepositional phrases, and a main-clause agreement dependency.",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 21,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.1905,
+          "unmarked_word_count": 17,
+          "gap_A_B": 3,
+          "gap_B_C": 4,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.7605,
+          "format_percentile_profile": {},
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              3
+            ],
+            "B": [
+              7
+            ],
+            "C": [
+              12
+            ],
+            "D": [
+              16
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "v2.1.2",
+        "format_spec_version": "v2.1.1-locked",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T091038Z",
+        "microbatch_id": "microbatch-007",
+        "item_generation_order": 7,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Although the preliminary measurements from three remote stations were inconsistent, the revised estimates of seasonal currents reveal a stable tidal pattern.",
+        "error_form": "Although the preliminary measurements from three remote stations were inconsistent, the revised estimates of seasonal currents reveals a stable tidal pattern.",
+        "minimal_correction": "reveals -> reveal",
+        "mutation_type": "subject-verb agreement: reveal -> reveals",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-008",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "verb-preposition collocation with rely",
+      "secondary_features": [
+        "preposition collocation",
+        "infinitival purpose clause",
+        "academic register"
+      ],
+      "tested_error_type": "wrong_preposition_collocation",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "archaeology and economic history",
+      "sentence": "Researchers relied in archival maps to reconstruct trade routes that connected inland markets with coastal ports during the early modern period.",
+      "marked_parts": {
+        "A": "Researchers",
+        "B": "in",
+        "C": "reconstruct",
+        "D": "markets"
+      },
+      "correct_answer": "B",
+      "error_explanation": "The verb rely requires the preposition on, not in, when identifying the source of support or information: relied on archival maps.",
+      "minimal_correction": "in -> on",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "19-23 words; empirical target 21 from official item-level draw",
+        "expected_span_profile": "Four local single-word spans; sampled distractor profile 1/1/1",
+        "coverage_profile": "Preferred empirical coverage band",
+        "approximate_context_profile": "17 unmarked lexical words; nonzero lexical gaps retained",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 21,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.1905,
+          "unmarked_word_count": 17,
+          "gap_A_B": 1,
+          "gap_B_C": 3,
+          "gap_C_D": 5,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "VERB_FRAME",
+          "format_distribution_distance": 0.7605,
+          "format_percentile_profile": {},
+          "format_band_status": "WARNING",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              0
+            ],
+            "B": [
+              2
+            ],
+            "C": [
+              6
+            ],
+            "D": [
+              12
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "2.1.2",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T091038Z",
+        "microbatch_id": "we-v2.1.2-live-e2e-20260826T091038Z-microbatch-008",
+        "item_generation_order": 8,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Researchers relied on archival maps to reconstruct trade routes that connected inland markets with coastal ports during the early modern period.",
+        "error_form": "Researchers relied in archival maps to reconstruct trade routes that connected inland markets with coastal ports during the early modern period.",
+        "minimal_correction": "in -> on",
+        "mutation_type": "preposition substitution: on -> in",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "WARN"
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-009",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject–verb agreement across an intervening prepositional phrase",
+      "secondary_features": [
+        "complex subject noun phrase",
+        "academic register"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "environmental monitoring",
+      "sentence": "The network of sensors installed across alpine valleys now regularly detect subtle shifts in temperature before they threaten nearby ecosystems.",
+      "marked_parts": {
+        "A": "The",
+        "B": "sensors",
+        "C": "alpine",
+        "D": "detect"
+      },
+      "correct_answer": "D",
+      "error_explanation": "The head noun of the subject is the singular noun “network,” so the finite verb must be singular: “detects.” The plural noun “sensors” is inside an intervening prepositional phrase and does not control agreement.",
+      "minimal_correction": "Change detect to detects.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "18–22 words (sampled target: 20; official source: official.items[].sentence_word_count)",
+        "expected_span_profile": "Four predominantly single-word local spans",
+        "coverage_profile": "20% marked coverage, within the preferred empirical region",
+        "approximate_context_profile": "Sixteen unmarked words with gaps of 2, 2, and 3 lexical words",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.2,
+          "unmarked_word_count": 16,
+          "gap_A_B": 2,
+          "gap_B_C": 2,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.6869,
+          "format_percentile_profile": {},
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              0
+            ],
+            "B": [
+              3
+            ],
+            "C": [
+              6
+            ],
+            "D": [
+              10
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "toefl-itp-we-generator-v2.1.2",
+        "format_spec_version": "we-v2.1.1-format-lock",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T091038Z",
+        "microbatch_id": "live-microbatch-009",
+        "item_generation_order": 9,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "The network of sensors installed across alpine valleys now regularly detects subtle shifts in temperature before they threaten nearby ecosystems.",
+        "error_form": "The network of sensors installed across alpine valleys now regularly detect subtle shifts in temperature before they threaten nearby ecosystems.",
+        "minimal_correction": "Change detect to detects.",
+        "mutation_type": "detects -> detect: subject-verb agreement mutation",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T091038Z-010",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "parallelism",
+      "subtype": "coordinated verb forms",
+      "secondary_features": [
+        "academic register",
+        "infinitival complementation"
+      ],
+      "tested_error_type": "nonparallel verb form in a coordinated series",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "environmental policy",
+      "sentence": "The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.",
+      "marked_parts": {
+        "A": "The regional plan",
+        "B": "requires factories",
+        "C": "improve filtration systems",
+        "D": "monitoring"
+      },
+      "correct_answer": "D",
+      "error_explanation": "The three coordinated verbs following “to” must use parallel base forms: “reduce,” “improve,” and “monitor.” The -ing form “monitoring” is grammatically incorrect here.",
+      "minimal_correction": "Change “monitoring” to “monitor.”",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "VERB_FRAME",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16–25 words (sampled official observed region)",
+        "expected_span_profile": "Four local spans with local phrase distractors and one single-word error span",
+        "coverage_profile": "Moderate partial coverage with unmarked context",
+        "approximate_context_profile": "Academic sentence with coordinated infinitival complements",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SHORT_PHRASE",
+          "C": "SHORT_PHRASE",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 18,
+          "span_word_counts": {
+            "A": 3,
+            "B": 2,
+            "C": 3,
+            "D": 1
+          },
+          "mean_span_length": 2.25,
+          "max_span_length": 3,
+          "marked_coverage_ratio": 0.5,
+          "unmarked_word_count": 9,
+          "gap_A_B": 0,
+          "gap_B_C": 3,
+          "gap_C_D": 1,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "VERB_FRAME",
+          "format_distribution_distance": 0.0,
+          "format_percentile_profile": {},
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              0,
+              1,
+              2
+            ],
+            "B": [
+              3,
+              4
+            ],
+            "C": [
+              8,
+              9,
+              10
+            ],
+            "D": [
+              12
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "toefl_itp_we_generator_v2.1.2",
+        "format_spec_version": "we_v2.1.1_format_locked",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T091038Z",
+        "microbatch_id": "live-microbatch-010",
+        "item_generation_order": 10,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "The regional plan requires factories to reduce emissions, improve filtration systems, and monitor water quality near industrial sites.",
+        "error_form": "The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.",
+        "minimal_correction": "Change “monitoring” to “monitor.”",
+        "mutation_type": "base-form-to-ing parallel mutation",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "item_id": "we-v2.1.2-live-ve-test--001",
+  "section": "Written Expression",
+  "sentence": "During the winter expedition, the observatory record subtle changes in atmospheric pressure across the northern plateau each morning.",
+  "marked_parts": {
+    "A": "expedition",
+    "B": "record",
+    "C": "pressure",
+    "D": "plateau"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2.1.2-live-T083657Z-001",
+      "section": "Written Expression",
+      "solver_answer": "C",
+      "confidence": "HIGH",
+      "reason": "The plural subject “researchers” requires the plural verb “identify,” not singular “identifies.”",
+      "ambiguity_detected": false,
+      "suggested_correction": "identifies → identify"
+    },
+    {
+      "item_id": "we-v2.1.2-live-T083657Z-002",
+      "section": "Written Expression",
+      "solver_answer": "D",
+      "confidence": "HIGH",
+      "reason": "The phrase “responsible of” is grammatically incorrect; the adjective “responsible” takes the preposition “for.”",
+      "ambiguity_detected": false,
+      "suggested_correction": "responsible for"
+    },
+    {
+      "item_id": "we-v2.1.2-live-T083657Z-003",
+      "section": "Written Expression",
+      "solver_answer": "B",
+      "confidence": "HIGH",
+      "reason": "The singular subject “The sequence” requires the singular verb “reveals,” not “reveal.”",
+      "ambiguity_detected": false,
+      "suggested_correction": "reveal → reveals"
+    }
+  ]
+}

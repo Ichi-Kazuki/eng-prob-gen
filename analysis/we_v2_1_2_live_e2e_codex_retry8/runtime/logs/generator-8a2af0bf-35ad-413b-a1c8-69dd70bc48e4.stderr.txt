@@ -1,0 +1,921 @@
+OpenAI Codex v0.146.0-alpha.3.1
+--------
+workdir: C:\Users\soted\Projects\itp-prob-gen
+model: gpt-5.6-luna
+provider: openai
+approval: on-request
+sandbox: read-only
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a03d70-1fbf-7c71-bee2-bf8007e0ff87
+--------
+user
+AUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the single source of truth; do not invent or copy grammar rules):
+<agent-instructions>
+---
+name: toefl-itp-we-generator-v2
+description: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。
+tools: Read, Write, Glob, Grep, Bash
+version: v2.1.2
+---
+
+# TOEFL ITP Written Expression Generator v2.1.2
+
+このAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。
+
+## Source of truth
+
+生成前に必ず次を読む。
+
+1. `specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md`
+2. `specs/toefl_itp_we_format_spec_addendum.json`
+3. `specs/TOEFL_ITP_GRAMMAR_SPEC.md`
+4. `specs/toefl_itp_grammar_spec.json`
+5. `analysis/GRAMMAR_TAXONOMY.md`
+6. `analysis/grammar_taxonomy.json`
+7. `analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md`
+8. `analysis/we_format/written_expression_format_official.json`
+9. `analysis/validation/VALIDATION_FAILURE_AUDIT.md`
+10. `analysis/pilot/PILOT_FAILURE_ANALYSIS.md`
+11. `agents/toefl_itp_we_generator_v2/scripts/format_planner.py`
+
+Official item本文を模倣・軽い言い換えするために使ってはいけない。Official artifactは分布・構造・format diagnosticsの根拠としてのみ読む。
+
+## Mandatory sentence-first phases
+
+各itemは巨大contextでまとめて実現せず、1 itemまたはsmall microbatchで独立に生成する。生成順序は必ず以下の通り。
+
+### PHASE 1 — Item design plan
+
+本文を書く前に次を決める。
+
+- `primary_target`
+- `subtype`
+- `tested_error_type`
+- `difficulty`
+- `vocabulary_domain`
+- `correction_locality`
+- `decision_granularity`
+- intended error locus (before any A/B/C/D placement)
+- `format_planner.py` が Official artifact から samplingした sentence target/range
+- `format_planner.py` が Official observed counts から samplingした correct-span type
+- sampled gap targets, distractor length profile, and answer-position preference
+- expected span profile / coverage profile / approximate context profile
+
+sentence length と correct-span type は固定値・hand-tuned probabilityではなく、
+`analysis/we_format/written_expression_format_official.json` の observed item/count を
+sourceにした empirical draw とする。小さなbatchへofficial quotaを機械的コピーしない。
+`correct_span_type` は `SINGLE_WORD` を中心にし、`SHORT_PHRASE` と
+`CLAUSE_OR_CLAUSE_LIKE` は Official 比率から少数 samplingする。grammar target上の
+最小自然 locus が sampled type と合わない場合は、grammar validity を優先して
+その locus を維持し、type を強制的に短縮・拡張しない。
+
+### PHASE 2 — Clean sentence first
+
+完全に正しい、natural、academic-styleのsentenceを先に作る。この時点ではmarked partsを作らず、errorも入れない。公式のmedian 20 / mean 20.05 / 16–25 words 97/125という観測を分布として参照し、全itemを20語へ固定しない。
+
+target は Official の実測値から sampling し、plan range を記録する。clean sentence
+realization後に `planned range` と `clean sentence word count` を deterministic に比較する。
+range外なら format-plan conformance failure として item をacceptしない。自然な文を
+最初から作り直し、無意味な副詞・修飾語・paddingで語数を合わせない。
+
+### PHASE 3 — Clean sentence validation
+
+`grammaticality`, `naturalness`, `semantic coherence`, `academic register`, `no accidental grammar error`をself-auditする。どれかに疑義があればそのsentenceは破棄して、clean sentenceから作り直す。
+
+### PHASE 4 — Inject exactly one genuine grammatical error
+
+clean formからerror formへ、標準英語の明確なviolationを一つだけ注入する。semantic oddity、reference ambiguity、connector semantics、tense optionality、lexical preference、style preferenceだけをerrorにしない。変更前は正しく、変更後は明確に誤りで、修正後に文法的になる必要がある。
+
+内部QA metadataに必ず次を保持する。
+
+- `clean_form`
+- `error_form`
+- `minimal_correction`
+- `mutation_type`
+
+### PHASE 5 — Error uniqueness audit
+
+次をすべて確認する。
+
+- genuine error count = exactly 1
+- intended error exists
+- intended repair is valid
+- corrected sentence is grammatical
+- no secondary error
+- alternate parseでも別解にならない
+
+NONE / multiple / marginal / alternate repairが残るitemは破棄して再生成する。
+
+### PHASE 6 — Select four local marked spans
+
+error injection後の完成sentenceからA/B/C/Dを選ぶ。4 spansはsentenceの一部であり、sentence全体を4分割しない。error locusを含むcorrect spanを先に最小local spanとして確定し、1語でdecisionを表せる場合にphrase全体をmarkedしない。残り3つはcorrect span近傍から機械的に取らず、sentence全体からgrammatical-looking local candidatesを列挙して選ぶ。random content word、意味のないboundary、長すぎる全体chunk、隣接contiguous spansを避ける。
+
+選択順序は次で固定する。
+
+1. clean sentenceを完成させる。
+2. intended error locusと、grammar上必要な最小correct spanを確定する。
+3. sentence全体から1–4語のcandidate spansを列挙する。
+4. local-span quality filterで、1語・自然な2語unitを優先する。distractorには
+   `syntactic_coherence` を加え、不完全なlocal cutをsoft penaltyする。correct spanは
+   grammar validityを優先してcoherenceで変更しない。
+5. correct spanと同じphrase内部から複数distractorを取らない。
+6. total marked words、coverage、unmarked context、max span、A–B/B–C/C–D gap、correct-span typeを含む soft geometry scoreで候補組合せを比較する。
+7. Official gap observationsからsampleした targetに近い、zero-gapでない組合せを選び、sentence orderをA/B/C/Dへ写像する。
+
+5+ word spanはnormal planning候補から除外する。grammar上どうしても必要な例外だけを
+明示的 rationale付きで許し、re-smokeではWARNING以上として記録する。これはGrammar
+Specification上の絶対禁止ではなく、v2.1.1 format policyである。
+
+surface word countとsyntactic span typeは別metadataとして保存する。`SINGLE_WORD`, `SHORT_PHRASE`, `CLAUSE_OR_CLAUSE_LIKE`を必要に応じて選ぶ。1語固定、max 2/3語のhard cap、全sentence被覆は採用しない。
+
+### PHASE 7 — WE format diagnostics
+
+`agents/toefl_itp_we_generator_v2/scripts/validate_format.py`を使い、次を機械計算する。
+
+`sentence_word_count`, `span_word_counts.A-D`, `mean_span_length`, `max_span_length`, `marked_coverage_ratio`, `unmarked_word_count`, `gap_A_B`, `gap_B_C`, `gap_C_D`, `correct_span_word_count`, `correct_span_type`, `correction_locality`, `decision_granularity`, `format_distribution_distance`, `format_percentile_profile`, `format_band_status`。
+
+公式分位bandは `agents/toefl_itp_we_generator_v2/config/we_v2_format_config.json` にある。PREFERRED/WARNING/EXTREMEはformat diagnosticsであり、grammar correctnessを上書きしない。100% coverageとunmarked context=0はnormal patternとして禁止するが、coverage 60%以上を絶対grammar rejection thresholdにはしない。
+
+emission前に `format_planner.py` の pre-emission checks を通す。sentence length、4 spanの
+word count、coverage、unmarked context、3 gaps、correct span typeを再計算する。
+planned range外、5+ word normal span、複数zero-gap、100% coverage、overlap/order failureは
+acceptしない。sentence planだけが短い場合は clean sentence generationへ戻し、span setだけ
+で救える場合は grammar locusを固定したまま span reselectionを先に試す。Format band
+thresholdsは変更しない。
+
+### PHASE 8 — Final one-error-only validation
+
+GRAMMAR CHECKとFORMAT CHECKを別々に実行し、`grammar_check_status`と`format_check_status`を保存する。format warningだけを理由にcorrectness判定やcorrect_answerを書き換えない。
+
+## Output
+
+`agents/toefl_itp_we_generator_v2/schema/written_expression_item_v2.schema.json`に従い、次を含む。
+
+- sentence
+- marked_parts A-D
+- correct_answer
+- error explanation
+- minimal correction
+- grammar metadata
+- format metadata / diagnostics
+- provenance telemetry
+- QA mutation record
+
+provenanceで取得できない `prompt_hash`, `invocation_id`, `runtime_model` はnullとし、推測して埋めない。25問以上を一つの巨大生成contextで作らない。
+
+## Prohibited actions
+
+- Structure pipelineの変更
+- WE v1.1 Agent/schema/scriptの変更・削除・上書き
+- shared grammar Generatorの改造
+- Solver / Orchestrator consensus policyの変更
+- Specification / Taxonomy / DB / Websiteの変更
+- DB insert、Website接続、25/40/120問へのscale
+- ReviewerのPASS/REVISE/REJECT判定の代行
+
+## v2.1.2 grammar mutation safety patch
+
+The v2.1.2 change is limited to grammar mutation safety.  All v2.1.1 format
+planning and geometry behavior remains locked.  Before emitting any item, the
+Generator must apply the following mutation gates:
+
+1. Maintain a clean sentence that is grammatical, then inject exactly one
+   morphosyntactic defect.  Meaning change, semantic oddity, discourse
+   ambiguity, or stylistic preference is never sufficient.
+2. Quarantine the old noun-phrase-to-pronoun substitution family
+   (`the noun phrase -> it/he/she/they`) unless the error is formally
+   defensible by number/person disagreement, determiner or demonstrative form,
+   or an invalid antecedent relation.  Multiple nearby nouns are not evidence.
+3. Reject semantic-only degree substitutions, including
+   `sufficiently X -> too X` and `enough X -> too X`.  Degree mutations require
+   a morphosyntactic trigger, such as `more reliable than -> most reliable than`
+   or invalid comparative morphology.
+4. Treat base-form-to-`-ing` parallel mutations as guarded templates.  Reject
+   the mutation if the `-ing` phrase can be read as a supplementary or
+   adverbial participial clause, or as a reduced modifier.  Use it only when
+   coordination structurally forces the mutated element to match the other
+   conjuncts.
+5. After every mutation, require: grammatical clean form; genuinely
+   ungrammatical error form; exactly one grammatical defect; defect inside the
+   declared span; minimal repair; no plausible alternate parse; and a defect
+   that is grammatical rather than semantic/pragmatic.  If any gate is
+   uncertain, reject and regenerate.
+6. Cross-check `clean_form`, `error_form`, `mutation_type`,
+   `minimal_correction`, and `answer_explanation` against the same local
+   mutation.  Direction and lexical forms must agree; stale or contradictory
+   metadata is a hard failure.
+
+The deterministic companion implementation is
+`agents/toefl_itp_we_generator_v2/scripts/mutation_safety.py`.  It classifies
+targeted families as `SAFE`, `NEEDS_GUARD`, or `QUARANTINE` and remains
+independent of the format planner and geometry validator.
+
+## v2.1.2 scope boundary
+
+The v2.1.1 format planner and geometry policy remain locked.  The only new
+runtime surface in v2.1.2 is grammar mutation safety and its deterministic
+metadata audit; the JSON Schema/output-field contract remains unchanged.
+The preserved v2.1.1 format-lock phrase is `grammar generation logic unchanged, format planner + span-selection policy only`.
+
+</agent-instructions>
+
+RUNTIME INVOCATION CONSTRAINTS:
+The final response for this invocation MUST be exactly one JSON object matching the supplied output schema. Do not return analysis, phase notes, prose, markdown fences, an items wrapper, or any extra keys. The caller will reject non-contract output.
+
+TASK-SPECIFIC INVOCATION:
+LIVE GENERATOR INVOCATION.
+
+Follow the authoritative Generator instruction supplied by the runtime. Do
+not copy an existing fixture and do not write files. Produce exactly one fresh
+Written Expression Part B item for the frozen v2.1.2 contract. The item_id
+must be exactly "we-v2.1.2-live-T091038Z-010"; this is microbatch item 10 in batch
+"we-v2.1.2-live-e2e-20260826T091038Z". Return one JSON object only, matching the supplied
+canonical Generator schema; do not use markdown or an items wrapper. Keep all
+field names, enum values, nested shapes, sentence-first phases, format rules,
+and mutation-safety rules from the authoritative instruction and schema.
+
+warning: Skill descriptions were shortened to fit the 2% skills context budget. Codex can still see every skill, but some descriptions are shorter. Disable unused skills or plugins to leave more room for the rest.
+codex
+{"item_id":"we-v2.1.2-live-T091038Z-010","section":"Written Expression","agent_version":"Written Expression Generator v2.1","primary_target":"parallelism","subtype":"coordinated verb forms","secondary_features":["subject-verb agreement","academic register"],"tested_error_type":"nonparallel verb form in a coordinated series","difficulty":"MEDIUM","vocabulary_domain":"environmental policy","sentence":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.","marked_parts":{"A":"The regional plan","B":"requires factories","C":"improve filtration systems","D":"monitoring water quality"},"correct_answer":"D","error_explanation":"The coordinated verbs after “to reduce” and “improve” must remain in the base form; “monitoring” is an -ing form and breaks the required parallel structure.","minimal_correction":"Change “monitoring” to “monitor.”","grammar_metadata":{"error_scope":"clause_level","correction_locality":"LOCAL_SINGLE_TOKEN","decision_granularity":"WORD_ORDER","intended_error_position":"D","correct_span_type":"SINGLE_WORD"},"format_metadata":{"target_sentence_length_region":"16–25 words (sampled official observed region)","expected_span_profile":"Four local spans, predominantly single words, with partial sentence coverage","coverage_profile":"Moderate partial coverage with unmarked context","approximate_context_profile":"Academic sentence with coordinated infinitival complements","span_types":{"A":"SHORT_PHRASE","B":"SHORT_PHRASE","C":"SHORT_PHRASE","D":"SINGLE_WORD"},"diagnostics":{"sentence_word_count":22,"span_word_counts":{"A":4,"B":2,"C":3,"D":4},"mean_span_length":3.25,"max_span_length":4,"marked_coverage_ratio":0.5909090909090909,"unmarked_word_count":9,"gap_A_B":0,"gap_B_C":2,"gap_C_D":1,"correct_span_word_count":4,"correct_span_type":"SINGLE_WORD","correction_locality":"LOCAL_SINGLE_TOKEN","decision_granularity":"WORD_ORDER","format_distribution_distance":0.0,"format_percentile_profile":{},"format_band_status":"WARNING","metric_band_status":{ },"span_token_indices":{"A":[0,1,2,3],"B":[4,5],"C":[8,9,10],"D":[12,13,14,15]}}},"provenance":{"agent_version":"Written Expression Generator v2.1","prompt_hash":null,"spec_version":"toefl_itp_we_generator_v2.1.2","format_spec_version":"we_v2.1.1_format_locked","generation_batch_id":"we-v2.1.2-live-e2e-20260826T091038Z","microbatch_id":"live-microbatch-010","item_generation_order":10,"invocation_id":null,"runtime_model":null},"qa_metadata":{"clean_form":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitor water quality near industrial sites.","error_form":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.","minimal_correction":"Change “monitoring” to “monitor.”","mutation_type":"base-form-to-ing parallel mutation","clean_sentence_validated":true,"grammar_check_status":"PASS","format_check_status":"WARN"}}
+codex
+{"item_id":"we-v2.1.2-live-T091038Z-010","section":"Written Expression","agent_version":"Written Expression Generator v2.1","primary_target":"parallelism","subtype":"coordinated verb forms","secondary_features":["subject-verb agreement","academic register"],"tested_error_type":"nonparallel verb form in a coordinated series","difficulty":"MEDIUM","vocabulary_domain":"environmental policy","sentence":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.","marked_parts":{"A":"The regional plan","B":"requires factories","C":"improve filtration systems","D":"monitoring water quality"},"correct_answer":"D","error_explanation":"The coordinated verbs after “to reduce” and “improve” must remain in the base form; “monitoring” is an -ing form and breaks the required parallel structure.","minimal_correction":"Change “monitoring” to “monitor.”","grammar_metadata":{"error_scope":"clause_level","correction_locality":"LOCAL_SINGLE_TOKEN","decision_granularity":"VERB_FRAME","intended_error_position":"D","correct_span_type":"SINGLE_WORD"},"format_metadata":{"target_sentence_length_region":"16–25 words (sampled official observed region)","expected_span_profile":"Four local spans, predominantly single words, with partial sentence coverage","coverage_profile":"Moderate partial coverage with unmarked context","approximate_context_profile":"Academic sentence with coordinated infinitival complements","span_types":{"A":"SHORT_PHRASE","B":"SHORT_PHRASE","C":"SHORT_PHRASE","D":"SHORT_PHRASE"},"diagnostics":{"sentence_word_count":22,"span_word_counts":{"A":4,"B":2,"C":3,"D":3},"mean_span_length":3,"max_span_length":4,"marked_coverage_ratio":0.5454545454545454,"unmarked_word_count":10,"gap_A_B":0,"gap_B_C":2,"gap_C_D":1,"correct_span_word_count":3,"correct_span_type":"SHORT_PHRASE","correction_locality":"LOCAL_SINGLE_TOKEN","decision_granularity":"VERB_FRAME","format_distribution_distance":0.0,"format_percentile_profile":{},"format_band_status":"WARNING","metric_band_status":{},"span_token_indices":{"A":[0,1,2,3],"B":[4,5],"C":[8,9,10],"D":[12,13,14]}}},"provenance":{"agent_version":"Written Expression Generator v2.1","prompt_hash":null,"spec_version":"toefl_itp_we_generator_v2.1.2","format_spec_version":"we_v2.1.1_format_locked","generation_batch_id":"we-v2.1.2-live-e2e-20260826T091038Z","microbatch_id":"live-microbatch-010","item_generation_order":10,"invocation_id":null,"runtime_model":null},"qa_metadata":{"clean_form":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitor water quality near industrial sites.","error_form":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.","minimal_correction":"Change “monitoring” to “monitor.”","mutation_type":"base-form-to-ing parallel mutation","clean_sentence_validated":true,"grammar_check_status":"PASS","format_check_status":"WARN"}}
+codex
+{"item_id":"we-v2.1.2-live-T091038Z-010","section":"Written Expression","agent_version":"Written Expression Generator v2.1","primary_target":"parallelism","subtype":"coordinated verb forms","secondary_features":["academic register","infinitival complementation"],"tested_error_type":"nonparallel verb form in a coordinated series","difficulty":"MEDIUM","vocabulary_domain":"environmental policy","sentence":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.","marked_parts":{"A":"The regional plan","B":"requires factories","C":"improve filtration systems","D":"monitoring"},"correct_answer":"D","error_explanation":"The three coordinated verbs following “to” must use parallel base forms: “reduce,” “improve,” and “monitor.” The -ing form “monitoring” is grammatically incorrect here.","minimal_correction":"Change “monitoring” to “monitor.”","grammar_metadata":{"error_scope":"clause_level","correction_locality":"LOCAL_SINGLE_TOKEN","decision_granularity":"AGREEMENT_DEPENDENCY","intended_error_position":"D","correct_span_type":"SINGLE_WORD"},"format_metadata":{"target_sentence_length_region":"16–25 words (sampled official observed region)","expected_span_profile":"Four local spans with local phrase distractors and one single-word error span","coverage_profile":"Moderate partial coverage with unmarked context","approximate_context_profile":"Academic sentence with coordinated infinitival complements","span_types":{"A":"SHORT_PHRASE","B":"SHORT_PHRASE","C":"SHORT_PHRASE","D":"SINGLE_WORD"},"diagnostics":{"sentence_word_count":18,"span_word_counts":{"A":3,"B":2,"C":3,"D":1},"mean_span_length":2.25,"max_span_length":3,"marked_coverage_ratio":0.5,"unmarked_word_count":9,"gap_A_B":0,"gap_B_C":1,"gap_C_D":0,"correct_span_word_count":1,"correct_span_type":"SINGLE_WORD","correction_locality":"LOCAL_SINGLE_TOKEN","decision_granularity":"AGREEMENT_DEPENDENCY","format_distribution_distance":0.0,"format_percentile_profile":{},"format_band_status":"PREFERRED","metric_band_status":{},"span_token_indices":{"A":[0,1,2],"B":[3,4],"C":[8,9,10],"D":[12]}}},"provenance":{"agent_version":"Written Expression Generator v2.1","prompt_hash":null,"spec_version":"toefl_itp_we_generator_v2.1.2","format_spec_version":"we_v2.1.1_format_locked","generation_batch_id":"we-v2.1.2-live-e2e-20260826T091038Z","microbatch_id":"live-microbatch-010","item_generation_order":10,"invocation_id":null,"runtime_model":null},"qa_metadata":{"clean_form":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitor water quality near industrial sites.","error_form":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.","minimal_correction":"Change “monitoring” to “monitor.”","mutation_type":"base-form-to-ing parallel mutation","clean_sentence_validated":true,"grammar_check_status":"PASS","format_check_status":"PASS"}}
+codex
+{"item_id":"we-v2.1.2-live-T091038Z-010","section":"Written Expression","agent_version":"Written Expression Generator v2.1","primary_target":"parallelism","subtype":"coordinated verb forms","secondary_features":["academic register","infinitival complementation"],"tested_error_type":"nonparallel verb form in a coordinated series","difficulty":"MEDIUM","vocabulary_domain":"environmental policy","sentence":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.","marked_parts":{"A":"The regional plan","B":"requires factories","C":"improve filtration systems","D":"monitoring"},"correct_answer":"D","error_explanation":"The three coordinated verbs following “to” must use parallel base forms: “reduce,” “improve,” and “monitor.” The -ing form “monitoring” is grammatically incorrect here.","minimal_correction":"Change “monitoring” to “monitor.”","grammar_metadata":{"error_scope":"clause_level","correction_locality":"LOCAL_SINGLE_TOKEN","decision_granularity":"VERB_FRAME","intended_error_position":"D","correct_span_type":"SINGLE_WORD"},"format_metadata":{"target_sentence_length_region":"16–25 words (sampled official observed region)","expected_span_profile":"Four local spans with local phrase distractors and one single-word error span","coverage_profile":"Moderate partial coverage with unmarked context","approximate_context_profile":"Academic sentence with coordinated infinitival complements","span_types":{"A":"SHORT_PHRASE","B":"SHORT_PHRASE","C":"SHORT_PHRASE","D":"SINGLE_WORD"},"diagnostics":{"sentence_word_count":18,"span_word_counts":{"A":3,"B":2,"C":3,"D":1},"mean_span_length":2.25,"max_span_length":3,"marked_coverage_ratio":0.5,"unmarked_word_count":9,"gap_A_B":0,"gap_B_C":3,"gap_C_D":1,"correct_span_word_count":1,"correct_span_type":"SINGLE_WORD","correction_locality":"LOCAL_SINGLE_TOKEN","decision_granularity":"VERB_FRAME","format_distribution_distance":0.0,"format_percentile_profile":{},"format_band_status":"PREFERRED","metric_band_status":{},"span_token_indices":{"A":[0,1,2],"B":[3,4],"C":[8,9,10],"D":[12]}}},"provenance":{"agent_version":"Written Expression Generator v2.1","prompt_hash":null,"spec_version":"toefl_itp_we_generator_v2.1.2","format_spec_version":"we_v2.1.1_format_locked","generation_batch_id":"we-v2.1.2-live-e2e-20260826T091038Z","microbatch_id":"live-microbatch-010","item_generation_order":10,"invocation_id":null,"runtime_model":null},"qa_metadata":{"clean_form":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitor water quality near industrial sites.","error_form":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.","minimal_correction":"Change “monitoring” to “monitor.”","mutation_type":"base-form-to-ing parallel mutation","clean_sentence_validated":true,"grammar_check_status":"PASS","format_check_status":"PASS"}}
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$files = @('"'specs/TOEFL_ITP_WE_FORMAT_SPEC_ADDENDUM.md','specs/toefl_itp_we_format_spec_addendum.json','specs/TOEFL_ITP_GRAMMAR_SPEC.md','specs/toefl_itp_grammar_spec.json','analysis/GRAMMAR_TAXONOMY.md','analysis/grammar_taxonomy.json','analysis/we_format/WE_FORMAT_ANALYSIS_REPORT.md','analysis/we_format/written_expression_format_official.json','analysis/validation/VALIDATION_FAILURE_AUDIT.md','analysis/pilot/PILOT_FAILURE_ANALYSIS.md','agents/toefl_itp_we_generator_v2/scripts/format_planner.py'); foreach ("'$f in $files) { if (-not (Test-Path -LiteralPath $f)) { throw "Missing $f" }; $null = Get-Content -LiteralPath $f -Raw }; Write-Output '"'SOURCE_FILES_READ'" in C:\Users\soted\Projects\itp-prob-gen
+ succeeded in 1730ms:
+SOURCE_FILES_READ
+
+2026-08-26T09:40:27.212518Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `base_instructions` at line 97 column 5
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-Content -LiteralPath agents/toefl_itp_we_generator_v2/scripts/format_planner.py -TotalCount 220; Get-Content -LiteralPath agents/toefl_itp_we_generator_v2/scripts/validate_format.py -TotalCount 220; Get-Content -LiteralPath agents/toefl_itp_we_generator_v2/scripts/mutation_safety.py -TotalCount 220' in C:\Users\soted\Projects\itp-prob-gen
+ succeeded in 1508ms:
+"""WE v2.1.1 format planning and span-selection policy.
+
+This module owns only the format layer.  It does not generate prose, mutate
+grammar, or decide whether an error is valid.  The official 125-item artifact
+is read as the empirical source on every planning call; probabilities are
+therefore derived from observed counts rather than copied from hand-tuned
+constants.
+"""
+
+from __future__ import annotations
+
+import itertools
+import copy
+import json
+import math
+import random
+import re
+import sys
+from collections import Counter
+from dataclasses import dataclass
+from functools import lru_cache
+from pathlib import Path
+from typing import Any, Iterable, Sequence
+
+
+ROOT = Path(__file__).resolve().parents[3]
+OFFICIAL_SOURCE = ROOT / "analysis" / "we_format" / "written_expression_format_official.json"
+sys.path.insert(0, str(ROOT))
+
+from shared.tokenization import (  # noqa: E402
+    LEXICAL_TOKEN_RE,
+    lexical_token_matches,
+    lexical_token_spans,
+)
+
+
+TOKEN_RE = LEXICAL_TOKEN_RE
+LABELS = ("A", "B", "C", "D")
+SPAN_TYPES = {"SINGLE_WORD", "SHORT_PHRASE", "CLAUSE_OR_CLAUSE_LIKE"}
+NORMAL_MAX_SPAN_WORDS = 4
+CLAUSE_MARKERS = {
+    "although", "because", "if", "since", "that", "though", "unless",
+    "until", "when", "where", "while", "which", "who", "whom", "whose",
+}
+BOUNDARY_WORDS = {"and", "or", "but", "nor", "of", "to", "for", "in", "on", "at", "by", "with"}
+DETERMINERS = {
+    "a", "an", "the", "this", "that", "these", "those", "each", "every",
+    "either", "neither", "some", "any", "no", "another", "both", "many",
+    "much", "few", "several", "all", "enough", "one", "two", "three", "four",
+    "five", "my", "your", "his", "her", "its", "our", "their",
+}
+PREPOSITIONS = {
+    "about", "above", "across", "after", "against", "along", "among", "around",
+    "at", "before", "behind", "below", "beneath", "beside", "between", "beyond",
+    "by", "despite", "during", "except", "for", "from", "in", "inside", "into",
+    "near", "of", "off", "on", "onto", "over", "per", "since", "through",
+    "throughout", "to", "toward", "under", "until", "up", "upon", "via", "with",
+    "within", "without",
+}
+AUXILIARIES = {
+    "am", "are", "be", "been", "being", "can", "could", "did", "do", "does",
+    "had", "has", "have", "is", "may", "might", "must", "shall", "should", "was",
+    "were", "will", "would",
+}
+CONJUNCTIONS = {"and", "or", "but", "nor", "yet", "so"}
+COMMON_ADVERBS = {
+    "already", "always", "carefully", "clearly", "early", "earlier", "especially", "even",
+    "ever", "often", "only", "quite", "rather", "recently", "seldom", "simply",
+    "still", "then", "there", "together", "usually", "very", "well", "later",
+}
+COMMON_ADJECTIVES = {
+    "ancient", "annual", "available", "coastal", "chemical", "careful", "current",
+    "detailed", "different", "direct", "early", "every", "extended", "familiar",
+    "fragile", "gradual", "high", "independent", "intense", "local", "long-term", "mechanical",
+    "mechanized", "natural", "northern", "regional", "remote", "revised", "scarce",
+    "seasonal", "several", "similar", "small", "steep", "stellar", "structural",
+    "terraced", "unusual", "unstable", "warm", "wet", "following", "first", "next",
+    "neighboring", "public", "latest", "monthly", "subtle",
+}
+COMMON_VERBS = {
+    "adopt", "adopted", "altered", "approved", "compare", "compared", "contains",
+    "clarify", "changes", "detect", "developed", "determined", "examines", "expect",
+    "find", "found", "gathered", "identifies", "include", "includes", "increases",
+    "limit", "limits", "measure", "measures", "monitor", "observed", "opens",
+    "preserves", "plans", "produce", "produced", "reaches", "records", "reduce",
+    "reduced", "repeated", "require", "requires", "restore", "reviewed", "shows",
+    "studying", "tested", "tests", "transport", "withstand", "were", "was",
+}
+
+
+@dataclass(frozen=True)
+class SentenceLengthPlan:
+    target: int
+    lower: int
+    upper: int
+    source: str = "official.items[].sentence_word_count"
+
+    @property
+    def region(self) -> str:
+        if self.target <= 10:
+            return "<=10"
+        if self.target <= 15:
+            return "11-15"
+        if self.target <= 20:
+            return "16-20"
+        if self.target <= 25:
+            return "21-25"
+        if self.target <= 30:
+            return "26-30"
+        return "31+"
+
+    def contains(self, realized_word_count: int) -> bool:
+        return self.lower <= realized_word_count <= self.upper
+
+
+@dataclass(frozen=True)
+class CorrectSpanPlan:
+    span_type: str
+    target_word_count: int
+    source: str = "official.items[].correct_span_type / correct_span_word_count"
+
+
+@dataclass(frozen=True)
+class FormatPlan:
+    sentence: SentenceLengthPlan
+    correct_span: CorrectSpanPlan
+    gap_targets: dict[str, int]
+    distractor_word_counts: tuple[int, int, int]
+    answer_position: str
+
+
+@dataclass(frozen=True)
+class SpanCandidate:
+    start: int
+    end: int
+    text: str
+    word_count: int
+    span_type: str
+    lexical_quality: float = 0.0
+    syntactic_coherence: float = 0.0
+
+    @property
+    def is_single_word(self) -> bool:
+        return self.word_count == 1
+
+
+@dataclass(frozen=True)
+class SpanSelection:
+    spans: tuple[SpanCandidate, ...]
+    correct_index: int
+    correct_answer: str
+    score: float
+    candidate_scope: str = "whole_sentence"
+
+    @property
+    def gaps(self) -> tuple[int, int, int]:
+        return tuple(
+            self.spans[index + 1].start - self.spans[index].end
+            for index in range(3)
+        )
+
+
+class SpanSelectionError(ValueError):
+    """Raised when a safe four-span set cannot be selected."""
+
+
+def _read_official(source: Path) -> dict[str, Any]:
+    return json.loads(source.read_text(encoding="utf-8"))
+
+
+@lru_cache(maxsize=4)
+def official_profile(source_text: str = str(OFFICIAL_SOURCE)) -> dict[str, Any]:
+    """Derive all sampling observations from the official artifact."""
+
+    source = Path(source_text)
+    data = _read_official(source)
+    items = data.get("items")
+    if not isinstance(items, list) or not items:
+        raise ValueError("official format source must contain a non-empty items array")
+
+    sentence_values = [int(item["sentence_word_count"]) for item in items]
+    correct_types = [str(item["correct_span_type"]) for item in items]
+    correct_lengths = [int(item["correct_span_word_count"]) for item in items]
+    correct_positions = [str(item["correct_answer"]) for item in items]
+    gap_values = {
+        key: [int(item[key]) for item in items]
+        for key in ("gap_A_B", "gap_B_C", "gap_C_D")
+    }
+    span_values = [
+        int(span["word_count"])
+        for item in items
+        for span in item.get("marked_spans", [])
+    ]
+    type_to_lengths: dict[str, list[int]] = {name: [] for name in SPAN_TYPES}
+    for span_type, length in zip(correct_types, correct_lengths):
+        if span_type not in SPAN_TYPES:
+            raise ValueError(f"unexpected official correct span type: {span_type}")
+        type_to_lengths[span_type].append(length)
+
+    return {
+        "source": str(source),
+        "sentence_values": sentence_values,
+        "correct_types": correct_types,
+        "correct_lengths": correct_lengths,
+        "correct_positions": correct_positions,
+        "gap_values": gap_values,
+        "span_values": span_values,
+        "counts": {
+            "sentence_word_count": dict(Counter(sentence_values)),
+            "correct_span_type": dict(Counter(correct_types)),
+            "correct_span_word_count": dict(Counter(correct_lengths)),
+            "correct_answer": dict(Counter(correct_positions)),
+            "span_word_count": dict(Counter(span_values)),
+            "gap_A_B": dict(Counter(gap_values["gap_A_B"])),
+            "gap_B_C": dict(Counter(gap_values["gap_B_C"])),
+            "gap_C_D": dict(Counter(gap_values["gap_C_D"])),
+        },
+        "correct_lengths_by_type": type_to_lengths,
+        "item_geometry": [
+            {
+#!/usr/bin/env python3
+"""Deterministic geometry and contract validator for TOEFL ITP WE v2.
+
+This tool deliberately does not pretend to decide whether an English sentence
+has a genuine grammatical error. That is the independent Reviewer phase. It
+does mechanically validate tokenization, span alignment, non-overlap, four
+spans, coverage, context, gaps, and empirical format diagnostics.
+
+Usage:
+    python validate_format.py path/to/items.json
+    python validate_format.py path/to/items.json --report path/to/report.json
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import sys
+from functools import lru_cache
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[3]
+CONFIG_PATH = ROOT / "agents" / "toefl_itp_we_generator_v2" / "config" / "we_v2_format_config.json"
+GRAMMAR_SPEC_PATH = ROOT / "specs" / "toefl_itp_grammar_spec.json"
+TAXONOMY_PATH = ROOT / "analysis" / "grammar_taxonomy.json"
+sys.path.insert(0, str(ROOT))
+
+from shared.tokenization import (  # noqa: E402
+    LEXICAL_TOKEN_RE,
+    lexical_token_matches,
+    lexical_token_spans,
+)
+
+
+TOKEN_RE = LEXICAL_TOKEN_RE
+LABELS = ("A", "B", "C", "D")
+SPAN_TYPES = {"SINGLE_WORD", "SHORT_PHRASE", "CLAUSE_OR_CLAUSE_LIKE"}
+ERROR_SCOPES = {"local", "clause_level", "sentence_level", "cross_clause"}
+CORRECTION_LOCALITIES = {"DEPENDENCY_BASED", "LOCAL_SHORT_SPAN", "SEMANTIC_OR_CONTEXT_DEPENDENT", "LOCAL_SINGLE_TOKEN", "CLAUSE_LEVEL"}
+DECISION_GRANULARITIES = {"FUNCTION_WORD", "WORD_ORDER", "CLAUSE_RELATION", "VERB_FRAME", "OTHER", "MORPHOLOGY", "WORD_CLASS", "AGREEMENT_DEPENDENCY", "LOCAL_PHRASE"}
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_items(path: Path) -> list[dict[str, Any]]:
+    data = load_json(path)
+    if isinstance(data, dict) and isinstance(data.get("items"), list):
+        return data["items"]
+    if isinstance(data, list):
+        return data
+    if isinstance(data, dict):
+        return [data]
+    raise ValueError("top-level JSON must be an item array or an object with items")
+
+
+def tokens(text: str) -> list[dict[str, Any]]:
+    return [
+        {"text": m.group(0), "start": m.start(), "end": m.end(), "index": i}
+        for i, m in enumerate(lexical_token_matches(text))
+    ]
+
+
+def span_token_indices(sentence: str, span: str) -> tuple[list[int], list[str]]:
+    occurrences = lexical_token_spans(sentence, span)
+    if not occurrences:
+        return [], ["span is not an exact lexical-token sequence in sentence"]
+    if len(occurrences) > 1:
+        return [], ["span occurs more than once; alignment is not unique"]
+
+    sentence_tokens = tokens(sentence)
+    start_index, end_index = occurrences[0]
+    selected = sentence_tokens[start_index:end_index]
+    errors: list[str] = []
+    if not selected:
+        errors.append("span contains no lexical token")
+        return [], errors
+    start_char = selected[0]["start"]
+    end_char = selected[-1]["end"]
+    if sentence[start_char:end_char].casefold() != span.casefold():
+        errors.append("span cuts through a lexical token or has unaligned boundary")
+    expected = list(range(selected[0]["index"], selected[-1]["index"] + 1))
+    actual = [t["index"] for t in selected]
+    if actual != expected:
+        errors.append("span token indices are not contiguous")
+    return actual, errors
+
+
+def nearest_rank_percentile(value: float, sample: list[float]) -> float:
+    if not sample:
+        return 0.0
+    # Empirical CDF percentile, with a deterministic mid-rank for ties.
+    lower = sum(x < value for x in sample)
+    equal = sum(x == value for x in sample)
+    return (lower + 0.5 * equal) / len(sample)
+
+
+def band(value: float, threshold: dict[str, float]) -> str:
+    if value < threshold["q05"] or value > threshold["q95"]:
+        return "EXTREME"
+    if value < threshold["q10"] or value > threshold["q90"]:
+        return "WARNING"
+    return "PREFERRED"
+
+
+def worst_band(bands: list[str]) -> str:
+    rank = {"PREFERRED": 0, "WARNING": 1, "EXTREME": 2}
+    return max(bands, key=lambda item: rank[item]) if bands else "EXTREME"
+
+
+@lru_cache(maxsize=1)
+def official_format_data() -> dict[str, Any]:
+    official_path = ROOT / "analysis" / "we_format" / "written_expression_format_official.json"
+    return load_json(official_path)
+
+
+@lru_cache(maxsize=1)
+def official_item_samples() -> dict[str, list[float]]:
+    items = official_format_data()["items"]
+    return {
+        "sentence_word_count": [x["sentence_word_count"] for x in items],
+        "marked_coverage_ratio": [x["marked_coverage_ratio"] for x in items],
+        "unmarked_word_count": [x["unmarked_word_count"] for x in items],
+        "mean_span_length": [x["mean_marked_span_length"] for x in items],
+        "max_span_length": [x["max_marked_span_length"] for x in items],
+        "gap_A_B": [x["gap_A_B"] for x in items],
+        "gap_B_C": [x["gap_B_C"] for x in items],
+        "gap_C_D": [x["gap_C_D"] for x in items],
+    }
+
+
+def format_diagnostics(item: dict[str, Any], config: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
+    errors: list[str] = []
+    sentence = item.get("sentence")
+    if not isinstance(sentence, str):
+        return {}, ["sentence must be a string"]
+    sentence_tokens = tokens(sentence)
+    parts = item.get("marked_parts")
+    if not isinstance(parts, dict) or set(parts) != set(LABELS):
+        return {}, ["marked_parts must have exactly A/B/C/D"]
+    if any(not isinstance(parts[label], str) for label in LABELS):
+        return {}, ["marked_parts.A/B/C/D must all be strings"]
+
+    indices: dict[str, list[int]] = {}
+    span_errors: dict[str, list[str]] = {}
+    for label in LABELS:
+        idx, idx_errors = span_token_indices(sentence, parts[label])
+        indices[label] = idx
+        span_errors[label] = idx_errors
+        errors.extend(f"{label}: {message}" for message in idx_errors)
+
+    starts = [indices[label][0] for label in LABELS if indices[label]]
+    ends = [indices[label][-1] for label in LABELS if indices[label]]
+    if len(starts) == 4 and starts != sorted(starts):
+        errors.append("marked spans are not in sentence order A-B-C-D")
+    for before, after in zip(LABELS, LABELS[1:]):
+        if indices[before] and indices[after] and indices[before][-1] >= indices[after][0]:
+            errors.append(f"span overlap or reversed order: {before}/{after}")
+
+    counts = {label: len(indices[label]) for label in LABELS}
+    if any(count < 1 for count in counts.values()):
+        errors.append("all four spans must contain at least one lexical token")
+    marked_count = sum(counts.values())
+    sentence_count = len(sentence_tokens)
+    coverage = (marked_count / sentence_count) if sentence_count else 1.0
+    unmarked = sentence_count - marked_count
+    gaps = {
+        "gap_A_B": indices["B"][0] - indices["A"][-1] - 1 if indices["A"] and indices["B"] else -1,
+        "gap_B_C": indices["C"][0] - indices["B"][-1] - 1 if indices["B"] and indices["C"] else -1,
+        "gap_C_D": indices["D"][0] - indices["C"][-1] - 1 if indices["C"] and indices["D"] else -1,
+    }
+    if any(value < 0 for value in gaps.values()):
+        errors.append("gap cannot be computed because a span is not aligned")
+
+    mean_length = marked_count / 4 if marked_count else 0.0
+    max_length = max(counts.values()) if counts else 0
+    grammar = item.get("grammar_metadata", {})
+    if not isinstance(grammar, dict):
+        return {}, ["grammar_metadata must be an object"]
+    correct = item.get("correct_answer")
+    correct_count = counts.get(correct, 0)
+    format_metadata = item.get("format_metadata", {})
+    if not isinstance(format_metadata, dict):
+        return {}, ["format_metadata must be an object"]
+    declared_types = format_metadata.get("span_types", {})
+    if not isinstance(declared_types, dict):
+        return {}, ["format_metadata.span_types must be an object"]
+    for label in LABELS:
+        declared = declared_types.get(label)
+        count = counts[label]
+        if declared not in SPAN_TYPES:
+            errors.append(f"span_types.{label} is missing or invalid")
+        elif declared == "SINGLE_WORD" and count != 1:
+            errors.append(f"span_types.{label}=SINGLE_WORD but word count is {count}")
+        elif declared == "SHORT_PHRASE" and not 2 <= count <= 4:
+            errors.append(f"span_types.{label}=SHORT_PHRASE but word count is {count}")
+        elif declared == "CLAUSE_OR_CLAUSE_LIKE" and count < 2:
+            errors.append(f"span_types.{label}=CLAUSE_OR_CLAUSE_LIKE needs at least 2 tokens")
+
+    if correct in LABELS:
+        declared_correct_type = declared_types.get(correct)
+        grammar_correct_type = grammar.get("correct_span_type")
+        if declared_correct_type in SPAN_TYPES and grammar_correct_type != declared_correct_type:
+            errors.append(
+                "grammar_metadata.correct_span_type must match "
+                f"format_metadata.span_types.{correct}"
+            )
+
+    samples = official_item_samples()
+    metric_values = {
+        "sentence_word_count": sentence_count,
+        "marked_coverage_ratio": coverage,
+        "unmarked_word_count": unmarked,
+        "mean_span_length": mean_length,
+        "max_span_length": max_length,
+    }
+"""Fail-closed safety checks for Written Expression grammar mutations.
+
+This module deliberately does not decide format geometry, span selection, or
+Reviewer/Solver routing.  It protects the mutation boundary only:
+
+* known unsafe template families are quarantined or guarded;
+* the clean -> error surface edit remains local to the declared span;
+* mutation metadata describes the same lexical change as the item; and
+* an external grammar runtime can attach the strong one-error invariant.
+
+The local checks are intentionally conservative.  They are not a replacement
+for a grammar-capable Generator/Reviewer runtime.  When external grammar
+evidence is absent, ``grammar_evidence_status`` is
+``REQUIRES_EXTERNAL_REVIEW`` rather than silently claiming a grammaticality
+judgement.
+"""
+
+from __future__ import annotations
+
+import re
+import sys
+from collections import Counter
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from difflib import SequenceMatcher
+from enum import Enum
+from pathlib import Path
+from typing import Any, Iterable, Mapping
+
+
+try:
+    from shared.tokenization import lexical_token_matches, lexical_token_spans, lexical_tokens
+except ModuleNotFoundError:  # pragma: no cover - supports direct CLI execution
+    sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
+    from shared.tokenization import lexical_token_matches, lexical_token_spans, lexical_tokens
+
+
+LABELS = ("A", "B", "C", "D")
+PRONOUNS = {"it", "he", "she", "they", "him", "her", "them", "its", "their"}
+REFERENCE_FEATURES: dict[str, tuple[str, str]] = {
+    # value: (number, person)
+    "i": ("singular", "first"),
+    "me": ("singular", "first"),
+    "we": ("plural", "first"),
+    "us": ("plural", "first"),
+    "you": ("ambiguous", "second"),
+    "he": ("singular", "third"),
+    "him": ("singular", "third"),
+    "she": ("singular", "third"),
+    "her": ("singular", "third"),
+    "it": ("singular", "third"),
+    "they": ("plural", "third"),
+    "them": ("plural", "third"),
+    # Possessive determiners/pronouns participate in the same objective
+    # number/person agreement checks as their corresponding personal forms.
+    "my": ("singular", "first"),
+    "our": ("plural", "first"),
+    "your": ("ambiguous", "second"),
+    "his": ("singular", "third"),
+    "its": ("singular", "third"),
+    "their": ("plural", "third"),
+    "mine": ("singular", "first"),
+    "ours": ("plural", "first"),
+    "yours": ("ambiguous", "second"),
+    "hers": ("singular", "third"),
+    "theirs": ("plural", "third"),
+    "this": ("singular", "third"),
+    "that": ("singular", "third"),
+    "these": ("plural", "third"),
+    "those": ("plural", "third"),
+}
+REFERENCE_DETERMINERS: dict[str, str] = {
+    "a": "singular", "an": "singular", "each": "singular", "every": "singular",
+    "either": "singular", "neither": "singular", "many": "plural", "few": "plural",
+    "several": "plural", "both": "plural", "much": "mass", "little": "mass",
+}
+REFERENCE_FUNCTION_WORDS = {
+    "a", "an", "the", "this", "that", "these", "those", "each", "every",
+    "either", "neither", "many", "few", "several", "both", "much", "little",
+    "of", "after", "before", "during", "from", "in", "on", "to", "with",
+    "and", "or", "but", "if", "because", "when", "while", "as", "than",
+    "is", "are", "was", "were", "be", "been", "being", "do", "does", "did",
+    "has", "have", "had", "will", "can", "may", "must", "should", "could",
+    "would", "might", "not", "very", "more", "most",
+    "my", "our", "your", "his", "its", "their", "mine", "ours", "yours", "hers", "theirs",
+}
+FINITE_VERB_FORMS = {
+    # Lexical finite verbs that do not carry the regular -ed/-ing signal and
+    # would otherwise look like singular noun heads during antecedent scans.
+    "arise", "arose", "become", "became", "begin", "began", "bring", "brought",
+    "come", "came", "do", "did", "draw", "drew", "drink", "drank", "drive", "drove",
+    "eat", "ate", "fall", "fell", "feel", "felt", "find", "found", "fly", "flew",
+    "forget", "forgot", "give", "gave", "go", "went", "grow", "grew", "hear", "heard",
+    "hold", "held", "keep", "kept", "know", "knew", "leave", "left", "make", "made",
+    "mean", "meant", "meet", "met", "pay", "paid", "read", "run", "ran", "say", "said",
+    "see", "saw", "send", "sent", "set", "speak", "spoke", "stand", "stood", "take",
+    "took", "tell", "told", "think", "thought", "understand", "understood", "write", "wrote",
+}
+SINGULAR_NOUN_EXCEPTIONS = {
+    "analysis", "basis", "crisis", "diagnosis", "hypothesis", "news", "series",
+    "species", "status", "thesis", "this", "physics", "mathematics", "research",
+    "information", "equipment", "evidence",
+}
+# A small deterministic lexical layer is enough for the noun-phrase shape
+# this guard needs.  It prevents an attributive adjective from being treated
+# as the head noun while keeping the validator independent of an NLP runtime.
+COMMON_ATTRIBUTIVE_ADJECTIVES = {
+    "ancient", "annual", "central", "coastal", "consistent", "deep", "detailed",
+    "digital", "early", "eastern", "extended", "faint", "fragile", "heavy",
+    "large", "local", "long", "new", "northern", "odd", "older", "polar",
+    "prolonged", "rare", "regional", "remote", "revised", "shared", "small",
+    "subtle", "unusual", "updated", "western", "winter", "young",
+}
+ADJECTIVE_SUFFIXES = ("able", "ible", "al", "ant", "ary", "ent", "ful", "ic", "ish", "ive", "less", "ous", "y")
+PERSONAL_PRONOUNS = {"i", "me", "we", "us", "you", "he", "him", "she", "her", "they", "them"}
+MODAL_TRIGGERS = {"will", "can", "may", "must", "should", "could", "would", "might"}
+STRONG_INVARIANT_NAMES = (
+    "clean_sentence_grammatical",
+    "mutated_sentence_ungrammatical",
+    "exactly_one_grammatical_defect",
+    "declared_marked_span_contains_defect",
+    "minimal_repair_restores_grammaticality",
+    "no_plausible_alternate_parse",
+    "defect_is_grammatical_not_semantic",
+)
+EVIDENCE_PROVENANCE_REQUIRED_FIELDS = (
+    "evidence_producer",
+    "evidence_producer_version",
+    "invocation_id",
+    "created_at",
+    "evidence_method",
+    "model_identifier",
+)
+ARROW_RE = re.compile(r"(?P<left>[^:;\n]+?)\s*(?:->|竊・\s*(?P<right>[^,;\n]+)")
+CHANGE_BODY_RE = re.compile(
+    r"\b(?:change|replace)\s+(?P<body>.+?)(?:[.!?]|$)",
+    re.IGNORECASE,
+)
+CORRECTION_CONNECTOR_RE = re.compile(r"\b(?:to|with)\b", re.IGNORECASE)
+REMOVE_USE_RE = re.compile(
+    r"\bremove\s+(?P<source>\S+).*?\buse\s+(?P<target>\S+)",
+    re.IGNORECASE,
+)
+REORDER_RE = re.compile(
+    r"\breorder\s+(?P<source>.+?)\s+as\s+(?P<target>.+?)(?:[.!?]|$)",
+    re.IGNORECASE,
+)
+
+
+def evidence_provenance_errors(record: Mapping[str, Any]) -> list[str]:
+    """Validate audit provenance without treating it as cryptographic proof.
+
+    These fields make an evidence record attributable and replay-auditable.
+    They do not authenticate the producer; only the content hash binds the
+    record to the current item, and no signature/HMAC is implied here.
+    """
+    errors: list[str] = []
+    for field in EVIDENCE_PROVENANCE_REQUIRED_FIELDS:
+        value = record.get(field)
+        if not isinstance(value, str) or not value.strip():
+            errors.append(f"{field} must be a nonempty string")
+    content_hash = record.get("content_hash")
+    if not isinstance(content_hash, str) or not re.fullmatch(r"sha256:[0-9a-f]{64}", content_hash):
+        errors.append("content_hash must match sha256:<64 lowercase hexadecimal characters>")
+    created_at = record.get("created_at")
+    if isinstance(created_at, str) and created_at.strip():
+        try:
+            parsed_created_at = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
+        except ValueError:
+            errors.append("created_at must be an ISO-8601 timestamp")
+        else:
+            if parsed_created_at.tzinfo is None:
+                errors.append("created_at must include a timezone offset")
+    return errors
+
+
+class TemplateClass(str, Enum):
+    SAFE = "SAFE"
+    NEEDS_GUARD = "NEEDS_GUARD"
+    QUARANTINE = "QUARANTINE"
+
+
+@dataclass(frozen=True)
+class TemplateRecord:
+    template_id: str
+    tested_error_type: str
+    primary_target: str
+    classification: TemplateClass
+    guard: str
+    rationale: str
+
+
+@dataclass
+class MutationSafetyResult:
+    status: str
+    template_class: str
+    template_id: str
+    reasons: list[str]
+    metadata_consistent: bool
+    surface_integrity: bool
+    grammar_evidence_status: str
+    invariants: dict[str, bool | None]
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+# Catalogued template families.  The catalog is deliberately broader than the
+# four pilot failures so future generation cannot quietly reintroduce the same
+# mechanisms under a new sentence.
+TEMPLATE_CATALOG: tuple[TemplateRecord, ...] = (
+    TemplateRecord(
+        "reference.ambiguous_pronoun_substitution",
+        "incorrect_reference",
+        "REFERENCE_AND_DETERMINERS",
+        TemplateClass.QUARANTINE,
+        "formal_reference_evidence_required",
+        "A nearby noun is not evidence of a grammatical reference error.",
+    ),
+    TemplateRecord(
+
+2026-08-26T09:40:33.530843Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `base_instructions` at line 97 column 5
+codex
+{"item_id":"we-v2.1.2-live-T091038Z-010","section":"Written Expression","agent_version":"Written Expression Generator v2.1","primary_target":"parallelism","subtype":"coordinated verb forms","secondary_features":["academic register","infinitival complementation"],"tested_error_type":"nonparallel verb form in a coordinated series","difficulty":"MEDIUM","vocabulary_domain":"environmental policy","sentence":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.","marked_parts":{"A":"The regional plan","B":"requires factories","C":"improve filtration systems","D":"monitoring"},"correct_answer":"D","error_explanation":"The three coordinated verbs following “to” must use parallel base forms: “reduce,” “improve,” and “monitor.” The -ing form “monitoring” is grammatically incorrect here.","minimal_correction":"Change “monitoring” to “monitor.”","grammar_metadata":{"error_scope":"clause_level","correction_locality":"LOCAL_SINGLE_TOKEN","decision_granularity":"VERB_FRAME","intended_error_position":"D","correct_span_type":"SINGLE_WORD"},"format_metadata":{"target_sentence_length_region":"16–25 words (sampled official observed region)","expected_span_profile":"Four local spans with local phrase distractors and one single-word error span","coverage_profile":"Moderate partial coverage with unmarked context","approximate_context_profile":"Academic sentence with coordinated infinitival complements","span_types":{"A":"SHORT_PHRASE","B":"SHORT_PHRASE","C":"SHORT_PHRASE","D":"SINGLE_WORD"},"diagnostics":{"sentence_word_count":18,"span_word_counts":{"A":3,"B":2,"C":3,"D":1},"mean_span_length":2.25,"max_span_length":3,"marked_coverage_ratio":0.5,"unmarked_word_count":9,"gap_A_B":0,"gap_B_C":3,"gap_C_D":1,"correct_span_word_count":1,"correct_span_type":"SINGLE_WORD","correction_locality":"LOCAL_SINGLE_TOKEN","decision_granularity":"VERB_FRAME","format_distribution_distance":0.0,"format_percentile_profile":{},"format_band_status":"PREFERRED","metric_band_status":{},"span_token_indices":{"A":[0,1,2],"B":[3,4],"C":[8,9,10],"D":[12]}}},"provenance":{"agent_version":"Written Expression Generator v2.1","prompt_hash":null,"spec_version":"toefl_itp_we_generator_v2.1.2","format_spec_version":"we_v2.1.1_format_locked","generation_batch_id":"we-v2.1.2-live-e2e-20260826T091038Z","microbatch_id":"live-microbatch-010","item_generation_order":10,"invocation_id":null,"runtime_model":null},"qa_metadata":{"clean_form":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitor water quality near industrial sites.","error_form":"The regional plan requires factories to reduce emissions, improve filtration systems, and monitoring water quality near industrial sites.","minimal_correction":"Change “monitoring” to “monitor.”","mutation_type":"base-form-to-ing parallel mutation","clean_sentence_validated":true,"grammar_check_status":"PASS","format_check_status":"PASS"}}
+tokens used
+39,959

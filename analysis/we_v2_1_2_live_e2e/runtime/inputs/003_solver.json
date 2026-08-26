@@ -1,0 +1,11 @@
+{
+  "item_id": "we-v2.1.2-live-T054917Z-003",
+  "section": "Written Expression",
+  "sentence": "Researchers who studied the coral reefs near the coast discovered that pollution levels has risen sharply over the past decade.",
+  "marked_parts": {
+    "A": "studied",
+    "B": "near the coast",
+    "C": "has",
+    "D": "sharply"
+  }
+}

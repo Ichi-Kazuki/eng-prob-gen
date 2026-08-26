@@ -1,0 +1,309 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "reviewer_output_v2.schema.json",
+  "title": "TOEFL ITP Written Expression Reviewer v2.0 result",
+  "description": "WE-specific review contract with independent grammar validity and separate format validity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_id",
+    "section",
+    "agent_version",
+    "verdict",
+    "critical_failure",
+    "independent_answer",
+    "grammar_validity",
+    "format_validity",
+    "detected_error_count",
+    "detected_error_position",
+    "non_error_parts_valid",
+    "minimal_correction_valid",
+    "marked_part_assessments",
+    "checks",
+    "issues",
+    "revision_requirements",
+    "source_similarity_risk",
+    "provenance",
+    "format_diagnostics"
+  ],
+  "properties": {
+    "item_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "section": {
+      "enum": [
+        "Written Expression"
+      ]
+    },
+    "agent_version": {
+      "enum": [
+        "Written Expression Reviewer v2.0"
+      ]
+    },
+    "verdict": {
+      "enum": [
+        "PASS",
+        "REVISE",
+        "REJECT"
+      ]
+    },
+    "critical_failure": {
+      "type": "boolean"
+    },
+    "independent_answer": {
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "NONE",
+        "AMBIGUOUS"
+      ]
+    },
+    "grammar_validity": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "AMBIGUOUS"
+      ]
+    },
+    "format_validity": {
+      "enum": [
+        "PASS",
+        "WARN",
+        "FAIL"
+      ]
+    },
+    "detected_error_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "detected_error_position": {
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "NONE"
+      ]
+    },
+    "non_error_parts_valid": {
+      "type": "boolean"
+    },
+    "minimal_correction_valid": {
+      "type": "boolean"
+    },
+    "marked_part_assessments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "properties": {
+        "A": {
+          "enum": [
+            "ACCEPTABLE",
+            "ERROR",
+            "MARGINAL"
+          ]
+        },
+        "B": {
+          "enum": [
+            "ACCEPTABLE",
+            "ERROR",
+            "MARGINAL"
+          ]
+        },
+        "C": {
+          "enum": [
+            "ACCEPTABLE",
+            "ERROR",
+            "MARGINAL"
+          ]
+        },
+        "D": {
+          "enum": [
+            "ACCEPTABLE",
+            "ERROR",
+            "MARGINAL"
+          ]
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grammar_validity",
+        "one_error_only",
+        "answer_uniqueness",
+        "format_validity",
+        "target_metadata",
+        "naturalness",
+        "provenance"
+      ],
+      "properties": {
+        "grammar_validity": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "AMBIGUOUS"
+          ]
+        },
+        "one_error_only": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "AMBIGUOUS"
+          ]
+        },
+        "answer_uniqueness": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "AMBIGUOUS"
+          ]
+        },
+        "format_validity": {
+          "enum": [
+            "PASS",
+            "WARN",
+            "FAIL"
+          ]
+        },
+        "target_metadata": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "AMBIGUOUS"
+          ]
+        },
+        "naturalness": {
+          "enum": [
+            "PASS",
+            "WARN",
+            "FAIL"
+          ]
+        },
+        "provenance": {
+          "enum": [
+            "PASS",
+            "WARN",
+            "FAIL"
+          ]
+        }
+      }
+    },
+    "format_diagnostics": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {},
+      "required": []
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "severity",
+          "category",
+          "description"
+        ],
+        "properties": {
+          "severity": {
+            "enum": [
+              "CRITICAL",
+              "MAJOR",
+              "MINOR"
+            ]
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "revision_requirements": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "source_similarity_risk": {
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent_version",
+        "prompt_hash",
+        "spec_version",
+        "format_spec_version",
+        "review_batch_id",
+        "item_review_order",
+        "invocation_id",
+        "runtime_model"
+      ],
+      "properties": {
+        "agent_version": {
+          "enum": [
+            "Written Expression Reviewer v2.0"
+          ]
+        },
+        "prompt_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "spec_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format_spec_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "review_batch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "item_review_order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "invocation_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "runtime_model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "items": [
+    {
+      "provider": "codex",
+      "runtime_provider": "codex",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "cli_version": "codex-cli 0.149.1",
+      "codex_cli_version": "codex-cli 0.149.1",
+      "model": "gpt-5.6-luna",
+      "model_identifier": "gpt-5.6-luna",
+      "invocation_id": "980b88d3-e191-4768-8cbe-4b13d8041a7a",
+      "timestamp": "2026-08-26T07:04:59.812143+00:00",
+      "invocation_timestamp": "2026-08-26T07:04:59.812143+00:00",
+      "completed_timestamp": "2026-08-26T07:07:04.888337+00:00",
+      "exit_code": null,
+      "live_invocation": true,
+      "contract_valid": false,
+      "contract_validated": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_stdout_path": "analysis/we_v2_1_2_live_e2e_codex_final/runtime/logs/generator-980b88d3-e191-4768-8cbe-4b13d8041a7a.stdout.txt",
+      "raw_stderr_path": "analysis/we_v2_1_2_live_e2e_codex_final/runtime/logs/generator-980b88d3-e191-4768-8cbe-4b13d8041a7a.stderr.txt",
+      "output_last_message_path": "analysis/we_v2_1_2_live_e2e_codex_final/runtime/logs/generator-980b88d3-e191-4768-8cbe-4b13d8041a7a.last-message.json",
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e_codex_final/runtime/logs/generator-980b88d3-e191-4768-8cbe-4b13d8041a7a.stdout.txt",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI timeout after 120s"
+      }
+    }
+  ]
+}

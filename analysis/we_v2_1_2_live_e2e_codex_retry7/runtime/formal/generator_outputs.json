@@ -1,0 +1,310 @@
+{
+  "items": [
+    {
+      "item_id": "we-v2.1.2-live-T083657Z-001",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject-verb agreement across an intervening participial modifier",
+      "secondary_features": [
+        "intervening participial modifier",
+        "relative clause"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "paleoclimatology",
+      "sentence": "In recent studies, researchers examining pollen records from lakes identifies patterns that reveal how climates changed after eruptions.",
+      "marked_parts": {
+        "A": "studies",
+        "B": "records",
+        "C": "identifies",
+        "D": "after eruptions"
+      },
+      "correct_answer": "C",
+      "error_explanation": "The plural subject researchers requires the base-form finite verb identify; the singular form identifies does not agree with the subject.",
+      "minimal_correction": "Replace identifies with identify.",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "C",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16-20 (empirical target 16; conformance range 14-18 words)",
+        "expected_span_profile": "Empirical correct-span draw: SINGLE_WORD; selected surface span lengths 1/1/1/2",
+        "coverage_profile": "PREFERRED empirical coverage band; 5 of 18 lexical words marked (27.78%)",
+        "approximate_context_profile": "13 unmarked lexical words; inter-span gaps A-B/B-C/C-D = 3/2/6, with C-D in the WARNING tail",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SHORT_PHRASE"
+        },
+        "diagnostics": {
+          "sentence_word_count": 18,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 2
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.2778,
+          "unmarked_word_count": 13,
+          "gap_A_B": 3,
+          "gap_B_C": 2,
+          "gap_C_D": 6,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.3327,
+          "format_percentile_profile": {},
+          "format_band_status": "WARNING",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              2
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              9
+            ],
+            "D": [
+              16,
+              17
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T083657Z",
+        "microbatch_id": "we-v2.1.2-live-e2e-20260826T083657Z-microbatch-001",
+        "item_generation_order": 1,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "In recent studies, researchers examining pollen records from lakes identify patterns that reveal how climates changed after eruptions.",
+        "error_form": "In recent studies, researchers examining pollen records from lakes identifies patterns that reveal how climates changed after eruptions.",
+        "minimal_correction": "Replace identifies with identify.",
+        "mutation_type": "subject-verb agreement: identify -> identifies.",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "WARN"
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T083657Z-002",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "VERB_COMPLEMENTATION",
+      "subtype": "adjective-governed preposition collocation ('responsible for')",
+      "secondary_features": [
+        "adjective-governed preposition",
+        "embedded wh-clause"
+      ],
+      "tested_error_type": "wrong_preposition_collocation",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "environmental monitoring and emergency planning",
+      "sentence": "Local agencies collect detailed historical records to determine which department within each district remains ultimately responsible of emergency coordination during severe coastal storms.",
+      "marked_parts": {
+        "A": "agencies",
+        "B": "determine",
+        "C": "within",
+        "D": "of"
+      },
+      "correct_answer": "D",
+      "error_explanation": "The adjective 'responsible' requires the preposition 'for' before its complement; 'of' is not grammatical in this fixed collocation.",
+      "minimal_correction": "change 'of' to 'for'",
+      "grammar_metadata": {
+        "error_scope": "local",
+        "correction_locality": "LOCAL_SINGLE_TOKEN",
+        "decision_granularity": "FUNCTION_WORD",
+        "intended_error_position": "D",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "21-25 words; empirical plan target 23 with conformance range 21-25",
+        "expected_span_profile": "four local SINGLE_WORD spans with 1/1/1/1 surface-word profile; sampled correct span SINGLE_WORD",
+        "coverage_profile": "preferred empirical coverage region: 4 marked tokens out of 23 (17.39%) with substantial unmarked context",
+        "approximate_context_profile": "19 unmarked lexical words; nonzero gaps A-B=5, B-C=2, C-D=5",
+        "span_types": {
+          "A": "SINGLE_WORD",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 23,
+          "span_word_counts": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.0,
+          "max_span_length": 1,
+          "marked_coverage_ratio": 0.1739,
+          "unmarked_word_count": 19,
+          "gap_A_B": 5,
+          "gap_B_C": 2,
+          "gap_C_D": 5,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "LOCAL_SINGLE_TOKEN",
+          "decision_granularity": "FUNCTION_WORD",
+          "format_distribution_distance": 0.9762,
+          "format_percentile_profile": {},
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              1
+            ],
+            "B": [
+              7
+            ],
+            "C": [
+              10
+            ],
+            "D": [
+              16
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "1.0.0",
+        "format_spec_version": "1.0.0",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T083657Z",
+        "microbatch_id": "we-v2.1.2-live-e2e-20260826T083657Z-microbatch-002",
+        "item_generation_order": 2,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "Local agencies collect detailed historical records to determine which department within each district remains ultimately responsible for emergency coordination during severe coastal storms.",
+        "error_form": "Local agencies collect detailed historical records to determine which department within each district remains ultimately responsible of emergency coordination during severe coastal storms.",
+        "minimal_correction": "change 'of' to 'for'",
+        "mutation_type": "wrong preposition collocation: for -> of",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    },
+    {
+      "item_id": "we-v2.1.2-live-T083657Z-003",
+      "section": "Written Expression",
+      "agent_version": "Written Expression Generator v2.1",
+      "primary_target": "CLAUSE_STRUCTURE",
+      "subtype": "subject-verb agreement across an intervening prepositional phrase",
+      "secondary_features": [
+        "complex subject with an of-phrase",
+        "subject head separated from the finite verb",
+        "academic environmental-science vocabulary"
+      ],
+      "tested_error_type": "agreement_error",
+      "difficulty": "MEDIUM",
+      "vocabulary_domain": "glaciology and hydrology",
+      "sentence": "The sequence of images from satellites reveal gradual shifts in glacier coverage, helping scientists estimate water supplies during dry summers.",
+      "marked_parts": {
+        "A": "The sequence",
+        "B": "reveal",
+        "C": "coverage",
+        "D": "water"
+      },
+      "correct_answer": "B",
+      "error_explanation": "The singular subject head “sequence” requires the correct form “reveals”; the marked form “reveal” is ungrammatical here.",
+      "minimal_correction": "reveal -> reveals",
+      "grammar_metadata": {
+        "error_scope": "clause_level",
+        "correction_locality": "DEPENDENCY_BASED",
+        "decision_granularity": "AGREEMENT_DEPENDENCY",
+        "intended_error_position": "B",
+        "correct_span_type": "SINGLE_WORD"
+      },
+      "format_metadata": {
+        "target_sentence_length_region": "16–20 words (empirical draw target 18 ± 2)",
+        "expected_span_profile": "Four local spans, primarily single-word spans, with partial coverage and nonzero lexical gaps.",
+        "coverage_profile": "Partial marked coverage near the official central range, with unmarked context retained throughout the sentence.",
+        "approximate_context_profile": "Academic sentence with a complex subject, an intervening prepositional phrase, and a participial clause.",
+        "span_types": {
+          "A": "SHORT_PHRASE",
+          "B": "SINGLE_WORD",
+          "C": "SINGLE_WORD",
+          "D": "SINGLE_WORD"
+        },
+        "diagnostics": {
+          "sentence_word_count": 20,
+          "span_word_counts": {
+            "A": 2,
+            "B": 1,
+            "C": 1,
+            "D": 1
+          },
+          "mean_span_length": 1.25,
+          "max_span_length": 2,
+          "marked_coverage_ratio": 0.25,
+          "unmarked_word_count": 15,
+          "gap_A_B": 4,
+          "gap_B_C": 4,
+          "gap_C_D": 3,
+          "correct_span_word_count": 1,
+          "correct_span_type": "SINGLE_WORD",
+          "correction_locality": "DEPENDENCY_BASED",
+          "decision_granularity": "AGREEMENT_DEPENDENCY",
+          "format_distribution_distance": 0.1472,
+          "format_percentile_profile": {},
+          "format_band_status": "PREFERRED",
+          "metric_band_status": {},
+          "span_token_indices": {
+            "A": [
+              0,
+              1
+            ],
+            "B": [
+              6
+            ],
+            "C": [
+              11
+            ],
+            "D": [
+              15
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "agent_version": "Written Expression Generator v2.1",
+        "prompt_hash": null,
+        "spec_version": "v2.1.2",
+        "format_spec_version": "v2.1.1-locked",
+        "generation_batch_id": "we-v2.1.2-live-e2e-20260826T083657Z",
+        "microbatch_id": "we-v2.1.2-live-e2e-20260826T083657Z-micro-003",
+        "item_generation_order": 3,
+        "invocation_id": null,
+        "runtime_model": null
+      },
+      "qa_metadata": {
+        "clean_form": "The sequence of images from satellites reveals gradual shifts in glacier coverage, helping scientists estimate water supplies during dry summers.",
+        "error_form": "The sequence of images from satellites reveal gradual shifts in glacier coverage, helping scientists estimate water supplies during dry summers.",
+        "minimal_correction": "reveal -> reveals",
+        "mutation_type": "reveals -> reveal",
+        "clean_sentence_validated": true,
+        "grammar_check_status": "PASS",
+        "format_check_status": "PASS"
+      }
+    }
+  ]
+}

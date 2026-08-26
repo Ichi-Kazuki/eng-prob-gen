@@ -16,5 +16,10 @@ Codex calls use one `codex exec --ephemeral` process per item. Reviewer and
 Solver calls use `--sandbox read-only`, an isolated workspace, and the
 allowlisted input projection. The Solver and Reviewer final messages are
 validated by their existing `validate_contract()` implementations after the
-last-message file is read. Runtime facts and raw stdout/stderr paths are
-stored in the separate provenance sidecar.
+last-message file is read. Before a Codex call, `runtime.codex_schema` builds a
+deterministic transport-only projection from the canonical schema: structural
+`allOf` branches are flattened, unsupported conditional/semantic keywords are
+recorded as relaxed, and the original canonical schema remains untouched.
+Transport-schema provenance records both schema hashes and explicitly requires
+canonical validation. Runtime facts, raw stdout/stderr paths, and the
+transport provenance are stored in the separate provenance sidecar.

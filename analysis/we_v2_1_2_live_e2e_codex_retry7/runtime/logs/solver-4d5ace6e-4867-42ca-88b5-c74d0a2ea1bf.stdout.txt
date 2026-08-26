@@ -1,0 +1,1 @@
+{"item_id":"we-v2.1.2-live-T083657Z-003","section":"Written Expression","solver_answer":"B","confidence":"HIGH","reason":"The singular subject “The sequence” requires the singular verb “reveals,” not “reveal.”","ambiguity_detected":false,"suggested_correction":"reveal → reveals"}

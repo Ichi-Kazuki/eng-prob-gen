@@ -1,0 +1,227 @@
+{
+  "batch_id": "we-v2.1.2-live-e2e-20260826T062547Z",
+  "cohort_size": 10,
+  "microbatch_size": 1,
+  "runtime": {
+    "provider": "claude-code-cli",
+    "model_identifier": "sonnet",
+    "live_invocation": true,
+    "synthetic_reviewer_output": false,
+    "synthetic_solver_output": false
+  },
+  "gates": {
+    "generator_schema": {
+      "passed": 0,
+      "required": 10,
+      "ok": false
+    },
+    "reviewer_contract": {
+      "passed": 0,
+      "required": 10,
+      "ok": false
+    },
+    "solver_contract": {
+      "passed": 0,
+      "required": 10,
+      "ok": false
+    },
+    "reviewer_live_invocation": {
+      "passed": 0,
+      "required": 10,
+      "ok": false
+    },
+    "solver_live_invocation": {
+      "passed": 0,
+      "required": 10,
+      "ok": false
+    },
+    "answer_leakage": {
+      "count": 0,
+      "required": 0,
+      "ok": true
+    },
+    "reviewer_genuine_error_failure": {
+      "count": 0,
+      "required": 0,
+      "ok": true
+    },
+    "reviewer_multiple_error": {
+      "count": 0,
+      "required": 0,
+      "ok": true
+    },
+    "solver_none": {
+      "count": 0,
+      "required": 0,
+      "ok": true
+    },
+    "solver_ambiguous": {
+      "count": 0,
+      "maximum": 1,
+      "ok": true
+    },
+    "generator_solver_agreement": {
+      "passed": 0,
+      "required": 9,
+      "denominator": 10,
+      "ok": false
+    },
+    "reviewer_solver_structural_conflict": {
+      "count": 0,
+      "maximum": 1,
+      "ok": true
+    },
+    "orchestrator_acceptance_logic": {
+      "invariant_failures": [],
+      "grammar_judgment_added": false,
+      "ok": true
+    }
+  },
+  "outcomes": [
+    {
+      "item_id": "we-v2.1.2-live-T062547Z-001",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T062547Z-002",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T062547Z-003",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T062547Z-004",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T062547Z-005",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T062547Z-006",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T062547Z-007",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T062547Z-008",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T062547Z-009",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      },
+      "generator_attempts": 1
+    },
+    {
+      "item_id": "we-v2.1.2-live-T062547Z-010",
+      "state": "GENERATION_FAILED",
+      "failure": {
+        "stage": "generator",
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      },
+      "generator_attempts": 1
+    }
+  ],
+  "failure_classification": [
+    {
+      "stage": "generator",
+      "invocation_id": "c683ec8b-600d-4214-82b8-2902c5b6eb44",
+      "category": "infrastructure",
+      "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+    }
+  ],
+  "attempts": {
+    "generator_invocations": 10,
+    "reviewer_invocations": 0,
+    "solver_invocations": 0,
+    "generator_validation_retries": 10
+  },
+  "formal_output_counts": {
+    "generator": 0,
+    "reviewer": 0,
+    "solver": 0
+  },
+  "existing_tests": {
+    "command": [
+      "C:\\Users\\soted\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_*.py"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output_tail": ") NONE\n  2) grammar\n  3) ambiguity\n  4) semantics\n  5) unnatural_english\n  6) distractor_quality\n  7) multiple_errors\n  8) no_error\n  9) metadata_not_applicable\n  10) other\n\nmain_problem:\n  1) NONE\n  2) grammar\n  3) ambiguity\n  4) semantics\n  5) unnatural_english\n  6) distractor_quality\n  7) multiple_errors\n  8) no_error\n  9) metadata_not_applicable\n  10) other\n\nmain_problem:\n  1) NONE\n  2) grammar\n  3) ambiguity\n  4) semantics\n  5) unnatural_english\n  6) distractor_quality\n  7) multiple_errors\n  8) no_error\n  9) metadata_not_applicable\n  10) other\nReviewer round 'retry' applied to 1 candidates.\n  SOLVING (1): ['gen-struct-001']\nWrote 0 REVISE feedback record(s) (issues+revision_requirements only) to C:\\Users\\soted\\AppData\\Local\\Temp\\tmpjbvtzdjl\\round_feedback_retry.json\nCurrent tally: {'SOLVING': 1}\nApplied Reviewer retry: {'SOLVING': 1}\nState tally: {'SOLVING': 1}\nBlinded 0 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmputfra4i3\\solver_input_batch.json\nBlinding errors:\n  leak-001: leakage guard failed: ['unexpected key: correct_answer']\nitem_ids: ['leak-001']\nBlinded 1 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmpmvaxk_7j\\solver_input_batch.json\nitem_ids: ['gen-struct-001']\nSolver output applied. Routing:\n  ACCEPTED (1): ['gen-struct-001']\nCurrent tally: {'ACCEPTED': 1}\nBlinded 1 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmp_lktht21\\solver_input_batch.json\nitem_ids: ['gen-struct-001']\nApplied Reviewer round-test: {'REVISE_REQUIRED': 1}\nState tally: {'REVISE_REQUIRED': 2}\nRebuilt 1 REVISE feedback record(s) for round 'rebuild' at C:\\Users\\soted\\AppData\\Local\\Temp\\tmpcpttzfl8\\round_feedback_rebuild.json\nRebuilt 1 REVISE feedback record(s) for round 'rebuild' at C:\\Users\\soted\\AppData\\Local\\Temp\\tmpe62g6209\\validation_round_feedback_rebuild.json\nFinalized 1 candidates.\nState tally: {'MANUAL_REVIEW': 1}\nACCEPTED: 0  MANUAL_REVIEW: 1  failure_items: 1\nFinalize id: finalize-007d8c0adecc557692a5c7f5\nWrote: pilot_provenance.json, pilot_accepted_items.json, pilot_manual_review.json, pilot_failure_items.json\nFinalized 1 candidates.\nState tally: {'MANUAL_REVIEW': 1}\nACCEPTED: 0  MANUAL_REVIEW: 1  failure_items: 1\nFinalize id: finalize-007d8c0adecc557692a5c7f5\nWrote: pilot_provenance.json, pilot_accepted_items.json, pilot_manual_review.json, pilot_failure_items.json\nFinalized 1 initial candidates\nState tally: {'MANUAL_REVIEW': 1}\nFinalize id: finalize-d8defc84d605bf9766aa38c0\nFinalized 1 initial candidates\nState tally: {'MANUAL_REVIEW': 1}\nFinalize id: finalize-d8defc84d605bf9766aa38c0\nLoaded 2 candidates (2 generator records).\nReady for Reviewer round 1 (0): []\nNOT ready (schema validation issue) (2):\n  pilot-s: state=GENERATED failure=None\n  pilot-w: state=GENERATED failure=None\nLoaded 2 candidates (2 generator records).\nReady for Reviewer round 1 (0): []\nNOT ready (schema validation issue) (2):\n  pilot-s: state=GENERATED failure=None\n  pilot-w: state=GENERATED failure=None\nLoaded exactly 120 initial candidates: {'Structure': 45, 'Written Expression': 75}\nState tally: {'GENERATED': 120}\nLoaded exactly 120 initial candidates: {'Structure': 45, 'Written Expression': 75}\nState tally: {'GENERATED': 120}\nBlinded 1 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmp3n4r2u0j\\solver_input_batch.json\nitem_ids: ['gen-struct-001']\nBlinded 1 candidate(s) currently in SOLVING -> C:\\Users\\soted\\AppData\\Local\\Temp\\tmp3n4r2u0j\\solver_input_batch.json\nitem_ids: ['gen-struct-001']\nSolver output applied. Routing:\n  ACCEPTED (1): ['gen-struct-001']\nCurrent tally: {'ACCEPTED': 1}\nPrepared blinded Solver batch: 1\nPrepared blinded Solver batch: 1\nApplied Solver outputs: 6 supplied\nState tally: {'ACCEPTED': 1}\n................................................................................................s.....................................\n----------------------------------------------------------------------\nRan 134 tests in 47.210s\n\nOK (skipped=1)"
+  },
+  "formal_output_files": {
+    "generator": "runtime/formal/generator_outputs.json",
+    "reviewer": "runtime/formal/reviewer_outputs.json",
+    "solver": "runtime/formal/solver_outputs.json"
+  },
+  "runtime_provenance_sidecar": "runtime/provenance/runtime_provenance.json",
+  "final_decision": {
+    "code": "E",
+    "label": "Runtime infrastructure unavailable",
+    "reason": "The runtime could not provide the required complete live pipeline; see classified invocation failures."
+  }
+}

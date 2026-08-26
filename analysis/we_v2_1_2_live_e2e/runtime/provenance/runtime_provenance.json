@@ -1,0 +1,194 @@
+{
+  "items": [
+    {
+      "runtime_provider": "claude-code-cli",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "model_identifier": "sonnet",
+      "invocation_id": "c683ec8b-600d-4214-82b8-2902c5b6eb44",
+      "invocation_timestamp": "2026-08-26T06:25:47.701856+00:00",
+      "completed_timestamp": "2026-08-26T06:25:54.917317+00:00",
+      "live_invocation": true,
+      "contract_validated": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e/runtime/logs/generator-c683ec8b-600d-4214-82b8-2902c5b6eb44.txt",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      }
+    },
+    {
+      "runtime_provider": "claude-code-cli",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "model_identifier": "sonnet",
+      "invocation_id": "ddf68c47-f279-41a4-bca5-8b43aed45c00",
+      "invocation_timestamp": "2026-08-26T06:25:55.120036+00:00",
+      "completed_timestamp": "2026-08-26T06:26:02.037342+00:00",
+      "live_invocation": true,
+      "contract_validated": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e/runtime/logs/generator-ddf68c47-f279-41a4-bca5-8b43aed45c00.txt",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      }
+    },
+    {
+      "runtime_provider": "claude-code-cli",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "model_identifier": "sonnet",
+      "invocation_id": "b1044a3c-fbce-4173-ae12-a253957810c3",
+      "invocation_timestamp": "2026-08-26T06:26:02.229796+00:00",
+      "completed_timestamp": "2026-08-26T06:26:09.117136+00:00",
+      "live_invocation": true,
+      "contract_validated": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e/runtime/logs/generator-b1044a3c-fbce-4173-ae12-a253957810c3.txt",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      }
+    },
+    {
+      "runtime_provider": "claude-code-cli",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "model_identifier": "sonnet",
+      "invocation_id": "e28c2a12-9729-484d-bc19-3c050ee14eef",
+      "invocation_timestamp": "2026-08-26T06:26:09.366020+00:00",
+      "completed_timestamp": "2026-08-26T06:26:16.525387+00:00",
+      "live_invocation": true,
+      "contract_validated": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e/runtime/logs/generator-e28c2a12-9729-484d-bc19-3c050ee14eef.txt",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      }
+    },
+    {
+      "runtime_provider": "claude-code-cli",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "model_identifier": "sonnet",
+      "invocation_id": "c21a3ffc-20a1-4e07-8bcc-408871527f32",
+      "invocation_timestamp": "2026-08-26T06:26:16.744625+00:00",
+      "completed_timestamp": "2026-08-26T06:26:23.956945+00:00",
+      "live_invocation": true,
+      "contract_validated": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e/runtime/logs/generator-c21a3ffc-20a1-4e07-8bcc-408871527f32.txt",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      }
+    },
+    {
+      "runtime_provider": "claude-code-cli",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "model_identifier": "sonnet",
+      "invocation_id": "a50dd9d5-0231-411c-8eed-c8fcead6b1b1",
+      "invocation_timestamp": "2026-08-26T06:26:24.169914+00:00",
+      "completed_timestamp": "2026-08-26T06:26:31.231773+00:00",
+      "live_invocation": true,
+      "contract_validated": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e/runtime/logs/generator-a50dd9d5-0231-411c-8eed-c8fcead6b1b1.txt",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      }
+    },
+    {
+      "runtime_provider": "claude-code-cli",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "model_identifier": "sonnet",
+      "invocation_id": "1ebd90d5-59e7-49d4-9365-d0a5b3eba1ea",
+      "invocation_timestamp": "2026-08-26T06:26:31.425993+00:00",
+      "completed_timestamp": "2026-08-26T06:26:38.475038+00:00",
+      "live_invocation": true,
+      "contract_validated": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e/runtime/logs/generator-1ebd90d5-59e7-49d4-9365-d0a5b3eba1ea.txt",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      }
+    },
+    {
+      "runtime_provider": "claude-code-cli",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "model_identifier": "sonnet",
+      "invocation_id": "ae572928-682b-4926-b98d-ada12018050a",
+      "invocation_timestamp": "2026-08-26T06:26:38.676811+00:00",
+      "completed_timestamp": "2026-08-26T06:26:45.633676+00:00",
+      "live_invocation": true,
+      "contract_validated": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e/runtime/logs/generator-ae572928-682b-4926-b98d-ada12018050a.txt",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      }
+    },
+    {
+      "runtime_provider": "claude-code-cli",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "model_identifier": "sonnet",
+      "invocation_id": "8c0111f4-8235-42f1-a480-6c61e5ed4e1e",
+      "invocation_timestamp": "2026-08-26T06:26:45.861852+00:00",
+      "completed_timestamp": "2026-08-26T06:26:52.864655+00:00",
+      "live_invocation": true,
+      "contract_validated": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e/runtime/logs/generator-8c0111f4-8235-42f1-a480-6c61e5ed4e1e.txt",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      }
+    },
+    {
+      "runtime_provider": "claude-code-cli",
+      "agent_identifier": "toefl-itp-we-generator-v2",
+      "model_identifier": "sonnet",
+      "invocation_id": "247e52cc-1484-4089-bca7-afc216df361f",
+      "invocation_timestamp": "2026-08-26T06:26:53.056638+00:00",
+      "completed_timestamp": "2026-08-26T06:27:00.213761+00:00",
+      "live_invocation": true,
+      "contract_validated": false,
+      "stage": "generator",
+      "input_keys": [],
+      "input_payload_sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "forbidden_input_fields_present": [],
+      "raw_output_log": "analysis/we_v2_1_2_live_e2e/runtime/logs/generator-247e52cc-1484-4089-bca7-afc216df361f.txt",
+      "failure": {
+        "category": "infrastructure",
+        "detail": "generator: CLI exit 1: api_error_status=429; terminal_reason=api_error; result=You've hit your session limit · resets 5:40pm (Asia/Tokyo)"
+      }
+    }
+  ]
+}

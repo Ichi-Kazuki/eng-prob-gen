@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "C:\Users\soted\Projects\itp-prob-gen\scripts\run_live_e2e.py", line 1222, in <module>
+    print(json.dumps({"batch_id": batch_id, "gates": metrics["gates"], "existing_tests": tests}, ensure_ascii=False, indent=2))
+                     ^^^^^^
+  File "C:\Users\soted\Projects\itp-prob-gen\scripts\run_live_e2e.py", line 1204, in main
+    reviewer_items: list = []
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\soted\Projects\itp-prob-gen\scripts\run_live_e2e.py", line 773, in process_one
+    candidate = candidate_from_generator(generated)
+                              ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        reviewer_invocation = invoke(
+        ^
+  File "C:\Users\soted\Projects\itp-prob-gen\scripts\run_live_e2e.py", line 345, in invoke
+    timeout_seconds=CLI_TIMEOUT_SECONDS,
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\soted\Projects\itp-prob-gen\runtime\adapters.py", line 611, in invoke
+    "AUTHORITATIVE AGENT INSTRUCTIONS (use this checked-in file as the "
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\soted\Projects\itp-prob-gen\runtime\adapters.py", line 195, in _assert_isolated_workspace_clean
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: isolated Solver workspace contains forbidden artifact(s): schemas\reviewer_output_v2.schema.json

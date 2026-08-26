@@ -1,0 +1,11 @@
+{
+  "item_id": "we-v2.1.2-live-T082350Z-001",
+  "section": "Written Expression",
+  "sentence": "The concentration of dissolved minerals vary across coastal aquifers, but seasonal rainfall can alter groundwater chemistry and influence wetlands during unusually dry summers.",
+  "marked_parts": {
+    "A": "concentration",
+    "B": "vary",
+    "C": "seasonal rainfall",
+    "D": "chemistry"
+  }
+}
