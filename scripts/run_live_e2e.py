@@ -32,7 +32,7 @@ import sys
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -68,6 +68,7 @@ from runtime.adapters import (  # noqa: E402
     InvocationRequest,
     InvocationResult,
     RuntimeInvocationError,
+    SandboxMode,
 )
 from runtime.freeze import (  # noqa: E402
     FreezeDriftError,
@@ -354,6 +355,7 @@ def _freeze_protected_files() -> dict[str, dict[str, Path]]:
             "reviewer_blinding": ROOT / "shared/reviewer_blinding.py",
             "solver_blinding": ROOT / "shared/solver_blinding.py",
             "config": ROOT / "orchestrator/config.json",
+            "config_schema": ROOT / "orchestrator/schemas/config.schema.json",
         },
     }
 
@@ -439,6 +441,10 @@ def invoke(
     if agent not in agent_paths:
         raise LiveInvocationError("infrastructure", f"No authoritative agent definition is configured for {agent!r}")
     runtime = current_runtime()
+    live_sandbox = cast(
+        SandboxMode | None,
+        sandbox_override or ("read-only" if runtime.provider == "codex" else None),
+    )
     request = InvocationRequest(
         stage=stage,
         agent_name=agent,
@@ -457,7 +463,7 @@ def invoke(
         # Codex has no Claude-style empty tools switch. A read-only isolated
         # workspace makes the Reviewer/Solver blind boundary enforceable even
         # if a Codex tool is selected by the model.
-        sandbox=sandbox_override or ("read-only" if runtime.provider == "codex" else None),
+        sandbox=live_sandbox,
         tools=tools,
         max_budget_usd=PER_CALL_BUDGET if runtime.provider == "claude-code-cli" else None,
         timeout_seconds=timeout_override if timeout_override is not None else CLI_TIMEOUT_SECONDS,
@@ -702,6 +708,23 @@ def live_config() -> dict:
     return config
 
 
+def record_live_stage_failure(
+    candidate: orch.Candidate,
+    config: dict,
+    stage: str,
+    error: LiveInvocationError,
+) -> orch.Candidate:
+    """Route a live stage failure through the production state machine."""
+    kind = "content" if error.category == "schema" else "system"
+    return orch.record_stage_failure(
+        candidate,
+        config,
+        kind=kind,
+        stage=stage,
+        detail=error.detail,
+    )
+
+
 def candidate_from_generator(item: dict) -> orch.Candidate:
     candidate = orch.Candidate(item_id=item["item_id"], concept_id=item["item_id"], section=item["section"])
     candidate.generator_item = item
@@ -764,15 +787,24 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
 
     candidate = candidate_from_generator(generated)
     candidate.transition(orch.State.REVIEWING, "Generator structural schema passed")
+    reviewer_input: dict = {}
+    reviewer_leakage: list[str] = []
     try:
-        reviewer_input = canonical_reviewer_input(generated)
-    except (TypeError, ValueError, KeyError) as exc:
-        raise LiveInvocationError("schema", f"reviewer: canonical blind payload failed: {exc}") from exc
-    reviewer_leakage = reviewer_input_errors(generated, reviewer_input, reviewer_input_sha256(reviewer_input))
-    if reviewer_leakage:
-        raise LiveInvocationError("schema", "reviewer: canonical blind payload failed: " + "; ".join(reviewer_leakage))
-    atomic_write_json(INPUTS / f"{order:03d}_reviewer.json", reviewer_input)
-    try:
+        try:
+            reviewer_input = canonical_reviewer_input(generated)
+        except (TypeError, ValueError, KeyError) as exc:
+            raise LiveInvocationError("schema", f"reviewer: canonical blind payload failed: {exc}") from exc
+        reviewer_leakage = reviewer_input_errors(
+            generated,
+            reviewer_input,
+            reviewer_input_sha256(reviewer_input),
+        )
+        if reviewer_leakage:
+            raise LiveInvocationError(
+                "schema",
+                "reviewer: canonical blind payload failed: " + "; ".join(reviewer_leakage),
+            )
+        atomic_write_json(INPUTS / f"{order:03d}_reviewer.json", reviewer_input)
         reviewer_invocation = invoke(
             REVIEWER_AGENT, "reviewer", reviewer_prompt(reviewer_input), list(reviewer_input), "",
             _schema_for_stage("reviewer", REVIEWER_SCHEMA_PATH),
@@ -805,8 +837,17 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
                 cli_version=runtime.cli_version, input_keys=list(reviewer_input),
             )
         provenance_records.append(sidecar(reviewer_invocation, input_payload=reviewer_input, contract_validated=False, formal_output_exists=False, leakage=reviewer_leakage, error=exc))
-        candidate.failure = orch.FailureInfo("content" if exc.category == "schema" else "system", "reviewer", exc.detail)
-        outcomes.append({"item_id": item_id, "state": "GENERATION_FAILED" if exc.category != "schema" else "VALIDATION_FAILED", "failure": {"stage": "reviewer", "category": exc.category, "detail": exc.detail}, "state_history": candidate.state_history})
+        candidate = record_live_stage_failure(candidate, config, "reviewer", exc)
+        outcomes.append({
+            "item_id": item_id,
+            "state": candidate.state,
+            "failure": {
+                "stage": "reviewer",
+                "category": exc.category,
+                "detail": exc.detail,
+            },
+            "state_history": list(candidate.state_history),
+        })
         return
 
     if candidate.state != orch.State.SOLVING:
@@ -852,8 +893,17 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
                 cli_version=runtime.cli_version, input_keys=list(solver_input),
             )
         provenance_records.append(sidecar(solver_invocation, input_payload=solver_input, contract_validated=False, formal_output_exists=False, leakage=solver_leakage, error=exc))
-        candidate.failure = orch.FailureInfo("content" if exc.category == "schema" else "system", "solver", exc.detail)
-        outcomes.append({"item_id": item_id, "state": "GENERATION_FAILED" if exc.category != "schema" else "VALIDATION_FAILED", "failure": {"stage": "solver", "category": exc.category, "detail": exc.detail}, "state_history": candidate.state_history})
+        candidate = record_live_stage_failure(candidate, config, "solver", exc)
+        outcomes.append({
+            "item_id": item_id,
+            "state": candidate.state,
+            "failure": {
+                "stage": "solver",
+                "category": exc.category,
+                "detail": exc.detail,
+            },
+            "state_history": list(candidate.state_history),
+        })
         return
 
     outcomes.append({

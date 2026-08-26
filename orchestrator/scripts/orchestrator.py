@@ -141,6 +141,7 @@ CONFIG_PATH = Path(__file__).resolve().parents[1] / "config.json"
 SOLVER_BATCH_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "solver_input_batch.schema.json"
 REVIEWER_BATCH_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "reviewer_input_batch.schema.json"
 MANUAL_REVIEW_QUEUE_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "manual_review_queue.schema.json"
+CONFIG_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "config.schema.json"
 STATE_SCHEMA_VERSION = 2
 RUN_MANIFEST_SCHEMA_VERSION = 3
 STATE_MANIFEST_KEY = "run_manifest"
@@ -277,10 +278,30 @@ def _validate_config_paths(config: dict) -> None:
         resolve_repo_path(raw_path, field=f"config.paths.{name}")
 
 
-def load_config() -> dict:
-    config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+def _validate_config_contract(config: object, *, source: str = "orchestrator config") -> dict:
+    """Validate the complete config contract before any config is consumed.
+
+    JSON Schema owns structure, types, enums, and numeric bounds.  The
+    repository-local path check remains separate because JSON Schema cannot
+    resolve symlinks or enforce containment below ``REPO_ROOT``.
+    """
     if not isinstance(config, dict):
-        raise ValueError("orchestrator config must be an object")
+        raise ValueError(f"{source} must be an object")
+    try:
+        errors = schema_errors(config, load_schema(CONFIG_SCHEMA_PATH))
+    except SchemaValidationRuntimeError as exc:
+        raise ValueError(f"{source} schema could not be validated: {exc}") from exc
+    if errors:
+        raise ValueError(f"{source} schema validation failed: " + "; ".join(errors))
+    return config
+
+
+def load_config() -> dict:
+    try:
+        config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"could not load orchestrator config {CONFIG_PATH}: {exc}") from exc
+    _validate_config_contract(config)
     _validate_config_paths(config)
     configured_runtime_root(config)
     return config
@@ -380,6 +401,7 @@ def load_versions(config: dict) -> dict:
         "solver_input_batch": _hash_repo_file(
             "orchestrator/schemas/solver_input_batch.schema.json"
         ),
+        "config": _hash_repo_file("orchestrator/schemas/config.schema.json"),
     }
     v["orchestrator_version"] = _hash_repo_file("orchestrator/scripts/orchestrator.py")
     # The policy now lives in shared code; keep a separate CLI hash so the
@@ -483,6 +505,7 @@ def _manifest_file_hashes(config: dict) -> dict:
         "solver_input_batch": "orchestrator/schemas/solver_input_batch.schema.json",
         "reviewer_input_batch": "orchestrator/schemas/reviewer_input_batch.schema.json",
         "run_manifest": "orchestrator/schemas/run_manifest.schema.json",
+        "config": "orchestrator/schemas/config.schema.json",
     }
     validator_paths = {
         "generator": config["paths"]["generator_validate_script"],
@@ -583,8 +606,7 @@ def _finalize_run_manifest(manifest: dict) -> dict:
 
 def build_run_manifest(config: dict) -> dict:
     """Create the immutable run snapshot persisted at ``init`` time."""
-    if not isinstance(config, dict):
-        raise ValueError("run manifest config must be an object")
+    _validate_config_contract(config, source="run manifest config")
     _validate_config_paths(config)
     configured_runtime_root(config)
     versions = load_versions(config)
@@ -644,6 +666,10 @@ def validate_run_manifest(manifest: object) -> dict:
         raise ValueError("run manifest versions and hashes must be objects")
     if not isinstance(manifest["config_snapshot"], dict):
         raise ValueError("run manifest config_snapshot must be an object")
+    _validate_config_contract(
+        manifest["config_snapshot"],
+        source="run manifest config_snapshot",
+    )
     try:
         _validate_config_paths(manifest["config_snapshot"])
         configured_runtime_root(manifest["config_snapshot"])

@@ -582,6 +582,23 @@ def _project_node(value: Any, path: str, records: list[JsonObject], *, root: boo
 
 def _make_nullable(schema: JsonObject, path: str, records: list[JsonObject]) -> None:
     """Preserve an optional canonical property after making it required."""
+    if isinstance(schema.get("$ref"), str):
+        # A reference is resolved only by the validator.  Do not add null to
+        # the referenced definition itself: that definition may be required
+        # elsewhere.  Wrapping the reference keeps this property-local
+        # relaxation and leaves every other use of the definition unchanged.
+        referenced_schema = copy.deepcopy(schema)
+        schema.clear()
+        schema["anyOf"] = [referenced_schema, {"type": "null"}]
+        _record(
+            records,
+            path=path,
+            keyword="$ref",
+            action="relaxed",
+            replacement="anyOf[$ref, null]",
+            reason="optional canonical $ref property is required by Codex and null preserves its optional state",
+        )
+        return
     schema_type = schema.get("type")
     if isinstance(schema_type, str) and schema_type != "null":
         schema["type"] = [schema_type, "null"]

@@ -43,7 +43,11 @@ python -m unittest discover -s tests -p "test_*.py" -v
 `requirements.lock` pins the runtime dependency closure used for replay
 diagnostics. The immutable run manifest records the Python/platform snapshot
 and SHA-256 digests of both dependency files; environment differences are
-reported separately from the executable pipeline fingerprint.
+reported separately from the executable pipeline fingerprint. CI installs
+that same locked closure into an isolated audit environment and runs
+`python -m pip_audit --path <locked-runtime-site-packages>`, so the
+audit target is the installed runtime environment rather than a fresh
+resolution of `requirements.txt` or the CI tooling environment.
 
 CI also runs `pip check`, Ruff, a scoped mypy check, pip-audit, coverage measurement, and Python bytecode compilation on Ubuntu and Windows.
 

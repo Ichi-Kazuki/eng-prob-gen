@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config.schema.json",
+  "title": "TOEFL ITP Orchestrator configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["pipeline_version", "runtime_root", "retry_policy", "auto_accept", "paths"],
+  "properties": {
+    "pipeline_version": { "$ref": "#/$defs/non_empty_string" },
+    "runtime_root": { "$ref": "#/$defs/non_empty_string" },
+    "retry_policy": { "$ref": "#/$defs/retry_policy" },
+    "auto_accept": { "$ref": "#/$defs/auto_accept" },
+    "paths": { "$ref": "#/$defs/paths" }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "non_negative_integer": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "retry_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_revision_cycles",
+        "max_generation_validation_retries",
+        "max_system_failure_retries",
+        "stage_failure_policy"
+      ],
+      "properties": {
+        "max_revision_cycles": { "$ref": "#/$defs/non_negative_integer" },
+        "max_generation_validation_retries": { "$ref": "#/$defs/non_negative_integer" },
+        "max_system_failure_retries": { "$ref": "#/$defs/non_negative_integer" },
+        "stage_failure_policy": { "enum": ["retry_then_manual_review"] },
+        "replay_driver_behavior": { "$ref": "#/$defs/non_empty_string" }
+      }
+    },
+    "auto_accept": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_solver_confidence", "block_source_similarity_risk"],
+      "properties": {
+        "allowed_solver_confidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["HIGH", "MEDIUM", "LOW"] }
+        },
+        "block_source_similarity_risk": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["LOW", "MEDIUM", "HIGH"] }
+        }
+      }
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spec_json",
+        "generator_agent_md",
+        "reviewer_agent_md",
+        "solver_agent_md",
+        "generator_validate_script",
+        "reviewer_validate_script",
+        "solver_validate_script",
+        "solver_blinding_script",
+        "manual_review_queue"
+      ],
+      "properties": {
+        "spec_json": { "$ref": "#/$defs/non_empty_string" },
+        "generator_agent_md": { "$ref": "#/$defs/non_empty_string" },
+        "reviewer_agent_md": { "$ref": "#/$defs/non_empty_string" },
+        "solver_agent_md": { "$ref": "#/$defs/non_empty_string" },
+        "generator_validate_script": { "$ref": "#/$defs/non_empty_string" },
+        "reviewer_validate_script": { "$ref": "#/$defs/non_empty_string" },
+        "solver_validate_script": { "$ref": "#/$defs/non_empty_string" },
+        "solver_blinding_script": { "$ref": "#/$defs/non_empty_string" },
+        "manual_review_queue": { "$ref": "#/$defs/non_empty_string" }
+      }
+    }
+  }
+}

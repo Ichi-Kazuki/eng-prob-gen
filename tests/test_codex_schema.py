@@ -12,6 +12,7 @@ from runtime.codex_schema import (
     build_codex_transport_artifact,
     build_codex_transport_schema,
     codex_transport_schema_errors,
+    normalize_codex_output_for_canonical,
 )
 from shared.schema_validation import load_schema, schema_errors
 
@@ -192,6 +193,47 @@ class CodexSchemaAdapterTests(unittest.TestCase):
                 transport = build_codex_transport_schema(canonical)
                 self.assertEqual(transport["properties"]["value"]["enum"], expected)
                 self.assertEqual(canonical, original)
+
+    def test_optional_ref_is_nullable_without_mutating_its_definition(self) -> None:
+        canonical = {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {
+                "optional_obj": {"$ref": "#/$defs/Foo"},
+            },
+            "$defs": {
+                "Foo": {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["value"],
+                    "properties": {"value": {"type": "string"}},
+                },
+            },
+        }
+        original = copy.deepcopy(canonical)
+
+        artifact = build_codex_transport_artifact(canonical)
+        transport_property = artifact.schema["properties"]["optional_obj"]
+        self.assertEqual(
+            transport_property,
+            {"anyOf": [{"$ref": "#/$defs/Foo"}, {"type": "null"}]},
+        )
+        self.assertEqual(canonical, original)
+        self.assertEqual(schema_errors({}, canonical), [])
+        self.assertEqual(schema_errors({"optional_obj": None}, artifact.schema), [])
+
+        normalized = normalize_codex_output_for_canonical(
+            {"optional_obj": None}, canonical
+        )
+        self.assertEqual(normalized, {})
+        self.assertEqual(schema_errors(normalized, canonical), [])
+        ref_relaxations = [
+            entry
+            for entry in artifact.provenance["removed_or_relaxed_keywords"]
+            if entry["path"] == "$.properties.optional_obj" and entry["keyword"] == "$ref"
+        ]
+        self.assertEqual(len(ref_relaxations), 1)
+        self.assertEqual(ref_relaxations[0]["replacement"], "anyOf[$ref, null]")
 
 
 if __name__ == "__main__":
