@@ -9,6 +9,9 @@ replacement-candidate dilution.
 ``rebuild_feedback <round_label>`` regenerates a round artifact from the
 persisted Candidate Reviewer history if the original artifact write failed.
 ``init ... --force-reset`` is required to replace an existing state file.
+Reviewer calls use the canonical state-bound payload from
+``prepare_reviewer_batch``; raw Generator metadata is retained only for the
+later comparison phase.
 Solver batches are rebuilt from committed state and are rejected when their
 state fingerprint is stale. Final artifacts use a staging directory and a
 completion manifest so an incomplete publish is not treated as a run. Stage
@@ -19,6 +22,7 @@ migrated before finalization.
 
 from __future__ import annotations
 
+import copy
 import json
 import sys
 from pathlib import Path
@@ -30,7 +34,7 @@ from orchestrator import (  # noqa: E402
     Candidate,
     config_from_run_manifest,
     configured_runtime_root,
-    current_version_mismatches,
+    ensure_pipeline_snapshot_current,
     State,
     SystemCallError,
     TERMINAL_STATES,
@@ -39,6 +43,7 @@ from orchestrator import (  # noqa: E402
     build_manual_review_entry,
     build_provenance_record,
     build_review_feedback_from_state,
+    build_reviewer_batch_artifact,
     build_solver_batch_artifact,
     canonical_solver_input_errors,
     derive_slot_requirements,
@@ -59,6 +64,7 @@ from orchestrator import (  # noqa: E402
     strip_internal_test_keys,
     validate_final_record,
     validate_solver_batch_artifact,
+    validate_reviewer_batch_artifact,
     validate_stage_item_ids,
 )
 from shared.json_io import (  # noqa: E402
@@ -74,6 +80,7 @@ from driver_helpers import apply_generation_result, apply_review_result  # noqa:
 
 VALIDATION_DIR = configured_runtime_root() / "validation"
 STATE_PATH = VALIDATION_DIR / "validation_candidates_state.json"
+REVIEWER_BATCH_FILENAME = "validation_reviewer_input_batch.json"
 
 
 def load_state() -> dict[str, Candidate]:
@@ -86,7 +93,11 @@ def load_state_config() -> dict:
     if not STATE_PATH.exists():
         return load_config()
     manifest = load_state_manifest(STATE_PATH)
-    return config_from_run_manifest(manifest) if manifest is not None else load_config()
+    current_config = load_config()
+    if manifest is None:
+        return current_config
+    ensure_pipeline_snapshot_current(manifest, current_config)
+    return config_from_run_manifest(manifest)
 
 
 def save_state(candidates: dict[str, Candidate], run_manifest: dict | None = None) -> None:
@@ -95,12 +106,52 @@ def save_state(candidates: dict[str, Candidate], run_manifest: dict | None = Non
         run_manifest = load_state_manifest(STATE_PATH)
     if run_manifest is None:
         run_manifest = build_run_manifest(load_config())
+    for candidate in candidates.values():
+        if candidate.planned_slot is None and candidate.generator_item is not None:
+            candidate.planned_slot = derive_slot_requirements(candidate.generator_item)
     save_candidate_state(STATE_PATH, candidates, run_manifest=run_manifest)
+    atomic_write_json(reviewer_batch_path(), build_reviewer_batch_artifact(candidates))
 
 
 def state_transaction():
     """Lock the full Candidate read-modify-write cycle for this driver."""
     return exclusive_state_transaction(STATE_PATH, load_state, save_state)
+
+
+def reviewer_batch_path() -> Path:
+    return VALIDATION_DIR / REVIEWER_BATCH_FILENAME
+
+
+def write_reviewer_batch() -> None:
+    """Publish the current canonical Reviewer batch from a locked snapshot."""
+    with exclusive_file_lock(STATE_PATH):
+        candidates = load_state()
+        artifact = build_reviewer_batch_artifact(candidates)
+        atomic_write_json(reviewer_batch_path(), artifact)
+
+
+def validate_reviewer_batch_if_present(candidates: dict[str, Candidate]) -> None:
+    """Reject a present stale/tampered precomputed Reviewer input artifact."""
+    path = reviewer_batch_path()
+    if not path.exists():
+        # A current run is initialized with this artifact.  Only unmanifested
+        # legacy/direct-call state may omit it; silently falling back to raw
+        # Generator state would reopen the prompt-only blinding boundary.
+        if load_state_manifest(STATE_PATH) is not None:
+            raise ValueError(
+                "refusing Reviewer output: canonical Reviewer batch is missing"
+            )
+        return
+    try:
+        artifact = read_json(path)
+    except JsonPersistenceError as exc:
+        raise ValueError(f"refusing Reviewer output: current Reviewer batch is unreadable: {exc}") from exc
+    errors = validate_reviewer_batch_artifact(artifact, candidates)
+    if errors:
+        raise ValueError(
+            "refusing Reviewer output: Reviewer batch is missing, stale, or tampered: "
+            + "; ".join(errors)
+        )
 
 
 def state_tally(candidates: dict[str, Candidate]) -> dict[str, int]:
@@ -160,6 +211,7 @@ def cmd_apply_review(
     reviewer_items = load_items_by_id(Path(reviewer_path), f"reviewer {round_label}")
     routed: dict[str, list[str]] = {}
     with state_transaction() as candidates:
+        validate_reviewer_batch_if_present(candidates)
         batch_errors = validate_stage_item_ids(
             candidates, reviewer_items, "reviewer", allow_partial=allow_partial
         )
@@ -184,12 +236,14 @@ def cmd_apply_review(
         VALIDATION_DIR / f"validation_round_feedback_{round_label}.json",
         feedback_document,
     )
+    write_reviewer_batch()
     print(f"Applied Reviewer {round_label}: { {k: len(v) for k, v in routed.items()} }")
     print(f"State tally: {state_tally(candidates)}")
 
 
 def cmd_rebuild_feedback(round_label: str) -> None:
     """Idempotently rebuild one Reviewer round's feedback from Candidate state."""
+    load_state_config()
     with exclusive_file_lock(STATE_PATH):
         candidates = load_state()
         feedback_document = build_review_feedback_from_state(candidates, round_label)
@@ -228,6 +282,8 @@ def cmd_apply_revision(generator_path: str, *, allow_partial: bool = False) -> N
                 c = retry_failed_stage(c, config)
             else:
                 c.reviewer_item = None
+                c.reviewer_input = None
+                c.reviewer_input_sha256 = None
                 c.solver_item = None
                 c.solver_input = None
                 c.leakage_check = None
@@ -239,6 +295,8 @@ def cmd_apply_revision(generator_path: str, *, allow_partial: bool = False) -> N
             c = apply_generation_result(c, raw, config, process_generation_output)
             candidates[item_id] = c
             updated.append(item_id)
+
+    write_reviewer_batch()
     print(f"Applied revisions: {len(updated)}")
     print(f"State tally: {state_tally(candidates)}")
 
@@ -302,6 +360,13 @@ def cmd_prepare_solver_batch() -> None:
     print(f"Prepared blinded Solver batch: {len(batch)}")
 
 
+def cmd_prepare_reviewer_batch() -> None:
+    """Rebuild the canonical phase-1 Reviewer input artifact."""
+    load_state_config()
+    write_reviewer_batch()
+    print(f"Prepared canonical Reviewer batch -> {reviewer_batch_path()}")
+
+
 def cmd_apply_solver(solver_path: str, *, allow_partial: bool = False) -> None:
     config = load_state_config()
     solver_items = load_items_by_id(Path(solver_path), "solver output")
@@ -347,13 +412,17 @@ def cmd_apply_solver(solver_path: str, *, allow_partial: bool = False) -> None:
 
 def cmd_finalize() -> None:
     config = load_state_config()
-    run_manifest = load_state_manifest(STATE_PATH) if STATE_PATH.exists() else None
-    versions = (
-        load_versions(config)
-        if run_manifest is None
-        else manifest_versions(run_manifest)
-    )
-    candidates = load_state()
+    # Acquire the first state snapshot under the same exclusive lock used by
+    # stage transactions. Artifact construction happens after unlock, then
+    # the commit phase below rechecks this exact snapshot digest.
+    with exclusive_file_lock(STATE_PATH):
+        candidates = load_state()
+        run_manifest = load_state_manifest(STATE_PATH) if STATE_PATH.exists() else None
+        if run_manifest is not None:
+            ensure_pipeline_snapshot_current(run_manifest, config)
+        candidates = copy.deepcopy(candidates)
+        state_digest = state_snapshot_digest(candidates, run_manifest=run_manifest)
+    versions = load_versions(config) if run_manifest is None else manifest_versions(run_manifest)
     legacy_candidates = sorted(
         candidate.item_id for candidate in candidates.values() if candidate.legacy_compatibility
     )
@@ -410,7 +479,6 @@ def cmd_finalize() -> None:
                 + "; ".join(final_errors)
             )
     run_id = finalization_id(candidates, versions)
-    state_digest = state_snapshot_digest(candidates, run_manifest=run_manifest)
     wrapper["finalize_id"] = run_id
     wrapper["state_digest"] = state_digest
     artifacts = {
@@ -431,6 +499,8 @@ def cmd_finalize() -> None:
             raise ValueError("validation finalize snapshot is stale; rerun finalize")
         if run_manifest is not None and current_manifest != run_manifest:
             raise ValueError("validation run manifest changed; refusing mixed finalization")
+        if current_manifest is not None:
+            ensure_pipeline_snapshot_current(current_manifest, config)
         manifest = publish_json_bundle(
             VALIDATION_DIR,
             artifacts,
@@ -445,10 +515,6 @@ def cmd_finalize() -> None:
     print(f"Finalized {len(candidates)} initial candidates")
     print(f"State tally: {state_tally(candidates)}")
     print(f"Finalize id: {run_id}")
-    if run_manifest is not None:
-        mismatches = current_version_mismatches(run_manifest)
-        if mismatches:
-            print(f"WARNING: current files differ from the run snapshot: {', '.join(mismatches)}")
 
 
 def main() -> int:
@@ -478,6 +544,8 @@ def main() -> int:
         cmd_apply_revision(*args, allow_partial=bool(allow_partial))
     elif cmd == "prepare_solver_batch":
         cmd_prepare_solver_batch()
+    elif cmd == "prepare_reviewer_batch":
+        cmd_prepare_reviewer_batch()
     elif cmd == "apply_solver":
         allow_partial = args.count("--allow-partial")
         if allow_partial > 1:

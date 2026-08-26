@@ -52,6 +52,12 @@ from shared.solver_blinding import (  # noqa: E402
     WRITTEN_EXPRESSION_ALLOWLIST,
     canonical_solver_input as _canonical_solver_input,
 )
+from shared.reviewer_blinding import (  # noqa: E402
+    canonical_reviewer_input as _canonical_reviewer_input,
+    canonical_reviewer_input_sha256 as _canonical_reviewer_input_sha256,
+    reviewer_input_errors as _reviewer_input_errors,
+    reviewer_input_sha256 as _reviewer_input_sha256,
+)
 
 __all__ = [
     "State",
@@ -81,6 +87,7 @@ __all__ = [
     "load_config",
     "configured_runtime_root",
     "load_versions",
+    "pipeline_fingerprint",
     "build_run_manifest",
     "validate_run_manifest",
     "load_state_bundle",
@@ -88,6 +95,7 @@ __all__ = [
     "config_from_run_manifest",
     "manifest_versions",
     "current_version_mismatches",
+    "ensure_pipeline_snapshot_current",
     "load_items_by_id",
     "strip_internal_test_keys",
     "run_schema_validator",
@@ -95,6 +103,11 @@ __all__ = [
     "canonicalize_solver_input",
     "canonical_solver_input_errors",
     "leakage_guard",
+    "canonical_reviewer_input",
+    "canonical_reviewer_input_sha256",
+    "reviewer_input_errors",
+    "build_reviewer_batch_artifact",
+    "validate_reviewer_batch_artifact",
     "build_generator_feedback",
     "build_review_feedback_from_state",
     "derive_slot_requirements",
@@ -110,6 +123,9 @@ __all__ = [
     "build_provenance_record",
     "build_manual_review_entry",
     "append_manual_review_queue",
+    "validate_manual_review_entry",
+    "migrate_manual_review_entry",
+    "migrate_manual_review_queue",
     "parse_agent_json",
     "validate_final_record",
 ]
@@ -117,8 +133,10 @@ __all__ = [
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = Path(__file__).resolve().parents[1] / "config.json"
 SOLVER_BATCH_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "solver_input_batch.schema.json"
+REVIEWER_BATCH_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "reviewer_input_batch.schema.json"
+MANUAL_REVIEW_QUEUE_SCHEMA_PATH = REPO_ROOT / "orchestrator" / "schemas" / "manual_review_queue.schema.json"
 STATE_SCHEMA_VERSION = 2
-RUN_MANIFEST_SCHEMA_VERSION = 1
+RUN_MANIFEST_SCHEMA_VERSION = 2
 STATE_MANIFEST_KEY = "run_manifest"
 ACCEPTANCE_POLICY_SCHEMA_VERSION = 1
 ACCEPTANCE_POLICY_FIELDS = (
@@ -318,6 +336,20 @@ def load_versions(config: dict) -> dict:
     v["solver_blinding_cli_version"] = _hash_repo_file(
         config["paths"]["solver_blinding_script"]
     )
+    v["reviewer_blinding_version"] = _hash_repo_file("shared/reviewer_blinding.py")
+    v["we_v2_versions"] = {
+        "generator_prompt": _hash_repo_file(".claude/agents/toefl-itp-we-generator-v2.md"),
+        "reviewer_prompt": _hash_repo_file(".claude/agents/toefl-itp-we-reviewer-v2.md"),
+        "mutation_safety": _hash_repo_file(
+            "agents/toefl_itp_we_generator_v2/scripts/mutation_safety.py"
+        ),
+        "format_validator": _hash_repo_file(
+            "agents/toefl_itp_we_generator_v2/scripts/validate_format.py"
+        ),
+        "format_planner": _hash_repo_file(
+            "agents/toefl_itp_we_generator_v2/scripts/format_planner.py"
+        ),
+    }
     v["config_version"] = _hash_repo_file("orchestrator/config.json")
     return v
 
@@ -341,6 +373,8 @@ def _manifest_file_hashes(config: dict) -> dict:
         "generator": config["paths"]["generator_agent_md"],
         "reviewer": config["paths"]["reviewer_agent_md"],
         "solver": config["paths"]["solver_agent_md"],
+        "we_generator_v2": ".claude/agents/toefl-itp-we-generator-v2.md",
+        "we_reviewer_v2": ".claude/agents/toefl-itp-we-reviewer-v2.md",
     }
     schema_paths = {
         "generator_structure": "agents/toefl_itp_grammar_generator/schema/structure_item.schema.json",
@@ -351,13 +385,17 @@ def _manifest_file_hashes(config: dict) -> dict:
         "solver": "agents/toefl_itp_grammar_solver/schema/solver_output.schema.json",
         "grammar_evidence": "agents/toefl_itp_we_generator_v2/schema/grammar_evidence.schema.json",
         "solver_input_batch": "orchestrator/schemas/solver_input_batch.schema.json",
+        "reviewer_input_batch": "orchestrator/schemas/reviewer_input_batch.schema.json",
         "run_manifest": "orchestrator/schemas/run_manifest.schema.json",
     }
     validator_paths = {
         "generator": config["paths"]["generator_validate_script"],
         "reviewer": config["paths"]["reviewer_validate_script"],
         "solver": config["paths"]["solver_validate_script"],
+        "solver_blinding_cli": config["paths"]["solver_blinding_script"],
         "we_generator_v2": "agents/toefl_itp_we_generator_v2/scripts/validate_output.py",
+        "we_mutation_safety": "agents/toefl_itp_we_generator_v2/scripts/mutation_safety.py",
+        "we_format_validator": "agents/toefl_itp_we_generator_v2/scripts/validate_format.py",
         "we_reviewer_v2": "agents/toefl_itp_we_reviewer_v2/scripts/validate_output.py",
     }
     shared_paths = {
@@ -365,17 +403,24 @@ def _manifest_file_hashes(config: dict) -> dict:
         "json_io": "shared/json_io.py",
         "schema_validation": "shared/schema_validation.py",
         "solver_blinding": "shared/solver_blinding.py",
+        "reviewer_blinding": "shared/reviewer_blinding.py",
         "tokenization": "shared/tokenization.py",
     }
     runtime_paths = {
         "adapters": "runtime/adapters.py",
         "codex_schema": "runtime/codex_schema.py",
     }
+    driver_paths = {
+        "pilot": "orchestrator/scripts/pilot_driver.py",
+        "validation": "orchestrator/scripts/validation_driver.py",
+    }
     policy_input_paths = {
         "specification": config["paths"]["spec_json"],
+        "taxonomy": "analysis/grammar_taxonomy.json",
         "we_format_spec": "specs/toefl_itp_we_format_spec_addendum.json",
         "we_format_config": "agents/toefl_itp_we_generator_v2/config/we_v2_format_config.json",
         "we_format_planner": "agents/toefl_itp_we_generator_v2/scripts/format_planner.py",
+        "we_grammar_evidence_schema": "agents/toefl_itp_we_generator_v2/schema/grammar_evidence.schema.json",
         "we_official_profile": "analysis/we_format/written_expression_format_official.json",
     }
 
@@ -388,10 +433,40 @@ def _manifest_file_hashes(config: dict) -> dict:
         "schemas": hash_group(schema_paths),
         "validators": hash_group(validator_paths),
         "orchestrator_source": _hash_repo_file("orchestrator/scripts/orchestrator.py"),
+        "drivers": hash_group(driver_paths),
         "shared_modules": hash_group(shared_paths),
         "runtime_modules": hash_group(runtime_paths),
         "policy_inputs": hash_group(policy_input_paths),
     }
+
+
+def pipeline_fingerprint(
+    config: dict,
+    *,
+    versions: dict | None = None,
+    hashes: dict | None = None,
+) -> str:
+    """Hash the complete executable/configuration snapshot for one run."""
+
+    if not isinstance(config, dict):
+        raise ValueError("pipeline fingerprint config must be an object")
+    versions = load_versions(config) if versions is None else copy.deepcopy(versions)
+    hashes = _manifest_file_hashes(config) if hashes is None else copy.deepcopy(hashes)
+    return canonical_json_sha256({
+        "config_snapshot": copy.deepcopy(config),
+        "versions": versions,
+        "hashes": hashes,
+    })
+
+
+def manifest_pipeline_fingerprint(manifest: dict) -> str:
+    """Derive the fingerprint from persisted manifest data only."""
+
+    return pipeline_fingerprint(
+        manifest["config_snapshot"],
+        versions=manifest["versions"],
+        hashes=manifest["hashes"],
+    )
 
 
 def _manifest_payload(manifest: dict) -> dict:
@@ -414,16 +489,21 @@ def build_run_manifest(config: dict) -> dict:
     """Create the immutable run snapshot persisted at ``init`` time."""
     if not isinstance(config, dict):
         raise ValueError("run manifest config must be an object")
+    versions = load_versions(config)
+    hashes = _manifest_file_hashes(config)
     manifest = {
         "manifest_schema_version": RUN_MANIFEST_SCHEMA_VERSION,
         "created_at": now_iso(),
         "git_commit_sha": _git_commit_sha(),
         "pipeline_version": config.get("pipeline_version"),
-        "versions": load_versions(config),
-        "hashes": _manifest_file_hashes(config),
+        "versions": versions,
+        "hashes": hashes,
         # This is non-secret policy/config input used for replay validation.
         "config_snapshot": copy.deepcopy(config),
     }
+    manifest["pipeline_fingerprint"] = pipeline_fingerprint(
+        config, versions=versions, hashes=hashes
+    )
     return _finalize_run_manifest(manifest)
 
 
@@ -433,7 +513,8 @@ def validate_run_manifest(manifest: object) -> dict:
         raise ValueError("run manifest must be an object")
     required = {
         "manifest_schema_version", "created_at", "git_commit_sha", "pipeline_version",
-        "versions", "hashes", "config_snapshot", "manifest_sha256", "manifest_id",
+        "versions", "hashes", "config_snapshot", "pipeline_fingerprint",
+        "manifest_sha256", "manifest_id",
     }
     missing = sorted(required - set(manifest))
     if missing:
@@ -454,6 +535,10 @@ def validate_run_manifest(manifest: object) -> dict:
         raise ValueError("run manifest versions and hashes must be objects")
     if not isinstance(manifest["config_snapshot"], dict):
         raise ValueError("run manifest config_snapshot must be an object")
+    if not isinstance(manifest["pipeline_fingerprint"], str):
+        raise ValueError("run manifest pipeline_fingerprint must be a sha256 digest")
+    if manifest["pipeline_fingerprint"] != manifest_pipeline_fingerprint(manifest):
+        raise ValueError("run manifest pipeline_fingerprint mismatch")
     try:
         manifest_schema = load_schema(REPO_ROOT / "orchestrator" / "schemas" / "run_manifest.schema.json")
         structural_errors = schema_errors(manifest, manifest_schema)
@@ -491,7 +576,29 @@ def current_version_mismatches(manifest: dict, config: dict | None = None) -> li
         for name, value in values.items():
             if actual.get(group, {}).get(name) != value:
                 mismatches.append(f"{group}.{name}")
+    try:
+        current_fingerprint = pipeline_fingerprint(config, hashes=expected)
+    except (KeyError, TypeError, ValueError, OSError) as exc:
+        mismatches.append(f"pipeline_fingerprint(unavailable:{type(exc).__name__})")
+    else:
+        if manifest.get("pipeline_fingerprint") != current_fingerprint:
+            mismatches.append("pipeline_fingerprint")
     return mismatches
+
+
+def ensure_pipeline_snapshot_current(
+    manifest: dict,
+    config: dict | None = None,
+) -> None:
+    """Fail closed when the checked-out pipeline differs from run start."""
+
+    validated = validate_run_manifest(manifest)
+    mismatches = current_version_mismatches(validated, config)
+    if mismatches:
+        raise ValueError(
+            "pipeline version snapshot mismatch; continuation is refused: "
+            + ", ".join(mismatches)
+        )
 
 
 def load_items_by_id(path: Path, label: str = "") -> dict[str, dict]:
@@ -727,6 +834,94 @@ def canonical_solver_input_errors(
             "derived from the current generator_item"
         ]
     return []
+
+
+def canonical_reviewer_input(item: dict) -> dict:
+    """Return the canonical phase-1 Reviewer payload from shared code."""
+
+    return _canonical_reviewer_input(item)
+
+
+def canonical_reviewer_input_sha256(item: dict) -> str:
+    """Return the digest of the canonical phase-1 Reviewer payload."""
+
+    return _canonical_reviewer_input_sha256(item)
+
+
+def reviewer_input_errors(
+    generator_item: object,
+    reviewer_input: object,
+    expected_sha256: object | None = None,
+) -> list[str]:
+    """Check a persisted/precomputed Reviewer payload against its source."""
+
+    return _reviewer_input_errors(generator_item, reviewer_input, expected_sha256)
+
+
+def build_reviewer_batch_artifact(candidates: dict[str, "Candidate"]) -> dict:
+    """Build the deterministic, allowlisted Reviewer invocation batch."""
+
+    items: list[dict] = []
+    input_hashes: dict[str, str] = {}
+    for item_id in sorted(candidates):
+        candidate = candidates[item_id]
+        reviewer_retry_pending = (
+            candidate.state in {State.GENERATION_FAILED, State.VALIDATION_FAILED}
+            and candidate.failure is not None
+            and candidate.failure.stage == "reviewer"
+        )
+        if candidate.state != State.REVIEWING and not reviewer_retry_pending:
+            continue
+        if candidate.generator_item is None:
+            raise ValueError(f"REVIEWING candidate {item_id!r} has no generator_item")
+        expected = canonical_reviewer_input(candidate.generator_item)
+        if candidate.reviewer_input is not None:
+            errors = reviewer_input_errors(
+                candidate.generator_item,
+                candidate.reviewer_input,
+                candidate.reviewer_input_sha256,
+            )
+            if errors:
+                raise ValueError(f"{item_id}: {'; '.join(errors)}")
+            payload = copy.deepcopy(candidate.reviewer_input)
+        else:
+            payload = expected
+        items.append(payload)
+        input_hashes[item_id] = _reviewer_input_sha256(payload)
+    return {
+        "artifact_version": 1,
+        "state_fingerprint": state_snapshot_digest(candidates),
+        "items": items,
+        "input_sha256": input_hashes,
+    }
+
+
+def validate_reviewer_batch_artifact(
+    artifact: object,
+    candidates: dict[str, "Candidate"],
+) -> list[str]:
+    """Return errors when a precomputed Reviewer batch is stale/tampered."""
+
+    if not isinstance(artifact, dict):
+        return ["Reviewer batch artifact must be an object"]
+    try:
+        structural_errors = schema_errors(artifact, load_schema(REVIEWER_BATCH_SCHEMA_PATH))
+    except SchemaValidationRuntimeError:
+        raise
+    if structural_errors:
+        return [f"reviewer_input_batch.schema.json: {error}" for error in structural_errors]
+    try:
+        expected = build_reviewer_batch_artifact(candidates)
+    except (TypeError, ValueError, KeyError) as exc:
+        return [f"current persisted state cannot produce a Reviewer batch: {exc}"]
+    errors: list[str] = []
+    if artifact.get("state_fingerprint") != expected["state_fingerprint"]:
+        errors.append("Reviewer batch artifact is stale relative to persisted candidate state")
+    if artifact.get("items") != expected["items"]:
+        errors.append("Reviewer batch artifact items do not match canonical Reviewer inputs")
+    if artifact.get("input_sha256") != expected["input_sha256"]:
+        errors.append("Reviewer batch artifact input digests do not match canonical inputs")
+    return errors
 
 
 def leakage_guard(blinded_item: dict, section: str) -> tuple[bool, list[str]]:
@@ -1022,6 +1217,10 @@ class Candidate:
     validation_failure_retries: dict[str, int] = field(default_factory=dict)
     generator_item: Optional[dict] = None
     reviewer_item: Optional[dict] = None
+    # Canonical phase-1 Reviewer input.  Keeping this projection and its
+    # digest in state makes the blind boundary auditable across processes.
+    reviewer_input: Optional[dict] = None
+    reviewer_input_sha256: Optional[str] = None
     solver_item: Optional[dict] = None
     solver_input: Optional[dict] = None
     leakage_check: Optional[dict] = None
@@ -1077,6 +1276,8 @@ def candidate_to_dict(candidate: Candidate) -> dict:
         "validation_failure_retries": candidate.validation_failure_retries,
         "generator_item": candidate.generator_item,
         "reviewer_item": candidate.reviewer_item,
+        "reviewer_input": candidate.reviewer_input,
+        "reviewer_input_sha256": candidate.reviewer_input_sha256,
         "solver_item": candidate.solver_item,
         "solver_input": candidate.solver_input,
         "leakage_check": candidate.leakage_check,
@@ -1130,6 +1331,8 @@ def dict_to_candidate(
     candidate.validation_failure_retries = data.get("validation_failure_retries", {})
     candidate.generator_item = data.get("generator_item")
     candidate.reviewer_item = data.get("reviewer_item")
+    candidate.reviewer_input = data.get("reviewer_input")
+    candidate.reviewer_input_sha256 = data.get("reviewer_input_sha256")
     candidate.solver_item = data.get("solver_item")
     candidate.solver_input = data.get("solver_input")
     candidate.leakage_check = data.get("leakage_check")
@@ -1257,6 +1460,12 @@ def validate_candidate_invariants(
             routed_state = history_entry.get("routed_state")
             if routed_state is not None and routed_state not in VALID_STATES:
                 errors.append(f"review_history[{index}].routed_state is invalid")
+            review_input_hash = history_entry.get("reviewer_input_sha256")
+            if review_input_hash is not None and (
+                not isinstance(review_input_hash, str)
+                or not review_input_hash.startswith("sha256:")
+            ):
+                errors.append(f"review_history[{index}].reviewer_input_sha256 is malformed")
 
     for stage, item in (
         ("generator", candidate.generator_item),
@@ -1276,6 +1485,24 @@ def validate_candidate_invariants(
                 errors.append(
                     f"{stage}.section={item.get('section')!r} does not match candidate.section={candidate.section!r}"
                 )
+
+    if candidate.reviewer_input is None:
+        if candidate.reviewer_input_sha256 is not None:
+            errors.append("reviewer_input_sha256 requires reviewer_input")
+    else:
+        if not isinstance(candidate.reviewer_input, dict):
+            errors.append("reviewer_input must be an object")
+        elif candidate.generator_item is None:
+            errors.append("reviewer_input requires generator_item for canonical validation")
+        else:
+            errors.extend(
+                f"reviewer_input: {error}"
+                for error in reviewer_input_errors(
+                    candidate.generator_item,
+                    candidate.reviewer_input,
+                    candidate.reviewer_input_sha256,
+                )
+            )
 
     failure = candidate.failure
     if failure is not None:
@@ -1792,6 +2019,8 @@ def retry_failed_stage(candidate: Candidate, config: dict) -> Candidate:
     # the already-blinded input, but never reuse a stale Solver verdict.
     if stage == "generator":
         candidate.reviewer_item = None
+        candidate.reviewer_input = None
+        candidate.reviewer_input_sha256 = None
         candidate.solver_item = None
         candidate.solver_input = None
         candidate.leakage_check = None
@@ -1858,6 +2087,17 @@ def process_generation_output(candidate: Candidate, config: dict) -> Candidate:
 
     candidate.failure = None
     candidate.transition(State.REVIEWING, "generator output passed schema validation")
+    try:
+        candidate.reviewer_input = canonical_reviewer_input(candidate.generator_item)
+        candidate.reviewer_input_sha256 = _reviewer_input_sha256(candidate.reviewer_input)
+    except (TypeError, ValueError, KeyError) as exc:
+        return _reject_identity(
+            candidate,
+            config,
+            "reviewer",
+            candidate.generator_item,
+            [f"canonical Reviewer input could not be derived: {exc}"],
+        )
     return candidate
 
 
@@ -1872,6 +2112,26 @@ def process_review_output(candidate: Candidate, config: dict) -> Candidate:
         )
     if candidate.reviewer_item is None:
         raise ValueError("process_review_output requires reviewer_item")
+    try:
+        if candidate.reviewer_input is None:
+            candidate.reviewer_input = canonical_reviewer_input(candidate.generator_item)
+            candidate.reviewer_input_sha256 = _reviewer_input_sha256(candidate.reviewer_input)
+        else:
+            blind_errors = reviewer_input_errors(
+                candidate.generator_item,
+                candidate.reviewer_input,
+                candidate.reviewer_input_sha256,
+            )
+            if blind_errors:
+                return _reject_identity(candidate, config, "reviewer", candidate.reviewer_input, blind_errors)
+    except (TypeError, ValueError, KeyError) as exc:
+        return _reject_identity(
+            candidate,
+            config,
+            "reviewer",
+            candidate.generator_item,
+            [f"canonical Reviewer input could not be derived: {exc}"],
+        )
     identity_errors = _identity_errors(candidate, candidate.reviewer_item, "reviewer")
     if identity_errors:
         return _reject_identity(candidate, config, "reviewer", candidate.reviewer_item, identity_errors)
@@ -2259,6 +2519,111 @@ def build_manual_review_entry(candidate: Candidate) -> dict:
     }
 
 
+def validate_manual_review_entry(entry: object, *, legacy_mode: bool = False) -> list[str]:
+    """Validate one queue entry, including its full current schema.
+
+    The small legacy branch exists only for direct callers of the old helper
+    API that supplied a deliberately minimal ``{"item_id": ...}`` record.
+    Production drivers always use the current schema and never enable it.
+    """
+
+    if legacy_mode:
+        if not isinstance(entry, dict) or not isinstance(entry.get("item_id"), str) or not entry["item_id"].strip():
+            return ["legacy manual review entry requires a non-empty item_id"]
+        return []
+    if not isinstance(entry, dict):
+        return ["manual review entry must be an object"]
+    # Validate the entry schema through a tiny document wrapper so local $ref
+    # resolution remains anchored at the checked-in queue schema.
+    schema = load_schema(MANUAL_REVIEW_QUEUE_SCHEMA_PATH)
+    errors = [
+        f"manual_review_queue.schema.json: {error}"
+        for error in schema_errors({"items": [entry]}, schema)
+    ]
+    if not errors:
+        item = entry.get("item")
+        if isinstance(item, dict):
+            if item.get("item_id") != entry.get("item_id"):
+                errors.append("manual review entry item.item_id must match item_id")
+            if item.get("section") != entry.get("section"):
+                errors.append("manual review entry item.section must match section")
+    return errors
+
+
+def migrate_manual_review_entry(entry: object) -> dict:
+    """Convert one recognized historical queue record to the current shape."""
+
+    if not isinstance(entry, dict):
+        raise ValueError("legacy manual review entry must be an object")
+    if "_synthetic_test_entry" in entry:
+        raise ValueError("synthetic manual review entries cannot be migrated")
+    if not validate_manual_review_entry(entry):
+        return copy.deepcopy(entry)
+    required_legacy = (
+        "item_id", "section", "item", "disagreement_reasons", "generator_answer",
+        "reviewer_answer", "solver_answer", "solver_confidence", "issues",
+        "state_history", "possible_actions",
+    )
+    missing = [key for key in required_legacy if key not in entry]
+    if missing:
+        raise ValueError(
+            "manual review entry is neither current nor a recognized legacy record; "
+            f"missing field(s): {', '.join(missing)}"
+        )
+    if not isinstance(entry["item"], dict) or entry["item"].get("item_id") != entry["item_id"]:
+        raise ValueError("legacy manual review entry item identity is invalid")
+    if entry["item"].get("section") != entry["section"]:
+        raise ValueError("legacy manual review entry section is inconsistent")
+    disagreement_reasons = entry["disagreement_reasons"]
+    if not isinstance(disagreement_reasons, list) or not all(isinstance(value, str) for value in disagreement_reasons):
+        raise ValueError("legacy manual review disagreement_reasons must be a string array")
+    migrated = {
+        "item_id": entry["item_id"],
+        "section": entry["section"],
+        "item": copy.deepcopy(entry["item"]),
+        "routing_reason": "consensus_disagreement" if disagreement_reasons else "manual_review_routing",
+        "consensus": {
+            "auto_accept": False,
+            "routing": "MANUAL_REVIEW",
+            "failed_conditions": [],
+            "disagreement_reasons": copy.deepcopy(disagreement_reasons),
+        },
+        "failed_conditions": [],
+        "disagreement_reasons": copy.deepcopy(disagreement_reasons),
+        "failure": None,
+        "leakage_check": None,
+        "notes": [],
+        "generator_answer": entry["generator_answer"],
+        "reviewer_answer": entry["reviewer_answer"],
+        "solver_answer": entry["solver_answer"],
+        "solver_confidence": entry["solver_confidence"],
+        "issues": copy.deepcopy(entry["issues"]),
+        "state_history": copy.deepcopy(entry["state_history"]),
+        "possible_actions": copy.deepcopy(entry["possible_actions"]),
+    }
+    errors = validate_manual_review_entry(migrated)
+    if errors:
+        raise ValueError("migrated manual review entry failed schema validation: " + "; ".join(errors))
+    return migrated
+
+
+def migrate_manual_review_queue(document: object) -> dict:
+    """Explicitly migrate a whole historical queue without mixing formats."""
+
+    if not isinstance(document, dict) or not isinstance(document.get("items"), list):
+        raise ValueError("manual review queue must be an object containing an items array")
+    migrated: list[dict] = []
+    seen: set[str] = set()
+    for entry in document["items"]:
+        converted = migrate_manual_review_entry(entry)
+        item_id = converted.get("item_id") if isinstance(converted, dict) else None
+        if not isinstance(item_id, str) or item_id in seen:
+            raise ValueError("manual review queue migration found an invalid or duplicate item_id")
+        seen.add(item_id)
+        migrated.append(converted)
+    return {"items": migrated}
+
+
 FINAL_SCHEMA_PATHS = {
     "accepted_item": REPO_ROOT / "orchestrator" / "schemas" / "accepted_item.schema.json",
     "qa_audit": REPO_ROOT / "orchestrator" / "schemas" / "qa_audit.schema.json",
@@ -2288,9 +2653,26 @@ def validate_final_record(record: dict) -> list[str]:
     return errors
 
 
-def append_manual_review_queue(config: dict, entries: list[dict]) -> Path:
+def append_manual_review_queue(
+    config: dict,
+    entries: list[dict],
+    *,
+    legacy_mode: bool | None = None,
+) -> Path:
+    if not isinstance(config, dict) or not isinstance(entries, list):
+        raise JsonPersistenceError("manual review queue append requires a config object and entry list")
     configured = Path(config["paths"]["manual_review_queue"])
     path = configured if configured.is_absolute() else REPO_ROOT / configured
+    # A missing pipeline marker is the historical direct-library API. Live
+    # drivers pass a manifest-backed config and therefore take the strict path.
+    # Callers migrating old records can opt into this compatibility path
+    # explicitly; a current config may never silently downgrade to it.
+    if legacy_mode is None:
+        legacy_mode = not isinstance(config.get("pipeline_version"), str)
+    if legacy_mode and isinstance(config.get("pipeline_version"), str):
+        raise JsonPersistenceError(
+            "legacy manual-review append requires an unversioned compatibility config"
+        )
     with exclusive_file_lock(path):
         if path.exists():
             document = read_json(path)
@@ -2303,9 +2685,11 @@ def append_manual_review_queue(config: dict, entries: list[dict]) -> Path:
             existing = []
         existing_ids: set[str] = set()
         for entry in existing:
-            if not isinstance(entry, dict) or not isinstance(entry.get("item_id"), str):
+            validation_errors = validate_manual_review_entry(entry, legacy_mode=legacy_mode)
+            if validation_errors:
                 raise JsonPersistenceError(
-                    f"manual review queue {path} contains an entry without a valid item_id"
+                    f"manual review queue {path} contains an invalid entry: "
+                    + "; ".join(validation_errors)
                 )
             if entry["item_id"] in existing_ids:
                 raise JsonPersistenceError(
@@ -2315,8 +2699,12 @@ def append_manual_review_queue(config: dict, entries: list[dict]) -> Path:
         incoming_by_id: dict[str, dict] = {}
         incoming_order: list[str] = []
         for entry in entries:
-            if not isinstance(entry, dict) or not isinstance(entry.get("item_id"), str):
-                raise JsonPersistenceError("new manual review entry has no valid item_id")
+            validation_errors = validate_manual_review_entry(entry, legacy_mode=legacy_mode)
+            if validation_errors:
+                raise JsonPersistenceError(
+                    "new manual review entry failed schema validation: "
+                    + "; ".join(validation_errors)
+                )
             item_id = entry["item_id"]
             if item_id not in incoming_by_id:
                 incoming_order.append(item_id)

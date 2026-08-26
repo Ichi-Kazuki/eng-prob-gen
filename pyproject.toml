@@ -32,6 +32,7 @@ ignore = ["E501"]
 python_version = "3.11"
 files = [
   "shared/schema_validation.py",
+  "shared/reviewer_blinding.py",
   "shared/solver_blinding.py",
   "orchestrator/scripts/driver_helpers.py",
 ]

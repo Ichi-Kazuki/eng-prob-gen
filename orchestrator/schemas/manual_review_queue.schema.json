@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "manual_review_queue.schema.json",
+  "title": "Current manual review queue",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/entry"}
+    }
+  },
+  "$defs": {
+    "answer": {"type": ["string", "null"]},
+    "consensus": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["auto_accept", "routing", "failed_conditions", "disagreement_reasons"],
+      "properties": {
+        "auto_accept": {"type": "boolean"},
+        "routing": {"const": "MANUAL_REVIEW"},
+        "failed_conditions": {"type": "array", "items": {"type": "string"}},
+        "disagreement_reasons": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "failure": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["kind", "stage", "detail"],
+      "properties": {
+        "kind": {"enum": ["system", "content"]},
+        "stage": {"enum": ["generator", "reviewer", "solver"]},
+        "detail": {"type": "string"}
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item_id", "section", "item", "routing_reason", "consensus",
+        "failed_conditions", "disagreement_reasons", "failure", "leakage_check",
+        "notes", "generator_answer", "reviewer_answer", "solver_answer",
+        "solver_confidence", "issues", "state_history", "possible_actions"
+      ],
+      "properties": {
+        "item_id": {"type": "string", "minLength": 1},
+        "section": {"enum": ["Structure", "Written Expression"]},
+        "item": {"type": "object"},
+        "routing_reason": {"type": "string", "minLength": 1},
+        "consensus": {"$ref": "#/$defs/consensus"},
+        "failed_conditions": {"type": "array", "items": {"type": "string"}},
+        "disagreement_reasons": {"type": "array", "items": {"type": "string"}},
+        "failure": {"$ref": "#/$defs/failure"},
+        "leakage_check": {"type": ["object", "null"]},
+        "notes": {"type": "array", "items": {"type": "string"}},
+        "generator_answer": {"$ref": "#/$defs/answer"},
+        "reviewer_answer": {"$ref": "#/$defs/answer"},
+        "solver_answer": {"$ref": "#/$defs/answer"},
+        "solver_confidence": {"type": ["string", "null"]},
+        "issues": {"type": "array"},
+        "state_history": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "possible_actions": {
+          "type": "array",
+          "items": {"enum": ["ACCEPT", "REGENERATE", "DISCARD"]}
+        }
+      }
+    }
+  }
+}

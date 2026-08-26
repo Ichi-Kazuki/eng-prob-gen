@@ -24,7 +24,9 @@ Subcommands (each reads/writes runs/pilot/candidates_state.json):
 
   apply_review <reviewer_output.json> <round_label> [--allow-partial]
       Feed a Reviewer output file (item_id-keyed) to process_review_output()
-      for every expected candidate. Output IDs must match the pending batch by
+      for every expected candidate. The Reviewer must have been given the
+      canonical reviewer_input_batch.json produced by init or
+      prepare_reviewer_batch. Output IDs must match the pending batch by
       default; ``--allow-partial`` is an explicit compatibility opt-in. Prints
       routing summary and writes runs/pilot/round_feedback_<round_label>.json
       (allowlisted Generator feedback for any REVISE_REQUIRED candidates).
@@ -44,6 +46,10 @@ Subcommands (each reads/writes runs/pilot/candidates_state.json):
       projection (through orchestrator.blind_for_solver()), commit Candidate
       state first, and then rebuild the state-bound batch artifact at
       runs/pilot/solver_input_batch.json.
+
+  prepare_reviewer_batch
+      Rebuild the canonical, state-bound phase-1 Reviewer payload at
+      runs/pilot/reviewer_input_batch.json.
 
   apply_solver <solver_output.json> [--allow-partial]
       Feed a Solver output file to process_solver_stage() for every
@@ -67,6 +73,7 @@ Usage: python orchestrator/scripts/pilot_driver.py <subcommand> [args...]
 
 from __future__ import annotations
 
+import copy
 import sys
 from pathlib import Path
 
@@ -77,7 +84,7 @@ from orchestrator import (  # noqa: E402
     Candidate,
     config_from_run_manifest,
     configured_runtime_root,
-    current_version_mismatches,
+    ensure_pipeline_snapshot_current,
     State,
     SystemCallError,
     TERMINAL_STATES,
@@ -87,6 +94,7 @@ from orchestrator import (  # noqa: E402
     build_manual_review_entry,
     build_provenance_record,
     build_review_feedback_from_state,
+    build_reviewer_batch_artifact,
     build_solver_batch_artifact,
     canonical_solver_input_errors,
     derive_slot_requirements,
@@ -106,6 +114,7 @@ from orchestrator import (  # noqa: E402
     save_candidate_state,
     strip_internal_test_keys,
     validate_solver_batch_artifact,
+    validate_reviewer_batch_artifact,
     validate_stage_item_ids,
 )
 from shared.json_io import (  # noqa: E402
@@ -121,6 +130,7 @@ from driver_helpers import apply_generation_result, apply_review_result  # noqa:
 
 PILOT_DIR = configured_runtime_root() / "pilot"
 STATE_PATH = PILOT_DIR / "candidates_state.json"
+REVIEWER_BATCH_FILENAME = "reviewer_input_batch.json"
 
 
 def load_state() -> dict[str, Candidate]:
@@ -133,7 +143,11 @@ def load_state_config() -> dict:
     if not STATE_PATH.exists():
         return load_config()
     manifest = load_state_manifest(STATE_PATH)
-    return config_from_run_manifest(manifest) if manifest is not None else load_config()
+    current_config = load_config()
+    if manifest is None:
+        return current_config
+    ensure_pipeline_snapshot_current(manifest, current_config)
+    return config_from_run_manifest(manifest)
 
 
 def save_state(candidates: dict[str, Candidate], run_manifest: dict | None = None) -> None:
@@ -142,12 +156,52 @@ def save_state(candidates: dict[str, Candidate], run_manifest: dict | None = Non
         run_manifest = load_state_manifest(STATE_PATH)
     if run_manifest is None:
         run_manifest = build_run_manifest(load_config())
+    for candidate in candidates.values():
+        if candidate.planned_slot is None and candidate.generator_item is not None:
+            candidate.planned_slot = derive_slot_requirements(candidate.generator_item)
     save_candidate_state(STATE_PATH, candidates, run_manifest=run_manifest)
+    atomic_write_json(reviewer_batch_path(), build_reviewer_batch_artifact(candidates))
 
 
 def state_transaction():
     """Lock the full Candidate read-modify-write cycle for this driver."""
     return exclusive_state_transaction(STATE_PATH, load_state, save_state)
+
+
+def reviewer_batch_path() -> Path:
+    return PILOT_DIR / REVIEWER_BATCH_FILENAME
+
+
+def write_reviewer_batch() -> None:
+    """Publish the current canonical Reviewer batch from a locked snapshot."""
+    with exclusive_file_lock(STATE_PATH):
+        candidates = load_state()
+        artifact = build_reviewer_batch_artifact(candidates)
+        atomic_write_json(reviewer_batch_path(), artifact)
+
+
+def validate_reviewer_batch_if_present(candidates: dict[str, Candidate]) -> None:
+    """Reject a present stale/tampered precomputed Reviewer input artifact."""
+    path = reviewer_batch_path()
+    if not path.exists():
+        # A current run is initialized with this artifact.  Only unmanifested
+        # legacy/direct-call state may omit it; silently falling back to raw
+        # Generator state would reopen the prompt-only blinding boundary.
+        if load_state_manifest(STATE_PATH) is not None:
+            raise ValueError(
+                "refusing Reviewer output: canonical Reviewer batch is missing"
+            )
+        return
+    try:
+        artifact = read_json(path)
+    except JsonPersistenceError as exc:
+        raise ValueError(f"refusing Reviewer output: current Reviewer batch is unreadable: {exc}") from exc
+    errors = validate_reviewer_batch_artifact(artifact, candidates)
+    if errors:
+        raise ValueError(
+            "refusing Reviewer output: Reviewer batch is missing, stale, or tampered: "
+            + "; ".join(errors)
+        )
 
 
 def state_tally(candidates: dict[str, Candidate]) -> dict[str, int]:
@@ -217,6 +271,7 @@ def cmd_apply_review(
 
     routed: dict[str, list[str]] = {}
     with state_transaction() as candidates:
+        validate_reviewer_batch_if_present(candidates)
         batch_errors = validate_stage_item_ids(
             candidates, reviewer_items, "reviewer", allow_partial=allow_partial
         )
@@ -240,6 +295,7 @@ def cmd_apply_review(
         feedback_document = build_review_feedback_from_state(candidates, round_label)
     feedback_path = PILOT_DIR / f"round_feedback_{round_label}.json"
     atomic_write_json(feedback_path, feedback_document)
+    write_reviewer_batch()
 
     applied_count = sum(len(ids) for ids in routed.values())
     print(f"Reviewer round '{round_label}' applied: {applied_count} (supplied: {len(reviewer_items)}).")
@@ -252,6 +308,7 @@ def cmd_apply_review(
 
 def cmd_rebuild_feedback(round_label: str) -> None:
     """Idempotently rebuild one round's feedback from persisted Candidate state."""
+    load_state_config()
     with exclusive_file_lock(STATE_PATH):
         candidates = load_state()
         feedback_document = build_review_feedback_from_state(candidates, round_label)
@@ -293,6 +350,8 @@ def cmd_apply_revision(generator_path: str, *, allow_partial: bool = False) -> N
                 # A revision is a quality-driven new Generator attempt. It is
                 # intentionally distinct from transient failure retry counters.
                 c.reviewer_item = None
+                c.reviewer_input = None
+                c.reviewer_input_sha256 = None
                 c.solver_item = None
                 c.solver_input = None
                 c.leakage_check = None
@@ -303,6 +362,8 @@ def cmd_apply_revision(generator_path: str, *, allow_partial: bool = False) -> N
                 c.generation_attempt += 1
             c = apply_generation_result(c, gitem, config, process_generation_output)
             updated.append(item_id)
+
+    write_reviewer_batch()
 
     print(f"Applied revision to {len(updated)} candidate(s): {sorted(updated)}")
     ready = sorted(i for i in updated if candidates[i].state == State.REVIEWING)
@@ -378,6 +439,13 @@ def cmd_prepare_solver_batch() -> None:
     print(f"item_ids: {sorted(solving.keys())}")
 
 
+def cmd_prepare_reviewer_batch() -> None:
+    """Rebuild the canonical phase-1 Reviewer input artifact."""
+    load_state_config()
+    write_reviewer_batch()
+    print(f"Prepared canonical Reviewer batch -> {reviewer_batch_path()}")
+
+
 def cmd_apply_solver(solver_path: str, *, allow_partial: bool = False) -> None:
     config = load_state_config()
     solver_items = load_items_by_id(Path(solver_path), "solver output")
@@ -431,13 +499,17 @@ def cmd_apply_solver(solver_path: str, *, allow_partial: bool = False) -> None:
 
 def cmd_finalize() -> None:
     config = load_state_config()
-    run_manifest = load_state_manifest(STATE_PATH) if STATE_PATH.exists() else None
-    versions = (
-        load_versions(config)
-        if run_manifest is None
-        else manifest_versions(run_manifest)
-    )
-    candidates = load_state()
+    # Acquire the first state snapshot under the same exclusive lock used by
+    # stage transactions. Artifact construction happens after unlock, then
+    # the commit phase below rechecks this exact snapshot digest.
+    with exclusive_file_lock(STATE_PATH):
+        candidates = load_state()
+        run_manifest = load_state_manifest(STATE_PATH) if STATE_PATH.exists() else None
+        if run_manifest is not None:
+            ensure_pipeline_snapshot_current(run_manifest, config)
+        candidates = copy.deepcopy(candidates)
+        state_digest = state_snapshot_digest(candidates, run_manifest=run_manifest)
+    versions = load_versions(config) if run_manifest is None else manifest_versions(run_manifest)
 
     legacy_candidates = sorted(
         candidate.item_id for candidate in candidates.values() if candidate.legacy_compatibility
@@ -485,7 +557,6 @@ def cmd_finalize() -> None:
                 + "; ".join(final_errors)
             )
     run_id = finalization_id(candidates, versions)
-    state_digest = state_snapshot_digest(candidates, run_manifest=run_manifest)
     artifacts = {
         "provenance": ("pilot_provenance.json", {
             "pipeline_version": config["pipeline_version"],
@@ -511,6 +582,8 @@ def cmd_finalize() -> None:
             raise ValueError("pilot finalize snapshot is stale; rerun finalize")
         if run_manifest is not None and current_manifest != run_manifest:
             raise ValueError("pilot run manifest changed; refusing mixed finalization")
+        if current_manifest is not None:
+            ensure_pipeline_snapshot_current(current_manifest, config)
         manifest = publish_json_bundle(
             PILOT_DIR,
             artifacts,
@@ -531,10 +604,6 @@ def cmd_finalize() -> None:
     print(f"State tally: {state_tally(candidates)}")
     print(f"ACCEPTED: {len(accepted_items)}  MANUAL_REVIEW: {len(manual_review_entries)}  failure_items: {len(failure_items)}")
     print(f"Finalize id: {run_id}")
-    if run_manifest is not None:
-        mismatches = current_version_mismatches(run_manifest)
-        if mismatches:
-            print(f"WARNING: current files differ from the run snapshot: {', '.join(mismatches)}")
     print("Wrote: pilot_provenance.json, pilot_accepted_items.json, pilot_manual_review.json, pilot_failure_items.json")
 
 
@@ -566,6 +635,8 @@ def main() -> int:
         cmd_apply_revision(*args, allow_partial=bool(allow_partial))
     elif cmd == "prepare_solver_batch":
         cmd_prepare_solver_batch()
+    elif cmd == "prepare_reviewer_batch":
+        cmd_prepare_reviewer_batch()
     elif cmd == "apply_solver":
         allow_partial = args.count("--allow-partial")
         if allow_partial > 1:

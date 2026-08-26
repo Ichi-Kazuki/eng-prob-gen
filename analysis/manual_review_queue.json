@@ -1,55 +1,6 @@
 {
   "items": [
     {
-      "item_id": "synthetic-struct-001",
-      "section": "Structure",
-      "item": {
-        "item_id": "synthetic-struct-001",
-        "section": "Structure",
-        "primary_target": "RELATIVE_CLAUSES",
-        "subtype": "test",
-        "secondary_features": [],
-        "difficulty": "MEDIUM",
-        "vocabulary_domain": "test domain",
-        "stem": "This is a synthetic stem ____.",
-        "options": {
-          "A": "a",
-          "B": "b",
-          "C": "c",
-          "D": "d"
-        },
-        "correct_answer": "C",
-        "answer_explanation": "test",
-        "distractor_rationales": {
-          "A": "x",
-          "B": "x",
-          "C": "correct",
-          "D": "x"
-        }
-      },
-      "disagreement_reasons": [
-        "solver_generator_mismatch",
-        "solver_reviewer_mismatch"
-      ],
-      "generator_answer": "C",
-      "reviewer_answer": "C",
-      "solver_answer": "D",
-      "solver_confidence": "HIGH",
-      "issues": [],
-      "state_history": [
-        "GENERATED",
-        "REVIEWING",
-        "SOLVING",
-        "MANUAL_REVIEW"
-      ],
-      "possible_actions": [
-        "ACCEPT",
-        "REGENERATE",
-        "DISCARD"
-      ],
-      "_synthetic_test_entry": "Produced by run_acceptance_tests.py to demonstrate manual-review-queue mechanics; not a real candidate awaiting human review."
-    },
-    {
       "item_id": "pilot-we-009",
       "section": "Written Expression",
       "item": {
@@ -79,6 +30,19 @@
       "disagreement_reasons": [
         "solver_ambiguous"
       ],
+      "routing_reason": "consensus_disagreement",
+      "consensus": {
+        "auto_accept": false,
+        "routing": "MANUAL_REVIEW",
+        "failed_conditions": [],
+        "disagreement_reasons": [
+          "solver_ambiguous"
+        ]
+      },
+      "failed_conditions": [],
+      "failure": null,
+      "leakage_check": null,
+      "notes": [],
       "generator_answer": "A",
       "reviewer_answer": "A",
       "solver_answer": "AMBIGUOUS",
