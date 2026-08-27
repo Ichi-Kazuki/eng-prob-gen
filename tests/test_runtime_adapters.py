@@ -484,6 +484,7 @@ class LiveReviewerAdapterTests(unittest.TestCase):
         raw = copy.deepcopy(expected)
         del raw["generator_answer"]
         del raw["answer_match"]
+        del raw["checks"]["target_metadata"]
         return generator, expected, raw
 
     def test_valid_reviewer_output_is_structurally_adapted_without_rewriting(self) -> None:
@@ -499,12 +500,45 @@ class LiveReviewerAdapterTests(unittest.TestCase):
         with self.assertRaises(harness.LiveInvocationError):
             harness.formal_reviewer(raw, generator, 1, "adapter-test")
 
-    def test_pass_with_failed_target_metadata_check_is_rejected(self) -> None:
+    def test_blind_target_metadata_field_is_rejected(self) -> None:
         harness = self._harness()
-        generator, _expected, raw = self._records()
-        raw["checks"]["target_metadata"] = "FAIL"
+        generator, expected, raw = self._records()
+        raw["checks"]["target_metadata"] = expected["checks"]["target_metadata"]
         with self.assertRaises(harness.LiveInvocationError):
             harness.formal_reviewer(raw, generator, 1, "adapter-test")
+
+    def test_target_metadata_is_added_after_blind_response(self) -> None:
+        harness = self._harness()
+        generator, expected, raw = self._records()
+        live_schema = harness.reviewer_runtime_schema()
+        checks_schema = live_schema["properties"]["checks"]
+        self.assertNotIn("target_metadata", checks_schema["required"])
+        self.assertNotIn("target_metadata", checks_schema["properties"])
+        formal = harness.formal_reviewer(raw, generator, 1, "adapter-test")
+        self.assertEqual(formal["checks"]["target_metadata"], "PASS")
+        self.assertEqual(formal, expected)
+
+    def test_generator_metadata_contradiction_fails_closed_without_changing_grammar(self) -> None:
+        harness = self._harness()
+        generator, _expected, raw = self._records()
+        generator = copy.deepcopy(generator)
+        generator["grammar_metadata"]["correct_span_type"] = "CLAUSE_OR_CLAUSE_LIKE"
+        original_answer = raw["independent_answer"]
+        original_grammar = raw["grammar_validity"]
+        with self.assertRaises(harness.LiveInvocationError) as raised:
+            harness.formal_reviewer(raw, generator, 1, "adapter-test")
+        self.assertIn("target_metadata", str(raised.exception))
+        self.assertEqual(raw["independent_answer"], original_answer)
+        self.assertEqual(raw["grammar_validity"], original_grammar)
+
+    def test_contradictory_formal_target_metadata_fails_closed(self) -> None:
+        harness = self._harness()
+        generator, _expected, raw = self._records()
+        formal = harness.adapt_reviewer_structural(raw, generator, 1, "adapter-test")
+        formal["checks"]["target_metadata"] = "AMBIGUOUS"
+        errors = harness.validate_reviewer_post_blind_consistency(formal, generator)
+        self.assertTrue(errors)
+        self.assertIn("target_metadata", errors[0])
 
     def test_missing_verdict_is_rejected(self) -> None:
         harness = self._harness()

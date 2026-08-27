@@ -70,3 +70,11 @@ Human Calibrationが未完了のため、境界は過度に緩めない。zero-e
 - Structure pipeline / WE v1.1 / Solver / Orchestratorの変更
 - consensus policyの変更
 - DB insert / Website接続 / large batch scheduling
+## Blind responsibility boundary
+
+The live Reviewer invocation is strictly blind. The Generator target and
+metadata are intentionally withheld, so the blind response must not include
+`checks.target_metadata`. The Orchestrator adds that field only after the
+blind response by running a deterministic Generator-metadata consistency
+check. This does not alter any blind grammar judgment; contradictory formal
+records fail closed.

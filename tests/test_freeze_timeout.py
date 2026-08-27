@@ -19,7 +19,15 @@ from runtime.adapters import (
     InvocationRequest,
     RuntimeInvocationError,
 )
-from runtime.freeze import FreezeDriftError, create_run_freeze, load_run_freeze
+from runtime.freeze import (
+    NONPROTECTED_WORKSPACE_DIRTY,
+    PROTECTED_FREEZE_DRIFT,
+    FreezeDriftError,
+    classify_workspace_status,
+    create_run_freeze,
+    load_run_freeze,
+    verify_detached_worktree,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,6 +67,75 @@ def _pid_exists(pid: int) -> bool:
 
 
 class ImmutableRunFreezeTests(unittest.TestCase):
+    def test_workspace_status_separates_ephemeral_and_protected_rows(self) -> None:
+        status = classify_workspace_status(
+            "?? .mypy_cache/new.bin\n M runtime/freeze.py\n?? runs/pilot/out.json\n"
+        )
+        self.assertEqual(status["protected"]["entries"], [" M runtime/freeze.py"])
+        self.assertEqual(
+            status["nonprotected"]["entries"],
+            ["?? .mypy_cache/new.bin", "?? runs/pilot/out.json"],
+        )
+
+    def test_allowlisted_workspace_dirtiness_does_not_invalidate_v2_freeze(self) -> None:
+        statuses = iter(
+            (
+                "?? .pytest_cache/initial.bin\n",
+                "?? .pytest_cache/new.bin\n",
+                "?? .pytest_cache/new.bin\n",
+            )
+        )
+
+        def fake_git(_repo_root: Path, *args: str) -> str | None:
+            if args[:2] == ("rev-parse", "HEAD"):
+                return "test-head\n"
+            if args[:2] == ("status", "--porcelain"):
+                return next(statuses)
+            return None
+
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            protected = root / "protected.py"
+            protected.write_text("original\n", encoding="utf-8")
+            with mock.patch("runtime.freeze._run_git", side_effect=fake_git):
+                freeze = create_run_freeze(
+                    root / "freeze",
+                    repo_root=ROOT,
+                    protected_file_groups={"orchestrator": {"test_file": protected}},
+                    canonical_schemas={"generator": GENERATOR_SCHEMA},
+                    agent_instructions={},
+                    provider="test",
+                    codex_cli_version="test",
+                    model="test",
+                    reasoning_effort="unset",
+                    sandbox="read-only",
+                    timeout_seconds=1,
+                )
+                freeze.verify("after", "allowlisted-dirty")
+                self.assertEqual(
+                    freeze.workspace_status()["category"],
+                    NONPROTECTED_WORKSPACE_DIRTY,
+                )
+
+            manifest = json.loads(freeze.manifest_path.read_text(encoding="utf-8"))
+            self.assertTrue(manifest["git_status"]["nonprotected_dirty"])
+
+    def test_detached_worktree_preflight_requires_exact_clean_source(self) -> None:
+        with mock.patch(
+            "runtime.freeze._run_git",
+            side_effect=("abc123\n", None),
+        ), mock.patch("runtime.freeze._git_status_porcelain", return_value=""):
+            self.assertEqual(verify_detached_worktree(ROOT, expected_commit="abc123"), "abc123")
+
+    def test_detached_worktree_preflight_rejects_branch_or_protected_dirtiness(self) -> None:
+        with mock.patch(
+            "runtime.freeze._run_git",
+            side_effect=("abc123\n", "master\n"),
+        ), mock.patch("runtime.freeze._git_status_porcelain", return_value=" M runtime/freeze.py\n"):
+            with self.assertRaises(ValueError) as raised:
+                verify_detached_worktree(ROOT, expected_commit="abc123")
+        self.assertIn("detached_head", str(raised.exception))
+
     def test_freeze_captures_settings_hashes_and_schema_snapshots(self) -> None:
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
@@ -105,7 +182,7 @@ class ImmutableRunFreezeTests(unittest.TestCase):
             protected.write_text("drifted\n", encoding="utf-8")
             with self.assertRaises(FreezeDriftError) as raised:
                 freeze.verify("after", "generator")
-            self.assertEqual(raised.exception.category, "FREEZE_DRIFT")
+            self.assertEqual(raised.exception.category, PROTECTED_FREEZE_DRIFT)
             self.assertTrue(any("protected_file_hashes" in item for item in raised.exception.mismatches))
 
     def test_dirty_state_change_is_detected_by_porcelain_hash(self) -> None:
@@ -137,8 +214,8 @@ class ImmutableRunFreezeTests(unittest.TestCase):
                 with self.assertRaises(FreezeDriftError) as raised:
                     freeze.verify("after", "dirty-state")
 
-        self.assertIn("git_status.porcelain_sha256", raised.exception.mismatches)
-        self.assertIn("git_status.porcelain", raised.exception.mismatches)
+        self.assertIn("git_status.protected_porcelain_sha256", raised.exception.mismatches)
+        self.assertIn("git_status.protected_porcelain", raised.exception.mismatches)
 
     def test_runtime_guard_runs_before_and_after_process(self) -> None:
         events: list[tuple[str, str]] = []

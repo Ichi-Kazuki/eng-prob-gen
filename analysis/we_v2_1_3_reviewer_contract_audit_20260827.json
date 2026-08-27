@@ -1,0 +1,2213 @@
+{
+  "status": "OFFLINE_AUDIT_COMPLETE",
+  "run": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z",
+  "model_invocations": 0,
+  "historical_run_modified": false,
+  "failure_count": 22,
+  "all_failures_are_reviewer_contract_failures": true,
+  "target_metadata_origins": [
+    "BLIND_REVIEWER_RESPONSE"
+  ],
+  "canonical_error_variants": 1,
+  "root_cause": "The blind Reviewer output contract required checks.target_metadata, but the blind invocation withheld Generator metadata. All 22 raw responses therefore returned target_metadata=AMBIGUOUS; the formal Reviewer semantic validator rejects PASS with an ambiguous check.",
+  "items": [
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-001",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-9d3d7400-5a30-4b14-b140-3e876c437f92.last-message.json",
+        "sha256": "sha256:f06dda9293297bbf537af7f4b1279a63a27734c808f27e61e113658f59d268a8",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "C",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "PASS"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "C",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-001] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-001] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-002",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-dead832b-bf9d-46ed-95b5-c60ead4b42e9.last-message.json",
+        "sha256": "sha256:24da0f039ae7ba7b209467b2ab1d85283c2be116acf943e60e46c104efb9bf99",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "C",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "WARN"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "C",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-002] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-002] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-003",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-9b1388ba-444d-4dc6-a9b5-0d2e25bdfc81.last-message.json",
+        "sha256": "sha256:db39756f8e43ae48b35551595b85047e79b3591e0795966582bd5c51f1660b66",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "B",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "B",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "WARN"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "B",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-003] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-003] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-004",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-4fdb6290-9671-49bb-8c6c-0acf50c4eb2e.last-message.json",
+        "sha256": "sha256:738678acc7724610c5772dbe6fb96ca4d75576343827b4891de6581b692fd453",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "C",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "PASS"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "C",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-004] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-004] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-005",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-36284d55-d900-4ab9-a9a4-5b1f7beb1f46.last-message.json",
+        "sha256": "sha256:b3ae204601fb243623a82b0c605ee1fa8cee9bd43c3faf8b953f28f7c0cd7f81",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "B",
+        "grammar_validity": "PASS",
+        "format_validity": "WARN",
+        "detected_error_count": 1,
+        "detected_error_position": "B",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "WARN",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "WARN"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "B",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-005] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-005] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-007",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-1c1bb351-f8e2-4a02-b238-dec98e653e17.last-message.json",
+        "sha256": "sha256:fbaa87ef4ebdebdefa147f577ec3b11b25da259faf3745b5ce051160c48c9ef7",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "C",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "PASS"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "C",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-007] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-007] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-008",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-b81bcdc7-a768-4a23-9598-b967837cec82.last-message.json",
+        "sha256": "sha256:ddfdada6343553e66b52183f24a050d37c9d1ce6a8063eae2fb3ea3d1f1d7f13",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "D",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "WARN"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "D",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-008] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-008] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-009",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-7d216ffc-4550-470f-b2e0-11ac7566697f.last-message.json",
+        "sha256": "sha256:1320b225bf056bc781bc05cb28de678d08a43338dbedbad4e012eb3a247a1a03",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "B",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "B",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "WARN"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "B",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-009] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-009] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-010",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-fcac5428-5117-42f5-994c-f01799437d77.last-message.json",
+        "sha256": "sha256:16c0b6c8dc96ff908db3ad4b8ab49eb40aa25f221bf77015a8a4bae3ab5c3419",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "C",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "PASS"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "C",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-010] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-010] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-012",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-7b02489d-6c73-4805-9d39-270f0ab35e8d.last-message.json",
+        "sha256": "sha256:02203fe48fadf471719fce0f764b6a7ac733f65cb424873f27375ecb5c371f28",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "C",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "PASS"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "C",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-012] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-012] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-013",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-660d866b-524b-4628-849c-ff1e13e843f0.last-message.json",
+        "sha256": "sha256:c995135ee668cea5cb9068aa70fdc0ba15f8dee6eab6afd70e299d37648302e5",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "C",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "PASS"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "C",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-013] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-013] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-014",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-a55703bd-ebd4-4b9a-946b-293f9676649b.last-message.json",
+        "sha256": "sha256:11c8d6d4989c980c9510f5847c56527281ebcb4bb9759b5029b43150ded16bef",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "C",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "PASS"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "C",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-014] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-014] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-015",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-7535f242-0a41-4725-9868-03ff6a090d46.last-message.json",
+        "sha256": "sha256:0e19fd14061a9e2530eba07aadbfe2483df8e847d3ddd0f4481407ab85b8ea17",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "D",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "WARN"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "D",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-015] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-015] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-017",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-80570ee5-5ed2-458a-a285-30c74ec96671.last-message.json",
+        "sha256": "sha256:16a589a4c8397a98534dce5347c6e8d3de370fa97c1fd49629a0aa874690e238",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "C",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "WARN"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "C",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-017] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-017] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-018",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-9d5dd6c9-e8b4-4a69-90cd-393e65a6b6a3.last-message.json",
+        "sha256": "sha256:fe708da6775276c657391432e012949a09207815fe9113727f7ea4a6850f0ab4",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "D",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "WARN"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [],
+        "generator_answer": "D",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-018] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-018] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-019",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-fe4daab2-c71a-4d77-823b-3385cdf70781.last-message.json",
+        "sha256": "sha256:108d822db25db9af3798e61ca4c1d975abf222612b11033b2dca6c1472cc5e07",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "D",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "WARN"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "D",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-019] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-019] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-020",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-1e435abc-7f35-4137-9810-3e4157da0853.last-message.json",
+        "sha256": "sha256:5cf199f9a4f625ba218e5ec89e3fe5d3ea8847558a7ae481d49b66b7fc03759b",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "B",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "B",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "PASS"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "B",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-020] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-020] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-021",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-9e2332c3-0c40-479a-9934-0f68b67dec32.last-message.json",
+        "sha256": "sha256:74bb29f69c5836c42bc9cd680c879a9103e3112b50aec344570b292187ca7458",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "D",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "PASS"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "D",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-021] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-021] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-022",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-b1c0a941-8524-47b9-ac7a-db455dd5ee5a.last-message.json",
+        "sha256": "sha256:636f11a34e7a68ecfff4b121217d3aad7fb093beee8b5297266f0954788a5bf1",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "B",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "B",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "WARN"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [],
+        "generator_answer": "B",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-022] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-022] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-023",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-53d25881-7739-4016-b85b-4fd2feeef165.last-message.json",
+        "sha256": "sha256:5f8adfba9534f023e21ea58d8196da13db8f54842c59518579232a124bbe82b1",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "C",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "WARN"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "C",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-023] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-023] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-024",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-d6435c8b-c8b9-4451-8683-df58cac5e6f5.last-message.json",
+        "sha256": "sha256:e1b7d743c33ba7f136b320c5178c909b4efe9fa6532ec640c93d8efe03b7f6c0",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "D",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "WARN"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "D",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-024] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-024] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    },
+    {
+      "item_id": "we-v2.1.3-live-T014147Z-025",
+      "raw_live_reviewer_response": {
+        "path": "runs/we_v2_1_3_live_pilot_fresh_20260827T014147Z/runtime/logs/reviewer-f750e9e9-47de-4980-b6c7-39646868618c.last-message.json",
+        "sha256": "sha256:2a1f0d78e6d3883432a5cb70256340d41867688b8122a1176e85cc4798f96667",
+        "keys": [
+          "agent_version",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_diagnostics",
+          "format_validity",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "grammar_validity": "PASS",
+        "format_validity": "PASS",
+        "detected_error_count": 1,
+        "detected_error_position": "C",
+        "checks": {
+          "grammar_validity": "PASS",
+          "one_error_only": "PASS",
+          "answer_uniqueness": "PASS",
+          "format_validity": "PASS",
+          "target_metadata": "AMBIGUOUS",
+          "naturalness": "PASS",
+          "provenance": "PASS"
+        }
+      },
+      "normalized_adapter_representation": {
+        "source": "historical structural adapter: deep copy + generator_answer + answer_match",
+        "keys": [
+          "agent_version",
+          "answer_match",
+          "checks",
+          "critical_failure",
+          "detected_error_count",
+          "detected_error_position",
+          "format_validity",
+          "generator_answer",
+          "grammar_validity",
+          "independent_answer",
+          "issues",
+          "item_id",
+          "marked_part_assessments",
+          "minimal_correction_valid",
+          "non_error_parts_valid",
+          "provenance",
+          "revision_requirements",
+          "section",
+          "source_similarity_risk",
+          "verdict"
+        ],
+        "transport_normalization_removed_keys": [
+          "format_diagnostics"
+        ],
+        "generator_answer": "C",
+        "answer_match": true,
+        "checks_target_metadata": "AMBIGUOUS",
+        "judgment_fields_unchanged": true
+      },
+      "final_formal_reviewer_record": {
+        "present": false,
+        "path": "runtime/formal/reviewer_outputs.json",
+        "item_id": null,
+        "reason_absent": "not published after canonical Reviewer validation failed"
+      },
+      "canonical_validation_errors": [
+        "reviewer: [we-v2.1.3-live-T014147Z-025] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']"
+      ],
+      "recorded_outcome_error": "reviewer: [we-v2.1.3-live-T014147Z-025] $.checks: PASS forbids failed/ambiguous checks=['target_metadata']",
+      "target_metadata_provenance": {
+        "raw_live_value": "AMBIGUOUS",
+        "normalized_value": "AMBIGUOUS",
+        "formal_value": null,
+        "origin": "BLIND_REVIEWER_RESPONSE",
+        "not_computed_by_structural_adapter": true,
+        "not_attached_during_post_blind_comparison": true,
+        "blind_input_keys": [
+          "item_id",
+          "marked_parts",
+          "section",
+          "sentence"
+        ]
+      },
+      "historical_transport_schema_errors": []
+    }
+  ]
+}

@@ -27,8 +27,11 @@ transport provenance are stored in the separate provenance sidecar.
 Each live run creates `runtime/freeze/freeze_manifest.json` before the first
 agent call and snapshots the canonical schemas under
 `runtime/freeze/snapshots/canonical-schemas/`. Generator, Reviewer, and Solver
-boundaries verify the manifest before and after every invocation; protected-file
-drift fails closed as `FREEZE_DRIFT`. Real subprocess timeouts terminate the
+boundaries verify the manifest before and after every invocation. Protected or
+non-allowlisted source drift fails closed as `PROTECTED_FREEZE_DRIFT`; changes
+limited to the explicit ephemeral allowlist are recorded as
+`NONPROTECTED_WORKSPACE_DIRTY` and do not invalidate the frozen cohort. Real
+subprocess timeouts terminate the
 Windows process tree with bounded `taskkill`/Job Object cleanup (or a bounded
 POSIX process-group escalation) and persist separate timeout, termination, and
 cleanup timestamps.

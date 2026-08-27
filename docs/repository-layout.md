@@ -68,6 +68,14 @@ runtime input. Historical answer-bearing artifacts currently retained under
 The reusable OCR/crop utilities formerly found in `tmp/` now live in
 `scripts/`; their input images and OCR outputs remain disposable local data.
 
+For the final quality pilot, source must be a new detached Git worktree at one
+explicit commit, created outside the development checkout by
+`scripts/prepare_final_pilot_worktree.py`. The harness is then run from that
+worktree with output directed to a separate absolute directory. The run freeze
+classifies protected/non-allowlisted source changes as
+`PROTECTED_FREEZE_DRIFT`; only paths in its explicit ephemeral allowlist are
+`NONPROTECTED_WORKSPACE_DIRTY` and may not invalidate the cohort by themselves.
+
 ## Reference material and copyright review
 
 The PDFs under `source/` are development/reference inputs; production runtime

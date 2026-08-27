@@ -10,6 +10,7 @@ invocation.
 from __future__ import annotations
 
 import copy
+import fnmatch
 import hashlib
 import json
 import shutil
@@ -18,12 +19,38 @@ import uuid
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Mapping
+from typing import Mapping, Sequence
 
 from shared.json_io import atomic_write_json  # noqa: E402
 
 
-FREEZE_SCHEMA_VERSION = 1
+FREEZE_SCHEMA_VERSION = 2
+PROTECTED_FREEZE_DRIFT = "PROTECTED_FREEZE_DRIFT"
+NONPROTECTED_WORKSPACE_DIRTY = "NONPROTECTED_WORKSPACE_DIRTY"
+
+# These are deliberately narrow, repository-relative patterns.  A path that
+# is not listed here is treated as protected source/configuration for a new
+# freeze, even if it is not one of the individually hashed files.
+DEFAULT_NONPROTECTED_PATHS = (
+    ".analysis_tmp_deps/",
+    ".analysis_tmp_pip_audit/",
+    ".analysis_tmp_uv_cache/",
+    ".coverage",
+    ".pytest_cache/",
+    ".mypy_cache/",
+    ".ruff_cache/",
+    "artifacts/",
+    "htmlcov/",
+    "ocr/",
+    "render/",
+    "runs/",
+    "tmp/",
+    "*.ocr/",
+    "*.render/",
+    "*.tmp",
+    "__pycache__/",
+    "*.pyc",
+)
 
 
 def _now_iso() -> str:
@@ -75,6 +102,63 @@ def _git_status_porcelain(repo_root: Path, *, excluded_path: Path | None = None)
     return _run_git(repo_root, *args)
 
 
+def _status_paths(row: str) -> list[str]:
+    """Extract all paths represented by one porcelain-v1 status row."""
+
+    if len(row) < 4:
+        return []
+    value = row[3:].strip()
+    if " -> " in value:
+        return [part.strip().strip('"') for part in value.split(" -> ")]
+    return [value.strip('"')]
+
+
+def _allowlisted_workspace_path(path: str, allowlist: Sequence[str]) -> bool:
+    normalized = path.replace("\\", "/").lstrip("./")
+    for pattern in allowlist:
+        candidate = pattern.replace("\\", "/").lstrip("./")
+        if candidate.endswith("/"):
+            if normalized == candidate[:-1] or normalized.startswith(candidate):
+                return True
+        elif fnmatch.fnmatchcase(normalized, candidate):
+            return True
+    return False
+
+
+def classify_workspace_status(
+    porcelain: str,
+    *,
+    allowlist: Sequence[str] = DEFAULT_NONPROTECTED_PATHS,
+) -> dict[str, object]:
+    """Separate protected freeze drift from explicitly ephemeral dirtiness."""
+
+    protected_rows: list[str] = []
+    nonprotected_rows: list[str] = []
+    for row in porcelain.splitlines(keepends=True):
+        paths = _status_paths(row.rstrip("\r\n"))
+        if paths and all(_allowlisted_workspace_path(path, allowlist) for path in paths):
+            nonprotected_rows.append(row)
+        else:
+            protected_rows.append(row)
+
+    protected_porcelain = "".join(protected_rows)
+    nonprotected_porcelain = "".join(nonprotected_rows)
+    return {
+        "protected": {
+            "clean": protected_porcelain == "",
+            "porcelain": protected_porcelain,
+            "porcelain_sha256": _sha256_bytes(protected_porcelain.encode("utf-8")),
+            "entries": [row.rstrip("\r\n") for row in protected_rows],
+        },
+        "nonprotected": {
+            "dirty": nonprotected_porcelain != "",
+            "porcelain": nonprotected_porcelain,
+            "porcelain_sha256": _sha256_bytes(nonprotected_porcelain.encode("utf-8")),
+            "entries": [row.rstrip("\r\n") for row in nonprotected_rows],
+        },
+    }
+
+
 def _repo_relative(repo_root: Path, path: Path) -> str:
     return str(path.resolve().relative_to(repo_root.resolve())).replace("\\", "/")
 
@@ -113,9 +197,18 @@ def _safe_snapshot_name(key: str, source: Path) -> str:
 class FreezeDriftError(RuntimeError):
     """A run-start contract no longer matches the live checkout."""
 
-    category = "FREEZE_DRIFT"
+    category = PROTECTED_FREEZE_DRIFT
 
-    def __init__(self, phase: str, stage: str, mismatches: list[str], manifest_path: Path):
+    def __init__(
+        self,
+        phase: str,
+        stage: str,
+        mismatches: list[str],
+        manifest_path: Path,
+        *,
+        category: str = PROTECTED_FREEZE_DRIFT,
+    ):
+        self.category = category
         self.phase = phase
         self.stage = stage
         self.mismatches = tuple(mismatches)
@@ -141,6 +234,31 @@ class RunFreeze:
     @property
     def manifest_sha256(self) -> str:
         return str(self.manifest["freeze_manifest_sha256"])
+
+    @property
+    def workspace_allowlist(self) -> tuple[str, ...]:
+        configured = self.manifest.get("workspace_allowlist", DEFAULT_NONPROTECTED_PATHS)
+        if not isinstance(configured, list) or any(not isinstance(value, str) for value in configured):
+            return DEFAULT_NONPROTECTED_PATHS
+        return tuple(configured)
+
+    def workspace_status(self) -> dict[str, object]:
+        """Return current protected/nonprotected status without mutating evidence."""
+
+        porcelain = _git_status_porcelain(self.repo_root, excluded_path=self.manifest_path.parent)
+        if porcelain is None:
+            return {"available": False, "category": PROTECTED_FREEZE_DRIFT}
+        classified = classify_workspace_status(porcelain, allowlist=self.workspace_allowlist)
+        protected = classified["protected"]
+        nonprotected = classified["nonprotected"]
+        category = (
+            PROTECTED_FREEZE_DRIFT
+            if isinstance(protected, dict) and not protected["clean"]
+            else NONPROTECTED_WORKSPACE_DIRTY
+            if isinstance(nonprotected, dict) and nonprotected["dirty"]
+            else None
+        )
+        return {"available": True, "category": category, **classified}
 
     def _manifest_mismatches(self) -> list[str]:
         mismatches: list[str] = []
@@ -177,7 +295,24 @@ class RunFreeze:
         actual_porcelain = _git_status_porcelain(self.repo_root, excluded_path=self.manifest_path.parent)
         if actual_porcelain is None:
             mismatches.append("git_status(unavailable)")
+        elif "protected_porcelain_sha256" in expected_status:
+            # v2 freezes compare only the protected partition.  Ephemeral
+            # cache/output churn is observable through workspace_status(), but
+            # cannot invalidate the frozen cohort by itself.
+            actual_status = classify_workspace_status(actual_porcelain, allowlist=self.workspace_allowlist)
+            actual_protected = actual_status["protected"]
+            expected_protected = expected_status.get("protected", {})
+            if not isinstance(actual_protected, dict) or not isinstance(expected_protected, dict):
+                mismatches.append("git_status.protected")
+            else:
+                if actual_protected["porcelain_sha256"] != expected_status.get("protected_porcelain_sha256"):
+                    mismatches.append("git_status.protected_porcelain_sha256")
+                if actual_protected["porcelain"] != expected_status.get("protected_porcelain"):
+                    mismatches.append("git_status.protected_porcelain")
+                if actual_protected["clean"] != expected_status.get("protected_clean"):
+                    mismatches.append("git_status.protected_clean")
         else:
+            # Preserve verification semantics for historical v1 manifests.
             actual_clean = actual_porcelain == ""
             if actual_clean != expected_status.get("clean"):
                 mismatches.append("git_status.clean")
@@ -233,6 +368,7 @@ def create_run_freeze(
     reasoning_effort: str,
     sandbox: str,
     timeout_seconds: float,
+    workspace_allowlist: Sequence[str] | None = None,
 ) -> RunFreeze:
     """Create and persist a run-start freeze plus schema/instruction snapshots."""
 
@@ -299,10 +435,16 @@ def create_run_freeze(
             "sha256": digest,
         }
 
+    allowlist = tuple(DEFAULT_NONPROTECTED_PATHS if workspace_allowlist is None else workspace_allowlist)
     git_head = (_run_git(repo_root, "rev-parse", "HEAD") or "").strip() or None
     git_porcelain = _git_status_porcelain(repo_root, excluded_path=freeze_root)
     if git_porcelain is None:
         raise RuntimeError("could not capture Git status for run freeze")
+    workspace_status = classify_workspace_status(git_porcelain, allowlist=allowlist)
+    protected_status = workspace_status["protected"]
+    nonprotected_status = workspace_status["nonprotected"]
+    if not isinstance(protected_status, dict) or not isinstance(nonprotected_status, dict):
+        raise RuntimeError("workspace status classifier returned an invalid result")
 
     manifest = {
         "freeze_schema_version": FREEZE_SCHEMA_VERSION,
@@ -313,6 +455,18 @@ def create_run_freeze(
             "clean": git_porcelain == "",
             "porcelain": git_porcelain,
             "porcelain_sha256": _sha256_bytes(git_porcelain.encode("utf-8")),
+            "protected_clean": protected_status["clean"],
+            "protected_porcelain": protected_status["porcelain"],
+            "protected_porcelain_sha256": protected_status["porcelain_sha256"],
+            "nonprotected_dirty": nonprotected_status["dirty"],
+            "nonprotected_porcelain": nonprotected_status["porcelain"],
+            "nonprotected_porcelain_sha256": nonprotected_status["porcelain_sha256"],
+        },
+        "workspace_allowlist": list(allowlist),
+        "worktree": {
+            "source_root": str(repo_root).replace("\\", "/"),
+            "exact_commit": git_head,
+            "detached": not bool((_run_git(repo_root, "symbolic-ref", "--quiet", "--short", "HEAD") or "").strip()),
         },
         "protected_file_groups": normalized_groups,
         "protected_file_hashes": dict(sorted(protected.items())),
@@ -389,11 +543,101 @@ def load_run_freeze(manifest_path: Path, *, repo_root: Path) -> RunFreeze:
     )
 
 
+def create_detached_worktree(
+    repository_root: Path,
+    worktree_path: Path,
+    *,
+    commit: str,
+) -> str:
+    """Materialize one exact detached commit for a quality-pilot source tree.
+
+    The caller owns the lifecycle of the resulting worktree.  This helper
+    refuses an existing destination, verifies the resolved commit and detached
+    HEAD, and requires an initially clean protected partition.  Pilot output
+    should be directed outside this tree so generated evidence cannot become
+    source input.
+    """
+
+    repository_root = Path(repository_root).resolve()
+    worktree_path = Path(worktree_path).resolve()
+    if worktree_path.exists():
+        raise FileExistsError(f"quality pilot worktree already exists: {worktree_path}")
+    resolved_commit = (_run_git(repository_root, "rev-parse", f"{commit}^{{commit}}") or "").strip()
+    if not resolved_commit:
+        raise ValueError(f"could not resolve quality pilot commit {commit!r}")
+    try:
+        completed = subprocess.run(
+            ["git", "worktree", "add", "--detach", str(worktree_path), resolved_commit],
+            cwd=repository_root,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=30,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise RuntimeError(f"could not create detached quality pilot worktree: {exc}") from exc
+    if completed.returncode != 0:
+        detail = (completed.stderr or completed.stdout or "git worktree add failed").strip()
+        raise RuntimeError(detail)
+
+    actual_commit = (_run_git(worktree_path, "rev-parse", "HEAD") or "").strip()
+    branch = (_run_git(worktree_path, "symbolic-ref", "--quiet", "--short", "HEAD") or "").strip()
+    porcelain = _git_status_porcelain(worktree_path)
+    if actual_commit != resolved_commit or branch or porcelain is None or porcelain:
+        mismatches: list[str] = []
+        if actual_commit != resolved_commit:
+            mismatches.append("worktree.git_head")
+        if branch:
+            mismatches.append("worktree.detached_head")
+        if porcelain:
+            mismatches.append("worktree.protected_status")
+        if porcelain is None:
+            mismatches.append("worktree.status_unavailable")
+        raise RuntimeError(
+            "quality pilot worktree failed immutable preflight: " + ", ".join(mismatches)
+        )
+    return resolved_commit
+
+
+def verify_detached_worktree(repository_root: Path, *, expected_commit: str | None = None) -> str:
+    """Verify that a pilot source root is detached, exact, and protected-clean."""
+
+    repository_root = Path(repository_root).resolve()
+    actual_commit = (_run_git(repository_root, "rev-parse", "HEAD") or "").strip()
+    branch = (_run_git(repository_root, "symbolic-ref", "--quiet", "--short", "HEAD") or "").strip()
+    porcelain = _git_status_porcelain(repository_root)
+    mismatches: list[str] = []
+    if not actual_commit:
+        mismatches.append("worktree.git_head_unavailable")
+    if expected_commit and actual_commit != expected_commit:
+        mismatches.append("worktree.git_head")
+    if branch:
+        mismatches.append("worktree.detached_head")
+    if porcelain is None:
+        mismatches.append("worktree.status_unavailable")
+    elif porcelain:
+        classified = classify_workspace_status(porcelain)
+        protected = classified["protected"]
+        if isinstance(protected, dict) and not protected["clean"]:
+            mismatches.append("worktree.protected_status")
+    if mismatches:
+        raise ValueError("quality pilot worktree preflight failed: " + ", ".join(mismatches))
+    return actual_commit
+
+
 __all__ = [
+    "DEFAULT_NONPROTECTED_PATHS",
     "FREEZE_SCHEMA_VERSION",
     "FreezeDriftError",
+    "NONPROTECTED_WORKSPACE_DIRTY",
+    "PROTECTED_FREEZE_DRIFT",
     "RunFreeze",
+    "classify_workspace_status",
+    "create_detached_worktree",
     "create_run_freeze",
     "load_run_freeze",
     "sha256_file",
+    "verify_detached_worktree",
 ]

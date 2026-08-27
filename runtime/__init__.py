@@ -15,7 +15,18 @@ from .codex_schema import (
     build_codex_transport_artifact,
     build_codex_transport_schema,
 )
-from .freeze import FreezeDriftError, RunFreeze, create_run_freeze, load_run_freeze
+from .freeze import (
+    DEFAULT_NONPROTECTED_PATHS,
+    NONPROTECTED_WORKSPACE_DIRTY,
+    PROTECTED_FREEZE_DRIFT,
+    FreezeDriftError,
+    RunFreeze,
+    classify_workspace_status,
+    create_detached_worktree,
+    create_run_freeze,
+    load_run_freeze,
+    verify_detached_worktree,
+)
 
 __all__ = [
     "AgentRuntime",
@@ -31,6 +42,12 @@ __all__ = [
     "build_codex_transport_schema",
     "FreezeDriftError",
     "RunFreeze",
+    "DEFAULT_NONPROTECTED_PATHS",
+    "NONPROTECTED_WORKSPACE_DIRTY",
+    "PROTECTED_FREEZE_DRIFT",
+    "classify_workspace_status",
+    "create_detached_worktree",
     "create_run_freeze",
     "load_run_freeze",
+    "verify_detached_worktree",
 ]

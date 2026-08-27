@@ -76,6 +76,7 @@ from runtime.freeze import (  # noqa: E402
     create_run_freeze,
     load_run_freeze,
     sha256_file,
+    verify_detached_worktree,
 )
 
 
@@ -107,6 +108,7 @@ REVIEWER_REQUIRED = {
 }
 REVIEWER_POST_STAGE_KEYS = {"generator_answer", "answer_match"}
 REVIEWER_LIVE_REQUIRED = REVIEWER_REQUIRED - REVIEWER_POST_STAGE_KEYS
+REVIEWER_DEFERRED_POST_BLIND_CHECKS = {"target_metadata"}
 REVIEWER_FORBIDDEN_OUTPUT_KEYS = {
     "correct_answer", "intended_answer", "mutation_metadata", "generation_plan",
     "answer_explanation", "error_explanation", "minimal_correction",
@@ -399,6 +401,9 @@ def sidecar(
         "freeze_manifest_path": _relative_path(_RUN_FREEZE.manifest_path) if _RUN_FREEZE is not None else None,
         "freeze_manifest_sha256": _RUN_FREEZE.manifest_sha256 if _RUN_FREEZE is not None else None,
     }
+    if invocation.stage == "reviewer":
+        record["deferred_post_blind_checks"] = sorted(REVIEWER_DEFERRED_POST_BLIND_CHECKS)
+        record["target_metadata_origin"] = "deterministic_post_blind_comparison"
     if classification is not None:
         record["classification"] = classification
         if classification != "SUCCESS":
@@ -501,6 +506,24 @@ def _create_run_freeze(
         sandbox=sandbox,
         timeout_seconds=timeout_seconds,
     )
+
+
+def _final_quality_pilot_preflight() -> None:
+    """Require the explicitly selected immutable source architecture."""
+
+    if os.environ.get("WE_E2E_FINAL_PILOT") != "1":
+        return
+    expected_commit = os.environ.get("WE_E2E_EXPECTED_COMMIT", "").strip()
+    if not expected_commit:
+        raise ValueError("WE_E2E_FINAL_PILOT=1 requires WE_E2E_EXPECTED_COMMIT")
+    verify_detached_worktree(ROOT, expected_commit=expected_commit)
+    if not OUT.is_absolute():
+        raise ValueError("final quality pilot output directory must be absolute")
+    try:
+        OUT.resolve().relative_to(ROOT.resolve())
+    except ValueError:
+        return
+    raise ValueError("final quality pilot output directory must be outside the source worktree")
 
 
 def configure_runtime(
@@ -694,6 +717,7 @@ def validate_frozen_run_contract(freeze: RunFreeze) -> tuple[str, dict, list]:
         "solver": SOLVER_VALIDATOR,
     }
     formal_counts: dict[str, int] = {}
+    generator_items_by_id: dict[str, dict] = {}
     for stage, path in formal_paths.items():
         _verify_freeze("before", f"report_{stage}_artifact")
         document = _read_json_file(path, f"{stage} formal output")
@@ -708,9 +732,19 @@ def validate_frozen_run_contract(freeze: RunFreeze) -> tuple[str, dict, list]:
             if not ok:
                 raise ValueError("; ".join(errors))
             if stage == "generator":
+                if isinstance(item.get("item_id"), str):
+                    generator_items_by_id[item["item_id"]] = item
                 ok, errors = validate_generator_finalization(item)
             else:
                 ok, errors = validate_existing_contract(item, validator_paths[stage], stage)
+                if stage == "reviewer":
+                    generator_item = generator_items_by_id.get(item.get("item_id"))
+                    if generator_item is None:
+                        raise ValueError(
+                            f"reviewer formal item {item.get('item_id')!r} has no matching Generator item"
+                        )
+                    errors.extend(validate_reviewer_post_blind_consistency(item, generator_item))
+                    ok = not errors
             if not ok:
                 raise ValueError("; ".join(errors))
         _verify_freeze("after", f"report_{stage}_artifact")
@@ -760,11 +794,12 @@ def validate_frozen_run_contract(freeze: RunFreeze) -> tuple[str, dict, list]:
 def reviewer_runtime_schema(canonical_schema_path: Path | dict[str, Any] = REVIEWER_SCHEMA_PATH) -> dict:
     """The live Reviewer response contract, before Orchestrator comparison fields.
 
-    The checked-in formal schema intentionally requires ``generator_answer``
-    and ``answer_match`` for the post-stage record.  Those are not Reviewer
-    judgments and cannot be sent into a blinded runtime, so the CLI receives a
-    derived response schema with only those two required fields removed.  The
-    formal checked-in schema itself is never edited.
+    The checked-in formal schema intentionally requires ``generator_answer``,
+    ``answer_match``, and ``checks.target_metadata`` for the post-stage record.
+    None is a blind Reviewer judgment: the first two are comparison fields and
+    target metadata is deterministic Generator consistency.  The CLI receives
+    a derived response schema that omits all three from the blind response.
+    The formal checked-in schema itself is never edited.
     """
     schema = copy.deepcopy(
         canonical_schema_path
@@ -777,6 +812,17 @@ def reviewer_runtime_schema(canonical_schema_path: Path | dict[str, Any] = REVIE
     ]
     schema.get("properties", {}).pop("generator_answer", None)
     schema.get("properties", {}).pop("answer_match", None)
+    checks = schema.get("properties", {}).get("checks")
+    if isinstance(checks, dict):
+        required_checks = checks.get("required")
+        if isinstance(required_checks, list):
+            checks["required"] = [
+                key for key in required_checks if key not in REVIEWER_DEFERRED_POST_BLIND_CHECKS
+            ]
+        properties = checks.get("properties")
+        if isinstance(properties, dict):
+            for key in REVIEWER_DEFERRED_POST_BLIND_CHECKS:
+                properties.pop(key, None)
     return schema
 
 
@@ -811,8 +857,9 @@ judgment. Those withheld fields are not review failures.
 
 Return one JSON object only using the live Reviewer response shape derived
 from the canonical Reviewer schema. The post-stage Orchestrator will attach
-generator_answer and answer_match after this invocation; do not emit either
-field. Do not emit any other Generator fields or markdown.
+generator_answer, answer_match, and the deterministic checks.target_metadata
+result after this invocation; do not emit any of those fields. Do not emit
+any other Generator fields or markdown.
 
 BLINDED CANDIDATE:
 {payload}
@@ -820,7 +867,7 @@ BLINDED CANDIDATE:
 
 
 def reviewer_system_directive() -> str:
-    return """The final response for this invocation MUST be exactly one JSON object using only the supplied live Reviewer response schema keys. Use the exact keys and enum values in that schema. Do not return phase notes, alternate key names such as answer/candidate_answer, nested assessment objects, prose, markdown fences, Generator fields, generator_answer, or answer_match. The caller will reject non-contract output."""
+    return """The final response for this invocation MUST be exactly one JSON object using only the supplied live Reviewer response schema keys. Use the exact keys and enum values in that schema. Do not return phase notes, alternate key names such as answer/candidate_answer, nested assessment objects, prose, markdown fences, Generator fields, generator_answer, answer_match, or checks.target_metadata. The caller will reject non-contract output."""
 
 
 def solver_prompt(candidate: dict) -> str:
@@ -853,6 +900,79 @@ def get_single_item(parsed: Any, stage: str) -> dict:
     return parsed
 
 
+def deterministic_target_metadata_errors(generator_item: dict) -> list[str]:
+    """Check only Generator metadata relationships that are mechanically knowable.
+
+    This function deliberately does not inspect or rewrite the Reviewer's
+    grammar fields.  It verifies consistency among the Generator's declared
+    target/format metadata and the emitted item so the blind Reviewer is not
+    assigned a comparison it cannot perform.
+    """
+
+    errors: list[str] = []
+    if not isinstance(generator_item, dict):
+        return ["generator item must be an object"]
+
+    correct_answer = generator_item.get("correct_answer")
+    grammar = generator_item.get("grammar_metadata")
+    format_metadata = generator_item.get("format_metadata")
+    provenance = generator_item.get("provenance")
+    qa_metadata = generator_item.get("qa_metadata")
+    if not isinstance(grammar, dict):
+        errors.append("grammar_metadata must be an object")
+    if not isinstance(format_metadata, dict):
+        errors.append("format_metadata must be an object")
+    if not isinstance(provenance, dict):
+        errors.append("provenance must be an object")
+    if not isinstance(qa_metadata, dict):
+        errors.append("qa_metadata must be an object")
+    if errors:
+        return errors
+
+    if correct_answer not in {"A", "B", "C", "D"}:
+        errors.append("correct_answer must be A/B/C/D")
+    if grammar.get("intended_error_position") != correct_answer:
+        errors.append("grammar_metadata.intended_error_position does not match correct_answer")
+
+    span_types = format_metadata.get("span_types")
+    if not isinstance(span_types, dict):
+        errors.append("format_metadata.span_types must be an object")
+    elif correct_answer in {"A", "B", "C", "D"}:
+        if grammar.get("correct_span_type") != span_types.get(correct_answer):
+            errors.append("grammar_metadata.correct_span_type does not match the correct span type")
+
+    diagnostics = format_metadata.get("diagnostics")
+    if not isinstance(diagnostics, dict):
+        errors.append("format_metadata.diagnostics must be an object")
+    else:
+        for key in ("correct_span_type", "correction_locality", "decision_granularity"):
+            if diagnostics.get(key) != grammar.get(key):
+                errors.append(f"format_metadata.diagnostics.{key} does not match grammar_metadata.{key}")
+
+    if provenance.get("agent_version") != generator_item.get("agent_version"):
+        errors.append("provenance.agent_version does not match agent_version")
+    return errors
+
+
+def deterministic_target_metadata_status(generator_item: dict) -> str:
+    """Return the formal enum value for the post-blind metadata check."""
+
+    return "PASS" if not deterministic_target_metadata_errors(generator_item) else "FAIL"
+
+
+def validate_reviewer_post_blind_consistency(reviewer_item: dict, generator_item: dict) -> list[str]:
+    """Fail closed when a formal record contradicts deterministic metadata."""
+
+    expected = deterministic_target_metadata_status(generator_item)
+    actual = reviewer_item.get("checks", {}).get("target_metadata")
+    if actual != expected:
+        return [
+            "reviewer: checks.target_metadata contradicts deterministic post-blind "
+            f"evaluation (expected {expected}, got {actual})"
+        ]
+    return []
+
+
 def adapt_reviewer_structural(
     raw: dict,
     generator_item: dict,
@@ -863,10 +983,11 @@ def adapt_reviewer_structural(
     """Adapt a blind Reviewer record without changing its judgment.
 
     The live response already uses the v2 Reviewer contract except for the two
-    comparison fields that cannot be exposed during the blind call.  Validate
-    only its structural shape, copy it unchanged, and attach only those
-    post-invocation comparison fields.  Semantic consistency is deliberately
-    left to the checked-in Reviewer validator.
+    comparison fields that cannot be exposed during the blind call and the
+    deterministic target-metadata check. Validate only its structural shape,
+    copy its judgment fields unchanged, and attach only those post-invocation
+    fields. Semantic consistency is deliberately left to the checked-in
+    Reviewer validator.
     """
     del order, batch_id  # provenance is supplied by the Reviewer response
     forbidden = sorted(nested_forbidden(raw, REVIEWER_FORBIDDEN_OUTPUT_KEYS))
@@ -875,6 +996,12 @@ def adapt_reviewer_structural(
     unexpected_post_stage = sorted(set(raw) & REVIEWER_POST_STAGE_KEYS)
     if unexpected_post_stage:
         raise LiveInvocationError("schema", "reviewer: comparison fields must be attached after the live invocation")
+    raw_checks = raw.get("checks")
+    if isinstance(raw_checks, dict) and "target_metadata" in raw_checks:
+        raise LiveInvocationError(
+            "schema",
+            "reviewer: checks.target_metadata is deferred to deterministic post-blind comparison",
+        )
 
     missing = sorted(REVIEWER_LIVE_REQUIRED - set(raw))
     if missing:
@@ -893,6 +1020,7 @@ def adapt_reviewer_structural(
     formal = copy.deepcopy(raw)
     formal["generator_answer"] = generator_answer
     formal["answer_match"] = formal["independent_answer"] == generator_answer
+    formal.setdefault("checks", {})["target_metadata"] = deterministic_target_metadata_status(generator_item)
     return formal
 
 
@@ -906,6 +1034,9 @@ def formal_reviewer(
     """Perform structural adaptation, then run the canonical Reviewer validator."""
 
     formal = adapt_reviewer_structural(raw, generator_item, order, batch_id, runtime_schema)
+    post_blind_errors = validate_reviewer_post_blind_consistency(formal, generator_item)
+    if post_blind_errors:
+        raise LiveInvocationError("schema", "; ".join(post_blind_errors))
     formal_ok, formal_errors = validate_existing_contract(formal, REVIEWER_VALIDATOR, "reviewer")
     if not formal_ok:
         raise LiveInvocationError("schema", "; ".join(formal_errors))
@@ -1547,7 +1678,7 @@ def _write_freeze_drift_artifact(error: FreezeDriftError) -> None:
     atomic_write_json(
         OUT / "freeze_drift.json",
         {
-            "status": "FREEZE_DRIFT",
+            "status": error.category,
             "category": error.category,
             "phase": error.phase,
             "stage": error.stage,
@@ -1613,7 +1744,7 @@ def run_generator_probe() -> int:
         invocation = exc.invocation
     except FreezeDriftError as exc:
         _write_freeze_drift_artifact(exc)
-        print(json.dumps({"status": "FREEZE_DRIFT", "detail": str(exc)}, ensure_ascii=False, indent=2))
+        print(json.dumps({"status": exc.category, "detail": str(exc)}, ensure_ascii=False, indent=2))
         return 2
 
     if invocation is None:
@@ -1670,10 +1801,11 @@ def main(argv: list[str] | None = None) -> int:
             return run_generator_probe()
         except FreezeDriftError as exc:
             _write_freeze_drift_artifact(exc)
-            print(json.dumps({"status": "FREEZE_DRIFT", "detail": str(exc)}, ensure_ascii=False, indent=2))
+            print(json.dumps({"status": exc.category, "detail": str(exc)}, ensure_ascii=False, indent=2))
             return 2
     if os.environ.get("WE_E2E_REPORT_ONLY") == "1":
         return report_existing_run()
+    _final_quality_pilot_preflight()
     for directory in (FORMAL, PROVENANCE, INPUTS, LOGS):
         directory.mkdir(parents=True, exist_ok=True)
     batch_id = "we-v2.1.3-live-e2e-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -1705,7 +1837,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"completed microbatch {order}/10: {latest.get('item_id')} -> {latest.get('state')}", flush=True)
     except FreezeDriftError as exc:
         _write_freeze_drift_artifact(exc)
-        print(json.dumps({"status": "FREEZE_DRIFT", "detail": str(exc)}, ensure_ascii=False, indent=2))
+        print(json.dumps({"status": exc.category, "detail": str(exc)}, ensure_ascii=False, indent=2))
         return 2
     tests = run_existing_tests()
     atomic_write_json(_outcomes_path(), {"batch_id": batch_id, "outcomes": outcomes})

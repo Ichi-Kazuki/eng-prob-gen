@@ -58,6 +58,15 @@ also publish `runtime/artifact_manifest_v1.json`, a deterministic SHA-256
 sidecar for the formal outputs, provenance, outcomes, test result, and freeze
 manifest used by report-only mode.
 
+The final quality pilot must be prepared with
+`scripts/prepare_final_pilot_worktree.py --commit <exact-commit> --worktree
+<external-path>`. Run the live harness from that detached worktree with
+`WE_E2E_FINAL_PILOT=1`, `WE_E2E_EXPECTED_COMMIT=<exact-commit>`, and an
+absolute `WE_E2E_OUTPUT_DIR` outside the worktree. The development checkout
+is never a pilot source tree. Protected freeze drift stops the cohort as
+`PROTECTED_FREEZE_DRIFT`; allowlisted caches and outputs are reported as
+`NONPROTECTED_WORKSPACE_DIRTY` and are not cohort-invalidating by themselves.
+
 The image crop/underline utilities are analysis-only tools. Install their
 optional dependency when using them:
 
