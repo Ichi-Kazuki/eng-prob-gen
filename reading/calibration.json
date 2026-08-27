@@ -1,0 +1,27 @@
+{
+  "schema_version": "reading-calibration-v0.1",
+  "source_material": [
+    "source/Practice Test B Sec 3 RC.pdf",
+    "source/Practice Test C Sec 3 RC.pdf",
+    "source/Practice Test D Sec 3 RC.pdf",
+    "source/Practice Test E Sec 3 RC.pdf"
+  ],
+  "use": "abstract_format_only",
+  "derived_properties": {
+    "section": "READING_COMPREHENSION",
+    "passage_shape": "academic expository prose in several paragraphs",
+    "passage_length_target_words": [250, 450],
+    "paragraph_count_target": [3, 6],
+    "choices": ["A", "B", "C", "D"],
+    "questions_per_passage": [5, 14],
+    "common_question_types": [
+      "DETAIL",
+      "VOCABULARY_IN_CONTEXT",
+      "INFERENCE",
+      "MAIN_IDEA",
+      "REFERENCE"
+    ],
+    "register": "neutral academic, information-dense, answerable from stated or implied passage content"
+  },
+  "copyright_note": "No official passage or question text is stored or used as generation content."
+}

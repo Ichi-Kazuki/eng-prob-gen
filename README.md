@@ -2,6 +2,35 @@
 
 This repository implements a fail-closed pipeline for generating and quality-gating TOEFL ITP Structure and Written Expression items. It stores stage state and replayable artifacts as JSON; it does not silently repair an item or replace an agent's grammar/quality judgment.
 
+## Reading Comprehension v0.1
+
+Reading is a separate contract family and currently runs one original
+four-paragraph passage with five questions (one each of DETAIL,
+VOCABULARY_IN_CONTEXT, INFERENCE, MAIN_IDEA, and REFERENCE). The first-pass
+live path is exactly one Generator call, one blind Reviewer call, and one blind
+Solver call. Failed validation or disagreement is preserved as `QUARANTINE`;
+there is no quality retry or answer repair.
+
+Run one fresh set with Claude Code (the default provider):
+
+```powershell
+python -m reading.cli --seed 1001
+```
+
+Use the existing Codex adapter with its read-only/medium-reasoning settings:
+
+```powershell
+python -m reading.cli --provider codex --seed 1001
+```
+
+Artifacts are written under `runs/reading_v0_1/<run-id>/`, including the
+answer-bearing Generator output, the answer-free Reviewer/Solver inputs and
+outputs, runtime logs, and `result.json`. Offline tests are run with:
+
+```powershell
+python -m unittest discover -s tests -p "test_*.py" -v
+```
+
 ## Architecture
 
 `Generator → Reviewer → Solver → Orchestrator`

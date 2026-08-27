@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/reading-plan-v0.1.schema.json",
+  "title": "Reading v0.1 generation plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "plan_id", "seed", "domain", "target_words", "target_paragraphs", "question_plan"],
+  "properties": {
+    "schema_version": {"const": "reading-plan-v0.1"},
+    "plan_id": {"type": "string", "pattern": "^rp-[0-9a-f]{8,}$"},
+    "seed": {"type": "integer", "minimum": 0},
+    "domain": {"enum": ["biology", "geology", "astronomy", "anthropology", "history", "ecology", "technology", "earth science"]},
+    "target_words": {"type": "integer", "minimum": 260, "maximum": 340},
+    "target_paragraphs": {"const": 4},
+    "question_plan": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "DETAIL"},
+        {"const": "VOCABULARY_IN_CONTEXT"},
+        {"const": "INFERENCE"},
+        {"const": "MAIN_IDEA"},
+        {"const": "REFERENCE"}
+      ],
+      "items": false,
+      "minItems": 5,
+      "maxItems": 5
+    }
+  }
+}

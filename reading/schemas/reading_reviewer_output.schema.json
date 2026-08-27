@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/reading-reviewer-output-v0.1.schema.json",
+  "title": "Reading Reviewer formal output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "passage_id", "section", "questions", "set_judgment", "set_comment"],
+  "properties": {
+    "schema_version": {"const": "reading-reviewer-v0.1"},
+    "passage_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+$"},
+    "section": {"const": "READING_COMPREHENSION"},
+    "questions": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item_id", "best_answer", "unique_answer", "distractors_incorrect", "answerable", "natural_wording", "serious_defect", "comment"],
+        "properties": {
+          "item_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+-q[1-5]$"},
+          "best_answer": {"enum": ["A", "B", "C", "D", "AMBIGUOUS", "NONE"]},
+          "unique_answer": {"type": "boolean"},
+          "distractors_incorrect": {"type": "boolean"},
+          "answerable": {"type": "boolean"},
+          "natural_wording": {"type": "boolean"},
+          "serious_defect": {"type": "boolean"},
+          "comment": {"type": "string", "minLength": 3, "maxLength": 800}
+        }
+      }
+    },
+    "set_judgment": {"enum": ["PASS", "REJECT"]},
+    "set_comment": {"type": "string", "minLength": 3, "maxLength": 1000}
+  }
+}

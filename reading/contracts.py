@@ -1,0 +1,309 @@
+"""Canonical contracts and fail-closed checks for Reading v0.1.
+
+The Reading contract family is intentionally independent of the existing WE
+schemas and validators.  This module owns only shape/integrity checks; it
+never repairs a model response or changes an agent judgment.
+"""
+
+from __future__ import annotations
+
+import copy
+import hashlib
+import json
+import re
+from pathlib import Path
+from typing import Any
+
+from shared.schema_validation import load_schema, schema_errors
+
+from .planner import QUESTION_TYPES
+
+
+SCHEMA_DIR = Path(__file__).resolve().parent / "schemas"
+SCHEMA_PATHS = {
+    "plan": SCHEMA_DIR / "reading_plan.schema.json",
+    "generator": SCHEMA_DIR / "reading_generator_output.schema.json",
+    "reviewer_input": SCHEMA_DIR / "reading_reviewer_input.schema.json",
+    "reviewer": SCHEMA_DIR / "reading_reviewer_output.schema.json",
+    "solver_input": SCHEMA_DIR / "reading_solver_input.schema.json",
+    "solver": SCHEMA_DIR / "reading_solver_output.schema.json",
+    "result": SCHEMA_DIR / "reading_result.schema.json",
+}
+ANSWER_LABELS = {"A", "B", "C", "D"}
+SOLVER_LABELS = ANSWER_LABELS | {"AMBIGUOUS", "NONE"}
+BLIND_FORBIDDEN_KEYS = {
+    "correct_answer",
+    "intended_answer",
+    "generator_answer",
+    "answer_key",
+    "answer_match",
+    "rationale",
+    "explanation",
+    "evidence",
+    "generation_plan",
+    "plan",
+    "plan_id",
+    "target_words",
+    "target_paragraphs",
+    "question_plan",
+    "question_type",
+    "generator_metadata",
+    "target_metadata",
+    "provenance",
+}
+
+
+def _schema_errors(value: Any, key: str) -> list[str]:
+    return [f"{key}: {error}" for error in schema_errors(value, load_schema(SCHEMA_PATHS[key]))]
+
+
+def validate_plan_contract(plan: Any) -> list[str]:
+    return _schema_errors(plan, "plan")
+
+
+def word_count(text: str) -> int:
+    return len(re.findall(r"\b[\w]+(?:['-][\w]+)*\b", text, flags=re.UNICODE))
+
+
+def split_paragraphs(passage: str) -> list[str]:
+    return [paragraph.strip() for paragraph in re.split(r"\n\s*\n", passage.strip()) if paragraph.strip()]
+
+
+def _normalized_text(value: str) -> str:
+    return re.sub(r"\s+", " ", value).strip().casefold()
+
+
+def _contains_anchor(paragraph: str, anchor: str) -> bool:
+    return _normalized_text(anchor) in _normalized_text(paragraph)
+
+
+def _duplicate_text(values: list[str]) -> bool:
+    normalized = [_normalized_text(value).strip(" .,:;!?\"'()[]") for value in values]
+    return len(set(normalized)) != len(normalized)
+
+
+def _nested_keys(value: Any, forbidden: set[str], path: str = "$") -> list[str]:
+    found: list[str] = []
+    if isinstance(value, dict):
+        for key, nested in value.items():
+            if key in forbidden:
+                found.append(f"{path}.{key}")
+            found.extend(_nested_keys(nested, forbidden, f"{path}.{key}"))
+    elif isinstance(value, list):
+        for index, nested in enumerate(value):
+            found.extend(_nested_keys(nested, forbidden, f"{path}[{index}]"))
+    return found
+
+
+def validate_generator_contract(output: Any, plan: dict[str, Any] | None = None) -> list[str]:
+    errors = _schema_errors(output, "generator")
+    if errors or not isinstance(output, dict):
+        return errors
+    questions = output["questions"]
+    passage_id = output["passage_id"]
+    seen_ids: set[str] = set()
+    seen_types: list[str] = []
+    for index, question in enumerate(questions, 1):
+        item_id = question["item_id"]
+        if item_id in seen_ids:
+            errors.append(f"generator: duplicate question id {item_id!r}")
+        seen_ids.add(item_id)
+        if item_id != f"{passage_id}-q{index}":
+            errors.append(f"generator: question {index} has unexpected item_id {item_id!r}")
+        seen_types.append(question["question_type"])
+        choices = question["choices"]
+        if _duplicate_text(list(choices.values())):
+            errors.append(f"generator: question {item_id} has duplicate answer choices")
+        evidence = question["evidence"]
+        paragraphs = split_paragraphs(output["passage"])
+        paragraph_number = evidence["paragraph"]
+        if paragraph_number > len(paragraphs):
+            errors.append(f"generator: {item_id} evidence paragraph {paragraph_number} is out of range")
+        elif not _contains_anchor(paragraphs[paragraph_number - 1], evidence["anchor"]):
+            errors.append(f"generator: {item_id} evidence anchor is not present in its paragraph")
+    if sorted(seen_types) != sorted(QUESTION_TYPES):
+        errors.append(f"generator: question types must contain exactly {list(QUESTION_TYPES)}")
+    if plan is not None:
+        if validate_plan_contract(plan):
+            errors.append("generator: supplied plan is not a valid Reading plan")
+        else:
+            expected_id = f"rc-{plan['seed']:08x}"
+            if passage_id != expected_id:
+                errors.append(f"generator: passage_id must equal planned id {expected_id!r}")
+            if seen_types != list(plan["question_plan"]):
+                errors.append("generator: question order does not follow the deterministic plan")
+    return errors
+
+
+def validate_deterministic(output: Any, plan: dict[str, Any]) -> list[str]:
+    """Run inexpensive content/structure gates before any blind calls."""
+
+    errors = validate_generator_contract(output, plan)
+    if errors or not isinstance(output, dict):
+        return errors
+    passage = output["passage"]
+    paragraphs = split_paragraphs(passage)
+    count = word_count(passage)
+    if count < 240 or count > 380:
+        errors.append(f"deterministic: passage word count {count} is outside 240-380")
+    if len(paragraphs) != plan["target_paragraphs"]:
+        errors.append(
+            f"deterministic: passage must contain exactly {plan['target_paragraphs']} non-empty paragraphs; got {len(paragraphs)}"
+        )
+    if "\r" in passage or "\t" in passage or "\n\n\n" in passage:
+        errors.append("deterministic: passage contains malformed whitespace formatting")
+    if re.search(r"(^|\n)\s*(?:[-*]|\d+[.)])\s+", passage):
+        errors.append("deterministic: passage contains list-like formatting")
+    if re.search(r"lorem ipsum|\[insert|\{placeholder|question\s+[1-5]", passage, flags=re.IGNORECASE):
+        errors.append("deterministic: passage contains placeholder or question formatting")
+    if any(word_count(paragraph) < 35 for paragraph in paragraphs):
+        errors.append("deterministic: every paragraph must contain at least 35 words")
+    if len({_normalized_text(paragraph) for paragraph in paragraphs}) != len(paragraphs):
+        errors.append("deterministic: passage contains duplicate paragraphs")
+    return errors
+
+
+def blind_input(output: dict[str, Any]) -> dict[str, Any]:
+    """Project only test-taker-visible fields, for both blind agents."""
+
+    payload = {
+        "schema_version": "reading-blind-input-v0.1",
+        "passage_id": output["passage_id"],
+        "section": output["section"],
+        "title": output["title"],
+        "passage": output["passage"],
+        "questions": [
+            {
+                "item_id": question["item_id"],
+                "number": index,
+                "stem": question["stem"],
+                "choices": copy.deepcopy(question["choices"]),
+            }
+            for index, question in enumerate(output["questions"], 1)
+        ],
+    }
+    leakage = _nested_keys(payload, BLIND_FORBIDDEN_KEYS)
+    if leakage:
+        raise ValueError("blind projection contains forbidden field(s): " + ", ".join(leakage))
+    return payload
+
+
+def _blind_input_errors(output: Any, payload: Any, schema_key: str) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(output, dict):
+        return ["blind input source must be an object"]
+    try:
+        expected = blind_input(output)
+    except (KeyError, TypeError, ValueError) as exc:
+        return [f"blind input could not be derived: {exc}"]
+    if payload != expected:
+        errors.append("blind input does not match the canonical allowlisted projection")
+    errors.extend(f"blind input: forbidden field {path}" for path in _nested_keys(payload, BLIND_FORBIDDEN_KEYS))
+    errors.extend(_schema_errors(payload, schema_key))
+    return errors
+
+
+def blind_input_errors(output: Any, payload: Any) -> list[str]:
+    return _blind_input_errors(output, payload, "reviewer_input")
+
+
+def solver_input_errors(output: Any, payload: Any) -> list[str]:
+    return _blind_input_errors(output, payload, "solver_input")
+
+
+def payload_sha256(payload: Any) -> str:
+    serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return "sha256:" + hashlib.sha256(serialized).hexdigest()
+
+
+def _ids(values: list[dict[str, Any]], field: str) -> tuple[list[str], list[str]]:
+    ids = [value.get(field) for value in values]
+    valid = [value for value in ids if isinstance(value, str)]
+    duplicates = sorted({value for value in valid if valid.count(value) > 1})
+    return valid, duplicates
+
+
+def validate_reviewer_contract(output: Any, blind: dict[str, Any]) -> list[str]:
+    errors = _schema_errors(output, "reviewer")
+    if errors or not isinstance(output, dict):
+        return errors
+    if output["passage_id"] != blind["passage_id"] or output["section"] != blind["section"]:
+        errors.append("reviewer: passage identity does not match blind input")
+    expected_ids = [question["item_id"] for question in blind["questions"]]
+    actual_ids, duplicates = _ids(output["questions"], "item_id")
+    if duplicates:
+        errors.append(f"reviewer: duplicate item_id(s) {duplicates}")
+    if actual_ids != expected_ids:
+        errors.append("reviewer: question ids/order do not match blind input")
+    for question in output["questions"]:
+        if question["best_answer"] in {"AMBIGUOUS", "NONE"} and question["unique_answer"]:
+            errors.append(f"reviewer: {question['item_id']} cannot mark AMBIGUOUS/NONE as unique")
+        if question["best_answer"] == "NONE" and question["answerable"]:
+            errors.append(f"reviewer: {question['item_id']} cannot mark NONE as answerable")
+    errors.extend(f"reviewer: forbidden field {path}" for path in _nested_keys(output, BLIND_FORBIDDEN_KEYS))
+    return errors
+
+
+def validate_solver_contract(output: Any, blind: dict[str, Any]) -> list[str]:
+    errors = _schema_errors(output, "solver")
+    if errors or not isinstance(output, dict):
+        return errors
+    if output["passage_id"] != blind["passage_id"] or output["section"] != blind["section"]:
+        errors.append("solver: passage identity does not match blind input")
+    expected_ids = [question["item_id"] for question in blind["questions"]]
+    actual_ids, duplicates = _ids(output["answers"], "item_id")
+    if duplicates:
+        errors.append(f"solver: duplicate item_id(s) {duplicates}")
+    if actual_ids != expected_ids:
+        errors.append("solver: answer ids/order do not match blind input")
+    errors.extend(f"solver: forbidden field {path}" for path in _nested_keys(output, BLIND_FORBIDDEN_KEYS))
+    return errors
+
+
+def post_blind_comparison(
+    generator: dict[str, Any], reviewer: dict[str, Any], solver: dict[str, Any]
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Compare sealed judgments without altering any of them."""
+
+    reviewer_by_id = {item["item_id"]: item["best_answer"] for item in reviewer["questions"]}
+    solver_by_id = {item["item_id"]: item["answer"] for item in solver["answers"]}
+    agreements: list[dict[str, Any]] = []
+    errors: list[str] = []
+    for question in generator["questions"]:
+        item_id = question["item_id"]
+        answers = {
+            "generator": question["correct_answer"],
+            "reviewer": reviewer_by_id.get(item_id),
+            "solver": solver_by_id.get(item_id),
+        }
+        agree = len(set(answers.values())) == 1
+        agreements.append({"item_id": item_id, **answers, "agree": agree})
+        if not agree:
+            errors.append(f"answer disagreement for {item_id}: {answers}")
+    return agreements, errors
+
+
+def validate_result_contract(result: Any) -> list[str]:
+    errors = _schema_errors(result, "result")
+    if errors or not isinstance(result, dict):
+        return errors
+    if result["decision"] == "ACCEPT":
+        checks = result["checks"]
+        required_true = {
+            "generator_canonical",
+            "deterministic",
+            "reviewer_contract",
+            "reviewer_set_pass",
+            "reviewer_no_ambiguous_none",
+            "solver_contract",
+            "solver_no_ambiguous_none",
+            "all_answers_agree",
+            "no_leakage",
+            "no_synthetic_fallback",
+        }
+        missing_or_false = sorted(key for key in required_true if checks.get(key) is not True)
+        if missing_or_false:
+            errors.append(f"result: ACCEPT requires true gates {missing_or_false}")
+        if result["infrastructure"].get("runtime_failures"):
+            errors.append("result: ACCEPT forbids runtime failures")
+    return errors
