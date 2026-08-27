@@ -38,6 +38,7 @@ files = [
   "orchestrator/scripts/pilot_driver.py",
   "orchestrator/scripts/validation_driver.py",
   "scripts/run_live_e2e.py",
+  "scripts/audit_invalid_pilot.py",
 ]
 ignore_missing_imports = true
 check_untyped_defs = true
@@ -46,7 +47,7 @@ follow_imports = "skip"
 
 [tool.coverage.run]
 branch = true
-source = ["orchestrator/scripts", "shared", "runtime"]
+source = ["orchestrator/scripts", "shared", "runtime", "scripts"]
 
 [tool.coverage.report]
 skip_empty = true

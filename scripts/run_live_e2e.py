@@ -74,6 +74,8 @@ from runtime.freeze import (  # noqa: E402
     FreezeDriftError,
     RunFreeze,
     create_run_freeze,
+    load_run_freeze,
+    sha256_file,
 )
 
 
@@ -125,14 +127,27 @@ FORMAL_OUTPUT_PATHS = {
 }
 LIVE_FAILURE_CATEGORIES = {
     "HARNESS_TIMEOUT",
-    "CODEX_NETWORK_ERROR",
-    "CODEX_AUTH_ERROR",
-    "CODEX_SCHEMA_COMPATIBILITY_ERROR",
-    "CODEX_PROCESS_ERROR",
+    "NETWORK_ERROR",
+    "AUTH_ERROR",
+    "SCHEMA_COMPATIBILITY_ERROR",
+    "PROCESS_ERROR",
     "CONTRACT_VALIDATION_ERROR",
     "MODEL_OUTPUT_ERROR",
+    "INFRASTRUCTURE_ERROR",
     "SUCCESS",
 }
+
+ARTIFACT_MANIFEST_VERSION = 1
+ARTIFACT_MANIFEST_FILENAME = "artifact_manifest_v1.json"
+EVIDENCE_ARTIFACTS = (
+    "runtime/formal/generator_outputs.json",
+    "runtime/formal/reviewer_outputs.json",
+    "runtime/formal/solver_outputs.json",
+    "runtime/provenance/runtime_provenance.json",
+    "runtime/outcomes.json",
+    "runtime/test_result.json",
+    "runtime/freeze/freeze_manifest.json",
+)
 
 
 def now_iso() -> str:
@@ -142,6 +157,88 @@ def now_iso() -> str:
 def sha256_json(value: Any) -> str:
     raw = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return "sha256:" + hashlib.sha256(raw).hexdigest()
+
+
+def _artifact_manifest_path() -> Path:
+    return OUT / "runtime" / ARTIFACT_MANIFEST_FILENAME
+
+
+def _outcomes_path() -> Path:
+    return OUT / "runtime" / "outcomes.json"
+
+
+def _test_result_path() -> Path:
+    return OUT / "runtime" / "test_result.json"
+
+
+def _freeze_manifest_path() -> Path:
+    return OUT / "runtime" / "freeze" / "freeze_manifest.json"
+
+
+def _artifact_manifest_payload(freeze: RunFreeze) -> dict[str, Any]:
+    files: dict[str, dict[str, str]] = {}
+    for relative in EVIDENCE_ARTIFACTS:
+        path = OUT / Path(relative)
+        if not path.is_file():
+            raise FileNotFoundError(f"required immutable evidence artifact is missing: {path}")
+        files[relative] = {"sha256": sha256_file(path)}
+    payload: dict[str, Any] = {
+        "artifact_manifest_version": ARTIFACT_MANIFEST_VERSION,
+        "freeze_manifest_sha256": freeze.manifest_sha256,
+        "files": dict(sorted(files.items())),
+    }
+    payload["artifact_manifest_sha256"] = sha256_json(payload)
+    return payload
+
+
+def write_artifact_manifest(freeze: RunFreeze) -> None:
+    """Publish a deterministic hash set for the immutable report evidence."""
+
+    freeze.verify("before", "artifact_manifest")
+    atomic_write_json(_artifact_manifest_path(), _artifact_manifest_payload(freeze))
+    freeze.verify("after", "artifact_manifest")
+
+
+def _read_json_file(path: Path, label: str) -> Any:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{label} cannot be read as JSON: {exc}") from exc
+
+
+def verify_artifact_manifest(freeze: RunFreeze) -> None:
+    """Fail closed when the evidence sidecar or any listed artifact changed."""
+
+    path = _artifact_manifest_path()
+    document = _read_json_file(path, "artifact manifest")
+    if not isinstance(document, dict):
+        raise ValueError("artifact manifest must be a JSON object")
+    if document.get("artifact_manifest_version") != ARTIFACT_MANIFEST_VERSION:
+        raise ValueError("unsupported artifact manifest version")
+    recorded_hash = document.get("artifact_manifest_sha256")
+    unsigned = copy.deepcopy(document)
+    unsigned.pop("artifact_manifest_sha256", None)
+    if recorded_hash != sha256_json(unsigned):
+        raise ValueError("artifact manifest SHA-256 does not match its contents")
+    if document.get("freeze_manifest_sha256") != freeze.manifest_sha256:
+        raise ValueError("artifact manifest is bound to a different freeze manifest")
+
+    files = document.get("files")
+    if not isinstance(files, dict) or set(files) != set(EVIDENCE_ARTIFACTS):
+        raise ValueError("artifact manifest does not contain the exact required evidence set")
+    base = OUT.resolve()
+    for relative in EVIDENCE_ARTIFACTS:
+        if not isinstance(relative, str) or Path(relative).is_absolute() or ".." in Path(relative).parts:
+            raise ValueError(f"artifact manifest contains an unsafe path: {relative!r}")
+        info = files.get(relative)
+        expected = info.get("sha256") if isinstance(info, dict) else None
+        candidate = (OUT / Path(relative)).resolve()
+        try:
+            candidate.relative_to(base)
+        except ValueError as exc:
+            raise ValueError(f"artifact manifest path escapes output directory: {relative!r}") from exc
+        if not isinstance(expected, str) or not candidate.is_file() or sha256_file(candidate) != expected:
+            raise ValueError(f"immutable evidence artifact is missing or tampered: {relative}")
 
 
 class LiveInvocationError(Exception):
@@ -173,10 +270,10 @@ def _elapsed_seconds(started_at: str, completed_at: str | None) -> float | None:
 
 
 def _invocation_diagnostic(invocation: InvocationResult, error: LiveInvocationError | None) -> str:
-    # Codex stderr contains the complete authoritative prompt and tool
+    # Provider CLIs can echo the complete authoritative prompt and tool
     # transcript.  Classification must inspect the tail where CLI errors are
     # emitted, otherwise ordinary prompt words such as "network" can create a
-    # false CODEX_NETWORK_ERROR.
+    # false transport failure.
     parts = [invocation.raw_stderr[-8000:], invocation.raw_stdout[-4000:]]
     if error is not None:
         parts.append(error.detail)
@@ -188,12 +285,12 @@ def _classify_invocation_failure(invocation: InvocationResult, error: LiveInvoca
         return "SUCCESS"
     diagnostic = _invocation_diagnostic(invocation, error)
     if (
-        invocation.error_category == "CODEX_SCHEMA_COMPATIBILITY_ERROR"
-        or (error is not None and error.category == "CODEX_SCHEMA_COMPATIBILITY_ERROR")
+        invocation.error_category in {"CODEX_SCHEMA_COMPATIBILITY_ERROR", "SCHEMA_COMPATIBILITY_ERROR"}
+        or (error is not None and error.category in {"CODEX_SCHEMA_COMPATIBILITY_ERROR", "SCHEMA_COMPATIBILITY_ERROR"})
         or "invalid_json_schema" in diagnostic
         or "invalid json schema" in diagnostic
     ):
-        return "CODEX_SCHEMA_COMPATIBILITY_ERROR"
+        return "SCHEMA_COMPATIBILITY_ERROR"
     if (
         invocation.error_category in {"parsing", "MODEL_OUTPUT_ERROR"}
         or (error is not None and error.category in {"parsing", "MODEL_OUTPUT_ERROR"})
@@ -204,6 +301,11 @@ def _classify_invocation_failure(invocation: InvocationResult, error: LiveInvoca
         or (error is not None and error.category == "CONTRACT_VALIDATION_ERROR")
     ):
         return "CONTRACT_VALIDATION_ERROR"
+    if (
+        invocation.error_category in {"schema", "SCHEMA_ERROR"}
+        or (error is not None and error.category in {"schema", "SCHEMA_ERROR"})
+    ):
+        return "CONTRACT_VALIDATION_ERROR"
     auth_tokens = ("unauthorized", "authentication", "api key", "invalid token", "login required", "not logged in")
     network_tokens = (
         "socket", "websocket", "dns", "econn", "connection refused", "connection reset",
@@ -211,15 +313,15 @@ def _classify_invocation_failure(invocation: InvocationResult, error: LiveInvoca
         "network is unreachable", "network error", "error sending request",
     )
     if any(token in diagnostic for token in auth_tokens):
-        return "CODEX_AUTH_ERROR"
+        return "AUTH_ERROR"
     if any(token in diagnostic for token in network_tokens):
-        return "CODEX_NETWORK_ERROR"
+        return "NETWORK_ERROR"
     if invocation.exit_code is None:
         if "timeout" in diagnostic or "timed out" in diagnostic:
             return "HARNESS_TIMEOUT"
-        return "CODEX_PROCESS_ERROR"
+        return "PROCESS_ERROR"
     if invocation.exit_code != 0:
-        return "CODEX_PROCESS_ERROR"
+        return "PROCESS_ERROR"
     return "CONTRACT_VALIDATION_ERROR"
 
 
@@ -233,7 +335,9 @@ def _failure_source(invocation: InvocationResult, classification: str | None) ->
         return "subprocess_error"
     if classification == "CONTRACT_VALIDATION_ERROR":
         return "contract_validation"
-    return "codex_cli"
+    if classification == "SCHEMA_COMPATIBILITY_ERROR":
+        return "transport_schema"
+    return invocation.provider
 
 
 def sidecar(
@@ -300,6 +404,9 @@ def sidecar(
         if classification != "SUCCESS":
             record["failure_classification"] = classification
             record["failure_source"] = _failure_source(invocation, classification)
+            record["provider_failure_category"] = (
+                (error.category if error is not None else invocation.error_category)
+            )
     if failure is not None:
         record["failure"] = failure
     elif invocation.error_category is not None:
@@ -310,6 +417,11 @@ def sidecar(
 _RUNTIME: AgentRuntime | None = None
 _RUNTIME_MODEL_OVERRIDE: str | None = None
 _RUN_FREEZE: RunFreeze | None = None
+
+
+def _verify_freeze(phase: str, stage: str) -> None:
+    if _RUN_FREEZE is not None:
+        _RUN_FREEZE.verify(phase, stage)
 
 
 def _schema_for_stage(stage: str, fallback: Path) -> Path:
@@ -506,16 +618,20 @@ def nested_forbidden(value: Any, forbidden: set[str], path: str = "$") -> list[s
 
 
 def validate_schema_only(item: dict, schema_path: Path, stage: str) -> tuple[bool, list[str]]:
+    _verify_freeze("before", f"{stage}_schema_validation")
     errors = schema_errors(item, load_schema(schema_path))
+    _verify_freeze("after", f"{stage}_schema_validation")
     return not errors, [f"{stage}: {error}" for error in errors]
 
 
-_VALIDATOR_MODULES: dict[str, Any] = {}
+_VALIDATOR_MODULES: dict[tuple[str, str | None], Any] = {}
 
 
 def validate_existing_contract(item: dict, validator_path: str, stage: str) -> tuple[bool, list[str]]:
     """Run the stage's checked-in ``validate_contract()`` implementation."""
-    module = _VALIDATOR_MODULES.get(validator_path)
+    _verify_freeze("before", f"{stage}_contract_validator_load")
+    cache_key = (validator_path, _RUN_FREEZE.manifest_sha256 if _RUN_FREEZE is not None else None)
+    module = _VALIDATOR_MODULES.get(cache_key)
     if module is None:
         path = ROOT / validator_path
         module_name = f"we_live_{stage}_validator"
@@ -524,8 +640,11 @@ def validate_existing_contract(item: dict, validator_path: str, stage: str) -> t
             return False, [f"{stage}: cannot load contract validator {path}"]
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        _VALIDATOR_MODULES[validator_path] = module
+        _VALIDATOR_MODULES[cache_key] = module
+    _verify_freeze("after", f"{stage}_contract_validator_load")
+    _verify_freeze("before", f"{stage}_contract_validation")
     errors = module.validate_contract(item)
+    _verify_freeze("after", f"{stage}_contract_validation")
     return not errors, [f"{stage}: {error}" for error in errors]
 
 
@@ -533,7 +652,9 @@ def validate_generator_finalization(item: dict) -> tuple[bool, list[str]]:
     """Check the parsed formal Generator item before any Reviewer call."""
 
     validator_path = GENERATOR_VALIDATOR
-    module = _VALIDATOR_MODULES.get(validator_path)
+    _verify_freeze("before", "generator_finalization_validator_load")
+    cache_key = (validator_path, _RUN_FREEZE.manifest_sha256 if _RUN_FREEZE is not None else None)
+    module = _VALIDATOR_MODULES.get(cache_key)
     if module is None:
         path = ROOT / validator_path
         module_name = "we_live_generator_finalization_validator"
@@ -545,12 +666,98 @@ def validate_generator_finalization(item: dict) -> tuple[bool, list[str]]:
             sys.path.insert(0, scripts_path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        _VALIDATOR_MODULES[validator_path] = module
+        _VALIDATOR_MODULES[cache_key] = module
+    _verify_freeze("after", "generator_finalization_validator_load")
+    _verify_freeze("before", "generator_finalization_validation")
     errors = module.validate_finalization_integrity(item)
+    _verify_freeze("after", "generator_finalization_validation")
     return not errors, [f"generator: {error}" for error in errors]
 
 
-def reviewer_runtime_schema(canonical_schema_path: Path = REVIEWER_SCHEMA_PATH) -> dict:
+def _resolve_recorded_path(value: object) -> Path | None:
+    if not isinstance(value, str) or not value.strip():
+        return None
+    path = Path(value)
+    return path.resolve() if path.is_absolute() else (ROOT / path).resolve()
+
+
+def validate_frozen_run_contract(freeze: RunFreeze) -> tuple[str, dict, list]:
+    """Validate every report input against the run-start frozen contract."""
+
+    formal_paths = {
+        "generator": FORMAL / "generator_outputs.json",
+        "reviewer": FORMAL / "reviewer_outputs.json",
+        "solver": FORMAL / "solver_outputs.json",
+    }
+    validator_paths = {
+        "reviewer": REVIEWER_VALIDATOR,
+        "solver": SOLVER_VALIDATOR,
+    }
+    formal_counts: dict[str, int] = {}
+    for stage, path in formal_paths.items():
+        _verify_freeze("before", f"report_{stage}_artifact")
+        document = _read_json_file(path, f"{stage} formal output")
+        if not isinstance(document, dict) or not isinstance(document.get("items"), list):
+            raise ValueError(f"{stage} formal output must be an object with an items list")
+        items = document["items"]
+        formal_counts[stage] = len(items)
+        for index, item in enumerate(items):
+            if not isinstance(item, dict):
+                raise ValueError(f"{stage} formal output item {index} is not an object")
+            ok, errors = validate_schema_only(item, freeze.schema_snapshots[stage], stage)
+            if not ok:
+                raise ValueError("; ".join(errors))
+            if stage == "generator":
+                ok, errors = validate_generator_finalization(item)
+            else:
+                ok, errors = validate_existing_contract(item, validator_paths[stage], stage)
+            if not ok:
+                raise ValueError("; ".join(errors))
+        _verify_freeze("after", f"report_{stage}_artifact")
+
+    provenance_document = _read_json_file(PROVENANCE / "runtime_provenance.json", "runtime provenance")
+    if not isinstance(provenance_document, dict) or not isinstance(provenance_document.get("items"), list):
+        raise ValueError("runtime provenance must be an object with an items list")
+    expected_manifest_path = freeze.manifest_path.resolve()
+    expected_schema_hashes = freeze.manifest.get("canonical_schema_hashes", {})
+    provenance_by_stage: dict[str, list[dict[str, Any]]] = {stage: [] for stage in formal_paths}
+    for index, record in enumerate(provenance_document["items"]):
+        if not isinstance(record, dict):
+            raise ValueError(f"runtime provenance item {index} is not an object")
+        if record.get("freeze_manifest_sha256") != freeze.manifest_sha256:
+            raise ValueError(f"runtime provenance item {index} is not bound to the run freeze")
+        if _resolve_recorded_path(record.get("freeze_manifest_path")) != expected_manifest_path:
+            raise ValueError(f"runtime provenance item {index} points to a different freeze manifest")
+        stage_value = record.get("stage")
+        if not isinstance(stage_value, str) or stage_value not in formal_paths:
+            raise ValueError(f"runtime provenance item {index} has an unknown stage")
+        stage = stage_value
+        provenance_by_stage[stage].append(record)
+        transport_provenance = record.get("transport_schema_provenance")
+        if isinstance(transport_provenance, dict) and "canonical_schema_hash" in transport_provenance:
+            if transport_provenance.get("canonical_schema_hash") != expected_schema_hashes.get(stage):
+                raise ValueError(f"runtime provenance item {index} uses a different canonical {stage} schema")
+        if record.get("formal_output_exists") is True and record.get("formal_output_path") != FORMAL_OUTPUT_PATHS[stage]:
+            raise ValueError(f"runtime provenance item {index} has an inconsistent formal output path")
+    for stage in formal_paths:
+        if formal_counts[stage]:
+            if not any(record.get("formal_output_exists") is True for record in provenance_by_stage[stage]):
+                raise ValueError(f"{stage} formal output is not represented by a successful provenance record")
+
+    outcomes_document = _read_json_file(_outcomes_path(), "run outcomes")
+    if not isinstance(outcomes_document, dict) or not isinstance(outcomes_document.get("outcomes"), list):
+        raise ValueError("run outcomes must be an object with an outcomes list")
+    batch_id = outcomes_document.get("batch_id")
+    if not isinstance(batch_id, str) or not batch_id.strip():
+        raise ValueError("run outcomes must contain a non-empty batch_id")
+    test_result = _read_json_file(_test_result_path(), "test result")
+    if not isinstance(test_result, dict) or not isinstance(test_result.get("passed"), bool):
+        raise ValueError("test result must contain a boolean passed field")
+    _verify_freeze("after", "report_frozen_contract")
+    return batch_id, test_result, outcomes_document["outcomes"]
+
+
+def reviewer_runtime_schema(canonical_schema_path: Path | dict[str, Any] = REVIEWER_SCHEMA_PATH) -> dict:
     """The live Reviewer response contract, before Orchestrator comparison fields.
 
     The checked-in formal schema intentionally requires ``generator_answer``
@@ -559,7 +766,11 @@ def reviewer_runtime_schema(canonical_schema_path: Path = REVIEWER_SCHEMA_PATH) 
     derived response schema with only those two required fields removed.  The
     formal checked-in schema itself is never edited.
     """
-    schema = copy.deepcopy(load_schema(canonical_schema_path))
+    schema = copy.deepcopy(
+        canonical_schema_path
+        if isinstance(canonical_schema_path, dict)
+        else load_schema(canonical_schema_path)
+    )
     schema["required"] = [
         key for key in schema.get("required", [])
         if key not in {"generator_answer", "answer_match"}
@@ -702,9 +913,11 @@ def formal_reviewer(
 
 
 def live_config() -> dict:
+    _verify_freeze("before", "config_load")
     config = copy.deepcopy(orch.load_config())
     config["paths"]["reviewer_validate_script"] = REVIEWER_VALIDATOR
     config["paths"]["solver_validate_script"] = SOLVER_VALIDATOR
+    _verify_freeze("after", "config_load")
     return config
 
 
@@ -791,7 +1004,9 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
     reviewer_leakage: list[str] = []
     try:
         try:
+            _verify_freeze("before", "reviewer_blinding")
             reviewer_input = canonical_reviewer_input(generated)
+            _verify_freeze("after", "reviewer_blinding")
         except (TypeError, ValueError, KeyError) as exc:
             raise LiveInvocationError("schema", f"reviewer: canonical blind payload failed: {exc}") from exc
         reviewer_leakage = reviewer_input_errors(
@@ -824,7 +1039,9 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
             raise LiveInvocationError("schema", "; ".join(reviewer_errors))
         reviewer_formal.append(reviewer)
         candidate.reviewer_item = reviewer
+        _verify_freeze("before", "reviewer_orchestrator_validation")
         candidate = orch.process_review_output(candidate, config)
+        _verify_freeze("after", "reviewer_orchestrator_validation")
         provenance_records.append(sidecar(reviewer_invocation, input_payload=reviewer_input, contract_validated=True, formal_output_exists=True, leakage=reviewer_leakage))
     except LiveInvocationError as exc:
         if reviewer_invocation is None and exc.invocation is not None:
@@ -854,7 +1071,9 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
         outcomes.append({"item_id": item_id, "state": candidate.state, "state_history": candidate.state_history, "reviewer_verdict": reviewer.get("verdict")})
         return
 
+    _verify_freeze("before", "solver_blinding")
     solver_input = canonical_solver_input(generated)
+    _verify_freeze("after", "solver_blinding")
     solver_leakage = nested_forbidden(solver_input, SOLVER_FORBIDDEN_FIELDS)
     ok, problems = orch.leakage_guard(solver_input, generated["section"])
     if not ok:
@@ -880,7 +1099,9 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
         if not solver_ok:
             raise LiveInvocationError("schema", "; ".join(solver_errors))
         solver_formal.append(solver)
+        _verify_freeze("before", "solver_orchestrator_validation")
         candidate = orch.process_solver_stage(candidate, config, solver, precomputed_solver_input=solver_input)
+        _verify_freeze("after", "solver_orchestrator_validation")
         provenance_records.append(sidecar(solver_invocation, input_payload=solver_input, contract_validated=True, formal_output_exists=True, leakage=solver_leakage))
     except LiveInvocationError as exc:
         if solver_invocation is None and exc.invocation is not None:
@@ -1254,44 +1475,72 @@ def write_report(metrics: dict, decision: str, decision_reason: str) -> None:
 
 
 def report_existing_run() -> int:
-    """Rebuild summary/report fields without making another live call."""
+    """Rebuild derived reports only after revalidating immutable evidence."""
+
+    global _RUN_FREEZE
     metrics_path = OUT / "we_v2_1_3_live_e2e.json"
-    provenance_path = PROVENANCE / "runtime_provenance.json"
-    if not metrics_path.exists() or not provenance_path.exists():
-        print(f"Cannot report existing run; missing {metrics_path} or {provenance_path}", file=sys.stderr)
+    previous_freeze = _RUN_FREEZE
+    try:
+        # This is deliberately the first trust decision in report-only mode.
+        # The manifest's own contents/hash and every protected checkout file
+        # must still match before any formal artifact is parsed.
+        freeze = load_run_freeze(_freeze_manifest_path(), repo_root=ROOT)
+        _RUN_FREEZE = freeze
+        freeze.verify("report-only", "freeze_manifest")
+        verify_artifact_manifest(freeze)
+
+        batch_id, tests, outcomes = validate_frozen_run_contract(freeze)
+        provenance_document = _read_json_file(PROVENANCE / "runtime_provenance.json", "runtime provenance")
+        if not isinstance(provenance_document, dict):
+            raise ValueError("runtime provenance must be an object")
+        provenance_records = provenance_document["items"]
+        formal_documents = {
+            "generator": _read_json_file(FORMAL / "generator_outputs.json", "generator formal output"),
+            "reviewer": _read_json_file(FORMAL / "reviewer_outputs.json", "reviewer formal output"),
+            "solver": _read_json_file(FORMAL / "solver_outputs.json", "solver formal output"),
+        }
+        generator_items = formal_documents["generator"]["items"]
+        reviewer_items = formal_documents["reviewer"]["items"]
+        solver_items = formal_documents["solver"]["items"]
+        if os.environ.get("WE_E2E_REPORT_ONLY_RUN_TESTS") == "1":
+            tests = run_existing_tests()
+
+        # Recheck both the source freeze and the evidence hash set after all
+        # reads/validation. A report cannot turn a mid-report mutation into A.
+        verify_artifact_manifest(freeze)
+        freeze.verify("report-only", "before_metrics")
+        metrics = build_metrics(
+            generator_items,
+            reviewer_items,
+            solver_items,
+            provenance_records,
+            outcomes,
+            tests,
+            batch_id,
+        )
+        verify_artifact_manifest(freeze)
+        freeze.verify("report-only", "after_metrics")
+        decision, decision_reason = final_decision(metrics)
+        metrics["final_decision"] = {
+            "code": decision,
+            "label": {
+                "A": "Live Reviewer/Solver pipeline ready",
+                "B": "Reviewer issue",
+                "C": "Solver issue",
+                "D": "Orchestrator issue",
+                "E": "Runtime infrastructure unavailable",
+            }[decision],
+            "reason": decision_reason,
+        }
+        freeze.verify("report-only", "before_report_write")
+        atomic_write_json(metrics_path, metrics)
+        write_report(metrics, decision, decision_reason)
+        return 0 if e2e_succeeded(metrics) else 1
+    except (FreezeDriftError, OSError, TypeError, ValueError, KeyError, json.JSONDecodeError) as exc:
+        print(f"Cannot report existing run; immutable evidence verification failed: {exc}", file=sys.stderr)
         return 2
-    previous = json.loads(metrics_path.read_text(encoding="utf-8"))
-    generator_items = json.loads((FORMAL / "generator_outputs.json").read_text(encoding="utf-8")).get("items", [])
-    reviewer_items = json.loads((FORMAL / "reviewer_outputs.json").read_text(encoding="utf-8")).get("items", [])
-    solver_items = json.loads((FORMAL / "solver_outputs.json").read_text(encoding="utf-8")).get("items", [])
-    provenance_records = json.loads(provenance_path.read_text(encoding="utf-8")).get("items", [])
-    tests = previous.get("existing_tests", {"passed": None, "note": "not rerun in report-only mode"})
-    if os.environ.get("WE_E2E_REPORT_ONLY_RUN_TESTS") == "1":
-        tests = run_existing_tests()
-    metrics = build_metrics(
-        generator_items,
-        reviewer_items,
-        solver_items,
-        provenance_records,
-        previous.get("outcomes", []),
-        tests,
-        previous.get("batch_id", "unknown"),
-    )
-    decision, decision_reason = final_decision(metrics)
-    metrics["final_decision"] = {
-        "code": decision,
-        "label": {
-            "A": "Live Reviewer/Solver pipeline ready",
-            "B": "Reviewer issue",
-            "C": "Solver issue",
-            "D": "Orchestrator issue",
-            "E": "Runtime infrastructure unavailable",
-        }[decision],
-        "reason": decision_reason,
-    }
-    atomic_write_json(metrics_path, metrics)
-    write_report(metrics, decision, decision_reason)
-    return 0 if e2e_succeeded(metrics) else 1
+    finally:
+        _RUN_FREEZE = previous_freeze
 
 
 def _write_freeze_drift_artifact(error: FreezeDriftError) -> None:
@@ -1451,6 +1700,7 @@ def main(argv: list[str] | None = None) -> int:
             atomic_write_json(FORMAL / "reviewer_outputs.json", {"items": reviewer_items})
             atomic_write_json(FORMAL / "solver_outputs.json", {"items": solver_items})
             atomic_write_json(PROVENANCE / "runtime_provenance.json", {"items": provenance_records})
+            atomic_write_json(_outcomes_path(), {"batch_id": batch_id, "outcomes": outcomes})
             latest = outcomes[-1] if outcomes else {"state": "UNKNOWN"}
             print(f"completed microbatch {order}/10: {latest.get('item_id')} -> {latest.get('state')}", flush=True)
     except FreezeDriftError as exc:
@@ -1458,11 +1708,18 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({"status": "FREEZE_DRIFT", "detail": str(exc)}, ensure_ascii=False, indent=2))
         return 2
     tests = run_existing_tests()
+    atomic_write_json(_outcomes_path(), {"batch_id": batch_id, "outcomes": outcomes})
+    atomic_write_json(_test_result_path(), tests)
+    _verify_freeze("before", "final_metrics")
     metrics = build_metrics(generator_items, reviewer_items, solver_items, provenance_records, outcomes, tests, batch_id)
+    _verify_freeze("after", "final_metrics")
     decision, decision_reason = final_decision(metrics)
     metrics["final_decision"] = {"code": decision, "label": {"A": "Live Reviewer/Solver pipeline ready", "B": "Reviewer issue", "C": "Solver issue", "D": "Orchestrator issue", "E": "Runtime infrastructure unavailable"}[decision], "reason": decision_reason}
     atomic_write_json(OUT / "we_v2_1_3_live_e2e.json", metrics)
     write_report(metrics, decision, decision_reason)
+    if _RUN_FREEZE is None:  # pragma: no cover - main always creates a freeze first
+        raise RuntimeError("cannot publish evidence without a run freeze")
+    write_artifact_manifest(_RUN_FREEZE)
     print(json.dumps({"batch_id": batch_id, "gates": metrics["gates"], "existing_tests": tests}, ensure_ascii=False, indent=2))
     return 0 if e2e_succeeded(metrics) else 1
 

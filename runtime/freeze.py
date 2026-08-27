@@ -61,8 +61,48 @@ def _run_git(repo_root: Path, *args: str) -> str | None:
     return completed.stdout
 
 
+def _git_status_porcelain(repo_root: Path, *, excluded_path: Path | None = None) -> str | None:
+    """Read user checkout status while excluding generated freeze artifacts."""
+
+    args = ["status", "--porcelain", "--untracked-files=all"]
+    if excluded_path is not None:
+        try:
+            relative = _repo_relative(repo_root, excluded_path)
+        except ValueError:
+            relative = None
+        if relative:
+            args.extend(["--", ".", f":(exclude){relative}/**"])
+    return _run_git(repo_root, *args)
+
+
 def _repo_relative(repo_root: Path, path: Path) -> str:
     return str(path.resolve().relative_to(repo_root.resolve())).replace("\\", "/")
+
+
+def _path_identity(repo_root: Path, path: Path) -> tuple[str, str]:
+    """Return a manifest path without confusing repo sources and artifacts.
+
+    Protected source files are required to live in the checkout and therefore
+    use a stable repository-relative identity.  Snapshot/artifact paths may
+    intentionally live outside the checkout (for example when
+    ``WE_E2E_OUTPUT_DIR`` is absolute), so those paths retain their absolute
+    identity in the manifest.
+    """
+
+    resolved = path.resolve()
+    try:
+        return _repo_relative(repo_root, resolved), "repo_relative"
+    except ValueError:
+        return str(resolved).replace("\\", "/"), "external"
+
+
+def _resolve_manifest_path(repo_root: Path, value: object, kind: object = None) -> Path:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError("freeze manifest path must be a non-empty string")
+    path = Path(value)
+    if kind == "external" or path.is_absolute():
+        return path.resolve()
+    return (repo_root / path).resolve()
 
 
 def _safe_snapshot_name(key: str, source: Path) -> str:
@@ -134,13 +174,19 @@ class RunFreeze:
             mismatches.append("git_head")
 
         expected_status = self.manifest.get("git_status", {})
-        actual_porcelain = _run_git(self.repo_root, "status", "--porcelain", "--untracked-files=all")
+        actual_porcelain = _git_status_porcelain(self.repo_root, excluded_path=self.manifest_path.parent)
         if actual_porcelain is None:
             mismatches.append("git_status(unavailable)")
         else:
             actual_clean = actual_porcelain == ""
             if actual_clean != expected_status.get("clean"):
                 mismatches.append("git_status.clean")
+            expected_porcelain_hash = expected_status.get("porcelain_sha256")
+            actual_porcelain_hash = _sha256_bytes(actual_porcelain.encode("utf-8"))
+            if actual_porcelain_hash != expected_porcelain_hash:
+                mismatches.append("git_status.porcelain_sha256")
+            if actual_porcelain != expected_status.get("porcelain"):
+                mismatches.append("git_status.porcelain")
 
         for key, snapshot_path in self.schema_snapshots.items():
             expected = self.manifest["canonical_schema_snapshots"][key]["sha256"]
@@ -218,14 +264,15 @@ def create_run_freeze(
         digest = sha256_file(source)
         if sha256_file(target) != digest:
             raise OSError(f"schema snapshot hash mismatch for {key}")
-        relative = _repo_relative(repo_root, target)
+        snapshot_path, snapshot_path_kind = _path_identity(repo_root, target)
         schema_snapshots[key] = target
         source_relative = _repo_relative(repo_root, source)
         protected[source_relative] = digest
         normalized_groups.setdefault("canonical_schemas", {})[key] = digest
         schema_snapshot_records[key] = {
             "source_path": source_relative,
-            "snapshot_path": relative,
+            "snapshot_path": snapshot_path,
+            "snapshot_path_kind": snapshot_path_kind,
             "sha256": digest,
         }
 
@@ -241,18 +288,19 @@ def create_run_freeze(
             raise OSError(f"agent-instruction snapshot hash mismatch for {key}")
         agent_snapshots[key] = target
         source_relative = _repo_relative(repo_root, source)
-        snapshot_relative = _repo_relative(repo_root, target)
+        snapshot_path, snapshot_path_kind = _path_identity(repo_root, target)
         agent_hashes[source_relative] = digest
         protected[source_relative] = digest
         normalized_groups.setdefault("agent_instructions", {})[key] = digest
         agent_snapshot_records[key] = {
             "source_path": source_relative,
-            "snapshot_path": snapshot_relative,
+            "snapshot_path": snapshot_path,
+            "snapshot_path_kind": snapshot_path_kind,
             "sha256": digest,
         }
 
     git_head = (_run_git(repo_root, "rev-parse", "HEAD") or "").strip() or None
-    git_porcelain = _run_git(repo_root, "status", "--porcelain", "--untracked-files=all")
+    git_porcelain = _git_status_porcelain(repo_root, excluded_path=freeze_root)
     if git_porcelain is None:
         raise RuntimeError("could not capture Git status for run freeze")
 
@@ -296,10 +344,56 @@ def create_run_freeze(
     )
 
 
+def load_run_freeze(manifest_path: Path, *, repo_root: Path) -> RunFreeze:
+    """Load an existing freeze without recreating any snapshot or manifest.
+
+    The caller must invoke :meth:`RunFreeze.verify` before trusting the loaded
+    contract.  Both current repository-relative manifests and the newer
+    external snapshot identities are accepted so historical run artifacts can
+    be checked without moving them into the checkout.
+    """
+
+    manifest_path = Path(manifest_path).resolve()
+    repo_root = Path(repo_root).resolve()
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"cannot load freeze manifest {manifest_path}: {exc}") from exc
+    if not isinstance(manifest, dict):
+        raise ValueError(f"freeze manifest {manifest_path} must be a JSON object")
+
+    snapshot_root = manifest_path.parent / "snapshots"
+    schema_snapshots: dict[str, Path] = {}
+    for key, record in manifest.get("canonical_schema_snapshots", {}).items():
+        if not isinstance(record, dict):
+            raise ValueError(f"malformed canonical schema snapshot record: {key}")
+        schema_snapshots[str(key)] = _resolve_manifest_path(
+            repo_root, record.get("snapshot_path"), record.get("snapshot_path_kind")
+        )
+
+    agent_snapshots: dict[str, Path] = {}
+    for key, record in manifest.get("agent_instruction_snapshots", {}).items():
+        if not isinstance(record, dict):
+            raise ValueError(f"malformed agent instruction snapshot record: {key}")
+        agent_snapshots[str(key)] = _resolve_manifest_path(
+            repo_root, record.get("snapshot_path"), record.get("snapshot_path_kind")
+        )
+
+    return RunFreeze(
+        manifest_path=manifest_path,
+        snapshot_root=snapshot_root,
+        manifest=copy.deepcopy(manifest),
+        schema_snapshots=schema_snapshots,
+        agent_snapshots=agent_snapshots,
+        repo_root=repo_root,
+    )
+
+
 __all__ = [
     "FREEZE_SCHEMA_VERSION",
     "FreezeDriftError",
     "RunFreeze",
     "create_run_freeze",
+    "load_run_freeze",
     "sha256_file",
 ]

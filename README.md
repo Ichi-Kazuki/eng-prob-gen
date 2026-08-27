@@ -51,6 +51,13 @@ resolution of `requirements.txt` or the CI tooling environment.
 
 CI also runs `pip check`, Ruff, a scoped mypy check, pip-audit, coverage measurement, and Python bytecode compilation on Ubuntu and Windows.
 
+The live E2E harness accepts an absolute `WE_E2E_OUTPUT_DIR`. Protected source
+identity remains repository-relative, while freeze snapshots and generated
+evidence retain their external absolute path identity. Completed live runs
+also publish `runtime/artifact_manifest_v1.json`, a deterministic SHA-256
+sidecar for the formal outputs, provenance, outcomes, test result, and freeze
+manifest used by report-only mode.
+
 The image crop/underline utilities are analysis-only tools. Install their
 optional dependency when using them:
 

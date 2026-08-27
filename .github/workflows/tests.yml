@@ -36,8 +36,9 @@ jobs:
               path = pathlib.Path(name)
               venv.EnvBuilder(with_pip=True).create(path)
               python = (path / "Scripts" / "python.exe") if os.name == "nt" else (path / "bin" / "python")
-              site_packages = (path / "Lib" / "site-packages") if os.name == "nt" else (path / "lib" / "python3.11" / "site-packages")
-              if os.name != "nt":
+              if os.name == "nt":
+                  site_packages = path / "Lib" / "site-packages"
+              else:
                   matches = list((path / "lib").glob("python*/site-packages"))
                   if len(matches) != 1:
                       raise RuntimeError(f"could not identify site-packages under {path}: {matches}")
@@ -47,30 +48,99 @@ jobs:
           runtime_python, _ = create_environment(".ci-runtime")
           audit_python, audit_site_packages = create_environment(".ci-audit-runtime")
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
-              output.write(f"runtime_python={runtime_python}\n")
-              output.write(f"audit_python={audit_python}\n")
-              output.write(f"audit_site_packages={audit_site_packages}\n")
+              output.write(f"runtime_python={runtime_python.resolve()}\n")
+              output.write(f"audit_python={audit_python.resolve()}\n")
+              output.write(f"audit_site_packages={audit_site_packages.resolve()}\n")
       - name: Install locked runtime dependencies
+        shell: python
+        env:
+          RUNTIME_PYTHON: ${{ steps.runtime_envs.outputs.runtime_python }}
+          AUDIT_PYTHON: ${{ steps.runtime_envs.outputs.audit_python }}
         run: |
-          "${{ steps.runtime_envs.outputs.runtime_python }}" -m pip install --disable-pip-version-check -r requirements.txt -c requirements.lock
-          "${{ steps.runtime_envs.outputs.audit_python }}" -m pip install --disable-pip-version-check -r requirements.txt -c requirements.lock
+          import os
+          import subprocess
+
+          for variable in ("RUNTIME_PYTHON", "AUDIT_PYTHON"):
+              subprocess.run(
+                  [os.environ[variable], "-m", "pip", "install", "--disable-pip-version-check", "-r", "requirements.txt", "-c", "requirements.lock"],
+                  check=True,
+              )
       - name: Install CI tooling into test runtime
+        shell: python
+        env:
+          RUNTIME_PYTHON: ${{ steps.runtime_envs.outputs.runtime_python }}
         run: |
-          "${{ steps.runtime_envs.outputs.runtime_python }}" -m pip install --disable-pip-version-check "ruff>=0.6,<1" "mypy>=1.11,<2" "pip-audit>=2.7,<3" "coverage>=7.6,<8"
+          import os
+          import subprocess
+
+          subprocess.run(
+              [os.environ["RUNTIME_PYTHON"], "-m", "pip", "install", "--disable-pip-version-check", "ruff>=0.6,<1", "mypy>=1.11,<2", "pip-audit>=2.7,<3", "coverage>=7.6,<8"],
+              check=True,
+          )
       - name: Verify installed runtime dependency closure
+        shell: python
+        env:
+          RUNTIME_PYTHON: ${{ steps.runtime_envs.outputs.runtime_python }}
+          AUDIT_PYTHON: ${{ steps.runtime_envs.outputs.audit_python }}
         run: |
-          "${{ steps.runtime_envs.outputs.audit_python }}" -m pip freeze
-          "${{ steps.runtime_envs.outputs.runtime_python }}" -m pip check
-          "${{ steps.runtime_envs.outputs.audit_python }}" -m pip check
+          import os
+          import subprocess
+
+          subprocess.run([os.environ["AUDIT_PYTHON"], "-m", "pip", "freeze"], check=True)
+          for variable in ("RUNTIME_PYTHON", "AUDIT_PYTHON"):
+              subprocess.run([os.environ[variable], "-m", "pip", "check"], check=True)
       - name: Compile Python sources
-        run: "${{ steps.runtime_envs.outputs.runtime_python }}" -m compileall -q agents orchestrator runtime shared scripts tests
+        shell: python
+        env:
+          RUNTIME_PYTHON: ${{ steps.runtime_envs.outputs.runtime_python }}
+        run: |
+          import os
+          import subprocess
+
+          subprocess.run([os.environ["RUNTIME_PYTHON"], "-m", "compileall", "-q", "agents", "orchestrator", "runtime", "shared", "scripts", "tests"], check=True)
       - name: Ruff static checks
-        run: "${{ steps.runtime_envs.outputs.runtime_python }}" -m ruff check orchestrator/scripts shared runtime scripts agents tests
+        shell: python
+        env:
+          RUNTIME_PYTHON: ${{ steps.runtime_envs.outputs.runtime_python }}
+        run: |
+          import os
+          import subprocess
+
+          subprocess.run([os.environ["RUNTIME_PYTHON"], "-m", "ruff", "check", "orchestrator/scripts", "shared", "runtime", "scripts", "agents", "tests"], check=True)
       - name: Minimum static type check
-        run: "${{ steps.runtime_envs.outputs.runtime_python }}" -m mypy --config-file pyproject.toml
+        shell: python
+        env:
+          RUNTIME_PYTHON: ${{ steps.runtime_envs.outputs.runtime_python }}
+        run: |
+          import os
+          import subprocess
+
+          subprocess.run([os.environ["RUNTIME_PYTHON"], "-m", "mypy", "--config-file", "pyproject.toml"], check=True)
       - name: Dependency audit (installed locked runtime environment)
-        run: "${{ steps.runtime_envs.outputs.runtime_python }}" -m pip_audit --path "${{ steps.runtime_envs.outputs.audit_site_packages }}" --strict
+        shell: python
+        env:
+          RUNTIME_PYTHON: ${{ steps.runtime_envs.outputs.runtime_python }}
+          AUDIT_SITE_PACKAGES: ${{ steps.runtime_envs.outputs.audit_site_packages }}
+        run: |
+          import os
+          import subprocess
+
+          subprocess.run([os.environ["RUNTIME_PYTHON"], "-m", "pip_audit", "--path", os.environ["AUDIT_SITE_PACKAGES"], "--strict"], check=True)
       - name: Run hardening and deterministic regression tests (including persistence)
-        run: "${{ steps.runtime_envs.outputs.runtime_python }}" -m coverage run -m unittest discover -s tests -p "test_*.py" -v
+        shell: python
+        env:
+          RUNTIME_PYTHON: ${{ steps.runtime_envs.outputs.runtime_python }}
+        run: |
+          import os
+          import subprocess
+
+          subprocess.run([os.environ["RUNTIME_PYTHON"], "-m", "coverage", "run", "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py", "-v"], check=True)
       - name: Coverage measurement
-        run: "${{ steps.runtime_envs.outputs.runtime_python }}" -m coverage report
+        shell: python
+        env:
+          RUNTIME_PYTHON: ${{ steps.runtime_envs.outputs.runtime_python }}
+        run: |
+          import os
+          import subprocess
+
+          subprocess.run([os.environ["RUNTIME_PYTHON"], "-m", "coverage", "report"], check=True)

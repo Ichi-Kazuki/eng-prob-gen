@@ -11,6 +11,7 @@ import tempfile
 import time
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from runtime.adapters import (
     PROCESS_CLEANUP_GRACE_SECONDS,
@@ -18,7 +19,7 @@ from runtime.adapters import (
     InvocationRequest,
     RuntimeInvocationError,
 )
-from runtime.freeze import FreezeDriftError, create_run_freeze
+from runtime.freeze import FreezeDriftError, create_run_freeze, load_run_freeze
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -91,12 +92,53 @@ class ImmutableRunFreezeTests(unittest.TestCase):
                 GENERATOR_SCHEMA.read_bytes(),
             )
             freeze.verify("test", "generator")
+            loaded = load_run_freeze(freeze.manifest_path, repo_root=ROOT)
+            loaded.verify("test", "loaded-generator")
+
+            on_disk = json.loads(freeze.manifest_path.read_text(encoding="utf-8"))
+            on_disk["runtime"]["model"] = "tampered"
+            freeze.manifest_path.write_text(json.dumps(on_disk), encoding="utf-8")
+            with self.assertRaises(FreezeDriftError) as raised_manifest:
+                loaded.verify("test", "tampered-manifest")
+            self.assertIn("freeze_manifest_contents", raised_manifest.exception.mismatches)
 
             protected.write_text("drifted\n", encoding="utf-8")
             with self.assertRaises(FreezeDriftError) as raised:
                 freeze.verify("after", "generator")
             self.assertEqual(raised.exception.category, "FREEZE_DRIFT")
             self.assertTrue(any("protected_file_hashes" in item for item in raised.exception.mismatches))
+
+    def test_dirty_state_change_is_detected_by_porcelain_hash(self) -> None:
+        statuses = iter((" M dirty-a.txt\n", " M dirty-b.txt\n"))
+
+        def fake_git(_repo_root: Path, *args: str) -> str | None:
+            if args[:2] == ("rev-parse", "HEAD"):
+                return "test-head\n"
+            if args[:2] == ("status", "--porcelain"):
+                return next(statuses)
+            return None
+
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            freeze_root = Path(directory) / "freeze"
+            with mock.patch("runtime.freeze._run_git", side_effect=fake_git):
+                freeze = create_run_freeze(
+                    freeze_root,
+                    repo_root=ROOT,
+                    protected_file_groups={},
+                    canonical_schemas={"generator": GENERATOR_SCHEMA},
+                    agent_instructions={},
+                    provider="codex",
+                    codex_cli_version="test",
+                    model="test",
+                    reasoning_effort="unset",
+                    sandbox="read-only",
+                    timeout_seconds=1,
+                )
+                with self.assertRaises(FreezeDriftError) as raised:
+                    freeze.verify("after", "dirty-state")
+
+        self.assertIn("git_status.porcelain_sha256", raised.exception.mismatches)
+        self.assertIn("git_status.porcelain", raised.exception.mismatches)
 
     def test_runtime_guard_runs_before_and_after_process(self) -> None:
         events: list[tuple[str, str]] = []

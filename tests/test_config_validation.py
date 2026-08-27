@@ -42,6 +42,18 @@ class ConfigSchemaValidationTests(unittest.TestCase):
     def test_unknown_top_level_key_is_rejected_at_load(self) -> None:
         self._load_variant(lambda config: config.update(unexpected=True))
 
+    def test_whitespace_only_pipeline_and_path_values_are_rejected(self) -> None:
+        # Keep the path case explicit so this regression covers both a version
+        # field and path-like fields using the shared non_empty_string shape.
+        cases = (
+            lambda config: config.update(pipeline_version="   "),
+            lambda config: config.update(runtime_root="\t"),
+            lambda config: config["paths"].update(spec_json="\n  "),
+        )
+        for mutate in cases:
+            with self.subTest(mutate=mutate):
+                self._load_variant(mutate)
+
     def test_auto_accept_arrays_are_nonempty_unique_and_enum_checked(self) -> None:
         cases = (
             lambda config: config["auto_accept"].update(allowed_solver_confidence=["UNKNOWN"]),

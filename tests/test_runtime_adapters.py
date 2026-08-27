@@ -13,6 +13,7 @@ import tempfile
 import unittest
 from dataclasses import replace
 from pathlib import Path
+from types import SimpleNamespace
 from unittest import mock
 
 from runtime.adapters import (
@@ -234,6 +235,63 @@ class RuntimeAdapterTests(unittest.TestCase):
         self.assertEqual(runtime._process_error_category("invalid_json_schema: allOf is not permitted"), "CODEX_SCHEMA_COMPATIBILITY_ERROR")
         self.assertEqual(runtime._process_error_category("prompt mentions network monitoring\nprocess exited unexpectedly"), "CODEX_PROCESS_ERROR")
 
+    def test_harness_failure_classification_is_provider_neutral(self) -> None:
+        harness_path = ROOT / "scripts" / "run_live_e2e.py"
+        spec = importlib.util.spec_from_file_location("we_live_harness_failure_classification_test", harness_path)
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        harness = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(harness)
+        for provider, raw_category in (("claude-code-cli", "auth"), ("codex", "CODEX_AUTH_ERROR")):
+            with self.subTest(provider=provider):
+                invocation = harness.InvocationResult(
+                    "reviewer",
+                    harness.REVIEWER_AGENT,
+                    f"{provider}-invocation",
+                    harness.now_iso(),
+                    completed_at=harness.now_iso(),
+                    provider=provider,
+                    model="test",
+                    cli_version="test",
+                    exit_code=1,
+                    raw_stderr="authentication failed",
+                    error_category=raw_category,
+                )
+                self.assertEqual(harness._classify_invocation_failure(invocation, None), "AUTH_ERROR")
+                record = harness.sidecar(
+                    invocation,
+                    input_payload={},
+                    contract_validated=False,
+                    formal_output_exists=False,
+                    leakage=[],
+                )
+                self.assertEqual(record["failure_classification"], "AUTH_ERROR")
+                self.assertEqual(record["failure_source"], provider)
+                self.assertEqual(record["provider_failure_category"], raw_category)
+
+    def test_absolute_output_directory_keeps_external_snapshot_identity(self) -> None:
+        harness_path = ROOT / "scripts" / "run_live_e2e.py"
+        with tempfile.TemporaryDirectory() as directory, mock.patch.dict(
+            os.environ, {"WE_E2E_OUTPUT_DIR": str(Path(directory) / "external-run")}, clear=False
+        ):
+            spec = importlib.util.spec_from_file_location("we_live_harness_external_output_test", harness_path)
+            self.assertIsNotNone(spec)
+            self.assertIsNotNone(spec.loader)
+            harness = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(harness)
+            self.assertEqual(harness.OUT, Path(directory).resolve() / "external-run")
+            freeze = harness._create_run_freeze(
+                SimpleNamespace(provider="codex", cli_version="test"),
+                model="test",
+                reasoning_effort="unset",
+                sandbox="read-only",
+                timeout_seconds=1,
+            )
+            generator_snapshot = freeze.manifest["canonical_schema_snapshots"]["generator"]
+            self.assertEqual(generator_snapshot["snapshot_path_kind"], "external")
+            self.assertTrue(Path(generator_snapshot["snapshot_path"]).is_absolute())
+            freeze.verify("test", "external-output")
+
     def test_claude_retains_named_agent_and_json_envelope_behavior(self) -> None:
         calls: list[list[str]] = []
 
@@ -361,7 +419,7 @@ class RuntimeAdapterTests(unittest.TestCase):
         self.assertEqual(metrics["gates"]["reviewer_multiple_error"]["count"], 1)
         self.assertEqual(metrics["gates"]["reviewer_ambiguous_one_error"]["count"], 1)
 
-    def test_live_e2e_report_only_exit_code_matches_gates_and_uses_atomic_json(self) -> None:
+    def test_live_e2e_report_only_rejects_tampered_artifact_without_invocation(self) -> None:
         harness_path = ROOT / "scripts" / "run_live_e2e.py"
         spec = importlib.util.spec_from_file_location("we_live_harness_report_test", harness_path)
         self.assertIsNotNone(spec)
@@ -369,65 +427,40 @@ class RuntimeAdapterTests(unittest.TestCase):
         harness = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(harness)
 
-        gate_names = (
-            "generator_schema",
-            "reviewer_contract",
-            "solver_contract",
-            "reviewer_live_invocation",
-            "solver_live_invocation",
-            "answer_leakage",
-            "reviewer_genuine_error_failure",
-            "reviewer_zero_genuine_errors",
-            "reviewer_multiple_error",
-            "reviewer_ambiguous_one_error",
-            "solver_none",
-            "solver_ambiguous",
-            "generator_solver_agreement",
-            "reviewer_solver_structural_conflict",
-            "orchestrator_acceptance_logic",
-        )
-
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            out = root / "out"
-            formal = root / "formal"
-            provenance = root / "provenance"
-            out.mkdir()
-            formal.mkdir()
-            provenance.mkdir()
-            for filename in ("generator_outputs.json", "reviewer_outputs.json", "solver_outputs.json"):
-                (formal / filename).write_text('{"items": []}\n', encoding="utf-8")
-            (provenance / "runtime_provenance.json").write_text('{"items": []}\n', encoding="utf-8")
-            (out / "we_v2_1_3_live_e2e.json").write_text(
-                json.dumps({"batch_id": "report-test", "outcomes": []}), encoding="utf-8"
-            )
+            out = Path(directory) / "out"
+            formal = out / "runtime" / "formal"
+            provenance = out / "runtime" / "provenance"
+            inputs = out / "runtime" / "inputs"
+            logs = out / "runtime" / "logs"
+            runtime_dir = out / "runtime"
+            for path in (formal, provenance, inputs, logs):
+                path.mkdir(parents=True)
+            patched = {
+                "OUT": out,
+                "RUNTIME": runtime_dir,
+                "FORMAL": formal,
+                "PROVENANCE": provenance,
+                "INPUTS": inputs,
+                "LOGS": logs,
+            }
+            with mock.patch.multiple(harness, **patched):
+                freeze = harness._create_run_freeze(SimpleNamespace(provider="test", cli_version="test"), model="test", reasoning_effort="unset", sandbox="read-only", timeout_seconds=1)
+                with mock.patch.object(harness, "_RUN_FREEZE", freeze):
+                    for filename in ("generator_outputs.json", "reviewer_outputs.json", "solver_outputs.json"):
+                        harness.atomic_write_json(formal / filename, {"items": []})
+                    harness.atomic_write_json(provenance / "runtime_provenance.json", {"items": []})
+                    harness.atomic_write_json(runtime_dir / "outcomes.json", {"batch_id": "report-test", "outcomes": []})
+                    harness.atomic_write_json(runtime_dir / "test_result.json", {"passed": False})
+                    harness.write_artifact_manifest(freeze)
 
-            for existing_tests_passed, gates_passed, expected_exit_code in (
-                (True, True, 0),
-                (True, False, 1),
-                (False, True, 1),
-            ):
-                with self.subTest(
-                    existing_tests_passed=existing_tests_passed,
-                    gates_passed=gates_passed,
-                ):
-                    metrics = {
-                        "batch_id": "report-test",
-                        "outcomes": [],
-                        "existing_tests": {"passed": existing_tests_passed},
-                        "failure_classification": [],
-                        "gates": {
-                            name: {"ok": gates_passed}
-                            for name in gate_names
-                        },
-                    }
-                    with mock.patch.object(harness, "OUT", out), \
-                         mock.patch.object(harness, "FORMAL", formal), \
-                         mock.patch.object(harness, "PROVENANCE", provenance), \
-                         mock.patch.object(harness, "build_metrics", return_value=metrics), \
-                         mock.patch.object(harness, "atomic_write_json", wraps=harness.atomic_write_json) as writer:
-                        self.assertEqual(harness.report_existing_run(), expected_exit_code)
-                    writer.assert_called_once_with(out / "we_v2_1_3_live_e2e.json", metrics)
+                    with mock.patch.object(harness, "invoke") as invoke:
+                        self.assertEqual(harness.report_existing_run(), 1)
+                    invoke.assert_not_called()
+                    (formal / "generator_outputs.json").write_text('{"items": [{"tampered": true}]}\n', encoding="utf-8")
+                    with mock.patch.object(harness, "invoke") as invoke:
+                        self.assertEqual(harness.report_existing_run(), 2)
+                    invoke.assert_not_called()
 
 
 class LiveReviewerAdapterTests(unittest.TestCase):
