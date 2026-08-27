@@ -150,6 +150,7 @@ EVIDENCE_ARTIFACTS = (
     "runtime/test_result.json",
     "runtime/freeze/freeze_manifest.json",
 )
+OFFLINE_TEST_TIMEOUT_SECONDS = 300
 
 
 def now_iso() -> str:
@@ -738,7 +739,10 @@ def validate_frozen_run_contract(freeze: RunFreeze) -> tuple[str, dict, list]:
             else:
                 ok, errors = validate_existing_contract(item, validator_paths[stage], stage)
                 if stage == "reviewer":
-                    generator_item = generator_items_by_id.get(item.get("item_id"))
+                    reviewer_item_id = item.get("item_id")
+                    if not isinstance(reviewer_item_id, str):
+                        raise ValueError("reviewer formal item must contain a string item_id")
+                    generator_item = generator_items_by_id.get(reviewer_item_id)
                     if generator_item is None:
                         raise ValueError(
                             f"reviewer formal item {item.get('item_id')!r} has no matching Generator item"
@@ -928,6 +932,10 @@ def deterministic_target_metadata_errors(generator_item: dict) -> list[str]:
         errors.append("qa_metadata must be an object")
     if errors:
         return errors
+    assert isinstance(grammar, dict)
+    assert isinstance(format_metadata, dict)
+    assert isinstance(provenance, dict)
+    assert isinstance(qa_metadata, dict)
 
     if correct_answer not in {"A", "B", "C", "D"}:
         errors.append("correct_answer must be A/B/C/D")
@@ -1495,7 +1503,15 @@ def build_metrics(generator_items: list, reviewer_items: list, solver_items: lis
 def run_existing_tests() -> dict:
     command = [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py"]
     try:
-        proc = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180)
+        proc = subprocess.run(
+            command,
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=OFFLINE_TEST_TIMEOUT_SECONDS,
+        )
         output = (proc.stdout + proc.stderr).strip()
         return {"command": command, "exit_code": proc.returncode, "passed": proc.returncode == 0, "output_tail": output[-4000:]}
     except subprocess.TimeoutExpired as exc:

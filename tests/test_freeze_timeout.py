@@ -37,6 +37,22 @@ SOLVER_SCHEMA = ROOT / "agents" / "toefl_itp_grammar_solver" / "schema" / "solve
 GENERATOR_AGENT = ROOT / ".claude" / "agents" / "toefl-itp-we-generator-v2.md"
 REVIEWER_AGENT = ROOT / ".claude" / "agents" / "toefl-itp-we-reviewer-v2.md"
 SOLVER_AGENT = ROOT / ".claude" / "agents" / "toefl-itp-grammar-solver.md"
+ORCHESTRATOR_REPLAY_OUTPUTS = (
+    ROOT / "analysis" / "orchestrator_adversarial_test.json",
+    ROOT / "analysis" / "orchestrator_reject_path_test.json",
+    ROOT / "analysis" / "orchestrator_smoke_test.json",
+)
+
+
+def git_status() -> str:
+    result = subprocess.run(
+        ["git", "status", "--porcelain"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return result.stdout
 
 
 def _pid_exists(pid: int) -> bool:
@@ -297,6 +313,45 @@ class BoundedTimeoutTests(unittest.TestCase):
             while _pid_exists(child_pid) and time.monotonic() < deadline:
                 time.sleep(0.02)
             self.assertFalse(_pid_exists(child_pid), "timeout cleanup left the dummy child alive")
+
+
+class RepositoryFreezeRegressionTests(unittest.TestCase):
+    def test_offline_acceptance_preserves_protected_sources_and_freeze_passes(self) -> None:
+        protected_before = {path: path.read_bytes() for path in ORCHESTRATOR_REPLAY_OUTPUTS}
+        status_before = git_status()
+        protected_groups = {
+            "orchestrator_replay_outputs": {
+                path.relative_to(ROOT).as_posix(): path for path in ORCHESTRATOR_REPLAY_OUTPUTS
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as directory:
+            freeze = create_run_freeze(
+                Path(directory) / "freeze",
+                repo_root=ROOT,
+                protected_file_groups=protected_groups,
+                canonical_schemas={},
+                agent_instructions={},
+                provider="test",
+                codex_cli_version="test",
+                model="test",
+                reasoning_effort="unset",
+                sandbox="read-only",
+                timeout_seconds=180,
+            )
+            result = subprocess.run(
+                [sys.executable, str(ROOT / "orchestrator/scripts/run_acceptance_tests.py")],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertEqual(
+                {path: path.read_bytes() for path in ORCHESTRATOR_REPLAY_OUTPUTS},
+                protected_before,
+            )
+            self.assertEqual(git_status(), status_before)
+            freeze.verify("after", "offline tests")
 
 
 if __name__ == "__main__":

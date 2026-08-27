@@ -21,6 +21,7 @@ Writes:
     analysis/orchestrator_adversarial_test.json
 """
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -45,7 +46,18 @@ SOLVER_FIXTURE = REPO_ROOT / "analysis" / "solver_adversarial_test.json"
 OUTPUT_PATH = REPO_ROOT / "analysis" / "orchestrator_adversarial_test.json"
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=OUTPUT_PATH,
+        help="write the replay artifact here (default: the historical analysis path)",
+    )
+    args = parser.parse_args(argv)
+    output_path = args.output
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
     config = load_config()
     versions = load_versions(config)
 
@@ -92,9 +104,9 @@ def main() -> int:
         "accept_rate": len(accepted) / len(records) if records else None,
         "solver_skip_log": solver_skip_log,
     }
-    OUTPUT_PATH.write_text(json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    output_path.write_text(json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    print(f"Wrote {len(records)} provenance record(s) to {OUTPUT_PATH}")
+    print(f"Wrote {len(records)} provenance record(s) to {output_path}")
     print()
     for item_id, candidate, _rec in records:
         print(f"{item_id:<28} final_state={candidate.state:<16} entered_SOLVING={'yes' if item_id in solved else 'no'}")

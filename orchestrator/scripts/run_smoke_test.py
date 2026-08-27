@@ -26,6 +26,7 @@ Writes:
     analysis/orchestrator_smoke_test.json
 """
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -64,7 +65,18 @@ EXPECTED_LABEL = {
 }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=OUTPUT_PATH,
+        help="write the replay artifact here (default: the historical analysis path)",
+    )
+    args = parser.parse_args(argv)
+    output_path = args.output
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
     config = load_config()
     versions = load_versions(config)
 
@@ -131,9 +143,9 @@ def main() -> int:
         "batch_summary": tracker.summary(),
         "solver_skip_log": solver_skip_log,
     }
-    OUTPUT_PATH.write_text(json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    output_path.write_text(json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    print(f"Wrote {len(records)} provenance record(s) to {OUTPUT_PATH}")
+    print(f"Wrote {len(records)} provenance record(s) to {output_path}")
     print()
     print(f"{'item_id':<16} {'reviewer_verdict':<18} {'solver_answer':<15} {'final_state':<16} {'expected':<16} match")
     all_ok = True

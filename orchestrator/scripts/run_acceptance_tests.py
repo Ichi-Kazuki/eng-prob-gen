@@ -52,9 +52,9 @@ def check(n: int, desc: str, condition: bool, detail: str = "") -> None:
     print(f"[{status}] #{n} {desc}" + (f" -- {detail}" if detail else ""))
 
 
-def run_script(relpath: str) -> subprocess.CompletedProcess:
+def run_script(relpath: str, output_path: Path) -> subprocess.CompletedProcess:
     return subprocess.run(
-        [sys.executable, str(REPO_ROOT / relpath)],
+        [sys.executable, str(REPO_ROOT / relpath), "--output", str(output_path)],
         capture_output=True, text=True, cwd=REPO_ROOT,
     )
 
@@ -136,30 +136,34 @@ def main() -> int:
     load_versions(config)
 
     # -- #12 schema validation PASS, plus drives #1/#2/#9/#10/#4/#13 -------
-    smoke = run_script("orchestrator/scripts/run_smoke_test.py")
-    adversarial = run_script("orchestrator/scripts/run_adversarial_test.py")
-    reject_path = run_script("orchestrator/scripts/run_reject_path_test.py")
+    with tempfile.TemporaryDirectory(prefix="orchestrator-replay-", dir=REPO_ROOT) as directory:
+        output_dir = Path(directory)
+        smoke_path = output_dir / "orchestrator_smoke_test.json"
+        adversarial_path = output_dir / "orchestrator_adversarial_test.json"
+        reject_path_output = output_dir / "orchestrator_reject_path_test.json"
+        smoke = run_script("orchestrator/scripts/run_smoke_test.py", smoke_path)
+        adversarial = run_script("orchestrator/scripts/run_adversarial_test.py", adversarial_path)
+        reject_path = run_script("orchestrator/scripts/run_reject_path_test.py", reject_path_output)
 
-    check(12, "schema validation PASS for all valid fixtures (replay scripts exit 0)",
-          smoke.returncode == 0 and adversarial.returncode == 0 and reject_path.returncode == 0,
-          f"smoke_rc={smoke.returncode} adversarial_rc={adversarial.returncode} reject_rc={reject_path.returncode}")
+        check(12, "schema validation PASS for all valid fixtures (replay scripts exit 0)",
+              smoke.returncode == 0 and adversarial.returncode == 0 and reject_path.returncode == 0,
+              f"smoke_rc={smoke.returncode} adversarial_rc={adversarial.returncode} reject_rc={reject_path.returncode}")
 
-    prov_checks = [
-        subprocess.run(
-            [sys.executable, str(REPO_ROOT / "orchestrator" / "scripts" / "validate_provenance.py"),
-             str(REPO_ROOT / "analysis" / fname)],
-            capture_output=True, text=True, cwd=REPO_ROOT,
-        )
-        for fname in ["orchestrator_smoke_test.json", "orchestrator_adversarial_test.json",
-                      "orchestrator_reject_path_test.json"]
-    ]
-    check("12b", "Orchestrator's own provenance output passes its shape validator (validate_provenance.py)",
-          all(p.returncode == 0 for p in prov_checks),
-          f"returncodes={[p.returncode for p in prov_checks]}")
+        prov_checks = [
+            subprocess.run(
+                [sys.executable, str(REPO_ROOT / "orchestrator" / "scripts" / "validate_provenance.py"),
+                 str(path)],
+                capture_output=True, text=True, cwd=REPO_ROOT,
+            )
+            for path in (smoke_path, adversarial_path, reject_path_output)
+        ]
+        check("12b", "Orchestrator's own provenance output passes its shape validator (validate_provenance.py)",
+              all(p.returncode == 0 for p in prov_checks),
+              f"returncodes={[p.returncode for p in prov_checks]}")
 
-    smoke_data = json.loads((REPO_ROOT / "analysis" / "orchestrator_smoke_test.json").read_text(encoding="utf-8"))
-    adversarial_data = json.loads((REPO_ROOT / "analysis" / "orchestrator_adversarial_test.json").read_text(encoding="utf-8"))
-    reject_data = json.loads((REPO_ROOT / "analysis" / "orchestrator_reject_path_test.json").read_text(encoding="utf-8"))
+        smoke_data = json.loads(smoke_path.read_text(encoding="utf-8"))
+        adversarial_data = json.loads(adversarial_path.read_text(encoding="utf-8"))
+        reject_data = json.loads(reject_path_output.read_text(encoding="utf-8"))
 
     smoke_by_id = {i["item_id"]: i for i in smoke_data["items"]}
 
