@@ -4,7 +4,7 @@
   "title": "Reading v0.2 generation plan",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "plan_id", "seed", "domain", "target_words", "target_paragraphs", "question_count", "question_plan"],
+  "required": ["schema_version", "plan_id", "seed", "domain", "target_words", "target_paragraphs", "question_count", "question_plan", "question_type_counts"],
   "properties": {
     "schema_version": {"const": "reading-plan-v0.2"},
     "plan_id": {"type": "string", "pattern": "^rp-[a-z0-9-]+$"},
@@ -18,6 +18,18 @@
       "minItems": 7,
       "maxItems": 14,
       "items": {"enum": ["DETAIL", "VOCABULARY_IN_CONTEXT", "INFERENCE", "MAIN_IDEA", "REFERENCE"]}
+    },
+    "question_type_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["DETAIL", "VOCABULARY_IN_CONTEXT", "INFERENCE", "MAIN_IDEA", "REFERENCE"],
+      "properties": {
+        "DETAIL": {"type": "integer", "minimum": 0},
+        "VOCABULARY_IN_CONTEXT": {"type": "integer", "minimum": 0},
+        "INFERENCE": {"type": "integer", "minimum": 0},
+        "MAIN_IDEA": {"type": "integer", "minimum": 0},
+        "REFERENCE": {"type": "integer", "minimum": 0}
+      }
     }
   }
 }

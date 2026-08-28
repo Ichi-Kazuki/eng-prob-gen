@@ -34,6 +34,7 @@ from .contracts import (
     SCHEMA_PATHS_V02,
     blind_input,
     blind_input_errors,
+    deterministic_diagnostics,
     payload_sha256,
     post_blind_comparison,
     solver_input_errors,
@@ -530,6 +531,8 @@ class ReadingV02Pipeline(ReadingPipeline):
         blind: dict[str, Any] | None = None
         generator_errors: list[str] = []
         deterministic_errors: list[str] = []
+        empirical_warnings: list[str] = []
+        deterministic_classification = "HARD_VALIDITY"
         reviewer_errors: list[str] = []
         solver_errors: list[str] = []
         post_blind_metadata_errors: list[str] = []
@@ -542,7 +545,7 @@ class ReadingV02Pipeline(ReadingPipeline):
                 stage="reading_generator",
                 agent=GENERATOR_AGENT,
                 prompt=self._prompt(
-                    "Generate one original TOEFL ITP-style Reading Comprehension set. Follow the supplied deterministic plan exactly. Return JSON only. The passage_id must be exactly rc- followed by the plan seed as eight lowercase hexadecimal digits (for example, seed 1002 means rc-000003ea); every item_id must be that exact passage_id followed by -q1, -q2, and so on. Generate exactly the planned question_count questions, in the exact planned question_plan order, with four A/B/C/D choices per question and the Generator correct answer plus private evidence/rationale metadata required by the schema. Process the whole passage set in this one invocation. Never quote, paraphrase, or imitate any official ETS passage or question.",
+                    "Generate one original TOEFL ITP-style Reading Comprehension set. Follow the supplied deterministic plan exactly. Return JSON only. The passage_id must be exactly rc- followed by the plan seed as eight lowercase hexadecimal digits (for example, seed 1002 means rc-000003ea); every item_id must be that exact passage_id followed by -q1, -q2, and so on. Generate exactly the planned question_count questions, and make the count of every question type exactly match question_type_counts. The legacy question_plan order is compatibility guidance only; ordering of the generated questions is free. Include four A/B/C/D choices per question and the Generator correct answer plus private evidence/rationale metadata required by the schema. Process the whole passage set in this one invocation. Never quote, paraphrase, or imitate any official ETS passage or question.",
                     plan,
                 ),
                 input_keys=("plan",),
@@ -553,8 +556,11 @@ class ReadingV02Pipeline(ReadingPipeline):
             generator = generator_result.parsed
             atomic_write_json(run_dir / "generator.json", generator)
             generator_errors = validate_generator_contract(generator, plan, self.schema_paths)
+            validation = deterministic_diagnostics(generator, plan, self.schema_paths)
+            empirical_warnings = validation["empirical_warnings"]
+            deterministic_classification = validation["classification"]
             if not generator_errors:
-                deterministic_errors = validate_deterministic(generator, plan, self.schema_paths)
+                deterministic_errors = validation["hard_failures"]
                 post_blind_metadata_errors = validate_generator_contract(generator, plan, self.schema_paths)
             if not generator_errors and not deterministic_errors:
                 try:
@@ -646,6 +652,8 @@ class ReadingV02Pipeline(ReadingPipeline):
             "post_blind_metadata": not post_blind_metadata_errors and generator is not None,
             "no_leakage": leakage_ok,
             "no_synthetic_fallback": True,
+            "deterministic_classification": deterministic_classification,
+            "empirical_warnings": empirical_warnings,
             "generator_errors": generator_errors,
             "deterministic_errors": deterministic_errors,
             "blind_errors": blind_errors,
@@ -717,12 +725,14 @@ class ReadingV02Pipeline(ReadingPipeline):
         generator: Any = None
         generator_errors: list[str] = []
         deterministic_errors: list[str] = []
+        empirical_warnings: list[str] = []
+        deterministic_classification = "HARD_VALIDITY"
         try:
             generator_result = self._invoke(
                 stage="reading_generator",
                 agent=GENERATOR_AGENT,
                 prompt=self._prompt(
-                    "Generate one original TOEFL ITP-style Reading Comprehension draft. Follow the supplied deterministic plan exactly. Return JSON only. The passage_id must be exactly rc- followed by the plan seed as eight lowercase hexadecimal digits; every item_id must be that exact passage_id followed by -q1, -q2, and so on. Generate exactly the planned question_count questions, in the exact planned question_plan order, with four A/B/C/D choices per question and the Generator correct answer plus private evidence/rationale metadata required by the schema. This is an UNVALIDATED_DRAFT for development inspection only. Never quote, paraphrase, or imitate any official ETS passage or question.",
+                    "Generate one original TOEFL ITP-style Reading Comprehension draft. Follow the supplied deterministic plan exactly. Return JSON only. The passage_id must be exactly rc- followed by the plan seed as eight lowercase hexadecimal digits; every item_id must be that exact passage_id followed by -q1, -q2, and so on. Generate exactly the planned question_count questions, and make the count of every question type exactly match question_type_counts. The legacy question_plan order is compatibility guidance only; ordering of the generated questions is free. Include four A/B/C/D choices per question and the Generator correct answer plus private evidence/rationale metadata required by the schema. This is an UNVALIDATED_DRAFT for development inspection only. Never quote, paraphrase, or imitate any official ETS passage or question.",
                     plan,
                 ),
                 input_keys=("plan",),
@@ -733,8 +743,11 @@ class ReadingV02Pipeline(ReadingPipeline):
             generator = generator_result.parsed
             atomic_write_json(run_dir / "generator.json", generator)
             generator_errors = validate_generator_contract(generator, plan, self.schema_paths)
+            validation = deterministic_diagnostics(generator, plan, self.schema_paths)
+            empirical_warnings = validation["empirical_warnings"]
+            deterministic_classification = validation["classification"]
             if not generator_errors:
-                deterministic_errors = validate_deterministic(generator, plan, self.schema_paths)
+                deterministic_errors = validation["hard_failures"]
         except RuntimeInvocationError:
             pass
 
@@ -760,6 +773,8 @@ class ReadingV02Pipeline(ReadingPipeline):
                 "deterministic": not deterministic_errors and not generator_errors,
                 "draft_only": True,
                 "production_eligible": False,
+                "deterministic_classification": deterministic_classification,
+                "empirical_warnings": empirical_warnings,
                 "generator_errors": generator_errors,
                 "deterministic_errors": deterministic_errors,
             },
@@ -959,6 +974,13 @@ def run_reading_batch(
             "artifact_dir": str(batch_dir / f"passage-{index:03d}"),
             "elapsed_seconds": result.get("infrastructure", {}).get("elapsed_seconds", 0.0),
             "question_count": len(generator.get("questions", [])),
+            "planned_type_counts": result.get("plan", {}).get("question_type_counts", {}),
+            "actual_type_counts": result.get("diagnostics", {}).get("question_type_distribution", {}),
+            "deterministic_hard_failures": (
+                result.get("checks", {}).get("generator_errors", [])
+                + result.get("checks", {}).get("deterministic_errors", [])
+            ),
+            "empirical_warnings": result.get("checks", {}).get("empirical_warnings", []),
             "invocation_counts": result.get("infrastructure", {}).get("invocation_counts", {}),
         })
     batch_result = {

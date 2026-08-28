@@ -11,6 +11,7 @@ import copy
 import hashlib
 import json
 import re
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -42,6 +43,10 @@ SCHEMA_PATHS_V02 = {
 }
 ANSWER_LABELS = {"A", "B", "C", "D"}
 SOLVER_LABELS = ANSWER_LABELS | {"AMBIGUOUS", "NONE"}
+HARD_VALIDITY = "HARD_VALIDITY"
+EMPIRICAL_FORMAT_WARNING = "EMPIRICAL_FORMAT_WARNING"
+FORMAT_ADHERENCE_FAILURE = "FORMAT_ADHERENCE_FAILURE"
+VALID = "VALID"
 BLIND_FORBIDDEN_KEYS = {
     "correct_answer",
     "intended_answer",
@@ -82,6 +87,15 @@ def validate_plan_contract(
     if not errors and isinstance(plan, dict) and plan.get("schema_version") == "reading-plan-v0.2":
         if plan.get("question_count") != len(plan.get("question_plan", [])):
             errors.append("plan: question_count must equal the length of question_plan")
+        planned_types = plan.get("question_plan", [])
+        planned_counts = Counter(planned_types)
+        if plan.get("question_type_counts") != {
+            question_type: planned_counts[question_type]
+            for question_type in QUESTION_TYPES
+        }:
+            errors.append("plan: question_type_counts must equal the question_plan multiset")
+        if sum(plan.get("question_type_counts", {}).values()) != plan.get("question_count"):
+            errors.append("plan: question_type_counts must sum to question_count")
     return errors
 
 
@@ -168,9 +182,116 @@ def validate_generator_contract(
                 errors.append(
                     f"generator: expected {plan['question_count']} questions; got {len(questions)}"
                 )
-            if seen_types != list(plan["question_plan"]):
+            if is_v02 and Counter(seen_types) != Counter(plan["question_type_counts"]):
+                errors.append(
+                    "generator: question type counts do not match the planned multiset; "
+                    f"expected {dict(sorted(plan['question_type_counts'].items()))}, "
+                    f"got {dict(sorted(Counter(seen_types).items()))}"
+                )
+            elif not is_v02 and seen_types != list(plan["question_plan"]):
                 errors.append("generator: question order does not follow the deterministic plan")
     return errors
+
+
+def passage_word_count_profile(count: int, *, is_v02: bool) -> dict[str, Any]:
+    """Classify passage length without treating the preferred band as a cap."""
+
+    if not is_v02:
+        return {
+            "classification": VALID,
+            "band": "HISTORICAL_V01",
+            "hard_failure": False,
+            "empirical_warning": False,
+        }
+    if count < 160:
+        return {
+            "classification": HARD_VALIDITY,
+            "band": "BELOW_EMPIRICAL_MINIMUM",
+            "hard_failure": True,
+            "empirical_warning": False,
+        }
+    if count > 300:
+        return {
+            "classification": EMPIRICAL_FORMAT_WARNING,
+            "band": "ABOVE_EMPIRICAL_PREFERRED_BAND",
+            "hard_failure": False,
+            "empirical_warning": True,
+        }
+    return {
+        "classification": VALID,
+        "band": "EMPIRICAL_PREFERRED_BAND",
+        "hard_failure": False,
+        "empirical_warning": False,
+    }
+
+
+def deterministic_diagnostics(
+    output: Any,
+    plan: dict[str, Any],
+    schema_paths: dict[str, Path] | None = None,
+) -> dict[str, Any]:
+    """Return hard deterministic failures and non-blocking empirical warnings."""
+
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02 if plan.get("schema_version") == "reading-plan-v0.2" else SCHEMA_PATHS
+    errors = validate_generator_contract(output, plan, schema_paths)
+    warnings: list[str] = []
+    is_v02 = plan.get("schema_version") == "reading-plan-v0.2"
+    count: int | None = None
+    paragraph_count: int | None = None
+    profile: dict[str, Any] | None = None
+    if isinstance(output, dict) and isinstance(output.get("passage"), str):
+        passage = output["passage"]
+        paragraphs = split_paragraphs(passage)
+        count = word_count(passage)
+        paragraph_count = len(paragraphs)
+        profile = passage_word_count_profile(count, is_v02=is_v02)
+        if profile["hard_failure"]:
+            if is_v02:
+                errors.append(f"deterministic: passage word count {count} is below 160")
+        elif profile["empirical_warning"]:
+            if is_v02:
+                warnings.append(
+                    f"deterministic: passage word count {count} is above the empirical preferred band of 160-300"
+                )
+        elif not is_v02 and (count < 240 or count > 380):
+            errors.append(f"deterministic: passage word count {count} is outside 240-380")
+
+        if not errors:
+            if not is_v02 and len(paragraphs) != plan["target_paragraphs"]:
+                errors.append(
+                    f"deterministic: passage must contain exactly {plan['target_paragraphs']} non-empty paragraphs; got {len(paragraphs)}"
+                )
+            if "\r" in passage or "\t" in passage or "\n\n\n" in passage:
+                errors.append("deterministic: passage contains malformed whitespace formatting")
+            if re.search(r"(^|\n)\s*(?:[-*]|\d+[.)])\s+", passage):
+                errors.append("deterministic: passage contains list-like formatting")
+            if re.search(r"lorem ipsum|\[insert|\{placeholder|question\s+[1-5]", passage, flags=re.IGNORECASE):
+                errors.append("deterministic: passage contains placeholder or question formatting")
+            if any(word_count(paragraph) < 35 for paragraph in paragraphs):
+                errors.append("deterministic: every paragraph must contain at least 35 words")
+            if len({_normalized_text(paragraph) for paragraph in paragraphs}) != len(paragraphs):
+                errors.append("deterministic: passage contains duplicate paragraphs")
+
+    adherence_errors = [
+        error for error in errors
+        if "question type counts" in error
+        or "expected" in error and "questions; got" in error
+        or "supplied plan" in error
+    ]
+    if errors and len(adherence_errors) == len(errors):
+        classification = FORMAT_ADHERENCE_FAILURE
+    else:
+        classification = HARD_VALIDITY if errors else (EMPIRICAL_FORMAT_WARNING if warnings else VALID)
+    return {
+        "classification": classification,
+        "hard_failures": errors,
+        "adherence_failures": adherence_errors,
+        "empirical_warnings": warnings,
+        "passage_word_count": count,
+        "paragraph_count": paragraph_count,
+        "word_count_profile": profile,
+    }
 
 
 def validate_deterministic(
@@ -182,29 +303,7 @@ def validate_deterministic(
 
     if schema_paths is None:
         schema_paths = SCHEMA_PATHS_V02 if plan.get("schema_version") == "reading-plan-v0.2" else SCHEMA_PATHS
-    errors = validate_generator_contract(output, plan, schema_paths)
-    if errors or not isinstance(output, dict):
-        return errors
-    passage = output["passage"]
-    paragraphs = split_paragraphs(passage)
-    count = word_count(passage)
-    if count < 240 or count > 380:
-        errors.append(f"deterministic: passage word count {count} is outside 240-380")
-    if len(paragraphs) != plan["target_paragraphs"]:
-        errors.append(
-            f"deterministic: passage must contain exactly {plan['target_paragraphs']} non-empty paragraphs; got {len(paragraphs)}"
-        )
-    if "\r" in passage or "\t" in passage or "\n\n\n" in passage:
-        errors.append("deterministic: passage contains malformed whitespace formatting")
-    if re.search(r"(^|\n)\s*(?:[-*]|\d+[.)])\s+", passage):
-        errors.append("deterministic: passage contains list-like formatting")
-    if re.search(r"lorem ipsum|\[insert|\{placeholder|question\s+[1-5]", passage, flags=re.IGNORECASE):
-        errors.append("deterministic: passage contains placeholder or question formatting")
-    if any(word_count(paragraph) < 35 for paragraph in paragraphs):
-        errors.append("deterministic: every paragraph must contain at least 35 words")
-    if len({_normalized_text(paragraph) for paragraph in paragraphs}) != len(paragraphs):
-        errors.append("deterministic: passage contains duplicate paragraphs")
-    return errors
+    return deterministic_diagnostics(output, plan, schema_paths)["hard_failures"]
 
 
 def blind_input(

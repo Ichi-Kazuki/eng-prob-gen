@@ -8,6 +8,7 @@ in ``analysis/reading_v0_2_empirical_profile.json``.  It never calls a model.
 from __future__ import annotations
 
 import random
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -94,8 +95,9 @@ def build_plan_v02(seed: int, domain: str | None = None) -> dict[str, Any]:
     """Build a replayable variable-length v0.2 passage plan.
 
     Question count and type mix are sampled from the derived B-E profile.  A
-    type may repeat; the exact sampled sequence is part of the plan and is
-    later enforced by deterministic validation.
+    type may repeat.  ``question_plan`` remains as an ordered compatibility
+    representation, while ``question_type_counts`` is the canonical
+    adherence contract for the v0.2.1 Generator.
     """
 
     _validate_seed_and_domain(seed, domain)
@@ -107,6 +109,10 @@ def build_plan_v02(seed: int, domain: str | None = None) -> dict[str, Any]:
         _weighted_choice(rng, QUESTION_TYPE_WEIGHTS)
         for _ in range(question_count)
     ]
+    question_type_counts = {
+        question_type: Counter(question_plan)[question_type]
+        for question_type in QUESTION_TYPES
+    }
     plan = {
         "schema_version": "reading-plan-v0.2",
         "plan_id": f"rp-v02-{seed:08x}",
@@ -116,6 +122,7 @@ def build_plan_v02(seed: int, domain: str | None = None) -> dict[str, Any]:
         "target_paragraphs": 4,
         "question_count": question_count,
         "question_plan": question_plan,
+        "question_type_counts": question_type_counts,
     }
     errors = schema_errors(plan, load_schema(PLAN_V02_SCHEMA_PATH))
     if errors:

@@ -7,7 +7,12 @@ from collections import Counter
 from statistics import mean
 from typing import Any, Iterable
 
-from .contracts import split_paragraphs, word_count
+from .contracts import (
+    HARD_VALIDITY,
+    passage_word_count_profile,
+    split_paragraphs,
+    word_count,
+)
 
 
 def sentence_count(text: str) -> int:
@@ -51,6 +56,8 @@ def diagnostics_for_result(result: dict[str, Any]) -> dict[str, Any]:
         return {
             "passage_word_count": 0,
             "paragraph_count": 0,
+            "word_count_classification": None,
+            "empirical_format_warnings": [],
             "sentence_count": 0,
             "question_count": 0,
             "question_type_distribution": {},
@@ -65,6 +72,19 @@ def diagnostics_for_result(result: dict[str, Any]) -> dict[str, Any]:
     questions = generator.get("questions", [])
     if not isinstance(passage, str) or not isinstance(questions, list):
         return diagnostics_for_result({**result, "generator": None})
+    is_v02 = (result.get("plan") or {}).get("schema_version") == "reading-plan-v0.2"
+    count = word_count(passage)
+    word_profile = passage_word_count_profile(count, is_v02=is_v02)
+    checks = result.get("checks", {})
+    hard_failures = checks.get("generator_errors", []) + checks.get("deterministic_errors", [])
+    classification = checks.get("deterministic_classification")
+    if not isinstance(classification, str):
+        classification = HARD_VALIDITY if hard_failures else word_profile["classification"]
+    empirical_warnings = list(checks.get("empirical_warnings", []))
+    if word_profile["empirical_warning"] and not empirical_warnings:
+        empirical_warnings.append(
+            f"deterministic: passage word count {count} is above the empirical preferred band of 160-300"
+        )
     agreements = result.get("checks", {}).get("answer_agreement", [])
     reviewer = result.get("reviewer") or {}
     solver = result.get("solver") or {}
@@ -72,8 +92,10 @@ def diagnostics_for_result(result: dict[str, Any]) -> dict[str, Any]:
     solver_answers = solver.get("answers", []) if isinstance(solver, dict) else []
     agree_count = sum(item.get("agree") is True for item in agreements if isinstance(item, dict))
     return {
-        "passage_word_count": word_count(passage),
+        "passage_word_count": count,
         "paragraph_count": len(split_paragraphs(passage)),
+        "word_count_classification": classification,
+        "empirical_format_warnings": empirical_warnings,
         "sentence_count": sentence_count(passage),
         "question_count": len(questions),
         "question_type_distribution": _counts(
