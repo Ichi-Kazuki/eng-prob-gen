@@ -574,16 +574,73 @@ class ReadingV02BatchTests(unittest.TestCase):
             )
         self.assertIn("exactly match question_type_counts", generator_request.prompt)
         self.assertIn("ordering of the generated questions is free", generator_request.prompt)
-        self.assertIn("combining or interpreting passage information", generator_request.prompt)
-        self.assertIn("context-dependent senses", generator_request.prompt)
+        self.assertIn("vary reasoning depth according to what the passage naturally supports", generator_request.prompt)
+        self.assertIn("Explicit restatement should not dominate", generator_request.prompt)
+        self.assertIn("genuine supported inference should also occur regularly", generator_request.prompt)
+        self.assertIn("Multi-sentence or cross-idea reasoning is appropriate", generator_request.prompt)
+        self.assertIn("fully entailed by the text", generator_request.prompt)
+        self.assertIn("unsupported speculation", generator_request.prompt)
+        self.assertIn("both ordinary dictionary senses and context-clarified senses are acceptable", generator_request.prompt)
+        self.assertIn("Do not require strong context dependence", generator_request.prompt)
+        self.assertIn("actual sense in its local sentence", generator_request.prompt)
+        self.assertIn("grammatical construction, collocation, and local context", generator_request.prompt)
+        self.assertIn("rationale must explain why the keyed sense fits the local usage", generator_request.prompt)
+        self.assertNotIn("rather than direct sentence lookup", generator_request.prompt)
+        self.assertNotIn("avoid dictionary-only answers", generator_request.prompt)
+        self.assertNotIn("determined by", generator_request.prompt)
+        self.assertNotIn("decided by", generator_request.prompt)
         self.assertIn("approximate information density", generator_request.prompt)
         self.assertIn("without padding for exact character-length equality", generator_request.prompt)
         self.assertNotIn("exact planned question_plan order", generator_request.prompt)
         generator_agent = (ROOT / ".claude" / "agents" / "toefl-itp-reading-generator-v0.2.md").read_text(encoding="utf-8")
+        generator_agent = " ".join(generator_agent.split())
         self.assertIn("question_type_counts", generator_agent)
-        self.assertIn("combine or interpret", generator_agent)
-        self.assertIn("disambiguated", generator_agent)
+        self.assertIn("vary reasoning depth according to what the passage", generator_agent)
+        self.assertIn("Explicit restatement should not dominate", generator_agent)
+        self.assertIn("genuine supported inference should also occur regularly", generator_agent)
+        self.assertIn("Multi-sentence or cross-idea reasoning is appropriate", generator_agent)
+        self.assertIn("fully entailed by the text", generator_agent)
+        self.assertIn("both ordinary dictionary senses and context-clarified senses are acceptable", generator_agent)
+        self.assertIn("Do not require strong context", generator_agent)
+        self.assertIn("grammatical construction, collocation, and local", generator_agent)
+        self.assertIn("rationale must explain why the keyed", generator_agent)
+        self.assertNotIn("rather than locate a sentence that directly", generator_agent)
+        self.assertNotIn("Avoid words for which ordinary dictionary meaning alone", generator_agent)
+        self.assertNotIn("determined by", generator_agent)
+        self.assertNotIn("decided by", generator_agent)
         self.assertIn("approximate information", generator_agent)
+
+    def test_draft_generator_instruction_uses_same_calibration(self) -> None:
+        trace = BatchTrace()
+        with TemporaryDirectory() as directory:
+            result = ReadingV02Pipeline(BatchFakeRuntime("draft", trace)).run_draft(
+                1001,
+                domain="biology",
+                output_dir=Path(directory),
+            )
+        self.assertEqual(result["decision"], "UNVALIDATED_DRAFT")
+        draft_request = next(request for request in trace.requests if request.stage == "reading_generator")
+        for required in (
+            "vary reasoning depth according to what the passage naturally supports",
+            "Explicit restatement should not dominate",
+            "genuine supported inference should also occur regularly",
+            "Multi-sentence or cross-idea reasoning is appropriate",
+            "fully entailed by the text",
+            "unsupported speculation",
+            "both ordinary dictionary senses and context-clarified senses are acceptable",
+            "Do not require strong context dependence",
+            "actual sense in its local sentence",
+            "grammatical construction, collocation, and local context",
+            "rationale must explain why the keyed sense fits the local usage",
+        ):
+            self.assertIn(required, draft_request.prompt)
+        for forbidden in (
+            "rather than direct sentence lookup",
+            "avoid dictionary-only answers",
+            "determined by",
+            "decided by",
+        ):
+            self.assertNotIn(forbidden, draft_request.prompt)
 
     def test_historical_v02_passages_001_and_002_are_unchanged(self) -> None:
         required = [HISTORICAL_ARTIFACT_ROOT / relative_path for relative_path in HISTORICAL_ARTIFACT_HASHES]

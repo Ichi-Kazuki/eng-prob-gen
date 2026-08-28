@@ -1,0 +1,313 @@
+{
+  "schema_version": "reading-official-calibration-v0.3",
+  "measurement_mode": "offline_only",
+  "measured_on": "2026-08-28",
+  "copyright_policy": {
+    "raw_official_wording_retained": false,
+    "retained_data": "abstract measurements, aggregate counts, proportions, source identifiers, and file hashes only"
+  },
+  "corpus": {
+    "section": "READING_COMPREHENSION",
+    "source_family": "official Section 3 Reading Comprehension references under source/",
+    "source_sets": ["B", "C", "D", "E"],
+    "source_book_or_unit": "Unit C",
+    "passages": 20,
+    "questions": 200,
+    "questions_per_source_set": {
+      "B": 50,
+      "C": 50,
+      "D": 50,
+      "E": 50
+    },
+    "reference_files": [
+      {
+        "path": "source/Practice Test B Sec 3 RC.pdf",
+        "source_set": "B",
+        "pages": 7,
+        "sha256": "23DE047C07B560595F24F987C0E7C06FD3240C0BEA24A860B3D62F15825EBACA"
+      },
+      {
+        "path": "source/Practice Test C Sec 3 RC.pdf",
+        "source_set": "C",
+        "pages": 8,
+        "sha256": "0F87F3E181EDB3CC8B5F0F1136EFEE627CCBFB309F858BA5147FDB4EE689335D"
+      },
+      {
+        "path": "source/Practice Test D Sec 3 RC.pdf",
+        "source_set": "D",
+        "pages": 8,
+        "sha256": "CC6C1E6C9E717B2062D89FE5BD88716E282B79C2998FE61E91FADB5B45738DED"
+      },
+      {
+        "path": "source/Practice Test E Sec 3 RC.pdf",
+        "source_set": "E",
+        "pages": 7,
+        "sha256": "344BC2E336A9BD85432AB6BFBBE5285C75B210E77D0AEF1A6B3C3F0601579869"
+      }
+    ],
+    "excluded_source_material": [
+      {
+        "source_set": "F",
+        "reason": "no Section 3 Reading reference file is present under source/"
+      }
+    ],
+    "answer_key_availability": {
+      "official_key_file_present_in_repository": false,
+      "official_key_coverage_verified_questions": 0,
+      "all_included_questions_have_official_keys": false,
+      "answer_position_policy": "answer-position aggregate is retained as independent offline resolution from the complete question/passages; it is not represented as extraction from an official key"
+    },
+    "corpus_selection_policy": "B-E is the same complete 20-passage/200-question corpus used by the existing passage-length profile; no incomplete or key-bearing subset was silently mixed"
+  },
+  "answer_position": {
+    "status": "offline_reference_resolution_without_local_official_key",
+    "resolved_questions": 200,
+    "counts": {
+      "A": 47,
+      "B": 53,
+      "C": 45,
+      "D": 55
+    },
+    "proportions": {
+      "A": 0.235,
+      "B": 0.265,
+      "C": 0.225,
+      "D": 0.275
+    },
+    "per_source_set_counts": {
+      "B": {"A": 12, "B": 18, "C": 8, "D": 12},
+      "C": {"A": 11, "B": 11, "C": 13, "D": 15},
+      "D": {"A": 13, "B": 10, "C": 10, "D": 17},
+      "E": {"A": 11, "B": 14, "C": 14, "D": 11}
+    },
+    "generated_combined_v0_2_2_v0_2_3": {
+      "questions": 59,
+      "counts": {"A": 28, "B": 19, "C": 10, "D": 2},
+      "proportions": {
+        "A": 0.4745762712,
+        "B": 0.3220338983,
+        "C": 0.1694915254,
+        "D": 0.0338983051
+      },
+      "delta_proportion_points_vs_reference": {
+        "A": 23.96,
+        "B": 5.70,
+        "C": -5.55,
+        "D": -24.11
+      },
+      "directional_bias_assessment": "material_A_overweight_and_D_underweight"
+    }
+  },
+  "passage_length": {
+    "unit": "approximate_words",
+    "observed_measurements": [
+      {"source_set": "B", "passage_index": 1, "words": 295},
+      {"source_set": "B", "passage_index": 2, "words": 300},
+      {"source_set": "B", "passage_index": 3, "words": 280},
+      {"source_set": "B", "passage_index": 4, "words": 275},
+      {"source_set": "B", "passage_index": 5, "words": 290},
+      {"source_set": "C", "passage_index": 1, "words": 225},
+      {"source_set": "C", "passage_index": 2, "words": 220},
+      {"source_set": "C", "passage_index": 3, "words": 180},
+      {"source_set": "C", "passage_index": 4, "words": 180},
+      {"source_set": "C", "passage_index": 5, "words": 185},
+      {"source_set": "D", "passage_index": 1, "words": 165},
+      {"source_set": "D", "passage_index": 2, "words": 160},
+      {"source_set": "D", "passage_index": 3, "words": 180},
+      {"source_set": "D", "passage_index": 4, "words": 245},
+      {"source_set": "D", "passage_index": 5, "words": 180},
+      {"source_set": "E", "passage_index": 1, "words": 285},
+      {"source_set": "E", "passage_index": 2, "words": 275},
+      {"source_set": "E", "passage_index": 3, "words": 300},
+      {"source_set": "E", "passage_index": 4, "words": 270},
+      {"source_set": "E", "passage_index": 5, "words": 285}
+    ],
+    "minimum": 160,
+    "maximum": 300,
+    "mean": 238.75,
+    "median": 257.5,
+    "quartiles": {"q1": 180.0, "q3": 285.0},
+    "sampling_recommendation": "raw_observed_empirical_lengths_direct",
+    "planner_change": "none"
+  },
+  "question_count": {
+    "per_passage": [
+      {"source_set": "B", "passage_index": 1, "questions": 8},
+      {"source_set": "B", "passage_index": 2, "questions": 11},
+      {"source_set": "B", "passage_index": 3, "questions": 11},
+      {"source_set": "B", "passage_index": 4, "questions": 8},
+      {"source_set": "B", "passage_index": 5, "questions": 12},
+      {"source_set": "C", "passage_index": 1, "questions": 9},
+      {"source_set": "C", "passage_index": 2, "questions": 10},
+      {"source_set": "C", "passage_index": 3, "questions": 10},
+      {"source_set": "C", "passage_index": 4, "questions": 10},
+      {"source_set": "C", "passage_index": 5, "questions": 11},
+      {"source_set": "D", "passage_index": 1, "questions": 9},
+      {"source_set": "D", "passage_index": 2, "questions": 10},
+      {"source_set": "D", "passage_index": 3, "questions": 9},
+      {"source_set": "D", "passage_index": 4, "questions": 10},
+      {"source_set": "D", "passage_index": 5, "questions": 12},
+      {"source_set": "E", "passage_index": 1, "questions": 7},
+      {"source_set": "E", "passage_index": 2, "questions": 10},
+      {"source_set": "E", "passage_index": 3, "questions": 14},
+      {"source_set": "E", "passage_index": 4, "questions": 7},
+      {"source_set": "E", "passage_index": 5, "questions": 12}
+    ],
+    "minimum": 7,
+    "maximum": 14,
+    "mean": 10.0,
+    "median": 10.0,
+    "frequency": {"7": 2, "8": 2, "9": 3, "10": 6, "11": 3, "12": 3, "14": 1}
+  },
+  "question_type": {
+    "existing_profile_counts": {
+      "DETAIL": 74,
+      "VOCABULARY_IN_CONTEXT": 63,
+      "INFERENCE": 27,
+      "MAIN_IDEA": 15,
+      "REFERENCE": 21
+    },
+    "existing_profile_proportions": {
+      "DETAIL": 0.37,
+      "VOCABULARY_IN_CONTEXT": 0.315,
+      "INFERENCE": 0.135,
+      "MAIN_IDEA": 0.075,
+      "REFERENCE": 0.105
+    },
+    "strict_offline_reread_counts": {
+      "DETAIL": 70,
+      "VOCABULARY_IN_CONTEXT": 66,
+      "INFERENCE": 25,
+      "MAIN_IDEA": 16,
+      "REFERENCE": 23
+    },
+    "strict_offline_reread_proportions": {
+      "DETAIL": 0.35,
+      "VOCABULARY_IN_CONTEXT": 0.33,
+      "INFERENCE": 0.125,
+      "MAIN_IDEA": 0.08,
+      "REFERENCE": 0.115
+    },
+    "strict_reread_minus_existing_profile_counts": {
+      "DETAIL": -4,
+      "VOCABULARY_IN_CONTEXT": 3,
+      "INFERENCE": -2,
+      "MAIN_IDEA": 1,
+      "REFERENCE": 2
+    },
+    "per_source_set_strict_reread_counts": {
+      "B": {"DETAIL": 20, "VOCABULARY_IN_CONTEXT": 16, "INFERENCE": 4, "MAIN_IDEA": 4, "REFERENCE": 6},
+      "C": {"DETAIL": 17, "VOCABULARY_IN_CONTEXT": 17, "INFERENCE": 7, "MAIN_IDEA": 4, "REFERENCE": 5},
+      "D": {"DETAIL": 15, "VOCABULARY_IN_CONTEXT": 17, "INFERENCE": 9, "MAIN_IDEA": 4, "REFERENCE": 5},
+      "E": {"DETAIL": 18, "VOCABULARY_IN_CONTEXT": 16, "INFERENCE": 5, "MAIN_IDEA": 4, "REFERENCE": 7}
+    },
+    "passage_counts_verified_against_existing_profile": true,
+    "aggregate_type_counts_reproduced_exactly": false,
+    "discrepancy_interpretation": "small taxonomy discrepancy under conservative stem/content reread; insufficient basis to alter Planner weights in this measurement-only pass",
+    "planner_weights_changed": false
+  },
+  "vocabulary_context_dependence": {
+    "classification_basis": "strict offline reread of lexical-in-context items; no target words, options, or stems retained",
+    "questions": 66,
+    "counts": {
+      "DICTIONARY_SOLVABLE": 56,
+      "MILD_CONTEXT_DEPENDENCE": 9,
+      "STRONG_CONTEXT_DEPENDENCE": 1,
+      "SEMANTIC_FIT_UNCLEAR": 0
+    },
+    "proportions": {
+      "DICTIONARY_SOLVABLE": 0.8484848485,
+      "MILD_CONTEXT_DEPENDENCE": 0.1363636364,
+      "STRONG_CONTEXT_DEPENDENCE": 0.0151515152,
+      "SEMANTIC_FIT_UNCLEAR": 0.0
+    },
+    "context_dependent_or_unclear_questions": 10,
+    "context_dependent_or_unclear_proportion": 0.1515151515,
+    "per_source_set_counts": {
+      "B": {"questions": 16, "DICTIONARY_SOLVABLE": 13, "MILD_CONTEXT_DEPENDENCE": 3, "STRONG_CONTEXT_DEPENDENCE": 0, "SEMANTIC_FIT_UNCLEAR": 0},
+      "C": {"questions": 17, "DICTIONARY_SOLVABLE": 13, "MILD_CONTEXT_DEPENDENCE": 3, "STRONG_CONTEXT_DEPENDENCE": 1, "SEMANTIC_FIT_UNCLEAR": 0},
+      "D": {"questions": 17, "DICTIONARY_SOLVABLE": 15, "MILD_CONTEXT_DEPENDENCE": 2, "STRONG_CONTEXT_DEPENDENCE": 0, "SEMANTIC_FIT_UNCLEAR": 0},
+      "E": {"questions": 16, "DICTIONARY_SOLVABLE": 15, "MILD_CONTEXT_DEPENDENCE": 1, "STRONG_CONTEXT_DEPENDENCE": 0, "SEMANTIC_FIT_UNCLEAR": 0}
+    },
+    "existing_profile_vocab_questions": 63,
+    "strict_reread_vocab_questions_minus_existing_profile": 3,
+    "generated_v0_2_3": {
+      "questions": 12,
+      "reported_counts": {"DICTIONARY_SOLVABLE": 9, "MILD_CONTEXT_DEPENDENCE": 2, "STRONG_CONTEXT_DEPENDENCE": 0, "SEMANTIC_FIT_PROBLEM": 1},
+      "reported_proportions": {"DICTIONARY_SOLVABLE": 0.75, "MILD_CONTEXT_DEPENDENCE": 0.1666666667, "STRONG_CONTEXT_DEPENDENCE": 0.0, "SEMANTIC_FIT_PROBLEM": 0.0833333333},
+      "mapped_to_official_categories": {"DICTIONARY_SOLVABLE": 9, "MILD_CONTEXT_DEPENDENCE": 2, "STRONG_CONTEXT_DEPENDENCE": 0, "SEMANTIC_FIT_UNCLEAR": 1},
+      "mapped_context_dependent_or_unclear_proportion": 0.25,
+      "materially_less_context_dependent_than_reference": false,
+      "too_dictionary_solvable_assessment": "not_supported"
+    }
+  },
+  "inference_depth": {
+    "classification_basis": "strict offline reread using conservative depth definitions; no official wording retained",
+    "questions": 25,
+    "counts": {
+      "EXPLICIT_RESTATEMENT": 2,
+      "SHALLOW_INFERENCE": 8,
+      "GENUINE_SUPPORTED_INFERENCE": 11,
+      "MULTI_SENTENCE_OR_CROSS_IDEA_INFERENCE": 4,
+      "UNCLEAR": 0
+    },
+    "proportions": {
+      "EXPLICIT_RESTATEMENT": 0.08,
+      "SHALLOW_INFERENCE": 0.32,
+      "GENUINE_SUPPORTED_INFERENCE": 0.44,
+      "MULTI_SENTENCE_OR_CROSS_IDEA_INFERENCE": 0.16,
+      "UNCLEAR": 0.0
+    },
+    "supported_inference_questions": 15,
+    "supported_inference_proportion": 0.60,
+    "per_source_set_counts": {
+      "B": {"questions": 4, "EXPLICIT_RESTATEMENT": 0, "SHALLOW_INFERENCE": 4, "GENUINE_SUPPORTED_INFERENCE": 0, "MULTI_SENTENCE_OR_CROSS_IDEA_INFERENCE": 0, "UNCLEAR": 0},
+      "C": {"questions": 7, "EXPLICIT_RESTATEMENT": 0, "SHALLOW_INFERENCE": 2, "GENUINE_SUPPORTED_INFERENCE": 2, "MULTI_SENTENCE_OR_CROSS_IDEA_INFERENCE": 3, "UNCLEAR": 0},
+      "D": {"questions": 9, "EXPLICIT_RESTATEMENT": 1, "SHALLOW_INFERENCE": 2, "GENUINE_SUPPORTED_INFERENCE": 5, "MULTI_SENTENCE_OR_CROSS_IDEA_INFERENCE": 1, "UNCLEAR": 0},
+      "E": {"questions": 5, "EXPLICIT_RESTATEMENT": 1, "SHALLOW_INFERENCE": 0, "GENUINE_SUPPORTED_INFERENCE": 4, "MULTI_SENTENCE_OR_CROSS_IDEA_INFERENCE": 0, "UNCLEAR": 0}
+    },
+    "existing_profile_inference_questions": 27,
+    "strict_reread_inference_questions_minus_existing_profile": -2,
+    "generated_v0_2_3": {
+      "questions": 7,
+      "reported_counts": {"EXPLICIT_RESTATEMENT": 3, "SHALLOW_INFERENCE": 2, "GENUINE_SUPPORTED_INFERENCE": 2, "UNSUPPORTED": 0},
+      "reported_proportions": {"EXPLICIT_RESTATEMENT": 0.4285714286, "SHALLOW_INFERENCE": 0.2857142857, "GENUINE_SUPPORTED_INFERENCE": 0.2857142857, "UNSUPPORTED": 0.0},
+      "mapped_to_official_categories": {"EXPLICIT_RESTATEMENT": 3, "SHALLOW_INFERENCE": 2, "GENUINE_SUPPORTED_INFERENCE": 2, "MULTI_SENTENCE_OR_CROSS_IDEA_INFERENCE": 0, "UNCLEAR": 0},
+      "supported_inference_proportion": 0.2857142857,
+      "explicit_or_shallow_proportion": 0.7142857143,
+      "remains_too_shallow_assessment": true
+    }
+  },
+  "future_calibration_change_assessment": {
+    "answer_position_balancing": {
+      "status": "NEEDS_MORE_DATA",
+      "evidence": "large directional difference is present in independent offline resolution, but no local official answer key is available for confirmation"
+    },
+    "increase_vocabulary_context_dependence": {
+      "status": "NOT_YET_SUPPORTED",
+      "evidence": "v0.2.3 is not less context-dependent than the strict reference reread and is not too dictionary-solvable by this comparison"
+    },
+    "increase_genuine_or_multi_sentence_inference": {
+      "status": "SUPPORTED",
+      "evidence": "reference supported-inference share is 0.60 versus 0.2857142857 in v0.2.3; v0.2.3 has no multi-sentence/cross-idea items"
+    },
+    "change_passage_length_sampling": {
+      "status": "NOT_YET_SUPPORTED",
+      "evidence": "the existing raw empirical length vector is verified and is already the appropriate direct sampling basis"
+    },
+    "change_question_type_weights": {
+      "status": "NEEDS_MORE_DATA",
+      "evidence": "strict reread differs modestly from the existing profile; the taxonomy discrepancy and 20-passage sample do not justify Planner changes"
+    },
+    "obtain_or_verify_official_answer_keys": {
+      "status": "SUPPORTED",
+      "evidence": "complete local Section 3 question PDFs are present, but no official key file/page was found in the repository"
+    }
+  },
+  "implementation_scope": {
+    "reading_v0_2_3_modified": false,
+    "we_v2_1_3_modified": false,
+    "historical_run_artifacts_modified": false,
+    "generator_or_planner_changed": false
+  }
+}

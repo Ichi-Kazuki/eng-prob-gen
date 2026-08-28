@@ -1,4 +1,4 @@
-"""Command-line entry point for historical v0.1 and current v0.2.3 Reading."""
+"""Command-line entry point for historical v0.1 and current v0.2.4 Reading."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from .planner import ALLOWED_DOMAINS
 from .contracts import split_paragraphs, word_count
 
 
-CURRENT_READING_VERSION = "v0.2.3"
+CURRENT_READING_VERSION = "v0.2.4"
 HISTORICAL_READING_VERSION = "v0.1"
 V02_ONLY_OPTIONS = ("--count", "--parallel", "--mode")
 
@@ -23,7 +23,7 @@ def _parser() -> argparse.ArgumentParser:
         "--version",
         choices=(CURRENT_READING_VERSION, HISTORICAL_READING_VERSION),
         default=CURRENT_READING_VERSION,
-        help="Reading pipeline version (default: v0.2.3; v0.1 requires an explicit compatibility choice)",
+        help="Reading pipeline version (default: v0.2.4; v0.1 requires an explicit compatibility choice)",
     )
     parser.add_argument("--seed", type=int, help="replayable non-negative planner seed")
     parser.add_argument("--count", type=int, help="v0.2 number of independent passage sets")
@@ -111,7 +111,7 @@ def main(argv: list[str] | None = None) -> int:
         }, ensure_ascii=False, indent=2))
         return 0 if result["decision"] == "ACCEPT" else 1
 
-    # Current/default Reading is always the v0.2.3 calibration patch.  Even a single
+    # Current/default Reading is always the v0.2.4 calibration patch.  Even a single
     # passage uses the batch wrapper so current draft/batch controls cannot
     # accidentally enter the historical v0.1 path.
     batch = run_reading_batch(
