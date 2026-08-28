@@ -15,6 +15,32 @@
     "main_idea_questions",
     "reference_questions"
   ],
+  "$defs": {
+    "questionSubtype": {
+      "type": "string",
+      "enum": ["DIRECT_FACTUAL_DETAIL", "PARAPHRASED_FACTUAL_DETAIL", "NEGATIVE_EXCEPT_DETAIL", "LOCAL_INFERENCE", "CROSS_IDEA_INFERENCE", "RHETORICAL_PURPOSE", "VOCABULARY_CONTEXT_MEANING", "PASSAGE_MAIN_IDEA", "ANTECEDENT_REFERENCE"]
+    },
+    "distractorMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B", "C", "D"],
+      "properties": {
+        "A": {"$ref": "#/$defs/distractorEntry"},
+        "B": {"$ref": "#/$defs/distractorEntry"},
+        "C": {"$ref": "#/$defs/distractorEntry"},
+        "D": {"$ref": "#/$defs/distractorEntry"}
+      }
+    },
+    "distractorEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "rationale"],
+      "properties": {
+        "category": {"enum": ["CORRECT_OPTION", "TEXT_TRUE_BUT_NOT_ANSWER", "WRONG_REFERENT", "SCOPE_SHIFT", "CAUSE_EFFECT_REVERSAL", "OVERGENERALIZATION", "UNDERGENERALIZATION", "LEXICAL_SENSE_TRAP", "UNSUPPORTED_INFERENCE", "NEARBY_DETAIL_CONFUSION", "CONTRADICTED_BY_PASSAGE"]},
+        "rationale": {"type": "string", "minLength": 3, "maxLength": 300}
+      }
+    }
+  },
   "properties": {
     "schema_version": {"const": "reading-generator-v0.2"},
     "section": {"const": "READING_COMPREHENSION"},
@@ -28,6 +54,8 @@
         "required": ["question_type", "stem", "choices", "correct_answer", "evidence"],
         "properties": {
           "question_type": {"const": "DETAIL"},
+          "subtype": {"$ref": "#/$defs/questionSubtype"},
+          "distractor_metadata": {"$ref": "#/$defs/distractorMetadata"},
           "stem": {"type": "string", "minLength": 8, "maxLength": 400},
           "choices": {
             "type": "object",
@@ -62,6 +90,8 @@
         "required": ["question_type", "stem", "choices", "correct_answer", "evidence"],
         "properties": {
           "question_type": {"const": "VOCABULARY_IN_CONTEXT"},
+          "subtype": {"$ref": "#/$defs/questionSubtype"},
+          "distractor_metadata": {"$ref": "#/$defs/distractorMetadata"},
           "stem": {"type": "string", "minLength": 8, "maxLength": 400},
           "choices": {
             "type": "object",
@@ -96,6 +126,8 @@
         "required": ["question_type", "stem", "choices", "correct_answer", "evidence"],
         "properties": {
           "question_type": {"const": "INFERENCE"},
+          "subtype": {"$ref": "#/$defs/questionSubtype"},
+          "distractor_metadata": {"$ref": "#/$defs/distractorMetadata"},
           "stem": {"type": "string", "minLength": 8, "maxLength": 400},
           "choices": {
             "type": "object",
@@ -130,6 +162,8 @@
         "required": ["question_type", "stem", "choices", "correct_answer", "evidence"],
         "properties": {
           "question_type": {"const": "MAIN_IDEA"},
+          "subtype": {"$ref": "#/$defs/questionSubtype"},
+          "distractor_metadata": {"$ref": "#/$defs/distractorMetadata"},
           "stem": {"type": "string", "minLength": 8, "maxLength": 400},
           "choices": {
             "type": "object",
@@ -164,6 +198,8 @@
         "required": ["question_type", "stem", "choices", "correct_answer", "evidence"],
         "properties": {
           "question_type": {"const": "REFERENCE"},
+          "subtype": {"$ref": "#/$defs/questionSubtype"},
+          "distractor_metadata": {"$ref": "#/$defs/distractorMetadata"},
           "stem": {"type": "string", "minLength": 8, "maxLength": 400},
           "choices": {
             "type": "object",

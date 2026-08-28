@@ -1,12 +1,14 @@
 {
   "schema_version": "reading-calibration-v0.1",
+  "status": "deprecated",
+  "superseded_by": "analysis/reading_v0_2_empirical_profile.json",
   "source_material": [
     "source/Practice Test B Sec 3 RC.pdf",
     "source/Practice Test C Sec 3 RC.pdf",
     "source/Practice Test D Sec 3 RC.pdf",
     "source/Practice Test E Sec 3 RC.pdf"
   ],
-  "use": "abstract_format_only",
+  "use": "legacy_v0_1_reference_only",
   "derived_properties": {
     "section": "READING_COMPREHENSION",
     "passage_shape": "academic expository prose in several paragraphs",

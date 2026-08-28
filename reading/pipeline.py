@@ -51,7 +51,7 @@ from .contracts import (
     validate_solver_contract,
 )
 from .diagnostics import aggregate_diagnostics, diagnostics_for_result
-from .planner import build_plan_v01, build_plan_v02, passage_id_for_seed
+from .planner import ALLOWED_DOMAINS, build_plan_v01, build_plan_v02, passage_id_for_seed
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -97,16 +97,40 @@ READING_LENGTH_GUIDANCE = (
     "empirical warning rather than a hard rejection."
 )
 READING_VOCABULARY_GUIDANCE = (
-    "For VOCABULARY_IN_CONTEXT questions, both ordinary dictionary senses and context-clarified senses are acceptable. "
-    "Do not require strong context dependence and do not choose obscure vocabulary merely to increase difficulty. The keyed "
-    "synonym must match the target word's actual sense in its local sentence. When a target word is polysemous, distinguish "
-    "between legitimate dictionary senses using grammatical construction, collocation, and local context. Distractors may use "
-    "other legitimate dictionary senses when those senses are wrong in the sentence. The rationale must explain why the keyed "
-    "sense fits the local usage."
+    "For VOCABULARY_IN_CONTEXT questions, both ordinary dictionary senses and context-clarified senses are acceptable, but "
+    "prefer a word whose actual local sentence disambiguates among multiple plausible general-English senses. Do not require "
+    "strong context dependence for every item and do not choose obscure vocabulary merely to increase difficulty. The tested "
+    "word must occur naturally in the passage, not look inserted solely for the item. The keyed synonym must match the word's "
+    "actual sense in its local sentence. When a target word is polysemous, distinguish between legitimate senses using "
+    "grammatical construction, collocation, and local context. Distractors may use other legitimate senses when those senses "
+    "are wrong in the sentence. The rationale must explain why the keyed sense fits the local usage."
 )
 READING_CHOICE_GUIDANCE = (
     "Keep correct options from being systematically longest or most specific; use comparable grammatical form and approximate "
     "information density for distractors without padding for exact character-length equality."
+)
+READING_TAXONOMY_GUIDANCE = (
+    "Treat question_type as the empirical primary planning category and include a secondary subtype for every question. "
+    "Use DIRECT_FACTUAL_DETAIL, PARAPHRASED_FACTUAL_DETAIL, or NEGATIVE_EXCEPT_DETAIL for DETAIL; "
+    "LOCAL_INFERENCE, CROSS_IDEA_INFERENCE, or RHETORICAL_PURPOSE for INFERENCE; "
+    "VOCABULARY_CONTEXT_MEANING for VOCABULARY_IN_CONTEXT; PASSAGE_MAIN_IDEA for MAIN_IDEA; and "
+    "ANTECEDENT_REFERENCE for REFERENCE. These subtypes describe item behavior only; do not infer or invent subtype "
+    "frequencies that are not measured in the empirical profile. Rhetorical-purpose stems may ask why the author "
+    "mentions or discusses something, or the purpose of an example."
+)
+READING_DISTRACTOR_GUIDANCE = (
+    "For every question include private distractor_metadata for A/B/C/D. Mark the keyed choice CORRECT_OPTION and "
+    "give each wrong choice one plausible error mechanism plus a short rationale. Use mechanisms such as "
+    "TEXT_TRUE_BUT_NOT_ANSWER, WRONG_REFERENT, SCOPE_SHIFT, CAUSE_EFFECT_REVERSAL, OVERGENERALIZATION, "
+    "UNDERGENERALIZATION, LEXICAL_SENSE_TRAP, UNSUPPORTED_INFERENCE, NEARBY_DETAIL_CONFUSION, or "
+    "CONTRADICTED_BY_PASSAGE. Use only mechanisms that fit the item; do not force a category, use outside knowledge, "
+    "or make distractors silly. This metadata is private QA information and must never appear in blind inputs."
+)
+READING_DOMAIN_GUIDANCE = (
+    "Use the selected academic domain as a topic anchor for a self-contained expository passage, with enough definitions, "
+    "examples, contrasts, causal links, chronology, and references to support the planned questions. Keep the register like "
+    "compact academic textbook prose, avoid unsupported specialist jargon, do not make every passage STEM-oriented, and do "
+    "not write controversial current-affairs or opinion commentary."
 )
 
 
@@ -124,7 +148,8 @@ def reading_v02_generator_instruction(*, draft: bool = False) -> str:
         "evidence/rationale metadata. Do not include passage_id or question item_id; trusted pipeline code attaches those "
         "deterministic identity fields after generation. "
         f"{READING_INFERENCE_GUIDANCE} {READING_LENGTH_GUIDANCE} {READING_VOCABULARY_GUIDANCE} "
-        f"{READING_CHOICE_GUIDANCE} Process the whole passage set in this one invocation."
+        f"{READING_CHOICE_GUIDANCE} {READING_TAXONOMY_GUIDANCE} {READING_DISTRACTOR_GUIDANCE} {READING_DOMAIN_GUIDANCE} "
+        "Process the whole passage set in this one invocation."
     )
     if draft:
         instruction += " This is an UNVALIDATED_DRAFT for development inspection only."
@@ -708,7 +733,7 @@ class ReadingV02Pipeline(ReadingPipeline):
                     stage="reading_reviewer",
                     agent=REVIEWER_AGENT,
                     prompt=self._prompt(
-                        "Independently audit this entire Reading set as a blind Reviewer. Use only the visible passage, stems, and A/B/C/D choices in INPUT_JSON. Process every question in this one invocation. For every question choose the best answer, or AMBIGUOUS/NONE, and assess uniqueness, distractors, answerability, wording, and serious defects. Return JSON only. Do not request or infer hidden Generator metadata.",
+                        "Independently audit this entire Reading set as a blind Reviewer. Use only the visible passage, stems, and A/B/C/D choices in INPUT_JSON. Process every question in this one invocation. For every question choose the best answer, or AMBIGUOUS/NONE, and assess uniqueness, distractors, answerability, wording, and serious defects. Reject an INFERENCE item when its answer is only a direct sentence copied or paraphrased from the passage, when more than one inference is defensible, or when unstated outside knowledge is required. For VOCABULARY_IN_CONTEXT, judge the actual local sense rather than a dictionary-only synonym. Check author-purpose questions for a passage-supported rhetorical role and check distractors for plausible text-grounded error mechanisms, parallel grammar, and comparable information density. Return JSON only. Do not request or infer hidden Generator metadata.",
                         blind,
                     ),
                     input_keys=("passage_id", "section", "title", "passage", "questions"),
@@ -724,7 +749,7 @@ class ReadingV02Pipeline(ReadingPipeline):
                     stage="reading_solver",
                     agent=SOLVER_AGENT,
                     prompt=self._prompt(
-                        "Solve this entire Reading set independently as a test-taker. Use only INPUT_JSON and process every visible question in this one invocation. Return exactly one answer for each question: A, B, C, D, AMBIGUOUS, or NONE, with confidence and a concise reason. Do not use or request Generator or Reviewer metadata. Return JSON only.",
+                        "Solve this entire Reading set independently as a test-taker. Use only INPUT_JSON and process every visible question in this one invocation. Return exactly one answer for each question: A, B, C, D, AMBIGUOUS, or NONE, with confidence and a concise reason. Treat inference questions as passage-supported reasoning only; use AMBIGUOUS or NONE when outside knowledge is required or two choices are equally defensible. For vocabulary questions use the tested word's local context. Do not use or request Generator or Reviewer metadata. Return JSON only.",
                         blind,
                     ),
                     input_keys=("passage_id", "section", "title", "passage", "questions"),
@@ -1041,9 +1066,7 @@ def run_reading_batch(
     base_seed = secrets.randbits(32) if seed is None else seed
     if not isinstance(base_seed, int) or isinstance(base_seed, bool) or base_seed < 0:
         raise ValueError("seed must be a non-negative integer")
-    if domain is not None and domain not in {
-        "biology", "geology", "astronomy", "anthropology", "history", "ecology", "technology", "earth science"
-    }:
+    if domain is not None and domain not in ALLOWED_DOMAINS:
         raise ValueError(f"unsupported Reading domain: {domain!r}")
 
     batch_started = time.perf_counter()

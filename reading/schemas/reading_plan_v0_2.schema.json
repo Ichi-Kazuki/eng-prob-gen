@@ -10,7 +10,7 @@
     "plan_id": {"type": "string", "pattern": "^rp-[a-z0-9-]+$"},
     "passage_id": {"type": "string", "pattern": "^rc-[0-9a-f]{8}$"},
     "seed": {"type": "integer", "minimum": 0},
-    "domain": {"enum": ["biology", "geology", "astronomy", "anthropology", "history", "ecology", "technology", "earth science"]},
+    "domain": {"enum": ["biology", "geology", "astronomy", "anthropology", "history", "ecology", "technology", "earth science", "archaeology", "psychology", "sociology", "linguistics", "economics", "geography", "architecture", "art history", "visual arts", "music", "communication", "education", "environmental science"]},
     "target_words": {"type": "integer", "minimum": 160, "maximum": 300},
     "target_paragraphs": {"const": 4},
     "question_count": {"type": "integer", "enum": [7, 8, 9, 10, 11, 12, 14]},

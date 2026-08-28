@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from collections import Counter
+from difflib import SequenceMatcher
 from statistics import mean
 from typing import Any, Iterable
 
@@ -50,6 +51,51 @@ def _option_length_distribution(questions: list[dict[str, Any]]) -> dict[str, An
     }
 
 
+def choice_quality_warnings(output: dict[str, Any] | None) -> list[str]:
+    """Return conservative, non-blocking warnings for suspicious choices.
+
+    These checks are intentionally surface-level. They flag patterns worth
+    review without attempting to decide semantic correctness automatically.
+    """
+
+    if not isinstance(output, dict) or not isinstance(output.get("passage"), str):
+        return []
+    passage = re.sub(r"\s+", " ", output["passage"]).strip().casefold()
+    warnings: list[str] = []
+    for question in output.get("questions", []):
+        if not isinstance(question, dict) or not isinstance(question.get("choices"), dict):
+            continue
+        item_id = question.get("item_id", "<unknown>")
+        choices = question["choices"]
+        if set(choices) != {"A", "B", "C", "D"} or not all(isinstance(value, str) for value in choices.values()):
+            continue
+        lengths = {label: len(choices[label]) for label in ("A", "B", "C", "D")}
+        for label, length in lengths.items():
+            other_lengths = [value for other, value in lengths.items() if other != label]
+            if length >= 40 and length >= 1.8 * max(other_lengths) and length - max(other_lengths) >= 20:
+                warnings.append(f"{item_id}: CHOICE_LENGTH_OUTLIER on {label}")
+        normalized = {
+            label: re.sub(r"\s+", " ", choices[label]).strip(" .,:;!?\"'()[]").casefold()
+            for label in ("A", "B", "C", "D")
+        }
+        for index, left in enumerate(("A", "B", "C", "D")):
+            for right in ("A", "B", "C", "D")[index + 1:]:
+                if normalized[left] != normalized[right] and len(normalized[left].split()) >= 4:
+                    if SequenceMatcher(None, normalized[left], normalized[right]).ratio() >= 0.92:
+                        warnings.append(f"{item_id}: CHOICE_NEAR_DUPLICATE {left}/{right}")
+        correct_answer = question.get("correct_answer")
+        correct = normalized.get(correct_answer) if isinstance(correct_answer, str) else None
+        if isinstance(correct, str) and len(correct.split()) >= 5 and correct in passage:
+            wrong_choices_copied = any(
+                normalized[label] and normalized[label] in passage
+                for label in ("A", "B", "C", "D")
+                if label != correct_answer
+            )
+            if not wrong_choices_copied:
+                warnings.append(f"{item_id}: CORRECT_OPTION_COPIED_FROM_PASSAGE")
+    return warnings
+
+
 def diagnostics_for_result(result: dict[str, Any]) -> dict[str, Any]:
     generator = result.get("generator")
     if not isinstance(generator, dict):
@@ -63,6 +109,7 @@ def diagnostics_for_result(result: dict[str, Any]) -> dict[str, Any]:
             "question_type_distribution": {},
             "correct_answer_distribution": {},
             "option_length_distribution": _option_length_distribution([]),
+            "choice_quality_warnings": [],
             "reviewer_solver_agreement": {"agree": 0, "total": 0, "rate": None},
             "reviewer_ambiguous_none_count": 0,
             "solver_ambiguous_none_count": 0,
@@ -111,6 +158,7 @@ def diagnostics_for_result(result: dict[str, Any]) -> dict[str, Any]:
         "option_length_distribution": _option_length_distribution(
             [question for question in questions if isinstance(question, dict)]
         ),
+        "choice_quality_warnings": choice_quality_warnings(generator),
         "reviewer_solver_agreement": {
             "agree": agree_count,
             "total": len(agreements),
@@ -140,6 +188,7 @@ def aggregate_diagnostics(results: list[dict[str, Any]]) -> dict[str, Any]:
     agreement_agree = 0
     reviewer_none = 0
     solver_none = 0
+    choice_quality_warning_count = 0
     for item in populated:
         type_counts.update(item["question_type_distribution"])
         answer_counts.update(item["correct_answer_distribution"])
@@ -148,6 +197,7 @@ def aggregate_diagnostics(results: list[dict[str, Any]]) -> dict[str, Any]:
         agreement_total += item["reviewer_solver_agreement"]["total"]
         reviewer_none += item["reviewer_ambiguous_none_count"]
         solver_none += item["solver_ambiguous_none_count"]
+        choice_quality_warning_count += len(item["choice_quality_warnings"])
     completed = len(results)
     accepted = sum(result.get("decision") == "ACCEPT" for result in results)
     return {
@@ -168,6 +218,7 @@ def aggregate_diagnostics(results: list[dict[str, Any]]) -> dict[str, Any]:
         },
         "reviewer_ambiguous_none_count": reviewer_none,
         "solver_ambiguous_none_count": solver_none,
+        "choice_quality_warning_count": choice_quality_warning_count,
         "acceptance_rate": round(accepted / completed, 4) if completed else None,
         "per_passage": per_passage,
     }

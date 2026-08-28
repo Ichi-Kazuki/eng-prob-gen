@@ -20,7 +20,12 @@ from typing import Any
 
 from shared.schema_validation import load_schema, schema_errors
 
-from .planner import QUESTION_TYPES, passage_id_for_seed
+from .planner import (
+    QUESTION_SUBTYPES,
+    QUESTION_SUBTYPE_COMPATIBILITY,
+    QUESTION_TYPES,
+    passage_id_for_seed,
+)
 
 
 SCHEMA_DIR = Path(__file__).resolve().parent / "schemas"
@@ -79,8 +84,26 @@ BLIND_FORBIDDEN_KEYS = {
     "question_type",
     "generator_metadata",
     "target_metadata",
+    "subtype",
+    "distractor_metadata",
+    "distractor_taxonomy",
+    "distractor_category",
+    "why_wrong",
     "provenance",
 }
+DISTRACTOR_CATEGORIES = (
+    "TEXT_TRUE_BUT_NOT_ANSWER",
+    "WRONG_REFERENT",
+    "SCOPE_SHIFT",
+    "CAUSE_EFFECT_REVERSAL",
+    "OVERGENERALIZATION",
+    "UNDERGENERALIZATION",
+    "LEXICAL_SENSE_TRAP",
+    "UNSUPPORTED_INFERENCE",
+    "NEARBY_DETAIL_CONFUSION",
+    "CONTRADICTED_BY_PASSAGE",
+)
+DISTRACTOR_METADATA_CORRECT = "CORRECT_OPTION"
 
 
 def _schema_errors(
@@ -546,6 +569,52 @@ def _duplicate_text(values: list[str]) -> bool:
     return len(set(normalized)) != len(normalized)
 
 
+def _question_metadata_errors(question: dict[str, Any]) -> list[str]:
+    """Validate optional secondary taxonomy and private distractor metadata."""
+
+    errors: list[str] = []
+    item_id = question.get("item_id", "<unknown>")
+    question_type = question.get("question_type")
+    subtype = question.get("subtype")
+    if subtype is not None:
+        allowed = QUESTION_SUBTYPE_COMPATIBILITY.get(question_type, frozenset())
+        if subtype not in QUESTION_SUBTYPES:
+            errors.append(f"generator: {item_id} has invalid question subtype {subtype!r}")
+        elif subtype not in allowed:
+            errors.append(
+                f"generator: {item_id} subtype {subtype!r} is not compatible with {question_type!r}"
+            )
+
+    metadata = question.get("distractor_metadata")
+    if metadata is None:
+        return errors
+    if not isinstance(metadata, dict) or set(metadata) != ANSWER_LABELS:
+        errors.append(f"generator: {item_id} distractor_metadata must contain exactly A/B/C/D")
+        return errors
+    correct_answer = question.get("correct_answer")
+    for label in ANSWER_LABEL_ORDER:
+        entry = metadata[label]
+        if not isinstance(entry, dict):
+            errors.append(f"generator: {item_id} distractor_metadata[{label}] must be an object")
+            continue
+        category = entry.get("category")
+        rationale = entry.get("rationale")
+        if category == DISTRACTOR_METADATA_CORRECT:
+            if label != correct_answer:
+                errors.append(
+                    f"generator: {item_id} marks non-key choice {label} as CORRECT_OPTION"
+                )
+        elif category not in DISTRACTOR_CATEGORIES:
+            errors.append(f"generator: {item_id} has invalid distractor category {category!r} for {label}")
+        if not isinstance(rationale, str) or not rationale.strip():
+            errors.append(f"generator: {item_id} distractor rationale for {label} is missing")
+    if correct_answer in ANSWER_LABELS:
+        correct_entry = metadata.get(correct_answer, {})
+        if isinstance(correct_entry, dict) and correct_entry.get("category") != DISTRACTOR_METADATA_CORRECT:
+            errors.append(f"generator: {item_id} correct choice must be marked CORRECT_OPTION")
+    return errors
+
+
 def _nested_keys(value: Any, forbidden: set[str], path: str = "$") -> list[str]:
     found: list[str] = []
     if isinstance(value, dict):
@@ -589,6 +658,7 @@ def validate_generator_contract(
         if item_id != f"{passage_id}-q{index}":
             errors.append(f"generator: question {index} has unexpected item_id {item_id!r}")
         seen_types.append(question["question_type"])
+        errors.extend(_question_metadata_errors(question))
         choices = question["choices"]
         if _duplicate_text(list(choices.values())):
             errors.append(f"generator: question {item_id} has duplicate answer choices")
@@ -704,6 +774,12 @@ def deterministic_diagnostics(
             if len({_normalized_text(paragraph) for paragraph in paragraphs}) != len(paragraphs):
                 errors.append("deterministic: passage contains duplicate paragraphs")
 
+    # Keep semantic choice checks conservative and non-blocking. Importing
+    # lazily avoids a module cycle because diagnostics uses contract helpers.
+    from .diagnostics import choice_quality_warnings
+
+    quality_warnings = choice_quality_warnings(output if isinstance(output, dict) else None)
+
     adherence_errors = [
         error for error in errors
         if "question type counts" in error
@@ -719,6 +795,7 @@ def deterministic_diagnostics(
         "hard_failures": errors,
         "adherence_failures": adherence_errors,
         "empirical_warnings": warnings,
+        "choice_quality_warnings": quality_warnings,
         "passage_word_count": count,
         "paragraph_count": paragraph_count,
         "word_count_profile": profile,

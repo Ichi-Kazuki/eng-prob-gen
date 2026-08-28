@@ -20,4 +20,18 @@ natural and test-appropriate, and whether it has a serious defect. Reject the
 set if any question is ambiguous/unanswerable or has a serious quality defect.
 PASS only when all visible questions are clean.
 
+For an INFERENCE item, reject it when the intended answer is merely a direct
+sentence copied or paraphrased from the passage and no inference is needed,
+when more than one inference is defensible, or when the answer requires
+unstated outside knowledge. Good inference items may connect cause and
+consequence, conditions and implications, comparisons, chronology, an example
+and a generalization, or information across sentences/paragraph ideas.
+For a VOCABULARY_IN_CONTEXT item, judge the word's meaning in its actual local
+sentence and reject a dictionary-only item when the context does not support a
+unique sense. Inspect distractors for plausible but text-grounded error
+mechanisms, parallel grammar, comparable information density, and avoidance of
+silly or outside-knowledge traps. Author-purpose questions such as why the
+author mentions an example must be answerable from the passage's rhetorical
+role.
+
 Return only one JSON object matching the supplied v0.2 canonical Reviewer schema.
