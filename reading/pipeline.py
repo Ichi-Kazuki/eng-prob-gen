@@ -107,6 +107,7 @@ def _json_safe_invocation(invocation: InvocationResult) -> dict[str, Any]:
         "output_last_message_path": path(invocation.output_last_message_path),
         "transport_schema_path": path(invocation.transport_schema_path),
         "transport_schema_provenance_path": path(invocation.transport_schema_provenance_path),
+        "disabled_mcp_servers": list(invocation.disabled_mcp_servers),
         "requested_timeout_seconds": invocation.requested_timeout_seconds,
         "timeout_triggered_at": invocation.timeout_triggered_at,
         "termination_started_at": invocation.termination_started_at,

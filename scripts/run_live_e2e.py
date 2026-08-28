@@ -399,6 +399,7 @@ def sidecar(
         "transport_schema_path": _relative_path(invocation.transport_schema_path),
         "transport_schema_provenance_path": _relative_path(invocation.transport_schema_provenance_path),
         "transport_schema_provenance": copy.deepcopy(invocation.transport_schema_provenance),
+        "disabled_mcp_servers": list(invocation.disabled_mcp_servers),
         "freeze_manifest_path": _relative_path(_RUN_FREEZE.manifest_path) if _RUN_FREEZE is not None else None,
         "freeze_manifest_sha256": _RUN_FREEZE.manifest_sha256 if _RUN_FREEZE is not None else None,
     }

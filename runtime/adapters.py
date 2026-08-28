@@ -112,6 +112,7 @@ class InvocationResult:
     transport_schema_path: Path | None = None
     transport_schema_provenance_path: Path | None = None
     transport_schema_provenance: dict[str, Any] | None = None
+    disabled_mcp_servers: list[str] = field(default_factory=list)
     requested_timeout_seconds: float | None = None
     timeout_triggered_at: str | None = None
     termination_started_at: str | None = None
@@ -771,6 +772,8 @@ class CodexRuntime(_SubprocessRuntime):
     """Codex CLI adapter using one ephemeral ``codex exec`` per item."""
 
     provider = "codex"
+    _disabled_mcp_servers = ("node_repl",)
+    _node_repl_disable_override = "mcp_servers.node_repl.enabled=false"
 
     def __init__(self, *, executable: str | None = None, model: str | None = None, runner: Runner | None = None, cli_version: str | None = None) -> None:
         super().__init__(executable=executable, model=model or _configured_codex_model(), runner=runner, cli_version=cli_version)
@@ -820,6 +823,11 @@ class CodexRuntime(_SubprocessRuntime):
         stdout_path, stderr_path, _ = super()._artifact_paths(request, invocation_id)
         last_message_path = request.artifact_dir / f"{request.stage}-{invocation_id}.last-message.json"
         return stdout_path, stderr_path, last_message_path
+
+    def _new_result(self, request: InvocationRequest) -> InvocationResult:
+        result = super()._new_result(request)
+        result.disabled_mcp_servers = list(self._disabled_mcp_servers)
+        return result
 
     @staticmethod
     def _prompt(request: InvocationRequest) -> str:
@@ -901,6 +909,8 @@ class CodexRuntime(_SubprocessRuntime):
                 self.executable,
                 "exec",
                 "--ephemeral",
+                "-c",
+                self._node_repl_disable_override,
                 "--output-schema",
                 str(output_schema_path.resolve()),
                 "--output-last-message",

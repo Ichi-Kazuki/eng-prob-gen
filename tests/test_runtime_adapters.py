@@ -51,6 +51,7 @@ def request(tmp: Path, *, stage: str = "solver", sandbox: str = "read-only", sch
 class RuntimeAdapterTests(unittest.TestCase):
     def test_codex_uses_ephemeral_exec_schema_last_message_and_read_only(self) -> None:
         calls: list[tuple[list[str], dict]] = []
+        invocation_request: InvocationRequest | None = None
 
         def runner(command: list[str], **kwargs):
             calls.append((command, kwargs))
@@ -69,7 +70,8 @@ class RuntimeAdapterTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as directory:
             runtime = CodexRuntime(executable="codex", model="mock-model", runner=runner, cli_version="codex-cli 0.0-test")
-            result = runtime.invoke(request(Path(directory)))
+            invocation_request = request(Path(directory))
+            result = runtime.invoke(invocation_request)
             self.assertTrue(result.output_last_message_path and result.output_last_message_path.exists())
             self.assertTrue(result.transport_schema_path and result.transport_schema_path.exists())
             self.assertTrue(result.workspace_path)
@@ -88,6 +90,10 @@ class RuntimeAdapterTests(unittest.TestCase):
         command, kwargs = calls[0]
         self.assertEqual(command[0:2], ["codex", "exec"])
         self.assertIn("--ephemeral", command)
+        self.assertEqual(command.count("-c"), 1)
+        self.assertEqual(command.count("mcp_servers.node_repl.enabled=false"), 1)
+        self.assertEqual(command[command.index("-c") + 1], "mcp_servers.node_repl.enabled=false")
+        self.assertEqual(result.disabled_mcp_servers, ["node_repl"])
         self.assertIn("--sandbox", command)
         self.assertEqual(command[command.index("--sandbox") + 1], "read-only")
         self.assertIn("--output-schema", command)
@@ -96,8 +102,8 @@ class RuntimeAdapterTests(unittest.TestCase):
         self.assertEqual(transport_path.name, result.transport_schema_path.name)
         self.assertIn("--output-last-message", command)
         self.assertEqual(command[-1], "-")
-        self.assertEqual(kwargs["input"].split("AUTHORITATIVE AGENT INSTRUCTIONS", 1)[0], "")
-        self.assertIn(SOLVER_AGENT.read_text(encoding="utf-8"), kwargs["input"])
+        assert invocation_request is not None
+        self.assertEqual(kwargs["input"], CodexRuntime._prompt(invocation_request))
         self.assertNotEqual(result.raw_output, result.parsed)
         self.assertEqual(result.parsed["solver_answer"], "A")
 
@@ -317,6 +323,8 @@ class RuntimeAdapterTests(unittest.TestCase):
         self.assertIn("--agent", command)
         self.assertIn("--no-session-persistence", command)
         self.assertIn("--json-schema", command)
+        self.assertNotIn("-c", command)
+        self.assertEqual(result.disabled_mcp_servers, [])
         self.assertNotIn("exec", command)
         self.assertEqual(result.parsed["item_id"], "mock-001")
 
