@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/reading-result-v0.2.schema.json",
+  "title": "Reading v0.2 passage result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "decision", "passage_id", "section", "plan", "generator", "reviewer", "solver", "checks", "infrastructure"],
+  "properties": {
+    "schema_version": {"const": "reading-result-v0.2"},
+    "run_id": {"type": "string", "minLength": 1},
+    "decision": {"enum": ["ACCEPT", "QUARANTINE", "INFRASTRUCTURE_FAILURE"]},
+    "passage_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+$"},
+    "section": {"const": "READING_COMPREHENSION"},
+    "plan": {"type": "object"},
+    "generator": {"type": ["object", "null"]},
+    "reviewer": {"type": ["object", "null"]},
+    "solver": {"type": ["object", "null"]},
+    "checks": {"type": "object"},
+    "diagnostics": {"type": "object"},
+    "infrastructure": {
+      "type": "object",
+      "required": ["live_invocations", "provider", "runtime_failures", "synthetic_fallback"],
+      "properties": {
+        "live_invocations": {"type": "integer", "minimum": 0},
+        "provider": {"type": "string"},
+        "runtime_failures": {"type": "array"},
+        "synthetic_fallback": {"const": false},
+        "elapsed_seconds": {"type": "number", "minimum": 0},
+        "invocation_counts": {"type": "object"}
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": "reading-empirical-profile-v0.2",
+  "measurement_scope": {
+    "source_family": "official Section 3 Reading Comprehension references under source/",
+    "reference_files": [
+      "Practice Test B Sec 3 RC.pdf",
+      "Practice Test C Sec 3 RC.pdf",
+      "Practice Test D Sec 3 RC.pdf",
+      "Practice Test E Sec 3 RC.pdf"
+    ],
+    "passages_measured": 20,
+    "questions_measured": 200,
+    "method": "Page-image OCR followed by manual passage/question segmentation; word counts are approximate and question types are abstract classifications from stems.",
+    "raw_official_wording_retained": false
+  },
+  "passage_measurements": [
+    {"reference": "B", "passage_index": 1, "passage_word_count_approx": 295, "question_count": 8, "question_type_counts": {"DETAIL": 4, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 0, "MAIN_IDEA": 0, "REFERENCE": 0}},
+    {"reference": "B", "passage_index": 2, "passage_word_count_approx": 300, "question_count": 11, "question_type_counts": {"DETAIL": 5, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 0, "MAIN_IDEA": 1, "REFERENCE": 1}},
+    {"reference": "B", "passage_index": 3, "passage_word_count_approx": 280, "question_count": 11, "question_type_counts": {"DETAIL": 3, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 1}},
+    {"reference": "B", "passage_index": 4, "passage_word_count_approx": 275, "question_count": 8, "question_type_counts": {"DETAIL": 3, "VOCABULARY_IN_CONTEXT": 2, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 1}},
+    {"reference": "B", "passage_index": 5, "passage_word_count_approx": 290, "question_count": 12, "question_type_counts": {"DETAIL": 5, "VOCABULARY_IN_CONTEXT": 2, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 3}},
+    {"reference": "C", "passage_index": 1, "passage_word_count_approx": 225, "question_count": 9, "question_type_counts": {"DETAIL": 4, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 0, "MAIN_IDEA": 0, "REFERENCE": 1}},
+    {"reference": "C", "passage_index": 2, "passage_word_count_approx": 220, "question_count": 10, "question_type_counts": {"DETAIL": 4, "VOCABULARY_IN_CONTEXT": 3, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 1}},
+    {"reference": "C", "passage_index": 3, "passage_word_count_approx": 180, "question_count": 10, "question_type_counts": {"DETAIL": 4, "VOCABULARY_IN_CONTEXT": 3, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 1}},
+    {"reference": "C", "passage_index": 4, "passage_word_count_approx": 180, "question_count": 10, "question_type_counts": {"DETAIL": 3, "VOCABULARY_IN_CONTEXT": 3, "INFERENCE": 2, "MAIN_IDEA": 1, "REFERENCE": 1}},
+    {"reference": "C", "passage_index": 5, "passage_word_count_approx": 185, "question_count": 11, "question_type_counts": {"DETAIL": 4, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 2, "MAIN_IDEA": 0, "REFERENCE": 1}},
+    {"reference": "D", "passage_index": 1, "passage_word_count_approx": 165, "question_count": 9, "question_type_counts": {"DETAIL": 4, "VOCABULARY_IN_CONTEXT": 3, "INFERENCE": 1, "MAIN_IDEA": 0, "REFERENCE": 1}},
+    {"reference": "D", "passage_index": 2, "passage_word_count_approx": 160, "question_count": 10, "question_type_counts": {"DETAIL": 5, "VOCABULARY_IN_CONTEXT": 3, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 0}},
+    {"reference": "D", "passage_index": 3, "passage_word_count_approx": 180, "question_count": 9, "question_type_counts": {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 1}},
+    {"reference": "D", "passage_index": 4, "passage_word_count_approx": 245, "question_count": 10, "question_type_counts": {"DETAIL": 1, "VOCABULARY_IN_CONTEXT": 3, "INFERENCE": 3, "MAIN_IDEA": 1, "REFERENCE": 2}},
+    {"reference": "D", "passage_index": 5, "passage_word_count_approx": 180, "question_count": 12, "question_type_counts": {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 5, "MAIN_IDEA": 1, "REFERENCE": 0}},
+    {"reference": "E", "passage_index": 1, "passage_word_count_approx": 285, "question_count": 7, "question_type_counts": {"DETAIL": 3, "VOCABULARY_IN_CONTEXT": 2, "INFERENCE": 0, "MAIN_IDEA": 0, "REFERENCE": 2}},
+    {"reference": "E", "passage_index": 2, "passage_word_count_approx": 275, "question_count": 10, "question_type_counts": {"DETAIL": 5, "VOCABULARY_IN_CONTEXT": 3, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 0}},
+    {"reference": "E", "passage_index": 3, "passage_word_count_approx": 300, "question_count": 14, "question_type_counts": {"DETAIL": 7, "VOCABULARY_IN_CONTEXT": 3, "INFERENCE": 2, "MAIN_IDEA": 1, "REFERENCE": 1}},
+    {"reference": "E", "passage_index": 4, "passage_word_count_approx": 270, "question_count": 7, "question_type_counts": {"DETAIL": 3, "VOCABULARY_IN_CONTEXT": 1, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 1}},
+    {"reference": "E", "passage_index": 5, "passage_word_count_approx": 285, "question_count": 12, "question_type_counts": {"DETAIL": 3, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 3, "MAIN_IDEA": 1, "REFERENCE": 1}}
+  ],
+  "derived_profile": {
+    "passage_word_count_approx": {"minimum": 160, "maximum": 300, "mean": 238.75, "median": 257.5},
+    "questions_per_passage": {"minimum": 7, "maximum": 14, "mean": 10.0, "median": 10.0, "frequency": {"7": 2, "8": 2, "9": 3, "10": 6, "11": 3, "12": 3, "14": 1}},
+    "length_question_count_relationship": {"approximate_pearson_r": 0.06, "interpretation": "weak relationship in this small sample; v0.2 samples question count independently from the word target"},
+    "question_type_counts": {"DETAIL": 74, "VOCABULARY_IN_CONTEXT": 63, "INFERENCE": 27, "MAIN_IDEA": 15, "REFERENCE": 21},
+    "question_type_share": {"DETAIL": 0.37, "VOCABULARY_IN_CONTEXT": 0.315, "INFERENCE": 0.135, "MAIN_IDEA": 0.075, "REFERENCE": 0.105}
+  }
+}

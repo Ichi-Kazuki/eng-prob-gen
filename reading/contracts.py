@@ -1,4 +1,4 @@
-"""Canonical contracts and fail-closed checks for Reading v0.1.
+"""Canonical contracts and fail-closed checks for Reading v0.1/v0.2.
 
 The Reading contract family is intentionally independent of the existing WE
 schemas and validators.  This module owns only shape/integrity checks; it
@@ -29,6 +29,17 @@ SCHEMA_PATHS = {
     "solver": SCHEMA_DIR / "reading_solver_output.schema.json",
     "result": SCHEMA_DIR / "reading_result.schema.json",
 }
+SCHEMA_PATHS_V02 = {
+    "plan": SCHEMA_DIR / "reading_plan_v0_2.schema.json",
+    "generator": SCHEMA_DIR / "reading_generator_output_v0_2.schema.json",
+    "reviewer_input": SCHEMA_DIR / "reading_reviewer_input_v0_2.schema.json",
+    "reviewer": SCHEMA_DIR / "reading_reviewer_output_v0_2.schema.json",
+    "solver_input": SCHEMA_DIR / "reading_solver_input_v0_2.schema.json",
+    "solver": SCHEMA_DIR / "reading_solver_output_v0_2.schema.json",
+    "result": SCHEMA_DIR / "reading_result_v0_2.schema.json",
+    "draft_result": SCHEMA_DIR / "reading_draft_result_v0_2.schema.json",
+    "batch_result": SCHEMA_DIR / "reading_batch_result_v0_2.schema.json",
+}
 ANSWER_LABELS = {"A", "B", "C", "D"}
 SOLVER_LABELS = ANSWER_LABELS | {"AMBIGUOUS", "NONE"}
 BLIND_FORBIDDEN_KEYS = {
@@ -53,12 +64,25 @@ BLIND_FORBIDDEN_KEYS = {
 }
 
 
-def _schema_errors(value: Any, key: str) -> list[str]:
-    return [f"{key}: {error}" for error in schema_errors(value, load_schema(SCHEMA_PATHS[key]))]
+def _schema_errors(
+    value: Any,
+    key: str,
+    schema_paths: dict[str, Path] = SCHEMA_PATHS,
+) -> list[str]:
+    return [f"{key}: {error}" for error in schema_errors(value, load_schema(schema_paths[key]))]
 
 
-def validate_plan_contract(plan: Any) -> list[str]:
-    return _schema_errors(plan, "plan")
+def validate_plan_contract(
+    plan: Any,
+    schema_paths: dict[str, Path] | None = None,
+) -> list[str]:
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02 if isinstance(plan, dict) and plan.get("schema_version") == "reading-plan-v0.2" else SCHEMA_PATHS
+    errors = _schema_errors(plan, "plan", schema_paths)
+    if not errors and isinstance(plan, dict) and plan.get("schema_version") == "reading-plan-v0.2":
+        if plan.get("question_count") != len(plan.get("question_plan", [])):
+            errors.append("plan: question_count must equal the length of question_plan")
+    return errors
 
 
 def word_count(text: str) -> int:
@@ -95,8 +119,17 @@ def _nested_keys(value: Any, forbidden: set[str], path: str = "$") -> list[str]:
     return found
 
 
-def validate_generator_contract(output: Any, plan: dict[str, Any] | None = None) -> list[str]:
-    errors = _schema_errors(output, "generator")
+def validate_generator_contract(
+    output: Any,
+    plan: dict[str, Any] | None = None,
+    schema_paths: dict[str, Path] | None = None,
+) -> list[str]:
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02 if (
+            (isinstance(plan, dict) and plan.get("schema_version") == "reading-plan-v0.2")
+            or (isinstance(output, dict) and output.get("schema_version") == "reading-generator-v0.2")
+        ) else SCHEMA_PATHS
+    errors = _schema_errors(output, "generator", schema_paths)
     if errors or not isinstance(output, dict):
         return errors
     questions = output["questions"]
@@ -121,24 +154,35 @@ def validate_generator_contract(output: Any, plan: dict[str, Any] | None = None)
             errors.append(f"generator: {item_id} evidence paragraph {paragraph_number} is out of range")
         elif not _contains_anchor(paragraphs[paragraph_number - 1], evidence["anchor"]):
             errors.append(f"generator: {item_id} evidence anchor is not present in its paragraph")
-    if sorted(seen_types) != sorted(QUESTION_TYPES):
+    is_v02 = plan is not None and plan.get("schema_version") == "reading-plan-v0.2"
+    if not is_v02 and sorted(seen_types) != sorted(QUESTION_TYPES):
         errors.append(f"generator: question types must contain exactly {list(QUESTION_TYPES)}")
     if plan is not None:
-        if validate_plan_contract(plan):
+        if validate_plan_contract(plan, schema_paths):
             errors.append("generator: supplied plan is not a valid Reading plan")
         else:
             expected_id = f"rc-{plan['seed']:08x}"
             if passage_id != expected_id:
                 errors.append(f"generator: passage_id must equal planned id {expected_id!r}")
+            if is_v02 and len(questions) != plan["question_count"]:
+                errors.append(
+                    f"generator: expected {plan['question_count']} questions; got {len(questions)}"
+                )
             if seen_types != list(plan["question_plan"]):
                 errors.append("generator: question order does not follow the deterministic plan")
     return errors
 
 
-def validate_deterministic(output: Any, plan: dict[str, Any]) -> list[str]:
+def validate_deterministic(
+    output: Any,
+    plan: dict[str, Any],
+    schema_paths: dict[str, Path] | None = None,
+) -> list[str]:
     """Run inexpensive content/structure gates before any blind calls."""
 
-    errors = validate_generator_contract(output, plan)
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02 if plan.get("schema_version") == "reading-plan-v0.2" else SCHEMA_PATHS
+    errors = validate_generator_contract(output, plan, schema_paths)
     if errors or not isinstance(output, dict):
         return errors
     passage = output["passage"]
@@ -163,11 +207,15 @@ def validate_deterministic(output: Any, plan: dict[str, Any]) -> list[str]:
     return errors
 
 
-def blind_input(output: dict[str, Any]) -> dict[str, Any]:
+def blind_input(
+    output: dict[str, Any],
+    *,
+    schema_version: str = "reading-blind-input-v0.1",
+) -> dict[str, Any]:
     """Project only test-taker-visible fields, for both blind agents."""
 
     payload = {
-        "schema_version": "reading-blind-input-v0.1",
+        "schema_version": schema_version,
         "passage_id": output["passage_id"],
         "section": output["section"],
         "title": output["title"],
@@ -188,27 +236,45 @@ def blind_input(output: dict[str, Any]) -> dict[str, Any]:
     return payload
 
 
-def _blind_input_errors(output: Any, payload: Any, schema_key: str) -> list[str]:
+def _blind_input_errors(
+    output: Any,
+    payload: Any,
+    schema_key: str,
+    schema_paths: dict[str, Path] | None = None,
+    schema_version: str = "reading-blind-input-v0.1",
+) -> list[str]:
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02 if isinstance(output, dict) and output.get("schema_version") == "reading-generator-v0.2" else SCHEMA_PATHS
     errors: list[str] = []
     if not isinstance(output, dict):
         return ["blind input source must be an object"]
     try:
-        expected = blind_input(output)
+        expected = blind_input(output, schema_version=schema_version)
     except (KeyError, TypeError, ValueError) as exc:
         return [f"blind input could not be derived: {exc}"]
     if payload != expected:
         errors.append("blind input does not match the canonical allowlisted projection")
     errors.extend(f"blind input: forbidden field {path}" for path in _nested_keys(payload, BLIND_FORBIDDEN_KEYS))
-    errors.extend(_schema_errors(payload, schema_key))
+    errors.extend(_schema_errors(payload, schema_key, schema_paths))
     return errors
 
 
-def blind_input_errors(output: Any, payload: Any) -> list[str]:
-    return _blind_input_errors(output, payload, "reviewer_input")
+def blind_input_errors(
+    output: Any,
+    payload: Any,
+    schema_paths: dict[str, Path] | None = None,
+    schema_version: str = "reading-blind-input-v0.1",
+) -> list[str]:
+    return _blind_input_errors(output, payload, "reviewer_input", schema_paths, schema_version)
 
 
-def solver_input_errors(output: Any, payload: Any) -> list[str]:
-    return _blind_input_errors(output, payload, "solver_input")
+def solver_input_errors(
+    output: Any,
+    payload: Any,
+    schema_paths: dict[str, Path] | None = None,
+    schema_version: str = "reading-blind-input-v0.1",
+) -> list[str]:
+    return _blind_input_errors(output, payload, "solver_input", schema_paths, schema_version)
 
 
 def payload_sha256(payload: Any) -> str:
@@ -223,8 +289,16 @@ def _ids(values: list[dict[str, Any]], field: str) -> tuple[list[str], list[str]
     return valid, duplicates
 
 
-def validate_reviewer_contract(output: Any, blind: dict[str, Any]) -> list[str]:
-    errors = _schema_errors(output, "reviewer")
+def validate_reviewer_contract(
+    output: Any,
+    blind: dict[str, Any],
+    schema_paths: dict[str, Path] | None = None,
+) -> list[str]:
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02 if (
+            isinstance(output, dict) and output.get("schema_version") == "reading-reviewer-v0.2"
+        ) or blind.get("schema_version") == "reading-blind-input-v0.2" else SCHEMA_PATHS
+    errors = _schema_errors(output, "reviewer", schema_paths)
     if errors or not isinstance(output, dict):
         return errors
     if output["passage_id"] != blind["passage_id"] or output["section"] != blind["section"]:
@@ -244,8 +318,16 @@ def validate_reviewer_contract(output: Any, blind: dict[str, Any]) -> list[str]:
     return errors
 
 
-def validate_solver_contract(output: Any, blind: dict[str, Any]) -> list[str]:
-    errors = _schema_errors(output, "solver")
+def validate_solver_contract(
+    output: Any,
+    blind: dict[str, Any],
+    schema_paths: dict[str, Path] | None = None,
+) -> list[str]:
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02 if (
+            isinstance(output, dict) and output.get("schema_version") == "reading-solver-v0.2"
+        ) or blind.get("schema_version") == "reading-blind-input-v0.2" else SCHEMA_PATHS
+    errors = _schema_errors(output, "solver", schema_paths)
     if errors or not isinstance(output, dict):
         return errors
     if output["passage_id"] != blind["passage_id"] or output["section"] != blind["section"]:
@@ -283,8 +365,13 @@ def post_blind_comparison(
     return agreements, errors
 
 
-def validate_result_contract(result: Any) -> list[str]:
-    errors = _schema_errors(result, "result")
+def validate_result_contract(
+    result: Any,
+    schema_paths: dict[str, Path] | None = None,
+) -> list[str]:
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02 if isinstance(result, dict) and result.get("schema_version") == "reading-result-v0.2" else SCHEMA_PATHS
+    errors = _schema_errors(result, "result", schema_paths)
     if errors or not isinstance(result, dict):
         return errors
     if result["decision"] == "ACCEPT":
@@ -307,3 +394,15 @@ def validate_result_contract(result: Any) -> list[str]:
         if result["infrastructure"].get("runtime_failures"):
             errors.append("result: ACCEPT forbids runtime failures")
     return errors
+
+
+def validate_draft_result_contract(result: Any) -> list[str]:
+    """Validate the explicit non-production marker used by draft mode."""
+
+    return _schema_errors(result, "draft_result", SCHEMA_PATHS_V02)
+
+
+def validate_batch_result_contract(result: Any) -> list[str]:
+    """Validate the persisted v0.2 batch summary shape."""
+
+    return _schema_errors(result, "batch_result", SCHEMA_PATHS_V02)

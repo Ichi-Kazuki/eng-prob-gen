@@ -23,7 +23,7 @@ from reading.contracts import (
     validate_solver_contract,
 )
 from reading.pipeline import ReadingPipeline
-from reading.planner import QUESTION_TYPES, build_plan
+from reading.planner import QUESTION_TYPES, build_plan, build_plan_v01
 from runtime.adapters import InvocationResult
 
 
@@ -31,7 +31,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def generator_fixture(seed: int = 7) -> tuple[dict[str, Any], dict[str, Any]]:
-    plan = build_plan(seed, domain="biology")
+    plan = build_plan_v01(seed, domain="biology")
     passage = "\n\n".join([
         "In shallow coastal marshes, microscopic algae form thin communities on sediment surfaces. These communities are easy to overlook, yet they influence how oxygen and nutrients move through the upper layer of mud. During daylight, the algae draw carbon dioxide from the water and release oxygen. Their activity changes with temperature, salinity, and the amount of time that the sediment remains exposed.",
         "Researchers studying these marshes have found that the communities do more than provide food for small animals. Their filaments bind loose particles, reducing the amount of sediment carried away by ordinary tides. This stabilizing effect is strongest where water moves slowly, so a sheltered inlet may retain more fine material than an open shore. The result is a surface that can support additional organisms.",

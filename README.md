@@ -2,14 +2,16 @@
 
 This repository implements a fail-closed pipeline for generating and quality-gating TOEFL ITP Structure and Written Expression items. It stores stage state and replayable artifacts as JSON; it does not silently repair an item or replace an agent's grammar/quality judgment.
 
-## Reading Comprehension v0.1
+## Reading Comprehension v0.1/v0.2
 
-Reading is a separate contract family and currently runs one original
-four-paragraph passage with five questions (one each of DETAIL,
-VOCABULARY_IN_CONTEXT, INFERENCE, MAIN_IDEA, and REFERENCE). The first-pass
-live path is exactly one Generator call, one blind Reviewer call, and one blind
-Solver call. Failed validation or disagreement is preserved as `QUARANTINE`;
-there is no quality retry or answer repair.
+Reading is a separate contract family. The historical v0.1 one-set command
+remains available and runs one original four-paragraph passage with five
+questions and exactly one Generator, one blind Reviewer, and one blind Solver
+call. v0.2 is the current batch path: each independent passage plan samples a
+realistic variable question count and ordered type mix from the lightweight
+derived profile in `analysis/reading_v0_2_empirical_profile.json`. Repeated
+question types are allowed, and Generator, Reviewer, and Solver each process
+the complete question set in one invocation.
 
 Run one fresh set with Claude Code (the default provider):
 
@@ -23,9 +25,26 @@ Use the existing Codex adapter with its read-only/medium-reasoning settings:
 python -m reading.cli --provider codex --seed 1001
 ```
 
-Artifacts are written under `runs/reading_v0_1/<run-id>/`, including the
-answer-bearing Generator output, the answer-free Reviewer/Solver inputs and
-outputs, runtime logs, and `result.json`. Offline tests are run with:
+Generate an independent v0.2 batch with conservative bounded parallelism:
+
+```powershell
+python -m reading.cli --provider codex --seed 1001 --count 4 --parallel 2
+```
+
+Use Generator-only development drafts when needed:
+
+```powershell
+python -m reading.cli --provider codex --seed 1001 --count 5 --mode draft
+```
+
+Validated v0.2 artifacts are written under
+`runs/reading_v0_2/<batch-id>/passage-001/` (and so on), with isolated plan,
+Generator, blind inputs, Reviewer, Solver, result, runtime, and provenance
+artifacts plus the batch-level `batch_result.json`. A draft is always marked
+`UNVALIDATED_DRAFT` and `production_eligible: false`; it cannot be accepted.
+Quality rejection is `QUARANTINE`, infrastructure failure is
+`INFRASTRUCTURE_FAILURE`, and no quality retry or replacement generation is
+performed. Offline tests are run with:
 
 ```powershell
 python -m unittest discover -s tests -p "test_*.py" -v

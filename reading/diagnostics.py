@@ -1,0 +1,151 @@
+"""Cheap diagnostics for generated Reading passage sets and batches."""
+
+from __future__ import annotations
+
+import re
+from collections import Counter
+from statistics import mean
+from typing import Any, Iterable
+
+from .contracts import split_paragraphs, word_count
+
+
+def sentence_count(text: str) -> int:
+    """Count ordinary sentence-final punctuation without an NLP dependency."""
+
+    return len(re.findall(r"[.!?](?=(?:[\"'\)\]]?)(?:\s|$))", text))
+
+
+def _counts(values: Iterable[str]) -> dict[str, int]:
+    return dict(sorted(Counter(values).items()))
+
+
+def _option_length_distribution(questions: list[dict[str, Any]]) -> dict[str, Any]:
+    lengths = [
+        len(choice)
+        for question in questions
+        for choice in (question.get("choices", {}) or {}).values()
+        if isinstance(choice, str)
+    ]
+    if not lengths:
+        return {"count": 0, "minimum": 0, "maximum": 0, "mean": 0.0, "buckets": {}}
+    buckets = Counter(
+        "0-24" if length < 25 else
+        "25-49" if length < 50 else
+        "50-74" if length < 75 else
+        "75+"
+        for length in lengths
+    )
+    return {
+        "count": len(lengths),
+        "minimum": min(lengths),
+        "maximum": max(lengths),
+        "mean": round(mean(lengths), 2),
+        "buckets": dict(sorted(buckets.items())),
+    }
+
+
+def diagnostics_for_result(result: dict[str, Any]) -> dict[str, Any]:
+    generator = result.get("generator")
+    if not isinstance(generator, dict):
+        return {
+            "passage_word_count": 0,
+            "paragraph_count": 0,
+            "sentence_count": 0,
+            "question_count": 0,
+            "question_type_distribution": {},
+            "correct_answer_distribution": {},
+            "option_length_distribution": _option_length_distribution([]),
+            "reviewer_solver_agreement": {"agree": 0, "total": 0, "rate": None},
+            "reviewer_ambiguous_none_count": 0,
+            "solver_ambiguous_none_count": 0,
+            "acceptance_rate": None,
+        }
+    passage = generator.get("passage", "")
+    questions = generator.get("questions", [])
+    if not isinstance(passage, str) or not isinstance(questions, list):
+        return diagnostics_for_result({**result, "generator": None})
+    agreements = result.get("checks", {}).get("answer_agreement", [])
+    reviewer = result.get("reviewer") or {}
+    solver = result.get("solver") or {}
+    reviewer_questions = reviewer.get("questions", []) if isinstance(reviewer, dict) else []
+    solver_answers = solver.get("answers", []) if isinstance(solver, dict) else []
+    agree_count = sum(item.get("agree") is True for item in agreements if isinstance(item, dict))
+    return {
+        "passage_word_count": word_count(passage),
+        "paragraph_count": len(split_paragraphs(passage)),
+        "sentence_count": sentence_count(passage),
+        "question_count": len(questions),
+        "question_type_distribution": _counts(
+            question.get("question_type", "UNKNOWN")
+            for question in questions
+            if isinstance(question, dict)
+        ),
+        "correct_answer_distribution": _counts(
+            question.get("correct_answer", "UNKNOWN")
+            for question in questions
+            if isinstance(question, dict)
+        ),
+        "option_length_distribution": _option_length_distribution(
+            [question for question in questions if isinstance(question, dict)]
+        ),
+        "reviewer_solver_agreement": {
+            "agree": agree_count,
+            "total": len(agreements),
+            "rate": round(agree_count / len(agreements), 4) if agreements else None,
+        },
+        "reviewer_ambiguous_none_count": sum(
+            item.get("best_answer") in {"AMBIGUOUS", "NONE"}
+            for item in reviewer_questions
+            if isinstance(item, dict)
+        ),
+        "solver_ambiguous_none_count": sum(
+            item.get("answer") in {"AMBIGUOUS", "NONE"}
+            for item in solver_answers
+            if isinstance(item, dict)
+        ),
+        "acceptance_rate": 1.0 if result.get("decision") == "ACCEPT" else 0.0,
+    }
+
+
+def aggregate_diagnostics(results: list[dict[str, Any]]) -> dict[str, Any]:
+    per_passage = [diagnostics_for_result(result) for result in results]
+    populated = [item for item in per_passage if item["question_count"]]
+    type_counts = Counter()
+    answer_counts = Counter()
+    option_counts = Counter()
+    agreement_total = 0
+    agreement_agree = 0
+    reviewer_none = 0
+    solver_none = 0
+    for item in populated:
+        type_counts.update(item["question_type_distribution"])
+        answer_counts.update(item["correct_answer_distribution"])
+        option_counts.update(item["option_length_distribution"]["buckets"])
+        agreement_agree += item["reviewer_solver_agreement"]["agree"]
+        agreement_total += item["reviewer_solver_agreement"]["total"]
+        reviewer_none += item["reviewer_ambiguous_none_count"]
+        solver_none += item["solver_ambiguous_none_count"]
+    completed = len(results)
+    accepted = sum(result.get("decision") == "ACCEPT" for result in results)
+    return {
+        "passage_count_with_generator": len(populated),
+        "passage_word_count": {
+            "minimum": min((item["passage_word_count"] for item in populated), default=0),
+            "maximum": max((item["passage_word_count"] for item in populated), default=0),
+            "mean": round(mean(item["passage_word_count"] for item in populated), 2) if populated else 0.0,
+        },
+        "question_count_total": sum(item["question_count"] for item in populated),
+        "question_type_distribution": dict(sorted(type_counts.items())),
+        "correct_answer_distribution": dict(sorted(answer_counts.items())),
+        "option_length_buckets": dict(sorted(option_counts.items())),
+        "reviewer_solver_agreement": {
+            "agree": agreement_agree,
+            "total": agreement_total,
+            "rate": round(agreement_agree / agreement_total, 4) if agreement_total else None,
+        },
+        "reviewer_ambiguous_none_count": reviewer_none,
+        "solver_ambiguous_none_count": solver_none,
+        "acceptance_rate": round(accepted / completed, 4) if completed else None,
+        "per_passage": per_passage,
+    }

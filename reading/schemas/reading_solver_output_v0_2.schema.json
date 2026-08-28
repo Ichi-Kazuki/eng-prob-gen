@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/reading-solver-output-v0.2.schema.json",
+  "title": "Reading v0.2 Solver output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "passage_id", "section", "answers"],
+  "properties": {
+    "schema_version": {"const": "reading-solver-v0.2"},
+    "passage_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+$"},
+    "section": {"const": "READING_COMPREHENSION"},
+    "answers": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 14,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item_id", "answer", "confidence", "reason"],
+        "properties": {
+          "item_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+-q(?:[1-9]|1[0-4])$"},
+          "answer": {"enum": ["A", "B", "C", "D", "AMBIGUOUS", "NONE"]},
+          "confidence": {"enum": ["HIGH", "MEDIUM", "LOW"]},
+          "reason": {"type": "string", "minLength": 1, "maxLength": 600}
+        }
+      }
+    }
+  }
+}
