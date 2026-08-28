@@ -13,9 +13,12 @@ from .planner import (
 from .contracts import (
     CANONICAL_QUESTION_ORDER_VERSION,
     CHOICE_PERMUTATION_VERSION,
+    DISPLAY_LINE_WIDTH,
     GENERATOR_QUESTION_GROUP_FIELDS,
+    display_lines,
     generator_model_schema_for_plan,
     permute_generator_choices,
+    target_line_for_text,
 )
 from .pipeline import ReadingPipeline, ReadingV02Pipeline, derive_passage_seed, run_reading, run_reading_batch
 
@@ -32,9 +35,12 @@ __all__ = [
     "passage_id_for_seed",
     "CANONICAL_QUESTION_ORDER_VERSION",
     "CHOICE_PERMUTATION_VERSION",
+    "DISPLAY_LINE_WIDTH",
     "GENERATOR_QUESTION_GROUP_FIELDS",
+    "display_lines",
     "generator_model_schema_for_plan",
     "permute_generator_choices",
+    "target_line_for_text",
     "derive_passage_seed",
     "run_reading",
     "run_reading_batch",

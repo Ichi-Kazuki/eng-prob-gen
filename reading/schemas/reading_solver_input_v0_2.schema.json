@@ -4,12 +4,11 @@
   "title": "Reading v0.2 blind solver input",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "passage_id", "section", "title", "passage", "questions"],
+  "required": ["schema_version", "passage_id", "section", "passage", "questions"],
   "properties": {
     "schema_version": {"const": "reading-blind-input-v0.2"},
     "passage_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+$"},
     "section": {"const": "READING_COMPREHENSION"},
-    "title": {"type": "string", "minLength": 3, "maxLength": 160},
     "passage": {"type": "string", "minLength": 100},
     "questions": {
       "type": "array",

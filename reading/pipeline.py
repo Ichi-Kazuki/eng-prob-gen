@@ -105,6 +105,12 @@ READING_VOCABULARY_GUIDANCE = (
     "grammatical construction, collocation, and local context. Distractors may use other legitimate senses when those senses "
     "are wrong in the sentence. The rationale must explain why the keyed sense fits the local usage."
 )
+READING_TARGET_GUIDANCE = (
+    "For VOCABULARY_IN_CONTEXT and REFERENCE questions, use conventional TOEFL ITP line-based wording such as "
+    "The word 'X' in line N is closest in meaning to or The word 'it' in line N refers to. Include private target_text "
+    "and 1-based target_line metadata. The trusted display representation uses Unicode NFC, whitespace normalization, "
+    "and a fixed 72-character word wrap; never insert line numbers into the passage text."
+)
 READING_CHOICE_GUIDANCE = (
     "Keep correct options from being systematically longest or most specific; use comparable grammatical form and approximate "
     "information density for distractors without padding for exact character-length equality."
@@ -147,7 +153,7 @@ def reading_v02_generator_instruction(*, draft: bool = False) -> str:
         "grouped semantic Generator schema: include the passage, question types, four choices, intended answers, and private "
         "evidence/rationale metadata. Do not include passage_id or question item_id; trusted pipeline code attaches those "
         "deterministic identity fields after generation. "
-        f"{READING_INFERENCE_GUIDANCE} {READING_LENGTH_GUIDANCE} {READING_VOCABULARY_GUIDANCE} "
+        f"{READING_INFERENCE_GUIDANCE} {READING_LENGTH_GUIDANCE} {READING_VOCABULARY_GUIDANCE} {READING_TARGET_GUIDANCE} "
         f"{READING_CHOICE_GUIDANCE} {READING_TAXONOMY_GUIDANCE} {READING_DISTRACTOR_GUIDANCE} {READING_DOMAIN_GUIDANCE} "
         "Process the whole passage set in this one invocation."
     )
@@ -629,7 +635,7 @@ class ReadingV02Pipeline(ReadingPipeline):
             "canonical_schema_paths": {key: str(path) for key, path in self.schema_paths.items()},
             "invocation_ids": [item.invocation_id for item in self.invocations],
             "answer_bearing_prompt_fields": ["plan"],
-            "blind_prompt_fields": ["passage_id", "section", "title", "passage", "questions"],
+            "blind_prompt_fields": ["passage_id", "section", "passage", "questions"],
             "generator_model_transport": {
                 "schema_version": "reading-generator-model-v0.2.2",
                 "representation": "grouped_question_type_arrays",
@@ -736,7 +742,7 @@ class ReadingV02Pipeline(ReadingPipeline):
                         "Independently audit this entire Reading set as a blind Reviewer. Use only the visible passage, stems, and A/B/C/D choices in INPUT_JSON. Process every question in this one invocation. For every question choose the best answer, or AMBIGUOUS/NONE, and assess uniqueness, distractors, answerability, wording, and serious defects. Reject an INFERENCE item when its answer is only a direct sentence copied or paraphrased from the passage, when more than one inference is defensible, or when unstated outside knowledge is required. For VOCABULARY_IN_CONTEXT, judge the actual local sense rather than a dictionary-only synonym. Check author-purpose questions for a passage-supported rhetorical role and check distractors for plausible text-grounded error mechanisms, parallel grammar, and comparable information density. Return JSON only. Do not request or infer hidden Generator metadata.",
                         blind,
                     ),
-                    input_keys=("passage_id", "section", "title", "passage", "questions"),
+                    input_keys=("passage_id", "section", "passage", "questions"),
                     schema_key="reviewer",
                     output_dir=run_dir,
                     isolate_workspace=True,
@@ -752,7 +758,7 @@ class ReadingV02Pipeline(ReadingPipeline):
                         "Solve this entire Reading set independently as a test-taker. Use only INPUT_JSON and process every visible question in this one invocation. Return exactly one answer for each question: A, B, C, D, AMBIGUOUS, or NONE, with confidence and a concise reason. Treat inference questions as passage-supported reasoning only; use AMBIGUOUS or NONE when outside knowledge is required or two choices are equally defensible. For vocabulary questions use the tested word's local context. Do not use or request Generator or Reviewer metadata. Return JSON only.",
                         blind,
                     ),
-                    input_keys=("passage_id", "section", "title", "passage", "questions"),
+                    input_keys=("passage_id", "section", "passage", "questions"),
                     schema_key="solver",
                     output_dir=run_dir,
                     isolate_workspace=True,
@@ -982,7 +988,7 @@ def _unexpected_failure_result(
     passage_dir.mkdir(parents=True, exist_ok=True)
     run_id = f"reading-v02-failure-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}-{uuid.uuid4().hex[:10]}"
     plan = build_plan_v02(seed, domain) if isinstance(seed, int) and seed >= 0 else {}
-    result = {
+    result: dict[str, Any] = {
         "schema_version": "reading-result-v0.2",
         "run_id": run_id,
         "decision": "INFRASTRUCTURE_FAILURE",
@@ -1133,7 +1139,8 @@ def run_reading_batch(
     }
     passage_artifacts = []
     for (index, passage_seed, result) in outputs:
-        generator = result.get("generator") if isinstance(result.get("generator"), dict) else {}
+        generator_value = result.get("generator")
+        generator = generator_value if isinstance(generator_value, dict) else {}
         passage_artifacts.append({
             "passage_index": index,
             "seed": passage_seed,

@@ -93,6 +93,20 @@ def variable_generator_fixture(plan: dict[str, Any]) -> dict[str, Any]:
         question["item_id"] = f"{output['passage_id']}-q{index}"
         question["question_type"] = question_type
         question["stem"] = f"Which statement is supported by the passage in item {index}?"
+        question["subtype"] = {
+            "DETAIL": "DIRECT_FACTUAL_DETAIL",
+            "VOCABULARY_IN_CONTEXT": "VOCABULARY_CONTEXT_MEANING",
+            "INFERENCE": "LOCAL_INFERENCE",
+            "MAIN_IDEA": "PASSAGE_MAIN_IDEA",
+            "REFERENCE": "ANTECEDENT_REFERENCE",
+        }[question_type]
+        question["distractor_metadata"] = {
+            label: {
+                "category": "CORRECT_OPTION" if label == question["correct_answer"] else "TEXT_TRUE_BUT_NOT_ANSWER",
+                "rationale": "The keyed choice is supported." if label == question["correct_answer"] else "It is related but does not answer the stem.",
+            }
+            for label in ("A", "B", "C", "D")
+        }
         questions.append(question)
     output["questions"] = questions
     return output
@@ -382,13 +396,17 @@ class ReadingV02BatchTests(unittest.TestCase):
             [f"{plan['passage_id']}-q{index}" for index in range(1, plan["question_count"] + 1)],
         )
 
-    def test_grouped_model_output_order_is_seeded_replayable_and_quota_preserving(self) -> None:
+    def test_grouped_model_output_order_is_evidence_position_replayable_and_quota_preserving(self) -> None:
         plan = quota_plan(1105, {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 3, "MAIN_IDEA": 0, "REFERENCE": 1})
         first = canonicalize_generator_output(grouped_model_fixture(plan), plan)
         second = canonicalize_generator_output(grouped_model_fixture(plan), plan)
         self.assertEqual(first["questions"], second["questions"])
         actual_types = Counter(question["question_type"] for question in first["questions"])
         self.assertEqual(actual_types, Counter(plan["question_type_counts"]))
+        self.assertEqual(
+            [question["evidence"]["paragraph"] for question in first["questions"]],
+            sorted(question["evidence"]["paragraph"] for question in first["questions"]),
+        )
         self.assertNotEqual(
             [question["question_type"] for question in first["questions"]],
             [question_type for question_type, count in plan["question_type_counts"].items() for _ in range(count)],
@@ -488,16 +506,20 @@ class ReadingV02BatchTests(unittest.TestCase):
             provenance = json.loads((root / "provenance" / "provenance.json").read_text(encoding="utf-8"))
             self.assertEqual(provenance["reading_version"], "v0.2.5")
             self.assertEqual(provenance["choice_permutation"], expected_provenance)
+            self.assertEqual(provenance["blind_prompt_fields"], ["passage_id", "section", "passage", "questions"])
 
             reviewer_payload = json.loads(requests[1].prompt.split("INPUT_JSON:\n", 1)[1])
             solver_payload = json.loads(requests[2].prompt.split("INPUT_JSON:\n", 1)[1])
             self.assertEqual(reviewer_payload, blind_input(permuted, schema_version="reading-blind-input-v0.2"))
             self.assertEqual(solver_payload, reviewer_payload)
+            self.assertNotIn("title", reviewer_payload)
+            self.assertEqual(requests[1].input_keys, ("passage_id", "section", "passage", "questions"))
+            self.assertEqual(requests[2].input_keys, ("passage_id", "section", "passage", "questions"))
             self.assertNotIn("correct_answer", json.dumps(reviewer_payload))
             self.assertNotIn("evidence", json.dumps(reviewer_payload))
             self.assertEqual(validate_deterministic(permuted, plan), [])
 
-    def test_v025_permutation_keeps_group_quota_and_interleaving_unchanged(self) -> None:
+    def test_v025_permutation_keeps_canonical_order_and_group_quota(self) -> None:
         plan = quota_plan(1204, {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 3, "INFERENCE": 2, "MAIN_IDEA": 1, "REFERENCE": 1})
         canonical = canonicalize_generator_output(grouped_model_fixture(plan), plan)
         permuted, _provenance = permute_generator_choices(canonical, plan)
@@ -553,7 +575,9 @@ class ReadingV02BatchTests(unittest.TestCase):
         )
         self.assertEqual(raw, raw_snapshot)
         self.assertEqual(validate_generator_contract(canonical, plan), [])
-        for raw_question, canonical_question in zip(raw["questions"], canonical["questions"]):
+        canonical_by_stem = {question["stem"]: question for question in canonical["questions"]}
+        for raw_question in raw["questions"]:
+            canonical_question = canonical_by_stem[raw_question["stem"]]
             for field in ("question_type", "stem", "choices", "correct_answer", "evidence"):
                 self.assertEqual(canonical_question[field], raw_question[field])
 
@@ -609,9 +633,11 @@ class ReadingV02BatchTests(unittest.TestCase):
             self.assertEqual(provenance["generator_raw_artifact"], "generator_raw.json")
             self.assertTrue(provenance["generator_raw_sha256"].startswith("sha256:"))
 
-            for raw_question, canonical_question, expected_question in zip(
-                raw_snapshot["questions"], result["generator"]["questions"], permuted["questions"]
-            ):
+            canonical_by_stem = {question["stem"]: question for question in result["generator"]["questions"]}
+            permuted_by_stem = {question["stem"]: question for question in permuted["questions"]}
+            for raw_question in raw_snapshot["questions"]:
+                canonical_question = canonical_by_stem[raw_question["stem"]]
+                expected_question = permuted_by_stem[raw_question["stem"]]
                 self.assertEqual(canonical_question["stem"], raw_question["stem"])
                 self.assertEqual(canonical_question["choices"], expected_question["choices"])
                 self.assertEqual(canonical_question["correct_answer"], expected_question["correct_answer"])
@@ -654,6 +680,13 @@ class ReadingV02BatchTests(unittest.TestCase):
             types = types[1:] + types[:1]
         for question, question_type in zip(generator["questions"], types):
             question["question_type"] = question_type
+            question["subtype"] = {
+                "DETAIL": "DIRECT_FACTUAL_DETAIL",
+                "VOCABULARY_IN_CONTEXT": "VOCABULARY_CONTEXT_MEANING",
+                "INFERENCE": "LOCAL_INFERENCE",
+                "MAIN_IDEA": "PASSAGE_MAIN_IDEA",
+                "REFERENCE": "ANTECEDENT_REFERENCE",
+            }[question_type]
         self.assertEqual(validate_generator_contract(generator, plan), [])
 
     def test_wrong_question_type_multiset_fails(self) -> None:
@@ -662,6 +695,13 @@ class ReadingV02BatchTests(unittest.TestCase):
         original = generator["questions"][0]["question_type"]
         replacement = next(question_type for question_type in ("DETAIL", "VOCABULARY_IN_CONTEXT", "INFERENCE", "MAIN_IDEA", "REFERENCE") if question_type != original)
         generator["questions"][0]["question_type"] = replacement
+        generator["questions"][0]["subtype"] = {
+            "DETAIL": "DIRECT_FACTUAL_DETAIL",
+            "VOCABULARY_IN_CONTEXT": "VOCABULARY_CONTEXT_MEANING",
+            "INFERENCE": "LOCAL_INFERENCE",
+            "MAIN_IDEA": "PASSAGE_MAIN_IDEA",
+            "REFERENCE": "ANTECEDENT_REFERENCE",
+        }[replacement]
         errors = validate_generator_contract(generator, plan)
         self.assertTrue(any("type counts" in error for error in errors))
         self.assertEqual(deterministic_diagnostics(generator, plan)["classification"], FORMAT_ADHERENCE_FAILURE)

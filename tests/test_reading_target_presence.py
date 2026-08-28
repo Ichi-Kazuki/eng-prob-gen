@@ -59,6 +59,13 @@ def local_generator_fixture(plan: dict[str, Any]) -> dict[str, Any]:
         questions.append({
             "item_id": f"{plan['passage_id']}-q{index}",
             "question_type": question_type,
+            "subtype": {
+                "DETAIL": "DIRECT_FACTUAL_DETAIL",
+                "VOCABULARY_IN_CONTEXT": "VOCABULARY_CONTEXT_MEANING",
+                "INFERENCE": "LOCAL_INFERENCE",
+                "MAIN_IDEA": "PASSAGE_MAIN_IDEA",
+                "REFERENCE": "ANTECEDENT_REFERENCE",
+            }[question_type],
             "stem": f"Which statement is supported by the passage in item {index}?",
             "choices": {
                 "A": "It is connected with the conditions described by the author.",
@@ -67,6 +74,13 @@ def local_generator_fixture(plan: dict[str, Any]) -> dict[str, Any]:
                 "D": "It was rejected by every researcher in the study.",
             },
             "correct_answer": "A",
+            "distractor_metadata": {
+                label: {
+                    "category": "CORRECT_OPTION" if label == "A" else "TEXT_TRUE_BUT_NOT_ANSWER",
+                    "rationale": "The keyed choice is supported." if label == "A" else "It is related but does not answer the stem.",
+                }
+                for label in ("A", "B", "C", "D")
+            },
             "evidence": {
                 "paragraph": paragraph,
                 "anchor": f"Evidence marker {paragraph}",
@@ -178,6 +192,23 @@ class ReadingTargetPresenceTests(unittest.TestCase):
         self.assertTrue(MALFORMED_V024_PLAN.is_file())
         generator = json.loads(MALFORMED_V024_GENERATOR.read_text(encoding="utf-8"))
         plan = json.loads(MALFORMED_V024_PLAN.read_text(encoding="utf-8"))
+        subtype_by_type = {
+            "DETAIL": "DIRECT_FACTUAL_DETAIL",
+            "VOCABULARY_IN_CONTEXT": "VOCABULARY_CONTEXT_MEANING",
+            "INFERENCE": "LOCAL_INFERENCE",
+            "MAIN_IDEA": "PASSAGE_MAIN_IDEA",
+            "REFERENCE": "ANTECEDENT_REFERENCE",
+        }
+        for question in generator["questions"]:
+            question["subtype"] = subtype_by_type[question["question_type"]]
+            answer = question["correct_answer"]
+            question["distractor_metadata"] = {
+                label: {
+                    "category": "CORRECT_OPTION" if label == answer else "TEXT_TRUE_BUT_NOT_ANSWER",
+                    "rationale": "The keyed choice is supported." if label == answer else "It is related but does not answer the stem.",
+                }
+                for label in ("A", "B", "C", "D")
+            }
         generator["questions"][0]["stem"] = 'The word "not-present" in paragraph 2 refers to'
         errors = validate_deterministic(generator, plan)
         self.assertTrue(any("REFERENCE_TARGET_NOT_FOUND" in error for error in errors))
@@ -204,8 +235,11 @@ class ReadingTargetPresenceTests(unittest.TestCase):
         snapshot = copy.deepcopy(generator)
         canonical = canonicalize_generator_output(generator, plan)
         self.assertEqual(generator, snapshot)
-        self.assertEqual(canonical["questions"][0]["stem"], generator["questions"][0]["stem"])
-        self.assertEqual(canonical["questions"][0]["evidence"], generator["questions"][0]["evidence"])
+        canonical_question = next(
+            question for question in canonical["questions"] if question["stem"] == generator["questions"][0]["stem"]
+        )
+        self.assertEqual(canonical_question["stem"], generator["questions"][0]["stem"])
+        self.assertEqual(canonical_question["evidence"], generator["questions"][0]["evidence"])
 
 
 if __name__ == "__main__":

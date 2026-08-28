@@ -13,6 +13,7 @@ import json
 import random
 import re
 import string
+import textwrap
 import unicodedata
 from collections import Counter
 from pathlib import Path
@@ -60,8 +61,9 @@ GENERATOR_QUESTION_GROUP_FIELDS = {
     "MAIN_IDEA": "main_idea_questions",
     "REFERENCE": "reference_questions",
 }
-CANONICAL_QUESTION_ORDER_VERSION = "reading-v0.2.2-seeded-type-interleave-v1"
+CANONICAL_QUESTION_ORDER_VERSION = "reading-v0.2.5-evidence-position-aware-v1"
 CHOICE_PERMUTATION_VERSION = "reading-v0.2.5-seeded-choice-permutation-v1"
+DISPLAY_LINE_WIDTH = 72
 HARD_VALIDITY = "HARD_VALIDITY"
 EMPIRICAL_FORMAT_WARNING = "EMPIRICAL_FORMAT_WARNING"
 FORMAT_ADHERENCE_FAILURE = "FORMAT_ADHERENCE_FAILURE"
@@ -84,6 +86,8 @@ BLIND_FORBIDDEN_KEYS = {
     "question_type",
     "generator_metadata",
     "target_metadata",
+    "target_text",
+    "target_line",
     "subtype",
     "distractor_metadata",
     "distractor_taxonomy",
@@ -132,7 +136,7 @@ def validate_plan_contract(
         if plan.get("question_count") != len(plan.get("question_plan", [])):
             errors.append("plan: question_count must equal the length of question_plan")
         planned_types = plan.get("question_plan", [])
-        planned_counts = Counter(planned_types)
+        planned_counts: Counter[Any] = Counter(planned_types)
         if plan.get("question_type_counts") != {
             question_type: planned_counts[question_type]
             for question_type in QUESTION_TYPES
@@ -173,29 +177,117 @@ def generator_model_schema_for_plan(plan: dict[str, Any]) -> dict[str, Any]:
     return schema
 
 
-def _interleave_grouped_questions(
-    grouped: dict[str, list[dict[str, Any]]],
-    seed: int,
-) -> list[dict[str, Any]]:
-    """Interleave grouped questions in a replayable, seed-owned order."""
+def _normalized_display_paragraphs(passage: str) -> list[str]:
+    """Normalize passage paragraphs for the platform-independent display model."""
 
-    rng = random.Random(seed)
-    active_types = [question_type for question_type in QUESTION_TYPES if grouped[question_type]]
-    rng.shuffle(active_types)
-    positions = {question_type: 0 for question_type in active_types}
-    ordered: list[dict[str, Any]] = []
-    while active_types:
-        next_active: list[str] = []
-        for question_type in active_types:
-            position = positions[question_type]
-            questions = grouped[question_type]
-            if position < len(questions):
-                ordered.append(questions[position])
-                positions[question_type] = position + 1
-            if positions[question_type] < len(questions):
-                next_active.append(question_type)
-        active_types = next_active
-    return ordered
+    normalized = unicodedata.normalize("NFC", passage).replace("\r\n", "\n").replace("\r", "\n")
+    return [
+        re.sub(r"\s+", " ", paragraph).strip()
+        for paragraph in re.split(r"\n\s*\n", normalized.strip())
+        if re.sub(r"\s+", " ", paragraph).strip()
+    ]
+
+
+def display_lines(passage: str, *, width: int = DISPLAY_LINE_WIDTH) -> list[str]:
+    """Return deterministic 1-based-display-compatible lines for a passage.
+
+    The line model is intentionally independent of terminal or browser width.
+    Paragraph boundaries are preserved as wrapping boundaries, but blank lines
+    are not counted as display lines because the test-taker sees paragraph text,
+    not source-format separators.
+    """
+
+    if not isinstance(passage, str):
+        raise TypeError("passage must be a string")
+    if isinstance(width, bool) or not isinstance(width, int) or width < 20:
+        raise ValueError("display line width must be an integer of at least 20")
+    lines: list[str] = []
+    for paragraph in _normalized_display_paragraphs(passage):
+        lines.extend(
+            textwrap.wrap(
+                paragraph,
+                width=width,
+                break_long_words=False,
+                break_on_hyphens=False,
+                replace_whitespace=True,
+                drop_whitespace=True,
+            )
+        )
+    return lines
+
+
+def target_line_for_text(passage: str, target_text: str, *, width: int = DISPLAY_LINE_WIDTH) -> int | None:
+    """Return the first 1-based display line containing an exact target expression."""
+
+    lines = display_lines(passage, width=width)
+    for line_number, line in enumerate(lines, 1):
+        if _contains_surface_expression(line, target_text):
+            return line_number
+    return None
+
+
+def _display_position_for_question(question: dict[str, Any], passage: str) -> tuple[int, int, int]:
+    """Return a stable global display position for evidence-aware ordering."""
+
+    evidence = question.get("evidence")
+    paragraphs = _normalized_display_paragraphs(passage) if isinstance(passage, str) else []
+    paragraph_number = evidence.get("paragraph") if isinstance(evidence, dict) else None
+    anchor = evidence.get("anchor") if isinstance(evidence, dict) else None
+    if isinstance(paragraph_number, int) and 1 <= paragraph_number <= len(paragraphs):
+        preceding_lines = sum(len(display_lines(paragraph)) for paragraph in paragraphs[:paragraph_number - 1])
+        paragraph_lines = display_lines(paragraphs[paragraph_number - 1])
+        local_line = 0
+        anchor_offset = len(paragraphs[paragraph_number - 1])
+        if isinstance(anchor, str):
+            normalized_paragraph = _normalized_text(paragraphs[paragraph_number - 1])
+            normalized_anchor = _normalized_text(anchor)
+            offset = normalized_paragraph.find(normalized_anchor)
+            if offset >= 0:
+                anchor_offset = offset
+            for index, line in enumerate(paragraph_lines):
+                if _contains_surface_expression(line, anchor):
+                    local_line = index
+                    break
+        return preceding_lines + local_line + 1, paragraph_number, anchor_offset
+    return (10**9, 10**9, 10**9)
+
+
+def _question_order_key(
+    question: dict[str, Any],
+    passage: str,
+    original_index: int,
+) -> tuple[int, int, int, int, str, int]:
+    question_type = question.get("question_type")
+    subtype = question.get("subtype")
+    # Main-idea items are passage-global and conventionally appear before
+    # location-specific items. Cross-idea inference is synthesis and is placed
+    # after local evidence when the taxonomy identifies it as such.
+    global_rank = 0 if question_type == "MAIN_IDEA" else (
+        2 if question_type == "INFERENCE" and subtype == "CROSS_IDEA_INFERENCE" else 1
+    )
+    target_line = question.get("target_line")
+    if isinstance(target_line, int) and target_line >= 1:
+        line_number, paragraph_number, anchor_offset = target_line, target_line, 0
+    else:
+        line_number, paragraph_number, anchor_offset = _display_position_for_question(question, passage)
+    stem_value = question.get("stem")
+    stem = stem_value if isinstance(stem_value, str) else ""
+    return (global_rank, line_number, paragraph_number, anchor_offset, stem.casefold(), original_index)
+
+
+def _evidence_position_aware_order(
+    questions: list[dict[str, Any]],
+    passage: str,
+) -> list[dict[str, Any]]:
+    """Order questions by globality and deterministic passage evidence position."""
+
+    return [
+        question
+        for _index, question in sorted(
+            enumerate(questions),
+            key=lambda pair: _question_order_key(pair[1], passage, pair[0]),
+        )
+    ]
 
 
 def _flatten_grouped_generator_questions(
@@ -237,7 +329,10 @@ def _flatten_grouped_generator_questions(
                 )
             normalized.append(copied)
         grouped[question_type] = normalized
-    return _interleave_grouped_questions(grouped, plan["seed"])
+    return _evidence_position_aware_order(
+        [question for question_type in QUESTION_TYPES for question in grouped[question_type]],
+        raw_output.get("passage", ""),
+    )
 
 
 def canonicalize_generator_output(
@@ -271,6 +366,9 @@ def canonicalize_generator_output(
     canonical["passage_id"] = passage_id
     questions = canonical.get("questions")
     if isinstance(questions, list):
+        if is_v02:
+            questions = _evidence_position_aware_order(questions, canonical.get("passage", ""))
+            canonical["questions"] = questions
         for index, question in enumerate(questions, 1):
             if isinstance(question, dict):
                 question["item_id"] = f"{passage_id}-q{index}"
@@ -339,7 +437,7 @@ def _permutation_question_references(
     output: dict[str, Any],
     plan: dict[str, Any],
 ) -> list[dict[str, Any]]:
-    """Return raw question objects in the existing trusted interleave order."""
+    """Return raw question objects in the final canonical order."""
 
     if "questions" in output:
         if any(field in output for field in GENERATOR_QUESTION_GROUP_FIELDS.values()):
@@ -347,7 +445,9 @@ def _permutation_question_references(
         questions = output["questions"]
         if not isinstance(questions, list):
             raise ValueError("Generator questions must be an array")
-        return questions
+        if not all(isinstance(question, dict) for question in questions):
+            raise ValueError("Generator questions must contain only question objects")
+        return _evidence_position_aware_order(questions, output.get("passage", ""))
 
     expected_fields = set(GENERATOR_QUESTION_GROUP_FIELDS.values())
     present_fields = {field for field in expected_fields if field in output}
@@ -366,7 +466,10 @@ def _permutation_question_references(
         if not all(isinstance(question, dict) for question in questions):
             raise ValueError(f"{field_name} must contain only question objects")
         grouped[question_type] = questions
-    return _interleave_grouped_questions(grouped, plan["seed"])
+    return _evidence_position_aware_order(
+        [question for question_type in QUESTION_TYPES for question in grouped[question_type]],
+        output.get("passage", ""),
+    )
 
 
 def permute_generator_choices(
@@ -422,6 +525,12 @@ def permute_generator_choices(
             for canonical_label, original_label in canonical_to_original.items()
         }
         question["correct_answer"] = original_to_canonical[original_answer]
+        distractor_metadata = question.get("distractor_metadata")
+        if isinstance(distractor_metadata, dict) and set(distractor_metadata) == ANSWER_LABELS:
+            question["distractor_metadata"] = {
+                canonical_label: copy.deepcopy(distractor_metadata[original_label])
+                for canonical_label, original_label in canonical_to_original.items()
+            }
         _remap_internal_answer_labels(question.get("evidence"), original_to_canonical)
         question_provenance.append({
             "item_id": item_id,
@@ -461,7 +570,7 @@ def _contains_anchor(paragraph: str, anchor: str) -> bool:
 _TARGET_STEM_PREFIX = re.compile(r"^\s*The\s+(?:word|phrase)\b", flags=re.IGNORECASE)
 _TARGET_STEM_PATTERN = re.compile(
     r"^\s*The\s+(?:word|phrase)\s+(?P<target>.+?)\s+in\s+"
-    r"(?P<location>(?:paragraph\s+\d+)|(?:(?:the\s+)?(?:first|second|third|fourth|fifth|sixth|seventh|eighth)\s+paragraph))\s+"
+    r"(?P<location>(?:line\s+\d+)|(?:paragraph\s+\d+)|(?:(?:the\s+)?(?:first|second|third|fourth|fifth|sixth|seventh|eighth)\s+paragraph))\s+"
     r"(?:refers\s+to(?:\s+.+)?|is\s+closest\s+in\s+meaning\s+to)\s*$",
     flags=re.IGNORECASE,
 )
@@ -479,31 +588,49 @@ _TARGET_QUESTION_TYPES = {"REFERENCE", "VOCABULARY_IN_CONTEXT"}
 
 
 def _target_metadata_from_stem(stem: str) -> tuple[str, int] | None:
-    """Extract the target and claimed paragraph from a conventional target stem.
+    """Extract the target and claimed location number from a target stem.
 
-    The Reading schemas do not have target-text or target-location fields.  A
-    narrow parser is therefore necessary for the existing v0.2 representation;
-    stems outside this explicit target-question form are left to the existing
-    schema/content checks.
+    This compatibility helper retains the historical two-tuple API.  New v0.2
+    line-based validation uses ``_target_reference_from_stem`` so it can also
+    distinguish a line from a paragraph.
     """
+
+    reference = _target_reference_from_stem(stem)
+    if reference is None:
+        return None
+    target, _location_kind, location_number = reference
+    return target, location_number
+
+
+def _target_reference_from_stem(stem: str) -> tuple[str, str, int] | None:
+    """Extract target text and its explicit line/paragraph location from a stem."""
 
     match = _TARGET_STEM_PATTERN.fullmatch(stem)
     if match is None:
         return None
     location = match.group("location").casefold()
-    numeric_location = re.fullmatch(r"paragraph\s+(\d+)", location)
-    if numeric_location is not None:
-        paragraph_number = int(numeric_location.group(1))
+    line_location = re.fullmatch(r"line\s+(\d+)", location)
+    if line_location is not None:
+        location_kind = "line"
+        location_number = int(line_location.group(1))
     else:
-        ordinal = re.fullmatch(
-            r"(?:the\s+)?(first|second|third|fourth|fifth|sixth|seventh|eighth)\s+paragraph",
-            location,
-        )
-        if ordinal is None:
-            return None
-        paragraph_number = _PARAGRAPH_ORDINALS[ordinal.group(1)]
+        numeric_location = re.fullmatch(r"paragraph\s+(\d+)", location)
+        if numeric_location is not None:
+            location_kind = "paragraph"
+            location_number = int(numeric_location.group(1))
+        else:
+            ordinal = re.fullmatch(
+                r"(?:the\s+)?(first|second|third|fourth|fifth|sixth|seventh|eighth)\s+paragraph",
+                location,
+            )
+            if ordinal is None:
+                return None
+            location_kind = "paragraph"
+            location_number = _PARAGRAPH_ORDINALS[ordinal.group(1)]
     target = match.group("target").strip()
-    return target, paragraph_number
+    if len(target) >= 2 and target[0] in {"'", '"'} and target[-1] == target[0]:
+        target = target[1:-1].strip()
+    return target, location_kind, location_number
 
 
 _SURFACE_TRANSLATION = str.maketrans({
@@ -541,19 +668,45 @@ def _contains_surface_expression(paragraph: str, target: str) -> bool:
     ) is not None
 
 
-def _target_presence_errors(question: dict[str, Any], paragraphs: list[str]) -> list[str]:
+def _target_presence_errors(
+    question: dict[str, Any],
+    paragraphs: list[str],
+    passage: str,
+) -> list[str]:
     question_type = question["question_type"]
     if question_type not in _TARGET_QUESTION_TYPES:
         return []
     stem = question["stem"]
     if not _TARGET_STEM_PREFIX.match(stem):
         return []
-    metadata = _target_metadata_from_stem(stem)
+    metadata = _target_reference_from_stem(stem)
     item_id = question["item_id"]
     diagnostic_prefix = f"generator: {item_id} {question_type}_TARGET"
     if metadata is None:
         return [f"{diagnostic_prefix}_METADATA_UNPARSEABLE"]
-    target, paragraph_number = metadata
+    target, location_kind, location_number = metadata
+    target_text = question.get("target_text")
+    target_line = question.get("target_line")
+    has_explicit_target_metadata = "target_text" in question or "target_line" in question
+    if location_kind == "line":
+        if not isinstance(target_text, str) or not target_text.strip() or not isinstance(target_line, int):
+            return [f"{diagnostic_prefix}_METADATA_MISSING: line targets require target_text and target_line"]
+        if _surface_text(target_text) != _surface_text(target):
+            return [f"{diagnostic_prefix}_TEXT_MISMATCH: target_text does not match the stem target"]
+        if target_line != location_number:
+            return [f"{diagnostic_prefix}_LINE_MISMATCH: target_line does not match line {location_number}"]
+        lines = display_lines(passage)
+        if not 1 <= target_line <= len(lines):
+            return [f"{diagnostic_prefix}_LOCATION_INVALID: line {target_line} is out of range"]
+        if not _contains_surface_expression(lines[target_line - 1], target_text):
+            return [
+                f"{diagnostic_prefix}_NOT_FOUND: targeted expression {target_text!r} is not present "
+                f"in line {target_line}"
+            ]
+        return []
+    if has_explicit_target_metadata:
+        return [f"{diagnostic_prefix}_METADATA_MISMATCH: paragraph targets cannot carry line metadata"]
+    paragraph_number = location_number
     if not 1 <= paragraph_number <= len(paragraphs):
         return [f"{diagnostic_prefix}_LOCATION_INVALID: paragraph {paragraph_number} is out of range"]
     if not _contains_surface_expression(paragraphs[paragraph_number - 1], target):
@@ -577,7 +730,11 @@ def _question_metadata_errors(question: dict[str, Any]) -> list[str]:
     question_type = question.get("question_type")
     subtype = question.get("subtype")
     if subtype is not None:
-        allowed = QUESTION_SUBTYPE_COMPATIBILITY.get(question_type, frozenset())
+        allowed = (
+            QUESTION_SUBTYPE_COMPATIBILITY.get(question_type, frozenset())
+            if isinstance(question_type, str)
+            else frozenset()
+        )
         if subtype not in QUESTION_SUBTYPES:
             errors.append(f"generator: {item_id} has invalid question subtype {subtype!r}")
         elif subtype not in allowed:
@@ -669,7 +826,7 @@ def validate_generator_contract(
         elif not _contains_anchor(paragraphs[paragraph_number - 1], evidence["anchor"]):
             errors.append(f"generator: {item_id} evidence anchor is not present in its paragraph")
         if is_v02:
-            errors.extend(_target_presence_errors(question, paragraphs))
+            errors.extend(_target_presence_errors(question, paragraphs, output["passage"]))
     if not is_v02 and sorted(seen_types) != sorted(QUESTION_TYPES):
         errors.append(f"generator: question types must contain exactly {list(QUESTION_TYPES)}")
     if plan is not None:
@@ -825,7 +982,6 @@ def blind_input(
         "schema_version": schema_version,
         "passage_id": output["passage_id"],
         "section": output["section"],
-        "title": output["title"],
         "passage": output["passage"],
         "questions": [
             {
@@ -837,6 +993,17 @@ def blind_input(
             for index, question in enumerate(output["questions"], 1)
         ],
     }
+    if schema_version == "reading-blind-input-v0.1":
+        payload["title"] = output["title"]
+        # Preserve the historical v0.1 field order in persisted JSON objects.
+        payload = {
+            "schema_version": payload["schema_version"],
+            "passage_id": payload["passage_id"],
+            "section": payload["section"],
+            "title": payload["title"],
+            "passage": payload["passage"],
+            "questions": payload["questions"],
+        }
     leakage = _nested_keys(payload, BLIND_FORBIDDEN_KEYS)
     if leakage:
         raise ValueError("blind projection contains forbidden field(s): " + ", ".join(leakage))

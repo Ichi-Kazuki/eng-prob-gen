@@ -43,11 +43,13 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["question_type", "stem", "choices", "correct_answer", "evidence"],
+        "required": ["question_type", "subtype", "stem", "choices", "correct_answer", "evidence", "distractor_metadata"],
         "properties": {
           "question_type": {"enum": ["DETAIL", "VOCABULARY_IN_CONTEXT", "INFERENCE", "MAIN_IDEA", "REFERENCE"]},
           "subtype": {"$ref": "#/$defs/questionSubtype"},
           "distractor_metadata": {"$ref": "#/$defs/distractorMetadata"},
+          "target_text": {"type": "string", "minLength": 1, "maxLength": 120},
+          "target_line": {"type": "integer", "minimum": 1},
           "stem": {"type": "string", "minLength": 8, "maxLength": 400},
           "choices": {
             "type": "object",

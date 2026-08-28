@@ -181,9 +181,9 @@ def diagnostics_for_result(result: dict[str, Any]) -> dict[str, Any]:
 def aggregate_diagnostics(results: list[dict[str, Any]]) -> dict[str, Any]:
     per_passage = [diagnostics_for_result(result) for result in results]
     populated = [item for item in per_passage if item["question_count"]]
-    type_counts = Counter()
-    answer_counts = Counter()
-    option_counts = Counter()
+    type_counts: Counter[Any] = Counter()
+    answer_counts: Counter[Any] = Counter()
+    option_counts: Counter[Any] = Counter()
     agreement_total = 0
     agreement_agree = 0
     reviewer_none = 0
