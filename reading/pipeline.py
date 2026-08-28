@@ -36,6 +36,7 @@ from .contracts import (
     blind_input_errors,
     canonicalize_generator_output,
     CANONICAL_QUESTION_ORDER_VERSION,
+    permute_generator_choices,
     deterministic_diagnostics,
     generator_model_schema_for_plan,
     payload_sha256,
@@ -71,6 +72,63 @@ DEFAULT_MODEL = os.environ.get("READING_MODEL", "sonnet")
 DEFAULT_TIMEOUT_SECONDS = float(os.environ.get("READING_TIMEOUT_SECONDS", "300"))
 DEFAULT_MAX_BUDGET_USD = os.environ.get("READING_MAX_BUDGET_USD", "0.60")
 DEFAULT_PARALLELISM = 1
+READING_CURRENT_VERSION = "v0.2.5"
+
+
+READING_INFERENCE_GUIDANCE = (
+    "For INFERENCE questions, vary reasoning depth according to what the passage naturally supports. "
+    "Explicit restatement should not dominate, and a simple one-step paraphrase or inversion should not be the default. "
+    "Regularly require a conclusion that must be derived from the passage's implications, relationships, conditions, causes, "
+    "comparisons, or consequences when naturally supported by the passage. Some items may require a small supported inference, "
+    "while genuine supported inference should also occur regularly. When naturally supported, use information distributed across "
+    "more than one sentence or idea. Multi-sentence or cross-idea reasoning is appropriate when naturally supported by the passage. "
+    "Never force cross-sentence or cross-idea reasoning when the passage does not support it. "
+    "Every keyed inference must remain fully supported by the passage and fully entailed by the text, with one unique defensible answer and "
+    "no unsupported speculation. Do not create difficulty through simple negation/reversal or artificial logical tricks. "
+    "Distractors should be plausible but not entailed."
+)
+READING_LENGTH_GUIDANCE = (
+    "For passage realization, treat target_words as a real writing target, not a loose suggestion. Normally remain close to "
+    "target_words, using a soft tolerance on the order of a few dozen words calibrated to observed realization error; this is "
+    "not an exact hard count, and slight differences do not by themselves invalidate the passage. Avoid adding extra examples, "
+    "background, concluding exposition, or paragraph padding merely to make the passage richer or fill space. Preserve "
+    "completeness and naturalness. Never truncate a sentence unnaturally just to hit target_words. Existing validity behavior "
+    "is unchanged: below 160 words is hard-invalid, 160-300 words is the empirical preferred band, and above 300 words is an "
+    "empirical warning rather than a hard rejection."
+)
+READING_VOCABULARY_GUIDANCE = (
+    "For VOCABULARY_IN_CONTEXT questions, both ordinary dictionary senses and context-clarified senses are acceptable. "
+    "Do not require strong context dependence and do not choose obscure vocabulary merely to increase difficulty. The keyed "
+    "synonym must match the target word's actual sense in its local sentence. When a target word is polysemous, distinguish "
+    "between legitimate dictionary senses using grammatical construction, collocation, and local context. Distractors may use "
+    "other legitimate dictionary senses when those senses are wrong in the sentence. The rationale must explain why the keyed "
+    "sense fits the local usage."
+)
+READING_CHOICE_GUIDANCE = (
+    "Keep correct options from being systematically longest or most specific; use comparable grammatical form and approximate "
+    "information density for distractors without padding for exact character-length equality."
+)
+
+
+def reading_v02_generator_instruction(*, draft: bool = False) -> str:
+    """Return the shared v0.2.5 Generator contract used by production and draft modes."""
+
+    instruction = (
+        "Generate one original TOEFL ITP-style Reading Comprehension set. Follow the supplied semantic plan exactly. "
+        "The model-facing schema contains one required question collection for each type: detail_questions, "
+        "vocabulary_in_context_questions, inference_questions, main_idea_questions, and reference_questions. Create exactly "
+        "the requested number in each collection, including an empty array when a quota is zero; together these collections "
+        "must exactly match question_type_counts and question_count. ordering of the generated questions is free; do not create "
+        "a flat questions array or attempt to reproduce an exact cross-type order. Return JSON only using the supplied v0.2.2 "
+        "grouped semantic Generator schema: include the passage, question types, four choices, intended answers, and private "
+        "evidence/rationale metadata. Do not include passage_id or question item_id; trusted pipeline code attaches those "
+        "deterministic identity fields after generation. "
+        f"{READING_INFERENCE_GUIDANCE} {READING_LENGTH_GUIDANCE} {READING_VOCABULARY_GUIDANCE} "
+        f"{READING_CHOICE_GUIDANCE} Process the whole passage set in this one invocation."
+    )
+    if draft:
+        instruction += " This is an UNVALIDATED_DRAFT for development inspection only."
+    return instruction + " Never quote, paraphrase, or imitate any official ETS passage or question."
 
 
 def configured_runtime(provider: str | None = None, model: str | None = None) -> AgentRuntime:
@@ -524,6 +582,7 @@ class ReadingV02Pipeline(ReadingPipeline):
         plan: dict[str, Any],
         blind: dict[str, Any] | None,
         raw_generator: Any = None,
+        choice_permutation: dict[str, Any] | None = None,
     ) -> None:
         atomic_write_json(run_dir / "invocations.json", {
             "live_invocations": len(self.invocations),
@@ -540,6 +599,8 @@ class ReadingV02Pipeline(ReadingPipeline):
             "generator_raw_artifact": "generator_raw.json" if (run_dir / "generator_raw.json").is_file() else None,
             "generator_raw_sha256": payload_sha256(raw_generator) if raw_generator is not None else None,
             "canonical_generator_artifact": "generator.json" if (run_dir / "generator.json").is_file() else None,
+            "reading_version": READING_CURRENT_VERSION,
+            "choice_permutation": choice_permutation,
             "canonical_schema_paths": {key: str(path) for key, path in self.schema_paths.items()},
             "invocation_ids": [item.invocation_id for item in self.invocations],
             "answer_bearing_prompt_fields": ["plan"],
@@ -589,6 +650,7 @@ class ReadingV02Pipeline(ReadingPipeline):
         deterministic_errors: list[str] = []
         empirical_warnings: list[str] = []
         deterministic_classification = "HARD_VALIDITY"
+        choice_permutation: dict[str, Any] | None = None
         reviewer_errors: list[str] = []
         solver_errors: list[str] = []
         post_blind_metadata_errors: list[str] = []
@@ -601,7 +663,7 @@ class ReadingV02Pipeline(ReadingPipeline):
                 stage="reading_generator",
                 agent=GENERATOR_AGENT,
                 prompt=self._prompt(
-                    "Generate one original TOEFL ITP-style Reading Comprehension set. Follow the supplied semantic plan exactly. The model-facing schema contains one required question collection for each type: detail_questions, vocabulary_in_context_questions, inference_questions, main_idea_questions, and reference_questions. Create exactly the requested number in each collection, including an empty array when a quota is zero; together these collections must exactly match question_type_counts and question_count. ordering of the generated questions is free; do not create a flat questions array or attempt to reproduce an exact cross-type order. Return JSON only using the supplied v0.2.2 grouped semantic Generator schema: include the passage, question types, four choices, intended answers, and private evidence/rationale metadata. Do not include passage_id or question item_id; trusted pipeline code attaches those deterministic identity fields after generation. For INFERENCE questions, vary reasoning depth according to what the passage naturally supports. Explicit restatement should not dominate. Some items may require a small supported inference, while genuine supported inference should also occur regularly. Multi-sentence or cross-idea reasoning is appropriate when naturally supported by the passage. Every keyed inference must remain fully entailed by the text. Do not create difficulty through unsupported speculation, forced cross-sentence reasoning, simple negation/reversal, or artificial logical tricks. Distractors should be plausible from passage information but not entailed. For VOCABULARY_IN_CONTEXT questions, both ordinary dictionary senses and context-clarified senses are acceptable. Do not require strong context dependence and do not choose obscure vocabulary merely to increase difficulty. The keyed synonym must match the target word's actual sense in its local sentence. When a target word is polysemous, distinguish between legitimate dictionary senses using grammatical construction, collocation, and local context. Distractors may use other legitimate dictionary senses when those senses are wrong in the sentence. The rationale must explain why the keyed sense fits the local usage. Keep correct options from being systematically longest or most specific; use comparable grammatical form and approximate information density for distractors without padding for exact character-length equality. Process the whole passage set in this one invocation. Never quote, paraphrase, or imitate any official ETS passage or question.",
+                    reading_v02_generator_instruction(),
                     {key: value for key, value in plan.items() if key not in {"passage_id", "plan_id", "question_plan"}},
                 ),
                 input_keys=("plan",),
@@ -613,10 +675,12 @@ class ReadingV02Pipeline(ReadingPipeline):
             raw_generator = generator_result.parsed
             atomic_write_json(run_dir / "generator_raw.json", raw_generator)
             try:
-                generator = canonicalize_generator_output(raw_generator, plan)
+                permuted_raw, choice_permutation = permute_generator_choices(raw_generator, plan)
+                generator = canonicalize_generator_output(permuted_raw, plan)
             except (TypeError, ValueError) as exc:
                 envelope_errors = [f"generator envelope: {exc}"]
                 generator = None
+                choice_permutation = None
             if generator is not None:
                 atomic_write_json(run_dir / "generator.json", generator)
             generator_errors = envelope_errors + validate_generator_contract(generator, plan, self.schema_paths)
@@ -764,7 +828,9 @@ class ReadingV02Pipeline(ReadingPipeline):
             result["decision"] = "INFRASTRUCTURE_FAILURE" if self.runtime_failures else "QUARANTINE"
         result["checks"]["final_result_contract"] = not result_contract_errors
         result["checks"]["final_result_errors"] = result_contract_errors
-        self._write_invocations_and_provenance(run_dir, run_id, plan, blind, raw_generator)
+        self._write_invocations_and_provenance(
+            run_dir, run_id, plan, blind, raw_generator, choice_permutation
+        )
         atomic_write_json(run_dir / "result.json", result)
         return result
 
@@ -793,12 +859,13 @@ class ReadingV02Pipeline(ReadingPipeline):
         deterministic_errors: list[str] = []
         empirical_warnings: list[str] = []
         deterministic_classification = "HARD_VALIDITY"
+        choice_permutation: dict[str, Any] | None = None
         try:
             generator_result = self._invoke(
                 stage="reading_generator",
                 agent=GENERATOR_AGENT,
                 prompt=self._prompt(
-                    "Generate one original TOEFL ITP-style Reading Comprehension draft. Follow the supplied semantic plan exactly. The model-facing schema contains one required question collection for each type: detail_questions, vocabulary_in_context_questions, inference_questions, main_idea_questions, and reference_questions. Create exactly the requested number in each collection, including an empty array when a quota is zero; together these collections must exactly match question_type_counts and question_count. ordering of the generated questions is free; do not create a flat questions array or attempt to reproduce an exact cross-type order. Return JSON only using the supplied v0.2.2 grouped semantic Generator schema: include the passage, question types, four choices, intended answers, and private evidence/rationale metadata. Do not include passage_id or question item_id; trusted pipeline code attaches those deterministic identity fields after generation. For INFERENCE questions, vary reasoning depth according to what the passage naturally supports. Explicit restatement should not dominate. Some items may require a small supported inference, while genuine supported inference should also occur regularly. Multi-sentence or cross-idea reasoning is appropriate when naturally supported by the passage. Every keyed inference must remain fully entailed by the text. Do not create difficulty through unsupported speculation, forced cross-sentence reasoning, simple negation/reversal, or artificial logical tricks. Distractors should be plausible from passage information but not entailed. For VOCABULARY_IN_CONTEXT questions, both ordinary dictionary senses and context-clarified senses are acceptable. Do not require strong context dependence and do not choose obscure vocabulary merely to increase difficulty. The keyed synonym must match the target word's actual sense in its local sentence. When a target word is polysemous, distinguish between legitimate dictionary senses using grammatical construction, collocation, and local context. Distractors may use other legitimate dictionary senses when those senses are wrong in the sentence. The rationale must explain why the keyed sense fits the local usage. Keep correct options from being systematically longest or most specific; use comparable grammatical form and approximate information density for distractors without padding for exact character-length equality. This is an UNVALIDATED_DRAFT for development inspection only. Never quote, paraphrase, or imitate any official ETS passage or question.",
+                    reading_v02_generator_instruction(draft=True),
                     {key: value for key, value in plan.items() if key not in {"passage_id", "plan_id", "question_plan"}},
                 ),
                 input_keys=("plan",),
@@ -810,10 +877,12 @@ class ReadingV02Pipeline(ReadingPipeline):
             raw_generator = generator_result.parsed
             atomic_write_json(run_dir / "generator_raw.json", raw_generator)
             try:
-                generator = canonicalize_generator_output(raw_generator, plan)
+                permuted_raw, choice_permutation = permute_generator_choices(raw_generator, plan)
+                generator = canonicalize_generator_output(permuted_raw, plan)
             except (TypeError, ValueError) as exc:
                 envelope_errors = [f"generator envelope: {exc}"]
                 generator = None
+                choice_permutation = None
             if generator is not None:
                 atomic_write_json(run_dir / "generator.json", generator)
             generator_errors = envelope_errors + validate_generator_contract(generator, plan, self.schema_paths)
@@ -858,7 +927,9 @@ class ReadingV02Pipeline(ReadingPipeline):
         result_contract_errors = validate_draft_result_contract(result)
         result["checks"]["final_result_contract"] = not result_contract_errors
         result["checks"]["final_result_errors"] = result_contract_errors
-        self._write_invocations_and_provenance(run_dir, run_id, plan, None, raw_generator)
+        self._write_invocations_and_provenance(
+            run_dir, run_id, plan, None, raw_generator, choice_permutation
+        )
         atomic_write_json(run_dir / "result.json", result)
         return result
 

@@ -46,6 +46,7 @@ SCHEMA_PATHS_V02 = {
     "batch_result": SCHEMA_DIR / "reading_batch_result_v0_2.schema.json",
 }
 ANSWER_LABELS = {"A", "B", "C", "D"}
+ANSWER_LABEL_ORDER = ("A", "B", "C", "D")
 SOLVER_LABELS = ANSWER_LABELS | {"AMBIGUOUS", "NONE"}
 GENERATOR_QUESTION_GROUP_FIELDS = {
     "DETAIL": "detail_questions",
@@ -55,6 +56,7 @@ GENERATOR_QUESTION_GROUP_FIELDS = {
     "REFERENCE": "reference_questions",
 }
 CANONICAL_QUESTION_ORDER_VERSION = "reading-v0.2.2-seeded-type-interleave-v1"
+CHOICE_PERMUTATION_VERSION = "reading-v0.2.5-seeded-choice-permutation-v1"
 HARD_VALIDITY = "HARD_VALIDITY"
 EMPIRICAL_FORMAT_WARNING = "EMPIRICAL_FORMAT_WARNING"
 FORMAT_ADHERENCE_FAILURE = "FORMAT_ADHERENCE_FAILURE"
@@ -250,6 +252,171 @@ def canonicalize_generator_output(
             if isinstance(question, dict):
                 question["item_id"] = f"{passage_id}-q{index}"
     return canonical
+
+
+_INTERNAL_ANSWER_LABEL_KEYS = {
+    "answer_label",
+    "correct_answer",
+    "correct_answer_label",
+    "intended_answer",
+    "intended_answer_label",
+    "answer_key",
+    "generator_answer",
+    "generator_answer_label",
+}
+
+
+def _remap_internal_answer_labels(value: Any, original_to_canonical: dict[str, str]) -> None:
+    """Remap explicit nested label metadata without rewriting prose.
+
+    The current Reading evidence schema contains a natural-language rationale
+    only, so this is normally a no-op.  Keeping the traversal here makes the
+    permutation safe for any explicitly keyed label metadata that may be
+    carried by a compatible internal evidence representation; ordinary
+    rationale text is intentionally never parsed or rewritten.
+    """
+
+    if isinstance(value, dict):
+        for key, nested in value.items():
+            if key in _INTERNAL_ANSWER_LABEL_KEYS and isinstance(nested, str):
+                value[key] = original_to_canonical.get(nested, nested)
+            else:
+                _remap_internal_answer_labels(nested, original_to_canonical)
+    elif isinstance(value, list):
+        for nested in value:
+            _remap_internal_answer_labels(nested, original_to_canonical)
+
+
+def _choice_permutation_for_question(
+    *,
+    passage_seed: int,
+    passage_id: str,
+    item_id: str,
+    question_index: int,
+) -> tuple[dict[str, str], dict[str, str], str, str]:
+    """Build one replayable label permutation from only system-owned seed data."""
+
+    seed_material = (
+        f"{CHOICE_PERMUTATION_VERSION}|passage_seed={passage_seed}"
+        f"|passage_id={passage_id}|item_id={item_id}|question_index={question_index}"
+    )
+    seed_digest = hashlib.sha256(seed_material.encode("utf-8")).hexdigest()
+    rng = random.Random(int(seed_digest, 16))
+    original_labels = list(ANSWER_LABEL_ORDER)
+    rng.shuffle(original_labels)
+    canonical_to_original = dict(zip(ANSWER_LABEL_ORDER, original_labels))
+    original_to_canonical = {
+        original: canonical
+        for canonical, original in canonical_to_original.items()
+    }
+    return original_to_canonical, canonical_to_original, seed_material, seed_digest
+
+
+def _permutation_question_references(
+    output: dict[str, Any],
+    plan: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Return raw question objects in the existing trusted interleave order."""
+
+    if "questions" in output:
+        if any(field in output for field in GENERATOR_QUESTION_GROUP_FIELDS.values()):
+            raise ValueError("Generator response must use either flat or grouped questions, not both")
+        questions = output["questions"]
+        if not isinstance(questions, list):
+            raise ValueError("Generator questions must be an array")
+        return questions
+
+    expected_fields = set(GENERATOR_QUESTION_GROUP_FIELDS.values())
+    present_fields = {field for field in expected_fields if field in output}
+    if present_fields != expected_fields:
+        missing = sorted(expected_fields - present_fields)
+        detail = []
+        if missing:
+            detail.append("missing " + ", ".join(missing))
+        raise ValueError("grouped Generator response must contain all type collections (" + "; ".join(detail) + ")")
+
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for question_type, field_name in GENERATOR_QUESTION_GROUP_FIELDS.items():
+        questions = output[field_name]
+        if not isinstance(questions, list):
+            raise ValueError(f"{field_name} must be an array")
+        if not all(isinstance(question, dict) for question in questions):
+            raise ValueError(f"{field_name} must contain only question objects")
+        grouped[question_type] = questions
+    return _interleave_grouped_questions(grouped, plan["seed"])
+
+
+def permute_generator_choices(
+    output: dict[str, Any],
+    plan: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Apply an independent deterministic A/B/C/D permutation per v0.2 item.
+
+    ``output`` may be the model-facing flat or grouped response, or the
+    trusted canonical flat response.  The returned output is always a deep
+    copy, and no identity fields are assigned here.  Planned question
+    identity/index values are used only as stable seed material; the existing
+    canonicalizer still owns persisted identity fields.  The returned
+    provenance records both mapping directions and enough seed material to
+    reconstruct each mapping.
+    """
+
+    if plan.get("schema_version") != "reading-plan-v0.2":
+        raise ValueError("choice permutation requires a Reading v0.2 plan")
+    passage_seed = plan.get("seed")
+    if not isinstance(passage_seed, int) or isinstance(passage_seed, bool):
+        raise ValueError("choice permutation requires an integer passage seed")
+    passage_id = plan.get("passage_id") or passage_id_for_seed(passage_seed)
+    if not isinstance(passage_id, str):
+        raise ValueError("choice permutation requires a Planner-owned passage_id")
+    if not isinstance(output, dict):
+        raise ValueError("choice permutation requires a Generator response object")
+
+    permuted = copy.deepcopy(output)
+    questions = _permutation_question_references(permuted, plan)
+    question_provenance: list[dict[str, Any]] = []
+    for question_index, question in enumerate(questions, 1):
+        if not isinstance(question, dict):
+            raise ValueError(f"question {question_index} must be an object")
+        item_id = f"{passage_id}-q{question_index}"
+        choices = question.get("choices")
+        original_answer = question.get("correct_answer")
+        if not isinstance(choices, dict) or set(choices) != set(ANSWER_LABEL_ORDER):
+            raise ValueError(f"question {item_id} must contain exactly A/B/C/D choices")
+        if original_answer not in ANSWER_LABELS:
+            raise ValueError(f"question {item_id} has an invalid correct_answer")
+
+        original_to_canonical, canonical_to_original, seed_material, seed_digest = (
+            _choice_permutation_for_question(
+                passage_seed=passage_seed,
+                passage_id=passage_id,
+                item_id=item_id,
+                question_index=question_index,
+            )
+        )
+        question["choices"] = {
+            canonical_label: copy.deepcopy(choices[original_label])
+            for canonical_label, original_label in canonical_to_original.items()
+        }
+        question["correct_answer"] = original_to_canonical[original_answer]
+        _remap_internal_answer_labels(question.get("evidence"), original_to_canonical)
+        question_provenance.append({
+            "item_id": item_id,
+            "question_index": question_index,
+            "seed_material": seed_material,
+            "seed_sha256": "sha256:" + seed_digest,
+            "original_to_canonical": original_to_canonical,
+            "canonical_to_original": canonical_to_original,
+        })
+
+    provenance = {
+        "version": CHOICE_PERMUTATION_VERSION,
+        "algorithm": "sha256-seeded Fisher-Yates shuffle of A/B/C/D per question",
+        "passage_seed": passage_seed,
+        "passage_id": passage_id,
+        "questions": question_provenance,
+    }
+    return permuted, provenance
 
 
 def word_count(text: str) -> int:

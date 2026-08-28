@@ -15,18 +15,26 @@ from tempfile import TemporaryDirectory
 from typing import Any
 
 from reading.contracts import (
+    blind_input,
+    CHOICE_PERMUTATION_VERSION,
     EMPIRICAL_FORMAT_WARNING,
     FORMAT_ADHERENCE_FAILURE,
     HARD_VALIDITY,
     canonicalize_generator_output,
     deterministic_diagnostics,
     generator_model_schema_for_plan,
+    permute_generator_choices,
     validate_deterministic,
     validate_generator_contract,
     validate_plan_contract,
     word_count,
 )
 from reading.pipeline import ReadingV02Pipeline, run_reading_batch
+from reading.pipeline import (
+    READING_INFERENCE_GUIDANCE,
+    READING_LENGTH_GUIDANCE,
+    reading_v02_generator_instruction,
+)
 from reading.planner import (
     EMPIRICAL_PASSAGE_LENGTHS,
     EMPIRICAL_PROFILE_PATH,
@@ -241,7 +249,9 @@ class BatchFakeRuntime:
             passage_id = payload["passage_id"] if request.stage != "reading_generator" else f"rc-{payload['seed']:08x}"
             if request.stage == "reading_generator":
                 parsed = variable_generator_fixture(payload)
-                self.generators[parsed["passage_id"]] = parsed
+                worker_plan = build_plan_v02(payload["seed"], domain=payload.get("domain"))
+                canonical = canonicalize_generator_output(parsed, worker_plan)
+                self.generators[parsed["passage_id"]], _permutation = permute_generator_choices(canonical, worker_plan)
             elif request.stage == "reading_reviewer":
                 parsed = reviewer_for(self.generators[passage_id])
             else:
@@ -384,6 +394,138 @@ class ReadingV02BatchTests(unittest.TestCase):
             [question_type for question_type, count in plan["question_type_counts"].items() for _ in range(count)],
         )
 
+    def test_v025_choice_permutation_is_seeded_per_question_and_replayable(self) -> None:
+        plan = build_plan_v02(1201, domain="biology")
+        canonical = canonicalize_generator_output(variable_generator_fixture(plan), plan)
+        first, first_provenance = permute_generator_choices(canonical, plan)
+        second, second_provenance = permute_generator_choices(canonical, plan)
+
+        self.assertEqual(first, second)
+        self.assertEqual(first_provenance, second_provenance)
+        self.assertEqual(first_provenance["version"], CHOICE_PERMUTATION_VERSION)
+        mappings = {
+            tuple(record["canonical_to_original"].items())
+            for record in first_provenance["questions"]
+        }
+        self.assertGreater(len(mappings), 1)
+        for record in first_provenance["questions"]:
+            self.assertEqual(set(record["original_to_canonical"]), {"A", "B", "C", "D"})
+            self.assertEqual(set(record["canonical_to_original"]), {"A", "B", "C", "D"})
+            for original, canonical_label in record["original_to_canonical"].items():
+                self.assertEqual(record["canonical_to_original"][canonical_label], original)
+
+    def test_v025_choice_permutation_preserves_text_and_evidence_and_remaps_answer(self) -> None:
+        plan = build_plan_v02(1202, domain="biology")
+        canonical = canonicalize_generator_output(variable_generator_fixture(plan), plan)
+        for question in canonical["questions"]:
+            question["evidence"]["answer_label"] = question["correct_answer"]
+        original = copy.deepcopy(canonical)
+        permuted, provenance = permute_generator_choices(canonical, plan)
+
+        for original_question, permuted_question, record in zip(
+            original["questions"], permuted["questions"], provenance["questions"]
+        ):
+            self.assertEqual(permuted_question["stem"], original_question["stem"])
+            self.assertEqual(permuted_question["evidence"]["paragraph"], original_question["evidence"]["paragraph"])
+            self.assertEqual(permuted_question["evidence"]["anchor"], original_question["evidence"]["anchor"])
+            self.assertEqual(permuted_question["evidence"]["rationale"], original_question["evidence"]["rationale"])
+            for original_label, canonical_label in record["original_to_canonical"].items():
+                self.assertEqual(
+                    permuted_question["choices"][canonical_label],
+                    original_question["choices"][original_label],
+                )
+            self.assertEqual(
+                permuted_question["correct_answer"],
+                record["original_to_canonical"][original_question["correct_answer"]],
+            )
+            self.assertEqual(
+                permuted_question["evidence"]["answer_label"],
+                permuted_question["correct_answer"],
+            )
+        self.assertEqual(canonical, original)
+
+    def test_v025_pipeline_persists_raw_and_permuted_canonical_inputs(self) -> None:
+        plan = build_plan_v02(1203, domain="biology")
+        raw = variable_generator_fixture(plan)
+        canonical = canonicalize_generator_output(raw, plan)
+        permuted, expected_provenance = permute_generator_choices(canonical, plan)
+        requests: list[Any] = []
+
+        class PermutationRuntime:
+            provider = "fake"
+            cli_version = "offline-v0.2.5"
+
+            def invoke(self, request):
+                requests.append(request)
+                if request.stage == "reading_generator":
+                    parsed = raw
+                elif request.stage == "reading_reviewer":
+                    parsed = reviewer_for(permuted)
+                else:
+                    parsed = solver_for(permuted)
+                return InvocationResult(
+                    stage=request.stage,
+                    agent_name=request.agent_name,
+                    invocation_id=f"permutation-{len(requests)}",
+                    started_at="2026-01-01T00:00:00+00:00",
+                    completed_at="2026-01-01T00:00:01+00:00",
+                    provider=self.provider,
+                    model="offline",
+                    cli_version=self.cli_version,
+                    exit_code=0,
+                    parsed=copy.deepcopy(parsed),
+                    input_keys=list(request.input_keys),
+                )
+
+        with TemporaryDirectory() as directory:
+            result = ReadingV02Pipeline(PermutationRuntime()).run(
+                plan["seed"], domain=plan["domain"], output_dir=Path(directory)
+            )
+            root = Path(directory)
+            self.assertEqual(result["decision"], "ACCEPT")
+            self.assertEqual(json.loads((root / "generator_raw.json").read_text(encoding="utf-8")), raw)
+            self.assertEqual(json.loads((root / "generator.json").read_text(encoding="utf-8")), permuted)
+            provenance = json.loads((root / "provenance" / "provenance.json").read_text(encoding="utf-8"))
+            self.assertEqual(provenance["reading_version"], "v0.2.5")
+            self.assertEqual(provenance["choice_permutation"], expected_provenance)
+
+            reviewer_payload = json.loads(requests[1].prompt.split("INPUT_JSON:\n", 1)[1])
+            solver_payload = json.loads(requests[2].prompt.split("INPUT_JSON:\n", 1)[1])
+            self.assertEqual(reviewer_payload, blind_input(permuted, schema_version="reading-blind-input-v0.2"))
+            self.assertEqual(solver_payload, reviewer_payload)
+            self.assertNotIn("correct_answer", json.dumps(reviewer_payload))
+            self.assertNotIn("evidence", json.dumps(reviewer_payload))
+            self.assertEqual(validate_deterministic(permuted, plan), [])
+
+    def test_v025_permutation_keeps_group_quota_and_interleaving_unchanged(self) -> None:
+        plan = quota_plan(1204, {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 3, "INFERENCE": 2, "MAIN_IDEA": 1, "REFERENCE": 1})
+        canonical = canonicalize_generator_output(grouped_model_fixture(plan), plan)
+        permuted, _provenance = permute_generator_choices(canonical, plan)
+        self.assertEqual(
+            [question["question_type"] for question in permuted["questions"]],
+            [question["question_type"] for question in canonical["questions"]],
+        )
+        self.assertEqual(Counter(question["question_type"] for question in permuted["questions"]), Counter(plan["question_type_counts"]))
+        self.assertEqual(
+            [question["item_id"] for question in permuted["questions"]],
+            [f"{plan['passage_id']}-q{index}" for index in range(1, plan["question_count"] + 1)],
+        )
+
+    def test_v025_permutation_precedes_canonicalization_for_grouped_model_output(self) -> None:
+        plan = quota_plan(1206, {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 2, "INFERENCE": 2, "MAIN_IDEA": 1, "REFERENCE": 1})
+        raw = grouped_model_fixture(plan)
+        raw_snapshot = copy.deepcopy(raw)
+        permuted_raw, _provenance = permute_generator_choices(raw, plan)
+        canonical = canonicalize_generator_output(permuted_raw, plan)
+
+        self.assertEqual(raw, raw_snapshot)
+        self.assertEqual(validate_generator_contract(canonical, plan), [])
+        self.assertEqual(len(canonical["questions"]), plan["question_count"])
+        self.assertEqual(
+            Counter(question["question_type"] for question in canonical["questions"]),
+            Counter(plan["question_type_counts"]),
+        )
+
     def test_wrong_grouped_model_quota_fails_schema_and_canonicalization(self) -> None:
         plan = quota_plan(1106, {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 3, "MAIN_IDEA": 0, "REFERENCE": 1})
         raw = grouped_model_fixture(plan)
@@ -423,8 +565,9 @@ class ReadingV02BatchTests(unittest.TestCase):
             question["item_id"] = f"{raw['passage_id']}-q{index}"
         raw_snapshot = copy.deepcopy(raw)
         canonical = canonicalize_generator_output(raw, plan)
-        reviewer = reviewer_for(canonical)
-        solver = solver_for(canonical)
+        permuted, _permutation = permute_generator_choices(canonical, plan)
+        reviewer = reviewer_for(permuted)
+        solver = solver_for(permuted)
 
         class LegacyIdentityRuntime:
             provider = "fake"
@@ -466,10 +609,12 @@ class ReadingV02BatchTests(unittest.TestCase):
             self.assertEqual(provenance["generator_raw_artifact"], "generator_raw.json")
             self.assertTrue(provenance["generator_raw_sha256"].startswith("sha256:"))
 
-            for raw_question, canonical_question in zip(raw_snapshot["questions"], result["generator"]["questions"]):
+            for raw_question, canonical_question, expected_question in zip(
+                raw_snapshot["questions"], result["generator"]["questions"], permuted["questions"]
+            ):
                 self.assertEqual(canonical_question["stem"], raw_question["stem"])
-                self.assertEqual(canonical_question["choices"], raw_question["choices"])
-                self.assertEqual(canonical_question["correct_answer"], raw_question["correct_answer"])
+                self.assertEqual(canonical_question["choices"], expected_question["choices"])
+                self.assertEqual(canonical_question["correct_answer"], expected_question["correct_answer"])
                 self.assertEqual(canonical_question["evidence"], raw_question["evidence"])
 
             self.assertEqual(
@@ -641,6 +786,33 @@ class ReadingV02BatchTests(unittest.TestCase):
             "decided by",
         ):
             self.assertNotIn(forbidden, draft_request.prompt)
+
+    def test_v025_generator_guidance_is_synchronized_without_new_quotas(self) -> None:
+        trace = BatchTrace()
+        with TemporaryDirectory() as directory:
+            ReadingV02Pipeline(BatchFakeRuntime("prompt", trace)).run(
+                1205, domain="biology", output_dir=Path(directory)
+            )
+        generator_request = next(request for request in trace.requests if request.stage == "reading_generator")
+        prompt = generator_request.prompt
+        agent = " ".join(
+            (ROOT / ".claude" / "agents" / "toefl-itp-reading-generator-v0.2.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        self.assertIn(" ".join(READING_INFERENCE_GUIDANCE.split()), prompt)
+        self.assertIn(" ".join(READING_LENGTH_GUIDANCE.split()), prompt)
+        self.assertIn(" ".join(READING_INFERENCE_GUIDANCE.split()), agent)
+        self.assertIn(" ".join(READING_LENGTH_GUIDANCE.split()), agent)
+        self.assertIn(reading_v02_generator_instruction(), prompt)
+        self.assertNotIn("%", prompt)
+        self.assertNotIn("25/25/25/25", prompt)
+        self.assertNotIn("answer-position quota", prompt.casefold())
+        self.assertNotIn("%", agent)
+        self.assertNotIn("25/25/25/25", agent)
+        self.assertNotIn("answer-position quota", agent.casefold())
+        self.assertIn("both ordinary dictionary senses and context-clarified senses are acceptable", prompt)
+        self.assertIn("both ordinary dictionary senses and context-clarified senses are acceptable", agent)
 
     def test_historical_v02_passages_001_and_002_are_unchanged(self) -> None:
         required = [HISTORICAL_ARTIFACT_ROOT / relative_path for relative_path in HISTORICAL_ARTIFACT_HASHES]
