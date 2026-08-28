@@ -12,6 +12,8 @@ import hashlib
 import json
 import random
 import re
+import string
+import unicodedata
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -266,6 +268,112 @@ def _contains_anchor(paragraph: str, anchor: str) -> bool:
     return _normalized_text(anchor) in _normalized_text(paragraph)
 
 
+_TARGET_STEM_PREFIX = re.compile(r"^\s*The\s+(?:word|phrase)\b", flags=re.IGNORECASE)
+_TARGET_STEM_PATTERN = re.compile(
+    r"^\s*The\s+(?:word|phrase)\s+(?P<target>.+?)\s+in\s+"
+    r"(?P<location>(?:paragraph\s+\d+)|(?:(?:the\s+)?(?:first|second|third|fourth|fifth|sixth|seventh|eighth)\s+paragraph))\s+"
+    r"(?:refers\s+to(?:\s+.+)?|is\s+closest\s+in\s+meaning\s+to)\s*$",
+    flags=re.IGNORECASE,
+)
+_PARAGRAPH_ORDINALS = {
+    "first": 1,
+    "second": 2,
+    "third": 3,
+    "fourth": 4,
+    "fifth": 5,
+    "sixth": 6,
+    "seventh": 7,
+    "eighth": 8,
+}
+_TARGET_QUESTION_TYPES = {"REFERENCE", "VOCABULARY_IN_CONTEXT"}
+
+
+def _target_metadata_from_stem(stem: str) -> tuple[str, int] | None:
+    """Extract the target and claimed paragraph from a conventional target stem.
+
+    The Reading schemas do not have target-text or target-location fields.  A
+    narrow parser is therefore necessary for the existing v0.2 representation;
+    stems outside this explicit target-question form are left to the existing
+    schema/content checks.
+    """
+
+    match = _TARGET_STEM_PATTERN.fullmatch(stem)
+    if match is None:
+        return None
+    location = match.group("location").casefold()
+    numeric_location = re.fullmatch(r"paragraph\s+(\d+)", location)
+    if numeric_location is not None:
+        paragraph_number = int(numeric_location.group(1))
+    else:
+        ordinal = re.fullmatch(
+            r"(?:the\s+)?(first|second|third|fourth|fifth|sixth|seventh|eighth)\s+paragraph",
+            location,
+        )
+        if ordinal is None:
+            return None
+        paragraph_number = _PARAGRAPH_ORDINALS[ordinal.group(1)]
+    target = match.group("target").strip()
+    return target, paragraph_number
+
+
+_SURFACE_TRANSLATION = str.maketrans({
+    "’": "'",
+    "‘": "'",
+    "‐": "-",
+    "‑": "-",
+    "‒": "-",
+    "–": "-",
+    "—": "-",
+})
+_SURFACE_STRIP_CHARS = string.punctuation + "“”‘’‐‑‒–—"
+
+
+def _surface_text(value: str) -> str:
+    """Normalize only case, whitespace, quotes, and edge punctuation."""
+
+    normalized = unicodedata.normalize("NFC", value).translate(_SURFACE_TRANSLATION)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    return normalized.strip(_SURFACE_STRIP_CHARS).strip().casefold()
+
+
+def _contains_surface_expression(paragraph: str, target: str) -> bool:
+    """Check for an exact token sequence, never a fuzzy substring match."""
+
+    target_text = _surface_text(target)
+    paragraph_text = _surface_text(paragraph)
+    if not target_text:
+        return False
+    escaped_target = re.escape(target_text)
+    return re.search(
+        rf"(?<![\w'-]){escaped_target}(?![\w'-])",
+        paragraph_text,
+        flags=re.UNICODE,
+    ) is not None
+
+
+def _target_presence_errors(question: dict[str, Any], paragraphs: list[str]) -> list[str]:
+    question_type = question["question_type"]
+    if question_type not in _TARGET_QUESTION_TYPES:
+        return []
+    stem = question["stem"]
+    if not _TARGET_STEM_PREFIX.match(stem):
+        return []
+    metadata = _target_metadata_from_stem(stem)
+    item_id = question["item_id"]
+    diagnostic_prefix = f"generator: {item_id} {question_type}_TARGET"
+    if metadata is None:
+        return [f"{diagnostic_prefix}_METADATA_UNPARSEABLE"]
+    target, paragraph_number = metadata
+    if not 1 <= paragraph_number <= len(paragraphs):
+        return [f"{diagnostic_prefix}_LOCATION_INVALID: paragraph {paragraph_number} is out of range"]
+    if not _contains_surface_expression(paragraphs[paragraph_number - 1], target):
+        return [
+            f"{diagnostic_prefix}_NOT_FOUND: targeted expression {target!r} is not present "
+            f"in paragraph {paragraph_number}"
+        ]
+    return []
+
+
 def _duplicate_text(values: list[str]) -> bool:
     normalized = [_normalized_text(value).strip(" .,:;!?\"'()[]") for value in values]
     return len(set(normalized)) != len(normalized)
@@ -299,6 +407,11 @@ def validate_generator_contract(
         return errors
     questions = output["questions"]
     passage_id = output["passage_id"]
+    is_v02 = (
+        (plan is not None and plan.get("schema_version") == "reading-plan-v0.2")
+        or output.get("schema_version") == "reading-generator-v0.2"
+    )
+    paragraphs = split_paragraphs(output["passage"])
     seen_ids: set[str] = set()
     seen_types: list[str] = []
     for index, question in enumerate(questions, 1):
@@ -313,13 +426,13 @@ def validate_generator_contract(
         if _duplicate_text(list(choices.values())):
             errors.append(f"generator: question {item_id} has duplicate answer choices")
         evidence = question["evidence"]
-        paragraphs = split_paragraphs(output["passage"])
         paragraph_number = evidence["paragraph"]
         if paragraph_number > len(paragraphs):
             errors.append(f"generator: {item_id} evidence paragraph {paragraph_number} is out of range")
         elif not _contains_anchor(paragraphs[paragraph_number - 1], evidence["anchor"]):
             errors.append(f"generator: {item_id} evidence anchor is not present in its paragraph")
-    is_v02 = plan is not None and plan.get("schema_version") == "reading-plan-v0.2"
+        if is_v02:
+            errors.extend(_target_presence_errors(question, paragraphs))
     if not is_v02 and sorted(seen_types) != sorted(QUESTION_TYPES):
         errors.append(f"generator: question types must contain exactly {list(QUESTION_TYPES)}")
     if plan is not None:
