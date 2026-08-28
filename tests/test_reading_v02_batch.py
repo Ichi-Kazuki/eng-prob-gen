@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import inspect
 import json
 import threading
 import time
@@ -26,7 +27,14 @@ from reading.contracts import (
     word_count,
 )
 from reading.pipeline import ReadingV02Pipeline, run_reading_batch
-from reading.planner import build_plan_v02, passage_id_for_seed
+from reading.planner import (
+    EMPIRICAL_PASSAGE_LENGTHS,
+    EMPIRICAL_PROFILE_PATH,
+    QUESTION_COUNT_WEIGHTS,
+    QUESTION_TYPE_WEIGHTS,
+    build_plan_v02,
+    passage_id_for_seed,
+)
 from runtime.adapters import InvocationResult, RuntimeInvocationError
 from shared.schema_validation import schema_errors
 
@@ -257,6 +265,42 @@ class BatchFakeRuntime:
 
 
 class ReadingV02BatchTests(unittest.TestCase):
+    def test_planner_uses_persisted_empirical_passage_lengths(self) -> None:
+        profile = json.loads(EMPIRICAL_PROFILE_PATH.read_text(encoding="utf-8"))
+        persisted = tuple(
+            measurement["passage_word_count_approx"]
+            for measurement in profile["passage_measurements"]
+        )
+        self.assertEqual(len(persisted), 20)
+        self.assertEqual(EMPIRICAL_PASSAGE_LENGTHS, persisted)
+        for seed in range(1001, 1101):
+            self.assertIn(build_plan_v02(seed)["target_words"], persisted)
+
+    def test_same_seed_reproduces_empirical_length_target(self) -> None:
+        first = build_plan_v02(20260828, domain="biology")
+        second = build_plan_v02(20260828, domain="biology")
+        self.assertEqual(first, second)
+        self.assertIn(first["target_words"], EMPIRICAL_PASSAGE_LENGTHS)
+
+    def test_v023_planner_has_no_fixed_high_end_target_policy(self) -> None:
+        planner_source = inspect.getsource(build_plan_v02)
+        self.assertNotIn("280, 300, 320", planner_source)
+        self.assertNotEqual(set(EMPIRICAL_PASSAGE_LENGTHS), {280, 300, 320})
+
+    def test_question_quota_weights_and_behavior_remain_unchanged(self) -> None:
+        self.assertEqual(
+            QUESTION_COUNT_WEIGHTS,
+            ((7, 2), (8, 2), (9, 3), (10, 6), (11, 3), (12, 3), (14, 1)),
+        )
+        self.assertEqual(
+            QUESTION_TYPE_WEIGHTS,
+            (("DETAIL", 74), ("VOCABULARY_IN_CONTEXT", 63), ("INFERENCE", 27), ("MAIN_IDEA", 15), ("REFERENCE", 21)),
+        )
+        for seed in range(1001, 1011):
+            plan = build_plan_v02(seed)
+            self.assertEqual(sum(plan["question_type_counts"].values()), plan["question_count"])
+            self.assertEqual(Counter(plan["question_plan"]), Counter(plan["question_type_counts"]))
+
     def test_plan_specific_model_schema_enforces_d2_v4_i3_m0_r1(self) -> None:
         plan = quota_plan(1101, {
             "DETAIL": 2,
@@ -530,8 +574,16 @@ class ReadingV02BatchTests(unittest.TestCase):
             )
         self.assertIn("exactly match question_type_counts", generator_request.prompt)
         self.assertIn("ordering of the generated questions is free", generator_request.prompt)
+        self.assertIn("combining or interpreting passage information", generator_request.prompt)
+        self.assertIn("context-dependent senses", generator_request.prompt)
+        self.assertIn("approximate information density", generator_request.prompt)
+        self.assertIn("without padding for exact character-length equality", generator_request.prompt)
         self.assertNotIn("exact planned question_plan order", generator_request.prompt)
-        self.assertIn("question_type_counts", (ROOT / ".claude" / "agents" / "toefl-itp-reading-generator-v0.2.md").read_text(encoding="utf-8"))
+        generator_agent = (ROOT / ".claude" / "agents" / "toefl-itp-reading-generator-v0.2.md").read_text(encoding="utf-8")
+        self.assertIn("question_type_counts", generator_agent)
+        self.assertIn("combine or interpret", generator_agent)
+        self.assertIn("disambiguated", generator_agent)
+        self.assertIn("approximate information", generator_agent)
 
     def test_historical_v02_passages_001_and_002_are_unchanged(self) -> None:
         required = [HISTORICAL_ARTIFACT_ROOT / relative_path for relative_path in HISTORICAL_ARTIFACT_HASHES]

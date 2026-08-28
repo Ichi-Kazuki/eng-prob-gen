@@ -7,6 +7,7 @@ in ``analysis/reading_v0_2_empirical_profile.json``.  It never calls a model.
 
 from __future__ import annotations
 
+import json
 import random
 from collections import Counter
 from pathlib import Path
@@ -34,6 +35,40 @@ QUESTION_TYPES = (
 )
 PLAN_SCHEMA_PATH = Path(__file__).resolve().parent / "schemas" / "reading_plan.schema.json"
 PLAN_V02_SCHEMA_PATH = Path(__file__).resolve().parent / "schemas" / "reading_plan_v0_2.schema.json"
+EMPIRICAL_PROFILE_PATH = Path(__file__).resolve().parents[1] / "analysis" / "reading_v0_2_empirical_profile.json"
+
+
+def _load_empirical_passage_lengths(profile_path: Path) -> tuple[int, ...]:
+    """Load the persisted official-derived passage length observations.
+
+    The Planner samples the observations themselves rather than fitting a
+    parametric distribution.  Failing closed here prevents a missing or
+    malformed calibration profile from silently restoring an unsupported
+    fallback target policy.
+    """
+
+    try:
+        profile = json.loads(profile_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"could not load Reading empirical profile: {profile_path}") from exc
+
+    measurements = profile.get("passage_measurements") if isinstance(profile, dict) else None
+    if not isinstance(measurements, list) or not measurements:
+        raise RuntimeError("Reading empirical profile must contain passage_measurements")
+
+    lengths: list[int] = []
+    for index, measurement in enumerate(measurements, 1):
+        value = measurement.get("passage_word_count_approx") if isinstance(measurement, dict) else None
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            raise RuntimeError(
+                "Reading empirical profile contains an invalid passage length "
+                f"at passage_measurements[{index - 1}]"
+            )
+        lengths.append(value)
+    return tuple(lengths)
+
+
+EMPIRICAL_PASSAGE_LENGTHS = _load_empirical_passage_lengths(EMPIRICAL_PROFILE_PATH)
 
 # These are derived from the small 20-passage B-E measurement, not copied
 # official content.  Keeping the weights explicit makes replay behavior easy
@@ -111,7 +146,7 @@ def build_plan_v02(seed: int, domain: str | None = None) -> dict[str, Any]:
     _validate_seed_and_domain(seed, domain)
     rng = random.Random(seed)
     selected_domain = domain or rng.choice(ALLOWED_DOMAINS)
-    target_words = rng.choice((280, 300, 320))
+    target_words = rng.choice(EMPIRICAL_PASSAGE_LENGTHS)
     question_count = _weighted_choice(rng, QUESTION_COUNT_WEIGHTS)
     question_plan = [
         _weighted_choice(rng, QUESTION_TYPE_WEIGHTS)
