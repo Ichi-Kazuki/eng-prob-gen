@@ -8,6 +8,7 @@ import json
 import threading
 import time
 import unittest
+from collections import Counter
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Any
@@ -16,6 +17,7 @@ from reading.contracts import (
     EMPIRICAL_FORMAT_WARNING,
     FORMAT_ADHERENCE_FAILURE,
     HARD_VALIDITY,
+    canonicalize_generator_output,
     deterministic_diagnostics,
     validate_deterministic,
     validate_generator_contract,
@@ -23,7 +25,7 @@ from reading.contracts import (
     word_count,
 )
 from reading.pipeline import ReadingV02Pipeline, run_reading_batch
-from reading.planner import build_plan_v02
+from reading.planner import build_plan_v02, passage_id_for_seed
 from runtime.adapters import InvocationResult, RuntimeInvocationError
 
 from tests.test_reading_pipeline import generator_fixture
@@ -214,6 +216,100 @@ class BatchFakeRuntime:
 
 
 class ReadingV02BatchTests(unittest.TestCase):
+    def test_planner_identity_envelope_does_not_change_semantic_generator_fields(self) -> None:
+        plan = build_plan_v02(1001, domain="biology")
+        self.assertEqual(plan["passage_id"], passage_id_for_seed(plan["seed"]))
+        self.assertEqual(plan["passage_id"], build_plan_v02(1001, domain="biology")["passage_id"])
+
+        raw = variable_generator_fixture(plan)
+        raw["passage_id"] = "rc-legacy-model-choice"
+        for index, question in enumerate(raw["questions"], 1):
+            question["item_id"] = f"{raw['passage_id']}-q{index}"
+        raw_snapshot = copy.deepcopy(raw)
+
+        canonical = canonicalize_generator_output(raw, plan)
+        self.assertEqual(canonical["passage_id"], plan["passage_id"])
+        self.assertEqual(
+            [question["item_id"] for question in canonical["questions"]],
+            [f"{plan['passage_id']}-q{index}" for index in range(1, len(raw["questions"]) + 1)],
+        )
+        self.assertEqual(raw, raw_snapshot)
+        self.assertEqual(validate_generator_contract(canonical, plan), [])
+        for raw_question, canonical_question in zip(raw["questions"], canonical["questions"]):
+            for field in ("question_type", "stem", "choices", "correct_answer", "evidence"):
+                self.assertEqual(canonical_question[field], raw_question[field])
+
+    def test_v02_pipeline_binds_legacy_model_identity_and_preserves_raw_artifact(self) -> None:
+        plan = build_plan_v02(1001, domain="biology")
+        raw = variable_generator_fixture(plan)
+        raw["passage_id"] = "rc-model-selected"
+        for index, question in enumerate(raw["questions"], 1):
+            question["item_id"] = f"{raw['passage_id']}-q{index}"
+        raw_snapshot = copy.deepcopy(raw)
+        canonical = canonicalize_generator_output(raw, plan)
+        reviewer = reviewer_for(canonical)
+        solver = solver_for(canonical)
+
+        class LegacyIdentityRuntime:
+            provider = "fake"
+            cli_version = "offline-legacy-identity"
+
+            def __init__(self) -> None:
+                self.requests: list[Any] = []
+
+            def invoke(self, request):
+                self.requests.append(request)
+                parsed = {
+                    "reading_generator": raw_snapshot,
+                    "reading_reviewer": reviewer,
+                    "reading_solver": solver,
+                }[request.stage]
+                return InvocationResult(
+                    stage=request.stage,
+                    agent_name=request.agent_name,
+                    invocation_id=f"legacy-{len(self.requests)}",
+                    started_at="2026-01-01T00:00:00+00:00",
+                    completed_at="2026-01-01T00:01:00+00:00",
+                    provider=self.provider,
+                    model="offline",
+                    cli_version=self.cli_version,
+                    exit_code=0,
+                    parsed=copy.deepcopy(parsed),
+                    input_keys=list(request.input_keys),
+                )
+
+        runtime = LegacyIdentityRuntime()
+        with TemporaryDirectory() as directory:
+            result = ReadingV02Pipeline(runtime).run(1001, domain="biology", output_dir=Path(directory))
+            root = Path(directory)
+            self.assertEqual(result["decision"], "ACCEPT")
+            self.assertEqual(result["passage_id"], plan["passage_id"])
+            self.assertEqual(result["generator"]["passage_id"], plan["passage_id"])
+            self.assertEqual(json.loads((root / "generator_raw.json").read_text(encoding="utf-8")), raw_snapshot)
+            provenance = json.loads((root / "provenance" / "provenance.json").read_text(encoding="utf-8"))
+            self.assertEqual(provenance["generator_raw_artifact"], "generator_raw.json")
+            self.assertTrue(provenance["generator_raw_sha256"].startswith("sha256:"))
+
+            for raw_question, canonical_question in zip(raw_snapshot["questions"], result["generator"]["questions"]):
+                self.assertEqual(canonical_question["stem"], raw_question["stem"])
+                self.assertEqual(canonical_question["choices"], raw_question["choices"])
+                self.assertEqual(canonical_question["correct_answer"], raw_question["correct_answer"])
+                self.assertEqual(canonical_question["evidence"], raw_question["evidence"])
+
+            self.assertEqual(
+                Counter(question["question_type"] for question in result["generator"]["questions"]),
+                Counter(plan["question_type_counts"]),
+            )
+            self.assertEqual(result["checks"]["blind_errors"], [])
+            self.assertTrue(result["checks"]["reviewer_contract"])
+            self.assertTrue(result["checks"]["solver_contract"])
+
+        self.assertEqual(len(runtime.requests), 3)
+        for request in runtime.requests[1:]:
+            payload = json.loads(request.prompt.split("INPUT_JSON:\n", 1)[1])
+            self.assertEqual(payload["passage_id"], plan["passage_id"])
+            self.assertTrue(all(set(question) == {"item_id", "number", "stem", "choices"} for question in payload["questions"]))
+
     def test_variable_plan_is_replayable_and_repeated_types_are_valid(self) -> None:
         plan = build_plan_v02(1001, domain="biology")
         self.assertEqual(plan, build_plan_v02(1001, domain="biology"))

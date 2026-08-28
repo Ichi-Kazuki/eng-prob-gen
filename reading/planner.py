@@ -69,6 +69,13 @@ def _validate_seed_and_domain(seed: int, domain: str | None) -> None:
         raise ValueError(f"unsupported Reading domain: {domain!r}")
 
 
+def passage_id_for_seed(seed: int) -> str:
+    """Return the deterministic, Planner-owned Reading passage identity."""
+
+    _validate_seed_and_domain(seed, None)
+    return f"rc-{seed:08x}"
+
+
 def build_plan_v01(seed: int, domain: str | None = None) -> dict[str, Any]:
     """Build the historical, fixed five-question v0.1 plan."""
 
@@ -79,6 +86,7 @@ def build_plan_v01(seed: int, domain: str | None = None) -> dict[str, Any]:
     plan = {
         "schema_version": "reading-plan-v0.1",
         "plan_id": f"rp-{seed:08x}",
+        "passage_id": passage_id_for_seed(seed),
         "seed": seed,
         "domain": selected_domain,
         "target_words": target_words,
@@ -116,6 +124,7 @@ def build_plan_v02(seed: int, domain: str | None = None) -> dict[str, Any]:
     plan = {
         "schema_version": "reading-plan-v0.2",
         "plan_id": f"rp-v02-{seed:08x}",
+        "passage_id": passage_id_for_seed(seed),
         "seed": seed,
         "domain": selected_domain,
         "target_words": target_words,

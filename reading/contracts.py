@@ -17,7 +17,7 @@ from typing import Any
 
 from shared.schema_validation import load_schema, schema_errors
 
-from .planner import QUESTION_TYPES
+from .planner import QUESTION_TYPES, passage_id_for_seed
 
 
 SCHEMA_DIR = Path(__file__).resolve().parent / "schemas"
@@ -84,6 +84,13 @@ def validate_plan_contract(
     if schema_paths is None:
         schema_paths = SCHEMA_PATHS_V02 if isinstance(plan, dict) and plan.get("schema_version") == "reading-plan-v0.2" else SCHEMA_PATHS
     errors = _schema_errors(plan, "plan", schema_paths)
+    if not errors and isinstance(plan, dict) and "passage_id" in plan:
+        try:
+            expected_id = passage_id_for_seed(plan["seed"])
+        except (TypeError, ValueError):
+            expected_id = None
+        if expected_id is None or plan.get("passage_id") != expected_id:
+            errors.append("plan: passage_id must equal the deterministic Planner id")
     if not errors and isinstance(plan, dict) and plan.get("schema_version") == "reading-plan-v0.2":
         if plan.get("question_count") != len(plan.get("question_plan", [])):
             errors.append("plan: question_count must equal the length of question_plan")
@@ -97,6 +104,36 @@ def validate_plan_contract(
         if sum(plan.get("question_type_counts", {}).values()) != plan.get("question_count"):
             errors.append("plan: question_type_counts must sum to question_count")
     return errors
+
+
+def canonicalize_generator_output(
+    raw_output: Any,
+    plan: dict[str, Any],
+) -> dict[str, Any]:
+    """Bind Planner-owned identity fields without changing semantic content.
+
+    The raw model response is copied before the envelope is applied.  A
+    legacy response may contain ``passage_id`` or question ``item_id`` fields;
+    neither is authoritative.  Those deterministic identity fields are
+    replaced from the validated Planner state, while passage text, question
+    text, choices, answers, types, and evidence are left untouched.
+    """
+
+    if not isinstance(raw_output, dict):
+        raise ValueError("Generator response must be an object")
+    plan_errors = validate_plan_contract(plan)
+    if plan_errors:
+        raise ValueError("cannot build canonical Generator envelope: " + "; ".join(plan_errors))
+
+    canonical = copy.deepcopy(raw_output)
+    passage_id = plan.get("passage_id") or passage_id_for_seed(plan["seed"])
+    canonical["passage_id"] = passage_id
+    questions = canonical.get("questions")
+    if isinstance(questions, list):
+        for index, question in enumerate(questions, 1):
+            if isinstance(question, dict):
+                question["item_id"] = f"{passage_id}-q{index}"
+    return canonical
 
 
 def word_count(text: str) -> int:

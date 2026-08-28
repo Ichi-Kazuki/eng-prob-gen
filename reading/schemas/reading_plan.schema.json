@@ -8,6 +8,7 @@
   "properties": {
     "schema_version": {"const": "reading-plan-v0.1"},
     "plan_id": {"type": "string", "pattern": "^rp-[0-9a-f]{8,}$"},
+    "passage_id": {"type": "string", "pattern": "^rc-[0-9a-f]{8}$"},
     "seed": {"type": "integer", "minimum": 0},
     "domain": {"enum": ["biology", "geology", "astronomy", "anthropology", "history", "ecology", "technology", "earth science"]},
     "target_words": {"type": "integer", "minimum": 260, "maximum": 340},

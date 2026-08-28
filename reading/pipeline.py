@@ -34,6 +34,7 @@ from .contracts import (
     SCHEMA_PATHS_V02,
     blind_input,
     blind_input_errors,
+    canonicalize_generator_output,
     deterministic_diagnostics,
     payload_sha256,
     post_blind_comparison,
@@ -47,7 +48,7 @@ from .contracts import (
     validate_solver_contract,
 )
 from .diagnostics import aggregate_diagnostics, diagnostics_for_result
-from .planner import build_plan_v01, build_plan_v02
+from .planner import build_plan_v01, build_plan_v02, passage_id_for_seed
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -64,6 +65,7 @@ AGENT_PATHS_V02 = {
     REVIEWER_AGENT: ROOT / ".claude" / "agents" / f"{REVIEWER_AGENT}-v0.2.md",
     SOLVER_AGENT: ROOT / ".claude" / "agents" / f"{SOLVER_AGENT}-v0.2.md",
 }
+GENERATOR_MODEL_SCHEMA_V02_PATH = ROOT / "reading" / "schemas" / "reading_generator_model_v0_2.schema.json"
 DEFAULT_MODEL = os.environ.get("READING_MODEL", "sonnet")
 DEFAULT_TIMEOUT_SECONDS = float(os.environ.get("READING_TIMEOUT_SECONDS", "300"))
 DEFAULT_MAX_BUDGET_USD = os.environ.get("READING_MAX_BUDGET_USD", "0.60")
@@ -146,7 +148,13 @@ class ReadingPipeline:
         schema_key: str,
         output_dir: Path,
         isolate_workspace: bool,
+        transport_schema_path: Path | None = None,
     ) -> InvocationResult:
+        transport_output_schema = (
+            json.loads(transport_schema_path.read_text(encoding="utf-8"))
+            if transport_schema_path is not None
+            else None
+        )
         request = InvocationRequest(
             stage=stage,
             agent_name=agent,
@@ -154,6 +162,7 @@ class ReadingPipeline:
             prompt=prompt,
             input_keys=input_keys,
             formal_output_schema=SCHEMA_PATHS[schema_key],
+            transport_output_schema=transport_output_schema,
             model=self.model,
             cwd=ROOT,
             sandbox="read-only" if getattr(self.runtime, "provider", "") == "codex" else None,
@@ -203,8 +212,10 @@ class ReadingPipeline:
         run_dir.mkdir(parents=True, exist_ok=True)
         atomic_write_json(run_dir / "plan.json", plan)
 
-        expected_passage_id = f"rc-{actual_seed:08x}"
+        expected_passage_id = plan["passage_id"]
+        raw_generator: Any = None
         generator: Any = None
+        envelope_errors: list[str] = []
         reviewer: Any = None
         solver: Any = None
         blind: dict[str, Any] | None = None
@@ -230,9 +241,16 @@ class ReadingPipeline:
                 output_dir=run_dir,
                 isolate_workspace=False,
             )
-            generator = generator_result.parsed
-            atomic_write_json(run_dir / "generator_output.json", generator)
-            generator_errors = validate_generator_contract(generator, plan)
+            raw_generator = generator_result.parsed
+            atomic_write_json(run_dir / "generator_raw.json", raw_generator)
+            try:
+                generator = canonicalize_generator_output(raw_generator, plan)
+            except (TypeError, ValueError) as exc:
+                envelope_errors = [f"generator envelope: {exc}"]
+                generator = None
+            if generator is not None:
+                atomic_write_json(run_dir / "generator_output.json", generator)
+            generator_errors = envelope_errors + validate_generator_contract(generator, plan)
             if not generator_errors:
                 deterministic_errors = validate_deterministic(generator, plan)
             if not generator_errors and not deterministic_errors:
@@ -432,7 +450,13 @@ class ReadingV02Pipeline(ReadingPipeline):
         schema_key: str,
         output_dir: Path,
         isolate_workspace: bool,
+        transport_schema_path: Path | None = None,
     ) -> InvocationResult:
+        transport_output_schema = (
+            json.loads(transport_schema_path.read_text(encoding="utf-8"))
+            if transport_schema_path is not None
+            else None
+        )
         request = InvocationRequest(
             stage=stage,
             agent_name=agent,
@@ -440,6 +464,7 @@ class ReadingV02Pipeline(ReadingPipeline):
             prompt=prompt,
             input_keys=input_keys,
             formal_output_schema=self.schema_paths[schema_key],
+            transport_output_schema=transport_output_schema,
             model=self.model,
             cwd=ROOT,
             sandbox="read-only" if getattr(self.runtime, "provider", "") == "codex" else None,
@@ -487,6 +512,7 @@ class ReadingV02Pipeline(ReadingPipeline):
         run_id: str,
         plan: dict[str, Any],
         blind: dict[str, Any] | None,
+        raw_generator: Any = None,
     ) -> None:
         atomic_write_json(run_dir / "invocations.json", {
             "live_invocations": len(self.invocations),
@@ -500,6 +526,9 @@ class ReadingV02Pipeline(ReadingPipeline):
             "model": self.model or "runtime-default",
             "plan_sha256": payload_sha256(plan),
             "blind_input_sha256": payload_sha256(blind) if blind is not None else None,
+            "generator_raw_artifact": "generator_raw.json" if (run_dir / "generator_raw.json").is_file() else None,
+            "generator_raw_sha256": payload_sha256(raw_generator) if raw_generator is not None else None,
+            "canonical_generator_artifact": "generator.json" if (run_dir / "generator.json").is_file() else None,
             "canonical_schema_paths": {key: str(path) for key, path in self.schema_paths.items()},
             "invocation_ids": [item.invocation_id for item in self.invocations],
             "answer_bearing_prompt_fields": ["plan"],
@@ -525,8 +554,10 @@ class ReadingV02Pipeline(ReadingPipeline):
         run_dir.mkdir(parents=True, exist_ok=True)
         atomic_write_json(run_dir / "plan.json", plan)
 
-        expected_passage_id = f"rc-{actual_seed:08x}"
+        expected_passage_id = plan["passage_id"]
+        raw_generator: Any = None
         generator: Any = None
+        envelope_errors: list[str] = []
         reviewer: Any = None
         solver: Any = None
         blind: dict[str, Any] | None = None
@@ -546,17 +577,25 @@ class ReadingV02Pipeline(ReadingPipeline):
                 stage="reading_generator",
                 agent=GENERATOR_AGENT,
                 prompt=self._prompt(
-                    "Generate one original TOEFL ITP-style Reading Comprehension set. Follow the supplied deterministic plan exactly. Return JSON only. The passage_id must be exactly rc- followed by the plan seed as eight lowercase hexadecimal digits (for example, seed 1002 means rc-000003ea); every item_id must be that exact passage_id followed by -q1, -q2, and so on. Generate exactly the planned question_count questions, and make the count of every question type exactly match question_type_counts. The legacy question_plan order is compatibility guidance only; ordering of the generated questions is free. Include four A/B/C/D choices per question and the Generator correct answer plus private evidence/rationale metadata required by the schema. Process the whole passage set in this one invocation. Never quote, paraphrase, or imitate any official ETS passage or question.",
-                    plan,
+                    "Generate one original TOEFL ITP-style Reading Comprehension set. Follow the supplied semantic plan exactly; the generated question type counts must exactly match question_type_counts, and ordering of the generated questions is free. Return JSON only using the supplied semantic Generator schema: include the passage, exactly the planned questions, question types, four choices, intended answers, and private evidence/rationale metadata. Do not include passage_id or item_id; trusted pipeline code attaches those deterministic envelope fields after generation. Process the whole passage set in this one invocation. Never quote, paraphrase, or imitate any official ETS passage or question.",
+                    {key: value for key, value in plan.items() if key not in {"passage_id", "plan_id"}},
                 ),
                 input_keys=("plan",),
                 schema_key="generator",
                 output_dir=run_dir,
                 isolate_workspace=False,
+                transport_schema_path=GENERATOR_MODEL_SCHEMA_V02_PATH,
             )
-            generator = generator_result.parsed
-            atomic_write_json(run_dir / "generator.json", generator)
-            generator_errors = validate_generator_contract(generator, plan, self.schema_paths)
+            raw_generator = generator_result.parsed
+            atomic_write_json(run_dir / "generator_raw.json", raw_generator)
+            try:
+                generator = canonicalize_generator_output(raw_generator, plan)
+            except (TypeError, ValueError) as exc:
+                envelope_errors = [f"generator envelope: {exc}"]
+                generator = None
+            if generator is not None:
+                atomic_write_json(run_dir / "generator.json", generator)
+            generator_errors = envelope_errors + validate_generator_contract(generator, plan, self.schema_paths)
             validation = deterministic_diagnostics(generator, plan, self.schema_paths)
             empirical_warnings = validation["empirical_warnings"]
             deterministic_classification = validation["classification"]
@@ -701,7 +740,7 @@ class ReadingV02Pipeline(ReadingPipeline):
             result["decision"] = "INFRASTRUCTURE_FAILURE" if self.runtime_failures else "QUARANTINE"
         result["checks"]["final_result_contract"] = not result_contract_errors
         result["checks"]["final_result_errors"] = result_contract_errors
-        self._write_invocations_and_provenance(run_dir, run_id, plan, blind)
+        self._write_invocations_and_provenance(run_dir, run_id, plan, blind, raw_generator)
         atomic_write_json(run_dir / "result.json", result)
         return result
 
@@ -723,7 +762,9 @@ class ReadingV02Pipeline(ReadingPipeline):
         run_dir = (output_dir or self.artifact_root / run_id).resolve()
         run_dir.mkdir(parents=True, exist_ok=True)
         atomic_write_json(run_dir / "plan.json", plan)
+        raw_generator: Any = None
         generator: Any = None
+        envelope_errors: list[str] = []
         generator_errors: list[str] = []
         deterministic_errors: list[str] = []
         empirical_warnings: list[str] = []
@@ -733,17 +774,25 @@ class ReadingV02Pipeline(ReadingPipeline):
                 stage="reading_generator",
                 agent=GENERATOR_AGENT,
                 prompt=self._prompt(
-                    "Generate one original TOEFL ITP-style Reading Comprehension draft. Follow the supplied deterministic plan exactly. Return JSON only. The passage_id must be exactly rc- followed by the plan seed as eight lowercase hexadecimal digits; every item_id must be that exact passage_id followed by -q1, -q2, and so on. Generate exactly the planned question_count questions, and make the count of every question type exactly match question_type_counts. The legacy question_plan order is compatibility guidance only; ordering of the generated questions is free. Include four A/B/C/D choices per question and the Generator correct answer plus private evidence/rationale metadata required by the schema. This is an UNVALIDATED_DRAFT for development inspection only. Never quote, paraphrase, or imitate any official ETS passage or question.",
-                    plan,
+                    "Generate one original TOEFL ITP-style Reading Comprehension draft. Follow the supplied semantic plan exactly; the generated question type counts must exactly match question_type_counts, and ordering of the generated questions is free. Return JSON only using the supplied semantic Generator schema: include the passage, exactly the planned questions, question types, four choices, intended answers, and private evidence/rationale metadata. Do not include passage_id or item_id; trusted pipeline code attaches those deterministic envelope fields after generation. This is an UNVALIDATED_DRAFT for development inspection only. Never quote, paraphrase, or imitate any official ETS passage or question.",
+                    {key: value for key, value in plan.items() if key not in {"passage_id", "plan_id"}},
                 ),
                 input_keys=("plan",),
                 schema_key="generator",
                 output_dir=run_dir,
                 isolate_workspace=False,
+                transport_schema_path=GENERATOR_MODEL_SCHEMA_V02_PATH,
             )
-            generator = generator_result.parsed
-            atomic_write_json(run_dir / "generator.json", generator)
-            generator_errors = validate_generator_contract(generator, plan, self.schema_paths)
+            raw_generator = generator_result.parsed
+            atomic_write_json(run_dir / "generator_raw.json", raw_generator)
+            try:
+                generator = canonicalize_generator_output(raw_generator, plan)
+            except (TypeError, ValueError) as exc:
+                envelope_errors = [f"generator envelope: {exc}"]
+                generator = None
+            if generator is not None:
+                atomic_write_json(run_dir / "generator.json", generator)
+            generator_errors = envelope_errors + validate_generator_contract(generator, plan, self.schema_paths)
             validation = deterministic_diagnostics(generator, plan, self.schema_paths)
             empirical_warnings = validation["empirical_warnings"]
             deterministic_classification = validation["classification"]
@@ -763,7 +812,7 @@ class ReadingV02Pipeline(ReadingPipeline):
             "decision": "UNVALIDATED_DRAFT",
             "draft_status": status,
             "production_eligible": False,
-            "passage_id": f"rc-{actual_seed:08x}",
+            "passage_id": passage_id_for_seed(actual_seed),
             "section": "READING_COMPREHENSION",
             "plan": copy.deepcopy(plan),
             "generator": generator if isinstance(generator, dict) else None,
@@ -785,7 +834,7 @@ class ReadingV02Pipeline(ReadingPipeline):
         result_contract_errors = validate_draft_result_contract(result)
         result["checks"]["final_result_contract"] = not result_contract_errors
         result["checks"]["final_result_errors"] = result_contract_errors
-        self._write_invocations_and_provenance(run_dir, run_id, plan, None)
+        self._write_invocations_and_provenance(run_dir, run_id, plan, None, raw_generator)
         atomic_write_json(run_dir / "result.json", result)
         return result
 
@@ -817,7 +866,7 @@ def _unexpected_failure_result(
         "schema_version": "reading-result-v0.2",
         "run_id": run_id,
         "decision": "INFRASTRUCTURE_FAILURE",
-        "passage_id": f"rc-{seed:08x}",
+        "passage_id": passage_id_for_seed(seed),
         "section": "READING_COMPREHENSION",
         "plan": plan,
         "generator": None,
