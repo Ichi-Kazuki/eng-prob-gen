@@ -119,6 +119,16 @@ class InvocationResult:
     termination_completed_at: str | None = None
     termination_method: str | None = None
     cleanup_duration_seconds: float | None = None
+    config_isolation_mode: str | None = None
+    mcp_servers_exposed: list[str] = field(default_factory=list)
+    mcp_servers_loaded: list[str] = field(default_factory=list)
+    mcp_configuration_source: str | None = None
+    user_config_loaded: bool | None = None
+    global_codex_config_bypassed: bool | None = None
+    auth_material_source: str | None = None
+    codex_home_source: str | None = None
+    codex_home_disposable: bool | None = None
+    codex_home_cleaned: bool | None = None
 
 
 class AgentRuntime(Protocol):
@@ -225,34 +235,17 @@ def _assert_isolated_workspace_clean(workspace: Path) -> None:
 
 
 def _configured_codex_model() -> str:
-    explicit = os.environ.get("WE_E2E_CODEX_MODEL")
-    if explicit:
-        return explicit
-    codex_home = os.environ.get("CODEX_HOME")
-    config_path = Path(codex_home) / "config.toml" if codex_home else Path.home() / ".codex" / "config.toml"
-    try:
-        for line in config_path.read_text(encoding="utf-8").splitlines():
-            match = re.match(r"\s*model\s*=\s*['\"]([^'\"]+)['\"]\s*$", line)
-            if match:
-                return match.group(1)
-    except (OSError, UnicodeDecodeError):
-        pass
-    return "default"
+    # Repository-launched Codex runs must not read the user's config to infer
+    # a model. Callers can select a model explicitly through the supported
+    # environment variable or constructor argument; otherwise use the
+    # repository's explicit runtime default.
+    return os.environ.get("WE_E2E_CODEX_MODEL") or "gpt-5.6-luna"
 
 
 def _configured_codex_executable() -> str | None:
     explicit = os.environ.get("CODEX_CLI_PATH")
     if explicit and Path(explicit).exists():
         return explicit
-    codex_home = os.environ.get("CODEX_HOME")
-    config_path = Path(codex_home) / "config.toml" if codex_home else Path.home() / ".codex" / "config.toml"
-    try:
-        config_text = config_path.read_text(encoding="utf-8")
-    except (OSError, UnicodeDecodeError):
-        return None
-    match = re.search(r"^\s*CODEX_CLI_PATH\s*=\s*['\"]([^'\"]+)['\"]\s*$", config_text, flags=re.MULTILINE)
-    if match and Path(match.group(1)).exists():
-        return match.group(1)
     return None
 
 
@@ -397,6 +390,10 @@ class _SubprocessRuntime:
         with self._freeze_guard(request):
             return self._run_unchecked(request, result, command, stdin=stdin)
 
+    def _subprocess_environment(self, request: InvocationRequest) -> dict[str, str] | None:
+        """Return a runtime-specific child environment, if one is needed."""
+        return None
+
     def _run_unchecked(
         self,
         request: InvocationRequest,
@@ -409,19 +406,22 @@ class _SubprocessRuntime:
         try:
             if self._runner is subprocess.run:
                 return self._run_process_group(request, result, command, stdin=stdin)
-            return self._runner(
-                command,
-                cwd=str(request.cwd) if request.cwd is not None else None,
-                input=stdin,
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                timeout=request.timeout_seconds,
-            )
+            runner_kwargs: dict[str, Any] = {
+                "cwd": str(request.cwd) if request.cwd is not None else None,
+                "input": stdin,
+                "capture_output": True,
+                "text": True,
+                "encoding": "utf-8",
+                "errors": "replace",
+                "timeout": request.timeout_seconds,
+            }
+            environment = self._subprocess_environment(request)
+            if environment is not None:
+                runner_kwargs["env"] = environment
+            return self._runner(command, **runner_kwargs)
         except subprocess.TimeoutExpired as exc:
-            result.raw_stdout = _text(exc.stdout) or self._read_artifact(result.raw_stdout_path)
-            result.raw_stderr = _text(exc.stderr) or self._read_artifact(result.raw_stderr_path)
+            result.raw_stdout = self._sanitize_process_text(_text(exc.stdout)) or self._read_artifact(result.raw_stdout_path)
+            result.raw_stderr = self._sanitize_process_text(_text(exc.stderr)) or self._read_artifact(result.raw_stderr_path)
             result.exit_code = None
             result.completed_at = _now_iso()
             result.timeout_triggered_at = result.timeout_triggered_at or _now_iso()
@@ -439,12 +439,14 @@ class _SubprocessRuntime:
             self._write_process_artifacts(result)
             raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
 
-    @staticmethod
-    def _read_artifact(path: Path | None) -> str:
+    def _sanitize_process_text(self, value: str) -> str:
+        return value
+
+    def _read_artifact(self, path: Path | None) -> str:
         if path is None:
             return ""
         try:
-            return path.read_text(encoding="utf-8", errors="replace")
+            return self._sanitize_process_text(path.read_text(encoding="utf-8", errors="replace"))
         except OSError:
             return ""
 
@@ -558,18 +560,21 @@ class _SubprocessRuntime:
             stderr_path.parent.mkdir(parents=True, exist_ok=True)
             with stdout_path.open("w", encoding="utf-8") as stdout_file, stderr_path.open("w", encoding="utf-8") as stderr_file:
                 job_handle = self._create_windows_job()
-                process = subprocess.Popen(
-                    command,
-                    cwd=str(request.cwd) if request.cwd is not None else None,
-                    stdin=subprocess.PIPE if stdin is not None else None,
-                    stdout=stdout_file,
-                    stderr=stderr_file,
-                    text=True,
-                    encoding="utf-8",
-                    errors="replace",
-                    creationflags=creationflags,
-                    start_new_session=start_new_session,
-                )
+                popen_kwargs: dict[str, Any] = {
+                    "cwd": str(request.cwd) if request.cwd is not None else None,
+                    "stdin": subprocess.PIPE if stdin is not None else None,
+                    "stdout": stdout_file,
+                    "stderr": stderr_file,
+                    "text": True,
+                    "encoding": "utf-8",
+                    "errors": "replace",
+                    "creationflags": creationflags,
+                    "start_new_session": start_new_session,
+                }
+                environment = self._subprocess_environment(request)
+                if environment is not None:
+                    popen_kwargs["env"] = environment
+                process = subprocess.Popen(command, **popen_kwargs)
                 process_handle = getattr(process, "handle", getattr(process, "_handle", None))
                 if job_handle is not None and (
                     process_handle is None or not self._assign_windows_job(job_handle, int(process_handle))
@@ -653,8 +658,8 @@ class _SubprocessRuntime:
             self._close_windows_job(job_handle)
 
     def _complete(self, request: InvocationRequest, result: InvocationResult, proc: subprocess.CompletedProcess[str]) -> InvocationResult:
-        result.raw_stdout = _text(proc.stdout)
-        result.raw_stderr = _text(proc.stderr)
+        result.raw_stdout = self._sanitize_process_text(_text(proc.stdout))
+        result.raw_stderr = self._sanitize_process_text(_text(proc.stderr))
         result.raw_output = result.raw_stdout or result.raw_stderr
         result.exit_code = proc.returncode
         result.completed_at = _now_iso()
@@ -769,14 +774,79 @@ class ClaudeRuntime(_SubprocessRuntime):
 
 
 class CodexRuntime(_SubprocessRuntime):
-    """Codex CLI adapter using one ephemeral ``codex exec`` per item."""
+    """Codex CLI adapter using one ephemeral ``codex exec`` per item.
+
+    Authentication/runtime state comes from the normally resolved user
+    ``CODEX_HOME``.  The user's configuration is bypassed explicitly, so the
+    repository cannot consume user MCP definitions or other config settings.
+    """
 
     provider = "codex"
-    _disabled_mcp_servers = ("node_repl",)
-    _node_repl_disable_override = "mcp_servers.node_repl.enabled=false"
+    _disabled_mcp_servers: tuple[str, ...] = ()
+    _active_subprocess_env: dict[str, str] | None = None
+    _active_secret_values: tuple[str, ...] = ()
 
     def __init__(self, *, executable: str | None = None, model: str | None = None, runner: Runner | None = None, cli_version: str | None = None) -> None:
         super().__init__(executable=executable, model=model or _configured_codex_model(), runner=runner, cli_version=cli_version)
+
+    @staticmethod
+    def _user_codex_home() -> Path:
+        configured = os.environ.get("CODEX_HOME")
+        return Path(configured).expanduser() if configured else Path.home() / ".codex"
+
+    @contextmanager
+    def _codex_environment(
+        self,
+        result: InvocationResult | None = None,
+    ) -> Iterator[dict[str, str]]:
+        """Prepare a child environment without creating or copying Codex state.
+
+        ``CODEX_HOME`` is deliberately the existing authenticated user home.
+        Authentication files are left for Codex to resolve there; this adapter
+        never opens, copies, serializes, or logs their contents.  Environment
+        token values are retained only in memory so accidental CLI diagnostics
+        containing them can still be redacted from repository artifacts.
+        """
+        environment = os.environ.copy()
+        environment["CODEX_HOME"] = str(self._user_codex_home())
+        secret_values = [
+            environment[key]
+            for key in ("CODEX_ACCESS_TOKEN", "CODEX_API_KEY")
+            if environment.get(key)
+        ]
+
+        previous_environment = self._active_subprocess_env
+        previous_secrets = self._active_secret_values
+        self._active_subprocess_env = environment
+        self._active_secret_values = tuple(dict.fromkeys(secret_values))
+        if result is not None:
+            result.auth_material_source = "existing CODEX_HOME"
+            result.codex_home_source = "existing CODEX_HOME"
+            result.codex_home_disposable = False
+            result.codex_home_cleaned = None
+        try:
+            yield environment
+        finally:
+            self._active_subprocess_env = previous_environment
+            self._active_secret_values = previous_secrets
+
+    def _detect_cli_version(self) -> str:
+        """Detect the CLI version without loading user/global config."""
+        try:
+            with self._codex_environment() as environment:
+                proc = self._runner(
+                    [self.executable, "--ignore-user-config", "--version"],
+                    env=environment,
+                    capture_output=True,
+                    text=True,
+                    encoding="utf-8",
+                    errors="replace",
+                    timeout=30,
+                )
+        except (OSError, subprocess.TimeoutExpired):
+            return "unknown"
+        output = (_text(proc.stdout) or _text(proc.stderr)).strip()
+        return output.splitlines()[0][:200] if output else "unknown"
 
     def _find_executable(self) -> str:
         # Windows often exposes both a PowerShell shim (blocked by execution
@@ -827,7 +897,26 @@ class CodexRuntime(_SubprocessRuntime):
     def _new_result(self, request: InvocationRequest) -> InvocationResult:
         result = super()._new_result(request)
         result.disabled_mcp_servers = list(self._disabled_mcp_servers)
+        result.config_isolation_mode = "existing_CODEX_HOME+ignore-user-config+ignore-rules"
+        result.mcp_servers_exposed = []
+        result.mcp_servers_loaded = []
+        result.mcp_configuration_source = "none"
+        result.user_config_loaded = False
+        result.global_codex_config_bypassed = True
+        result.auth_material_source = "existing CODEX_HOME"
+        result.codex_home_source = "existing CODEX_HOME"
+        result.codex_home_disposable = False
+        result.codex_home_cleaned = None
         return result
+
+    def _subprocess_environment(self, request: InvocationRequest) -> dict[str, str] | None:
+        return self._active_subprocess_env
+
+    def _sanitize_process_text(self, value: str) -> str:
+        for secret in self._active_secret_values:
+            if secret:
+                value = value.replace(secret, "[REDACTED]")
+        return value
 
     @staticmethod
     def _prompt(request: InvocationRequest) -> str:
@@ -909,22 +998,21 @@ class CodexRuntime(_SubprocessRuntime):
                 self.executable,
                 "exec",
                 "--ephemeral",
-                "-c",
-                self._node_repl_disable_override,
+                "--ignore-user-config",
+                "--ignore-rules",
                 "--output-schema",
                 str(output_schema_path.resolve()),
                 "--output-last-message",
                 str(result.output_last_message_path.resolve()),
             ]
-            if request.sandbox is not None:
-                command.extend(["--sandbox", request.sandbox])
-            if request.model and request.model != "default":
-                command.extend(["--model", request.model])
-            elif self.model and self.model != "default":
-                command.extend(["--model", self.model])
-            reasoning_effort = request.reasoning_effort or os.environ.get("WE_E2E_CODEX_REASONING_EFFORT")
-            if reasoning_effort:
-                command.extend(["--config", f'model_reasoning_effort="{reasoning_effort}"'])
+            command.extend(["--sandbox", request.sandbox or "read-only"])
+            command.extend(["--model", request.model or self.model])
+            reasoning_effort = (
+                request.reasoning_effort
+                or os.environ.get("WE_E2E_CODEX_REASONING_EFFORT")
+                or "medium"
+            )
+            command.extend(["-c", f'model_reasoning_effort="{reasoning_effort}"'])
             cwd = effective_request.cwd
             if request.isolate_workspace:
                 command.extend(["--skip-git-repo-check"])
@@ -932,25 +1020,30 @@ class CodexRuntime(_SubprocessRuntime):
                 command.extend(["--cd", str(cwd.resolve())])
             command.append("-")
 
-            proc = self._run(effective_request, result, command, stdin=self._prompt(request))
-            self._complete(effective_request, result, proc)
+            with self._codex_environment(result):
+                proc = self._run(effective_request, result, command, stdin=self._prompt(request))
+                self._complete(effective_request, result, proc)
 
-            try:
-                last_message = result.output_last_message_path.read_text(encoding="utf-8")
-            except (OSError, UnicodeDecodeError) as exc:
-                result.error_category = "infrastructure"
-                result.error_detail = f"{request.stage}: Codex --output-last-message could not be read: {exc}"
-                raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
-            try:
-                result.parsed = parse_json_text(last_message, request.stage)
-            except ValueError as exc:
-                result.error_category = "parsing"
-                result.error_detail = str(exc)
-                raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
-            try:
-                result.parsed = normalize_codex_output_for_canonical(result.parsed, request.formal_output_schema)
-            except (OSError, UnicodeDecodeError, json.JSONDecodeError, TypeError, ValueError) as exc:
-                result.error_category = "CODEX_SCHEMA_COMPATIBILITY_ERROR"
-                result.error_detail = f"{request.stage}: could not normalize Codex output for canonical validation: {exc}"
-                raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
-            return result
+                try:
+                    last_message = result.output_last_message_path.read_text(encoding="utf-8")
+                except (OSError, UnicodeDecodeError) as exc:
+                    result.error_category = "infrastructure"
+                    result.error_detail = f"{request.stage}: Codex --output-last-message could not be read: {exc}"
+                    raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
+                sanitized_last_message = self._sanitize_process_text(last_message)
+                if sanitized_last_message != last_message:
+                    result.output_last_message_path.write_text(sanitized_last_message, encoding="utf-8")
+                    last_message = sanitized_last_message
+                try:
+                    result.parsed = parse_json_text(last_message, request.stage)
+                except ValueError as exc:
+                    result.error_category = "parsing"
+                    result.error_detail = str(exc)
+                    raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
+                try:
+                    result.parsed = normalize_codex_output_for_canonical(result.parsed, request.formal_output_schema)
+                except (OSError, UnicodeDecodeError, json.JSONDecodeError, TypeError, ValueError) as exc:
+                    result.error_category = "CODEX_SCHEMA_COMPATIBILITY_ERROR"
+                    result.error_detail = f"{request.stage}: could not normalize Codex output for canonical validation: {exc}"
+                    raise RuntimeInvocationError(result.error_category, result.error_detail, result) from exc
+                return result

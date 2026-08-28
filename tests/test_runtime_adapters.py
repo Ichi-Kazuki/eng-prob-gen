@@ -89,11 +89,33 @@ class RuntimeAdapterTests(unittest.TestCase):
 
         command, kwargs = calls[0]
         self.assertEqual(command[0:2], ["codex", "exec"])
-        self.assertIn("--ephemeral", command)
+        self.assertEqual(command.count("--ephemeral"), 1)
+        self.assertEqual(command.count("--ignore-user-config"), 1)
+        self.assertEqual(command.count("--ignore-rules"), 1)
         self.assertEqual(command.count("-c"), 1)
-        self.assertEqual(command.count("mcp_servers.node_repl.enabled=false"), 1)
-        self.assertEqual(command[command.index("-c") + 1], "mcp_servers.node_repl.enabled=false")
-        self.assertEqual(result.disabled_mcp_servers, ["node_repl"])
+        self.assertEqual(command[command.index("-c") + 1], 'model_reasoning_effort="medium"')
+        self.assertNotIn("node_repl", command)
+        self.assertEqual(result.disabled_mcp_servers, [])
+        self.assertEqual(result.mcp_servers_exposed, [])
+        self.assertEqual(result.mcp_servers_loaded, [])
+        self.assertEqual(result.mcp_configuration_source, "none")
+        self.assertFalse(result.user_config_loaded)
+        self.assertEqual(result.config_isolation_mode, "existing_CODEX_HOME+ignore-user-config+ignore-rules")
+        self.assertTrue(result.global_codex_config_bypassed)
+        self.assertEqual(result.auth_material_source, "existing CODEX_HOME")
+        self.assertEqual(result.codex_home_source, "existing CODEX_HOME")
+        self.assertFalse(result.codex_home_disposable)
+        self.assertIsNone(result.codex_home_cleaned)
+        self.assertIsInstance(kwargs["env"], dict)
+        expected_home = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")).expanduser()
+        self.assertEqual(Path(kwargs["env"]["CODEX_HOME"]), expected_home)
+        self.assertNotIn("itp-codex-home-", kwargs["env"]["CODEX_HOME"])
+        if "CODEX_SQLITE_HOME" in os.environ:
+            self.assertEqual(kwargs["env"]["CODEX_SQLITE_HOME"], os.environ["CODEX_SQLITE_HOME"])
+        else:
+            self.assertNotIn("CODEX_SQLITE_HOME", kwargs["env"])
+        self.assertIn("--model", command)
+        self.assertEqual(command[command.index("--model") + 1], "mock-model")
         self.assertIn("--sandbox", command)
         self.assertEqual(command[command.index("--sandbox") + 1], "read-only")
         self.assertIn("--output-schema", command)
@@ -106,6 +128,161 @@ class RuntimeAdapterTests(unittest.TestCase):
         self.assertEqual(kwargs["input"], CodexRuntime._prompt(invocation_request))
         self.assertNotEqual(result.raw_output, result.parsed)
         self.assertEqual(result.parsed["solver_answer"], "A")
+
+    def test_codex_ignores_malformed_global_config_and_exposes_no_mcp(self) -> None:
+        calls: list[tuple[list[str], dict]] = []
+
+        def runner(command: list[str], **kwargs):
+            calls.append((command, kwargs))
+            output = Path(command[command.index("--output-last-message") + 1])
+            output.write_text(json.dumps({
+                "item_id": "mock-001",
+                "section": "Written Expression",
+                "solver_answer": "A",
+                "confidence": "HIGH",
+                "reason": "mock contract output",
+                "ambiguity_detected": False,
+                "suggested_correction": "The report was completed yesterday.",
+            }), encoding="utf-8")
+            return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+        with tempfile.TemporaryDirectory() as directory:
+            global_home = Path(directory) / "global-codex"
+            global_home.mkdir()
+            (global_home / "config.toml").write_text(
+                '[mcp_servers.node_repl]\ntransport = "invalid-transport"\n',
+                encoding="utf-8",
+            )
+            with mock.patch.dict(os.environ, {"CODEX_HOME": str(global_home)}, clear=False):
+                runtime = CodexRuntime(
+                    executable="codex",
+                    model="mock-model",
+                    runner=runner,
+                    cli_version="mock",
+                )
+                result = runtime.invoke(request(Path(directory)))
+            self.assertTrue((global_home / "config.toml").exists())
+
+        self.assertEqual(len(calls), 1)
+        command, kwargs = calls[0]
+        self.assertEqual(Path(kwargs["env"]["CODEX_HOME"]), global_home)
+        self.assertEqual(command.count("--ignore-user-config"), 1)
+        self.assertEqual(command.count("--ignore-rules"), 1)
+        self.assertNotIn("node_repl", command)
+        self.assertEqual(result.mcp_servers_exposed, [])
+        self.assertEqual(result.mcp_servers_loaded, [])
+        self.assertEqual(result.mcp_configuration_source, "none")
+        self.assertFalse(result.user_config_loaded)
+        self.assertTrue(result.global_codex_config_bypassed)
+
+    def test_codex_command_does_not_consume_user_config_values(self) -> None:
+        calls: list[list[str]] = []
+
+        def runner(command: list[str], **kwargs):
+            calls.append(command)
+            output = Path(command[command.index("--output-last-message") + 1])
+            output.write_text(json.dumps({
+                "item_id": "mock-001",
+                "section": "Written Expression",
+                "solver_answer": "A",
+                "confidence": "HIGH",
+                "reason": "mock contract output",
+                "ambiguity_detected": False,
+                "suggested_correction": "The report was completed yesterday.",
+            }), encoding="utf-8")
+            return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+        with tempfile.TemporaryDirectory() as directory:
+            global_home = Path(directory) / "global-codex"
+            global_home.mkdir()
+            (global_home / "config.toml").write_text(
+                'model = "malicious-model-from-user-config"\n'
+                'model_reasoning_effort = "high"\n'
+                '[mcp_servers.node_repl]\ntransport = "invalid-transport"\n',
+                encoding="utf-8",
+            )
+            with mock.patch.dict(
+                os.environ,
+                {"CODEX_HOME": str(global_home), "WE_E2E_CODEX_MODEL": ""},
+                clear=False,
+            ):
+                runtime = CodexRuntime(executable="codex", runner=runner, cli_version="mock")
+                runtime.invoke(request(Path(directory)))
+
+        command = calls[0]
+        self.assertEqual(command[command.index("--model") + 1], "gpt-5.6-luna")
+        self.assertEqual(command[command.index("-c") + 1], 'model_reasoning_effort="medium"')
+        self.assertNotIn("malicious-model-from-user-config", command)
+        self.assertNotIn("model_reasoning_effort=\"high\"", command)
+
+    def test_codex_does_not_copy_or_read_auth_json(self) -> None:
+        calls: list[dict] = []
+
+        def runner(command: list[str], **kwargs):
+            environment = kwargs["env"]
+            self.assertEqual(Path(environment["CODEX_HOME"]), global_home)
+            calls.append(environment)
+            output = Path(command[command.index("--output-last-message") + 1])
+            output.write_text(json.dumps({
+                "item_id": "mock-001",
+                "section": "Written Expression",
+                "solver_answer": "A",
+                "confidence": "HIGH",
+                "reason": "mock contract output",
+                "ambiguity_detected": False,
+                "suggested_correction": "The report was completed yesterday.",
+            }), encoding="utf-8")
+            return subprocess.CompletedProcess(command, 0, stdout="diagnostic", stderr="warning")
+
+        with tempfile.TemporaryDirectory() as directory:
+            global_home = Path(directory) / "global-codex"
+            global_home.mkdir()
+            auth_path = global_home / "auth.json"
+            auth_before = b'{"access_token":"auth-content-never-read"}\n'
+            auth_path.write_bytes(auth_before)
+            with mock.patch.dict(os.environ, {"CODEX_HOME": str(global_home)}, clear=False):
+                with mock.patch("runtime.adapters.shutil.copyfile", wraps=shutil.copyfile) as copyfile:
+                    runtime = CodexRuntime(executable="codex", model="mock-model", runner=runner, cli_version="mock")
+                    result = runtime.invoke(request(Path(directory)))
+                    copied_sources = [Path(call.args[0]) for call in copyfile.call_args_list]
+
+            self.assertTrue(calls)
+            self.assertEqual(auth_path.read_bytes(), auth_before)
+            self.assertNotIn(auth_path, copied_sources)
+
+        serialized_result = json.dumps(result.__dict__, default=str)
+        self.assertNotIn("auth-content-never-read", serialized_result)
+        self.assertEqual(result.auth_material_source, "existing CODEX_HOME")
+        self.assertFalse(result.codex_home_disposable)
+        self.assertIsNone(result.codex_home_cleaned)
+
+    def test_codex_cli_version_detection_uses_existing_home(self) -> None:
+        calls: list[tuple[list[str], dict]] = []
+
+        def runner(command: list[str], **kwargs):
+            calls.append((command, kwargs))
+            if command[-1] == "--version":
+                return subprocess.CompletedProcess(command, 0, stdout="codex-cli test", stderr="")
+            output = Path(command[command.index("--output-last-message") + 1])
+            output.write_text("{}", encoding="utf-8")
+            return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+        with tempfile.TemporaryDirectory() as directory:
+            global_home = Path(directory) / "global-codex"
+            global_home.mkdir()
+            (global_home / "config.toml").write_text(
+                '[mcp_servers.node_repl]\ntransport = "invalid-transport"\n',
+                encoding="utf-8",
+            )
+            with mock.patch.dict(os.environ, {"CODEX_HOME": str(global_home)}, clear=False):
+                runtime = CodexRuntime(executable="codex", model="mock-model", runner=runner)
+                runtime.invoke(request(Path(directory)))
+            self.assertTrue(global_home.exists())
+
+        version_command, version_kwargs = calls[0]
+        self.assertEqual(version_command[-1], "--version")
+        self.assertEqual(version_command.count("--ignore-user-config"), 1)
+        self.assertEqual(Path(version_kwargs["env"]["CODEX_HOME"]), global_home)
 
 
     def test_each_codex_call_has_a_distinct_ephemeral_output_path(self) -> None:

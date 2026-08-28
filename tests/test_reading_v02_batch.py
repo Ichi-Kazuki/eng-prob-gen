@@ -19,6 +19,7 @@ from reading.contracts import (
     HARD_VALIDITY,
     canonicalize_generator_output,
     deterministic_diagnostics,
+    generator_model_schema_for_plan,
     validate_deterministic,
     validate_generator_contract,
     validate_plan_contract,
@@ -27,6 +28,7 @@ from reading.contracts import (
 from reading.pipeline import ReadingV02Pipeline, run_reading_batch
 from reading.planner import build_plan_v02, passage_id_for_seed
 from runtime.adapters import InvocationResult, RuntimeInvocationError
+from shared.schema_validation import schema_errors
 
 from tests.test_reading_pipeline import generator_fixture
 
@@ -65,7 +67,12 @@ def variable_generator_fixture(plan: dict[str, Any]) -> dict[str, Any]:
     output["schema_version"] = "reading-generator-v0.2"
     output["passage_id"] = f"rc-{plan['seed']:08x}"
     questions = []
-    for index, question_type in enumerate(plan["question_plan"], 1):
+    question_plan = plan.get("question_plan") or [
+        question_type
+        for question_type, count in plan["question_type_counts"].items()
+        for _ in range(count)
+    ]
+    for index, question_type in enumerate(question_plan, 1):
         question = copy.deepcopy(legacy["questions"][(index - 1) % len(legacy["questions"])])
         question["item_id"] = f"{output['passage_id']}-q{index}"
         question["question_type"] = question_type
@@ -101,6 +108,40 @@ def sized_generator_fixture(plan: dict[str, Any], target_words: int, paragraph_c
     output["passage"] = "\n\n".join(paragraphs)
     assert word_count(output["passage"]) == target_words
     return output
+
+
+def quota_plan(seed: int, counts: dict[str, int]) -> dict[str, Any]:
+    plan = build_plan_v02(seed, domain="biology")
+    question_plan = [question_type for question_type, count in counts.items() for _ in range(count)]
+    plan["question_count"] = sum(counts.values())
+    plan["question_plan"] = question_plan
+    plan["question_type_counts"] = dict(counts)
+    return plan
+
+
+def grouped_model_fixture(plan: dict[str, Any]) -> dict[str, Any]:
+    flat = variable_generator_fixture(plan)
+    grouped = copy.deepcopy(flat)
+    grouped.pop("passage_id")
+    grouped_questions = {field: [] for field in (
+        "detail_questions",
+        "vocabulary_in_context_questions",
+        "inference_questions",
+        "main_idea_questions",
+        "reference_questions",
+    )}
+    field_by_type = {
+        "DETAIL": "detail_questions",
+        "VOCABULARY_IN_CONTEXT": "vocabulary_in_context_questions",
+        "INFERENCE": "inference_questions",
+        "MAIN_IDEA": "main_idea_questions",
+        "REFERENCE": "reference_questions",
+    }
+    for question in grouped.pop("questions"):
+        question.pop("item_id", None)
+        grouped_questions[field_by_type[question["question_type"]]].append(question)
+    grouped.update(grouped_questions)
+    return grouped
 
 
 def reviewer_for(generator: dict[str, Any]) -> dict[str, Any]:
@@ -216,6 +257,97 @@ class BatchFakeRuntime:
 
 
 class ReadingV02BatchTests(unittest.TestCase):
+    def test_plan_specific_model_schema_enforces_d2_v4_i3_m0_r1(self) -> None:
+        plan = quota_plan(1101, {
+            "DETAIL": 2,
+            "VOCABULARY_IN_CONTEXT": 4,
+            "INFERENCE": 3,
+            "MAIN_IDEA": 0,
+            "REFERENCE": 1,
+        })
+        schema = generator_model_schema_for_plan(plan)
+        expected = {
+            "detail_questions": 2,
+            "vocabulary_in_context_questions": 4,
+            "inference_questions": 3,
+            "main_idea_questions": 0,
+            "reference_questions": 1,
+        }
+        for field, quota in expected.items():
+            with self.subTest(field=field):
+                self.assertEqual(schema["properties"][field]["minItems"], quota)
+                self.assertEqual(schema["properties"][field]["maxItems"], quota)
+        self.assertEqual(sum(schema["properties"][field]["maxItems"] for field in expected), plan["question_count"])
+
+    def test_plan_specific_model_schema_supports_zero_and_variable_quotas(self) -> None:
+        plans = (
+            quota_plan(1102, {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 3, "MAIN_IDEA": 0, "REFERENCE": 1}),
+            quota_plan(1103, {"DETAIL": 4, "VOCABULARY_IN_CONTEXT": 2, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 2}),
+        )
+        for plan in plans:
+            schema = generator_model_schema_for_plan(plan)
+            self.assertEqual(
+                [schema["properties"][field]["maxItems"] for field in (
+                    "detail_questions",
+                    "vocabulary_in_context_questions",
+                    "inference_questions",
+                    "main_idea_questions",
+                    "reference_questions",
+                )],
+                [plan["question_type_counts"][question_type] for question_type in (
+                    "DETAIL",
+                    "VOCABULARY_IN_CONTEXT",
+                    "INFERENCE",
+                    "MAIN_IDEA",
+                    "REFERENCE",
+                )],
+            )
+
+    def test_grouped_model_output_flattens_without_semantic_mutation(self) -> None:
+        plan = quota_plan(1104, {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 3, "MAIN_IDEA": 0, "REFERENCE": 1})
+        raw = grouped_model_fixture(plan)
+        raw_snapshot = copy.deepcopy(raw)
+        self.assertEqual(schema_errors(raw, generator_model_schema_for_plan(plan)), [])
+        canonical = canonicalize_generator_output(raw, plan)
+        self.assertEqual(raw, raw_snapshot)
+        self.assertEqual(len(canonical["questions"]), sum(plan["question_type_counts"].values()))
+        by_stem = {question["stem"]: question for question in canonical["questions"]}
+        for field in (
+            "detail_questions",
+            "vocabulary_in_context_questions",
+            "inference_questions",
+            "main_idea_questions",
+            "reference_questions",
+        ):
+            for raw_question in raw[field]:
+                canonical_question = by_stem[raw_question["stem"]]
+                for semantic_field in ("question_type", "stem", "choices", "correct_answer", "evidence"):
+                    self.assertEqual(canonical_question[semantic_field], raw_question[semantic_field])
+        self.assertEqual(
+            [question["item_id"] for question in canonical["questions"]],
+            [f"{plan['passage_id']}-q{index}" for index in range(1, plan["question_count"] + 1)],
+        )
+
+    def test_grouped_model_output_order_is_seeded_replayable_and_quota_preserving(self) -> None:
+        plan = quota_plan(1105, {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 3, "MAIN_IDEA": 0, "REFERENCE": 1})
+        first = canonicalize_generator_output(grouped_model_fixture(plan), plan)
+        second = canonicalize_generator_output(grouped_model_fixture(plan), plan)
+        self.assertEqual(first["questions"], second["questions"])
+        actual_types = Counter(question["question_type"] for question in first["questions"])
+        self.assertEqual(actual_types, Counter(plan["question_type_counts"]))
+        self.assertNotEqual(
+            [question["question_type"] for question in first["questions"]],
+            [question_type for question_type, count in plan["question_type_counts"].items() for _ in range(count)],
+        )
+
+    def test_wrong_grouped_model_quota_fails_schema_and_canonicalization(self) -> None:
+        plan = quota_plan(1106, {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 4, "INFERENCE": 3, "MAIN_IDEA": 0, "REFERENCE": 1})
+        raw = grouped_model_fixture(plan)
+        raw["inference_questions"].pop()
+        self.assertTrue(schema_errors(raw, generator_model_schema_for_plan(plan)))
+        with self.assertRaises(ValueError):
+            canonicalize_generator_output(raw, plan)
+
     def test_planner_identity_envelope_does_not_change_semantic_generator_fields(self) -> None:
         plan = build_plan_v02(1001, domain="biology")
         self.assertEqual(plan["passage_id"], passage_id_for_seed(plan["seed"]))
@@ -379,6 +511,23 @@ class ReadingV02BatchTests(unittest.TestCase):
         generator_request = next(request for request in trace.requests if request.stage == "reading_generator")
         payload = json.loads(generator_request.prompt.split("INPUT_JSON:\n", 1)[1])
         self.assertEqual(payload["question_type_counts"], plan["question_type_counts"])
+        self.assertNotIn("question_plan", payload)
+        assert generator_request.transport_output_schema is not None
+        for question_type, field in (
+            ("DETAIL", "detail_questions"),
+            ("VOCABULARY_IN_CONTEXT", "vocabulary_in_context_questions"),
+            ("INFERENCE", "inference_questions"),
+            ("MAIN_IDEA", "main_idea_questions"),
+            ("REFERENCE", "reference_questions"),
+        ):
+            self.assertEqual(
+                generator_request.transport_output_schema["properties"][field]["minItems"],
+                plan["question_type_counts"][question_type],
+            )
+            self.assertEqual(
+                generator_request.transport_output_schema["properties"][field]["maxItems"],
+                plan["question_type_counts"][question_type],
+            )
         self.assertIn("exactly match question_type_counts", generator_request.prompt)
         self.assertIn("ordering of the generated questions is free", generator_request.prompt)
         self.assertNotIn("exact planned question_plan order", generator_request.prompt)

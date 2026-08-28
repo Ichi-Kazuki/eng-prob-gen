@@ -10,6 +10,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import random
 import re
 from collections import Counter
 from pathlib import Path
@@ -21,6 +22,7 @@ from .planner import QUESTION_TYPES, passage_id_for_seed
 
 
 SCHEMA_DIR = Path(__file__).resolve().parent / "schemas"
+GENERATOR_MODEL_SCHEMA_V02_2_PATH = SCHEMA_DIR / "reading_generator_model_v0_2_2.schema.json"
 SCHEMA_PATHS = {
     "plan": SCHEMA_DIR / "reading_plan.schema.json",
     "generator": SCHEMA_DIR / "reading_generator_output.schema.json",
@@ -43,6 +45,14 @@ SCHEMA_PATHS_V02 = {
 }
 ANSWER_LABELS = {"A", "B", "C", "D"}
 SOLVER_LABELS = ANSWER_LABELS | {"AMBIGUOUS", "NONE"}
+GENERATOR_QUESTION_GROUP_FIELDS = {
+    "DETAIL": "detail_questions",
+    "VOCABULARY_IN_CONTEXT": "vocabulary_in_context_questions",
+    "INFERENCE": "inference_questions",
+    "MAIN_IDEA": "main_idea_questions",
+    "REFERENCE": "reference_questions",
+}
+CANONICAL_QUESTION_ORDER_VERSION = "reading-v0.2.2-seeded-type-interleave-v1"
 HARD_VALIDITY = "HARD_VALIDITY"
 EMPIRICAL_FORMAT_WARNING = "EMPIRICAL_FORMAT_WARNING"
 FORMAT_ADHERENCE_FAILURE = "FORMAT_ADHERENCE_FAILURE"
@@ -106,6 +116,103 @@ def validate_plan_contract(
     return errors
 
 
+def generator_model_schema_for_plan(plan: dict[str, Any]) -> dict[str, Any]:
+    """Build the v0.2.2 model-facing schema with exact type quotas.
+
+    This schema is a transport contract only.  The canonical Generator
+    schema remains the flat ``questions`` contract and is still validated
+    after the grouped response is flattened.
+    """
+
+    if not isinstance(plan, dict) or plan.get("schema_version") != "reading-plan-v0.2":
+        raise ValueError("a Reading v0.2 plan is required for the v0.2.2 Generator schema")
+    plan_errors = validate_plan_contract(plan, SCHEMA_PATHS_V02)
+    if plan_errors:
+        raise ValueError("cannot build Generator model schema from an invalid plan: " + "; ".join(plan_errors))
+    schema = load_schema(GENERATOR_MODEL_SCHEMA_V02_2_PATH)
+    properties = schema.get("properties")
+    counts = plan["question_type_counts"]
+    if not isinstance(properties, dict) or not isinstance(counts, dict):
+        raise ValueError("Generator model schema template or plan quotas are malformed")
+    for question_type, field_name in GENERATOR_QUESTION_GROUP_FIELDS.items():
+        group_schema = properties.get(field_name)
+        if not isinstance(group_schema, dict):
+            raise ValueError(f"Generator model schema is missing {field_name}")
+        quota = counts.get(question_type)
+        if not isinstance(quota, int) or isinstance(quota, bool) or quota < 0:
+            raise ValueError(f"invalid quota for {question_type}: {quota!r}")
+        group_schema["minItems"] = quota
+        group_schema["maxItems"] = quota
+    return schema
+
+
+def _interleave_grouped_questions(
+    grouped: dict[str, list[dict[str, Any]]],
+    seed: int,
+) -> list[dict[str, Any]]:
+    """Interleave grouped questions in a replayable, seed-owned order."""
+
+    rng = random.Random(seed)
+    active_types = [question_type for question_type in QUESTION_TYPES if grouped[question_type]]
+    rng.shuffle(active_types)
+    positions = {question_type: 0 for question_type in active_types}
+    ordered: list[dict[str, Any]] = []
+    while active_types:
+        next_active: list[str] = []
+        for question_type in active_types:
+            position = positions[question_type]
+            questions = grouped[question_type]
+            if position < len(questions):
+                ordered.append(questions[position])
+                positions[question_type] = position + 1
+            if positions[question_type] < len(questions):
+                next_active.append(question_type)
+        active_types = next_active
+    return ordered
+
+
+def _flatten_grouped_generator_questions(
+    raw_output: dict[str, Any],
+    plan: dict[str, Any],
+) -> list[dict[str, Any]]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    expected_fields = set(GENERATOR_QUESTION_GROUP_FIELDS.values())
+    present_fields = {field for field in expected_fields if field in raw_output}
+    if present_fields != expected_fields:
+        missing = sorted(expected_fields - present_fields)
+        extra = sorted(present_fields - expected_fields)
+        detail = []
+        if missing:
+            detail.append("missing " + ", ".join(missing))
+        if extra:
+            detail.append("unexpected " + ", ".join(extra))
+        raise ValueError("grouped Generator response must contain all type collections (" + "; ".join(detail) + ")")
+    for question_type, field_name in GENERATOR_QUESTION_GROUP_FIELDS.items():
+        questions = raw_output[field_name]
+        expected_count = plan["question_type_counts"][question_type]
+        if not isinstance(questions, list):
+            raise ValueError(f"{field_name} must be an array")
+        if len(questions) != expected_count:
+            raise ValueError(
+                f"{field_name} quota mismatch: expected {expected_count}; got {len(questions)}"
+            )
+        normalized: list[dict[str, Any]] = []
+        for index, question in enumerate(questions, 1):
+            if not isinstance(question, dict):
+                raise ValueError(f"{field_name}[{index}] must be an object")
+            copied = copy.deepcopy(question)
+            declared_type = copied.get("question_type")
+            if declared_type is None:
+                copied["question_type"] = question_type
+            elif declared_type != question_type:
+                raise ValueError(
+                    f"{field_name}[{index}].question_type must be {question_type!r}; got {declared_type!r}"
+                )
+            normalized.append(copied)
+        grouped[question_type] = normalized
+    return _interleave_grouped_questions(grouped, plan["seed"])
+
+
 def canonicalize_generator_output(
     raw_output: Any,
     plan: dict[str, Any],
@@ -126,6 +233,13 @@ def canonicalize_generator_output(
         raise ValueError("cannot build canonical Generator envelope: " + "; ".join(plan_errors))
 
     canonical = copy.deepcopy(raw_output)
+    is_v02 = plan.get("schema_version") == "reading-plan-v0.2"
+    if is_v02 and any(field in raw_output for field in GENERATOR_QUESTION_GROUP_FIELDS.values()):
+        if "questions" in raw_output:
+            raise ValueError("grouped Generator response must not also contain flat questions")
+        canonical["questions"] = _flatten_grouped_generator_questions(raw_output, plan)
+        for field_name in GENERATOR_QUESTION_GROUP_FIELDS.values():
+            canonical.pop(field_name, None)
     passage_id = plan.get("passage_id") or passage_id_for_seed(plan["seed"])
     canonical["passage_id"] = passage_id
     questions = canonical.get("questions")

@@ -12,17 +12,23 @@ $env:WE_E2E_RUNTIME = "codex"
 python scripts/run_live_e2e.py
 ```
 
-Codex calls use one `codex exec --ephemeral` process per item. Reviewer and
-Solver calls use `--sandbox read-only`, an isolated workspace, and the
-allowlisted input projection. The Solver and Reviewer final messages are
-validated by their existing `validate_contract()` implementations after the
-last-message file is read. Before a Codex call, `runtime.codex_schema` builds a
-deterministic transport-only projection from the canonical schema: structural
-`allOf` branches are flattened, unsupported conditional/semantic keywords are
-recorded as relaxed, and the original canonical schema remains untouched.
-Transport-schema provenance records both schema hashes and explicitly requires
-canonical validation. Runtime facts, raw stdout/stderr paths, and the
-transport provenance are stored in the separate provenance sidecar.
+Codex calls use one `codex exec --ephemeral` process per item with the normally
+resolved authenticated `CODEX_HOME`. Each call explicitly supplies
+`--ignore-user-config`, `--ignore-rules`, the model, medium reasoning, and a
+read-only sandbox. The user configuration is never consumed, so no user MCP
+configuration is initialized; runtime telemetry reports `user_config_loaded:
+false` and `mcp_configuration_source: none`. Authentication files remain in the
+existing user home and are never copied or serialized by the repository.
+Reviewer and Solver calls use an isolated workspace and the allowlisted input
+projection. The Solver and Reviewer final messages are validated by their
+existing `validate_contract()` implementations after the last-message file is
+read. Before a Codex call, `runtime.codex_schema` builds a deterministic
+transport-only projection from the canonical schema: structural `allOf`
+branches are flattened, unsupported conditional/semantic keywords are recorded
+as relaxed, and the original canonical schema remains untouched. Transport-
+schema provenance records both schema hashes and explicitly requires canonical
+validation. Runtime facts, raw stdout/stderr paths, and the transport provenance
+are stored in the separate provenance sidecar.
 
 Each live run creates `runtime/freeze/freeze_manifest.json` before the first
 agent call and snapshots the canonical schemas under

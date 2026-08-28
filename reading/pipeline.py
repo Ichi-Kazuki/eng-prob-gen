@@ -35,7 +35,9 @@ from .contracts import (
     blind_input,
     blind_input_errors,
     canonicalize_generator_output,
+    CANONICAL_QUESTION_ORDER_VERSION,
     deterministic_diagnostics,
+    generator_model_schema_for_plan,
     payload_sha256,
     post_blind_comparison,
     solver_input_errors,
@@ -65,7 +67,6 @@ AGENT_PATHS_V02 = {
     REVIEWER_AGENT: ROOT / ".claude" / "agents" / f"{REVIEWER_AGENT}-v0.2.md",
     SOLVER_AGENT: ROOT / ".claude" / "agents" / f"{SOLVER_AGENT}-v0.2.md",
 }
-GENERATOR_MODEL_SCHEMA_V02_PATH = ROOT / "reading" / "schemas" / "reading_generator_model_v0_2.schema.json"
 DEFAULT_MODEL = os.environ.get("READING_MODEL", "sonnet")
 DEFAULT_TIMEOUT_SECONDS = float(os.environ.get("READING_TIMEOUT_SECONDS", "300"))
 DEFAULT_MAX_BUDGET_USD = os.environ.get("READING_MAX_BUDGET_USD", "0.60")
@@ -116,6 +117,16 @@ def _json_safe_invocation(invocation: InvocationResult) -> dict[str, Any]:
         "termination_completed_at": invocation.termination_completed_at,
         "termination_method": invocation.termination_method,
         "cleanup_duration_seconds": invocation.cleanup_duration_seconds,
+        "config_isolation_mode": invocation.config_isolation_mode,
+        "mcp_servers_exposed": list(invocation.mcp_servers_exposed),
+        "mcp_servers_loaded": list(invocation.mcp_servers_loaded),
+        "mcp_configuration_source": invocation.mcp_configuration_source,
+        "user_config_loaded": invocation.user_config_loaded,
+        "global_codex_config_bypassed": invocation.global_codex_config_bypassed,
+        "auth_material_source": invocation.auth_material_source,
+        "codex_home_source": invocation.codex_home_source,
+        "codex_home_disposable": invocation.codex_home_disposable,
+        "codex_home_cleaned": invocation.codex_home_cleaned,
     }
 
 
@@ -149,12 +160,12 @@ class ReadingPipeline:
         output_dir: Path,
         isolate_workspace: bool,
         transport_schema_path: Path | None = None,
+        transport_output_schema: dict[str, Any] | None = None,
     ) -> InvocationResult:
-        transport_output_schema = (
-            json.loads(transport_schema_path.read_text(encoding="utf-8"))
-            if transport_schema_path is not None
-            else None
-        )
+        if transport_schema_path is not None and transport_output_schema is not None:
+            raise ValueError("provide either transport_schema_path or transport_output_schema, not both")
+        if transport_schema_path is not None:
+            transport_output_schema = json.loads(transport_schema_path.read_text(encoding="utf-8"))
         request = InvocationRequest(
             stage=stage,
             agent_name=agent,
@@ -451,12 +462,12 @@ class ReadingV02Pipeline(ReadingPipeline):
         output_dir: Path,
         isolate_workspace: bool,
         transport_schema_path: Path | None = None,
+        transport_output_schema: dict[str, Any] | None = None,
     ) -> InvocationResult:
-        transport_output_schema = (
-            json.loads(transport_schema_path.read_text(encoding="utf-8"))
-            if transport_schema_path is not None
-            else None
-        )
+        if transport_schema_path is not None and transport_output_schema is not None:
+            raise ValueError("provide either transport_schema_path or transport_output_schema, not both")
+        if transport_schema_path is not None:
+            transport_output_schema = json.loads(transport_schema_path.read_text(encoding="utf-8"))
         request = InvocationRequest(
             stage=stage,
             agent_name=agent,
@@ -533,6 +544,19 @@ class ReadingV02Pipeline(ReadingPipeline):
             "invocation_ids": [item.invocation_id for item in self.invocations],
             "answer_bearing_prompt_fields": ["plan"],
             "blind_prompt_fields": ["passage_id", "section", "title", "passage", "questions"],
+            "generator_model_transport": {
+                "schema_version": "reading-generator-model-v0.2.2",
+                "representation": "grouped_question_type_arrays",
+                "question_type_fields": {
+                    "DETAIL": "detail_questions",
+                    "VOCABULARY_IN_CONTEXT": "vocabulary_in_context_questions",
+                    "INFERENCE": "inference_questions",
+                    "MAIN_IDEA": "main_idea_questions",
+                    "REFERENCE": "reference_questions",
+                },
+                "canonical_ordering_version": CANONICAL_QUESTION_ORDER_VERSION,
+                "canonical_validation_still_required": True,
+            },
         })
 
     def run(
@@ -577,14 +601,14 @@ class ReadingV02Pipeline(ReadingPipeline):
                 stage="reading_generator",
                 agent=GENERATOR_AGENT,
                 prompt=self._prompt(
-                    "Generate one original TOEFL ITP-style Reading Comprehension set. Follow the supplied semantic plan exactly; the generated question type counts must exactly match question_type_counts, and ordering of the generated questions is free. Return JSON only using the supplied semantic Generator schema: include the passage, exactly the planned questions, question types, four choices, intended answers, and private evidence/rationale metadata. Do not include passage_id or item_id; trusted pipeline code attaches those deterministic envelope fields after generation. Process the whole passage set in this one invocation. Never quote, paraphrase, or imitate any official ETS passage or question.",
-                    {key: value for key, value in plan.items() if key not in {"passage_id", "plan_id"}},
+                    "Generate one original TOEFL ITP-style Reading Comprehension set. Follow the supplied semantic plan exactly. The model-facing schema contains one required question collection for each type: detail_questions, vocabulary_in_context_questions, inference_questions, main_idea_questions, and reference_questions. Create exactly the requested number in each collection, including an empty array when a quota is zero; together these collections must exactly match question_type_counts and question_count. ordering of the generated questions is free; do not create a flat questions array or attempt to reproduce an exact cross-type order. Return JSON only using the supplied v0.2.2 grouped semantic Generator schema: include the passage, question types, four choices, intended answers, and private evidence/rationale metadata. Do not include passage_id or question item_id; trusted pipeline code attaches those deterministic identity fields after generation. Process the whole passage set in this one invocation. Never quote, paraphrase, or imitate any official ETS passage or question.",
+                    {key: value for key, value in plan.items() if key not in {"passage_id", "plan_id", "question_plan"}},
                 ),
                 input_keys=("plan",),
                 schema_key="generator",
                 output_dir=run_dir,
                 isolate_workspace=False,
-                transport_schema_path=GENERATOR_MODEL_SCHEMA_V02_PATH,
+                transport_output_schema=generator_model_schema_for_plan(plan),
             )
             raw_generator = generator_result.parsed
             atomic_write_json(run_dir / "generator_raw.json", raw_generator)
@@ -774,14 +798,14 @@ class ReadingV02Pipeline(ReadingPipeline):
                 stage="reading_generator",
                 agent=GENERATOR_AGENT,
                 prompt=self._prompt(
-                    "Generate one original TOEFL ITP-style Reading Comprehension draft. Follow the supplied semantic plan exactly; the generated question type counts must exactly match question_type_counts, and ordering of the generated questions is free. Return JSON only using the supplied semantic Generator schema: include the passage, exactly the planned questions, question types, four choices, intended answers, and private evidence/rationale metadata. Do not include passage_id or item_id; trusted pipeline code attaches those deterministic envelope fields after generation. This is an UNVALIDATED_DRAFT for development inspection only. Never quote, paraphrase, or imitate any official ETS passage or question.",
-                    {key: value for key, value in plan.items() if key not in {"passage_id", "plan_id"}},
+                    "Generate one original TOEFL ITP-style Reading Comprehension draft. Follow the supplied semantic plan exactly. The model-facing schema contains one required question collection for each type: detail_questions, vocabulary_in_context_questions, inference_questions, main_idea_questions, and reference_questions. Create exactly the requested number in each collection, including an empty array when a quota is zero; together these collections must exactly match question_type_counts and question_count. ordering of the generated questions is free; do not create a flat questions array or attempt to reproduce an exact cross-type order. Return JSON only using the supplied v0.2.2 grouped semantic Generator schema: include the passage, question types, four choices, intended answers, and private evidence/rationale metadata. Do not include passage_id or question item_id; trusted pipeline code attaches those deterministic identity fields after generation. This is an UNVALIDATED_DRAFT for development inspection only. Never quote, paraphrase, or imitate any official ETS passage or question.",
+                    {key: value for key, value in plan.items() if key not in {"passage_id", "plan_id", "question_plan"}},
                 ),
                 input_keys=("plan",),
                 schema_key="generator",
                 output_dir=run_dir,
                 isolate_workspace=False,
-                transport_schema_path=GENERATOR_MODEL_SCHEMA_V02_PATH,
+                transport_output_schema=generator_model_schema_for_plan(plan),
             )
             raw_generator = generator_result.parsed
             atomic_write_json(run_dir / "generator_raw.json", raw_generator)

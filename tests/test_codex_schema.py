@@ -14,6 +14,8 @@ from runtime.codex_schema import (
     codex_transport_schema_errors,
     normalize_codex_output_for_canonical,
 )
+from reading.contracts import generator_model_schema_for_plan
+from reading.planner import build_plan_v02
 from shared.schema_validation import load_schema, schema_errors
 
 
@@ -45,6 +47,24 @@ def all_keywords(value: object) -> list[str]:
 
 
 class CodexSchemaAdapterTests(unittest.TestCase):
+    def test_reading_v022_grouped_quota_constraints_survive_codex_projection(self) -> None:
+        plan = build_plan_v02(1107, domain="biology")
+        model_schema = generator_model_schema_for_plan(plan)
+        transport = build_codex_transport_artifact(model_schema, canonical_schema_path=ROOT / "reading" / "schemas" / "reading_generator_output_v0_2.schema.json")
+        for question_type, field in (
+            ("DETAIL", "detail_questions"),
+            ("VOCABULARY_IN_CONTEXT", "vocabulary_in_context_questions"),
+            ("INFERENCE", "inference_questions"),
+            ("MAIN_IDEA", "main_idea_questions"),
+            ("REFERENCE", "reference_questions"),
+        ):
+            with self.subTest(question_type=question_type):
+                quota = plan["question_type_counts"][question_type]
+                self.assertEqual(transport.schema["properties"][field]["minItems"], quota)
+                self.assertEqual(transport.schema["properties"][field]["maxItems"], quota)
+        self.assertEqual(codex_transport_schema_errors(transport.schema), [])
+        self.assertNotIn("const", json.dumps(transport.schema))
+
     def test_canonical_schema_is_byte_for_byte_unchanged(self) -> None:
         before = GENERATOR_SCHEMA.read_bytes()
         canonical = json.loads(before.decode("utf-8"))

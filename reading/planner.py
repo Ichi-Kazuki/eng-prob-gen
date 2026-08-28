@@ -105,7 +105,7 @@ def build_plan_v02(seed: int, domain: str | None = None) -> dict[str, Any]:
     Question count and type mix are sampled from the derived B-E profile.  A
     type may repeat.  ``question_plan`` remains as an ordered compatibility
     representation, while ``question_type_counts`` is the canonical
-    adherence contract for the v0.2.1 Generator.
+    adherence contract for the v0.2.2 Generator.
     """
 
     _validate_seed_and_domain(seed, domain)

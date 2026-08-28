@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 from .pipeline import run_reading, run_reading_batch
@@ -11,8 +12,19 @@ from .planner import ALLOWED_DOMAINS
 from .contracts import split_paragraphs, word_count
 
 
-def main() -> int:
+CURRENT_READING_VERSION = "v0.2.2"
+HISTORICAL_READING_VERSION = "v0.1"
+V02_ONLY_OPTIONS = ("--count", "--parallel", "--mode")
+
+
+def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate TOEFL ITP Reading passage sets")
+    parser.add_argument(
+        "--version",
+        choices=(CURRENT_READING_VERSION, HISTORICAL_READING_VERSION),
+        default=CURRENT_READING_VERSION,
+        help="Reading pipeline version (default: v0.2.2; v0.1 requires an explicit compatibility choice)",
+    )
     parser.add_argument("--seed", type=int, help="replayable non-negative planner seed")
     parser.add_argument("--count", type=int, help="v0.2 number of independent passage sets")
     parser.add_argument("--parallel", type=int, default=1, help="v0.2 maximum concurrently active passage pipelines")
@@ -21,10 +33,30 @@ def main() -> int:
     parser.add_argument("--provider", choices=("claude", "codex"))
     parser.add_argument("--model")
     parser.add_argument("--output-dir", type=Path, help="directory for this first-pass run artifacts")
-    args = parser.parse_args()
+    return parser
 
-    # Preserve the exact v0.1 one-set CLI path when no v0.2 controls are used.
-    if args.count is None and args.mode == "validated" and args.parallel == 1:
+
+def _explicit_v02_options(argv: list[str]) -> list[str]:
+    options: list[str] = []
+    for token in argv:
+        option = token.split("=", 1)[0]
+        if option in V02_ONLY_OPTIONS:
+            options.append(token)
+    return options
+
+
+def main(argv: list[str] | None = None) -> int:
+    raw_argv = list(sys.argv[1:] if argv is None else argv)
+    parser = _parser()
+    args = parser.parse_args(raw_argv)
+
+    if args.version == HISTORICAL_READING_VERSION:
+        incompatible = _explicit_v02_options(raw_argv)
+        if incompatible:
+            parser.error(
+                "v0.1 compatibility mode does not accept v0.2.2 options: "
+                + ", ".join(incompatible)
+            )
         result = run_reading(
             args.seed,
             domain=args.domain,
@@ -79,9 +111,12 @@ def main() -> int:
         }, ensure_ascii=False, indent=2))
         return 0 if result["decision"] == "ACCEPT" else 1
 
+    # Current/default Reading is always the v0.2.2 pipeline.  Even a single
+    # passage uses the batch wrapper so v0.2.2 draft/batch controls cannot
+    # accidentally enter the historical v0.1 path.
     batch = run_reading_batch(
         args.seed,
-        count=args.count or 1,
+        count=args.count if args.count is not None else 1,
         parallel=args.parallel,
         mode=args.mode,
         domain=args.domain,

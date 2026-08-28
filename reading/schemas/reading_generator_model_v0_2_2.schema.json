@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/reading-generator-model-v0.2.2.schema.json",
+  "title": "Reading v0.2.2 Generator grouped semantic model output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "section",
+    "title",
+    "passage",
+    "detail_questions",
+    "vocabulary_in_context_questions",
+    "inference_questions",
+    "main_idea_questions",
+    "reference_questions"
+  ],
+  "properties": {
+    "schema_version": {"const": "reading-generator-v0.2"},
+    "section": {"const": "READING_COMPREHENSION"},
+    "title": {"type": "string", "minLength": 3, "maxLength": 160},
+    "passage": {"type": "string", "minLength": 100},
+    "detail_questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["question_type", "stem", "choices", "correct_answer", "evidence"],
+        "properties": {
+          "question_type": {"const": "DETAIL"},
+          "stem": {"type": "string", "minLength": 8, "maxLength": 400},
+          "choices": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["A", "B", "C", "D"],
+            "properties": {
+              "A": {"type": "string", "minLength": 1, "maxLength": 300},
+              "B": {"type": "string", "minLength": 1, "maxLength": 300},
+              "C": {"type": "string", "minLength": 1, "maxLength": 300},
+              "D": {"type": "string", "minLength": 1, "maxLength": 300}
+            }
+          },
+          "correct_answer": {"enum": ["A", "B", "C", "D"]},
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["paragraph", "anchor", "rationale"],
+            "properties": {
+              "paragraph": {"type": "integer", "minimum": 1, "maximum": 8},
+              "anchor": {"type": "string", "minLength": 3, "maxLength": 240},
+              "rationale": {"type": "string", "minLength": 8, "maxLength": 600}
+            }
+          }
+        }
+      }
+    },
+    "vocabulary_in_context_questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["question_type", "stem", "choices", "correct_answer", "evidence"],
+        "properties": {
+          "question_type": {"const": "VOCABULARY_IN_CONTEXT"},
+          "stem": {"type": "string", "minLength": 8, "maxLength": 400},
+          "choices": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["A", "B", "C", "D"],
+            "properties": {
+              "A": {"type": "string", "minLength": 1, "maxLength": 300},
+              "B": {"type": "string", "minLength": 1, "maxLength": 300},
+              "C": {"type": "string", "minLength": 1, "maxLength": 300},
+              "D": {"type": "string", "minLength": 1, "maxLength": 300}
+            }
+          },
+          "correct_answer": {"enum": ["A", "B", "C", "D"]},
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["paragraph", "anchor", "rationale"],
+            "properties": {
+              "paragraph": {"type": "integer", "minimum": 1, "maximum": 8},
+              "anchor": {"type": "string", "minLength": 3, "maxLength": 240},
+              "rationale": {"type": "string", "minLength": 8, "maxLength": 600}
+            }
+          }
+        }
+      }
+    },
+    "inference_questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["question_type", "stem", "choices", "correct_answer", "evidence"],
+        "properties": {
+          "question_type": {"const": "INFERENCE"},
+          "stem": {"type": "string", "minLength": 8, "maxLength": 400},
+          "choices": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["A", "B", "C", "D"],
+            "properties": {
+              "A": {"type": "string", "minLength": 1, "maxLength": 300},
+              "B": {"type": "string", "minLength": 1, "maxLength": 300},
+              "C": {"type": "string", "minLength": 1, "maxLength": 300},
+              "D": {"type": "string", "minLength": 1, "maxLength": 300}
+            }
+          },
+          "correct_answer": {"enum": ["A", "B", "C", "D"]},
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["paragraph", "anchor", "rationale"],
+            "properties": {
+              "paragraph": {"type": "integer", "minimum": 1, "maximum": 8},
+              "anchor": {"type": "string", "minLength": 3, "maxLength": 240},
+              "rationale": {"type": "string", "minLength": 8, "maxLength": 600}
+            }
+          }
+        }
+      }
+    },
+    "main_idea_questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["question_type", "stem", "choices", "correct_answer", "evidence"],
+        "properties": {
+          "question_type": {"const": "MAIN_IDEA"},
+          "stem": {"type": "string", "minLength": 8, "maxLength": 400},
+          "choices": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["A", "B", "C", "D"],
+            "properties": {
+              "A": {"type": "string", "minLength": 1, "maxLength": 300},
+              "B": {"type": "string", "minLength": 1, "maxLength": 300},
+              "C": {"type": "string", "minLength": 1, "maxLength": 300},
+              "D": {"type": "string", "minLength": 1, "maxLength": 300}
+            }
+          },
+          "correct_answer": {"enum": ["A", "B", "C", "D"]},
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["paragraph", "anchor", "rationale"],
+            "properties": {
+              "paragraph": {"type": "integer", "minimum": 1, "maximum": 8},
+              "anchor": {"type": "string", "minLength": 3, "maxLength": 240},
+              "rationale": {"type": "string", "minLength": 8, "maxLength": 600}
+            }
+          }
+        }
+      }
+    },
+    "reference_questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["question_type", "stem", "choices", "correct_answer", "evidence"],
+        "properties": {
+          "question_type": {"const": "REFERENCE"},
+          "stem": {"type": "string", "minLength": 8, "maxLength": 400},
+          "choices": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["A", "B", "C", "D"],
+            "properties": {
+              "A": {"type": "string", "minLength": 1, "maxLength": 300},
+              "B": {"type": "string", "minLength": 1, "maxLength": 300},
+              "C": {"type": "string", "minLength": 1, "maxLength": 300},
+              "D": {"type": "string", "minLength": 1, "maxLength": 300}
+            }
+          },
+          "correct_answer": {"enum": ["A", "B", "C", "D"]},
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["paragraph", "anchor", "rationale"],
+            "properties": {
+              "paragraph": {"type": "integer", "minimum": 1, "maximum": 8},
+              "anchor": {"type": "string", "minLength": 3, "maxLength": 240},
+              "rationale": {"type": "string", "minLength": 8, "maxLength": 600}
+            }
+          }
+        }
+      }
+    }
+  }
+}
