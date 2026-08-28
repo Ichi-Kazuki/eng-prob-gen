@@ -4,32 +4,180 @@
   "title": "Reading v0.2 generation plan",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "plan_id", "seed", "domain", "target_words", "target_paragraphs", "question_count", "question_plan", "question_type_counts"],
+  "required": [
+    "schema_version",
+    "plan_id",
+    "seed",
+    "domain",
+    "target_words",
+    "target_paragraphs",
+    "question_count",
+    "question_plan",
+    "question_type_counts"
+  ],
   "properties": {
-    "schema_version": {"const": "reading-plan-v0.2"},
-    "plan_id": {"type": "string", "pattern": "^rp-[a-z0-9-]+$"},
-    "passage_id": {"type": "string", "pattern": "^rc-[0-9a-f]{8}$"},
-    "seed": {"type": "integer", "minimum": 0},
-    "domain": {"enum": ["biology", "geology", "astronomy", "anthropology", "history", "ecology", "technology", "earth science", "archaeology", "psychology", "sociology", "linguistics", "economics", "geography", "architecture", "art history", "visual arts", "music", "communication", "education", "environmental science"]},
-    "target_words": {"type": "integer", "minimum": 160, "maximum": 300},
-    "target_paragraphs": {"const": 4},
-    "question_count": {"type": "integer", "enum": [7, 8, 9, 10, 11, 12, 14]},
+    "schema_version": {
+      "const": "reading-plan-v0.2"
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^rp-[a-z0-9-]+$"
+    },
+    "passage_id": {
+      "type": "string",
+      "pattern": "^rc-[0-9a-f]{8}$"
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "domain": {
+      "enum": [
+        "biology",
+        "geology",
+        "astronomy",
+        "anthropology",
+        "history",
+        "ecology",
+        "technology",
+        "earth science",
+        "archaeology",
+        "psychology",
+        "sociology",
+        "linguistics",
+        "economics",
+        "geography",
+        "architecture",
+        "art history",
+        "visual arts",
+        "music",
+        "communication",
+        "education",
+        "environmental science"
+      ]
+    },
+    "target_words": {
+      "type": "integer",
+      "minimum": 160,
+      "maximum": 300
+    },
+    "target_paragraphs": {
+      "const": 4
+    },
+    "question_count": {
+      "type": "integer",
+      "enum": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14
+      ]
+    },
     "question_plan": {
       "type": "array",
       "minItems": 7,
       "maxItems": 14,
-      "items": {"enum": ["DETAIL", "VOCABULARY_IN_CONTEXT", "INFERENCE", "MAIN_IDEA", "REFERENCE"]}
+      "items": {
+        "enum": [
+          "DETAIL",
+          "VOCABULARY_IN_CONTEXT",
+          "INFERENCE",
+          "MAIN_IDEA",
+          "REFERENCE"
+        ]
+      }
     },
     "question_type_counts": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["DETAIL", "VOCABULARY_IN_CONTEXT", "INFERENCE", "MAIN_IDEA", "REFERENCE"],
+      "required": [
+        "DETAIL",
+        "VOCABULARY_IN_CONTEXT",
+        "INFERENCE",
+        "MAIN_IDEA",
+        "REFERENCE"
+      ],
       "properties": {
-        "DETAIL": {"type": "integer", "minimum": 0},
-        "VOCABULARY_IN_CONTEXT": {"type": "integer", "minimum": 0},
-        "INFERENCE": {"type": "integer", "minimum": 0},
-        "MAIN_IDEA": {"type": "integer", "minimum": 0},
-        "REFERENCE": {"type": "integer", "minimum": 0}
+        "DETAIL": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "VOCABULARY_IN_CONTEXT": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "INFERENCE": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "MAIN_IDEA": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "REFERENCE": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "difficulty_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "target_band",
+        "calibration_status",
+        "psychometric_equivalence",
+        "dimensions"
+      ],
+      "properties": {
+        "profile_id": {
+          "const": "reading-difficulty-profile-v0.1"
+        },
+        "target_band": {
+          "const": "ITP_STYLE_STANDARD"
+        },
+        "calibration_status": {
+          "const": "PROVISIONAL_STRUCTURAL_PROXY"
+        },
+        "psychometric_equivalence": {
+          "const": false
+        },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "lexical",
+            "syntactic",
+            "paraphrase",
+            "evidence_distance",
+            "inference_depth",
+            "distractor_competitiveness"
+          ],
+          "properties": {
+            "lexical": {
+              "const": "MODERATE_ACADEMIC_NOT_OBSCURE"
+            },
+            "syntactic": {
+              "const": "MODERATE_ACADEMIC_NOT_ARTIFICIALLY_COMPLEX"
+            },
+            "paraphrase": {
+              "const": "MEANING_PRESERVING_NONCOPYING"
+            },
+            "evidence_distance": {
+              "const": "MIX_LOCAL_AND_DISTRIBUTED_WHEN_NATURAL"
+            },
+            "inference_depth": {
+              "const": "SUPPORTED_NONTRIVIAL_WHEN_PLANNED"
+            },
+            "distractor_competitiveness": {
+              "const": "PLAUSIBLE_TEXT_GROUNDED"
+            }
+          }
+        }
       }
     }
   }

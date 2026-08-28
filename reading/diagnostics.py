@@ -8,6 +8,8 @@ from difflib import SequenceMatcher
 from statistics import mean
 from typing import Any, Iterable
 
+from .difficulty import estimate_difficulty_alignment
+
 from .contracts import (
     HARD_VALIDITY,
     passage_word_count_profile,
@@ -110,6 +112,7 @@ def diagnostics_for_result(result: dict[str, Any]) -> dict[str, Any]:
             "correct_answer_distribution": {},
             "option_length_distribution": _option_length_distribution([]),
             "choice_quality_warnings": [],
+            "difficulty": estimate_difficulty_alignment(result.get("plan"), None),
             "reviewer_solver_agreement": {"agree": 0, "total": 0, "rate": None},
             "reviewer_ambiguous_none_count": 0,
             "solver_ambiguous_none_count": 0,
@@ -159,6 +162,7 @@ def diagnostics_for_result(result: dict[str, Any]) -> dict[str, Any]:
             [question for question in questions if isinstance(question, dict)]
         ),
         "choice_quality_warnings": choice_quality_warnings(generator),
+        "difficulty": estimate_difficulty_alignment(result.get("plan"), generator),
         "reviewer_solver_agreement": {
             "agree": agree_count,
             "total": len(agreements),

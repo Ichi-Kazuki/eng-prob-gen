@@ -1,0 +1,33 @@
+{
+  "schema_version": "reading-difficulty-profile-v0.1",
+  "status": "provisional_structural_proxy",
+  "target_band": "ITP_STYLE_STANDARD",
+  "psychometric_equivalence": false,
+  "calibration_basis": "Engineering guardrails for structural difficulty. These thresholds are not ETS-derived item difficulty parameters and are not score-equivalent to TOEFL ITP.",
+  "dimensions": {
+    "lexical": "MODERATE_ACADEMIC_NOT_OBSCURE",
+    "syntactic": "MODERATE_ACADEMIC_NOT_ARTIFICIALLY_COMPLEX",
+    "paraphrase": "MEANING_PRESERVING_NONCOPYING",
+    "evidence_distance": "MIX_LOCAL_AND_DISTRIBUTED_WHEN_NATURAL",
+    "inference_depth": "SUPPORTED_NONTRIVIAL_WHEN_PLANNED",
+    "distractor_competitiveness": "PLAUSIBLE_TEXT_GROUNDED"
+  },
+  "guardrails": {
+    "long_word_rate_warning_above": 0.36,
+    "mean_sentence_words_warning_above": 34.0,
+    "surface_copy_overlap_warning_at_or_above": 0.82,
+    "surface_copy_question_share_warning_above": 0.5,
+    "contradicted_distractor_share_warning_above": 0.5
+  },
+  "future_calibration": {
+    "official_feature_measurement_required": true,
+    "recommended_features": [
+      "evidence_distance",
+      "answer_evidence_lexical_overlap",
+      "inference_depth",
+      "distractor_mechanism",
+      "vocabulary_context_discrimination"
+    ],
+    "human_response_data_required_for_psychometric_difficulty": true
+  }
+}

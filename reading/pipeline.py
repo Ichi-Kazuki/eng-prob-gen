@@ -75,6 +75,14 @@ DEFAULT_PARALLELISM = 1
 READING_CURRENT_VERSION = "v0.2.5"
 
 
+READING_DIFFICULTY_GUIDANCE = (
+    "If the plan contains difficulty_profile, treat it as a structural calibration target, not a request for arbitrary " 
+    "hardness. Keep lexical and syntactic load at moderate academic levels; do not manufacture difficulty with obscure " 
+    "terminology, unnecessary sentence embedding, or trick logic. Create difficulty primarily through meaning-preserving " 
+    "paraphrase, appropriate evidence integration, genuine supported inference when the planned type calls for it, and " 
+    "plausible text-grounded distractors. Distributed evidence should be used only when naturally supported. The profile is " 
+    "a provisional structural proxy and never implies TOEFL ITP score equivalence."
+)
 READING_INFERENCE_GUIDANCE = (
     "For INFERENCE questions, vary reasoning depth according to what the passage naturally supports. "
     "Explicit restatement should not dominate, and a simple one-step paraphrase or inversion should not be the default. "
@@ -153,8 +161,9 @@ def reading_v02_generator_instruction(*, draft: bool = False) -> str:
         "grouped semantic Generator schema: include the passage, question types, four choices, intended answers, and private "
         "evidence/rationale metadata. Do not include passage_id or question item_id; trusted pipeline code attaches those "
         "deterministic identity fields after generation. "
-        f"{READING_INFERENCE_GUIDANCE} {READING_LENGTH_GUIDANCE} {READING_VOCABULARY_GUIDANCE} {READING_TARGET_GUIDANCE} "
-        f"{READING_CHOICE_GUIDANCE} {READING_TAXONOMY_GUIDANCE} {READING_DISTRACTOR_GUIDANCE} {READING_DOMAIN_GUIDANCE} "
+        f"{READING_DIFFICULTY_GUIDANCE} {READING_INFERENCE_GUIDANCE} {READING_LENGTH_GUIDANCE} "
+        f"{READING_VOCABULARY_GUIDANCE} {READING_TARGET_GUIDANCE} {READING_CHOICE_GUIDANCE} "
+        f"{READING_TAXONOMY_GUIDANCE} {READING_DISTRACTOR_GUIDANCE} {READING_DOMAIN_GUIDANCE} "
         "Process the whole passage set in this one invocation."
     )
     if draft:

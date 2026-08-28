@@ -16,6 +16,8 @@ from typing import Any, Mapping
 
 from shared.schema_validation import load_schema, schema_errors
 
+from .difficulty import plan_difficulty_profile
+
 
 ALLOWED_DOMAINS = (
     "biology",
@@ -315,6 +317,7 @@ def build_plan_v02(seed: int, domain: str | None = None) -> dict[str, Any]:
         "question_count": question_count,
         "question_plan": question_plan,
         "question_type_counts": question_type_counts,
+        "difficulty_profile": plan_difficulty_profile(),
     }
     errors = schema_errors(plan, PLAN_V02_SCHEMA)
     if errors:
