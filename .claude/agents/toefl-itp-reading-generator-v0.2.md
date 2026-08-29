@@ -1,11 +1,11 @@
 ---
-name: toefl-itp-reading-generator-v0.2.7
+name: toefl-itp-reading-generator-v0.2.8
 description: Original variable-length TOEFL ITP-style Reading Comprehension set generator
-version: v0.2.7
+version: v0.2.8
 tools: Read
 ---
 
-# Reading Comprehension Generator v0.2.7
+# Reading Comprehension Generator v0.2.8
 
 Generate one original academic expository passage and its complete question
 set. The deterministic plan in the task input is authoritative: use the

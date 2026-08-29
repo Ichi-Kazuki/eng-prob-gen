@@ -1,4 +1,4 @@
-"""Prompt-only regressions for the Reading v0.2.7 inference refinement."""
+"""Prompt-only regressions for the Reading v0.2.8 inference gate."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ def normalized_generator_agent() -> str:
     return " ".join(GENERATOR_AGENT.read_text(encoding="utf-8").split())
 
 
-class ReadingV027InferencePromptRegressionTests(unittest.TestCase):
+class ReadingV028InferencePromptRegressionTests(unittest.TestCase):
     def test_direct_sentence_restatement_is_explicitly_disallowed(self) -> None:
         guidance = normalized_guidance()
 
@@ -129,10 +129,10 @@ class ReadingV027InferencePromptRegressionTests(unittest.TestCase):
             self.assertNotIn(forbidden, guidance)
         self.assertNotRegex(guidance, re.compile(r"\bquota\b"))
 
-    def test_shared_guidance_is_synchronized_with_v027_generator_agent(self) -> None:
+    def test_shared_guidance_is_synchronized_with_v028_generator_agent(self) -> None:
         agent = normalized_generator_agent()
 
-        self.assertIn("version: v0.2.7", agent)
+        self.assertIn("version: v0.2.8", agent)
         self.assertIn(normalized_guidance(), agent)
 
 

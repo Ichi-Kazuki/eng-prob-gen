@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/reading-inference-repair-input-v0.2.schema.json",
+  "title": "Reading v0.2 bounded inference repair input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["passage", "items"],
+  "properties": {
+    "passage": {"type": "string", "minLength": 100},
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 14,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item_id", "stem", "choices", "verifier_status", "verifier_best_answer", "supporting_propositions", "conclusion", "verifier_comment", "defect_reasons"],
+        "properties": {
+          "item_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+-q(?:[1-9]|1[0-4])$"},
+          "stem": {"type": "string", "minLength": 8, "maxLength": 400},
+          "choices": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["A", "B", "C", "D"],
+            "properties": {
+              "A": {"type": "string", "minLength": 1, "maxLength": 300},
+              "B": {"type": "string", "minLength": 1, "maxLength": 300},
+              "C": {"type": "string", "minLength": 1, "maxLength": 300},
+              "D": {"type": "string", "minLength": 1, "maxLength": 300}
+            }
+          },
+          "verifier_status": {"enum": ["VALID_SHALLOW_INFERENCE", "VALID_GENUINE_INFERENCE", "VALID_CROSS_IDEA_INFERENCE", "INVALID_DIRECT_RESTATEMENT", "INVALID_UNSUPPORTED", "INVALID_AMBIGUOUS"]},
+          "verifier_best_answer": {"enum": ["A", "B", "C", "D", "AMBIGUOUS", "NONE"]},
+          "supporting_propositions": {"type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 600}},
+          "conclusion": {"type": "string", "minLength": 1, "maxLength": 600},
+          "verifier_comment": {"type": "string", "minLength": 1, "maxLength": 1000},
+          "defect_reasons": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1, "maxLength": 500}}
+        }
+      }
+    }
+  }
+}

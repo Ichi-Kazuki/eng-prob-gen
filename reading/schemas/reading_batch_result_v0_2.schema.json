@@ -34,6 +34,8 @@
     "generator_invocation_count": {"type": "integer", "minimum": 0},
     "reviewer_invocation_count": {"type": "integer", "minimum": 0},
     "solver_invocation_count": {"type": "integer", "minimum": 0},
+    "inference_verifier_invocation_count": {"type": "integer", "minimum": 0},
+    "inference_repair_invocation_count": {"type": "integer", "minimum": 0},
     "leakage_count": {"type": "integer", "minimum": 0},
     "synthetic_fallback_count": {"type": "integer", "minimum": 0},
     "elapsed_wall_clock_seconds": {"type": "number", "minimum": 0},

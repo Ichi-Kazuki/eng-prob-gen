@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/reading-inference-repair-output-v0.2.schema.json",
+  "title": "Reading v0.2 bounded inference repair output",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "distractorMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B", "C", "D"],
+      "properties": {
+        "A": {"$ref": "#/$defs/distractorEntry"},
+        "B": {"$ref": "#/$defs/distractorEntry"},
+        "C": {"$ref": "#/$defs/distractorEntry"},
+        "D": {"$ref": "#/$defs/distractorEntry"}
+      }
+    },
+    "distractorEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "rationale"],
+      "properties": {
+        "category": {"enum": ["CORRECT_OPTION", "TEXT_TRUE_BUT_NOT_ANSWER", "WRONG_REFERENT", "SCOPE_SHIFT", "CAUSE_EFFECT_REVERSAL", "OVERGENERALIZATION", "UNDERGENERALIZATION", "LEXICAL_SENSE_TRAP", "UNSUPPORTED_INFERENCE", "NEARBY_DETAIL_CONFUSION", "CONTRADICTED_BY_PASSAGE"]},
+        "rationale": {"type": "string", "minLength": 3, "maxLength": 300}
+      }
+    }
+  },
+  "required": ["schema_version", "replacements"],
+  "properties": {
+    "schema_version": {"const": "reading-inference-repair-v0.2"},
+    "replacements": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 14,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item_id", "question_type", "subtype", "stem", "choices", "correct_answer", "evidence", "distractor_metadata"],
+        "properties": {
+          "item_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+-q(?:[1-9]|1[0-4])$"},
+          "question_type": {"const": "INFERENCE"},
+          "subtype": {"enum": ["LOCAL_INFERENCE", "CROSS_IDEA_INFERENCE", "RHETORICAL_PURPOSE"]},
+          "stem": {"type": "string", "minLength": 8, "maxLength": 400},
+          "choices": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["A", "B", "C", "D"],
+            "properties": {
+              "A": {"type": "string", "minLength": 1, "maxLength": 300},
+              "B": {"type": "string", "minLength": 1, "maxLength": 300},
+              "C": {"type": "string", "minLength": 1, "maxLength": 300},
+              "D": {"type": "string", "minLength": 1, "maxLength": 300}
+            }
+          },
+          "correct_answer": {"enum": ["A", "B", "C", "D"]},
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["paragraph", "anchor", "rationale"],
+            "properties": {
+              "paragraph": {"type": "integer", "minimum": 1, "maximum": 8},
+              "anchor": {"type": "string", "minLength": 3, "maxLength": 240},
+              "rationale": {"type": "string", "minLength": 8, "maxLength": 600}
+            }
+          },
+          "distractor_metadata": {"$ref": "#/$defs/distractorMetadata"}
+        }
+      }
+    }
+  }
+}

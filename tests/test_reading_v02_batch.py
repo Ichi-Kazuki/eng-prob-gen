@@ -216,6 +216,26 @@ def solver_for(generator: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def inference_verifier_for(generator: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "schema_version": "reading-inference-verifier-v0.2",
+        "passage_id": generator["passage_id"],
+        "section": "READING_COMPREHENSION",
+        "questions": [
+            {
+                "item_id": question["item_id"],
+                "best_answer": question["correct_answer"],
+                "status": "VALID_SHALLOW_INFERENCE",
+                "supporting_propositions": ["The passage states the relevant fact.", "A second passage detail supports the conclusion."],
+                "conclusion": "The selected answer follows from the visible passage.",
+                "comment": "The item is independently answerable from the passage.",
+            }
+            for question in generator["questions"]
+            if question["question_type"] == "INFERENCE"
+        ],
+    }
+
+
 class BatchTrace:
     def __init__(self) -> None:
         self.lock = threading.Lock()
@@ -262,7 +282,12 @@ class BatchFakeRuntime:
                 raise RuntimeInvocationError("infrastructure", "intentional offline worker failure", failed)
 
             payload = json.loads(request.prompt.split("INPUT_JSON:\n", 1)[1])
-            passage_id = payload["passage_id"] if request.stage != "reading_generator" else f"rc-{payload['seed']:08x}"
+            if request.stage == "reading_generator":
+                passage_id = f"rc-{payload['seed']:08x}"
+            elif request.stage == "reading_inference_repair":
+                passage_id = payload["items"][0]["item_id"].rsplit("-q", 1)[0]
+            else:
+                passage_id = payload["passage_id"]
             if request.stage == "reading_generator":
                 parsed = variable_generator_fixture(payload)
                 worker_plan = build_plan_v02(payload["seed"], domain=payload.get("domain"))
@@ -270,8 +295,14 @@ class BatchFakeRuntime:
                 self.generators[parsed["passage_id"]], _permutation = permute_generator_choices(canonical, worker_plan)
             elif request.stage == "reading_reviewer":
                 parsed = reviewer_for(self.generators[passage_id])
-            else:
+            elif request.stage == "reading_inference_verifier":
+                parsed = inference_verifier_for(self.generators[passage_id])
+            elif request.stage == "reading_inference_repair":
+                raise AssertionError("the stable fake should not need inference repair")
+            elif request.stage == "reading_solver":
                 parsed = solver_for(self.generators[passage_id])
+            else:
+                raise AssertionError(f"unexpected stage: {request.stage}")
             return InvocationResult(
                 stage=request.stage,
                 agent_name=request.agent_name,
@@ -484,8 +515,12 @@ class ReadingV02BatchTests(unittest.TestCase):
                     parsed = raw
                 elif request.stage == "reading_reviewer":
                     parsed = reviewer_for(permuted)
-                else:
+                elif request.stage == "reading_inference_verifier":
+                    parsed = inference_verifier_for(permuted)
+                elif request.stage == "reading_solver":
                     parsed = solver_for(permuted)
+                else:
+                    raise AssertionError(f"unexpected stage: {request.stage}")
                 return InvocationResult(
                     stage=request.stage,
                     agent_name=request.agent_name,
@@ -509,12 +544,15 @@ class ReadingV02BatchTests(unittest.TestCase):
             self.assertEqual(json.loads((root / "generator_raw.json").read_text(encoding="utf-8")), raw)
             self.assertEqual(json.loads((root / "generator.json").read_text(encoding="utf-8")), permuted)
             provenance = json.loads((root / "provenance" / "provenance.json").read_text(encoding="utf-8"))
-            self.assertEqual(provenance["reading_version"], "v0.2.7")
+            self.assertEqual(provenance["reading_version"], "v0.2.8")
             self.assertEqual(provenance["choice_permutation"], expected_provenance)
             self.assertEqual(provenance["blind_prompt_fields"], ["passage_id", "section", "passage", "questions"])
 
-            reviewer_payload = json.loads(requests[1].prompt.split("INPUT_JSON:\n", 1)[1])
-            solver_payload = json.loads(requests[2].prompt.split("INPUT_JSON:\n", 1)[1])
+            verifier_payload = json.loads(requests[1].prompt.split("INPUT_JSON:\n", 1)[1])
+            reviewer_payload = json.loads(requests[2].prompt.split("INPUT_JSON:\n", 1)[1])
+            solver_payload = json.loads(requests[3].prompt.split("INPUT_JSON:\n", 1)[1])
+            self.assertEqual(verifier_payload["passage_id"], plan["passage_id"])
+            self.assertTrue(all(set(question) == {"item_id", "stem", "choices"} for question in verifier_payload["questions"]))
             self.assertEqual(reviewer_payload, blind_input(permuted, schema_version="reading-blind-input-v0.2"))
             self.assertEqual(solver_payload, reviewer_payload)
             self.assertNotIn("title", reviewer_payload)
@@ -609,6 +647,7 @@ class ReadingV02BatchTests(unittest.TestCase):
                 self.requests.append(request)
                 parsed = {
                     "reading_generator": raw_snapshot,
+                    "reading_inference_verifier": inference_verifier_for(permuted),
                     "reading_reviewer": reviewer,
                     "reading_solver": solver,
                 }[request.stage]
@@ -656,11 +695,12 @@ class ReadingV02BatchTests(unittest.TestCase):
             self.assertTrue(result["checks"]["reviewer_contract"])
             self.assertTrue(result["checks"]["solver_contract"])
 
-        self.assertEqual(len(runtime.requests), 3)
+        self.assertEqual(len(runtime.requests), 4)
         for request in runtime.requests[1:]:
             payload = json.loads(request.prompt.split("INPUT_JSON:\n", 1)[1])
             self.assertEqual(payload["passage_id"], plan["passage_id"])
-            self.assertTrue(all(set(question) == {"item_id", "number", "stem", "choices"} for question in payload["questions"]))
+            expected_fields = {"item_id", "stem", "choices"} if request.stage == "reading_inference_verifier" else {"item_id", "number", "stem", "choices"}
+            self.assertTrue(all(set(question) == expected_fields for question in payload["questions"]))
 
     def test_variable_plan_is_replayable_and_repeated_types_are_valid(self) -> None:
         plan = build_plan_v02(1001, domain="biology")
@@ -859,7 +899,7 @@ class ReadingV02BatchTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, draft_request.prompt)
 
-    def test_v027_generator_guidance_is_synchronized_without_new_quotas(self) -> None:
+    def test_v028_generator_guidance_is_synchronized_without_new_quotas(self) -> None:
         trace = BatchTrace()
         with TemporaryDirectory() as directory:
             ReadingV02Pipeline(BatchFakeRuntime("prompt", trace)).run(
@@ -912,7 +952,7 @@ class ReadingV02BatchTests(unittest.TestCase):
         self.assertEqual(len(legacy_generator["questions"]), 5)
         self.assertEqual(validate_generator_contract(legacy_generator, legacy_plan), [])
 
-    def test_batch_is_bounded_isolated_and_three_calls_per_success(self) -> None:
+    def test_batch_is_bounded_isolated_and_inference_gate_calls_per_success(self) -> None:
         trace = BatchTrace()
 
         def factory(index: int) -> BatchFakeRuntime:
@@ -933,10 +973,12 @@ class ReadingV02BatchTests(unittest.TestCase):
             self.assertEqual(batch["accept_count"], 3)
             self.assertEqual(batch["quarantine_count"], 0)
             self.assertEqual(batch["infrastructure_failure_count"], 0)
-            self.assertEqual(batch["total_live_invocation_count"], 9)
+            self.assertEqual(batch["total_live_invocation_count"], 12)
             self.assertEqual(batch["generator_invocation_count"], 3)
             self.assertEqual(batch["reviewer_invocation_count"], 3)
             self.assertEqual(batch["solver_invocation_count"], 3)
+            self.assertEqual(batch["inference_verifier_invocation_count"], 3)
+            self.assertEqual(batch["inference_repair_invocation_count"], 0)
             self.assertGreater(batch["total_questions_generated"], 15)
             self.assertLessEqual(trace.max_active, 2)
             self.assertEqual([item["seed"] for item in batch["passage_artifacts"]], [1001, 1002, 1003])
@@ -958,12 +1000,13 @@ class ReadingV02BatchTests(unittest.TestCase):
             self.assertFalse(list(root.rglob("*.tmp")))
             self.assertEqual(len({str(request.artifact_dir) for request in trace.requests}), 3)
         for request in trace.requests:
-            self.assertEqual(request.isolate_workspace, request.stage in {"reading_reviewer", "reading_solver"})
-            if request.stage in {"reading_reviewer", "reading_solver"}:
+            self.assertEqual(request.isolate_workspace, request.stage in {"reading_inference_verifier", "reading_reviewer", "reading_solver"})
+            if request.stage in {"reading_inference_verifier", "reading_reviewer", "reading_solver"}:
                 payload = json.loads(request.prompt.split("INPUT_JSON:\n", 1)[1])
                 self.assertNotIn("correct_answer", request.prompt)
                 self.assertNotIn("question_type", request.prompt)
-                self.assertTrue(all(set(question) == {"item_id", "number", "stem", "choices"} for question in payload["questions"]))
+                expected_fields = {"item_id", "stem", "choices"} if request.stage == "reading_inference_verifier" else {"item_id", "number", "stem", "choices"}
+                self.assertTrue(all(set(question) == expected_fields for question in payload["questions"]))
 
     def test_failed_passage_is_infrastructure_failure_without_cancelling_others(self) -> None:
         trace = BatchTrace()
@@ -981,10 +1024,11 @@ class ReadingV02BatchTests(unittest.TestCase):
             )
             decisions = [item["decision"] for item in batch["passage_decisions"]]
             self.assertEqual(decisions, ["ACCEPT", "INFRASTRUCTURE_FAILURE", "ACCEPT"])
-            self.assertEqual(batch["total_live_invocation_count"], 7)
+            self.assertEqual(batch["total_live_invocation_count"], 9)
             self.assertEqual(batch["generator_invocation_count"], 3)
             self.assertEqual(batch["reviewer_invocation_count"], 2)
             self.assertEqual(batch["solver_invocation_count"], 2)
+            self.assertEqual(batch["inference_verifier_invocation_count"], 2)
             self.assertEqual(batch["infrastructure_failure_count"], 1)
             failure_result = json.loads((Path(directory) / "passage-002" / "result.json").read_text(encoding="utf-8"))
             self.assertEqual(failure_result["decision"], "INFRASTRUCTURE_FAILURE")
@@ -1019,8 +1063,11 @@ class ReadingV02BatchTests(unittest.TestCase):
     def test_direct_v02_pipeline_preserves_first_pass_quality_quarantine(self) -> None:
         plan = build_plan_v02(3001)
         generator = variable_generator_fixture(plan)
-        reviewer = reviewer_for(generator)
-        solver = solver_for(generator)
+        canonical = canonicalize_generator_output(generator, plan)
+        permuted, _permutation = permute_generator_choices(canonical, plan)
+        reviewer = reviewer_for(permuted)
+        verifier = inference_verifier_for(permuted)
+        solver = solver_for(permuted)
         solver["answers"][0]["answer"] = "AMBIGUOUS"
 
         class SingleRuntime(BatchFakeRuntime):
@@ -1028,10 +1075,14 @@ class ReadingV02BatchTests(unittest.TestCase):
                 if request.stage == "reading_generator":
                     self.generators[generator["passage_id"]] = generator
                     parsed = generator
+                elif request.stage == "reading_inference_verifier":
+                    parsed = verifier
                 elif request.stage == "reading_reviewer":
                     parsed = reviewer
-                else:
+                elif request.stage == "reading_solver":
                     parsed = solver
+                else:
+                    raise AssertionError(f"unexpected stage: {request.stage}")
                 return InvocationResult(
                     stage=request.stage,
                     agent_name=request.agent_name,
@@ -1051,7 +1102,7 @@ class ReadingV02BatchTests(unittest.TestCase):
                 plan["seed"], output_dir=Path(directory)
             )
             self.assertEqual(result["decision"], "QUARANTINE")
-            self.assertEqual(result["infrastructure"]["live_invocations"], 3)
+            self.assertEqual(result["infrastructure"]["live_invocations"], 4)
             self.assertEqual(result["solver"]["answers"][0]["answer"], "AMBIGUOUS")
 
 

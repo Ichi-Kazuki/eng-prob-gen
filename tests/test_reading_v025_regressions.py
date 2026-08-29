@@ -29,6 +29,7 @@ from shared.schema_validation import load_schema, schema_errors
 
 from tests.test_reading_v02_batch import (
     grouped_model_fixture,
+    inference_verifier_for,
     quota_plan,
     reviewer_for,
     solver_for,
@@ -455,9 +456,16 @@ class ReadingV025RegressionTests(unittest.TestCase):
 
             def invoke(self, request: Any) -> InvocationResult:
                 self.requests.append(request)
-                parsed = raw if request.stage == "reading_generator" else (
-                    reviewer_for(expected) if request.stage == "reading_reviewer" else solver_for(expected)
-                )
+                if request.stage == "reading_generator":
+                    parsed = raw
+                elif request.stage == "reading_inference_verifier":
+                    parsed = inference_verifier_for(expected)
+                elif request.stage == "reading_reviewer":
+                    parsed = reviewer_for(expected)
+                elif request.stage == "reading_solver":
+                    parsed = solver_for(expected)
+                else:
+                    raise AssertionError(f"unexpected stage: {request.stage}")
                 return InvocationResult(
                     stage=request.stage,
                     agent_name=request.agent_name,
@@ -485,8 +493,8 @@ class ReadingV025RegressionTests(unittest.TestCase):
             self.assertEqual(target_record["generator_target_line"], details["generator_line"])
             self.assertTrue(target_record["stem_line_normalized"])
 
-        self.assertEqual(len(runtime.requests), 3)
-        for request in runtime.requests[1:]:
+        self.assertEqual(len(runtime.requests), 4)
+        for request in runtime.requests[2:]:
             payload = json.loads(request.prompt.split("INPUT_JSON:\n", 1)[1])
             visible_question = next(
                 item for item in payload["questions"]

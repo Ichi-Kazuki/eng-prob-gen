@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/reading-inference-verifier-output-v0.2.schema.json",
+  "title": "Reading v0.2 blind inference verifier output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "passage_id", "section", "questions"],
+  "properties": {
+    "schema_version": {"const": "reading-inference-verifier-v0.2"},
+    "passage_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+$"},
+    "section": {"const": "READING_COMPREHENSION"},
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 14,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item_id", "best_answer", "status", "supporting_propositions", "conclusion", "comment"],
+        "properties": {
+          "item_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+-q(?:[1-9]|1[0-4])$"},
+          "best_answer": {"enum": ["A", "B", "C", "D", "AMBIGUOUS", "NONE"]},
+          "status": {"enum": ["VALID_SHALLOW_INFERENCE", "VALID_GENUINE_INFERENCE", "VALID_CROSS_IDEA_INFERENCE", "INVALID_DIRECT_RESTATEMENT", "INVALID_UNSUPPORTED", "INVALID_AMBIGUOUS"]},
+          "supporting_propositions": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1, "maxLength": 600}
+          },
+          "conclusion": {"type": "string", "minLength": 1, "maxLength": 600},
+          "comment": {"type": "string", "minLength": 1, "maxLength": 1000}
+        }
+      }
+    }
+  }
+}

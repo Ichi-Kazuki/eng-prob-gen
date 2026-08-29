@@ -1,4 +1,4 @@
-"""Isolated TOEFL ITP Reading Comprehension v0.1/v0.2.7 pipelines."""
+"""Isolated TOEFL ITP Reading Comprehension v0.1/v0.2.8 pipelines."""
 
 from .planner import (
     ALLOWED_DOMAINS,
@@ -15,8 +15,11 @@ from .contracts import (
     CHOICE_PERMUTATION_VERSION,
     DISPLAY_LINE_WIDTH,
     GENERATOR_QUESTION_GROUP_FIELDS,
+    apply_choice_permutation_to_question,
     display_lines,
     generator_model_schema_for_plan,
+    inference_repair_model_schema_for_item_ids,
+    inference_verifier_input,
     normalize_target_line_metadata,
     permute_generator_choices,
     target_line_for_text,
@@ -38,8 +41,11 @@ __all__ = [
     "CHOICE_PERMUTATION_VERSION",
     "DISPLAY_LINE_WIDTH",
     "GENERATOR_QUESTION_GROUP_FIELDS",
+    "apply_choice_permutation_to_question",
     "display_lines",
     "generator_model_schema_for_plan",
+    "inference_repair_model_schema_for_item_ids",
+    "inference_verifier_input",
     "normalize_target_line_metadata",
     "permute_generator_choices",
     "target_line_for_text",

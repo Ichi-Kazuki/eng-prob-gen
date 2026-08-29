@@ -1,8 +1,8 @@
-"""Three-call Reading v0.1 orchestration.
+"""Fail-closed Reading v0.1 and bounded v0.2 orchestration.
 
-The live path is deliberately small: one Generator call, one blind Reviewer
-call, and one blind Solver call.  A failed gate quarantines the first result;
-there is no quality retry or answer repair.
+The historical v0.1 path remains a three-call Generator/Reviewer/Solver
+sequence. The current v0.2.8 path adds at most one bounded INFERENCE-only
+Verifier/Repair stage before the existing blind Reviewer/Solver stages.
 """
 
 from __future__ import annotations
@@ -32,6 +32,7 @@ from shared.json_io import atomic_write_json
 from .contracts import (
     SCHEMA_PATHS,
     SCHEMA_PATHS_V02,
+    apply_choice_permutation_to_question,
     blind_input,
     blind_input_errors,
     canonicalize_generator_output,
@@ -39,12 +40,19 @@ from .contracts import (
     permute_generator_choices,
     deterministic_diagnostics,
     generator_model_schema_for_plan,
+    INFERENCE_VERIFIER_VALID_STATUSES,
+    inference_repair_input_errors,
+    inference_repair_model_schema_for_item_ids,
+    inference_verifier_input,
+    inference_verifier_input_errors,
     normalize_target_line_metadata,
     payload_sha256,
     post_blind_comparison,
     solver_input_errors,
     validate_deterministic,
     validate_generator_contract,
+    validate_inference_repair_contract,
+    validate_inference_verifier_contract,
     validate_result_contract,
     validate_draft_result_contract,
     validate_batch_result_contract,
@@ -59,6 +67,8 @@ ROOT = Path(__file__).resolve().parents[1]
 GENERATOR_AGENT = "toefl-itp-reading-generator"
 REVIEWER_AGENT = "toefl-itp-reading-reviewer"
 SOLVER_AGENT = "toefl-itp-reading-solver"
+INFERENCE_VERIFIER_AGENT = "toefl-itp-reading-inference-verifier"
+INFERENCE_REPAIR_AGENT = "toefl-itp-reading-inference-repair"
 AGENT_PATHS = {
     GENERATOR_AGENT: ROOT / ".claude" / "agents" / f"{GENERATOR_AGENT}.md",
     REVIEWER_AGENT: ROOT / ".claude" / "agents" / f"{REVIEWER_AGENT}.md",
@@ -68,12 +78,14 @@ AGENT_PATHS_V02 = {
     GENERATOR_AGENT: ROOT / ".claude" / "agents" / f"{GENERATOR_AGENT}-v0.2.md",
     REVIEWER_AGENT: ROOT / ".claude" / "agents" / f"{REVIEWER_AGENT}-v0.2.md",
     SOLVER_AGENT: ROOT / ".claude" / "agents" / f"{SOLVER_AGENT}-v0.2.md",
+    INFERENCE_VERIFIER_AGENT: ROOT / ".claude" / "agents" / f"{INFERENCE_VERIFIER_AGENT}-v0.2.md",
+    INFERENCE_REPAIR_AGENT: ROOT / ".claude" / "agents" / f"{INFERENCE_REPAIR_AGENT}-v0.2.md",
 }
 DEFAULT_MODEL = os.environ.get("READING_MODEL", "sonnet")
 DEFAULT_TIMEOUT_SECONDS = float(os.environ.get("READING_TIMEOUT_SECONDS", "300"))
 DEFAULT_MAX_BUDGET_USD = os.environ.get("READING_MAX_BUDGET_USD", "0.60")
 DEFAULT_PARALLELISM = 1
-READING_CURRENT_VERSION = "v0.2.7"
+READING_CURRENT_VERSION = "v0.2.8"
 
 
 READING_DIFFICULTY_GUIDANCE = (
@@ -175,7 +187,7 @@ READING_DOMAIN_GUIDANCE = (
 
 
 def reading_v02_generator_instruction(*, draft: bool = False) -> str:
-    """Return the shared v0.2.7 Generator contract used by production and draft modes."""
+    """Return the shared v0.2.8 Generator contract used by production and draft modes."""
 
     instruction = (
         "Generate one original TOEFL ITP-style Reading Comprehension set. Follow the supplied semantic plan exactly. "
@@ -636,6 +648,8 @@ class ReadingV02Pipeline(ReadingPipeline):
                 "generator": counts["reading_generator"],
                 "reviewer": counts["reading_reviewer"],
                 "solver": counts["reading_solver"],
+                "inference_verifier": counts["reading_inference_verifier"],
+                "inference_repair": counts["reading_inference_repair"],
             },
             "provider": getattr(self.runtime, "provider", "unknown"),
             "runtime_failures": self.runtime_failures,
@@ -651,12 +665,13 @@ class ReadingV02Pipeline(ReadingPipeline):
         raw_generator: Any = None,
         choice_permutation: dict[str, Any] | None = None,
         target_line_normalization: dict[str, Any] | None = None,
+        inference_provenance: dict[str, Any] | None = None,
     ) -> None:
         atomic_write_json(run_dir / "invocations.json", {
             "live_invocations": len(self.invocations),
             "invocations": [_json_safe_invocation(item) for item in self.invocations],
         })
-        atomic_write_json(run_dir / "provenance" / "provenance.json", {
+        provenance: dict[str, Any] = {
             "schema_version": "reading-provenance-v0.2",
             "run_id": run_id,
             "created_at": _now_iso(),
@@ -687,7 +702,124 @@ class ReadingV02Pipeline(ReadingPipeline):
                 "canonical_ordering_version": CANONICAL_QUESTION_ORDER_VERSION,
                 "canonical_validation_still_required": True,
             },
-        })
+        }
+        if inference_provenance is not None:
+            provenance.update(inference_provenance)
+        atomic_write_json(run_dir / "provenance" / "provenance.json", provenance)
+
+    @staticmethod
+    def _inference_gate_evaluation(
+        generator: dict[str, Any],
+        verifier: Any,
+        verifier_input: dict[str, Any],
+        verifier_errors: list[str],
+    ) -> tuple[list[str], dict[str, list[str]], list[dict[str, Any]]]:
+        """Privately compare a blind verifier with the trusted Generator key."""
+
+        generator_by_id = {
+            question["item_id"]: question
+            for question in generator.get("questions", [])
+            if isinstance(question, dict) and question.get("question_type") == "INFERENCE"
+        }
+        verifier_by_id = {
+            question.get("item_id"): question
+            for question in verifier.get("questions", [])
+            if isinstance(question, dict)
+        } if isinstance(verifier, dict) else {}
+        flagged: list[str] = []
+        reasons_by_id: dict[str, list[str]] = {}
+        results: list[dict[str, Any]] = []
+        contract_reason = "inference verifier contract error: " + "; ".join(verifier_errors)
+        for input_question in verifier_input.get("questions", []):
+            item_id = input_question.get("item_id")
+            trusted_question = generator_by_id.get(item_id)
+            verifier_question = verifier_by_id.get(item_id)
+            reasons: list[str] = []
+            if verifier_errors:
+                reasons.append(contract_reason)
+            if trusted_question is None:
+                reasons.append("system could not locate the canonical inference item")
+            if not isinstance(verifier_question, dict):
+                reasons.append("inference verifier did not return a judgment for this item")
+                status = None
+                best_answer = None
+            else:
+                status = verifier_question.get("status")
+                best_answer = verifier_question.get("best_answer")
+                if status not in INFERENCE_VERIFIER_VALID_STATUSES:
+                    reasons.append(f"verifier status {status!r} is not a valid inference status")
+                if best_answer not in {"A", "B", "C", "D"}:
+                    reasons.append(f"verifier best_answer {best_answer!r} is not a unique answer choice")
+                elif isinstance(trusted_question, dict) and best_answer != trusted_question.get("correct_answer"):
+                    reasons.append("verifier best_answer disagrees with the trusted Generator answer")
+            passed = not reasons
+            if not passed and isinstance(item_id, str):
+                flagged.append(item_id)
+                reasons_by_id[item_id] = reasons
+            results.append({
+                "item_id": item_id,
+                "status": status,
+                "best_answer": best_answer,
+                "pass": passed,
+                "reasons": reasons,
+            })
+        return flagged, reasons_by_id, results
+
+    @staticmethod
+    def _build_inference_repair_input(
+        generator: dict[str, Any],
+        verifier: Any,
+        flagged_item_ids: list[str],
+        reasons_by_id: dict[str, list[str]],
+    ) -> dict[str, Any]:
+        generator_by_id = {
+            question["item_id"]: question
+            for question in generator["questions"]
+            if isinstance(question, dict)
+        }
+        verifier_by_id = {
+            question.get("item_id"): question
+            for question in verifier.get("questions", [])
+            if isinstance(question, dict)
+        } if isinstance(verifier, dict) else {}
+        items: list[dict[str, Any]] = []
+        for item_id in flagged_item_ids:
+            question = generator_by_id[item_id]
+            judgment = verifier_by_id.get(item_id, {})
+            supporting = judgment.get("supporting_propositions", [])
+            if not isinstance(supporting, list) or not all(isinstance(value, str) for value in supporting):
+                supporting = []
+            best_answer = judgment.get("best_answer")
+            if best_answer not in {"A", "B", "C", "D", "AMBIGUOUS", "NONE"}:
+                best_answer = "NONE"
+            conclusion = judgment.get("conclusion")
+            if not isinstance(conclusion, str) or not conclusion.strip():
+                conclusion = "The verifier did not provide a usable conclusion."
+            comment = judgment.get("comment")
+            if not isinstance(comment, str) or not comment.strip():
+                comment = "The verifier did not provide a usable comment."
+            status = judgment.get("status")
+            if status not in {
+                "VALID_SHALLOW_INFERENCE",
+                "VALID_GENUINE_INFERENCE",
+                "VALID_CROSS_IDEA_INFERENCE",
+                "INVALID_DIRECT_RESTATEMENT",
+                "INVALID_UNSUPPORTED",
+                "INVALID_AMBIGUOUS",
+            }:
+                status = "INVALID_UNSUPPORTED"
+            items.append({
+                "item_id": item_id,
+                "stem": question["stem"],
+                "choices": copy.deepcopy(question["choices"]),
+                "verifier_status": status,
+                "verifier_best_answer": best_answer,
+                "supporting_propositions": supporting,
+                "conclusion": conclusion,
+                "verifier_comment": comment,
+                "defect_reasons": reasons_by_id.get(item_id, ["inference verifier failed this item"]),
+            })
+        return {"passage": generator["passage"], "items": items}
 
     def run(
         self,
@@ -696,7 +828,7 @@ class ReadingV02Pipeline(ReadingPipeline):
         domain: str | None = None,
         output_dir: Path | None = None,
     ) -> dict[str, Any]:
-        """Run one first-pass variable-length set with exactly three stages."""
+        """Run one current Reading set with one bounded inference repair at most."""
 
         started = time.perf_counter()
         self.invocations = []
@@ -711,22 +843,41 @@ class ReadingV02Pipeline(ReadingPipeline):
         expected_passage_id = plan["passage_id"]
         raw_generator: Any = None
         generator: Any = None
-        envelope_errors: list[str] = []
+        pre_repair_generator: Any = None
         reviewer: Any = None
         solver: Any = None
+        inference_verifier: Any = None
+        inference_repair: Any = None
+        inference_reverify: Any = None
         blind: dict[str, Any] | None = None
+        initial_verifier_input: dict[str, Any] | None = None
+        repair_input: dict[str, Any] | None = None
+        reverify_input: dict[str, Any] | None = None
+        envelope_errors: list[str] = []
         generator_errors: list[str] = []
         deterministic_errors: list[str] = []
         empirical_warnings: list[str] = []
         deterministic_classification = "HARD_VALIDITY"
         choice_permutation: dict[str, Any] | None = None
         target_line_normalization: dict[str, Any] | None = None
+        final_target_line_normalization: dict[str, Any] | None = None
         reviewer_errors: list[str] = []
         solver_errors: list[str] = []
         post_blind_metadata_errors: list[str] = []
         blind_errors: list[str] = []
         agreements: list[dict[str, Any]] = []
         agreement_errors: list[str] = []
+        inference_verifier_errors: list[str] = []
+        inference_repair_errors: list[str] = []
+        inference_gate_required = False
+        inference_gate_pass = False
+        inference_repair_attempted = False
+        inference_repair_succeeded = False
+        flagged_item_ids: list[str] = []
+        repaired_item_ids: list[str] = []
+        repair_reasons: dict[str, list[str]] = {}
+        initial_gate_results: list[dict[str, Any]] = []
+        reverify_gate_results: list[dict[str, Any]] = []
 
         try:
             generator_result = self._invoke(
@@ -761,20 +912,233 @@ class ReadingV02Pipeline(ReadingPipeline):
             if not generator_errors:
                 deterministic_errors = validation["hard_failures"]
                 post_blind_metadata_errors = validate_generator_contract(generator, plan, self.schema_paths)
-            if not generator_errors and not deterministic_errors:
-                try:
-                    blind = blind_input(generator, schema_version=self.blind_schema_version)
-                    blind_errors = (
-                        blind_input_errors(generator, blind, self.schema_paths, self.blind_schema_version)
-                        + solver_input_errors(generator, blind, self.schema_paths, self.blind_schema_version)
-                    )
-                except (KeyError, TypeError, ValueError) as exc:
-                    blind_errors = [str(exc)]
-            if blind is not None:
-                atomic_write_json(run_dir / "reviewer_input.json", blind)
-                atomic_write_json(run_dir / "solver_input.json", blind)
 
-            if blind is not None and not blind_errors:
+            if generator is not None and not generator_errors and not deterministic_errors:
+                inference_items = [
+                    question for question in generator["questions"]
+                    if question.get("question_type") == "INFERENCE"
+                ]
+                inference_gate_required = bool(inference_items)
+                if not inference_items:
+                    inference_gate_pass = True
+                else:
+                    inference_ids = [question["item_id"] for question in inference_items]
+                    initial_verifier_input = inference_verifier_input(generator)
+                    verifier_input_errors = inference_verifier_input_errors(
+                        generator,
+                        initial_verifier_input,
+                        self.schema_paths,
+                        expected_item_ids=set(inference_ids),
+                    )
+                    atomic_write_json(run_dir / "inference_verifier_input.json", initial_verifier_input)
+                    if verifier_input_errors:
+                        inference_verifier_errors.extend(verifier_input_errors)
+                        flagged_item_ids = list(inference_ids)
+                        repair_reasons = {
+                            item_id: list(verifier_input_errors)
+                            for item_id in inference_ids
+                        }
+                    else:
+                        verifier_result = self._invoke(
+                            stage="reading_inference_verifier",
+                            agent=INFERENCE_VERIFIER_AGENT,
+                            prompt=self._prompt(
+                                "Independently verify only the supplied INFERENCE items. Use only INPUT_JSON. "
+                                "Solve each item, classify direct restatement, supported inference, unsupportedness, "
+                                "or ambiguity, and return one judgment per item. Do not request or infer hidden "
+                                "Generator metadata. Return JSON only.",
+                                initial_verifier_input,
+                            ),
+                            input_keys=("passage_id", "section", "passage", "questions"),
+                            schema_key="inference_verifier",
+                            output_dir=run_dir,
+                            isolate_workspace=True,
+                        )
+                        inference_verifier = verifier_result.parsed
+                        atomic_write_json(run_dir / "inference_verifier.json", inference_verifier)
+                        inference_verifier_errors = validate_inference_verifier_contract(
+                            inference_verifier,
+                            initial_verifier_input,
+                            self.schema_paths,
+                        )
+                        flagged_item_ids, repair_reasons, initial_gate_results = self._inference_gate_evaluation(
+                            generator,
+                            inference_verifier,
+                            initial_verifier_input,
+                            inference_verifier_errors,
+                        )
+                    if not flagged_item_ids and not inference_verifier_errors:
+                        inference_gate_pass = True
+                    else:
+                        inference_repair_attempted = True
+                        pre_repair_generator = copy.deepcopy(generator)
+                        atomic_write_json(run_dir / "generator_pre_repair.json", pre_repair_generator)
+                        repair_input = self._build_inference_repair_input(
+                            generator,
+                            inference_verifier,
+                            flagged_item_ids,
+                            repair_reasons,
+                        )
+                        repair_input_errors = inference_repair_input_errors(repair_input, self.schema_paths)
+                        atomic_write_json(run_dir / "inference_repair_input.json", repair_input)
+                        if repair_input_errors:
+                            inference_repair_errors.extend(repair_input_errors)
+                        else:
+                            repair_result = self._invoke(
+                                stage="reading_inference_repair",
+                                agent=INFERENCE_REPAIR_AGENT,
+                                prompt=self._prompt(
+                                    "Repair every flagged INFERENCE item in INPUT_JSON in one response. Use only the "
+                                    "passage, visible item content, blind Verifier feedback, and system-derived defect "
+                                    "reasons. Return exactly one replacement per requested item_id. Do not use the "
+                                    "original Generator key or rationale. Return fresh semantic A/B/C/D choices and a "
+                                    "fresh raw answer label; the trusted pipeline applies the existing answer-position "
+                                    "mapping. Return JSON only.",
+                                    repair_input,
+                                ),
+                                input_keys=("passage", "items"),
+                                schema_key="inference_repair",
+                                output_dir=run_dir,
+                                isolate_workspace=True,
+                                transport_output_schema=inference_repair_model_schema_for_item_ids(flagged_item_ids),
+                            )
+                            inference_repair = repair_result.parsed
+                            atomic_write_json(run_dir / "inference_repair.json", inference_repair)
+                            inference_repair_errors = validate_inference_repair_contract(
+                                inference_repair,
+                                flagged_item_ids,
+                                self.schema_paths,
+                            )
+                            if not inference_repair_errors:
+                                records_by_id = {
+                                    record["item_id"]: record
+                                    for record in choice_permutation["questions"]
+                                } if isinstance(choice_permutation, dict) else {}
+                                replacement_by_id = {
+                                    replacement["item_id"]: replacement
+                                    for replacement in inference_repair["replacements"]
+                                }
+                                candidate = copy.deepcopy(generator)
+                                slots_by_id = {
+                                    question["item_id"]: index
+                                    for index, question in enumerate(candidate["questions"])
+                                }
+                                merge_errors: list[str] = []
+                                for item_id in flagged_item_ids:
+                                    record = records_by_id.get(item_id)
+                                    replacement = replacement_by_id.get(item_id)
+                                    slot = slots_by_id.get(item_id)
+                                    if record is None or replacement is None or slot is None:
+                                        merge_errors.append(f"could not merge repaired item {item_id}")
+                                        continue
+                                    try:
+                                        remapped = apply_choice_permutation_to_question(
+                                            replacement,
+                                            original_to_canonical=record["original_to_canonical"],
+                                            canonical_to_original=record["canonical_to_original"],
+                                        )
+                                    except (TypeError, ValueError, KeyError) as exc:
+                                        merge_errors.append(f"could not remap repaired item {item_id}: {exc}")
+                                        continue
+                                    if remapped.get("item_id") != item_id or remapped.get("question_type") != "INFERENCE":
+                                        merge_errors.append(f"repaired item {item_id} changed trusted identity or type")
+                                        continue
+                                    candidate["questions"][slot] = remapped
+                                if merge_errors:
+                                    inference_repair_errors.extend(merge_errors)
+                                else:
+                                    candidate, final_target_line_normalization = normalize_target_line_metadata(candidate)
+                                    generator = candidate
+                                    repaired_item_ids = list(flagged_item_ids)
+                                    atomic_write_json(run_dir / "generator.json", generator)
+                                    final_generator_errors = validate_generator_contract(generator, plan, self.schema_paths)
+                                    final_validation = deterministic_diagnostics(generator, plan, self.schema_paths)
+                                    generator_errors = final_generator_errors
+                                    deterministic_errors = final_validation["hard_failures"]
+                                    empirical_warnings = final_validation["empirical_warnings"]
+                                    deterministic_classification = final_validation["classification"]
+                                    if generator_errors or deterministic_errors:
+                                        inference_repair_errors.extend(
+                                            ["final repaired Generator validation failed", *generator_errors, *deterministic_errors]
+                                        )
+                                    else:
+                                        reverify_input = inference_verifier_input(
+                                            generator,
+                                            item_ids=set(repaired_item_ids),
+                                        )
+                                        reverify_input_errors = inference_verifier_input_errors(
+                                            generator,
+                                            reverify_input,
+                                            self.schema_paths,
+                                            expected_item_ids=set(repaired_item_ids),
+                                        )
+                                        atomic_write_json(run_dir / "inference_reverify_input.json", reverify_input)
+                                        if reverify_input_errors:
+                                            inference_verifier_errors.extend(reverify_input_errors)
+                                            inference_repair_errors.extend(reverify_input_errors)
+                                        else:
+                                            reverify_result = self._invoke(
+                                                stage="reading_inference_verifier",
+                                                agent=INFERENCE_VERIFIER_AGENT,
+                                                prompt=self._prompt(
+                                                    "Re-verify only the repaired INFERENCE items in INPUT_JSON using "
+                                                    "the same blind inference-verification rules. Return one judgment "
+                                                    "per item and no set-level result. Do not request or infer hidden "
+                                                    "Generator metadata. Return JSON only.",
+                                                    reverify_input,
+                                                ),
+                                                input_keys=("passage_id", "section", "passage", "questions"),
+                                                schema_key="inference_verifier",
+                                                output_dir=run_dir,
+                                                isolate_workspace=True,
+                                            )
+                                            inference_reverify = reverify_result.parsed
+                                            atomic_write_json(run_dir / "inference_reverify.json", inference_reverify)
+                                            reverify_errors = validate_inference_verifier_contract(
+                                                inference_reverify,
+                                                reverify_input,
+                                                self.schema_paths,
+                                            )
+                                            inference_verifier_errors.extend(reverify_errors)
+                                            reverify_flagged, _reverify_reasons, reverify_gate_results = self._inference_gate_evaluation(
+                                                generator,
+                                                inference_reverify,
+                                                reverify_input,
+                                                reverify_errors,
+                                            )
+                                            inference_gate_pass = not reverify_errors and not reverify_flagged
+                                            inference_repair_succeeded = inference_gate_pass
+
+        except RuntimeInvocationError:
+            # Runtime failures are recorded by _invoke and remain distinct from
+            # quality quarantine; no later stage is invoked after one occurs.
+            pass
+
+        for failure in self.runtime_failures:
+            stage = failure.get("stage")
+            detail = str(failure.get("detail", "runtime invocation failed"))
+            if stage == "reading_inference_verifier":
+                inference_verifier_errors.append(detail)
+            elif stage == "reading_inference_repair":
+                inference_repair_errors.append(detail)
+
+        if generator is not None:
+            post_blind_metadata_errors = validate_generator_contract(generator, plan, self.schema_paths)
+        if blind is None and generator is not None and not generator_errors and not deterministic_errors and inference_gate_pass:
+            try:
+                blind = blind_input(generator, schema_version=self.blind_schema_version)
+                blind_errors = (
+                    blind_input_errors(generator, blind, self.schema_paths, self.blind_schema_version)
+                    + solver_input_errors(generator, blind, self.schema_paths, self.blind_schema_version)
+                )
+            except (KeyError, TypeError, ValueError) as exc:
+                blind_errors = [str(exc)]
+        if blind is not None:
+            atomic_write_json(run_dir / "reviewer_input.json", blind)
+            atomic_write_json(run_dir / "solver_input.json", blind)
+
+        if blind is not None and not blind_errors and not self.runtime_failures:
+            try:
                 reviewer_result = self._invoke(
                     stage="reading_reviewer",
                     agent=REVIEWER_AGENT,
@@ -806,21 +1170,10 @@ class ReadingV02Pipeline(ReadingPipeline):
                 solver = solver_result.parsed
                 atomic_write_json(run_dir / "solver.json", solver)
                 solver_errors = validate_solver_contract(solver, blind, self.schema_paths)
-
                 if not reviewer_errors and not solver_errors:
                     agreements, agreement_errors = post_blind_comparison(generator, reviewer, solver)
-        except RuntimeInvocationError:
-            # Preserve the first pass. Infrastructure failure is distinct from
-            # quality quarantine and never triggers replacement generation.
-            pass
-
-        if blind is not None and not (run_dir / "reviewer_input.json").exists():
-            atomic_write_json(run_dir / "reviewer_input.json", blind)
-            atomic_write_json(run_dir / "solver_input.json", blind)
-        if reviewer is not None and not (run_dir / "reviewer.json").exists():
-            atomic_write_json(run_dir / "reviewer.json", reviewer)
-        if solver is not None and not (run_dir / "solver.json").exists():
-            atomic_write_json(run_dir / "solver.json", solver)
+            except RuntimeInvocationError:
+                pass
 
         reviewer_questions = reviewer.get("questions", []) if isinstance(reviewer, dict) else []
         solver_answers = solver.get("answers", []) if isinstance(solver, dict) else []
@@ -842,6 +1195,16 @@ class ReadingV02Pipeline(ReadingPipeline):
         checks: dict[str, Any] = {
             "generator_canonical": not generator_errors,
             "deterministic": not deterministic_errors and not generator_errors,
+            "inference_gate_required": inference_gate_required,
+            "inference_gate_pass": inference_gate_pass,
+            "inference_repair_attempted": inference_repair_attempted,
+            "inference_repair_succeeded": inference_repair_succeeded,
+            "inference_verifier_errors": inference_verifier_errors,
+            "inference_repair_errors": inference_repair_errors,
+            "inference_gate_results": {
+                "initial": initial_gate_results,
+                "reverify": reverify_gate_results,
+            },
             "reviewer_contract": not reviewer_errors and reviewer is not None,
             "reviewer_set_pass": isinstance(reviewer, dict) and reviewer.get("set_judgment") == "PASS",
             "reviewer_no_ambiguous_none": reviewer_no_ambiguous_none,
@@ -867,6 +1230,7 @@ class ReadingV02Pipeline(ReadingPipeline):
             for key in (
                 "generator_canonical",
                 "deterministic",
+                "inference_gate_pass",
                 "reviewer_contract",
                 "reviewer_set_pass",
                 "reviewer_no_ambiguous_none",
@@ -899,6 +1263,32 @@ class ReadingV02Pipeline(ReadingPipeline):
             result["decision"] = "INFRASTRUCTURE_FAILURE" if self.runtime_failures else "QUARANTINE"
         result["checks"]["final_result_contract"] = not result_contract_errors
         result["checks"]["final_result_errors"] = result_contract_errors
+        inference_provenance = {
+            "generator_pre_repair_artifact": "generator_pre_repair.json" if pre_repair_generator is not None else None,
+            "generator_pre_repair_sha256": payload_sha256(pre_repair_generator) if pre_repair_generator is not None else None,
+            "final_generator_sha256": payload_sha256(generator) if isinstance(generator, dict) else None,
+            "inference_verifier_input_artifact": "inference_verifier_input.json" if initial_verifier_input is not None else None,
+            "inference_verifier_input_sha256": payload_sha256(initial_verifier_input) if initial_verifier_input is not None else None,
+            "inference_verifier_output_artifact": "inference_verifier.json" if inference_verifier is not None else None,
+            "inference_verifier_output_sha256": payload_sha256(inference_verifier) if inference_verifier is not None else None,
+            "flagged_inference_item_ids": flagged_item_ids,
+            "deterministic_repair_reasons": repair_reasons,
+            "repair_attempt_count": 1 if inference_repair_attempted else 0,
+            "repaired_item_ids": repaired_item_ids,
+            "inference_repair_input_artifact": "inference_repair_input.json" if repair_input is not None else None,
+            "inference_repair_input_sha256": payload_sha256(repair_input) if repair_input is not None else None,
+            "inference_repair_output_artifact": "inference_repair.json" if inference_repair is not None else None,
+            "inference_repair_output_sha256": payload_sha256(inference_repair) if inference_repair is not None else None,
+            "inference_reverify_input_artifact": "inference_reverify_input.json" if reverify_input is not None else None,
+            "inference_reverify_input_sha256": payload_sha256(reverify_input) if reverify_input is not None else None,
+            "inference_reverify_output_artifact": "inference_reverify.json" if inference_reverify is not None else None,
+            "inference_reverify_output_sha256": payload_sha256(inference_reverify) if inference_reverify is not None else None,
+            "final_specialized_inference_gate_result": inference_gate_pass,
+            "final_blind_input_sha256": payload_sha256(blind) if blind is not None else None,
+            "final_target_line_normalization": final_target_line_normalization,
+            "initial_inference_gate_results": initial_gate_results,
+            "reverify_inference_gate_results": reverify_gate_results,
+        }
         self._write_invocations_and_provenance(
             run_dir,
             run_id,
@@ -907,6 +1297,7 @@ class ReadingV02Pipeline(ReadingPipeline):
             raw_generator,
             choice_permutation,
             target_line_normalization,
+            inference_provenance,
         )
         atomic_write_json(run_dir / "result.json", result)
         return result
@@ -1072,10 +1463,22 @@ def _unexpected_failure_result(
             "answer_agreement": [],
             "answer_disagreement_errors": [],
             "post_blind_metadata_errors": [],
+            "inference_gate_required": False,
+            "inference_gate_pass": False,
+            "inference_repair_attempted": False,
+            "inference_repair_succeeded": False,
+            "inference_verifier_errors": [],
+            "inference_repair_errors": [],
         },
         "infrastructure": {
             "live_invocations": 0,
-            "invocation_counts": {"generator": 0, "reviewer": 0, "solver": 0},
+            "invocation_counts": {
+                "generator": 0,
+                "reviewer": 0,
+                "solver": 0,
+                "inference_verifier": 0,
+                "inference_repair": 0,
+            },
             "provider": provider or "unknown",
             "runtime_failures": [{"stage": "worker", "category": "infrastructure", "detail": str(exc)}],
             "synthetic_fallback": False,
@@ -1190,6 +1593,8 @@ def run_reading_batch(
         "generator": sum(result.get("infrastructure", {}).get("invocation_counts", {}).get("generator", 0) for result in results),
         "reviewer": sum(result.get("infrastructure", {}).get("invocation_counts", {}).get("reviewer", 0) for result in results),
         "solver": sum(result.get("infrastructure", {}).get("invocation_counts", {}).get("solver", 0) for result in results),
+        "inference_verifier": sum(result.get("infrastructure", {}).get("invocation_counts", {}).get("inference_verifier", 0) for result in results),
+        "inference_repair": sum(result.get("infrastructure", {}).get("invocation_counts", {}).get("inference_repair", 0) for result in results),
     }
     passage_artifacts = []
     for (index, passage_seed, result) in outputs:
@@ -1232,6 +1637,8 @@ def run_reading_batch(
         "generator_invocation_count": invocation_counts["generator"],
         "reviewer_invocation_count": invocation_counts["reviewer"],
         "solver_invocation_count": invocation_counts["solver"],
+        "inference_verifier_invocation_count": invocation_counts["inference_verifier"],
+        "inference_repair_invocation_count": invocation_counts["inference_repair"],
         "leakage_count": sum(len(result.get("checks", {}).get("blind_errors", [])) for result in results),
         "synthetic_fallback_count": sum(bool(result.get("infrastructure", {}).get("synthetic_fallback")) for result in results),
         "elapsed_wall_clock_seconds": round(time.perf_counter() - batch_started, 6),

@@ -47,6 +47,10 @@ SCHEMA_PATHS_V02 = {
     "reviewer": SCHEMA_DIR / "reading_reviewer_output_v0_2.schema.json",
     "solver_input": SCHEMA_DIR / "reading_solver_input_v0_2.schema.json",
     "solver": SCHEMA_DIR / "reading_solver_output_v0_2.schema.json",
+    "inference_verifier_input": SCHEMA_DIR / "reading_inference_verifier_input_v0_2.schema.json",
+    "inference_verifier": SCHEMA_DIR / "reading_inference_verifier_output_v0_2.schema.json",
+    "inference_repair_input": SCHEMA_DIR / "reading_inference_repair_input_v0_2.schema.json",
+    "inference_repair": SCHEMA_DIR / "reading_inference_repair_output_v0_2.schema.json",
     "result": SCHEMA_DIR / "reading_result_v0_2.schema.json",
     "draft_result": SCHEMA_DIR / "reading_draft_result_v0_2.schema.json",
     "batch_result": SCHEMA_DIR / "reading_batch_result_v0_2.schema.json",
@@ -61,6 +65,12 @@ GENERATOR_QUESTION_GROUP_FIELDS = {
     "MAIN_IDEA": "main_idea_questions",
     "REFERENCE": "reference_questions",
 }
+INFERENCE_SUBTYPES = frozenset({"LOCAL_INFERENCE", "CROSS_IDEA_INFERENCE", "RHETORICAL_PURPOSE"})
+INFERENCE_VERIFIER_VALID_STATUSES = frozenset({
+    "VALID_SHALLOW_INFERENCE",
+    "VALID_GENUINE_INFERENCE",
+    "VALID_CROSS_IDEA_INFERENCE",
+})
 _OPTIONAL_TARGET_FIELDS = ("target_text", "target_line")
 CANONICAL_QUESTION_ORDER_VERSION = "reading-v0.2.5-evidence-position-aware-v1"
 CHOICE_PERMUTATION_VERSION = "reading-v0.2.5-seeded-choice-permutation-v1"
@@ -487,6 +497,52 @@ def _permutation_question_references(
     )
 
 
+def apply_choice_permutation_to_question(
+    question: dict[str, Any],
+    *,
+    original_to_canonical: dict[str, str],
+    canonical_to_original: dict[str, str],
+) -> dict[str, Any]:
+    """Apply an already-recorded A/B/C/D mapping to one semantic question.
+
+    The helper is intentionally pure: it returns a deep copy and never derives
+    a new mapping.  This is used both by the original whole-set permutation and
+    by the bounded v0.2.8 inference repair merge.
+    """
+
+    if not isinstance(question, dict):
+        raise ValueError("choice permutation requires a question object")
+    if set(original_to_canonical) != ANSWER_LABELS or set(original_to_canonical.values()) != ANSWER_LABELS:
+        raise ValueError("original_to_canonical must be a complete A/B/C/D mapping")
+    if set(canonical_to_original) != ANSWER_LABELS or set(canonical_to_original.values()) != ANSWER_LABELS:
+        raise ValueError("canonical_to_original must be a complete A/B/C/D mapping")
+    if any(canonical_to_original[canonical] != original for original, canonical in original_to_canonical.items()):
+        raise ValueError("choice permutation mappings must be inverses")
+
+    copied = copy.deepcopy(question)
+    choices = copied.get("choices")
+    original_answer = copied.get("correct_answer")
+    if not isinstance(choices, dict) or set(choices) != ANSWER_LABELS:
+        raise ValueError("question must contain exactly A/B/C/D choices")
+    if original_answer not in ANSWER_LABELS:
+        raise ValueError("question has an invalid correct_answer")
+    copied["choices"] = {
+        canonical_label: copy.deepcopy(choices[original_label])
+        for canonical_label, original_label in canonical_to_original.items()
+    }
+    copied["correct_answer"] = original_to_canonical[original_answer]
+    distractor_metadata = copied.get("distractor_metadata")
+    if isinstance(distractor_metadata, dict) and set(distractor_metadata) == ANSWER_LABELS:
+        copied["distractor_metadata"] = {
+            canonical_label: copy.deepcopy(distractor_metadata[original_label])
+            for canonical_label, original_label in canonical_to_original.items()
+        }
+    for key, value in copied.items():
+        if key not in {"choices", "correct_answer"}:
+            _remap_internal_answer_labels(value, original_to_canonical)
+    return copied
+
+
 def permute_generator_choices(
     output: dict[str, Any],
     plan: dict[str, Any],
@@ -536,18 +592,13 @@ def permute_generator_choices(
                 question_index=question_index,
             )
         )
-        question["choices"] = {
-            canonical_label: copy.deepcopy(choices[original_label])
-            for canonical_label, original_label in canonical_to_original.items()
-        }
-        question["correct_answer"] = original_to_canonical[original_answer]
-        distractor_metadata = question.get("distractor_metadata")
-        if isinstance(distractor_metadata, dict) and set(distractor_metadata) == ANSWER_LABELS:
-            question["distractor_metadata"] = {
-                canonical_label: copy.deepcopy(distractor_metadata[original_label])
-                for canonical_label, original_label in canonical_to_original.items()
-            }
-        _remap_internal_answer_labels(question.get("evidence"), original_to_canonical)
+        permuted_question = apply_choice_permutation_to_question(
+            question,
+            original_to_canonical=original_to_canonical,
+            canonical_to_original=canonical_to_original,
+        )
+        question.clear()
+        question.update(permuted_question)
         question_provenance.append({
             "item_id": item_id,
             "question_index": question_index,
@@ -1234,6 +1285,140 @@ def solver_input_errors(
     return _blind_input_errors(output, payload, "solver_input", schema_paths, schema_version)
 
 
+def inference_verifier_input(
+    output: dict[str, Any],
+    *,
+    item_ids: set[str] | frozenset[str] | None = None,
+) -> dict[str, Any]:
+    """Project the visible surface of only the requested INFERENCE items."""
+
+    if not isinstance(output, dict):
+        raise ValueError("inference verifier input source must be an object")
+    questions = []
+    for question in output["questions"]:
+        if question.get("question_type") != "INFERENCE":
+            continue
+        if item_ids is not None and question.get("item_id") not in item_ids:
+            continue
+        questions.append({
+            "item_id": question["item_id"],
+            "stem": question["stem"],
+            "choices": copy.deepcopy(question["choices"]),
+        })
+    payload = {
+        "passage_id": output["passage_id"],
+        "section": output["section"],
+        "passage": output["passage"],
+        "questions": questions,
+    }
+    leakage = _nested_keys(payload, BLIND_FORBIDDEN_KEYS)
+    if leakage:
+        raise ValueError("inference verifier projection contains forbidden field(s): " + ", ".join(leakage))
+    return payload
+
+
+def inference_verifier_input_errors(
+    output: Any,
+    payload: Any,
+    schema_paths: dict[str, Path] | None = None,
+    *,
+    expected_item_ids: set[str] | frozenset[str] | None = None,
+) -> list[str]:
+    """Validate that verifier input is a strict visible inference projection."""
+
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02
+    errors: list[str] = []
+    if not isinstance(output, dict):
+        return ["inference verifier input source must be an object"]
+    try:
+        expected = inference_verifier_input(output, item_ids=expected_item_ids)
+    except (KeyError, TypeError, ValueError) as exc:
+        return [f"inference verifier input could not be derived: {exc}"]
+    if payload != expected:
+        errors.append("inference verifier input does not match the canonical visible projection")
+    errors.extend(
+        f"inference verifier input: forbidden field {path}"
+        for path in _nested_keys(payload, BLIND_FORBIDDEN_KEYS)
+    )
+    errors.extend(_schema_errors(payload, "inference_verifier_input", schema_paths))
+    return errors
+
+
+def validate_inference_verifier_contract(
+    output: Any,
+    verifier_input: dict[str, Any],
+    schema_paths: dict[str, Path] | None = None,
+) -> list[str]:
+    """Validate one blind Verifier response against its supplied item IDs."""
+
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02
+    errors = _schema_errors(output, "inference_verifier", schema_paths)
+    if errors or not isinstance(output, dict):
+        return errors
+    if output["passage_id"] != verifier_input["passage_id"] or output["section"] != verifier_input["section"]:
+        errors.append("inference_verifier: passage identity does not match input")
+    expected_ids = [question["item_id"] for question in verifier_input["questions"]]
+    actual_ids, duplicates = _ids(output["questions"], "item_id")
+    if duplicates:
+        errors.append(f"inference_verifier: duplicate item_id(s) {duplicates}")
+    if actual_ids != expected_ids:
+        errors.append("inference_verifier: question ids/order do not match input")
+    return errors
+
+
+def inference_repair_input_errors(
+    payload: Any,
+    schema_paths: dict[str, Path] | None = None,
+) -> list[str]:
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02
+    return _schema_errors(payload, "inference_repair_input", schema_paths)
+
+
+def inference_repair_model_schema_for_item_ids(item_ids: list[str] | tuple[str, ...]) -> dict[str, Any]:
+    """Build a repair transport schema with the exact requested item IDs."""
+
+    if not item_ids or len(set(item_ids)) != len(item_ids) or not all(isinstance(item_id, str) for item_id in item_ids):
+        raise ValueError("repair schema requires a non-empty unique item-id sequence")
+    schema = load_schema(SCHEMA_PATHS_V02["inference_repair"])
+    replacements = schema.get("properties", {}).get("replacements")
+    if not isinstance(replacements, dict) or not isinstance(replacements.get("items"), dict):
+        raise ValueError("repair schema is missing its replacement item definition")
+    replacements["minItems"] = len(item_ids)
+    replacements["maxItems"] = len(item_ids)
+    item_properties = replacements["items"].get("properties")
+    if not isinstance(item_properties, dict):
+        raise ValueError("repair schema is missing replacement item properties")
+    item_properties["item_id"] = {"enum": list(item_ids)}
+    return schema
+
+
+def validate_inference_repair_contract(
+    output: Any,
+    requested_item_ids: list[str] | tuple[str, ...],
+    schema_paths: dict[str, Path] | None = None,
+) -> list[str]:
+    """Validate exactly one replacement per flagged inference item."""
+
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02
+    errors = _schema_errors(output, "inference_repair", schema_paths)
+    if errors or not isinstance(output, dict):
+        return errors
+    actual_ids, duplicates = _ids(output["replacements"], "item_id")
+    requested = list(requested_item_ids)
+    if duplicates:
+        errors.append(f"inference_repair: duplicate item_id(s) {duplicates}")
+    if len(actual_ids) != len(requested) or set(actual_ids) != set(requested):
+        errors.append(
+            "inference_repair: replacement item IDs must exactly match requested IDs; "
+            f"requested {requested}, got {actual_ids}"
+        )
+    return errors
+
+
 def payload_sha256(payload: Any) -> str:
     serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return "sha256:" + hashlib.sha256(serialized).hexdigest()
@@ -1345,6 +1530,8 @@ def validate_result_contract(
             "no_leakage",
             "no_synthetic_fallback",
         }
+        if result.get("schema_version") == "reading-result-v0.2":
+            required_true.add("inference_gate_pass")
         missing_or_false = sorted(key for key in required_true if checks.get(key) is not True)
         if missing_or_false:
             errors.append(f"result: ACCEPT requires true gates {missing_or_false}")

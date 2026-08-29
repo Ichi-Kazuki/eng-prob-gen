@@ -1,10 +1,10 @@
 # TOEFL ITP Grammar Problem Generator
 
-This repository implements a fail-closed pipeline for generating and quality-gating TOEFL ITP Structure and Written Expression items. It stores stage state and replayable artifacts as JSON; it does not silently repair an item or replace an agent's grammar/quality judgment.
+This repository implements a fail-closed pipeline for generating and quality-gating TOEFL ITP Structure and Written Expression items. It stores stage state and replayable artifacts as JSON; it does not silently repair items or replace an agent's grammar/quality judgment. Reading v0.2.8's bounded inference repair is explicit and audited.
 
-## Reading Comprehension v0.2.7 (historical v0.1 compatibility)
+## Reading Comprehension v0.2.8 (historical v0.1 compatibility)
 
-Reading is a separate contract family. v0.2.7 is the current/default CLI
+Reading is a separate contract family. v0.2.8 is the current/default CLI
 route: each independent passage plan samples a
 realistic variable question count and ordered type mix from the lightweight
 derived profile in `analysis/reading_v0_2_empirical_profile.json`. Repeated
@@ -12,7 +12,7 @@ question types are allowed, and Generator, Reviewer, and Solver each process
 the complete question set in one invocation. Passage-length and question-count
 sampling remain independent Planner draws.
 
-Run one fresh current v0.2.7 passage set with Claude Code (the default provider):
+Run one fresh current v0.2.8 passage set with Claude Code (the default provider):
 
 ```powershell
 python -m reading.cli --seed 1001
@@ -49,8 +49,9 @@ Generator, blind inputs, Reviewer, Solver, result, runtime, and provenance
 artifacts plus the batch-level `batch_result.json`. A draft is always marked
 `UNVALIDATED_DRAFT` and `production_eligible: false`; it cannot be accepted.
 Quality rejection is `QUARANTINE`, infrastructure failure is
-`INFRASTRUCTURE_FAILURE`, and no quality retry or replacement generation is
-performed. Offline tests are run with:
+`INFRASTRUCTURE_FAILURE`. Whole-passage and whole-set replacement remains
+prohibited; v0.2.8 permits at most one bounded INFERENCE-only repair before
+the ordinary blind Reviewer/Solver stages. Offline tests are run with:
 
 ```powershell
 python -m unittest discover -s tests -p "test_*.py" -v
@@ -58,11 +59,21 @@ python -m unittest discover -s tests -p "test_*.py" -v
 
 ## Architecture
 
-`Generator → Reviewer → Solver → Orchestrator`
+`Generator → Inference Verifier/Repair (when needed) → Reviewer → Solver → Orchestrator`
 
-The Generator proposes an item, the Reviewer independently returns `PASS`, `REVISE`, or `REJECT`, and the blinded Solver independently selects an answer. The Orchestrator owns sequencing, schema boundaries, retry/state invariants, consensus, provenance, and human-review routing.
+The Generator proposes the set. When inference items are present, the blind
+Inference Verifier may flag them for one bounded repair. The existing blind
+Reviewer independently audits the final set and the Solver independently
+selects answers. The Orchestrator owns sequencing, schema boundaries,
+repair/state invariants, consensus, provenance, and human-review routing.
 
-The Solver receives only the canonical allowlisted projection (`item_id`, section, and question content). The canonical payload is deep-copied, persisted in candidate state, and re-derived and compared again at the Solver boundary. Live Reviewer/Solver calls use a disposable workspace outside the repository containing only the named agent definition and output schema. `ACCEPTED` requires the full Generator/Reviewer/Solver consensus invariant; any disagreement fails closed.
+The Verifier, Reviewer, and Solver receive only canonical allowlisted visible
+projections (`item_id`, section, and question content). The canonical payload
+is deep-copied, persisted in candidate state, and re-derived at each blind
+boundary. Live blind calls use a disposable workspace outside the repository
+containing only the named agent definition and output schema. `ACCEPTED`
+requires the full Generator/Verifier/Reviewer/Solver invariant; any
+disagreement fails closed.
 
 The production Orchestrator and the Written Expression v2 live E2E are
 separate contract families. Production finalization consumes the legacy
