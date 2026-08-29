@@ -32,7 +32,7 @@ def historical_result() -> dict:
 
 
 class ReadingCliRoutingTests(unittest.TestCase):
-    def test_default_command_routes_to_current_v025_batch(self) -> None:
+    def test_default_command_routes_to_current_v026_batch(self) -> None:
         with (
             mock.patch.object(cli, "run_reading_batch", return_value={}) as batch,
             mock.patch.object(cli, "run_reading") as historical,
@@ -51,10 +51,10 @@ class ReadingCliRoutingTests(unittest.TestCase):
             model=None,
         )
 
-    def test_explicit_current_v025_route_accepts_batch_and_draft_options(self) -> None:
+    def test_explicit_current_v026_route_accepts_batch_and_draft_options(self) -> None:
         with mock.patch.object(cli, "run_reading_batch", return_value={}) as batch:
             self.assertEqual(
-                cli.main(["--version", "v0.2.5", "--seed", "17", "--count", "2", "--parallel", "2", "--mode", "draft"]),
+                cli.main(["--version", "v0.2.6", "--seed", "17", "--count", "2", "--parallel", "2", "--mode", "draft"]),
                 0,
             )
 

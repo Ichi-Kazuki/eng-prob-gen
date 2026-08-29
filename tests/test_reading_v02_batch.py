@@ -508,7 +508,7 @@ class ReadingV02BatchTests(unittest.TestCase):
             self.assertEqual(json.loads((root / "generator_raw.json").read_text(encoding="utf-8")), raw)
             self.assertEqual(json.loads((root / "generator.json").read_text(encoding="utf-8")), permuted)
             provenance = json.loads((root / "provenance" / "provenance.json").read_text(encoding="utf-8"))
-            self.assertEqual(provenance["reading_version"], "v0.2.5")
+            self.assertEqual(provenance["reading_version"], "v0.2.6")
             self.assertEqual(provenance["choice_permutation"], expected_provenance)
             self.assertEqual(provenance["blind_prompt_fields"], ["passage_id", "section", "passage", "questions"])
 
@@ -763,12 +763,15 @@ class ReadingV02BatchTests(unittest.TestCase):
             )
         self.assertIn("exactly match question_type_counts", generator_request.prompt)
         self.assertIn("ordering of the generated questions is free", generator_request.prompt)
-        self.assertIn("vary reasoning depth according to what the passage naturally supports", generator_request.prompt)
-        self.assertIn("Explicit restatement should not dominate", generator_request.prompt)
-        self.assertIn("genuine supported inference should also occur regularly", generator_request.prompt)
-        self.assertIn("Multi-sentence or cross-idea reasoning is appropriate", generator_request.prompt)
-        self.assertIn("fully entailed by the text", generator_request.prompt)
-        self.assertIn("unsupported speculation", generator_request.prompt)
+        self.assertIn("keyed answer must not be explicitly stated", generator_request.prompt)
+        self.assertIn("must not be obtainable merely by replacing words", generator_request.prompt)
+        self.assertIn("ordinary synonym substitution", generator_request.prompt)
+        self.assertIn("rewrite the inference item rather than labeling the paraphrase", generator_request.prompt)
+        self.assertIn("at least one reasoning step from the passage", generator_request.prompt)
+        self.assertIn("Local inference is allowed", generator_request.prompt)
+        self.assertIn("Cross-idea inference is allowed", generator_request.prompt)
+        self.assertIn("Do not manufacture unnecessary multi-sentence complexity", generator_request.prompt)
+        self.assertIn("unsupported or ambiguous inference is worse than a shallow inference", generator_request.prompt)
         self.assertIn("both ordinary dictionary senses and context-clarified senses are acceptable", generator_request.prompt)
         self.assertIn("Do not require strong context dependence", generator_request.prompt)
         self.assertIn("actual sense in its local sentence", generator_request.prompt)
@@ -784,11 +787,15 @@ class ReadingV02BatchTests(unittest.TestCase):
         generator_agent = (ROOT / ".claude" / "agents" / "toefl-itp-reading-generator-v0.2.md").read_text(encoding="utf-8")
         generator_agent = " ".join(generator_agent.split())
         self.assertIn("question_type_counts", generator_agent)
-        self.assertIn("vary reasoning depth according to what the passage", generator_agent)
-        self.assertIn("Explicit restatement should not dominate", generator_agent)
-        self.assertIn("genuine supported inference should also occur regularly", generator_agent)
-        self.assertIn("Multi-sentence or cross-idea reasoning is appropriate", generator_agent)
-        self.assertIn("fully entailed by the text", generator_agent)
+        self.assertIn("keyed answer must not be explicitly stated", generator_agent)
+        self.assertIn("must not be obtainable merely by replacing words", generator_agent)
+        self.assertIn("ordinary synonym substitution", generator_agent)
+        self.assertIn("rewrite the inference item rather than labeling the paraphrase", generator_agent)
+        self.assertIn("at least one reasoning step from the passage", generator_agent)
+        self.assertIn("Local inference is allowed", generator_agent)
+        self.assertIn("Cross-idea inference is allowed", generator_agent)
+        self.assertIn("Do not manufacture unnecessary multi-sentence complexity", generator_agent)
+        self.assertIn("unsupported or ambiguous inference is worse than a shallow inference", generator_agent)
         self.assertIn("both ordinary dictionary senses and context-clarified senses are acceptable", generator_agent)
         self.assertIn("Do not require strong context", generator_agent)
         self.assertIn("grammatical construction, collocation, and local", generator_agent)
@@ -810,12 +817,15 @@ class ReadingV02BatchTests(unittest.TestCase):
         self.assertEqual(result["decision"], "UNVALIDATED_DRAFT")
         draft_request = next(request for request in trace.requests if request.stage == "reading_generator")
         for required in (
-            "vary reasoning depth according to what the passage naturally supports",
-            "Explicit restatement should not dominate",
-            "genuine supported inference should also occur regularly",
-            "Multi-sentence or cross-idea reasoning is appropriate",
-            "fully entailed by the text",
-            "unsupported speculation",
+            "keyed answer must not be explicitly stated",
+            "must not be obtainable merely by replacing words",
+            "ordinary synonym substitution",
+            "rewrite the inference item rather than labeling the paraphrase",
+            "at least one reasoning step from the passage",
+            "Local inference is allowed",
+            "Cross-idea inference is allowed",
+            "Do not manufacture unnecessary multi-sentence complexity",
+            "unsupported or ambiguous inference is worse than a shallow inference",
             "both ordinary dictionary senses and context-clarified senses are acceptable",
             "Do not require strong context dependence",
             "actual sense in its local sentence",
@@ -831,7 +841,7 @@ class ReadingV02BatchTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, draft_request.prompt)
 
-    def test_v025_generator_guidance_is_synchronized_without_new_quotas(self) -> None:
+    def test_v026_generator_guidance_is_synchronized_without_new_quotas(self) -> None:
         trace = BatchTrace()
         with TemporaryDirectory() as directory:
             ReadingV02Pipeline(BatchFakeRuntime("prompt", trace)).run(

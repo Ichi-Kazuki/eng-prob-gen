@@ -1,4 +1,4 @@
-"""Isolated TOEFL ITP Reading Comprehension v0.1/v0.2.5 pipelines."""
+"""Isolated TOEFL ITP Reading Comprehension v0.1/v0.2.6 pipelines."""
 
 from .planner import (
     ALLOWED_DOMAINS,

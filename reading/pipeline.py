@@ -73,7 +73,7 @@ DEFAULT_MODEL = os.environ.get("READING_MODEL", "sonnet")
 DEFAULT_TIMEOUT_SECONDS = float(os.environ.get("READING_TIMEOUT_SECONDS", "300"))
 DEFAULT_MAX_BUDGET_USD = os.environ.get("READING_MAX_BUDGET_USD", "0.60")
 DEFAULT_PARALLELISM = 1
-READING_CURRENT_VERSION = "v0.2.5"
+READING_CURRENT_VERSION = "v0.2.6"
 
 
 READING_DIFFICULTY_GUIDANCE = (
@@ -85,16 +85,19 @@ READING_DIFFICULTY_GUIDANCE = (
     "a provisional structural proxy and never implies TOEFL ITP score equivalence."
 )
 READING_INFERENCE_GUIDANCE = (
-    "For INFERENCE questions, vary reasoning depth according to what the passage naturally supports. "
-    "Explicit restatement should not dominate, and a simple one-step paraphrase or inversion should not be the default. "
-    "Regularly require a conclusion that must be derived from the passage's implications, relationships, conditions, causes, "
-    "comparisons, or consequences when naturally supported by the passage. Some items may require a small supported inference, "
-    "while genuine supported inference should also occur regularly. When naturally supported, use information distributed across "
-    "more than one sentence or idea. Multi-sentence or cross-idea reasoning is appropriate when naturally supported by the passage. "
-    "Never force cross-sentence or cross-idea reasoning when the passage does not support it. "
-    "Every keyed inference must remain fully supported by the passage and fully entailed by the text, with one unique defensible answer and "
-    "no unsupported speculation. Do not create difficulty through simple negation/reversal or artificial logical tricks. "
-    "Distractors should be plausible but not entailed."
+    "For INFERENCE questions, the keyed answer must not be explicitly stated in the passage and must not be obtainable merely by "
+    "replacing words in one passage sentence with synonyms or a close paraphrase. Before emitting each INFERENCE item, silently "
+    "test: 'If I can point to one passage sentence whose meaning directly states the correct option, even with ordinary synonym "
+    "substitution, this is not a valid inference question.' If yes, rewrite the inference item rather than labeling the paraphrase "
+    "as INFERENCE. Do not expose this internal check in generated question text or metadata unless the existing schema supports an "
+    "appropriate field. A valid inference must require at least one reasoning step from the passage, such as an implication, "
+    "consequence, likely condition, causal relationship, comparison, purpose, relationship between ideas, or conclusion supported "
+    "but not directly stated. Local inference is allowed when one sentence or adjacent sentences support a genuinely unstated "
+    "implication. Cross-idea inference is allowed when separated or multiple passage ideas naturally support the conclusion. Do not "
+    "manufacture unnecessary multi-sentence complexity or force cross-idea reasoning. Every inference must remain fully supported "
+    "by the passage and fully entailed by the text, with one unique defensible answer; it must be uniquely answerable, conservative, "
+    "and free of outside knowledge; unsupported or ambiguous inference is worse than a shallow inference. Do not create difficulty through simple "
+    "negation/reversal or artificial logical tricks. Distractors should be plausible but not entailed."
 )
 READING_LENGTH_GUIDANCE = (
     "For passage realization, treat target_words as a real writing target, not a loose suggestion. Normally remain close to "
@@ -155,7 +158,7 @@ READING_DOMAIN_GUIDANCE = (
 
 
 def reading_v02_generator_instruction(*, draft: bool = False) -> str:
-    """Return the shared v0.2.5 Generator contract used by production and draft modes."""
+    """Return the shared v0.2.6 Generator contract used by production and draft modes."""
 
     instruction = (
         "Generate one original TOEFL ITP-style Reading Comprehension set. Follow the supplied semantic plan exactly. "
