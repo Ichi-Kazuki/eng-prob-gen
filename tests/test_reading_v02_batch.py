@@ -33,6 +33,7 @@ from reading.pipeline import ReadingV02Pipeline, run_reading_batch
 from reading.pipeline import (
     READING_INFERENCE_GUIDANCE,
     READING_LENGTH_GUIDANCE,
+    READING_PARAGRAPH_GUIDANCE,
     reading_v02_generator_instruction,
 )
 from reading.planner import (
@@ -845,6 +846,16 @@ class ReadingV02BatchTests(unittest.TestCase):
         )
         self.assertIn(" ".join(READING_INFERENCE_GUIDANCE.split()), prompt)
         self.assertIn(" ".join(READING_LENGTH_GUIDANCE.split()), prompt)
+        paragraph_guidance = " ".join(READING_PARAGRAPH_GUIDANCE.split())
+        self.assertIn(paragraph_guidance, prompt)
+        self.assertIn(paragraph_guidance, agent)
+        self.assertIn("blank line (`\\n\\n`)", prompt)
+        self.assertIn("Evidence paragraph numbers must correspond exactly to the canonical paragraphs", prompt)
+        self.assertIn("paragraph count as guidance only", prompt)
+        self.assertNotIn("exactly four non-empty paragraphs", prompt.casefold())
+        self.assertNotIn("exactly four non-empty paragraphs", agent.casefold())
+        self.assertNotRegex(prompt.casefold(), r"exactly\s+(?:four|4)\s+(?:non-empty\s+)?paragraphs?")
+        self.assertNotRegex(agent.casefold(), r"exactly\s+(?:four|4)\s+(?:non-empty\s+)?paragraphs?")
         self.assertIn(" ".join(READING_INFERENCE_GUIDANCE.split()), agent)
         self.assertIn(" ".join(READING_LENGTH_GUIDANCE.split()), agent)
         self.assertIn(reading_v02_generator_instruction(), prompt)

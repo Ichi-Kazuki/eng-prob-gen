@@ -695,21 +695,40 @@ def _surface_match_line_numbers(lines: list[str], target_text: str) -> list[int]
     ]
 
 
+def _target_line_contains_expression(
+    lines: list[str],
+    target_line: Any,
+    target_text: str,
+) -> bool:
+    """Return whether a supplied 1-based display line contains the target."""
+
+    if (
+        isinstance(target_line, bool)
+        or not isinstance(target_line, int)
+        or not 1 <= target_line <= len(lines)
+    ):
+        return False
+    return _contains_surface_expression(lines[target_line - 1], target_text)
+
+
 def normalize_target_line_metadata(
     output: dict[str, Any],
 ) -> tuple[dict[str, Any], dict[str, Any]]:
-    """Normalize uniquely resolvable display-line metadata on a copied output.
+    """Normalize display-line metadata on a copied output.
 
     This is deliberately separate from schema and target-presence validation.
     It runs only on the post-permutation canonical copy, and it never mutates
     the Generator response that is persisted as ``generator_raw.json``.
 
-    The structured target line is derived only when the target expression
-    matches exactly one canonical display line.  A stem's numeric reference is
-    rewritten only when the existing full target-stem grammar parses, the stem
-    target agrees with ``target_text`` under the same surface matcher, and the
-    embedded number equals the original Generator ``target_line``.  That last
-    equality is the explicit safe pattern for a mechanical stem rewrite.
+    A supplied target line is authoritative when it contains the target under
+    the exact surface matcher, even when other display lines also match.  If
+    the supplied line does not match, the structured target line is derived
+    only when the target expression matches exactly one canonical display line.
+    A stem's numeric reference is rewritten only when the existing full
+    target-stem grammar parses, the stem target agrees with ``target_text``
+    under the same surface matcher, and the embedded number equals the
+    original Generator ``target_line``.  That last equality is the explicit
+    safe pattern for a mechanical stem rewrite.
     """
 
     normalized = copy.deepcopy(output)
@@ -717,6 +736,7 @@ def normalize_target_line_metadata(
         "version": TARGET_LINE_NORMALIZATION_VERSION,
         "algorithm": (
             "fixed-width display-line scan using _contains_surface_expression; "
+            "preserve a supplied matching target line, otherwise derive only a unique global match; "
             "stem rewrite only when parsed stem line equals generator_target_line"
         ),
         "questions": [],
@@ -741,23 +761,35 @@ def normalize_target_line_metadata(
 
         generator_target_line = question.get("target_line")
         matching_lines = _surface_match_line_numbers(lines, target_text)
-        resolution = (
-            "ZERO_SURFACE_MATCH"
-            if not matching_lines
-            else "UNIQUE_SURFACE_MATCH"
-            if len(matching_lines) == 1
-            else "MULTIPLE_SURFACE_MATCH"
+        supplied_line_matches = _target_line_contains_expression(
+            lines,
+            generator_target_line,
+            target_text,
         )
+        if supplied_line_matches:
+            resolution = "UNIQUE_SURFACE_MATCH" if len(matching_lines) == 1 else "SUPPLIED_LINE_MATCH"
+            canonical_target_line = generator_target_line
+        else:
+            resolution = (
+                "ZERO_SURFACE_MATCH"
+                if not matching_lines
+                else "UNIQUE_SURFACE_MATCH"
+                if len(matching_lines) == 1
+                else "MULTIPLE_SURFACE_MATCH"
+            )
+            canonical_target_line = matching_lines[0] if len(matching_lines) == 1 else None
         record: dict[str, Any] = {
             "item_id": question.get("item_id"),
             "question_index": question_index,
             "generator_target_line": copy.deepcopy(generator_target_line),
-            "canonical_target_line": matching_lines[0] if len(matching_lines) == 1 else None,
+            "canonical_target_line": canonical_target_line,
             "target_line_resolution": resolution,
             "stem_line_normalized": False,
             "matched_display_lines": matching_lines,
         }
         records.append(record)
+        if supplied_line_matches:
+            continue
         if len(matching_lines) != 1:
             continue
 
@@ -831,6 +863,10 @@ def _target_presence_errors(
             return [f"{diagnostic_prefix}_TEXT_MISMATCH: target_text does not match the stem target"]
         lines = display_lines(passage)
         matching_lines = _surface_match_line_numbers(lines, target_text)
+        if _target_line_contains_expression(lines, target_line, target_text):
+            if target_line != location_number:
+                return [f"{diagnostic_prefix}_LINE_MISMATCH: target_line does not match line {location_number}"]
+            return []
         if not matching_lines:
             return [
                 f"{diagnostic_prefix}_NOT_FOUND: targeted expression {target_text!r} is not present "

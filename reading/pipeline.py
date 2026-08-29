@@ -105,6 +105,11 @@ READING_LENGTH_GUIDANCE = (
     "is unchanged: below 160 words is hard-invalid, 160-300 words is the empirical preferred band, and above 300 words is an "
     "empirical warning rather than a hard rejection."
 )
+READING_PARAGRAPH_GUIDANCE = (
+    "Separate distinct passage paragraphs with a blank line (`\\n\\n`), and do not treat a single LF as a canonical paragraph "
+    "break. Evidence paragraph numbers must correspond exactly to the canonical paragraphs separated by blank lines. Treat "
+    "paragraph count as guidance only, not as a new hard quota; do not introduce a fixed paragraph-count quota."
+)
 READING_VOCABULARY_GUIDANCE = (
     "For VOCABULARY_IN_CONTEXT questions, both ordinary dictionary senses and context-clarified senses are acceptable, but "
     "prefer a word whose actual local sentence disambiguates among multiple plausible general-English senses. Do not require "
@@ -163,6 +168,7 @@ def reading_v02_generator_instruction(*, draft: bool = False) -> str:
         "evidence/rationale metadata. Do not include passage_id or question item_id; trusted pipeline code attaches those "
         "deterministic identity fields after generation. "
         f"{READING_DIFFICULTY_GUIDANCE} {READING_INFERENCE_GUIDANCE} {READING_LENGTH_GUIDANCE} "
+        f"{READING_PARAGRAPH_GUIDANCE} "
         f"{READING_VOCABULARY_GUIDANCE} {READING_TARGET_GUIDANCE} {READING_CHOICE_GUIDANCE} "
         f"{READING_TAXONOMY_GUIDANCE} {READING_DISTRACTOR_GUIDANCE} {READING_DOMAIN_GUIDANCE} "
         "Process the whole passage set in this one invocation."

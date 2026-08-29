@@ -359,7 +359,7 @@ class ReadingV025RegressionTests(unittest.TestCase):
         self.assertEqual(record["target_line_resolution"], "ZERO_SURFACE_MATCH")
         self.assertTrue(any("VOCABULARY_IN_CONTEXT_TARGET_NOT_FOUND" in error for error in validate_generator_contract(normalized, plan)))
 
-    def test_multiple_target_matches_are_not_repaired(self) -> None:
+    def test_multiple_target_matches_preserve_a_valid_supplied_line(self) -> None:
         plan, generator = self._line_target_generator("REFERENCE")
         paragraphs = generator["passage"].split("\n\n")
         paragraphs[0] += " Some"
@@ -375,9 +375,32 @@ class ReadingV025RegressionTests(unittest.TestCase):
 
         normalized, provenance = normalize_target_line_metadata(generator)
         self.assertEqual(normalized, generator)
-        record = next(item for item in provenance["questions"] if item["target_line_resolution"] == "MULTIPLE_SURFACE_MATCH")
+        record = next(item for item in provenance["questions"] if item["target_line_resolution"] == "SUPPLIED_LINE_MATCH")
+        self.assertEqual(record["canonical_target_line"], matching_lines[0])
         self.assertEqual(record["matched_display_lines"], matching_lines)
         self.assertFalse(record["stem_line_normalized"])
+        self.assertEqual(validate_generator_contract(normalized, plan), [])
+
+    def test_multiple_target_matches_fail_closed_when_supplied_line_is_not_a_match(self) -> None:
+        plan, generator = self._line_target_generator("REFERENCE")
+        paragraphs = generator["passage"].split("\n\n")
+        paragraphs[0] += " Some"
+        paragraphs[1] += " Some"
+        generator["passage"] = "\n\n".join(paragraphs)
+        question = next(item for item in generator["questions"] if item["question_type"] == "REFERENCE")
+        question["target_text"] = "Some"
+        lines = display_lines(generator["passage"])
+        matching_lines = [index for index, line in enumerate(lines, 1) if "some" in line.casefold().split()]
+        supplied_line = next(index for index in range(1, len(lines) + 1) if index not in matching_lines)
+        question["target_line"] = supplied_line
+        question["stem"] = f"The word 'Some' in line {supplied_line} refers to"
+
+        normalized, provenance = normalize_target_line_metadata(generator)
+        self.assertEqual(normalized, generator)
+        record = next(item for item in provenance["questions"] if item["question_index"] == generator["questions"].index(question) + 1)
+        self.assertEqual(record["target_line_resolution"], "MULTIPLE_SURFACE_MATCH")
+        self.assertIsNone(record["canonical_target_line"])
+        self.assertEqual(record["matched_display_lines"], matching_lines)
         self.assertTrue(any("REFERENCE_TARGET_MULTIPLE_MATCHES" in error for error in validate_generator_contract(normalized, plan)))
 
     def test_unsafe_stem_pattern_fails_closed_without_general_replacement(self) -> None:
