@@ -933,11 +933,7 @@ class ReadingV02Pipeline(ReadingPipeline):
                     atomic_write_json(run_dir / "inference_verifier_input.json", initial_verifier_input)
                     if verifier_input_errors:
                         inference_verifier_errors.extend(verifier_input_errors)
-                        flagged_item_ids = list(inference_ids)
-                        repair_reasons = {
-                            item_id: list(verifier_input_errors)
-                            for item_id in inference_ids
-                        }
+                        inference_gate_pass = False
                     else:
                         verifier_result = self._invoke(
                             stage="reading_inference_verifier",
@@ -961,15 +957,18 @@ class ReadingV02Pipeline(ReadingPipeline):
                             initial_verifier_input,
                             self.schema_paths,
                         )
-                        flagged_item_ids, repair_reasons, initial_gate_results = self._inference_gate_evaluation(
-                            generator,
-                            inference_verifier,
-                            initial_verifier_input,
-                            inference_verifier_errors,
-                        )
+                        if inference_verifier_errors:
+                            inference_gate_pass = False
+                        if not inference_verifier_errors:
+                            flagged_item_ids, repair_reasons, initial_gate_results = self._inference_gate_evaluation(
+                                generator,
+                                inference_verifier,
+                                initial_verifier_input,
+                                inference_verifier_errors,
+                            )
                     if not flagged_item_ids and not inference_verifier_errors:
                         inference_gate_pass = True
-                    else:
+                    elif flagged_item_ids and not inference_verifier_errors:
                         inference_repair_attempted = True
                         pre_repair_generator = copy.deepcopy(generator)
                         atomic_write_json(run_dir / "generator_pre_repair.json", pre_repair_generator)
@@ -1076,6 +1075,8 @@ class ReadingV02Pipeline(ReadingPipeline):
                                         if reverify_input_errors:
                                             inference_verifier_errors.extend(reverify_input_errors)
                                             inference_repair_errors.extend(reverify_input_errors)
+                                            inference_gate_pass = False
+                                            inference_repair_succeeded = False
                                         else:
                                             reverify_result = self._invoke(
                                                 stage="reading_inference_verifier",
@@ -1100,14 +1101,18 @@ class ReadingV02Pipeline(ReadingPipeline):
                                                 self.schema_paths,
                                             )
                                             inference_verifier_errors.extend(reverify_errors)
-                                            reverify_flagged, _reverify_reasons, reverify_gate_results = self._inference_gate_evaluation(
-                                                generator,
-                                                inference_reverify,
-                                                reverify_input,
-                                                reverify_errors,
-                                            )
-                                            inference_gate_pass = not reverify_errors and not reverify_flagged
-                                            inference_repair_succeeded = inference_gate_pass
+                                            if not reverify_errors:
+                                                reverify_flagged, _reverify_reasons, reverify_gate_results = self._inference_gate_evaluation(
+                                                    generator,
+                                                    inference_reverify,
+                                                    reverify_input,
+                                                    reverify_errors,
+                                                )
+                                                inference_gate_pass = not reverify_flagged
+                                                inference_repair_succeeded = inference_gate_pass
+                                            else:
+                                                inference_gate_pass = False
+                                                inference_repair_succeeded = False
 
         except RuntimeInvocationError:
             # Runtime failures are recorded by _invoke and remain distinct from

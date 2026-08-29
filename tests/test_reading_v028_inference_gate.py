@@ -8,6 +8,7 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Any
+from unittest.mock import patch
 
 from reading.contracts import (
     apply_choice_permutation_to_question,
@@ -79,6 +80,8 @@ class GateRuntime:
         reverify_status: str = "VALID_SHALLOW_INFERENCE",
         repair: bool = True,
         fail_stage: str | None = None,
+        initial_verifier_output_mode: str | None = None,
+        reverify_output_mode: str | None = None,
     ) -> None:
         self.plan = plan
         self.raw = variable_generator_fixture(plan)
@@ -90,6 +93,8 @@ class GateRuntime:
         self.reverify_status = reverify_status
         self.repair = repair
         self.fail_stage = fail_stage
+        self.initial_verifier_output_mode = initial_verifier_output_mode
+        self.reverify_output_mode = reverify_output_mode
         self.requests: list[Any] = []
         self.repair_calls = 0
         self.verifier_calls = 0
@@ -129,6 +134,15 @@ class GateRuntime:
                 item["status"] = status
                 if not is_reverify and item["item_id"] in self.initial_answer_overrides:
                     item["best_answer"] = self.initial_answer_overrides[item["item_id"]]
+            output_mode = self.reverify_output_mode if is_reverify else self.initial_verifier_output_mode
+            if output_mode == "malformed":
+                parsed["questions"][0]["status"] = "MALFORMED_STATUS"
+            elif output_mode == "wrong_item_id":
+                parsed["questions"][0]["item_id"] = f"{source['passage_id']}-q1"
+            elif output_mode == "missing_item_id":
+                parsed["questions"].pop()
+            elif output_mode == "duplicate_item_id":
+                parsed["questions"][1]["item_id"] = parsed["questions"][0]["item_id"]
         elif request.stage == "reading_inference_repair":
             self.repair_calls += 1
             self.final_generator = copy.deepcopy(self.initial_generator)
@@ -200,6 +214,65 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
         self.assertEqual(result["infrastructure"]["invocation_counts"]["inference_verifier"], 1)
         self.assertEqual(result["infrastructure"]["invocation_counts"]["inference_repair"], 0)
 
+    def test_initial_verifier_input_error_quarantines_without_verifier_or_downstream_stages(self) -> None:
+        plan = build_plan_v02(2900, domain="biology")
+        runtime = GateRuntime(plan)
+        input_error = "inference verifier input does not match the canonical visible projection"
+        with patch("reading.pipeline.inference_verifier_input_errors", return_value=[input_error]):
+            result, root = self.run_pipeline(runtime)
+
+        self.assertEqual(result["decision"], "QUARANTINE")
+        self.assertEqual([request.stage for request in runtime.requests], ["reading_generator"])
+        self.assertEqual(runtime.verifier_calls, 0)
+        self.assertEqual(runtime.repair_calls, 0)
+        self.assertFalse(result["checks"]["inference_gate_pass"])
+        self.assertFalse(result["checks"]["inference_repair_attempted"])
+        self.assertEqual(result["checks"]["inference_verifier_errors"], [input_error])
+        self.assertIsNone(result["reviewer"])
+        self.assertIsNone(result["solver"])
+        self.assertTrue((root / "inference_verifier_input.json").is_file())
+        self.assertFalse((root / "inference_verifier.json").exists())
+        self.assertFalse((root / "inference_repair.json").exists())
+
+    def test_initial_verifier_contract_error_quarantines_without_repair_or_downstream_stages(self) -> None:
+        plan = build_plan_v02(2900, domain="biology")
+        runtime = GateRuntime(plan, initial_verifier_output_mode="malformed")
+        result, root = self.run_pipeline(runtime)
+
+        self.assertEqual(result["decision"], "QUARANTINE")
+        self.assertEqual([request.stage for request in runtime.requests], [
+            "reading_generator", "reading_inference_verifier",
+        ])
+        self.assertEqual(runtime.verifier_calls, 1)
+        self.assertEqual(runtime.repair_calls, 0)
+        self.assertFalse(result["checks"]["inference_gate_pass"])
+        self.assertFalse(result["checks"]["inference_repair_attempted"])
+        self.assertTrue(result["checks"]["inference_verifier_errors"])
+        self.assertIsNone(result["reviewer"])
+        self.assertIsNone(result["solver"])
+        self.assertTrue((root / "inference_verifier.json").is_file())
+        self.assertFalse((root / "inference_repair_input.json").exists())
+        self.assertFalse((root / "inference_repair.json").exists())
+
+    def test_verifier_item_id_contract_errors_never_trigger_repair(self) -> None:
+        for output_mode in ("wrong_item_id", "missing_item_id", "duplicate_item_id"):
+            with self.subTest(output_mode=output_mode):
+                plan = build_plan_v02(2900, domain="biology")
+                runtime = GateRuntime(plan, initial_verifier_output_mode=output_mode)
+                result, _root = self.run_pipeline(runtime)
+
+                self.assertEqual(result["decision"], "QUARANTINE")
+                self.assertEqual(runtime.verifier_calls, 1)
+                self.assertEqual(runtime.repair_calls, 0)
+                self.assertEqual(
+                    [request.stage for request in runtime.requests],
+                    ["reading_generator", "reading_inference_verifier"],
+                )
+                self.assertTrue(result["checks"]["inference_verifier_errors"])
+                self.assertFalse(result["checks"]["inference_repair_attempted"])
+                self.assertIsNone(result["reviewer"])
+                self.assertIsNone(result["solver"])
+
     def test_invalid_statuses_trigger_exactly_one_repair(self) -> None:
         for status in ("INVALID_DIRECT_RESTATEMENT", "INVALID_UNSUPPORTED", "INVALID_AMBIGUOUS"):
             with self.subTest(status=status):
@@ -261,6 +334,33 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
         self.assertFalse(result["reviewer"])
         self.assertFalse(result["solver"])
         self.assertFalse(result["checks"]["inference_repair_succeeded"])
+
+    def test_repair_reverification_contract_error_quarantines_without_second_repair(self) -> None:
+        plan = build_plan_v02(2890, domain="biology")
+        runtime = GateRuntime(
+            plan,
+            initial_verifier_status="INVALID_DIRECT_RESTATEMENT",
+            reverify_output_mode="malformed",
+        )
+        result, _root = self.run_pipeline(runtime)
+
+        self.assertEqual(result["decision"], "QUARANTINE")
+        self.assertEqual(runtime.repair_calls, 1)
+        self.assertEqual(runtime.verifier_calls, 2)
+        self.assertEqual(
+            [request.stage for request in runtime.requests],
+            [
+                "reading_generator",
+                "reading_inference_verifier",
+                "reading_inference_repair",
+                "reading_inference_verifier",
+            ],
+        )
+        self.assertFalse(result["checks"]["inference_gate_pass"])
+        self.assertFalse(result["checks"]["inference_repair_succeeded"])
+        self.assertTrue(result["checks"]["inference_verifier_errors"])
+        self.assertIsNone(result["reviewer"])
+        self.assertIsNone(result["solver"])
 
     def test_raw_and_pre_repair_artifacts_and_provenance_are_auditable(self) -> None:
         plan = build_plan_v02(2900, domain="biology")
