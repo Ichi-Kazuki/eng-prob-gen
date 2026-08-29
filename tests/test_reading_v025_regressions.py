@@ -5,6 +5,9 @@ from __future__ import annotations
 import copy
 import json
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from typing import Any
 
 from reading.contracts import (
     DISTRACTOR_METADATA_CORRECT,
@@ -13,14 +16,24 @@ from reading.contracts import (
     canonicalize_generator_output,
     display_lines,
     generator_model_schema_for_plan,
+    normalize_target_line_metadata,
     permute_generator_choices,
     solver_input_errors,
     target_line_for_text,
     validate_generator_contract,
 )
+from reading.pipeline import ReadingV02Pipeline
+from reading.planner import build_plan_v02
+from runtime.adapters import InvocationResult
 from shared.schema_validation import load_schema, schema_errors
 
-from tests.test_reading_v02_batch import grouped_model_fixture, quota_plan, variable_generator_fixture
+from tests.test_reading_v02_batch import (
+    grouped_model_fixture,
+    quota_plan,
+    reviewer_for,
+    solver_for,
+    variable_generator_fixture,
+)
 
 
 def _metadata(correct_answer: str) -> dict[str, dict[str, str]]:
@@ -243,6 +256,224 @@ class ReadingV025RegressionTests(unittest.TestCase):
             "rationale": question["evidence"]["rationale"],
         }
         return plan, generator
+
+    def _wrong_unique_line_case(self) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+        plan, generator = self._line_target_generator("VOCABULARY_IN_CONTEXT")
+        question = next(item for item in generator["questions"] if item["question_type"] == "VOCABULARY_IN_CONTEXT")
+        canonical_line = question["target_line"]
+        assert isinstance(canonical_line, int)
+        generator_line = canonical_line - 1
+        target_text = "Filaments"
+        question["target_text"] = target_text
+        question["target_line"] = generator_line
+        question["stem"] = (
+            f" \tThe  word  'filaments'  in  line {generator_line} "
+            "is closest in meaning to  "
+        )
+        return plan, generator, {
+            "question": question,
+            "canonical_line": canonical_line,
+            "generator_line": generator_line,
+        }
+
+    def test_unique_target_normalizes_structured_and_embedded_lines_only(self) -> None:
+        plan, raw, details = self._wrong_unique_line_case()
+        raw_snapshot = copy.deepcopy(raw)
+        permuted, permutation = permute_generator_choices(raw, plan)
+        canonical = canonicalize_generator_output(permuted, plan)
+        target = next(
+            question for question in canonical["questions"]
+            if question["question_type"] == "VOCABULARY_IN_CONTEXT"
+        )
+        original_canonical_question = copy.deepcopy(target)
+
+        normalized, provenance = normalize_target_line_metadata(canonical)
+        corrected = next(
+            question for question in normalized["questions"]
+            if question["question_type"] == "VOCABULARY_IN_CONTEXT"
+        )
+        expected_line = details["canonical_line"]
+        self.assertEqual(corrected["target_line"], expected_line)
+        self.assertEqual(corrected["target_text"], "Filaments")
+        self.assertEqual(
+            corrected["stem"],
+            original_canonical_question["stem"].replace(
+                f"line {details['generator_line']}", f"line {expected_line}"
+            ),
+        )
+        self.assertEqual(
+            corrected["stem"].replace(f"line {expected_line}", "line N"),
+            original_canonical_question["stem"].replace(
+                f"line {details['generator_line']}", "line N"
+            ),
+        )
+        self.assertEqual(corrected["choices"], original_canonical_question["choices"])
+        self.assertEqual(corrected["correct_answer"], original_canonical_question["correct_answer"])
+        self.assertEqual(raw, raw_snapshot)
+        self.assertEqual(
+            validate_generator_contract(normalized, plan),
+            [],
+        )
+
+        record = next(
+            item for item in provenance["questions"]
+            if item["item_id"] == corrected["item_id"]
+        )
+        self.assertEqual(record["generator_target_line"], details["generator_line"])
+        self.assertEqual(record["canonical_target_line"], expected_line)
+        self.assertEqual(record["target_line_resolution"], "UNIQUE_SURFACE_MATCH")
+        self.assertTrue(record["stem_line_normalized"])
+        self.assertEqual(record["matched_display_lines"], [expected_line])
+        self.assertEqual(
+            permutation["questions"][0]["original_to_canonical"].keys(),
+            {"A", "B", "C", "D"},
+        )
+
+    def test_correct_generator_line_is_unchanged_and_normalization_is_idempotent(self) -> None:
+        plan, generator = self._line_target_generator("REFERENCE")
+        raw_snapshot = copy.deepcopy(generator)
+        permuted, _permutation = permute_generator_choices(generator, plan)
+        canonical = canonicalize_generator_output(permuted, plan)
+        before = copy.deepcopy(canonical)
+
+        normalized, provenance = normalize_target_line_metadata(canonical)
+        self.assertEqual(normalized, before)
+        record = next(item for item in provenance["questions"] if item["canonical_target_line"] is not None)
+        self.assertEqual(record["generator_target_line"], record["canonical_target_line"])
+        self.assertFalse(record["stem_line_normalized"])
+        normalized_again, provenance_again = normalize_target_line_metadata(normalized)
+        self.assertEqual(normalized_again, normalized)
+        self.assertEqual(provenance_again, provenance)
+        self.assertEqual(generator, raw_snapshot)
+
+    def test_zero_target_match_remains_a_hard_target_not_found_failure(self) -> None:
+        plan, generator = self._line_target_generator("VOCABULARY_IN_CONTEXT")
+        question = next(item for item in generator["questions"] if item["question_type"] == "VOCABULARY_IN_CONTEXT")
+        target_line = question["target_line"]
+        question["target_text"] = "not-present"
+        question["stem"] = f"The word 'not-present' in line {target_line} is closest in meaning to"
+
+        normalized, provenance = normalize_target_line_metadata(generator)
+        self.assertEqual(normalized, generator)
+        record = next(item for item in provenance["questions"] if item["question_index"] == generator["questions"].index(question) + 1)
+        self.assertEqual(record["target_line_resolution"], "ZERO_SURFACE_MATCH")
+        self.assertTrue(any("VOCABULARY_IN_CONTEXT_TARGET_NOT_FOUND" in error for error in validate_generator_contract(normalized, plan)))
+
+    def test_multiple_target_matches_are_not_repaired(self) -> None:
+        plan, generator = self._line_target_generator("REFERENCE")
+        paragraphs = generator["passage"].split("\n\n")
+        paragraphs[0] += " Some"
+        paragraphs[1] += " Some"
+        generator["passage"] = "\n\n".join(paragraphs)
+        question = next(item for item in generator["questions"] if item["question_type"] == "REFERENCE")
+        question["target_text"] = "Some"
+        lines = display_lines(generator["passage"])
+        matching_lines = [index for index, line in enumerate(lines, 1) if "some" in line.casefold().split()]
+        self.assertGreaterEqual(len(matching_lines), 2)
+        question["target_line"] = matching_lines[0]
+        question["stem"] = f"The word 'Some' in line {matching_lines[0]} refers to"
+
+        normalized, provenance = normalize_target_line_metadata(generator)
+        self.assertEqual(normalized, generator)
+        record = next(item for item in provenance["questions"] if item["target_line_resolution"] == "MULTIPLE_SURFACE_MATCH")
+        self.assertEqual(record["matched_display_lines"], matching_lines)
+        self.assertFalse(record["stem_line_normalized"])
+        self.assertTrue(any("REFERENCE_TARGET_MULTIPLE_MATCHES" in error for error in validate_generator_contract(normalized, plan)))
+
+    def test_unsafe_stem_pattern_fails_closed_without_general_replacement(self) -> None:
+        plan, generator = self._line_target_generator("REFERENCE")
+        question = next(item for item in generator["questions"] if item["question_type"] == "REFERENCE")
+        canonical_line = question["target_line"]
+        question["target_text"] = "the communities"
+        question["target_line"] = canonical_line
+        question["stem"] = "The token 'the communities' appears near line 999"
+
+        normalized, provenance = normalize_target_line_metadata(generator)
+        self.assertEqual(normalized["questions"][generator["questions"].index(question)]["stem"], question["stem"])
+        self.assertTrue(provenance["questions"])
+        self.assertTrue(validate_generator_contract(normalized, plan))
+
+    def test_non_target_question_fields_are_unchanged(self) -> None:
+        plan = quota_plan(9210, {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 1, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 2})
+        generator = variable_generator_fixture(plan)
+        detail = next(item for item in generator["questions"] if item["question_type"] == "DETAIL")
+        detail["target_text"] = "filaments"
+        detail["target_line"] = 999
+        before = copy.deepcopy(detail)
+        normalized, provenance = normalize_target_line_metadata(generator)
+        after = next(item for item in normalized["questions"] if item["item_id"] == detail["item_id"])
+        self.assertEqual(after, before)
+        self.assertEqual(provenance["questions"], [])
+
+    def test_pipeline_persists_normalization_and_sends_corrected_stem_to_both_blind_stages(self) -> None:
+        plan = build_plan_v02(9211, domain="biology")
+        raw = variable_generator_fixture(plan)
+        question = next(item for item in raw["questions"] if item["question_type"] == "VOCABULARY_IN_CONTEXT")
+        canonical_line = target_line_for_text(raw["passage"], "filaments")
+        assert canonical_line is not None
+        generator_line = canonical_line - 1
+        question["target_text"] = "Filaments"
+        question["target_line"] = generator_line
+        question["stem"] = f"The word 'filaments' in line {generator_line} is closest in meaning to"
+        details = {
+            "canonical_line": canonical_line,
+            "generator_line": generator_line,
+        }
+        expected_permuted, _permutation = permute_generator_choices(raw, plan)
+        expected_canonical = canonicalize_generator_output(expected_permuted, plan)
+        expected, _expected_normalization = normalize_target_line_metadata(expected_canonical)
+
+        class OfflineNormalizationRuntime:
+            provider = "offline-test"
+            cli_version = "offline-target-line-normalization"
+
+            def __init__(self) -> None:
+                self.requests: list[Any] = []
+
+            def invoke(self, request: Any) -> InvocationResult:
+                self.requests.append(request)
+                parsed = raw if request.stage == "reading_generator" else (
+                    reviewer_for(expected) if request.stage == "reading_reviewer" else solver_for(expected)
+                )
+                return InvocationResult(
+                    stage=request.stage,
+                    agent_name=request.agent_name,
+                    invocation_id=f"offline-normalization-{len(self.requests)}",
+                    started_at="2026-01-01T00:00:00+00:00",
+                    completed_at="2026-01-01T00:00:01+00:00",
+                    provider=self.provider,
+                    model="offline",
+                    cli_version=self.cli_version,
+                    exit_code=0,
+                    parsed=copy.deepcopy(parsed),
+                    input_keys=list(request.input_keys),
+                )
+
+        runtime = OfflineNormalizationRuntime()
+        with TemporaryDirectory() as directory:
+            result = ReadingV02Pipeline(runtime).run(
+                plan["seed"], domain=plan["domain"], output_dir=Path(directory)
+            )
+            self.assertEqual(result["decision"], "ACCEPT")
+            self.assertEqual(result["generator"], expected)
+            provenance = json.loads((Path(directory) / "provenance" / "provenance.json").read_text(encoding="utf-8"))
+            records = provenance["target_line_normalization"]["questions"]
+            target_record = next(record for record in records if record["canonical_target_line"] == details["canonical_line"])
+            self.assertEqual(target_record["generator_target_line"], details["generator_line"])
+            self.assertTrue(target_record["stem_line_normalized"])
+
+        self.assertEqual(len(runtime.requests), 3)
+        for request in runtime.requests[1:]:
+            payload = json.loads(request.prompt.split("INPUT_JSON:\n", 1)[1])
+            visible_question = next(
+                item for item in payload["questions"]
+                if item["stem"] == next(
+                    question["stem"] for question in expected["questions"]
+                    if question["question_type"] == "VOCABULARY_IN_CONTEXT"
+                )
+            )
+            self.assertIn(f"line {details['canonical_line']}", visible_question["stem"])
+            self.assertNotIn("target_line", visible_question)
 
     def test_line_number_target_resolves_and_is_validated(self) -> None:
         for question_type in ("VOCABULARY_IN_CONTEXT", "REFERENCE"):

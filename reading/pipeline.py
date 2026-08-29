@@ -39,6 +39,7 @@ from .contracts import (
     permute_generator_choices,
     deterministic_diagnostics,
     generator_model_schema_for_plan,
+    normalize_target_line_metadata,
     payload_sha256,
     post_blind_comparison,
     solver_input_errors,
@@ -623,6 +624,7 @@ class ReadingV02Pipeline(ReadingPipeline):
         blind: dict[str, Any] | None,
         raw_generator: Any = None,
         choice_permutation: dict[str, Any] | None = None,
+        target_line_normalization: dict[str, Any] | None = None,
     ) -> None:
         atomic_write_json(run_dir / "invocations.json", {
             "live_invocations": len(self.invocations),
@@ -641,6 +643,7 @@ class ReadingV02Pipeline(ReadingPipeline):
             "canonical_generator_artifact": "generator.json" if (run_dir / "generator.json").is_file() else None,
             "reading_version": READING_CURRENT_VERSION,
             "choice_permutation": choice_permutation,
+            "target_line_normalization": target_line_normalization,
             "canonical_schema_paths": {key: str(path) for key, path in self.schema_paths.items()},
             "invocation_ids": [item.invocation_id for item in self.invocations],
             "answer_bearing_prompt_fields": ["plan"],
@@ -691,6 +694,7 @@ class ReadingV02Pipeline(ReadingPipeline):
         empirical_warnings: list[str] = []
         deterministic_classification = "HARD_VALIDITY"
         choice_permutation: dict[str, Any] | None = None
+        target_line_normalization: dict[str, Any] | None = None
         reviewer_errors: list[str] = []
         solver_errors: list[str] = []
         post_blind_metadata_errors: list[str] = []
@@ -717,6 +721,7 @@ class ReadingV02Pipeline(ReadingPipeline):
             try:
                 permuted_raw, choice_permutation = permute_generator_choices(raw_generator, plan)
                 generator = canonicalize_generator_output(permuted_raw, plan)
+                generator, target_line_normalization = normalize_target_line_metadata(generator)
             except (TypeError, ValueError) as exc:
                 envelope_errors = [f"generator envelope: {exc}"]
                 generator = None
@@ -869,7 +874,13 @@ class ReadingV02Pipeline(ReadingPipeline):
         result["checks"]["final_result_contract"] = not result_contract_errors
         result["checks"]["final_result_errors"] = result_contract_errors
         self._write_invocations_and_provenance(
-            run_dir, run_id, plan, blind, raw_generator, choice_permutation
+            run_dir,
+            run_id,
+            plan,
+            blind,
+            raw_generator,
+            choice_permutation,
+            target_line_normalization,
         )
         atomic_write_json(run_dir / "result.json", result)
         return result
@@ -900,6 +911,7 @@ class ReadingV02Pipeline(ReadingPipeline):
         empirical_warnings: list[str] = []
         deterministic_classification = "HARD_VALIDITY"
         choice_permutation: dict[str, Any] | None = None
+        target_line_normalization: dict[str, Any] | None = None
         try:
             generator_result = self._invoke(
                 stage="reading_generator",
@@ -919,6 +931,7 @@ class ReadingV02Pipeline(ReadingPipeline):
             try:
                 permuted_raw, choice_permutation = permute_generator_choices(raw_generator, plan)
                 generator = canonicalize_generator_output(permuted_raw, plan)
+                generator, target_line_normalization = normalize_target_line_metadata(generator)
             except (TypeError, ValueError) as exc:
                 envelope_errors = [f"generator envelope: {exc}"]
                 generator = None
@@ -968,7 +981,13 @@ class ReadingV02Pipeline(ReadingPipeline):
         result["checks"]["final_result_contract"] = not result_contract_errors
         result["checks"]["final_result_errors"] = result_contract_errors
         self._write_invocations_and_provenance(
-            run_dir, run_id, plan, None, raw_generator, choice_permutation
+            run_dir,
+            run_id,
+            plan,
+            None,
+            raw_generator,
+            choice_permutation,
+            target_line_normalization,
         )
         atomic_write_json(run_dir / "result.json", result)
         return result

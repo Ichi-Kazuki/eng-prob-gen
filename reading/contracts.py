@@ -221,10 +221,8 @@ def target_line_for_text(passage: str, target_text: str, *, width: int = DISPLAY
     """Return the first 1-based display line containing an exact target expression."""
 
     lines = display_lines(passage, width=width)
-    for line_number, line in enumerate(lines, 1):
-        if _contains_surface_expression(line, target_text):
-            return line_number
-    return None
+    matching_lines = _surface_match_line_numbers(lines, target_text)
+    return matching_lines[0] if matching_lines else None
 
 
 def _display_position_for_question(question: dict[str, Any], passage: str) -> tuple[int, int, int]:
@@ -603,6 +601,7 @@ _PARAGRAPH_ORDINALS = {
     "eighth": 8,
 }
 _TARGET_QUESTION_TYPES = {"REFERENCE", "VOCABULARY_IN_CONTEXT"}
+TARGET_LINE_NORMALIZATION_VERSION = "reading-v0.2.5-target-line-normalization-v1"
 
 
 def _target_metadata_from_stem(stem: str) -> tuple[str, int] | None:
@@ -686,6 +685,121 @@ def _contains_surface_expression(paragraph: str, target: str) -> bool:
     ) is not None
 
 
+def _surface_match_line_numbers(lines: list[str], target_text: str) -> list[int]:
+    """Return display lines matching a target under target-presence semantics."""
+
+    return [
+        line_number
+        for line_number, line in enumerate(lines, 1)
+        if _contains_surface_expression(line, target_text)
+    ]
+
+
+def normalize_target_line_metadata(
+    output: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Normalize uniquely resolvable display-line metadata on a copied output.
+
+    This is deliberately separate from schema and target-presence validation.
+    It runs only on the post-permutation canonical copy, and it never mutates
+    the Generator response that is persisted as ``generator_raw.json``.
+
+    The structured target line is derived only when the target expression
+    matches exactly one canonical display line.  A stem's numeric reference is
+    rewritten only when the existing full target-stem grammar parses, the stem
+    target agrees with ``target_text`` under the same surface matcher, and the
+    embedded number equals the original Generator ``target_line``.  That last
+    equality is the explicit safe pattern for a mechanical stem rewrite.
+    """
+
+    normalized = copy.deepcopy(output)
+    audit: dict[str, Any] = {
+        "version": TARGET_LINE_NORMALIZATION_VERSION,
+        "algorithm": (
+            "fixed-width display-line scan using _contains_surface_expression; "
+            "stem rewrite only when parsed stem line equals generator_target_line"
+        ),
+        "questions": [],
+    }
+    passage = normalized.get("passage")
+    questions = normalized.get("questions")
+    if (
+        normalized.get("schema_version") != "reading-generator-v0.2"
+        or not isinstance(passage, str)
+        or not isinstance(questions, list)
+    ):
+        return normalized, audit
+
+    lines = display_lines(passage)
+    records = audit["questions"]
+    for question_index, question in enumerate(questions, 1):
+        if not isinstance(question, dict) or question.get("question_type") not in _TARGET_QUESTION_TYPES:
+            continue
+        target_text = question.get("target_text")
+        if not isinstance(target_text, str) or not target_text.strip():
+            continue
+
+        generator_target_line = question.get("target_line")
+        matching_lines = _surface_match_line_numbers(lines, target_text)
+        resolution = (
+            "ZERO_SURFACE_MATCH"
+            if not matching_lines
+            else "UNIQUE_SURFACE_MATCH"
+            if len(matching_lines) == 1
+            else "MULTIPLE_SURFACE_MATCH"
+        )
+        record: dict[str, Any] = {
+            "item_id": question.get("item_id"),
+            "question_index": question_index,
+            "generator_target_line": copy.deepcopy(generator_target_line),
+            "canonical_target_line": matching_lines[0] if len(matching_lines) == 1 else None,
+            "target_line_resolution": resolution,
+            "stem_line_normalized": False,
+            "matched_display_lines": matching_lines,
+        }
+        records.append(record)
+        if len(matching_lines) != 1:
+            continue
+
+        canonical_target_line = matching_lines[0]
+        # A unique surface match is sufficient to derive canonical structured
+        # metadata.  Invalid model values still fail the normal schema/contract
+        # gates; this function is not an input repair for malformed types.
+        question["target_line"] = canonical_target_line
+
+        stem = question.get("stem")
+        if not isinstance(stem, str):
+            continue
+        stem_match = _TARGET_STEM_PATTERN.fullmatch(stem)
+        if stem_match is None:
+            continue
+        stem_reference = _target_reference_from_stem(stem)
+        if stem_reference is None:
+            continue
+        stem_target, location_kind, stem_line = stem_reference
+        if (
+            location_kind != "line"
+            or _surface_text(stem_target) != _surface_text(target_text)
+            or not isinstance(generator_target_line, int)
+            or isinstance(generator_target_line, bool)
+            or generator_target_line < 1
+            or stem_line != generator_target_line
+            or stem_line == canonical_target_line
+        ):
+            continue
+
+        location_text = stem_match.group("location")
+        digits_match = re.search(r"\d+", location_text)
+        if digits_match is None:
+            continue
+        absolute_start = stem_match.start("location") + digits_match.start()
+        absolute_end = stem_match.start("location") + digits_match.end()
+        question["stem"] = stem[:absolute_start] + str(canonical_target_line) + stem[absolute_end:]
+        record["stem_line_normalized"] = True
+
+    return normalized, audit
+
+
 def _target_presence_errors(
     question: dict[str, Any],
     paragraphs: list[str],
@@ -696,6 +810,10 @@ def _target_presence_errors(
         return []
     stem = question["stem"]
     if not _TARGET_STEM_PREFIX.match(stem):
+        if "target_text" in question or "target_line" in question:
+            item_id = question["item_id"]
+            diagnostic_prefix = f"generator: {item_id} {question_type}_TARGET"
+            return [f"{diagnostic_prefix}_METADATA_UNPARSEABLE"]
         return []
     metadata = _target_reference_from_stem(stem)
     item_id = question["item_id"]
@@ -711,9 +829,20 @@ def _target_presence_errors(
             return [f"{diagnostic_prefix}_METADATA_MISSING: line targets require target_text and target_line"]
         if _surface_text(target_text) != _surface_text(target):
             return [f"{diagnostic_prefix}_TEXT_MISMATCH: target_text does not match the stem target"]
+        lines = display_lines(passage)
+        matching_lines = _surface_match_line_numbers(lines, target_text)
+        if not matching_lines:
+            return [
+                f"{diagnostic_prefix}_NOT_FOUND: targeted expression {target_text!r} is not present "
+                f"in line {target_line}"
+            ]
+        if len(matching_lines) > 1:
+            return [
+                f"{diagnostic_prefix}_MULTIPLE_MATCHES: targeted expression {target_text!r} "
+                f"appears on canonical display lines {matching_lines}"
+            ]
         if target_line != location_number:
             return [f"{diagnostic_prefix}_LINE_MISMATCH: target_line does not match line {location_number}"]
-        lines = display_lines(passage)
         if not 1 <= target_line <= len(lines):
             return [f"{diagnostic_prefix}_LOCATION_INVALID: line {target_line} is out of range"]
         if not _contains_surface_expression(lines[target_line - 1], target_text):
