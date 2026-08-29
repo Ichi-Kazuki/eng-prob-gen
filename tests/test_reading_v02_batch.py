@@ -465,6 +465,9 @@ class ReadingV02BatchTests(unittest.TestCase):
     def test_v025_pipeline_persists_raw_and_permuted_canonical_inputs(self) -> None:
         plan = build_plan_v02(1203, domain="biology")
         raw = variable_generator_fixture(plan)
+        for question in raw["questions"]:
+            question["target_text"] = None
+            question["target_line"] = None
         canonical = canonicalize_generator_output(raw, plan)
         permuted, expected_provenance = permute_generator_choices(canonical, plan)
         requests: list[Any] = []

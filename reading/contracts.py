@@ -61,6 +61,7 @@ GENERATOR_QUESTION_GROUP_FIELDS = {
     "MAIN_IDEA": "main_idea_questions",
     "REFERENCE": "reference_questions",
 }
+_OPTIONAL_TARGET_FIELDS = ("target_text", "target_line")
 CANONICAL_QUESTION_ORDER_VERSION = "reading-v0.2.5-evidence-position-aware-v1"
 CHOICE_PERMUTATION_VERSION = "reading-v0.2.5-seeded-choice-permutation-v1"
 DISPLAY_LINE_WIDTH = 72
@@ -290,6 +291,21 @@ def _evidence_position_aware_order(
     ]
 
 
+def _omit_transport_null_target_fields(question: dict[str, Any]) -> None:
+    """Restore omission semantics for transport-encoded optional targets.
+
+    Codex Structured Outputs requires every declared property in its transport
+    schema, so an optional canonical target property can arrive as ``None``.
+    Reading's canonical contract is non-nullable and historically represented
+    an inapplicable target by omission. Only remove those two transport nulls;
+    existing values and every other question field remain untouched.
+    """
+
+    for field_name in _OPTIONAL_TARGET_FIELDS:
+        if field_name in question and question[field_name] is None:
+            del question[field_name]
+
+
 def _flatten_grouped_generator_questions(
     raw_output: dict[str, Any],
     plan: dict[str, Any],
@@ -371,6 +387,7 @@ def canonicalize_generator_output(
             canonical["questions"] = questions
         for index, question in enumerate(questions, 1):
             if isinstance(question, dict):
+                _omit_transport_null_target_fields(question)
                 question["item_id"] = f"{passage_id}-q{index}"
     return canonical
 
@@ -504,6 +521,7 @@ def permute_generator_choices(
     for question_index, question in enumerate(questions, 1):
         if not isinstance(question, dict):
             raise ValueError(f"question {question_index} must be an object")
+        _omit_transport_null_target_fields(question)
         item_id = f"{passage_id}-q{question_index}"
         choices = question.get("choices")
         original_answer = question.get("correct_answer")

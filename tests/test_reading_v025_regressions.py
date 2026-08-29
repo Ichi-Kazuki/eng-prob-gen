@@ -14,10 +14,11 @@ from reading.contracts import (
     display_lines,
     generator_model_schema_for_plan,
     permute_generator_choices,
+    solver_input_errors,
     target_line_for_text,
     validate_generator_contract,
 )
-from shared.schema_validation import schema_errors
+from shared.schema_validation import load_schema, schema_errors
 
 from tests.test_reading_v02_batch import grouped_model_fixture, quota_plan, variable_generator_fixture
 
@@ -32,7 +33,122 @@ def _metadata(correct_answer: str) -> dict[str, dict[str, str]]:
     }
 
 
+def _grouped_questions(grouped: dict[str, object]) -> list[dict[str, object]]:
+    questions: list[dict[str, object]] = []
+    for field_name in (
+        "detail_questions",
+        "vocabulary_in_context_questions",
+        "inference_questions",
+        "main_idea_questions",
+        "reference_questions",
+    ):
+        values = grouped[field_name]
+        assert isinstance(values, list)
+        questions.extend(question for question in values if isinstance(question, dict))
+    return questions
+
+
 class ReadingV025RegressionTests(unittest.TestCase):
+    def test_transport_null_targets_are_omitted_without_changing_raw_or_answers(self) -> None:
+        plan = quota_plan(
+            9206,
+            {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 1, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 2},
+        )
+        grouped = grouped_model_fixture(plan)
+        for question in _grouped_questions(grouped):
+            question["target_text"] = None
+            question["target_line"] = None
+        raw_snapshot = copy.deepcopy(grouped)
+
+        permuted, provenance = permute_generator_choices(grouped, plan)
+        self.assertEqual(grouped, raw_snapshot)
+        for question in _grouped_questions(permuted):
+            self.assertNotIn("target_text", question)
+            self.assertNotIn("target_line", question)
+
+        absent_grouped = grouped_model_fixture(plan)
+        absent_permuted, _absent_provenance = permute_generator_choices(absent_grouped, plan)
+        for question in _grouped_questions(absent_permuted):
+            self.assertNotIn("target_text", question)
+            self.assertNotIn("target_line", question)
+
+        canonical = canonicalize_generator_output(permuted, plan)
+        self.assertEqual(schema_errors(canonical, load_schema("reading/schemas/reading_generator_output_v0_2.schema.json")), [])
+        self.assertEqual(validate_generator_contract(canonical, plan), [])
+        self.assertEqual(len(provenance["questions"]), plan["question_count"])
+        for record in provenance["questions"]:
+            self.assertEqual(set(record["original_to_canonical"]), {"A", "B", "C", "D"})
+            self.assertEqual(set(record["canonical_to_original"]), {"A", "B", "C", "D"})
+
+        blind = blind_input(canonical, schema_version="reading-blind-input-v0.2")
+        self.assertEqual(
+            blind_input_errors(canonical, blind, schema_version="reading-blind-input-v0.2"),
+            [],
+        )
+        self.assertEqual(
+            solver_input_errors(canonical, blind, schema_version="reading-blind-input-v0.2"),
+            [],
+        )
+
+    def test_valid_targets_survive_permutation_and_nulls_are_not_synthesized(self) -> None:
+        plan = quota_plan(
+            9207,
+            {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 1, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 2},
+        )
+        grouped = grouped_model_fixture(plan)
+        questions = _grouped_questions(grouped)
+        questions[0]["target_text"] = "exact target text"
+        questions[0]["target_line"] = 4
+        questions[1]["target_text"] = None
+        questions[1]["target_line"] = None
+        original_values = {
+            questions[0]["stem"]: ("exact target text", 4),
+            questions[1]["stem"]: (None, None),
+        }
+
+        permuted, _provenance = permute_generator_choices(grouped, plan)
+        for question in _grouped_questions(permuted):
+            expected = original_values.get(question["stem"])
+            if expected is None:
+                continue
+            target_text, target_line = expected
+            self.assertEqual(question.get("target_text"), target_text)
+            self.assertEqual(question.get("target_line"), target_line)
+            if target_text is None:
+                self.assertNotIn("target_text", question)
+                self.assertNotIn("target_line", question)
+
+        canonical = canonicalize_generator_output(permuted, plan)
+        for question in canonical["questions"]:
+            if question["stem"] == questions[0]["stem"]:
+                self.assertEqual(question["target_text"], "exact target text")
+                self.assertEqual(question["target_line"], 4)
+            self.assertFalse(
+                ("target_text" in question and question["target_text"] is None)
+                or ("target_line" in question and question["target_line"] is None)
+            )
+
+    def test_line_target_presence_validation_still_rejects_omitted_transport_targets(self) -> None:
+        plan = quota_plan(
+            9208,
+            {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 1, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 2},
+        )
+        generator = variable_generator_fixture(plan)
+        question = next(item for item in generator["questions"] if item["question_type"] == "REFERENCE")
+        target_text = "the communities"
+        line = target_line_for_text(generator["passage"], target_text)
+        assert line is not None
+        question["stem"] = f"The word '{target_text}' in line {line} refers to"
+        question["target_text"] = None
+        question["target_line"] = None
+        question["evidence"]["paragraph"] = 2
+        question["evidence"]["anchor"] = "filaments bind loose particles"
+
+        permuted, _provenance = permute_generator_choices(generator, plan)
+        canonical = canonicalize_generator_output(permuted, plan)
+        errors = validate_generator_contract(canonical, plan)
+        self.assertTrue(any("REFERENCE_TARGET_METADATA_MISSING" in error for error in errors))
+
     def test_distractor_metadata_moves_with_permuted_choices_and_does_not_mutate_input(self) -> None:
         for seed in range(9100, 9200):
             plan = quota_plan(seed, {"DETAIL": 2, "VOCABULARY_IN_CONTEXT": 1, "INFERENCE": 1, "MAIN_IDEA": 1, "REFERENCE": 2})
