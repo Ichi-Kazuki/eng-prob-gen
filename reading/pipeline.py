@@ -73,7 +73,7 @@ DEFAULT_MODEL = os.environ.get("READING_MODEL", "sonnet")
 DEFAULT_TIMEOUT_SECONDS = float(os.environ.get("READING_TIMEOUT_SECONDS", "300"))
 DEFAULT_MAX_BUDGET_USD = os.environ.get("READING_MAX_BUDGET_USD", "0.60")
 DEFAULT_PARALLELISM = 1
-READING_CURRENT_VERSION = "v0.2.6"
+READING_CURRENT_VERSION = "v0.2.7"
 
 
 READING_DIFFICULTY_GUIDANCE = (
@@ -85,19 +85,36 @@ READING_DIFFICULTY_GUIDANCE = (
     "a provisional structural proxy and never implies TOEFL ITP score equivalence."
 )
 READING_INFERENCE_GUIDANCE = (
-    "For INFERENCE questions, the keyed answer must not be explicitly stated in the passage and must not be obtainable merely by "
-    "replacing words in one passage sentence with synonyms or a close paraphrase. Before emitting each INFERENCE item, silently "
-    "test: 'If I can point to one passage sentence whose meaning directly states the correct option, even with ordinary synonym "
-    "substitution, this is not a valid inference question.' If yes, rewrite the inference item rather than labeling the paraphrase "
-    "as INFERENCE. Do not expose this internal check in generated question text or metadata unless the existing schema supports an "
-    "appropriate field. A valid inference must require at least one reasoning step from the passage, such as an implication, "
-    "consequence, likely condition, causal relationship, comparison, purpose, relationship between ideas, or conclusion supported "
-    "but not directly stated. Local inference is allowed when one sentence or adjacent sentences support a genuinely unstated "
-    "implication. Cross-idea inference is allowed when separated or multiple passage ideas naturally support the conclusion. Do not "
-    "manufacture unnecessary multi-sentence complexity or force cross-idea reasoning. Every inference must remain fully supported "
-    "by the passage and fully entailed by the text, with one unique defensible answer; it must be uniquely answerable, conservative, "
-    "and free of outside knowledge; unsupported or ambiguous inference is worse than a shallow inference. Do not create difficulty through simple "
-    "negation/reversal or artificial logical tricks. Distractors should be plausible but not entailed."
+    "For every INFERENCE question, conceptually construct the evidence chain internally before writing the stem or answer choices: "
+    "Fact A, Fact B, and an unstated conclusion. Fact A and Fact B must be two distinct textual propositions from the passage. "
+    "They may be in the same paragraph, in adjacent sentences, or in separated sentences or ideas. The final keyed option must "
+    "express the unstated conclusion, not Fact A or Fact B themselves. The private rationale must identify both facts and demonstrate "
+    "why both facts are needed to derive the answer. Keep these labels internal; do not expose Fact A, Fact B, or this construction "
+    "process in learner-facing question text. The keyed answer must not be explicitly stated in the passage; this prohibition applies "
+    "anywhere in the passage, and it must not be obtainable merely by replacing words in one passage sentence with synonyms or a "
+    "close paraphrase. Before finalizing each item, apply an ordinary synonym substitution check; if one sentence still directly "
+    "states the answer, rewrite the inference item rather than labeling the paraphrase as INFERENCE. Reject or rewrite a candidate "
+    "if its keyed answer is explicitly stated anywhere in the passage; is merely a synonym substitution or close paraphrase of one "
+    "passage sentence; one single passage proposition is sufficient to obtain the answer; or the rationale cannot identify at least "
+    "two distinct textual facts that jointly support the answer. A valid inference must require at least one reasoning step from the "
+    "passage that combines both facts to derive an unstated conclusion. Local inference is allowed when one sentence or adjacent "
+    "sentences support a genuinely unstated implication, provided that the support contains two distinct textual propositions rather "
+    "than a one-sentence restatement. Two adjacent textual propositions can support a valid local inference. Cross-idea inference is allowed when separated or multiple passage ideas naturally support the "
+    "conclusion. Cross-paragraph evidence is allowed when naturally supported, but it is not required; neither are multiple paragraphs, "
+    "distant evidence, or cross-idea reasoning. Use the evidence arrangement the passage naturally supports; do not set a target mix "
+    "of local, cross-idea, or cross-paragraph items. Do not manufacture unnecessary multi-sentence complexity or force cross-idea reasoning. "
+    "Each keyed inference must remain fully supported by the passage and fully entailed by the text, with one unique defensible answer; "
+    "it must be uniquely answerable, conservative, and free of outside knowledge; unsupported or ambiguous inference is worse than a "
+    "shallow inference. Do not create difficulty through simple negation/reversal or artificial logical tricks. Distractors should be "
+    "plausible but not entailed."
+)
+READING_REVIEWER_INFERENCE_GUIDANCE = (
+    "For INFERENCE items only, treat an item as a serious defect if its keyed answer is directly stated or paraphrased from one "
+    "passage sentence, or if one textual proposition alone fully supports the keyed answer. A valid inference should require at "
+    "least two distinct textual propositions to derive an unstated conclusion. Local evidence may be adjacent within one paragraph; "
+    "cross-idea and cross-paragraph evidence are allowed when supported but are not required. Also reject an INFERENCE item when "
+    "more than one inference is defensible or when the answer requires unstated outside knowledge. Do not apply this criterion to "
+    "other question types."
 )
 READING_LENGTH_GUIDANCE = (
     "For passage realization, treat target_words as a real writing target, not a loose suggestion. Normally remain close to "
@@ -158,7 +175,7 @@ READING_DOMAIN_GUIDANCE = (
 
 
 def reading_v02_generator_instruction(*, draft: bool = False) -> str:
-    """Return the shared v0.2.6 Generator contract used by production and draft modes."""
+    """Return the shared v0.2.7 Generator contract used by production and draft modes."""
 
     instruction = (
         "Generate one original TOEFL ITP-style Reading Comprehension set. Follow the supplied semantic plan exactly. "
@@ -762,7 +779,7 @@ class ReadingV02Pipeline(ReadingPipeline):
                     stage="reading_reviewer",
                     agent=REVIEWER_AGENT,
                     prompt=self._prompt(
-                        "Independently audit this entire Reading set as a blind Reviewer. Use only the visible passage, stems, and A/B/C/D choices in INPUT_JSON. Process every question in this one invocation. For every question choose the best answer, or AMBIGUOUS/NONE, and assess uniqueness, distractors, answerability, wording, and serious defects. Reject an INFERENCE item when its answer is only a direct sentence copied or paraphrased from the passage, when more than one inference is defensible, or when unstated outside knowledge is required. For VOCABULARY_IN_CONTEXT, judge the actual local sense rather than a dictionary-only synonym. Check author-purpose questions for a passage-supported rhetorical role and check distractors for plausible text-grounded error mechanisms, parallel grammar, and comparable information density. Return JSON only. Do not request or infer hidden Generator metadata.",
+                        f"Independently audit this entire Reading set as a blind Reviewer. Use only the visible passage, stems, and A/B/C/D choices in INPUT_JSON. Process every question in this one invocation. For every question choose the best answer, or AMBIGUOUS/NONE, and assess uniqueness, distractors, answerability, wording, and serious defects. {READING_REVIEWER_INFERENCE_GUIDANCE} For VOCABULARY_IN_CONTEXT, judge the actual local sense rather than a dictionary-only synonym. Check author-purpose questions for a passage-supported rhetorical role and check distractors for plausible text-grounded error mechanisms, parallel grammar, and comparable information density. Return JSON only. Do not request or infer hidden Generator metadata.",
                         blind,
                     ),
                     input_keys=("passage_id", "section", "passage", "questions"),

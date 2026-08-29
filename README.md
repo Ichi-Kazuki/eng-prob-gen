@@ -2,9 +2,9 @@
 
 This repository implements a fail-closed pipeline for generating and quality-gating TOEFL ITP Structure and Written Expression items. It stores stage state and replayable artifacts as JSON; it does not silently repair an item or replace an agent's grammar/quality judgment.
 
-## Reading Comprehension v0.2.6 (historical v0.1 compatibility)
+## Reading Comprehension v0.2.7 (historical v0.1 compatibility)
 
-Reading is a separate contract family. v0.2.6 is the current/default CLI
+Reading is a separate contract family. v0.2.7 is the current/default CLI
 route: each independent passage plan samples a
 realistic variable question count and ordered type mix from the lightweight
 derived profile in `analysis/reading_v0_2_empirical_profile.json`. Repeated
@@ -12,7 +12,7 @@ question types are allowed, and Generator, Reviewer, and Solver each process
 the complete question set in one invocation. Passage-length and question-count
 sampling remain independent Planner draws.
 
-Run one fresh current v0.2.6 passage set with Claude Code (the default provider):
+Run one fresh current v0.2.7 passage set with Claude Code (the default provider):
 
 ```powershell
 python -m reading.cli --seed 1001

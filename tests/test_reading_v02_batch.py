@@ -34,6 +34,7 @@ from reading.pipeline import (
     READING_INFERENCE_GUIDANCE,
     READING_LENGTH_GUIDANCE,
     READING_PARAGRAPH_GUIDANCE,
+    READING_REVIEWER_INFERENCE_GUIDANCE,
     reading_v02_generator_instruction,
 )
 from reading.planner import (
@@ -508,7 +509,7 @@ class ReadingV02BatchTests(unittest.TestCase):
             self.assertEqual(json.loads((root / "generator_raw.json").read_text(encoding="utf-8")), raw)
             self.assertEqual(json.loads((root / "generator.json").read_text(encoding="utf-8")), permuted)
             provenance = json.loads((root / "provenance" / "provenance.json").read_text(encoding="utf-8"))
-            self.assertEqual(provenance["reading_version"], "v0.2.6")
+            self.assertEqual(provenance["reading_version"], "v0.2.7")
             self.assertEqual(provenance["choice_permutation"], expected_provenance)
             self.assertEqual(provenance["blind_prompt_fields"], ["passage_id", "section", "passage", "questions"])
 
@@ -763,6 +764,11 @@ class ReadingV02BatchTests(unittest.TestCase):
             )
         self.assertIn("exactly match question_type_counts", generator_request.prompt)
         self.assertIn("ordering of the generated questions is free", generator_request.prompt)
+        self.assertIn("Fact A, Fact B, and an unstated conclusion", generator_request.prompt)
+        self.assertIn("Fact A and Fact B must be two distinct textual propositions", generator_request.prompt)
+        self.assertIn("final keyed option must express the unstated conclusion", generator_request.prompt)
+        self.assertIn("private rationale must identify both facts", generator_request.prompt)
+        self.assertIn("one single passage proposition is sufficient to obtain the answer", generator_request.prompt)
         self.assertIn("keyed answer must not be explicitly stated", generator_request.prompt)
         self.assertIn("must not be obtainable merely by replacing words", generator_request.prompt)
         self.assertIn("ordinary synonym substitution", generator_request.prompt)
@@ -784,9 +790,16 @@ class ReadingV02BatchTests(unittest.TestCase):
         self.assertIn("approximate information density", generator_request.prompt)
         self.assertIn("without padding for exact character-length equality", generator_request.prompt)
         self.assertNotIn("exact planned question_plan order", generator_request.prompt)
+        reviewer_request = next(request for request in trace.requests if request.stage == "reading_reviewer")
+        self.assertIn(" ".join(READING_REVIEWER_INFERENCE_GUIDANCE.split()), reviewer_request.prompt)
         generator_agent = (ROOT / ".claude" / "agents" / "toefl-itp-reading-generator-v0.2.md").read_text(encoding="utf-8")
         generator_agent = " ".join(generator_agent.split())
         self.assertIn("question_type_counts", generator_agent)
+        self.assertIn("Fact A, Fact B, and an unstated conclusion", generator_agent)
+        self.assertIn("Fact A and Fact B must be two distinct textual propositions", generator_agent)
+        self.assertIn("final keyed option must express the unstated conclusion", generator_agent)
+        self.assertIn("private rationale must identify both facts", generator_agent)
+        self.assertIn("one single passage proposition is sufficient to obtain the answer", generator_agent)
         self.assertIn("keyed answer must not be explicitly stated", generator_agent)
         self.assertIn("must not be obtainable merely by replacing words", generator_agent)
         self.assertIn("ordinary synonym substitution", generator_agent)
@@ -817,6 +830,11 @@ class ReadingV02BatchTests(unittest.TestCase):
         self.assertEqual(result["decision"], "UNVALIDATED_DRAFT")
         draft_request = next(request for request in trace.requests if request.stage == "reading_generator")
         for required in (
+            "Fact A, Fact B, and an unstated conclusion",
+            "Fact A and Fact B must be two distinct textual propositions",
+            "final keyed option must express the unstated conclusion",
+            "private rationale must identify both facts",
+            "one single passage proposition is sufficient to obtain the answer",
             "keyed answer must not be explicitly stated",
             "must not be obtainable merely by replacing words",
             "ordinary synonym substitution",
@@ -841,7 +859,7 @@ class ReadingV02BatchTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, draft_request.prompt)
 
-    def test_v026_generator_guidance_is_synchronized_without_new_quotas(self) -> None:
+    def test_v027_generator_guidance_is_synchronized_without_new_quotas(self) -> None:
         trace = BatchTrace()
         with TemporaryDirectory() as directory:
             ReadingV02Pipeline(BatchFakeRuntime("prompt", trace)).run(
