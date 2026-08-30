@@ -509,7 +509,7 @@ def apply_choice_permutation_to_question(
 
     The helper is intentionally pure: it returns a deep copy and never derives
     a new mapping.  This is used both by the original whole-set permutation and
-    by the bounded v0.2.10 inference repair merge.
+    by the bounded v0.2.11 inference repair merge.
     """
 
     if not isinstance(question, dict):

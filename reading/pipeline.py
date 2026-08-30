@@ -1,7 +1,7 @@
 """Fail-closed Reading v0.1 and bounded v0.2 orchestration.
 
 The historical v0.1 path remains a three-call Generator/Reviewer/Solver
-sequence. The current v0.2.10 path adds a bounded INFERENCE-only
+sequence. The current v0.2.11 path adds a bounded INFERENCE-only
 Verifier/Reviewer/Repair/candidate-verification gate before the final blind
 Reviewer/Solver stages.
 """
@@ -91,7 +91,7 @@ DEFAULT_MODEL = os.environ.get("READING_MODEL", "sonnet")
 DEFAULT_TIMEOUT_SECONDS = float(os.environ.get("READING_TIMEOUT_SECONDS", "300"))
 DEFAULT_MAX_BUDGET_USD = os.environ.get("READING_MAX_BUDGET_USD", "0.60")
 DEFAULT_PARALLELISM = 1
-READING_CURRENT_VERSION = "v0.2.10"
+READING_CURRENT_VERSION = "v0.2.11"
 
 
 READING_DIFFICULTY_GUIDANCE = (
@@ -1513,8 +1513,20 @@ class ReadingV02Pipeline(ReadingPipeline):
                                                             "Use only the visible passage, candidate identity, stem, and A/B/C/D choices. "
                                                             "The candidate key and all Generator, Reviewer, Verifier, evidence, rationale, "
                                                             "subtype, and repair metadata are private and unavailable. Choose the best "
-                                                            "answer or AMBIGUOUS/NONE, classify the inference, and return one judgment per "
-                                                            "candidate. Do not return a set-level PASS/FAIL field. Return JSON only.",
+                                                            "answer or AMBIGUOUS/NONE. A candidate is INVALID_DIRECT_RESTATEMENT if ONE "
+                                                            "passage proposition alone directly supports the selected answer. First ask "
+                                                            "whether ONE passage proposition alone directly supports the selected answer, "
+                                                            "including an explicit statement, "
+                                                            "ordinary synonym substitution, close paraphrase, or reformulation of one "
+                                                            "sentence/proposition; if so classify INVALID_DIRECT_RESTATEMENT and do not "
+                                                            "rescue it by citing another related proposition. Only when no single "
+                                                            "proposition is sufficient, evaluate the unstated inference and distinguish "
+                                                            "VALID_SHALLOW_INFERENCE, VALID_GENUINE_INFERENCE, or "
+                                                            "VALID_CROSS_IDEA_INFERENCE. VALID_SHALLOW_INFERENCE remains valid when "
+                                                            "multiple propositions are needed, even for an easy/local inference. Local "
+                                                            "inference is allowed and cross-paragraph evidence is not required. Return "
+                                                            "one judgment per candidate; do not return a set-level PASS/FAIL field. "
+                                                            "Return JSON only.",
                                                             candidate_verifier_input_payload,
                                                         ),
                                                         input_keys=("passage_id", "section", "passage", "candidates"),
