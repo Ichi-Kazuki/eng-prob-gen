@@ -44,7 +44,23 @@ Requirements:
   'it' in line N refers to`. Include private `target_text` and 1-based global
   `target_line` metadata. The trusted display model uses Unicode NFC,
   whitespace normalization, and a fixed 72-character word wrap; do not place
-  line numbers into the passage text.
+  line numbers into the passage text. For both target types, `target_text` must
+  be an exact expression that appears in the passage, and `evidence.anchor` must
+  be an exact passage substring containing the actual target occurrence asked
+  about in the learner-facing stem.
+- For REFERENCE questions, the `target_text` must be the exact expression at the
+  actual occurrence asked about in the learner-facing stem. `evidence.anchor`
+  must be an exact passage substring containing that occurrence and should
+  include enough local context to establish the intended antecedent or referent.
+  The keyed choice selected by `correct_answer` must identify the actual
+  antecedent or referent of that exact occurrence. Do not invent a pronoun that
+  is not present in the cited passage location, and do not ask about `it`,
+  `they`, `that`, or another pronoun merely because it would make a convenient
+  question. When the same surface pronoun occurs multiple times, construct the
+  item around one real occurrence and anchor that exact occurrence. Reference
+  targets do not need to be globally unique, common pronouns are allowed, and
+  cross-sentence reference is not required. Preserve conventional official-style
+  line-based wording.
 - Use the selected academic domain as a topic anchor for a self-contained
   expository passage, with enough definitions, examples, contrasts, causal
   links, chronology, and references to support the planned questions. Keep the

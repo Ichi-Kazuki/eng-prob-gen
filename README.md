@@ -1,10 +1,10 @@
 # TOEFL ITP Grammar Problem Generator
 
-This repository implements a fail-closed pipeline for generating and quality-gating TOEFL ITP Structure and Written Expression items. It stores stage state and replayable artifacts as JSON; it does not silently repair items or replace an agent's grammar/quality judgment. Reading v0.2.11's bounded inference repair is explicit and audited.
+This repository implements a fail-closed pipeline for generating and quality-gating TOEFL ITP Structure and Written Expression items. It stores stage state and replayable artifacts as JSON; it does not silently repair items or replace an agent's grammar/quality judgment. Reading v0.2.12's narrow target-location normalization and bounded inference repair are explicit and audited.
 
-## Reading Comprehension v0.2.11 (historical v0.1 compatibility)
+## Reading Comprehension v0.2.12 (historical v0.1 compatibility)
 
-Reading is a separate contract family. v0.2.11 is the current/default CLI
+Reading is a separate contract family. v0.2.12 is the current/default CLI
 route: each independent passage plan samples a
 realistic variable question count and ordered type mix from the lightweight
 derived profile in `analysis/reading_v0_2_empirical_profile.json`. Repeated
@@ -12,7 +12,7 @@ question types are allowed, and Generator, Reviewer, and Solver each process
 the complete question set in one invocation. Passage-length and question-count
 sampling remain independent Planner draws.
 
-Run one fresh current v0.2.11 passage set with Claude Code (the default provider):
+Run one fresh current v0.2.12 passage set with Claude Code (the default provider):
 
 ```powershell
 python -m reading.cli --seed 1001
@@ -50,7 +50,7 @@ artifacts plus the batch-level `batch_result.json`. A draft is always marked
 `UNVALIDATED_DRAFT` and `production_eligible: false`; it cannot be accepted.
 Quality rejection is `QUARANTINE`, infrastructure failure is
 `INFRASTRUCTURE_FAILURE`. Whole-passage and whole-set replacement remains
-prohibited; v0.2.11 preserves one Repair invocation producing two candidates per
+prohibited; v0.2.12 preserves one Repair invocation producing two candidates per
 flagged inference, deterministic candidate validation, one blind candidate
 verification, deterministic selection, then the existing Final Reviewer and
 Solver. Candidate Verifier semantics are kept at parity with the Initial

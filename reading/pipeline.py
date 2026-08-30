@@ -1,7 +1,8 @@
 """Fail-closed Reading v0.1 and bounded v0.2 orchestration.
 
 The historical v0.1 path remains a three-call Generator/Reviewer/Solver
-sequence. The current v0.2.11 path adds a bounded INFERENCE-only
+sequence. The current v0.2.12 path adds narrow target-location normalization
+and preserves the bounded INFERENCE-only
 Verifier/Reviewer/Repair/candidate-verification gate before the final blind
 Reviewer/Solver stages.
 """
@@ -91,7 +92,7 @@ DEFAULT_MODEL = os.environ.get("READING_MODEL", "sonnet")
 DEFAULT_TIMEOUT_SECONDS = float(os.environ.get("READING_TIMEOUT_SECONDS", "300"))
 DEFAULT_MAX_BUDGET_USD = os.environ.get("READING_MAX_BUDGET_USD", "0.60")
 DEFAULT_PARALLELISM = 1
-READING_CURRENT_VERSION = "v0.2.11"
+READING_CURRENT_VERSION = "v0.2.12"
 
 
 READING_DIFFICULTY_GUIDANCE = (
@@ -161,7 +162,20 @@ READING_TARGET_GUIDANCE = (
     "For VOCABULARY_IN_CONTEXT and REFERENCE questions, use conventional TOEFL ITP line-based wording such as "
     "The word 'X' in line N is closest in meaning to or The word 'it' in line N refers to. Include private target_text "
     "and 1-based target_line metadata. The trusted display representation uses Unicode NFC, whitespace normalization, "
-    "and a fixed 72-character word wrap; never insert line numbers into the passage text."
+    "and a fixed 72-character word wrap; never insert line numbers into the passage text. target_text must be an exact "
+    "expression that appears in the passage, and evidence.anchor must be an exact passage substring containing the actual "
+    "target occurrence being asked about in the learner-facing stem."
+)
+READING_REFERENCE_GUIDANCE = (
+    "For REFERENCE questions, the target_text must be an exact expression that actually appears at the occurrence asked "
+    "about in the learner-facing stem. evidence.anchor must be an exact passage substring containing that actual target "
+    "occurrence and should include enough local context to establish the intended antecedent or referent. The keyed correct "
+    "choice selected by correct_answer must identify the actual antecedent or referent of that exact occurrence. Do not "
+    "invent a pronoun that is not present in the cited passage location, and do not ask about 'it', 'they', 'that', or "
+    "another pronoun merely because it would make a convenient question. When the same surface pronoun occurs multiple "
+    "times, construct the item around one real occurrence and anchor that exact occurrence. Reference targets do not need "
+    "to be globally unique; common pronouns are allowed; do not force cross-sentence reference or change conventional "
+    "official-style line-based wording."
 )
 READING_CHOICE_GUIDANCE = (
     "Keep correct options from being systematically longest or most specific; use comparable grammatical form and approximate "
@@ -207,7 +221,7 @@ def reading_v02_generator_instruction(*, draft: bool = False) -> str:
         "deterministic identity fields after generation. "
         f"{READING_DIFFICULTY_GUIDANCE} {READING_INFERENCE_GUIDANCE} {READING_LENGTH_GUIDANCE} "
         f"{READING_PARAGRAPH_GUIDANCE} "
-        f"{READING_VOCABULARY_GUIDANCE} {READING_TARGET_GUIDANCE} {READING_CHOICE_GUIDANCE} "
+        f"{READING_VOCABULARY_GUIDANCE} {READING_TARGET_GUIDANCE} {READING_REFERENCE_GUIDANCE} {READING_CHOICE_GUIDANCE} "
         f"{READING_TAXONOMY_GUIDANCE} {READING_DISTRACTOR_GUIDANCE} {READING_DOMAIN_GUIDANCE} "
         "Process the whole passage set in this one invocation."
     )

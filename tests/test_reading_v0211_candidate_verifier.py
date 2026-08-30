@@ -18,8 +18,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class ReadingV0211CandidateVerifierTests(unittest.TestCase):
     def test_current_reading_version_is_v0211(self) -> None:
-        self.assertEqual(READING_CURRENT_VERSION, "v0.2.11")
-        self.assertEqual(CURRENT_READING_VERSION, "v0.2.11")
+        self.assertEqual(READING_CURRENT_VERSION, "v0.2.12")
+        self.assertEqual(CURRENT_READING_VERSION, "v0.2.12")
 
     def test_agent_instruction_has_one_proposition_direct_restatement_precedence(self) -> None:
         instruction = (ROOT / ".claude" / "agents" / "toefl-itp-reading-candidate-verifier-v0.2.md").read_text(

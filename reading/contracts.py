@@ -654,7 +654,7 @@ _PARAGRAPH_ORDINALS = {
     "eighth": 8,
 }
 _TARGET_QUESTION_TYPES = {"REFERENCE", "VOCABULARY_IN_CONTEXT"}
-TARGET_LINE_NORMALIZATION_VERSION = "reading-v0.2.5-target-line-normalization-v1"
+TARGET_LINE_NORMALIZATION_VERSION = "reading-v0.2.12-target-line-normalization-v1"
 
 
 def _target_metadata_from_stem(stem: str) -> tuple[str, int] | None:
@@ -723,6 +723,164 @@ def _surface_text(value: str) -> str:
     return normalized.strip(_SURFACE_STRIP_CHARS).strip().casefold()
 
 
+def _surface_text_with_source_offsets(value: str) -> tuple[str, list[tuple[int, int]]]:
+    """Return surface-normalized text plus source spans for each output character.
+
+    The source string used by the anchor resolver is already the canonical NFC
+    display paragraph.  Keeping offsets through the existing surface
+    normalization lets the resolver identify the exact target occurrence
+    without selecting a line by proximity or occurrence order.
+    """
+
+    normalized = unicodedata.normalize("NFC", value)
+    translated_chars: list[str] = []
+    translated_offsets: list[tuple[int, int]] = []
+    for source_index, char in enumerate(normalized):
+        translated = char.translate(_SURFACE_TRANSLATION)
+        for translated_char in translated:
+            translated_chars.append(translated_char)
+            translated_offsets.append((source_index, source_index + 1))
+
+    collapsed_chars: list[str] = []
+    collapsed_offsets: list[tuple[int, int]] = []
+    index = 0
+    while index < len(translated_chars):
+        if translated_chars[index].isspace():
+            start = index
+            index += 1
+            while index < len(translated_chars) and translated_chars[index].isspace():
+                index += 1
+            collapsed_chars.append(" ")
+            collapsed_offsets.append((translated_offsets[start][0], translated_offsets[index - 1][1]))
+            continue
+        collapsed_chars.append(translated_chars[index])
+        collapsed_offsets.append(translated_offsets[index])
+        index += 1
+
+    left = 0
+    right = len(collapsed_chars)
+    while left < right and collapsed_chars[left].isspace():
+        left += 1
+    while right > left and collapsed_chars[right - 1].isspace():
+        right -= 1
+    while left < right and collapsed_chars[left] in _SURFACE_STRIP_CHARS:
+        left += 1
+    while right > left and collapsed_chars[right - 1] in _SURFACE_STRIP_CHARS:
+        right -= 1
+    while left < right and collapsed_chars[left].isspace():
+        left += 1
+    while right > left and collapsed_chars[right - 1].isspace():
+        right -= 1
+
+    surface_chars: list[str] = []
+    surface_offsets: list[tuple[int, int]] = []
+    for char, source_span in zip(collapsed_chars[left:right], collapsed_offsets[left:right]):
+        folded = char.casefold()
+        surface_chars.extend(folded)
+        surface_offsets.extend(source_span for _ in folded)
+    return "".join(surface_chars), surface_offsets
+
+
+def _substring_spans(text: str, substring: str) -> list[tuple[int, int]]:
+    """Return all exact, including overlapping, substring spans."""
+
+    if not substring:
+        return []
+    spans: list[tuple[int, int]] = []
+    start = 0
+    while True:
+        match_start = text.find(substring, start)
+        if match_start < 0:
+            return spans
+        spans.append((match_start, match_start + len(substring)))
+        start = match_start + 1
+
+
+def _surface_expression_source_spans(text: str, target_text: str) -> list[tuple[int, int]]:
+    """Return exact surface target spans mapped back to ``text`` offsets."""
+
+    surface_text, source_offsets = _surface_text_with_source_offsets(text)
+    target_surface = _surface_text(target_text)
+    if not target_surface:
+        return []
+    escaped_target = re.escape(target_surface)
+    spans: list[tuple[int, int]] = []
+    for match in re.finditer(
+        rf"(?<![\w'-]){escaped_target}(?![\w'-])",
+        surface_text,
+        flags=re.UNICODE,
+    ):
+        if match.start() >= len(source_offsets) or match.end() > len(source_offsets):
+            continue
+        spans.append((source_offsets[match.start()][0], source_offsets[match.end() - 1][1]))
+    return spans
+
+
+def _display_line_ranges(paragraph: str, *, width: int = DISPLAY_LINE_WIDTH) -> list[tuple[int, int]]:
+    """Map each wrapped display line to a canonical paragraph character span."""
+
+    ranges: list[tuple[int, int]] = []
+    cursor = 0
+    for line in display_lines(paragraph, width=width):
+        start = paragraph.find(line, cursor)
+        if start < 0:
+            return []
+        end = start + len(line)
+        ranges.append((start, end))
+        cursor = end
+    return ranges
+
+
+def _target_line_from_evidence_anchor(
+    passage: str,
+    target_text: str,
+    evidence: Any,
+    matching_lines: list[int],
+) -> int | None:
+    """Resolve one target line only from one unique, exact evidence anchor."""
+
+    if not isinstance(evidence, dict):
+        return None
+    paragraph_number = evidence.get("paragraph")
+    anchor = evidence.get("anchor")
+    paragraphs = _normalized_display_paragraphs(passage)
+    if (
+        isinstance(paragraph_number, bool)
+        or not isinstance(paragraph_number, int)
+        or not 1 <= paragraph_number <= len(paragraphs)
+        or not isinstance(anchor, str)
+        or not anchor.strip()
+    ):
+        return None
+
+    paragraph = paragraphs[paragraph_number - 1]
+    normalized_anchor = _normalized_text(anchor)
+    anchor_spans = _substring_spans(_normalized_text(paragraph), normalized_anchor)
+    if len(anchor_spans) != 1:
+        return None
+    anchor_start, anchor_end = anchor_spans[0]
+    anchor_occurrence = paragraph[anchor_start:anchor_end]
+    target_spans = _surface_expression_source_spans(anchor_occurrence, target_text)
+    if len(target_spans) != 1:
+        return None
+    target_start, target_end = target_spans[0]
+
+    line_ranges = _display_line_ranges(paragraph)
+    local_lines = [
+        local_line
+        for local_line, (line_start, line_end) in enumerate(line_ranges, 1)
+        if line_start <= target_start and target_end <= line_end
+    ]
+    if len(local_lines) != 1:
+        return None
+    preceding_lines = sum(
+        len(display_lines(previous_paragraph))
+        for previous_paragraph in paragraphs[:paragraph_number - 1]
+    )
+    derived_line = preceding_lines + local_lines[0]
+    return derived_line if derived_line in matching_lines else None
+
+
 def _contains_surface_expression(paragraph: str, target: str) -> bool:
     """Check for an exact token sequence, never a fuzzy substring match."""
 
@@ -789,7 +947,8 @@ def normalize_target_line_metadata(
         "version": TARGET_LINE_NORMALIZATION_VERSION,
         "algorithm": (
             "fixed-width display-line scan using _contains_surface_expression; "
-            "preserve a supplied matching target line, otherwise derive only a unique global match; "
+            "preserve a supplied matching target line, otherwise derive only a unique global match "
+            "or a unique exact target occurrence inside a unique normalized evidence anchor; "
             "stem rewrite only when parsed stem line equals generator_target_line"
         ),
         "questions": [],
@@ -823,14 +982,25 @@ def normalize_target_line_metadata(
             resolution = "UNIQUE_SURFACE_MATCH" if len(matching_lines) == 1 else "SUPPLIED_LINE_MATCH"
             canonical_target_line = generator_target_line
         else:
-            resolution = (
-                "ZERO_SURFACE_MATCH"
-                if not matching_lines
-                else "UNIQUE_SURFACE_MATCH"
-                if len(matching_lines) == 1
-                else "MULTIPLE_SURFACE_MATCH"
-            )
-            canonical_target_line = matching_lines[0] if len(matching_lines) == 1 else None
+            if not matching_lines:
+                resolution = "ZERO_SURFACE_MATCH"
+                canonical_target_line = None
+            elif len(matching_lines) == 1:
+                resolution = "UNIQUE_SURFACE_MATCH"
+                canonical_target_line = matching_lines[0]
+            else:
+                anchor_line = _target_line_from_evidence_anchor(
+                    passage,
+                    target_text,
+                    question.get("evidence"),
+                    matching_lines,
+                )
+                if anchor_line is None:
+                    resolution = "MULTIPLE_SURFACE_MATCH"
+                    canonical_target_line = None
+                else:
+                    resolution = "EVIDENCE_ANCHOR_SURFACE_MATCH"
+                    canonical_target_line = anchor_line
         record: dict[str, Any] = {
             "item_id": question.get("item_id"),
             "question_index": question_index,
@@ -843,13 +1013,14 @@ def normalize_target_line_metadata(
         records.append(record)
         if supplied_line_matches:
             continue
-        if len(matching_lines) != 1:
+        if resolution not in {"UNIQUE_SURFACE_MATCH", "EVIDENCE_ANCHOR_SURFACE_MATCH"}:
             continue
 
-        canonical_target_line = matching_lines[0]
         # A unique surface match is sufficient to derive canonical structured
-        # metadata.  Invalid model values still fail the normal schema/contract
-        # gates; this function is not an input repair for malformed types.
+        # metadata; an anchor-derived match is sufficient only when its exact
+        # occurrence has also been mapped to one existing global line. Invalid
+        # model values still fail the normal schema/contract gates; this
+        # function is not an input repair for malformed types.
         question["target_line"] = canonical_target_line
 
         stem = question.get("stem")
