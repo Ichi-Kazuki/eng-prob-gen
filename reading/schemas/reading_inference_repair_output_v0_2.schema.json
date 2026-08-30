@@ -36,35 +36,48 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["item_id", "question_type", "subtype", "stem", "choices", "correct_answer", "evidence", "distractor_metadata"],
+        "required": ["item_id", "candidates"],
         "properties": {
           "item_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+-q(?:[1-9]|1[0-4])$"},
-          "question_type": {"const": "INFERENCE"},
-          "subtype": {"enum": ["LOCAL_INFERENCE", "CROSS_IDEA_INFERENCE", "RHETORICAL_PURPOSE"]},
-          "stem": {"type": "string", "minLength": 8, "maxLength": 400},
-          "choices": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["A", "B", "C", "D"],
-            "properties": {
-              "A": {"type": "string", "minLength": 1, "maxLength": 300},
-              "B": {"type": "string", "minLength": 1, "maxLength": 300},
-              "C": {"type": "string", "minLength": 1, "maxLength": 300},
-              "D": {"type": "string", "minLength": 1, "maxLength": 300}
+          "candidates": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["candidate_index", "question_type", "subtype", "stem", "choices", "correct_answer", "evidence", "distractor_metadata"],
+              "properties": {
+                "candidate_index": {"enum": [1, 2]},
+                "question_type": {"const": "INFERENCE"},
+                "subtype": {"enum": ["LOCAL_INFERENCE", "CROSS_IDEA_INFERENCE", "RHETORICAL_PURPOSE"]},
+                "stem": {"type": "string", "minLength": 8, "maxLength": 400},
+                "choices": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["A", "B", "C", "D"],
+                  "properties": {
+                    "A": {"type": "string", "minLength": 1, "maxLength": 300},
+                    "B": {"type": "string", "minLength": 1, "maxLength": 300},
+                    "C": {"type": "string", "minLength": 1, "maxLength": 300},
+                    "D": {"type": "string", "minLength": 1, "maxLength": 300}
+                  }
+                },
+                "correct_answer": {"enum": ["A", "B", "C", "D"]},
+                "evidence": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["paragraph", "anchor", "rationale"],
+                  "properties": {
+                    "paragraph": {"type": "integer", "minimum": 1, "maximum": 8},
+                    "anchor": {"type": "string", "minLength": 3, "maxLength": 240},
+                    "rationale": {"type": "string", "minLength": 8, "maxLength": 600}
+                  }
+                },
+                "distractor_metadata": {"$ref": "#/$defs/distractorMetadata"}
+              }
             }
-          },
-          "correct_answer": {"enum": ["A", "B", "C", "D"]},
-          "evidence": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["paragraph", "anchor", "rationale"],
-            "properties": {
-              "paragraph": {"type": "integer", "minimum": 1, "maximum": 8},
-              "anchor": {"type": "string", "minLength": 3, "maxLength": 240},
-              "rationale": {"type": "string", "minLength": 8, "maxLength": 600}
-            }
-          },
-          "distractor_metadata": {"$ref": "#/$defs/distractorMetadata"}
+          }
         }
       }
     }

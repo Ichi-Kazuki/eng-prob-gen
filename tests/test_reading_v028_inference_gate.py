@@ -1,4 +1,4 @@
-"""Focused offline coverage for the bounded Reading v0.2.9 inference gate."""
+"""Focused offline coverage for the bounded Reading v0.2.10 inference gate."""
 
 from __future__ import annotations
 
@@ -49,8 +49,7 @@ def repair_output(generator: dict[str, Any], item_ids: list[str]) -> dict[str, A
     replacements = []
     for item_id in item_ids:
         original = by_id[item_id]
-        replacements.append({
-            "item_id": item_id,
+        candidate = {
             "question_type": "INFERENCE",
             "subtype": "LOCAL_INFERENCE",
             "stem": "Which conclusion can be drawn from the two related facts in the passage?",
@@ -63,7 +62,13 @@ def repair_output(generator: dict[str, Any], item_ids: list[str]) -> dict[str, A
             "correct_answer": "B",
             "evidence": copy.deepcopy(original["evidence"]),
             "distractor_metadata": metadata("B"),
-        })
+        }
+        second = copy.deepcopy(candidate)
+        second["stem"] = "What is most reasonably inferred when these two facts are considered together?"
+        replacements.append({"item_id": item_id, "candidates": [
+            {"candidate_index": 1, **candidate},
+            {"candidate_index": 2, **second},
+        ]})
     return {"schema_version": "reading-inference-repair-v0.2", "replacements": replacements}
 
 
@@ -83,6 +88,9 @@ class GateRuntime:
         fail_stage: str | None = None,
         initial_verifier_output_mode: str | None = None,
         reverify_output_mode: str | None = None,
+        candidate_statuses: dict[tuple[str, int], str] | None = None,
+        candidate_answer_overrides: dict[tuple[str, int], str] | None = None,
+        repair_output_mode: str | None = None,
         initial_reviewer_overrides: dict[str, dict[str, Any]] | None = None,
         final_reviewer_overrides: dict[str, dict[str, Any]] | None = None,
         initial_reviewer_set_judgment: str | None = None,
@@ -93,6 +101,7 @@ class GateRuntime:
         initial_canonical = canonicalize_generator_output(self.raw, plan)
         self.initial_generator, self.permutation = permute_generator_choices(initial_canonical, plan)
         self.final_generator = copy.deepcopy(self.initial_generator)
+        self.candidate_questions: dict[tuple[str, int], dict[str, Any]] = {}
         self.initial_verifier_status = initial_verifier_status
         self.initial_verifier_statuses = initial_verifier_statuses or {}
         self.initial_answer_overrides = initial_answer_overrides or {}
@@ -101,6 +110,9 @@ class GateRuntime:
         self.fail_stage = fail_stage
         self.initial_verifier_output_mode = initial_verifier_output_mode
         self.reverify_output_mode = reverify_output_mode
+        self.candidate_statuses = candidate_statuses or {}
+        self.candidate_answer_overrides = candidate_answer_overrides or {}
+        self.repair_output_mode = repair_output_mode
         self.initial_reviewer_overrides = initial_reviewer_overrides or {}
         self.final_reviewer_overrides = final_reviewer_overrides or {}
         self.initial_reviewer_set_judgment = initial_reviewer_set_judgment
@@ -137,17 +149,16 @@ class GateRuntime:
             parsed = copy.deepcopy(self.raw)
         elif request.stage == "reading_inference_verifier":
             self.verifier_calls += 1
-            is_reverify = self.verifier_calls == 2
-            status = self.reverify_status if is_reverify else self.initial_verifier_status
-            source = self.final_generator if is_reverify else self.initial_generator
+            status = self.initial_verifier_status
+            source = self.initial_generator
             parsed = copy.deepcopy(inference_verifier_for(source))
             requested_ids = {question["item_id"] for question in payload["questions"]}
             parsed["questions"] = [question for question in parsed["questions"] if question["item_id"] in requested_ids]
             for item in parsed["questions"]:
-                item["status"] = status if is_reverify else self.initial_verifier_statuses.get(item["item_id"], status)
-                if not is_reverify and item["item_id"] in self.initial_answer_overrides:
+                item["status"] = self.initial_verifier_statuses.get(item["item_id"], status)
+                if item["item_id"] in self.initial_answer_overrides:
                     item["best_answer"] = self.initial_answer_overrides[item["item_id"]]
-            output_mode = self.reverify_output_mode if is_reverify else self.initial_verifier_output_mode
+            output_mode = self.initial_verifier_output_mode
             if output_mode == "malformed":
                 parsed["questions"][0]["status"] = "MALFORMED_STATUS"
             elif output_mode == "wrong_item_id":
@@ -166,17 +177,66 @@ class GateRuntime:
                 if question["item_id"] in by_id:
                     replacement = by_id[question["item_id"]]
                     record = next(item for item in self.permutation["questions"] if item["item_id"] == question["item_id"])
-                    remapped = apply_choice_permutation_to_question(
-                        replacement,
-                        original_to_canonical=record["original_to_canonical"],
-                        canonical_to_original=record["canonical_to_original"],
-                    )
+                    for candidate in replacement["candidates"]:
+                        raw_candidate = {"item_id": replacement["item_id"], **candidate}
+                        raw_candidate.pop("candidate_index", None)
+                        remapped = apply_choice_permutation_to_question(
+                            raw_candidate,
+                            original_to_canonical=record["original_to_canonical"],
+                            canonical_to_original=record["canonical_to_original"],
+                        )
+                        self.candidate_questions[(replacement["item_id"], candidate["candidate_index"])] = remapped
                     question.clear()
-                    question.update(remapped)
+                    question.update(self.candidate_questions[(replacement["item_id"], 1)])
             parsed = replacements if self.repair else {
                 "schema_version": "reading-inference-repair-v0.2",
                 "replacements": [],
             }
+            if self.repair_output_mode == "duplicate_index" and parsed["replacements"]:
+                parsed["replacements"][0]["candidates"][1]["candidate_index"] = 1
+            elif self.repair_output_mode == "missing_candidate" and parsed["replacements"]:
+                parsed["replacements"][0]["candidates"].pop()
+            elif self.repair_output_mode == "extra_candidate" and parsed["replacements"]:
+                extra = copy.deepcopy(parsed["replacements"][0]["candidates"][0])
+                extra["candidate_index"] = 3
+                parsed["replacements"][0]["candidates"].append(extra)
+            elif self.repair_output_mode == "missing_parent" and parsed["replacements"]:
+                parsed["replacements"].pop()
+            elif self.repair_output_mode == "extra_parent" and parsed["replacements"]:
+                parsed["replacements"].append(copy.deepcopy(parsed["replacements"][0]))
+            elif self.repair_output_mode == "invalid_anchor_1" and parsed["replacements"]:
+                parsed["replacements"][0]["candidates"][0]["evidence"]["anchor"] = "not present in passage"
+            elif self.repair_output_mode == "invalid_anchor_2" and parsed["replacements"]:
+                parsed["replacements"][0]["candidates"][1]["evidence"]["anchor"] = "not present in passage"
+            elif self.repair_output_mode == "both_invalid" and parsed["replacements"]:
+                for candidate in parsed["replacements"][0]["candidates"]:
+                    candidate["evidence"]["anchor"] = "not present in passage"
+        elif request.stage == "reading_inference_candidate_verifier":
+            parsed = {
+                "schema_version": "reading-inference-candidate-verifier-v0.2",
+                "passage_id": payload["passage_id"],
+                "section": payload["section"],
+                "candidates": [],
+            }
+            for candidate in payload["candidates"]:
+                key = (candidate["parent_item_id"], candidate["candidate_index"])
+                question = self.candidate_questions[key]
+                parsed["candidates"].append({
+                    "parent_item_id": candidate["parent_item_id"],
+                    "candidate_index": candidate["candidate_index"],
+                    "best_answer": self.candidate_answer_overrides.get(key, question["correct_answer"]),
+                    "status": self.candidate_statuses.get(key, self.reverify_status),
+                    "supporting_propositions": ["The passage states the first relevant fact.", "A second detail supports the conclusion."],
+                    "conclusion": "The candidate conclusion follows from the visible passage.",
+                    "comment": "The candidate is independently answerable from the passage.",
+                })
+            output_mode = self.reverify_output_mode
+            if output_mode == "malformed":
+                parsed["candidates"][0]["status"] = "MALFORMED_STATUS"
+            elif output_mode == "missing_item_id":
+                parsed["candidates"].pop()
+            elif output_mode == "duplicate_item_id":
+                parsed["candidates"][1]["candidate_index"] = parsed["candidates"][0]["candidate_index"]
         elif request.stage == "reading_reviewer":
             self.reviewer_calls += 1
             parsed = reviewer_for(self.final_generator)
@@ -342,7 +402,7 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
         self.assertEqual(result["decision"], "ACCEPT")
         self.assertEqual([request.stage for request in runtime.requests], [
             "reading_generator", "reading_inference_verifier", "reading_reviewer",
-            "reading_inference_repair", "reading_inference_verifier", "reading_reviewer", "reading_solver",
+            "reading_inference_repair", "reading_inference_candidate_verifier", "reading_reviewer", "reading_solver",
         ])
         self.assertEqual(runtime.repair_calls, 1)
         provenance = json.loads((root / "provenance" / "provenance.json").read_text(encoding="utf-8"))
@@ -374,13 +434,10 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
         self.assertEqual([item["item_id"] for item in repair["items"]], [inference_id])
         self.assertEqual(len({item["item_id"] for item in repair["items"]}), 1)
         provenance = json.loads((root / "provenance" / "provenance.json").read_text(encoding="utf-8"))
-        self.assertEqual(provenance["repair_item_provenance"], [{
-            "item_id": inference_id,
-            "verifier_flagged": True,
-            "reviewer_flagged": True,
-            "verifier_reasons": ["verifier status 'INVALID_DIRECT_RESTATEMENT' is not a valid inference status"],
-            "reviewer_reasons": ["reviewer serious_defect is true"],
-        }])
+        repair_provenance = provenance["repair_item_provenance"]
+        self.assertEqual(repair_provenance[0]["item_id"], inference_id)
+        self.assertEqual(repair_provenance[0]["parent_item_id"], inference_id)
+        self.assertEqual([candidate["candidate_index"] for candidate in repair_provenance[0]["candidates"]], [1, 2])
 
     def test_verifier_and_reviewer_split_flags_repair_in_one_invocation(self) -> None:
         plan = build_plan_v02(2900, domain="biology")
@@ -462,7 +519,7 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
         self.assertEqual(runtime.reviewer_calls, 2)
         self.assertEqual([request.stage for request in runtime.requests], [
             "reading_generator", "reading_inference_verifier", "reading_reviewer",
-            "reading_inference_repair", "reading_inference_verifier", "reading_reviewer",
+            "reading_inference_repair", "reading_inference_candidate_verifier", "reading_reviewer",
         ])
         self.assertIsNone(result["solver"])
         self.assertTrue((root / "reviewer_initial.json").is_file())
@@ -558,7 +615,7 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
         result, _root = self.run_pipeline(runtime)
         self.assertEqual(result["decision"], "QUARANTINE")
         self.assertEqual(runtime.repair_calls, 1)
-        self.assertEqual(runtime.verifier_calls, 2)
+        self.assertEqual(runtime.verifier_calls, 1)
         self.assertTrue(result["reviewer"])
         self.assertFalse(result["solver"])
         self.assertFalse(result["checks"]["inference_repair_succeeded"])
@@ -574,7 +631,7 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
 
         self.assertEqual(result["decision"], "QUARANTINE")
         self.assertEqual(runtime.repair_calls, 1)
-        self.assertEqual(runtime.verifier_calls, 2)
+        self.assertEqual(runtime.verifier_calls, 1)
         self.assertEqual(
             [request.stage for request in runtime.requests],
             [
@@ -582,12 +639,12 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
                     "reading_inference_verifier",
                     "reading_reviewer",
                     "reading_inference_repair",
-                    "reading_inference_verifier",
+                    "reading_inference_candidate_verifier",
             ],
         )
         self.assertFalse(result["checks"]["inference_gate_pass"])
         self.assertFalse(result["checks"]["inference_repair_succeeded"])
-        self.assertTrue(result["checks"]["inference_verifier_errors"])
+        self.assertTrue(result["checks"]["candidate_verifier_errors"])
         self.assertTrue(result["reviewer"])
         self.assertIsNone(result["solver"])
 
@@ -607,7 +664,7 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
         self.assertEqual(provenance["repair_attempt_count"], 1)
         self.assertEqual(provenance["repaired_item_ids"], provenance["flagged_inference_item_ids"])
         self.assertTrue(provenance["inference_verifier_input_sha256"].startswith("sha256:"))
-        self.assertTrue(provenance["inference_reverify_output_sha256"].startswith("sha256:"))
+        self.assertTrue(provenance["candidate_verifier_output_sha256"].startswith("sha256:"))
         self.assertEqual(provenance["final_specialized_inference_gate_result"], True)
         self.assertEqual(provenance["final_generator_sha256"], payload_sha256(result["generator"]))
         self.assertEqual(result["checks"]["inference_gate_pass"], True)
@@ -658,8 +715,9 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
 
         with TemporaryDirectory() as directory:
             batch = run_reading_batch(2892, count=2, parallel=1, output_dir=Path(directory), runtime_factory=factory)
-        self.assertEqual(batch["inference_verifier_invocation_count"], 3)
+        self.assertEqual(batch["inference_verifier_invocation_count"], 2)
         self.assertEqual(batch["inference_repair_invocation_count"], 1)
+        self.assertEqual(batch["candidate_verifier_invocation_count"], 1)
         self.assertEqual(batch["reviewer_invocation_count"], 3)
         self.assertEqual(batch["total_live_invocation_count"], 11)
 

@@ -49,6 +49,8 @@ SCHEMA_PATHS_V02 = {
     "solver": SCHEMA_DIR / "reading_solver_output_v0_2.schema.json",
     "inference_verifier_input": SCHEMA_DIR / "reading_inference_verifier_input_v0_2.schema.json",
     "inference_verifier": SCHEMA_DIR / "reading_inference_verifier_output_v0_2.schema.json",
+    "candidate_verifier_input": SCHEMA_DIR / "reading_inference_candidate_verifier_input_v0_2.schema.json",
+    "candidate_verifier": SCHEMA_DIR / "reading_inference_candidate_verifier_output_v0_2.schema.json",
     "inference_repair_input": SCHEMA_DIR / "reading_inference_repair_input_v0_2.schema.json",
     "inference_repair": SCHEMA_DIR / "reading_inference_repair_output_v0_2.schema.json",
     "result": SCHEMA_DIR / "reading_result_v0_2.schema.json",
@@ -507,7 +509,7 @@ def apply_choice_permutation_to_question(
 
     The helper is intentionally pure: it returns a deep copy and never derives
     a new mapping.  This is used both by the original whole-set permutation and
-    by the bounded v0.2.9 inference repair merge.
+    by the bounded v0.2.10 inference repair merge.
     """
 
     if not isinstance(question, dict):
@@ -1400,7 +1402,7 @@ def validate_inference_repair_contract(
     requested_item_ids: list[str] | tuple[str, ...],
     schema_paths: dict[str, Path] | None = None,
 ) -> list[str]:
-    """Validate exactly one replacement per flagged inference item."""
+    """Validate exactly two indexed candidates per flagged inference item."""
 
     if schema_paths is None:
         schema_paths = SCHEMA_PATHS_V02
@@ -1415,6 +1417,115 @@ def validate_inference_repair_contract(
         errors.append(
             "inference_repair: replacement item IDs must exactly match requested IDs; "
             f"requested {requested}, got {actual_ids}"
+        )
+    for replacement in output["replacements"]:
+        item_id = replacement.get("item_id")
+        candidates = replacement.get("candidates")
+        if not isinstance(candidates, list):
+            continue
+        candidate_indices = [candidate.get("candidate_index") for candidate in candidates if isinstance(candidate, dict)]
+        if (
+            len(candidate_indices) != 2
+            or any(isinstance(index, bool) or not isinstance(index, int) for index in candidate_indices)
+            or sorted(candidate_indices) != [1, 2]
+        ):
+            errors.append(
+                f"inference_repair: {item_id} candidate indices must be exactly [1, 2]; got {candidate_indices}"
+            )
+        if len(candidate_indices) != len(set(candidate_indices)):
+            errors.append(f"inference_repair: {item_id} contains duplicate candidate_index values")
+    return errors
+
+
+def candidate_verifier_input(
+    output: dict[str, Any],
+    candidates: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Build the temporary blind input for surviving remapped candidates."""
+
+    if not isinstance(output, dict):
+        raise ValueError("candidate verifier input source must be an object")
+    visible_candidates: list[dict[str, Any]] = []
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            raise ValueError("candidate verifier input candidates must be objects")
+        question = candidate.get("canonical_remapped_question", candidate.get("question"))
+        if not isinstance(question, dict):
+            raise ValueError("candidate verifier input candidate is missing its canonical question")
+        visible_candidates.append({
+            "parent_item_id": candidate["parent_item_id"],
+            "candidate_index": candidate["candidate_index"],
+            "stem": question["stem"],
+            "choices": copy.deepcopy(question["choices"]),
+        })
+    payload = {
+        "passage_id": output["passage_id"],
+        "section": output["section"],
+        "passage": output["passage"],
+        "candidates": visible_candidates,
+    }
+    leakage = _nested_keys(payload, BLIND_FORBIDDEN_KEYS)
+    if leakage:
+        raise ValueError("candidate verifier projection contains forbidden field(s): " + ", ".join(leakage))
+    return payload
+
+
+def candidate_verifier_input_errors(
+    output: Any,
+    payload: Any,
+    candidates: list[dict[str, Any]],
+    schema_paths: dict[str, Path] | None = None,
+) -> list[str]:
+    """Validate the exact visible allowlist used for candidate verification."""
+
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02
+    errors: list[str] = []
+    if not isinstance(output, dict):
+        return ["candidate verifier input source must be an object"]
+    try:
+        expected = candidate_verifier_input(output, candidates)
+    except (KeyError, TypeError, ValueError) as exc:
+        return [f"candidate verifier input could not be derived: {exc}"]
+    if payload != expected:
+        errors.append("candidate verifier input does not match the canonical visible projection")
+    errors.extend(
+        f"candidate verifier input: forbidden field {path}"
+        for path in _nested_keys(payload, BLIND_FORBIDDEN_KEYS)
+    )
+    errors.extend(_schema_errors(payload, "candidate_verifier_input", schema_paths))
+    return errors
+
+
+def validate_candidate_verifier_contract(
+    output: Any,
+    verifier_input: dict[str, Any],
+    schema_paths: dict[str, Path] | None = None,
+) -> list[str]:
+    """Validate every blind candidate judgment against the supplied candidate pairs."""
+
+    if schema_paths is None:
+        schema_paths = SCHEMA_PATHS_V02
+    errors = _schema_errors(output, "candidate_verifier", schema_paths)
+    if errors or not isinstance(output, dict):
+        return errors
+    if output["passage_id"] != verifier_input["passage_id"] or output["section"] != verifier_input["section"]:
+        errors.append("candidate_verifier: passage identity does not match input")
+    expected_pairs = [
+        (candidate.get("parent_item_id"), candidate.get("candidate_index"))
+        for candidate in verifier_input["candidates"]
+    ]
+    actual_pairs = [
+        (candidate.get("parent_item_id"), candidate.get("candidate_index"))
+        for candidate in output["candidates"]
+    ]
+    duplicates = sorted({pair for pair in actual_pairs if actual_pairs.count(pair) > 1})
+    if duplicates:
+        errors.append(f"candidate_verifier: duplicate candidate identity {duplicates}")
+    if actual_pairs != expected_pairs:
+        errors.append(
+            "candidate_verifier: candidate identities/order do not match input; "
+            f"expected {expected_pairs}, got {actual_pairs}"
         )
     return errors
 

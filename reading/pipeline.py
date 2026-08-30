@@ -1,8 +1,9 @@
 """Fail-closed Reading v0.1 and bounded v0.2 orchestration.
 
 The historical v0.1 path remains a three-call Generator/Reviewer/Solver
-sequence. The current v0.2.9 path adds a bounded INFERENCE-only
-Verifier/Reviewer/Repair gate before the final blind Reviewer/Solver stages.
+sequence. The current v0.2.10 path adds a bounded INFERENCE-only
+Verifier/Reviewer/Repair/candidate-verification gate before the final blind
+Reviewer/Solver stages.
 """
 
 from __future__ import annotations
@@ -36,6 +37,8 @@ from .contracts import (
     blind_input,
     blind_input_errors,
     canonicalize_generator_output,
+    candidate_verifier_input,
+    candidate_verifier_input_errors,
     CANONICAL_QUESTION_ORDER_VERSION,
     permute_generator_choices,
     deterministic_diagnostics,
@@ -52,6 +55,7 @@ from .contracts import (
     validate_deterministic,
     validate_generator_contract,
     validate_inference_repair_contract,
+    validate_candidate_verifier_contract,
     validate_inference_verifier_contract,
     validate_result_contract,
     validate_draft_result_contract,
@@ -69,6 +73,7 @@ REVIEWER_AGENT = "toefl-itp-reading-reviewer"
 SOLVER_AGENT = "toefl-itp-reading-solver"
 INFERENCE_VERIFIER_AGENT = "toefl-itp-reading-inference-verifier"
 INFERENCE_REPAIR_AGENT = "toefl-itp-reading-inference-repair"
+CANDIDATE_VERIFIER_AGENT = "toefl-itp-reading-candidate-verifier"
 AGENT_PATHS = {
     GENERATOR_AGENT: ROOT / ".claude" / "agents" / f"{GENERATOR_AGENT}.md",
     REVIEWER_AGENT: ROOT / ".claude" / "agents" / f"{REVIEWER_AGENT}.md",
@@ -80,12 +85,13 @@ AGENT_PATHS_V02 = {
     SOLVER_AGENT: ROOT / ".claude" / "agents" / f"{SOLVER_AGENT}-v0.2.md",
     INFERENCE_VERIFIER_AGENT: ROOT / ".claude" / "agents" / f"{INFERENCE_VERIFIER_AGENT}-v0.2.md",
     INFERENCE_REPAIR_AGENT: ROOT / ".claude" / "agents" / f"{INFERENCE_REPAIR_AGENT}-v0.2.md",
+    CANDIDATE_VERIFIER_AGENT: ROOT / ".claude" / "agents" / f"{CANDIDATE_VERIFIER_AGENT}-v0.2.md",
 }
 DEFAULT_MODEL = os.environ.get("READING_MODEL", "sonnet")
 DEFAULT_TIMEOUT_SECONDS = float(os.environ.get("READING_TIMEOUT_SECONDS", "300"))
 DEFAULT_MAX_BUDGET_USD = os.environ.get("READING_MAX_BUDGET_USD", "0.60")
 DEFAULT_PARALLELISM = 1
-READING_CURRENT_VERSION = "v0.2.9"
+READING_CURRENT_VERSION = "v0.2.10"
 
 
 READING_DIFFICULTY_GUIDANCE = (
@@ -650,6 +656,7 @@ class ReadingV02Pipeline(ReadingPipeline):
                 "solver": counts["reading_solver"],
                 "inference_verifier": counts["reading_inference_verifier"],
                 "inference_repair": counts["reading_inference_repair"],
+                "candidate_verifier": counts["reading_inference_candidate_verifier"],
             },
             "provider": getattr(self.runtime, "provider", "unknown"),
             "runtime_failures": self.runtime_failures,
@@ -918,6 +925,234 @@ class ReadingV02Pipeline(ReadingPipeline):
             items.append(item)
         return {"passage": generator["passage"], "items": items}
 
+    @staticmethod
+    def _validate_repair_candidates(
+        generator_pre_repair: dict[str, Any],
+        repair_output: dict[str, Any],
+        flagged_item_ids: list[str],
+        choice_permutation: dict[str, Any] | None,
+        plan: dict[str, Any],
+        schema_paths: dict[str, Path],
+    ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+        """Validate every raw repair candidate against an independent canonical copy."""
+
+        generator_questions = generator_pre_repair.get("questions", [])
+        slots_by_id = {
+            question["item_id"]: index
+            for index, question in enumerate(generator_questions)
+            if isinstance(question, dict) and isinstance(question.get("item_id"), str)
+        }
+        permutation_by_id = {
+            record["item_id"]: record
+            for record in choice_permutation.get("questions", [])
+            if isinstance(record, dict) and isinstance(record.get("item_id"), str)
+        } if isinstance(choice_permutation, dict) else {}
+        replacements_by_id = {
+            replacement["item_id"]: replacement
+            for replacement in repair_output.get("replacements", [])
+            if isinstance(replacement, dict) and isinstance(replacement.get("item_id"), str)
+        }
+        artifact_candidates: list[dict[str, Any]] = []
+        surviving: list[dict[str, Any]] = []
+        for item_id in flagged_item_ids:
+            replacement = replacements_by_id.get(item_id, {})
+            candidates_by_index = {
+                candidate.get("candidate_index"): candidate
+                for candidate in replacement.get("candidates", [])
+                if isinstance(candidate, dict)
+            } if isinstance(replacement.get("candidates"), list) else {}
+            slot = slots_by_id.get(item_id)
+            permutation = permutation_by_id.get(item_id)
+            for candidate_index in (1, 2):
+                raw_candidate = copy.deepcopy(candidates_by_index.get(candidate_index))
+                record: dict[str, Any] = {
+                    "parent_item_id": item_id,
+                    "candidate_index": candidate_index,
+                    "slot": slot,
+                    "raw_candidate": raw_candidate,
+                    "raw_candidate_keys": sorted(raw_candidate) if isinstance(raw_candidate, dict) else [],
+                    "raw_correct_answer": raw_candidate.get("correct_answer") if isinstance(raw_candidate, dict) else None,
+                    "raw_distractor_metadata_keys": sorted(raw_candidate.get("distractor_metadata", {}))
+                    if isinstance(raw_candidate, dict) and isinstance(raw_candidate.get("distractor_metadata"), dict)
+                    else [],
+                    "canonical_remapped_question": None,
+                    "canonical_remapped_keys": [],
+                    "canonical_correct_answer": None,
+                    "canonical_distractor_metadata_keys": [],
+                    "permutation_mapping_reused": copy.deepcopy({
+                        "original_to_canonical": permutation.get("original_to_canonical"),
+                        "canonical_to_original": permutation.get("canonical_to_original"),
+                    }) if isinstance(permutation, dict) else None,
+                }
+                remap_errors: list[str] = []
+                candidate_set = copy.deepcopy(generator_pre_repair)
+                remapped: dict[str, Any] | None = None
+                if not isinstance(raw_candidate, dict):
+                    remap_errors.append(f"missing candidate {candidate_index}")
+                elif slot is None:
+                    remap_errors.append(f"could not locate canonical slot for {item_id}")
+                elif permutation is None:
+                    remap_errors.append(f"could not locate recorded permutation for {item_id}")
+                else:
+                    raw_question = {"item_id": item_id}
+                    raw_question.update(copy.deepcopy(raw_candidate))
+                    raw_question.pop("candidate_index", None)
+                    try:
+                        remapped = apply_choice_permutation_to_question(
+                            raw_question,
+                            original_to_canonical=permutation["original_to_canonical"],
+                            canonical_to_original=permutation["canonical_to_original"],
+                        )
+                    except (TypeError, ValueError, KeyError) as exc:
+                        remap_errors.append(f"could not remap candidate {candidate_index}: {exc}")
+                    if remapped is not None and (
+                        remapped.get("item_id") != item_id
+                        or remapped.get("question_type") != "INFERENCE"
+                    ):
+                        remap_errors.append(
+                            f"candidate {candidate_index} changed trusted identity or question type"
+                        )
+                if remapped is not None and slot is not None and not remap_errors:
+                    candidate_set["questions"][slot] = remapped
+                    record["canonical_remapped_question"] = copy.deepcopy(remapped)
+                    record["canonical_remapped_keys"] = sorted(remapped)
+                    record["canonical_correct_answer"] = remapped.get("correct_answer")
+                    record["canonical_distractor_metadata_keys"] = sorted(remapped.get("distractor_metadata", {}))
+                generator_errors = validate_generator_contract(candidate_set, plan, schema_paths)
+                diagnostics = deterministic_diagnostics(candidate_set, plan, schema_paths)
+                deterministic_errors = diagnostics["hard_failures"]
+                all_errors = [*remap_errors, *generator_errors, *deterministic_errors]
+                record.update({
+                    "remap_errors": remap_errors,
+                    "generator_contract_errors": generator_errors,
+                    "deterministic_diagnostics": diagnostics,
+                    "deterministic_hard_failures": deterministic_errors,
+                    "deterministic_valid": not all_errors,
+                    "candidate_verifier_status": None,
+                    "candidate_verifier_best_answer": None,
+                    "candidate_verifier_comment": None,
+                    "private_key_match": None,
+                    "eligible": False,
+                    "eligibility_reasons": ["deterministic validation failed"] if all_errors else [],
+                })
+                artifact_candidates.append(record)
+                if not all_errors and isinstance(remapped, dict):
+                    surviving.append(record)
+        return {
+            "schema_version": "reading-candidate-validation-v0.2",
+            "parent_item_ids": list(flagged_item_ids),
+            "candidates": artifact_candidates,
+        }, surviving
+
+    @staticmethod
+    def _candidate_selection(
+        flagged_item_ids: list[str],
+        candidate_records: list[dict[str, Any]],
+        verifier_output: Any,
+        verifier_errors: list[str],
+    ) -> tuple[dict[str, Any], dict[str, dict[str, Any]], list[str]]:
+        """Apply private key matching and the fixed status/index ranking."""
+
+        valid_statuses = {
+            "VALID_SHALLOW_INFERENCE",
+            "VALID_GENUINE_INFERENCE",
+            "VALID_CROSS_IDEA_INFERENCE",
+        }
+        status_rank = {
+            "VALID_SHALLOW_INFERENCE": 1,
+            "VALID_CROSS_IDEA_INFERENCE": 2,
+            "VALID_GENUINE_INFERENCE": 3,
+        }
+        output_by_identity = {
+            (item.get("parent_item_id"), item.get("candidate_index")): item
+            for item in verifier_output.get("candidates", [])
+            if isinstance(item, dict)
+        } if isinstance(verifier_output, dict) else {}
+        selection_errors: list[str] = []
+        selected_by_id: dict[str, dict[str, Any]] = {}
+        for record in candidate_records:
+            identity = (record["parent_item_id"], record["candidate_index"])
+            reasons: list[str] = list(record.get("eligibility_reasons", []))
+            verifier_item = output_by_identity.get(identity)
+            if verifier_errors:
+                reasons.append("candidate verifier contract failure")
+            elif not isinstance(verifier_item, dict):
+                reasons.append("candidate verifier did not return a judgment")
+            else:
+                status = verifier_item.get("status")
+                best_answer = verifier_item.get("best_answer")
+                record["candidate_verifier_status"] = status
+                record["candidate_verifier_best_answer"] = best_answer
+                record["candidate_verifier_comment"] = verifier_item.get("comment")
+                record["candidate_verifier_supporting_propositions"] = copy.deepcopy(
+                    verifier_item.get("supporting_propositions")
+                )
+                record["candidate_verifier_conclusion"] = verifier_item.get("conclusion")
+                if status not in valid_statuses:
+                    reasons.append(f"verifier status {status!r} is not semantically eligible")
+                if best_answer not in {"A", "B", "C", "D"}:
+                    reasons.append(f"verifier best_answer {best_answer!r} is not a unique answer choice")
+                canonical_question = record.get("canonical_remapped_question")
+                key_match = (
+                    best_answer in {"A", "B", "C", "D"}
+                    and isinstance(canonical_question, dict)
+                    and best_answer == canonical_question.get("correct_answer")
+                )
+                record["private_key_match"] = key_match
+                if not key_match:
+                    reasons.append("verifier best_answer does not match the candidate canonical answer")
+            record["eligibility_reasons"] = reasons
+            record["eligible"] = not reasons
+
+        for item_id in flagged_item_ids:
+            eligible = [
+                record for record in candidate_records
+                if record["parent_item_id"] == item_id and record.get("eligible") is True
+            ]
+            if not eligible:
+                selection_errors.append(f"no semantically eligible candidate for {item_id}")
+                continue
+            if len(eligible) == 1:
+                selected = eligible[0]
+                reason = f"exactly one eligible candidate; selected candidate_index {selected['candidate_index']}"
+            else:
+                selected = sorted(
+                    eligible,
+                    key=lambda record: (
+                        -status_rank[record["candidate_verifier_status"]],
+                        record["candidate_index"],
+                    ),
+                )[0]
+                other = next(record for record in eligible if record is not selected)
+                if selected["candidate_verifier_status"] == other["candidate_verifier_status"]:
+                    reason = (
+                        f"both candidates eligible with status {selected['candidate_verifier_status']}; "
+                        f"selected lower candidate_index {selected['candidate_index']}"
+                    )
+                else:
+                    reason = (
+                        "both candidates eligible; selected "
+                        f"{selected['candidate_verifier_status']} over {other['candidate_verifier_status']} "
+                        f"by fixed status ranking"
+                    )
+            selected_by_id[item_id] = selected
+            selected["selection_reason"] = reason
+        selection_artifact = {
+            "schema_version": "reading-candidate-selection-v0.2",
+            "parent_item_ids": list(flagged_item_ids),
+            "candidates": [copy.deepcopy(record) for record in candidate_records],
+            "selected": [
+                {
+                    "parent_item_id": item_id,
+                    "candidate_index": record["candidate_index"],
+                    "selection_reason": record["selection_reason"],
+                }
+                for item_id, record in selected_by_id.items()
+            ],
+            "selection_errors": selection_errors,
+        }
+        return selection_artifact, selected_by_id, selection_errors
+
     def run(
         self,
         seed: int | None = None,
@@ -947,11 +1182,13 @@ class ReadingV02Pipeline(ReadingPipeline):
         solver: Any = None
         inference_verifier: Any = None
         inference_repair: Any = None
+        candidate_verifier: Any = None
         inference_reverify: Any = None
         blind: dict[str, Any] | None = None
         initial_blind: dict[str, Any] | None = None
         initial_verifier_input: dict[str, Any] | None = None
         repair_input: dict[str, Any] | None = None
+        candidate_verifier_input_payload: dict[str, Any] | None = None
         reverify_input: dict[str, Any] | None = None
         envelope_errors: list[str] = []
         generator_errors: list[str] = []
@@ -971,6 +1208,7 @@ class ReadingV02Pipeline(ReadingPipeline):
         agreement_errors: list[str] = []
         inference_verifier_errors: list[str] = []
         inference_repair_errors: list[str] = []
+        candidate_verifier_errors: list[str] = []
         inference_gate_required = False
         inference_gate_pass = False
         inference_repair_attempted = False
@@ -982,6 +1220,10 @@ class ReadingV02Pipeline(ReadingPipeline):
         reviewer_repair_reasons: dict[str, list[str]] = {}
         reviewer_blocking_reasons: dict[str, list[str]] = {}
         repair_item_provenance: list[dict[str, Any]] = []
+        candidate_validation_artifact: dict[str, Any] | None = None
+        candidate_selection_artifact: dict[str, Any] | None = None
+        candidate_records: list[dict[str, Any]] = []
+        selected_candidates: dict[str, dict[str, Any]] = {}
         repaired_item_ids: list[str] = []
         repair_reasons: dict[str, list[str]] = {}
         initial_gate_results: list[dict[str, Any]] = []
@@ -1179,10 +1421,18 @@ class ReadingV02Pipeline(ReadingPipeline):
                                             prompt=self._prompt(
                                                 "Repair every flagged INFERENCE item in INPUT_JSON in one response. Use only the "
                                                 "passage, visible item content, optional blind Verifier feedback, optional blind "
-                                                "Reviewer feedback, and system-derived defect reasons. Return exactly one replacement "
-                                                "per requested item_id. Do not use the original Generator key, evidence, rationale, "
-                                                "or permutation data. Return fresh semantic A/B/C/D choices and a fresh raw answer "
-                                                "label; the trusted pipeline applies the existing answer-position mapping. Return JSON only.",
+                                                 "Reviewer feedback, and system-derived defect reasons. Return exactly two candidates "
+                                                 "for every requested item_id, with candidate_index exactly 1 and 2. The two candidates "
+                                                 "must be meaningfully different inference constructions, not trivial wording variants "
+                                                 "of the same conclusion. Both must be fully supported and uniquely answerable; direct "
+                                                 "statement, synonym substitution, close paraphrase, unsupported inference, or ambiguity "
+                                                 "is invalid. Local inference is allowed and cross-paragraph inference is not required. "
+                                                 "Each evidence.anchor must be an exact textual substring of its declared evidence.paragraph "
+                                                 "under the repository normalization behavior; do not paraphrase, summarize, combine "
+                                                 "locations, or add explanatory anchor text. Do not use the original Generator key, "
+                                                 "evidence, rationale, or permutation data. Return fresh semantic A/B/C/D choices and "
+                                                 "a fresh raw answer label; the trusted pipeline applies the existing answer-position "
+                                                 "mapping. Return JSON only.",
                                                 repair_input,
                                             ),
                                             input_keys=("passage", "items"),
@@ -1199,105 +1449,137 @@ class ReadingV02Pipeline(ReadingPipeline):
                                             self.schema_paths,
                                         )
                                         if not inference_repair_errors:
-                                            records_by_id = {
-                                                record["item_id"]: record
-                                                for record in choice_permutation["questions"]
-                                            } if isinstance(choice_permutation, dict) else {}
-                                            replacement_by_id = {
-                                                replacement["item_id"]: replacement
-                                                for replacement in inference_repair["replacements"]
+                                            candidate_validation_artifact, _surviving = self._validate_repair_candidates(
+                                                pre_repair_generator,
+                                                inference_repair,
+                                                flagged_item_ids,
+                                                choice_permutation,
+                                                plan,
+                                                self.schema_paths,
+                                            )
+                                            atomic_write_json(run_dir / "candidate_validation.json", candidate_validation_artifact)
+                                            candidate_records = candidate_validation_artifact["candidates"]
+                                            surviving_candidates = [
+                                                record for record in candidate_records
+                                                if record.get("deterministic_valid") is True
+                                            ]
+                                            parent_with_survivor = {
+                                                record["parent_item_id"] for record in surviving_candidates
                                             }
-                                            candidate = copy.deepcopy(generator)
-                                            slots_by_id = {
-                                                question["item_id"]: index
-                                                for index, question in enumerate(candidate["questions"])
-                                            }
-                                            merge_errors: list[str] = []
-                                            for item_id in flagged_item_ids:
-                                                record = records_by_id.get(item_id)
-                                                replacement = replacement_by_id.get(item_id)
-                                                slot = slots_by_id.get(item_id)
-                                                if record is None or replacement is None or slot is None:
-                                                    merge_errors.append(f"could not merge repaired item {item_id}")
-                                                    continue
-                                                try:
-                                                    remapped = apply_choice_permutation_to_question(
-                                                        replacement,
-                                                        original_to_canonical=record["original_to_canonical"],
-                                                        canonical_to_original=record["canonical_to_original"],
-                                                    )
-                                                except (TypeError, ValueError, KeyError) as exc:
-                                                    merge_errors.append(f"could not remap repaired item {item_id}: {exc}")
-                                                    continue
-                                                if remapped.get("item_id") != item_id or remapped.get("question_type") != "INFERENCE":
-                                                    merge_errors.append(f"repaired item {item_id} changed trusted identity or type")
-                                                    continue
-                                                candidate["questions"][slot] = remapped
-                                            if merge_errors:
-                                                inference_repair_errors.extend(merge_errors)
+                                            missing_survivors = [
+                                                item_id for item_id in flagged_item_ids
+                                                if item_id not in parent_with_survivor
+                                            ]
+                                            if missing_survivors:
+                                                inference_repair_errors.extend(
+                                                    "both candidates failed deterministic validation for " + item_id
+                                                    for item_id in missing_survivors
+                                                )
+                                                candidate_selection_artifact = {
+                                                    "schema_version": "reading-candidate-selection-v0.2",
+                                                    "parent_item_ids": list(flagged_item_ids),
+                                                    "candidates": copy.deepcopy(candidate_records),
+                                                    "selected": [],
+                                                    "selection_errors": [
+                                                        "candidate verifier not invoked because both candidates failed deterministic validation for "
+                                                        + item_id
+                                                        for item_id in missing_survivors
+                                                    ],
+                                                }
+                                                atomic_write_json(run_dir / "candidate_selection.json", candidate_selection_artifact)
                                             else:
-                                                candidate, final_target_line_normalization = normalize_target_line_metadata(candidate)
-                                                generator = candidate
-                                                repaired_item_ids = list(flagged_item_ids)
-                                                atomic_write_json(run_dir / "generator.json", generator)
-                                                final_generator_errors = validate_generator_contract(generator, plan, self.schema_paths)
-                                                final_validation = deterministic_diagnostics(generator, plan, self.schema_paths)
-                                                generator_errors = final_generator_errors
-                                                deterministic_errors = final_validation["hard_failures"]
-                                                empirical_warnings = final_validation["empirical_warnings"]
-                                                deterministic_classification = final_validation["classification"]
-                                                if generator_errors or deterministic_errors:
-                                                    inference_repair_errors.extend(
-                                                        ["final repaired Generator validation failed", *generator_errors, *deterministic_errors]
-                                                    )
+                                                candidate_verifier_input_payload = candidate_verifier_input(
+                                                    pre_repair_generator,
+                                                    surviving_candidates,
+                                                )
+                                                candidate_input_errors = candidate_verifier_input_errors(
+                                                    pre_repair_generator,
+                                                    candidate_verifier_input_payload,
+                                                    surviving_candidates,
+                                                    self.schema_paths,
+                                                )
+                                                atomic_write_json(
+                                                    run_dir / "candidate_verifier_input.json",
+                                                    candidate_verifier_input_payload,
+                                                )
+                                                if candidate_input_errors:
+                                                    candidate_verifier_errors.extend(candidate_input_errors)
                                                 else:
-                                                    reverify_input = inference_verifier_input(
-                                                        generator,
-                                                        item_ids=set(repaired_item_ids),
+                                                    candidate_verifier_result = self._invoke(
+                                                        stage="reading_inference_candidate_verifier",
+                                                        agent=CANDIDATE_VERIFIER_AGENT,
+                                                        prompt=self._prompt(
+                                                            "Independently verify every supplied INFERENCE repair candidate in INPUT_JSON. "
+                                                            "Use only the visible passage, candidate identity, stem, and A/B/C/D choices. "
+                                                            "The candidate key and all Generator, Reviewer, Verifier, evidence, rationale, "
+                                                            "subtype, and repair metadata are private and unavailable. Choose the best "
+                                                            "answer or AMBIGUOUS/NONE, classify the inference, and return one judgment per "
+                                                            "candidate. Do not return a set-level PASS/FAIL field. Return JSON only.",
+                                                            candidate_verifier_input_payload,
+                                                        ),
+                                                        input_keys=("passage_id", "section", "passage", "candidates"),
+                                                        schema_key="candidate_verifier",
+                                                        output_dir=run_dir,
+                                                        isolate_workspace=True,
                                                     )
-                                                    reverify_input_errors = inference_verifier_input_errors(
-                                                        generator,
-                                                        reverify_input,
+                                                    candidate_verifier = candidate_verifier_result.parsed
+                                                    atomic_write_json(run_dir / "candidate_verifier.json", candidate_verifier)
+                                                    candidate_verifier_errors = validate_candidate_verifier_contract(
+                                                        candidate_verifier,
+                                                        candidate_verifier_input_payload,
                                                         self.schema_paths,
-                                                        expected_item_ids=set(repaired_item_ids),
                                                     )
-                                                    atomic_write_json(run_dir / "inference_reverify_input.json", reverify_input)
-                                                    if reverify_input_errors:
-                                                        inference_verifier_errors.extend(reverify_input_errors)
-                                                        inference_repair_errors.extend(reverify_input_errors)
+                                                if candidate_verifier_errors:
+                                                    inference_repair_errors.extend(candidate_verifier_errors)
+                                                    candidate_selection_artifact, selected_candidates, _selection_errors = self._candidate_selection(
+                                                        flagged_item_ids,
+                                                        candidate_records,
+                                                        candidate_verifier,
+                                                        candidate_verifier_errors,
+                                                    )
+                                                    atomic_write_json(run_dir / "candidate_selection.json", candidate_selection_artifact)
+                                                else:
+                                                    candidate_selection_artifact, selected_candidates, selection_errors = self._candidate_selection(
+                                                        flagged_item_ids,
+                                                        candidate_records,
+                                                        candidate_verifier,
+                                                        candidate_verifier_errors,
+                                                    )
+                                                    atomic_write_json(run_dir / "candidate_selection.json", candidate_selection_artifact)
+                                                    if selection_errors:
+                                                        inference_repair_errors.extend(selection_errors)
                                                     else:
-                                                        reverify_result = self._invoke(
-                                                            stage="reading_inference_verifier",
-                                                            agent=INFERENCE_VERIFIER_AGENT,
-                                                            prompt=self._prompt(
-                                                                "Re-verify only the repaired INFERENCE items in INPUT_JSON using "
-                                                                "the same blind inference-verification rules. Return one judgment "
-                                                                "per item and no set-level result. Do not request or infer hidden "
-                                                                "Generator metadata. Return JSON only.",
-                                                                reverify_input,
-                                                            ),
-                                                            input_keys=("passage_id", "section", "passage", "questions"),
-                                                            schema_key="inference_verifier",
-                                                            output_dir=run_dir,
-                                                            isolate_workspace=True,
-                                                        )
-                                                        inference_reverify = reverify_result.parsed
-                                                        atomic_write_json(run_dir / "inference_reverify.json", inference_reverify)
-                                                        reverify_errors = validate_inference_verifier_contract(
-                                                            inference_reverify,
-                                                            reverify_input,
-                                                            self.schema_paths,
-                                                        )
-                                                        inference_verifier_errors.extend(reverify_errors)
-                                                        if not reverify_errors:
-                                                            reverify_flagged, _reverify_reasons, reverify_gate_results = self._inference_gate_evaluation(
-                                                                generator,
-                                                                inference_reverify,
-                                                                reverify_input,
-                                                                reverify_errors,
-                                                            )
-                                                            if reverify_flagged:
-                                                                inference_gate_pass = False
+                                                        candidate = copy.deepcopy(pre_repair_generator)
+                                                        slots_by_id = {
+                                                            question["item_id"]: index
+                                                            for index, question in enumerate(candidate["questions"])
+                                                        }
+                                                        merge_errors: list[str] = []
+                                                        for item_id in flagged_item_ids:
+                                                            selected = selected_candidates.get(item_id)
+                                                            slot = slots_by_id.get(item_id)
+                                                            question = selected.get("canonical_remapped_question") if selected else None
+                                                            if selected is None or slot is None or not isinstance(question, dict):
+                                                                merge_errors.append(f"could not merge selected candidate for {item_id}")
+                                                            else:
+                                                                candidate["questions"][slot] = copy.deepcopy(question)
+                                                        if merge_errors:
+                                                            inference_repair_errors.extend(merge_errors)
+                                                        else:
+                                                            candidate, final_target_line_normalization = normalize_target_line_metadata(candidate)
+                                                            generator = candidate
+                                                            repaired_item_ids = list(flagged_item_ids)
+                                                            atomic_write_json(run_dir / "generator.json", generator)
+                                                            final_generator_errors = validate_generator_contract(generator, plan, self.schema_paths)
+                                                            final_validation = deterministic_diagnostics(generator, plan, self.schema_paths)
+                                                            generator_errors = final_generator_errors
+                                                            deterministic_errors = final_validation["hard_failures"]
+                                                            empirical_warnings = final_validation["empirical_warnings"]
+                                                            deterministic_classification = final_validation["classification"]
+                                                            if generator_errors or deterministic_errors:
+                                                                inference_repair_errors.extend(
+                                                                    ["final merged Generator validation failed", *generator_errors, *deterministic_errors]
+                                                                )
                                                             else:
                                                                 blind = blind_input(generator, schema_version=self.blind_schema_version)
                                                                 blind_errors = (
@@ -1360,6 +1642,8 @@ class ReadingV02Pipeline(ReadingPipeline):
                 inference_verifier_errors.append(detail)
             elif stage == "reading_inference_repair":
                 inference_repair_errors.append(detail)
+            elif stage == "reading_inference_candidate_verifier":
+                candidate_verifier_errors.append(detail)
 
         if generator is not None:
             post_blind_metadata_errors = validate_generator_contract(generator, plan, self.schema_paths)
@@ -1417,6 +1701,8 @@ class ReadingV02Pipeline(ReadingPipeline):
             "inference_repair_succeeded": inference_repair_succeeded,
             "inference_verifier_errors": inference_verifier_errors,
             "inference_repair_errors": inference_repair_errors,
+            "candidate_verifier_errors": candidate_verifier_errors,
+            "candidate_selection": candidate_selection_artifact,
             "inference_gate_results": {
                 "initial": initial_gate_results,
                 "initial_reviewer": initial_reviewer_gate_results,
@@ -1480,6 +1766,50 @@ class ReadingV02Pipeline(ReadingPipeline):
             result["decision"] = "INFRASTRUCTURE_FAILURE" if self.runtime_failures else "QUARANTINE"
         result["checks"]["final_result_contract"] = not result_contract_errors
         result["checks"]["final_result_errors"] = result_contract_errors
+        candidate_records_by_parent: dict[str, list[dict[str, Any]]] = {}
+        for record in candidate_records:
+            candidate_records_by_parent.setdefault(record["parent_item_id"], []).append(record)
+        extended_repair_item_provenance: list[dict[str, Any]] = []
+        for base_record in repair_item_provenance:
+            parent_item_id = base_record["item_id"]
+            parent_candidates = candidate_records_by_parent.get(parent_item_id, [])
+            candidate_provenance = [
+                {
+                    "raw_identity": {
+                        "parent_item_id": parent_item_id,
+                        "candidate_index": record["candidate_index"],
+                    },
+                    "candidate_index": record["candidate_index"],
+                    "raw_candidate_keys": record.get("raw_candidate_keys", []),
+                    "raw_correct_answer": record.get("raw_correct_answer"),
+                    "raw_distractor_metadata_keys": record.get("raw_distractor_metadata_keys", []),
+                    "canonical_remapped_keys": record.get("canonical_remapped_keys", []),
+                    "canonical_correct_answer": record.get("canonical_correct_answer"),
+                    "canonical_distractor_metadata_keys": record.get("canonical_distractor_metadata_keys", []),
+                    "permutation_mapping_reused": copy.deepcopy(record.get("permutation_mapping_reused")),
+                    "deterministic_validation": {
+                        "remap_errors": record.get("remap_errors", []),
+                        "generator_contract_errors": record.get("generator_contract_errors", []),
+                        "deterministic_hard_failures": record.get("deterministic_hard_failures", []),
+                        "deterministic_valid": record.get("deterministic_valid", False),
+                    },
+                    "candidate_verifier_status": record.get("candidate_verifier_status"),
+                    "candidate_verifier_best_answer": record.get("candidate_verifier_best_answer"),
+                    "private_key_match": record.get("private_key_match"),
+                    "eligible": record.get("eligible", False),
+                    "eligibility_reasons": record.get("eligibility_reasons", []),
+                }
+                for record in sorted(parent_candidates, key=lambda current: current["candidate_index"])
+            ]
+            selected = selected_candidates.get(parent_item_id)
+            extended_repair_item_provenance.append({
+                **base_record,
+                "parent_item_id": parent_item_id,
+                "candidates": candidate_provenance,
+                "selected_candidate_index": selected.get("candidate_index") if selected else None,
+                "deterministic_selection_reason": selected.get("selection_reason") if selected else None,
+            })
+        repair_item_provenance = extended_repair_item_provenance
         inference_provenance = {
             "generator_pre_repair_artifact": "generator_pre_repair.json" if pre_repair_generator is not None else None,
             "generator_pre_repair_sha256": payload_sha256(pre_repair_generator) if pre_repair_generator is not None else None,
@@ -1511,6 +1841,24 @@ class ReadingV02Pipeline(ReadingPipeline):
             "inference_repair_input_sha256": payload_sha256(repair_input) if repair_input is not None else None,
             "inference_repair_output_artifact": "inference_repair.json" if inference_repair is not None else None,
             "inference_repair_output_sha256": payload_sha256(inference_repair) if inference_repair is not None else None,
+            "candidate_validation_artifact": "candidate_validation.json" if candidate_validation_artifact is not None else None,
+            "candidate_validation_sha256": payload_sha256(candidate_validation_artifact) if candidate_validation_artifact is not None else None,
+            "candidate_verifier_input_artifact": "candidate_verifier_input.json" if candidate_verifier_input_payload is not None else None,
+            "candidate_verifier_input_sha256": payload_sha256(candidate_verifier_input_payload) if candidate_verifier_input_payload is not None else None,
+            "candidate_verifier_output_artifact": "candidate_verifier.json" if candidate_verifier is not None else None,
+            "candidate_verifier_output_sha256": payload_sha256(candidate_verifier) if candidate_verifier is not None else None,
+            "candidate_selection_artifact": "candidate_selection.json" if candidate_selection_artifact is not None else None,
+            "candidate_selection_sha256": payload_sha256(candidate_selection_artifact) if candidate_selection_artifact is not None else None,
+            "candidate_verifier_errors": candidate_verifier_errors,
+            "candidate_eligibility": [
+                {
+                    "parent_item_id": record["parent_item_id"],
+                    "candidate_index": record["candidate_index"],
+                    "eligible": record.get("eligible", False),
+                    "reasons": record.get("eligibility_reasons", []),
+                }
+                for record in candidate_records
+            ],
             "inference_reverify_input_artifact": "inference_reverify_input.json" if reverify_input is not None else None,
             "inference_reverify_input_sha256": payload_sha256(reverify_input) if reverify_input is not None else None,
             "inference_reverify_output_artifact": "inference_reverify.json" if inference_reverify is not None else None,
@@ -1711,6 +2059,7 @@ def _unexpected_failure_result(
                 "solver": 0,
                 "inference_verifier": 0,
                 "inference_repair": 0,
+                "candidate_verifier": 0,
             },
             "provider": provider or "unknown",
             "runtime_failures": [{"stage": "worker", "category": "infrastructure", "detail": str(exc)}],
@@ -1828,6 +2177,7 @@ def run_reading_batch(
         "solver": sum(result.get("infrastructure", {}).get("invocation_counts", {}).get("solver", 0) for result in results),
         "inference_verifier": sum(result.get("infrastructure", {}).get("invocation_counts", {}).get("inference_verifier", 0) for result in results),
         "inference_repair": sum(result.get("infrastructure", {}).get("invocation_counts", {}).get("inference_repair", 0) for result in results),
+        "candidate_verifier": sum(result.get("infrastructure", {}).get("invocation_counts", {}).get("candidate_verifier", 0) for result in results),
     }
     passage_artifacts = []
     for (index, passage_seed, result) in outputs:
@@ -1872,6 +2222,7 @@ def run_reading_batch(
         "solver_invocation_count": invocation_counts["solver"],
         "inference_verifier_invocation_count": invocation_counts["inference_verifier"],
         "inference_repair_invocation_count": invocation_counts["inference_repair"],
+        "candidate_verifier_invocation_count": invocation_counts["candidate_verifier"],
         "leakage_count": sum(len(result.get("checks", {}).get("blind_errors", [])) for result in results),
         "synthetic_fallback_count": sum(bool(result.get("infrastructure", {}).get("synthetic_fallback")) for result in results),
         "elapsed_wall_clock_seconds": round(time.perf_counter() - batch_started, 6),

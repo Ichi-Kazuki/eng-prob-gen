@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/reading-inference-candidate-verifier-input-v0.2.schema.json",
+  "title": "Reading v0.2 blind inference candidate verifier input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["passage_id", "section", "passage", "candidates"],
+  "properties": {
+    "passage_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+$"},
+    "section": {"const": "READING_COMPREHENSION"},
+    "passage": {"type": "string", "minLength": 100},
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 28,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["parent_item_id", "candidate_index", "stem", "choices"],
+        "properties": {
+          "parent_item_id": {"type": "string", "pattern": "^rc-[a-z0-9-]+-q(?:[1-9]|1[0-4])$"},
+          "candidate_index": {"enum": [1, 2]},
+          "stem": {"type": "string", "minLength": 8, "maxLength": 400},
+          "choices": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["A", "B", "C", "D"],
+            "properties": {
+              "A": {"type": "string", "minLength": 1, "maxLength": 300},
+              "B": {"type": "string", "minLength": 1, "maxLength": 300},
+              "C": {"type": "string", "minLength": 1, "maxLength": 300},
+              "D": {"type": "string", "minLength": 1, "maxLength": 300}
+            }
+          }
+        }
+      }
+    }
+  }
+}
