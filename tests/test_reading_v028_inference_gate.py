@@ -1,4 +1,4 @@
-"""Focused offline coverage for the bounded Reading v0.2.8 inference gate."""
+"""Focused offline coverage for the bounded Reading v0.2.9 inference gate."""
 
 from __future__ import annotations
 
@@ -76,12 +76,17 @@ class GateRuntime:
         plan: dict[str, Any],
         *,
         initial_verifier_status: str = "VALID_SHALLOW_INFERENCE",
+        initial_verifier_statuses: dict[str, str] | None = None,
         initial_answer_overrides: dict[str, str] | None = None,
         reverify_status: str = "VALID_SHALLOW_INFERENCE",
         repair: bool = True,
         fail_stage: str | None = None,
         initial_verifier_output_mode: str | None = None,
         reverify_output_mode: str | None = None,
+        initial_reviewer_overrides: dict[str, dict[str, Any]] | None = None,
+        final_reviewer_overrides: dict[str, dict[str, Any]] | None = None,
+        initial_reviewer_set_judgment: str | None = None,
+        final_reviewer_set_judgment: str | None = None,
     ) -> None:
         self.plan = plan
         self.raw = variable_generator_fixture(plan)
@@ -89,15 +94,21 @@ class GateRuntime:
         self.initial_generator, self.permutation = permute_generator_choices(initial_canonical, plan)
         self.final_generator = copy.deepcopy(self.initial_generator)
         self.initial_verifier_status = initial_verifier_status
+        self.initial_verifier_statuses = initial_verifier_statuses or {}
         self.initial_answer_overrides = initial_answer_overrides or {}
         self.reverify_status = reverify_status
         self.repair = repair
         self.fail_stage = fail_stage
         self.initial_verifier_output_mode = initial_verifier_output_mode
         self.reverify_output_mode = reverify_output_mode
+        self.initial_reviewer_overrides = initial_reviewer_overrides or {}
+        self.final_reviewer_overrides = final_reviewer_overrides or {}
+        self.initial_reviewer_set_judgment = initial_reviewer_set_judgment
+        self.final_reviewer_set_judgment = final_reviewer_set_judgment
         self.requests: list[Any] = []
         self.repair_calls = 0
         self.verifier_calls = 0
+        self.reviewer_calls = 0
 
     def _invocation_error(self, request: Any, invocation_id: str) -> RuntimeInvocationError:
         result = InvocationResult(
@@ -130,8 +141,10 @@ class GateRuntime:
             status = self.reverify_status if is_reverify else self.initial_verifier_status
             source = self.final_generator if is_reverify else self.initial_generator
             parsed = copy.deepcopy(inference_verifier_for(source))
+            requested_ids = {question["item_id"] for question in payload["questions"]}
+            parsed["questions"] = [question for question in parsed["questions"] if question["item_id"] in requested_ids]
             for item in parsed["questions"]:
-                item["status"] = status
+                item["status"] = status if is_reverify else self.initial_verifier_statuses.get(item["item_id"], status)
                 if not is_reverify and item["item_id"] in self.initial_answer_overrides:
                     item["best_answer"] = self.initial_answer_overrides[item["item_id"]]
             output_mode = self.reverify_output_mode if is_reverify else self.initial_verifier_output_mode
@@ -165,7 +178,14 @@ class GateRuntime:
                 "replacements": [],
             }
         elif request.stage == "reading_reviewer":
+            self.reviewer_calls += 1
             parsed = reviewer_for(self.final_generator)
+            overrides = self.final_reviewer_overrides if self.reviewer_calls > 1 else self.initial_reviewer_overrides
+            for item in parsed["questions"]:
+                item.update(copy.deepcopy(overrides.get(item["item_id"], {})))
+            set_judgment = self.final_reviewer_set_judgment if self.reviewer_calls > 1 else self.initial_reviewer_set_judgment
+            if set_judgment is not None:
+                parsed["set_judgment"] = set_judgment
         elif request.stage == "reading_solver":
             parsed = solver_for(self.final_generator)
         else:
@@ -202,6 +222,7 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
         self.assertFalse(result["checks"]["inference_gate_required"])
         self.assertTrue(result["checks"]["inference_gate_pass"])
         self.assertEqual(result["infrastructure"]["live_invocations"], 3)
+        self.assertEqual(runtime.reviewer_calls, 1)
 
     def test_all_inference_valid_uses_one_verifier_and_no_repair(self) -> None:
         plan = build_plan_v02(2900, domain="biology")
@@ -213,6 +234,8 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
         ])
         self.assertEqual(result["infrastructure"]["invocation_counts"]["inference_verifier"], 1)
         self.assertEqual(result["infrastructure"]["invocation_counts"]["inference_repair"], 0)
+        self.assertEqual(runtime.reviewer_calls, 1)
+        self.assertFalse(result["checks"]["inference_repair_attempted"])
 
     def test_initial_verifier_input_error_quarantines_without_verifier_or_downstream_stages(self) -> None:
         plan = build_plan_v02(2900, domain="biology")
@@ -283,7 +306,7 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
                 self.assertEqual(runtime.repair_calls, 1)
                 self.assertEqual(result["checks"]["inference_repair_attempted"], True)
                 self.assertEqual(result["checks"]["inference_repair_succeeded"], True)
-                self.assertEqual(result["infrastructure"]["live_invocations"], 6)
+                self.assertEqual(result["infrastructure"]["live_invocations"], 7)
 
     def test_verifier_answer_mismatch_repairs_without_key_leakage(self) -> None:
         plan = build_plan_v02(2830, domain="biology")
@@ -301,6 +324,211 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
         self.assertNotIn("evidence", json.dumps(verifier_payload))
         self.assertNotIn("distractor_metadata", json.dumps(verifier_payload))
         self.assertIn("disagrees with the trusted Generator answer", json.dumps(result["checks"]["inference_gate_results"]))
+
+    def test_reviewer_only_inference_defect_enters_repair_union(self) -> None:
+        plan = build_plan_v02(2900, domain="biology")
+        probe = GateRuntime(plan)
+        inference_id = next(
+            question["item_id"]
+            for question in probe.initial_generator["questions"]
+            if question["question_type"] == "INFERENCE"
+        )
+        runtime = GateRuntime(
+            plan,
+            initial_reviewer_overrides={inference_id: {"serious_defect": True}},
+            initial_reviewer_set_judgment="FAIL",
+        )
+        result, root = self.run_pipeline(runtime)
+        self.assertEqual(result["decision"], "ACCEPT")
+        self.assertEqual([request.stage for request in runtime.requests], [
+            "reading_generator", "reading_inference_verifier", "reading_reviewer",
+            "reading_inference_repair", "reading_inference_verifier", "reading_reviewer", "reading_solver",
+        ])
+        self.assertEqual(runtime.repair_calls, 1)
+        provenance = json.loads((root / "provenance" / "provenance.json").read_text(encoding="utf-8"))
+        self.assertEqual(provenance["verifier_flagged_item_ids"], [])
+        self.assertEqual(provenance["reviewer_flagged_inference_item_ids"], [inference_id])
+        self.assertEqual(provenance["repair_union_item_ids"], [inference_id])
+        repair_item = json.loads((root / "inference_repair_input.json").read_text(encoding="utf-8"))["items"][0]
+        self.assertIsNone(repair_item["verifier_status"])
+        self.assertEqual(repair_item["reviewer_serious_defect"], True)
+
+    def test_same_item_flagged_by_both_is_repaired_once(self) -> None:
+        plan = build_plan_v02(2900, domain="biology")
+        probe = GateRuntime(plan)
+        inference_id = next(
+            question["item_id"]
+            for question in probe.initial_generator["questions"]
+            if question["question_type"] == "INFERENCE"
+        )
+        runtime = GateRuntime(
+            plan,
+            initial_verifier_statuses={inference_id: "INVALID_DIRECT_RESTATEMENT"},
+            initial_reviewer_overrides={inference_id: {"serious_defect": True}},
+            initial_reviewer_set_judgment="FAIL",
+        )
+        result, root = self.run_pipeline(runtime)
+        self.assertEqual(result["decision"], "ACCEPT")
+        self.assertEqual(runtime.repair_calls, 1)
+        repair = json.loads((root / "inference_repair_input.json").read_text(encoding="utf-8"))
+        self.assertEqual([item["item_id"] for item in repair["items"]], [inference_id])
+        self.assertEqual(len({item["item_id"] for item in repair["items"]}), 1)
+        provenance = json.loads((root / "provenance" / "provenance.json").read_text(encoding="utf-8"))
+        self.assertEqual(provenance["repair_item_provenance"], [{
+            "item_id": inference_id,
+            "verifier_flagged": True,
+            "reviewer_flagged": True,
+            "verifier_reasons": ["verifier status 'INVALID_DIRECT_RESTATEMENT' is not a valid inference status"],
+            "reviewer_reasons": ["reviewer serious_defect is true"],
+        }])
+
+    def test_verifier_and_reviewer_split_flags_repair_in_one_invocation(self) -> None:
+        plan = build_plan_v02(2900, domain="biology")
+        probe = GateRuntime(plan)
+        inference_ids = [
+            question["item_id"]
+            for question in probe.initial_generator["questions"]
+            if question["question_type"] == "INFERENCE"
+        ]
+        self.assertGreaterEqual(len(inference_ids), 2)
+        runtime = GateRuntime(
+            plan,
+            initial_verifier_statuses={inference_ids[0]: "INVALID_UNSUPPORTED"},
+            initial_reviewer_overrides={inference_ids[1]: {"unique_answer": False}},
+            initial_reviewer_set_judgment="FAIL",
+        )
+        result, root = self.run_pipeline(runtime)
+        self.assertEqual(result["decision"], "ACCEPT")
+        self.assertEqual(runtime.repair_calls, 1)
+        repair = json.loads((root / "inference_repair_input.json").read_text(encoding="utf-8"))
+        self.assertEqual([item["item_id"] for item in repair["items"]], inference_ids[:2])
+        self.assertEqual(len(runtime.requests), 7)
+
+    def test_initial_reviewer_non_inference_defect_quarantines_before_repair_and_solver(self) -> None:
+        plan = build_plan_v02(2900, domain="biology")
+        probe = GateRuntime(plan)
+        non_inference_id = next(
+            question["item_id"]
+            for question in probe.initial_generator["questions"]
+            if question["question_type"] != "INFERENCE"
+        )
+        runtime = GateRuntime(
+            plan,
+            initial_reviewer_overrides={non_inference_id: {"serious_defect": True}},
+            initial_reviewer_set_judgment="FAIL",
+        )
+        result, _root = self.run_pipeline(runtime)
+        self.assertEqual(result["decision"], "QUARANTINE")
+        self.assertEqual([request.stage for request in runtime.requests], [
+            "reading_generator", "reading_inference_verifier", "reading_reviewer",
+        ])
+        self.assertEqual(runtime.repair_calls, 0)
+        self.assertIsNone(result["solver"])
+
+    def test_initial_reviewer_inference_answer_mismatch_is_repairable(self) -> None:
+        plan = build_plan_v02(2900, domain="biology")
+        probe = GateRuntime(plan)
+        inference = next(
+            question for question in probe.initial_generator["questions"] if question["question_type"] == "INFERENCE"
+        )
+        mismatch = next(label for label in ("A", "B", "C", "D") if label != inference["correct_answer"])
+        runtime = GateRuntime(
+            plan,
+            initial_reviewer_overrides={inference["item_id"]: {"best_answer": mismatch}},
+            initial_reviewer_set_judgment="FAIL",
+        )
+        result, _root = self.run_pipeline(runtime)
+        self.assertEqual(result["decision"], "ACCEPT")
+        self.assertEqual(runtime.repair_calls, 1)
+
+    def test_final_reviewer_failure_quarantines_without_second_repair_or_solver(self) -> None:
+        plan = build_plan_v02(2900, domain="biology")
+        probe = GateRuntime(plan)
+        inference_id = next(
+            question["item_id"]
+            for question in probe.initial_generator["questions"]
+            if question["question_type"] == "INFERENCE"
+        )
+        runtime = GateRuntime(
+            plan,
+            initial_verifier_statuses={inference_id: "INVALID_UNSUPPORTED"},
+            initial_reviewer_set_judgment="FAIL",
+            final_reviewer_overrides={inference_id: {"serious_defect": True}},
+            final_reviewer_set_judgment="FAIL",
+        )
+        result, root = self.run_pipeline(runtime)
+        self.assertEqual(result["decision"], "QUARANTINE")
+        self.assertEqual(runtime.repair_calls, 1)
+        self.assertEqual(runtime.reviewer_calls, 2)
+        self.assertEqual([request.stage for request in runtime.requests], [
+            "reading_generator", "reading_inference_verifier", "reading_reviewer",
+            "reading_inference_repair", "reading_inference_verifier", "reading_reviewer",
+        ])
+        self.assertIsNone(result["solver"])
+        self.assertTrue((root / "reviewer_initial.json").is_file())
+        self.assertTrue((root / "reviewer_final.json").is_file())
+
+    def test_repaired_final_reviewer_and_solver_use_identical_blind_projection(self) -> None:
+        plan = build_plan_v02(2900, domain="biology")
+        probe = GateRuntime(plan)
+        inference_id = next(
+            question["item_id"]
+            for question in probe.initial_generator["questions"]
+            if question["question_type"] == "INFERENCE"
+        )
+        runtime = GateRuntime(plan, initial_verifier_statuses={inference_id: "INVALID_UNSUPPORTED"})
+        result, root = self.run_pipeline(runtime)
+        self.assertEqual(result["decision"], "ACCEPT")
+        reviewer_requests = [request for request in runtime.requests if request.stage == "reading_reviewer"]
+        solver_request = next(request for request in runtime.requests if request.stage == "reading_solver")
+        final_reviewer_payload = json.loads(reviewer_requests[-1].prompt.split("INPUT_JSON:\n", 1)[1])
+        solver_payload = json.loads(solver_request.prompt.split("INPUT_JSON:\n", 1)[1])
+        self.assertEqual(final_reviewer_payload, solver_payload)
+        self.assertEqual(final_reviewer_payload, json.loads((root / "reviewer_input.json").read_text(encoding="utf-8")))
+
+    def test_repair_input_is_blind_to_generator_metadata_and_marks_absent_feedback_null(self) -> None:
+        plan = build_plan_v02(2900, domain="biology")
+        probe = GateRuntime(plan)
+        inference_id = next(
+            question["item_id"]
+            for question in probe.initial_generator["questions"]
+            if question["question_type"] == "INFERENCE"
+        )
+        runtime = GateRuntime(
+            plan,
+            initial_reviewer_overrides={inference_id: {"serious_defect": True}},
+            initial_reviewer_set_judgment="FAIL",
+        )
+        _result, root = self.run_pipeline(runtime)
+        repair_request = next(request for request in runtime.requests if request.stage == "reading_inference_repair")
+        repair_payload = json.loads(repair_request.prompt.split("INPUT_JSON:\n", 1)[1])
+        serialized = json.dumps(repair_payload)
+        for forbidden in ("correct_answer", "evidence", "rationale", "distractor_metadata", "original_to_canonical", "canonical_to_original"):
+            self.assertNotIn(forbidden, serialized)
+        item = repair_payload["items"][0]
+        self.assertIsNone(item["verifier_status"])
+        self.assertIsNone(item["defect_reasons"])
+        self.assertEqual(item["reviewer_serious_defect"], True)
+        self.assertTrue(item["reviewer_reasons"])
+
+    def test_repair_provenance_preserves_initial_and_final_reviewer_lifecycle(self) -> None:
+        plan = build_plan_v02(2900, domain="biology")
+        probe = GateRuntime(plan)
+        inference_id = next(
+            question["item_id"]
+            for question in probe.initial_generator["questions"]
+            if question["question_type"] == "INFERENCE"
+        )
+        runtime = GateRuntime(plan, initial_verifier_statuses={inference_id: "INVALID_UNSUPPORTED"})
+        _result, root = self.run_pipeline(runtime)
+        provenance = json.loads((root / "provenance" / "provenance.json").read_text(encoding="utf-8"))
+        initial = json.loads((root / "reviewer_initial.json").read_text(encoding="utf-8"))
+        final = json.loads((root / "reviewer_final.json").read_text(encoding="utf-8"))
+        self.assertEqual(provenance["initial_reviewer_artifact"], "reviewer_initial.json")
+        self.assertEqual(provenance["final_reviewer_artifact"], "reviewer_final.json")
+        self.assertEqual(provenance["initial_reviewer_sha256"], payload_sha256(initial))
+        self.assertEqual(provenance["final_reviewer_sha256"], payload_sha256(final))
+        self.assertNotEqual(provenance["initial_reviewer_artifact"], provenance["final_reviewer_artifact"])
 
     def test_multiple_bad_items_repair_together_and_preserve_unaffected_slots(self) -> None:
         plan = build_plan_v02(2924, domain="biology")
@@ -331,7 +559,7 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
         self.assertEqual(result["decision"], "QUARANTINE")
         self.assertEqual(runtime.repair_calls, 1)
         self.assertEqual(runtime.verifier_calls, 2)
-        self.assertFalse(result["reviewer"])
+        self.assertTrue(result["reviewer"])
         self.assertFalse(result["solver"])
         self.assertFalse(result["checks"]["inference_repair_succeeded"])
 
@@ -350,16 +578,17 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
         self.assertEqual(
             [request.stage for request in runtime.requests],
             [
-                "reading_generator",
-                "reading_inference_verifier",
-                "reading_inference_repair",
-                "reading_inference_verifier",
+                    "reading_generator",
+                    "reading_inference_verifier",
+                    "reading_reviewer",
+                    "reading_inference_repair",
+                    "reading_inference_verifier",
             ],
         )
         self.assertFalse(result["checks"]["inference_gate_pass"])
         self.assertFalse(result["checks"]["inference_repair_succeeded"])
         self.assertTrue(result["checks"]["inference_verifier_errors"])
-        self.assertIsNone(result["reviewer"])
+        self.assertTrue(result["reviewer"])
         self.assertIsNone(result["solver"])
 
     def test_raw_and_pre_repair_artifacts_and_provenance_are_auditable(self) -> None:
@@ -431,7 +660,8 @@ class ReadingV028InferenceGateTests(unittest.TestCase):
             batch = run_reading_batch(2892, count=2, parallel=1, output_dir=Path(directory), runtime_factory=factory)
         self.assertEqual(batch["inference_verifier_invocation_count"], 3)
         self.assertEqual(batch["inference_repair_invocation_count"], 1)
-        self.assertEqual(batch["total_live_invocation_count"], 10)
+        self.assertEqual(batch["reviewer_invocation_count"], 3)
+        self.assertEqual(batch["total_live_invocation_count"], 11)
 
     def test_verifier_contract_has_no_set_level_judgment_and_repair_schema_is_exact(self) -> None:
         plan = build_plan_v02(2900, domain="biology")

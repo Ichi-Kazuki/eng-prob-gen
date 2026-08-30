@@ -544,7 +544,7 @@ class ReadingV02BatchTests(unittest.TestCase):
             self.assertEqual(json.loads((root / "generator_raw.json").read_text(encoding="utf-8")), raw)
             self.assertEqual(json.loads((root / "generator.json").read_text(encoding="utf-8")), permuted)
             provenance = json.loads((root / "provenance" / "provenance.json").read_text(encoding="utf-8"))
-            self.assertEqual(provenance["reading_version"], "v0.2.8")
+            self.assertEqual(provenance["reading_version"], "v0.2.9")
             self.assertEqual(provenance["choice_permutation"], expected_provenance)
             self.assertEqual(provenance["blind_prompt_fields"], ["passage_id", "section", "passage", "questions"])
 
