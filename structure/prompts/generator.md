@@ -126,6 +126,29 @@ revisions; do not add regeneration.
   another conjunction as a distractor when it can create an independently
   grammatical conditional clause. Prefer a genuinely incorrect auxiliary,
   inversion structure, or word order.
+- **Fronted place-adverbial inversion:** When the stem begins with a fronted
+  place adverbial, evaluate every distractor as a complete inversion
+  construction. Do not use an alternative finite verb phrase if it
+  independently supports another grammatical inversion analysis. In
+  particular, an active locative-inversion target must not use a passive
+  auxiliary plus participle distractor such as `was hung` when that passive
+  phrase can license postposed-subject inversion. Passive locative inversion
+  may be grammatical even when it is marked, formal, or literary; those
+  properties do not make it INVALID. A wrong answer must contain a definite
+  structural defect rather than instantiate another legitimate inversion type.
+- **Reference / determiner antecedents:** For a reference item involving an
+  unclear or missing antecedent, do not assume that `this`, `that`, or `it` is
+  invalid merely because no immediately preceding noun phrase exactly matches
+  it. Account for discourse-deictic or propositional reference, where a
+  demonstrative can refer to the preceding event, fact, proposition, or
+  situation, and account for ordinary anaphoric readings of `it` to any
+  plausible singular antecedent already present. A pronoun or demonstrative
+  distractor is acceptable only when the completed standalone sentence leaves
+  no reasonable standard-English referential interpretation. Do not make
+  correctness depend merely on an explicit noun being clearer or stylistically
+  preferable: if multiple references are grammatical and differ mainly in
+  clarity, the item is not unique enough. An explicit noun is not automatically
+  correct merely because it is clearer.
 - **Articles / determiners:** Do not contrast indefinite and definite articles
   when both can be supported by an ordinary discourse interpretation. Do not
   depend on unspecified prior context to make `the` invalid. When testing `a`
@@ -160,6 +183,18 @@ revisions; do not add regeneration.
   infinitive relationship. Construct distractors whose local morphology or
   syntax creates a definite structural defect rather than another valid
   modifier analysis.
+- **Subject-position nonfinite phrases:** When the blank is in subject position
+  immediately before an existing finite predicate, do not assume a
+  gerund-participial clause is invalid merely because the intended answer is a
+  noun phrase. Gerund-participial clauses can function as grammatical subjects,
+  and infinitival clauses can also function as subjects where the construction
+  licenses them. Evaluate whether each nonfinite distractor can independently
+  serve as the full subject of the following finite predicate. Do not use such
+  a distractor when its syntax and a reasonable semantic interpretation make it
+  defensible. Reject it only when the complete sentence gives a definite
+  structural or semantic failure. Generalize this guardrail only to
+  subject-position constructions; it is not a broad new nonfinite grammar
+  manual.
 - **Appositive / word order:** A wrong-order distractor must actually be
   structurally defective. Do not use a different but grammatical possessive
   noun phrase or attachment merely because its meaning is odd.
@@ -201,6 +236,19 @@ these operational principles without creating a new taxonomy:
   structurally motivated distractors. The item must require more than a basic
   local subject-verb agreement check, a single-form check, or an obvious
   word-order check.
+
+For a planned HARD item, apply this stronger operational gate: solving must
+require integration of at least two interacting structural or grammatical
+cues, and at least one required cue must depend on non-local sentence
+structure outside the immediate blank-local phrase. Do not count sentence
+length, a rare subtype label, or three obviously malformed distractors around
+one trivial local cue as HARD. At least two distractors should be locally
+plausible English forms, but each must become definitely wrong when the larger
+complete-sentence structure is considered. Every such distractor must still
+have a definite structural defect in the complete sentence, not merely be
+awkward, less common, or stylistically different. HARD remains valid only when
+the item has one clearly correct answer, natural wording, and no dependence on
+rare vocabulary or world knowledge.
 
 Do not make HARD difficult through rare vocabulary, obscure world knowledge,
 ambiguity, unnatural wording, or trick semantics. Difficulty must never

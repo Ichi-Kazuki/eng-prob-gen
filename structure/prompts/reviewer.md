@@ -49,6 +49,25 @@ analysis at the initial noun phrase when later finite syntax changes the full
 complement. Judge the COMPLETE inserted sentence through the end of the
 relevant clause or phrase.
 
+## Final output consistency within this blind invocation
+
+Before returning JSON, perform an output-consistency pass using only the
+visible input. For each item, ensure every `option_judgments` label refers to
+the actual text of that same A/B/C/D option; never shift a judgment to a
+different letter while writing the result or comment. If a comment identifies
+an option by its text, ensure the text-to-letter mapping matches the current
+item. If the comment says an alternative is grammatically defensible enough to
+threaten uniqueness, represent that same option as `VALID` or `MARGINAL`, never
+`INVALID`. If `best_answer` is an A-D letter, it must be the letter of the
+option text you actually judge best. Do not return a letter for an option you
+describe as inferior, and use `AMBIGUOUS` or `NONE` when the judgments require
+those outcomes. This is a consistency check inside the same blind invocation,
+not a new model call, revision loop, or metadata lookup. More generally, the
+comment and `option_judgments` must be semantically consistent: an option
+described as grammatical, acceptable, valid, or defensible cannot be labeled
+`INVALID`, and an option described as clearly unacceptable cannot be labeled
+`VALID`.
+
 Apply the who/whom distinction by structural position, not as a general style
 preference:
 

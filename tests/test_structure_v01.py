@@ -314,6 +314,25 @@ class StructurePromptTests(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
 
+    def test_generator_prompt_operationalizes_hard_difficulty(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "stronger operational gate",
+            "at least two interacting structural or grammatical cues",
+            "at least one required cue must depend on non-local sentence structure",
+            "outside the immediate blank-local phrase",
+            "sentence length",
+            "rare subtype label",
+            "three obviously malformed distractors around one trivial local cue",
+            "At least two distractors should be locally plausible English forms",
+            "definitely wrong when the larger complete-sentence structure is considered",
+            "definite structural defect in the complete sentence",
+            "one clearly correct answer, natural wording",
+            "no dependence on rare vocabulary or world knowledge",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
     def test_generator_prompt_has_target_specific_semantic_guardrails(self) -> None:
         prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
         for phrase in (
@@ -346,6 +365,58 @@ class StructurePromptTests(unittest.TestCase):
             "**Noun-clause subjects:**",
             "semantically natural for a fact",
             "implausible physical agent",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_generator_prompt_guards_reference_and_determiner_ambiguity(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "Reference / determiner antecedents",
+            "unclear or missing antecedent",
+            "do not assume that `this`, `that`, or `it` is invalid",
+            "no immediately preceding noun phrase exactly matches it",
+            "discourse-deictic or propositional reference",
+            "preceding event, fact, proposition, or situation",
+            "ordinary anaphoric readings of `it`",
+            "any plausible singular antecedent already present",
+            "no reasonable standard-English referential interpretation",
+            "explicit noun being clearer or stylistically preferable",
+            "multiple references are grammatical and differ mainly in clarity",
+            "An explicit noun is not automatically correct merely because it is clearer",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_generator_prompt_guards_locative_inversion_alternatives(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "fronted place adverbial",
+            "complete inversion construction",
+            "another grammatical inversion analysis",
+            "active locative-inversion target",
+            "passive auxiliary plus participle distractor",
+            "can license postposed-subject inversion",
+            "Passive locative inversion may be grammatical",
+            "marked, formal, or literary",
+            "definite structural defect rather than instantiate another legitimate inversion type",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_generator_prompt_guards_subject_position_nonfinite_clauses(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "Subject-position nonfinite phrases",
+            "blank is in subject position immediately before an existing finite predicate",
+            "gerund-participial clause is invalid",
+            "Gerund-participial clauses can function as grammatical subjects",
+            "infinitival clauses can also function as subjects where the construction licenses them",
+            "full subject of the following finite predicate",
+            "syntax and a reasonable semantic interpretation make it defensible",
+            "complete sentence gives a definite structural or semantic failure",
+            "only to subject-position constructions",
+            "not a broad new nonfinite grammar manual",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
@@ -410,6 +481,28 @@ class StructurePromptTests(unittest.TestCase):
             "preposition or prepositional connector plus an appropriate nominal or gerund complement",
             "Do not stop the analysis at the initial noun phrase",
             "Judge the COMPLETE inserted sentence through the end",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_reviewer_prompt_requires_option_text_letter_alignment_and_consistency(self) -> None:
+        prompt = " ".join(Path("structure/prompts/reviewer.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "Final output consistency within this blind invocation",
+            "Before returning JSON",
+            "every `option_judgments` label refers to the actual text of that same A/B/C/D option",
+            "never shift a judgment to a different letter",
+            "comment identifies an option by its text",
+            "text-to-letter mapping matches the current item",
+            "alternative is grammatically defensible enough to threaten uniqueness",
+            "represent that same option as `VALID` or `MARGINAL`, never `INVALID`",
+            "If `best_answer` is an A-D letter, it must be the letter of the option text you actually judge best",
+            "use `AMBIGUOUS` or `NONE` when the judgments require those outcomes",
+            "same blind invocation",
+            "not a new model call, revision loop, or metadata lookup",
+            "comment and `option_judgments` must be semantically consistent",
+            "described as grammatical, acceptable, valid, or defensible cannot be labeled `INVALID`",
+            "described as clearly unacceptable cannot be labeled `VALID`",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
