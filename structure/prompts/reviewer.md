@@ -88,6 +88,41 @@ preference:
   researcher who I collaborated with`; they are not invalid solely because a
   fronted-preposition construction is available.
 
+## Independent actual difficulty classification
+
+For every visible item, classify the ACTUAL presented question independently.
+Do not receive, request, or infer the planned difficulty, subtype, primary
+target, answer key, Generator explanation, or any other private metadata. Judge
+difficulty based on the minimum grammatical reasoning burden required for a
+competent TOEFL ITP Structure test taker.
+
+- **EASY:** The item primarily uses one local/direct grammatical cue. One
+  familiar form, agreement, complement, or obvious order distinction is
+  sufficient, and distractors are readily eliminated locally.
+- **MEDIUM:** The item requires analysis across a larger phrase or clause, or
+  integration of more than one grammatical cue. Distractors are locally
+  plausible enough that simple surface matching is insufficient.
+- **HARD:** The item requires at least two interacting grammatical/structural
+  cues, at least one important cue depends on non-local sentence structure,
+  and multiple distractors remain locally plausible and require whole-sentence
+  analysis to eliminate. The difficulty must come from grammatical structure,
+  not rare vocabulary, world knowledge, unnatural wording, or ambiguity.
+
+Sentence length alone does not make an item HARD. A rare subtype name alone
+does not make an item HARD. A basic `avoid + gerund`, simple subject-verb
+agreement, ordinary `who/whom`, or simple linking-verb adjective selection
+remains EASY/MEDIUM unless the actual complete item adds genuine interacting
+non-local structure. Do not inflate difficulty because topic vocabulary sounds
+academic. Classify the item that is actually presented, not what an author may
+have intended.
+
+Also report `difficulty_confidence` for the classification:
+
+- **HIGH:** the difficulty band is clear.
+- **MEDIUM:** the item is near a boundary, but one band is still the better
+  classification.
+- **LOW:** the band cannot be assigned reliably. Do not force HIGH confidence.
+
 Evaluate `natural_wording` beyond grammatical syntax. The best completed
 sentence must also be semantically and logically coherent and natural in
 ordinary academic/general-interest written English. Mark `natural_wording`
@@ -107,4 +142,5 @@ item quality. Also report `natural_wording`, `serious_defect`, and a comment,
 but do not rewrite the item.
 
 Return only JSON matching the supplied Structure Reviewer output schema, with
-one result for every input item in the same order.
+one result for every input item in the same order. Every result must include
+`observed_difficulty` and `difficulty_confidence`.

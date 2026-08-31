@@ -4,7 +4,7 @@
   "title": "Structure v0.1 final run result",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "version", "run_id", "seed", "decision", "question_count", "live_invocation_count", "deterministic_hard_failure_count", "reviewer_solver_agreement", "reviewer_ambiguous_none_count", "solver_ambiguous_none_count", "final_answer_position_distribution", "item_results", "checks", "infrastructure", "artifact_hashes", "output_dir"],
+  "required": ["schema_version", "version", "run_id", "seed", "decision", "question_count", "live_invocation_count", "deterministic_hard_failure_count", "reviewer_solver_agreement", "reviewer_difficulty_agreement_count", "reviewer_difficulty_low_confidence_count", "reviewer_ambiguous_none_count", "solver_ambiguous_none_count", "final_answer_position_distribution", "item_results", "checks", "infrastructure", "artifact_hashes", "output_dir"],
   "properties": {
     "schema_version": {"const": "structure-result-v0.1"},
     "version": {"const": "v0.1"},
@@ -15,6 +15,8 @@
     "live_invocation_count": {"type": "integer", "minimum": 0},
     "deterministic_hard_failure_count": {"type": "integer", "minimum": 0},
     "reviewer_solver_agreement": {"type": "integer", "minimum": 0, "maximum": 15},
+    "reviewer_difficulty_agreement_count": {"type": "integer", "minimum": 0, "maximum": 15},
+    "reviewer_difficulty_low_confidence_count": {"type": "integer", "minimum": 0, "maximum": 15},
     "reviewer_ambiguous_none_count": {"type": "integer", "minimum": 0},
     "solver_ambiguous_none_count": {"type": "integer", "minimum": 0},
     "final_answer_position_distribution": {

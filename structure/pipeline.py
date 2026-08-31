@@ -19,6 +19,8 @@ from .blinding import blind_input_errors, blind_input_sha256, build_blind_input
 from .contracts import (
     SCHEMA_PATHS,
     post_blind_comparison,
+    reviewer_difficulty_rejection_reasons,
+    reviewer_difficulty_summary,
     validate_generator_contract,
     validate_reviewer_contract,
     validate_solver_contract,
@@ -154,6 +156,7 @@ class StructurePipeline:
                         reasons.append(f"reviewer_valid_option_count: {valid_count}")
                     if any(judgments.get(letter) == "MARGINAL" for letter in ("A", "B", "C", "D")):
                         reasons.append("reviewer_marginal_threatens_uniqueness")
+                reasons.extend(reviewer_difficulty_rejection_reasons(planned.get("difficulty"), reviewer_item))
 
             if solver_item is None:
                 reasons.append("solver_item_missing")
@@ -246,6 +249,9 @@ class StructurePipeline:
         agreement_count = 0
         if isinstance(generator, dict) and isinstance(reviewer, dict) and isinstance(solver, dict):
             agreements, agreement_count = post_blind_comparison(generator, reviewer, solver)
+        reviewer_difficulty_agreement_count, reviewer_difficulty_low_confidence_count = reviewer_difficulty_summary(
+            plan, reviewer
+        )
 
         reviewer_items = reviewer.get("items", []) if isinstance(reviewer, dict) else []
         solver_items = solver.get("items", []) if isinstance(solver, dict) else []
@@ -293,6 +299,8 @@ class StructurePipeline:
             "live_invocation_count": len(self.invocations),
             "deterministic_hard_failure_count": len(deterministic_errors),
             "reviewer_solver_agreement": agreement_count,
+            "reviewer_difficulty_agreement_count": reviewer_difficulty_agreement_count,
+            "reviewer_difficulty_low_confidence_count": reviewer_difficulty_low_confidence_count,
             "reviewer_ambiguous_none_count": reviewer_ambiguous_none_count,
             "solver_ambiguous_none_count": solver_ambiguous_none_count,
             "final_answer_position_distribution": final_distribution,

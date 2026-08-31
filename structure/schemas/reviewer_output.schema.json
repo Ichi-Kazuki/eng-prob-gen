@@ -13,7 +13,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["item_id", "option_judgments", "best_answer", "natural_wording", "serious_defect", "comment"],
+        "required": ["item_id", "option_judgments", "best_answer", "natural_wording", "serious_defect", "comment", "observed_difficulty", "difficulty_confidence"],
         "properties": {
           "item_id": {"type": "string", "minLength": 1},
           "option_judgments": {
@@ -30,7 +30,9 @@
           "best_answer": {"enum": ["A", "B", "C", "D", "AMBIGUOUS", "NONE"]},
           "natural_wording": {"type": "boolean"},
           "serious_defect": {"type": "boolean"},
-          "comment": {"type": "string"}
+          "comment": {"type": "string"},
+          "observed_difficulty": {"enum": ["EASY", "MEDIUM", "HARD"]},
+          "difficulty_confidence": {"enum": ["HIGH", "MEDIUM", "LOW"]}
         }
       }
     }

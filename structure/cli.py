@@ -28,6 +28,8 @@ def main(argv: list[str] | None = None) -> int:
         "live_invocation_count": result["live_invocation_count"],
         "deterministic_hard_failure_count": result["deterministic_hard_failure_count"],
         "reviewer_solver_agreement": result["reviewer_solver_agreement"],
+        "reviewer_difficulty_agreement_count": result["reviewer_difficulty_agreement_count"],
+        "reviewer_difficulty_low_confidence_count": result["reviewer_difficulty_low_confidence_count"],
         "reviewer_ambiguous_none_count": result["reviewer_ambiguous_none_count"],
         "solver_ambiguous_none_count": result["solver_ambiguous_none_count"],
         "final_answer_position_distribution": result["final_answer_position_distribution"],

@@ -15,6 +15,8 @@ from structure.blinding import blind_input_errors, build_blind_input
 from structure.contracts import (
     LETTERS,
     normalized_option_surface,
+    reviewer_difficulty_rejection_reasons,
+    reviewer_difficulty_summary,
     validate_generator_contract,
     validate_plan,
     validate_reviewer_contract,
@@ -47,7 +49,25 @@ def generator_fixture(plan: dict[str, Any]) -> dict[str, Any]:
     } for index, planned in enumerate(plan["items"])]}
 
 
-def reviewer_fixture(blind: dict[str, Any], *, first_best: str | None = None, natural: bool = True, serious: bool = False) -> dict[str, Any]:
+def reviewer_fixture(
+    blind: dict[str, Any],
+    *,
+    first_best: str | None = None,
+    natural: bool = True,
+    serious: bool = False,
+    observed_difficulty: str | None = None,
+    difficulty_confidence: str = "HIGH",
+) -> dict[str, Any]:
+    planned_difficulties: dict[str, str] = {}
+    if observed_difficulty is None and blind.get("items"):
+        item_id = blind["items"][0].get("item_id", "")
+        try:
+            seed = int(item_id.split("-")[-2], 16)
+            planned_difficulties = {
+                item["item_id"]: item["difficulty"] for item in build_plan(seed)["items"]
+            }
+        except (AttributeError, IndexError, KeyError, TypeError, ValueError):
+            planned_difficulties = {}
     items = []
     for index, item in enumerate(blind["items"]):
         correct = next(letter for letter in LETTERS if item["options"][letter] == "is")
@@ -57,6 +77,8 @@ def reviewer_fixture(blind: dict[str, Any], *, first_best: str | None = None, na
             "best_answer": first_best if index == 0 and first_best is not None else correct,
             "natural_wording": natural, "serious_defect": serious,
             "comment": "Only one option forms the intended sentence.",
+            "observed_difficulty": observed_difficulty or planned_difficulties.get(item["item_id"], "EASY"),
+            "difficulty_confidence": difficulty_confidence,
         })
     return {"items": items}
 
@@ -485,6 +507,32 @@ class StructurePromptTests(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
 
+        for phrase in (
+            "classify the ACTUAL presented question independently",
+            "minimum grammatical reasoning burden required for a competent TOEFL ITP Structure test taker",
+            "one local/direct grammatical cue",
+            "analysis across a larger phrase or clause",
+            "integration of more than one grammatical cue",
+            "at least two interacting grammatical/structural cues",
+            "at least one important cue depends on non-local sentence structure",
+            "multiple distractors remain locally plausible",
+            "Sentence length alone does not make an item HARD",
+            "A rare subtype name alone does not make an item HARD",
+            "basic `avoid + gerund`",
+            "simple subject-verb agreement",
+            "ordinary `who/whom`",
+            "simple linking-verb adjective selection",
+            "genuine interacting non-local structure",
+            "not rare vocabulary, world knowledge, unnatural wording, or ambiguity",
+            "HIGH",
+            "MEDIUM",
+            "LOW",
+            "Do not force HIGH confidence",
+            "Every result must include `observed_difficulty` and `difficulty_confidence`",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
     def test_reviewer_prompt_requires_option_text_letter_alignment_and_consistency(self) -> None:
         prompt = " ".join(Path("structure/prompts/reviewer.md").read_text(encoding="utf-8").split())
         for phrase in (
@@ -548,14 +596,25 @@ class StructurePromptTests(unittest.TestCase):
                 actual_hash = hashlib.sha256((Path("structure/schemas") / schema_name).read_bytes()).hexdigest()
                 self.assertEqual(actual_hash, expected_hash)
 
-    def test_planner_validation_and_pipeline_boundaries_remain_unchanged(self) -> None:
+    def test_planner_validation_and_pipeline_boundaries_are_protected(self) -> None:
         expected_hashes = {
             "structure/planner.py": "14dfb5e994df7cd1396710d543f0397eef9bd8c67e00a282e891be50ca7003ca",
             "structure/profile.json": "f72612c4aa64b22d1910b812d598839f069cb50c43805354448e4d8af1fb8671",
-            "structure/contracts.py": "1ee03109636d96d332c39b640786fdaaa6651350e87bebc0af3c3c2d95729f70",
-            "structure/pipeline.py": "9dcd003d6279f8240b476de9bc2c59d36c7846760c85479de8edcf88389ccc2b",
             "structure/blinding.py": "b39dcdad846adda25d46784c5d75b75e49f5b01d44df75a011bfe2c96546b351",
             "structure/permutation.py": "1efdba8054a14540ba838e31c2b57401faf97770c6da3ea14ea9850cc8c31b42",
+        }
+        for relative_path, expected_hash in expected_hashes.items():
+            with self.subTest(path=relative_path):
+                actual_hash = hashlib.sha256(Path(relative_path).read_bytes()).hexdigest()
+                self.assertEqual(actual_hash, expected_hash)
+
+    def test_difficulty_gate_boundaries_and_frozen_prompts_are_hash_protected(self) -> None:
+        expected_hashes = {
+            "structure/contracts.py": "7bbe6811f301f2065945ec1ae6706dfe80b7f5224ca3b34824b45886f18100cb",
+            "structure/pipeline.py": "cb2d14688184faa0a74ea4d735119317db183735d0ae53aee3586001fcc457a9",
+            "structure/prompts/generator.md": "da9499d13fff7b90a8f43f9c26c49a939c7db792d030e0f11feae218a23d422b",
+            "structure/prompts/reviewer.md": "2a58821bffaf307d2d196bec3617bb3e70237b27bf28731585863d416405c362",
+            "structure/prompts/solver.md": "112925abe56c70b7d8016a8554fa285ac4c633b80c508bafe2a493dc30f5a49f",
         }
         for relative_path, expected_hash in expected_hashes.items():
             with self.subTest(path=relative_path):
@@ -568,9 +627,9 @@ class StructurePromptTests(unittest.TestCase):
             "generator_output.schema.json": "78ad5e758052928bf51f973cdc009ab103c4f535e243e6bd17b0631fb361b2dd",
             "plan.schema.json": "6cd16610ec2f4f4b912f8700ff3a13e15faaa01a6dd25b07c85748cb081df4b5",
             "provenance.schema.json": "b40718298ea487fb10ae4136f687b210e3b7b9aef5cd8413aa0ff9862273d2cf",
-            "result.schema.json": "819e373e730fbdc8c98d0557cf3c28cea99593830ee468c166afa17ee166f1cd",
+            "result.schema.json": "9f049f94ec8a819bf228bd59845eb64deddd6f974f523a64abccbaae69bfb5c5",
             "reviewer_input.schema.json": "8e5181664253967064a4c415377f5bc9f75a55e69984e54c01148d413d9e8b19",
-            "reviewer_output.schema.json": "10fc549d094f0bdbefba1a86095723855968da413192a9119a4059308704b69a",
+            "reviewer_output.schema.json": "c8dc2c992e32451b489d6d0e5d37035bace90b8e0b73eb54f5b1210b33220907",
             "solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
             "solver_output.schema.json": "1e791bb296e808bff2fe25d6d94db22602aa3f68211b3691b967b26be43f4937",
         }
@@ -687,6 +746,76 @@ class StructureContractTests(unittest.TestCase):
         self.assertTrue(validate_reviewer_contract(reviewer, blind, plan))
         self.assertTrue(validate_solver_contract(solver, blind, plan))
 
+    def test_reviewer_input_allowlist_and_output_difficulty_contract(self) -> None:
+        input_schema = load_schema(Path("structure/schemas/reviewer_input.schema.json"))
+        output_schema = load_schema(Path("structure/schemas/reviewer_output.schema.json"))
+        self.assertEqual(
+            set(input_schema["properties"]["items"]["items"]["required"]),
+            {"item_id", "section", "stem", "options"},
+        )
+        self.assertEqual(
+            set(input_schema["properties"]["items"]["items"]["properties"]),
+            {"item_id", "section", "stem", "options"},
+        )
+        required = set(output_schema["properties"]["items"]["items"]["required"])
+        self.assertIn("observed_difficulty", required)
+        self.assertIn("difficulty_confidence", required)
+        self.assertEqual(
+            output_schema["properties"]["items"]["items"]["properties"]["observed_difficulty"]["enum"],
+            ["EASY", "MEDIUM", "HARD"],
+        )
+        self.assertEqual(
+            output_schema["properties"]["items"]["items"]["properties"]["difficulty_confidence"]["enum"],
+            ["HIGH", "MEDIUM", "LOW"],
+        )
+        valid = reviewer_fixture(build_blind_input(generator_fixture(build_plan(52))))
+        missing_observed = copy.deepcopy(valid)
+        del missing_observed["items"][0]["observed_difficulty"]
+        self.assertTrue(
+            validate_reviewer_contract(
+                missing_observed,
+                build_blind_input(generator_fixture(build_plan(52))),
+                build_plan(52),
+            )
+        )
+
+    def test_reviewer_difficulty_gate_is_independent_and_fail_closed(self) -> None:
+        self.assertEqual(
+            reviewer_difficulty_rejection_reasons(
+                "HARD", {"observed_difficulty": "MEDIUM", "difficulty_confidence": "HIGH"}
+            ),
+            ["reviewer_difficulty_mismatch: planned=HARD, observed=MEDIUM"],
+        )
+        self.assertEqual(
+            reviewer_difficulty_rejection_reasons(
+                "EASY", {"observed_difficulty": "MEDIUM", "difficulty_confidence": "HIGH"}
+            ),
+            ["reviewer_difficulty_mismatch: planned=EASY, observed=MEDIUM"],
+        )
+        self.assertEqual(
+            reviewer_difficulty_rejection_reasons(
+                "HARD", {"observed_difficulty": "HARD", "difficulty_confidence": "HIGH"}
+            ),
+            [],
+        )
+        self.assertEqual(
+            reviewer_difficulty_rejection_reasons(
+                "HARD", {"observed_difficulty": "HARD", "difficulty_confidence": "MEDIUM"}
+            ),
+            [],
+        )
+        self.assertEqual(
+            reviewer_difficulty_rejection_reasons(
+                "HARD", {"observed_difficulty": "HARD", "difficulty_confidence": "LOW"}
+            ),
+            ["reviewer_difficulty_confidence_low"],
+        )
+        plan = build_plan(51)
+        reviewer = reviewer_fixture(build_blind_input(generator_fixture(plan)))
+        self.assertEqual(reviewer_difficulty_summary(plan, reviewer), (15, 0))
+        reviewer["items"][0]["difficulty_confidence"] = "LOW"
+        self.assertEqual(reviewer_difficulty_summary(plan, reviewer), (15, 1))
+
 
 class StructurePipelineTests(unittest.TestCase):
     def run_fixture(self, runtime: FixtureRuntime) -> dict[str, Any]:
@@ -705,6 +834,54 @@ class StructurePipelineTests(unittest.TestCase):
         self.assertEqual([request.stage for request in runtime.requests], ["structure_generator", "structure_reviewer", "structure_solver"])
         self.assertEqual([request.agent_name for request in runtime.requests], [GENERATOR_AGENT, REVIEWER_AGENT, SOLVER_AGENT])
         self.assertEqual(sorted(result["final_answer_position_distribution"].values()), [3, 4, 4, 4])
+        self.assertEqual(result["reviewer_difficulty_agreement_count"], 15)
+        self.assertEqual(result["reviewer_difficulty_low_confidence_count"], 0)
+
+    def test_difficulty_mismatch_quarantines_whole_set_without_replacement(self) -> None:
+        plan = build_plan(51)
+        permuted, _ = permute_generator_output(generator_fixture(plan), 51)
+        blind = build_blind_input(permuted)
+        reviewer = reviewer_fixture(blind)
+        planned = plan["items"][0]["difficulty"]
+        reviewer["items"][0]["observed_difficulty"] = next(
+            difficulty for difficulty in ("EASY", "MEDIUM", "HARD") if difficulty != planned
+        )
+        runtime = FixtureRuntime(reviewer=reviewer)
+        result = self.run_fixture(runtime)
+        self.assertEqual(result["decision"], "QUARANTINE")
+        self.assertEqual(sum(item["accepted"] for item in result["item_results"]), 14)
+        self.assertIn(
+            f"reviewer_difficulty_mismatch: planned={planned}, observed={reviewer['items'][0]['observed_difficulty']}",
+            result["item_results"][0]["rejection_reasons"],
+        )
+        self.assertEqual(result["live_invocation_count"], 3)
+        self.assertEqual([request.stage for request in runtime.requests], [
+            "structure_generator", "structure_reviewer", "structure_solver"
+        ])
+
+    def test_low_difficulty_confidence_quarantines_with_exact_reason(self) -> None:
+        plan = build_plan(51)
+        blind = build_blind_input(permute_generator_output(generator_fixture(plan), 51)[0])
+        reviewer = reviewer_fixture(blind)
+        reviewer["items"][0]["difficulty_confidence"] = "LOW"
+        result = self.run_fixture(FixtureRuntime(reviewer=reviewer))
+        self.assertEqual(result["decision"], "QUARANTINE")
+        self.assertEqual(sum(item["accepted"] for item in result["item_results"]), 14)
+        self.assertEqual(result["reviewer_difficulty_agreement_count"], 15)
+        self.assertEqual(result["reviewer_difficulty_low_confidence_count"], 1)
+        self.assertIn(
+            "reviewer_difficulty_confidence_low",
+            result["item_results"][0]["rejection_reasons"],
+        )
+
+    def test_reviewer_artifact_persists_difficulty_fields_for_every_item(self) -> None:
+        runtime = FixtureRuntime()
+        with tempfile.TemporaryDirectory() as directory:
+            StructurePipeline(runtime).run(51, output_dir=Path(directory))
+            reviewer = json.loads((Path(directory) / "reviewer.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(reviewer["items"]), 15)
+        self.assertTrue(all("observed_difficulty" in item for item in reviewer["items"]))
+        self.assertTrue(all("difficulty_confidence" in item for item in reviewer["items"]))
 
     def test_one_defective_item_quarantines_the_whole_set(self) -> None:
         plan = build_plan(51)
@@ -749,6 +926,7 @@ class StructurePipelineTests(unittest.TestCase):
             payload = json.loads(request.prompt.split("INPUT_JSON:\n", 1)[1])
             self.assertEqual(set(payload), {"items"})
             self.assertEqual(set(payload["items"][0]), {"item_id", "section", "stem", "options"})
+            self.assertNotIn("difficulty", payload["items"][0])
             self.assertNotIn("correct_answer", request.prompt)
             self.assertNotIn("primary_target", request.prompt)
             self.assertNotIn("distractor_rationales", request.prompt)

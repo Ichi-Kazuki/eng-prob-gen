@@ -15,6 +15,7 @@ from .planner import PLAN_SCHEMA_PATH, load_profile
 ROOT = Path(__file__).resolve().parent
 BLANK_MARKER = "____"
 LETTERS = ("A", "B", "C", "D")
+REVIEWER_DIFFICULTY_CONFIDENCES = frozenset({"HIGH", "MEDIUM", "LOW"})
 SCHEMA_PATHS = {
     "plan": PLAN_SCHEMA_PATH,
     "generator_item": ROOT / "schemas" / "generator_item.schema.json",
@@ -180,6 +181,48 @@ def validate_reviewer_contract(output: Any, blind: Mapping[str, Any], plan: Mapp
         errors.append("reviewer: item IDs/order do not match blind input")
     errors.extend(f"reviewer: forbidden field {path}" for path in find_leakage(output))
     return _deduplicate(errors)
+
+
+def reviewer_difficulty_rejection_reasons(
+    planned_difficulty: Any, reviewer_item: Mapping[str, Any]
+) -> list[str]:
+    """Apply the fail-closed post-review difficulty gate to one item."""
+
+    observed_difficulty = reviewer_item.get("observed_difficulty")
+    confidence = reviewer_item.get("difficulty_confidence")
+    reasons: list[str] = []
+    if observed_difficulty != planned_difficulty:
+        reasons.append(
+            f"reviewer_difficulty_mismatch: planned={planned_difficulty}, observed={observed_difficulty}"
+        )
+    if confidence == "LOW":
+        reasons.append("reviewer_difficulty_confidence_low")
+    elif confidence not in REVIEWER_DIFFICULTY_CONFIDENCES - {"LOW"}:
+        reasons.append(f"reviewer_difficulty_confidence_not_accepted: {confidence}")
+    return reasons
+
+
+def reviewer_difficulty_summary(
+    plan: Mapping[str, Any], reviewer: Mapping[str, Any] | None
+) -> tuple[int, int]:
+    """Return observed/planned agreement and low-confidence counts."""
+
+    reviewer_by_id = {
+        item.get("item_id"): item
+        for item in (reviewer or {}).get("items", [])
+        if isinstance(item, dict)
+    }
+    agreement_count = 0
+    low_confidence_count = 0
+    for planned_item in _expected_items(plan):
+        reviewer_item = reviewer_by_id.get(planned_item.get("item_id"))
+        if not isinstance(reviewer_item, dict):
+            continue
+        if reviewer_item.get("observed_difficulty") == planned_item.get("difficulty"):
+            agreement_count += 1
+        if reviewer_item.get("difficulty_confidence") == "LOW":
+            low_confidence_count += 1
+    return agreement_count, low_confidence_count
 
 
 def validate_solver_contract(output: Any, blind: Mapping[str, Any], plan: Mapping[str, Any] | None = None) -> list[str]:
