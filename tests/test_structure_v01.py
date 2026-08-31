@@ -288,12 +288,29 @@ class StructurePromptTests(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
 
-    def test_solver_prompt_and_contract_remain_unchanged(self) -> None:
-        solver_prompt = Path("structure/prompts/solver.md").read_bytes()
-        self.assertEqual(
-            hashlib.sha256(solver_prompt).hexdigest(),
-            "c3a67804621efef18fa706845959921afd95725f12157d6bfed249c273e54593",
-        )
+    def test_solver_prompt_requires_whole_sentence_evaluation(self) -> None:
+        solver_prompt = " ".join(Path("structure/prompts/solver.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "For each option, literally insert that option into the `____` position.",
+            "Evaluate the resulting COMPLETE sentence from beginning to end.",
+            "Do not judge an option as valid merely because the option itself is a grammatical phrase, noun phrase, or clause.",
+            "Account for all syntax remaining before and after the blank.",
+            "adjacent or competing finite predicates",
+            "a missing complementizer or coordinator",
+            "an incomplete clause",
+            "an extra subject or predicate",
+            "an invalid clause boundary",
+            "another structural conflict outside the option itself",
+            "Before concluding that an inserted phrase or clause functions as the subject, object, complement, or modifier",
+            "verify that the COMPLETE resulting sentence actually supports that constituent analysis.",
+            "a nominalized finite clause such as `That + finite clause` functioning as a subject",
+            "a bare independent clause followed immediately by another finite predicate",
+            "The latter is not thereby converted into a subject clause.",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, solver_prompt)
+
+    def test_solver_contract_remains_unchanged(self) -> None:
         for schema_name, expected_hash in {
             "solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
             "solver_output.schema.json": "1e791bb296e808bff2fe25d6d94db22602aa3f68211b3691b967b26be43f4937",
@@ -304,6 +321,8 @@ class StructurePromptTests(unittest.TestCase):
 
     def test_planner_validation_and_pipeline_boundaries_remain_unchanged(self) -> None:
         expected_hashes = {
+            "structure/prompts/generator.md": "067a11af8f853957f87feed8c1f7811976af1c72c4b940ed8f5fef153c048aff",
+            "structure/prompts/reviewer.md": "0f7b8b03e58d247a2212a17acb2c737cb91760efcc98e0930750855e6bfc41e0",
             "structure/planner.py": "14dfb5e994df7cd1396710d543f0397eef9bd8c67e00a282e891be50ca7003ca",
             "structure/profile.json": "f72612c4aa64b22d1910b812d598839f069cb50c43805354448e4d8af1fb8671",
             "structure/contracts.py": "1ee03109636d96d332c39b640786fdaaa6651350e87bebc0af3c3c2d95729f70",
