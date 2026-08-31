@@ -219,6 +219,16 @@ class StructurePromptTests(unittest.TestCase):
             "fronted-preposition environment",
             "clear subject-relative position",
             "following noun",
+            "**NONFINITE_VERB_PHRASES: ordinal/superlative noun + infinitive:**",
+            "the first/second/only/best ... to ...",
+            "`-ing` participial form as a distractor",
+            "grammatical reduced relative/participial modifier",
+            "past participle",
+            "another grammatical reduced relative",
+            "alternative nonfinite form is invalid",
+            "ordinal/superlative infinitive relationship",
+            "local morphology or syntax creates a definite structural defect",
+            "another valid modifier analysis",
             "**Appositive / word order:**",
             "structurally defective",
             "**Noun-clause subjects:**",
@@ -246,6 +256,24 @@ class StructurePromptTests(unittest.TestCase):
             "Treat any such defensible alternative reading as a threat to uniqueness",
             "object-position `who`",
             "traditional prescriptive grammar prefers `whom`",
+            "Apply the who/whom distinction by structural position",
+            "Bare object position",
+            "bare object relative position",
+            "`who` may be acceptable in modern standard written English",
+            "purely prescriptive `whom` rule",
+            "Immediately after a fronted preposition",
+            "fronted-preposition relative position",
+            "a human antecedent requires the objective relative form `whom`",
+            "for a human antecedent, `whom` is the standard written-English form",
+            "`preposition + who`",
+            "Do not mark `preposition + who`",
+            "not an equally valid standard-written-English alternative",
+            "colloquial speech may contain it",
+            "pronoun immediately governed by the fronted preposition",
+            "not a general style preference",
+            "Do not globally prohibit stranded-preposition constructions",
+            "`the researcher who I collaborated with`",
+            "not invalid solely because a fronted-preposition construction is available",
             "semantically and logically coherent",
             "implausible or incoherent cause/effect relationship",
             "incompatible subject-predicate semantic roles",
@@ -272,6 +300,20 @@ class StructurePromptTests(unittest.TestCase):
         }.items():
             with self.subTest(schema=schema_name):
                 actual_hash = hashlib.sha256((Path("structure/schemas") / schema_name).read_bytes()).hexdigest()
+                self.assertEqual(actual_hash, expected_hash)
+
+    def test_planner_validation_and_pipeline_boundaries_remain_unchanged(self) -> None:
+        expected_hashes = {
+            "structure/planner.py": "14dfb5e994df7cd1396710d543f0397eef9bd8c67e00a282e891be50ca7003ca",
+            "structure/profile.json": "f72612c4aa64b22d1910b812d598839f069cb50c43805354448e4d8af1fb8671",
+            "structure/contracts.py": "1ee03109636d96d332c39b640786fdaaa6651350e87bebc0af3c3c2d95729f70",
+            "structure/pipeline.py": "9dcd003d6279f8240b476de9bc2c59d36c7846760c85479de8edcf88389ccc2b",
+            "structure/blinding.py": "b39dcdad846adda25d46784c5d75b75e49f5b01d44df75a011bfe2c96546b351",
+            "structure/permutation.py": "1efdba8054a14540ba838e31c2b57401faf97770c6da3ea14ea9850cc8c31b42",
+        }
+        for relative_path, expected_hash in expected_hashes.items():
+            with self.subTest(path=relative_path):
+                actual_hash = hashlib.sha256(Path(relative_path).read_bytes()).hexdigest()
                 self.assertEqual(actual_hash, expected_hash)
 
 

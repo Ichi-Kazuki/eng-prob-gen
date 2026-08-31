@@ -116,6 +116,17 @@ revisions; do not add regeneration.
   `whose` is intended, require the possessive relationship syntactically,
   normally with a following noun. Do not enforce a purely prescriptive
   who/whom distinction where ordinary modern standard English accepts both.
+- **NONFINITE_VERB_PHRASES: ordinal/superlative noun + infinitive:** When the
+  intended construction is an infinitive modifying an ordinal, superlative,
+  `only`, or similar noun phrase (for example, `the first/second/only/best ...
+  to ...`), do not use an `-ing` participial form as a distractor if it can
+  independently form a grammatical reduced relative/participial modifier. Do
+  not use a past participle if it can independently create another grammatical
+  reduced relative. Do not assume that an alternative nonfinite form is invalid
+  merely because it does not express the intended ordinal/superlative
+  infinitive relationship. Construct distractors whose local morphology or
+  syntax creates a definite structural defect rather than another valid
+  modifier analysis.
 - **Appositive / word order:** A wrong-order distractor must actually be
   structurally defective. Do not use a different but grammatical possessive
   noun phrase or attachment merely because its meaning is odd.

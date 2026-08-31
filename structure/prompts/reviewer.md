@@ -27,6 +27,26 @@ threat to uniqueness. In particular, do not reject object-position `who` solely
 because traditional prescriptive grammar prefers `whom`; if both are
 acceptable in the actual construction, uniqueness is threatened.
 
+Apply the who/whom distinction by structural position, not as a general style
+preference:
+
+- **Bare object position (bare object relative position):** In `the researcher
+  who I consulted`, `who` may be acceptable in modern standard written English.
+  Do not impose a purely prescriptive `whom` rule; `who` remains potentially
+  `VALID` when the actual construction supports it.
+- **Immediately after a fronted preposition (fronted-preposition relative
+  position):** In `the researcher with whom I collaborated`, a human antecedent
+  requires the objective relative form `whom`; for a human antecedent, `whom`
+  is the standard written-English form in the target construction. Do not mark
+  `preposition + who` (`with who`, `to who`, `for who`, etc.) `VALID` merely
+  because colloquial speech may contain it; it is not an equally valid
+  standard-written-English alternative here. This is a structural case rule
+  for the pronoun immediately governed by the fronted preposition, not a
+  general style preference.
+- Do not globally prohibit stranded-preposition constructions such as `the
+  researcher who I collaborated with`; they are not invalid solely because a
+  fronted-preposition construction is available.
+
 Evaluate `natural_wording` beyond grammatical syntax. The best completed
 sentence must also be semantically and logically coherent and natural in
 ordinary academic/general-interest written English. Mark `natural_wording`
