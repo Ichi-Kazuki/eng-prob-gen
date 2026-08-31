@@ -20,8 +20,15 @@ from structure.contracts import (
     validate_solver_contract,
 )
 from structure.permutation import PERMUTATION_VERSION, permute_generator_output
-from structure.pipeline import StructurePipeline
+from structure.pipeline import AGENT_PATHS, GENERATOR_AGENT, REVIEWER_AGENT, SOLVER_AGENT, StructurePipeline
 from structure.planner import CLAUSE_COUNT_WEIGHTS, LENGTH_BINS, PRIMARY_TARGET_WEIGHTS, build_plan, load_profile
+from runtime.codex_schema import build_codex_transport_schema
+from shared.schema_validation import load_schema, schema_errors
+
+
+ROOT = Path(__file__).resolve().parents[1]
+STRUCTURE_ITEM_SCHEMA = ROOT / "structure" / "schemas" / "generator_item.schema.json"
+STRUCTURE_OUTPUT_SCHEMA = ROOT / "structure" / "schemas" / "generator_output.schema.json"
 
 
 def generator_fixture(plan: dict[str, Any]) -> dict[str, Any]:
@@ -122,6 +129,44 @@ class StructurePlannerTests(unittest.TestCase):
 
 
 class StructurePromptTests(unittest.TestCase):
+    @staticmethod
+    def parse_frontmatter(path: Path) -> tuple[dict[str, str], str]:
+        lines = path.read_text(encoding="utf-8").splitlines()
+        if not lines or lines[0] != "---":
+            raise AssertionError(f"{path} does not start with YAML frontmatter")
+        try:
+            closing = lines.index("---", 1)
+        except ValueError as exc:
+            raise AssertionError(f"{path} does not close its YAML frontmatter") from exc
+
+        metadata: dict[str, str] = {}
+        for line in lines[1:closing]:
+            key, separator, value = line.partition(":")
+            if not separator or not key or not value.strip():
+                raise AssertionError(f"invalid scalar YAML frontmatter line in {path}: {line!r}")
+            value = value.strip()
+            if value.startswith('"') or value.endswith('"'):
+                if not (value.startswith('"') and value.endswith('"')):
+                    raise AssertionError(f"invalid quoted YAML frontmatter value in {path}: {line!r}")
+                value = json.loads(value)
+            metadata[key] = value
+        return metadata, "\n".join(lines[closing + 1:])
+
+    def test_structure_agent_definitions_have_matching_toolless_frontmatter(self) -> None:
+        expected = {
+            GENERATOR_AGENT: (AGENT_PATHS[GENERATOR_AGENT], "# Structure v0.1 Generator"),
+            REVIEWER_AGENT: (AGENT_PATHS[REVIEWER_AGENT], "# Structure v0.1 Blind Reviewer"),
+            SOLVER_AGENT: (AGENT_PATHS[SOLVER_AGENT], "# Structure v0.1 Blind Solver"),
+        }
+        for agent_name, (path, content_marker) in expected.items():
+            with self.subTest(agent=agent_name):
+                frontmatter, content = self.parse_frontmatter(path)
+                self.assertEqual(set(frontmatter), {"name", "description", "tools"})
+                self.assertEqual(frontmatter["name"], agent_name)
+                self.assertTrue(frontmatter["description"])
+                self.assertEqual(frontmatter["tools"], "")
+                self.assertIn(content_marker, content)
+
     def test_generator_prompt_uses_all_planner_construction_targets(self) -> None:
         prompt = Path("structure/prompts/generator.md").read_text(encoding="utf-8")
         for field in ("primary_target", "difficulty", "clause_count", "sentence_length_bin", "target_word_count"):
@@ -157,6 +202,32 @@ class StructurePermutationTests(unittest.TestCase):
 
 
 class StructureContractTests(unittest.TestCase):
+    def test_structure_stem_pattern_survives_codex_transport(self) -> None:
+        item_schema = load_schema(STRUCTURE_ITEM_SCHEMA)
+        output_schema = load_schema(STRUCTURE_OUTPUT_SCHEMA)
+        self.assertEqual(item_schema["properties"]["stem"]["pattern"], "____")
+        self.assertEqual(output_schema["$defs"]["item"]["properties"]["stem"]["pattern"], "____")
+
+        transport_schema = build_codex_transport_schema(STRUCTURE_OUTPUT_SCHEMA)
+        self.assertEqual(transport_schema["$defs"]["item"]["properties"]["stem"]["pattern"], "____")
+        self.assertEqual(schema_errors(generator_fixture(build_plan(39)), output_schema), [])
+
+    def test_structure_stem_requires_exactly_one_blank_marker(self) -> None:
+        plan = build_plan(46)
+        cases = (
+            ("The researcher examined the documented pattern.", False),
+            ("The researcher ____ examined the ____ pattern.", False),
+            ("The researcher ____ examined the documented pattern.", True),
+        )
+        for stem, valid in cases:
+            with self.subTest(stem=stem):
+                output = generator_fixture(plan)
+                output["items"][0]["stem"] = stem
+                errors = validate_generator_contract(output, plan)
+                self.assertEqual(not errors, valid)
+                if not valid:
+                    self.assertTrue(any("stem must contain exactly one '____' blank marker" in error for error in errors))
+
     def test_generator_owns_nonempty_free_form_vocabulary_domain(self) -> None:
         plan = build_plan(40)
         output = generator_fixture(plan)
@@ -233,6 +304,7 @@ class StructurePipelineTests(unittest.TestCase):
         self.assertEqual(result["decision"], "ACCEPT")
         self.assertEqual(result["live_invocation_count"], 3)
         self.assertEqual([request.stage for request in runtime.requests], ["structure_generator", "structure_reviewer", "structure_solver"])
+        self.assertEqual([request.agent_name for request in runtime.requests], [GENERATOR_AGENT, REVIEWER_AGENT, SOLVER_AGENT])
         self.assertEqual(sorted(result["final_answer_position_distribution"].values()), [3, 4, 4, 4])
 
     def test_one_defective_item_quarantines_the_whole_set(self) -> None:
