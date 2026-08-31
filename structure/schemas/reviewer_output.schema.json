@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "structure-reviewer-output-v0.1.schema.json",
+  "title": "Structure v0.1 blind Reviewer output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item_id", "option_judgments", "best_answer", "natural_wording", "serious_defect", "comment"],
+        "properties": {
+          "item_id": {"type": "string", "minLength": 1},
+          "option_judgments": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["A", "B", "C", "D"],
+            "properties": {
+              "A": {"enum": ["VALID", "INVALID", "MARGINAL"]},
+              "B": {"enum": ["VALID", "INVALID", "MARGINAL"]},
+              "C": {"enum": ["VALID", "INVALID", "MARGINAL"]},
+              "D": {"enum": ["VALID", "INVALID", "MARGINAL"]}
+            }
+          },
+          "best_answer": {"enum": ["A", "B", "C", "D", "AMBIGUOUS", "NONE"]},
+          "natural_wording": {"type": "boolean"},
+          "serious_defect": {"type": "boolean"},
+          "comment": {"type": "string"}
+        }
+      }
+    }
+  }
+}

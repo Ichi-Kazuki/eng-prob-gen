@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "structure-reviewer-input-v0.1.schema.json",
+  "title": "Structure v0.1 blind Reviewer input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item_id", "section", "stem", "options"],
+        "properties": {
+          "item_id": {"type": "string", "minLength": 1},
+          "section": {"const": "Structure"},
+          "stem": {"type": "string", "minLength": 1},
+          "options": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["A", "B", "C", "D"],
+            "properties": {
+              "A": {"type": "string", "minLength": 1},
+              "B": {"type": "string", "minLength": 1},
+              "C": {"type": "string", "minLength": 1},
+              "D": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  }
+}

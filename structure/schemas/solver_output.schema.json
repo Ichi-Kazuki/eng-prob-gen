@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "structure-solver-output-v0.1.schema.json",
+  "title": "Structure v0.1 blind Solver output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item_id", "answer", "confidence", "reason"],
+        "properties": {
+          "item_id": {"type": "string", "minLength": 1},
+          "answer": {"enum": ["A", "B", "C", "D", "AMBIGUOUS", "NONE"]},
+          "confidence": {"enum": ["HIGH", "MEDIUM", "LOW"]},
+          "reason": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

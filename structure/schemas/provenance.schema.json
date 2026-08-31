@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "structure-provenance-v0.1.schema.json",
+  "title": "Structure v0.1 provenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "version", "run_id", "seed", "provider", "model", "invocations", "invocation_ids", "invocation_count", "deterministic_validation", "answer_position_permutation", "blind_inputs", "reviewer_solver_agreement", "leakage", "fallback", "runtime_failures", "artifact_hashes"],
+  "properties": {
+    "schema_version": {"const": "structure-provenance-v0.1"},
+    "version": {"const": "v0.1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "seed": {"type": "integer", "minimum": 0},
+    "provider": {"type": "string"},
+    "model": {"type": "string"},
+    "invocations": {"type": "array"},
+    "invocation_ids": {"type": "array", "items": {"type": "string"}},
+    "invocation_count": {"type": "integer", "minimum": 0},
+    "logical_invocation_counts": {"type": "object"},
+    "deterministic_validation": {"type": "object"},
+    "answer_position_permutation": {"type": ["object", "null"]},
+    "blind_inputs": {"type": "object"},
+    "reviewer_solver_agreement": {"type": "object"},
+    "leakage": {"type": "object"},
+    "fallback": {"type": "object"},
+    "runtime_failures": {"type": "array"},
+    "artifact_hashes": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}}
+  }
+}
