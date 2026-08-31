@@ -18,7 +18,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["item_id", "order", "section", "primary_target", "subtype", "difficulty", "vocabulary_domain", "clause_count", "sentence_length_bin", "target_word_count"],
+        "required": ["item_id", "order", "section", "primary_target", "subtype", "difficulty", "clause_count", "sentence_length_bin", "target_word_count"],
         "properties": {
           "item_id": {"type": "string", "minLength": 1},
           "order": {"type": "integer", "minimum": 1, "maximum": 15},
@@ -26,7 +26,6 @@
           "primary_target": {"type": "string", "minLength": 1},
           "subtype": {"type": "string", "minLength": 1},
           "difficulty": {"enum": ["EASY", "MEDIUM", "HARD"]},
-          "vocabulary_domain": {"type": "string", "minLength": 1},
           "clause_count": {"enum": [1, 2, 3, 4]},
           "sentence_length_bin": {
             "type": "object",

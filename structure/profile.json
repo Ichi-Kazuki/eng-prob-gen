@@ -108,28 +108,5 @@
       "article selection"
     ],
     "WORD_CLASS_FORM": []
-  },
-  "vocabulary_domains": [
-    "biology",
-    "geology",
-    "astronomy",
-    "anthropology",
-    "history",
-    "ecology",
-    "technology",
-    "earth science",
-    "archaeology",
-    "psychology",
-    "sociology",
-    "linguistics",
-    "economics",
-    "geography",
-    "architecture",
-    "art history",
-    "visual arts",
-    "music",
-    "communication",
-    "education",
-    "environmental science"
-  ]
+  }
 }

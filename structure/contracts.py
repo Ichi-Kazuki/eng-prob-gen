@@ -62,9 +62,6 @@ def validate_plan(plan: Any) -> list[str]:
     expected_targets = set(load_profile()["primary_target_weights"])
     if any(item["primary_target"] not in expected_targets for item in plan["items"]):
         errors.append("plan: primary_target is outside the Structure profile")
-    expected_domains = set(load_profile()["vocabulary_domains"])
-    if any(item["vocabulary_domain"] not in expected_domains for item in plan["items"]):
-        errors.append("plan: vocabulary_domain is outside the abstract domain pool")
     expected_ids = [f"structure-v01-{plan['seed']:016x}-{order:02d}" for order in range(1, 16)]
     actual_ids = [item["item_id"] for item in plan["items"]]
     if actual_ids != expected_ids:

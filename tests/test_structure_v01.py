@@ -21,14 +21,14 @@ from structure.contracts import (
 )
 from structure.permutation import PERMUTATION_VERSION, permute_generator_output
 from structure.pipeline import StructurePipeline
-from structure.planner import CLAUSE_COUNT_WEIGHTS, LENGTH_BINS, PRIMARY_TARGET_WEIGHTS, VOCABULARY_DOMAINS, build_plan
+from structure.planner import CLAUSE_COUNT_WEIGHTS, LENGTH_BINS, PRIMARY_TARGET_WEIGHTS, build_plan, load_profile
 
 
 def generator_fixture(plan: dict[str, Any]) -> dict[str, Any]:
     return {"items": [{
         "item_id": planned["item_id"], "section": "Structure", "primary_target": planned["primary_target"],
         "subtype": planned["subtype"], "secondary_features": ["academic register"],
-        "difficulty": planned["difficulty"], "vocabulary_domain": planned["vocabulary_domain"],
+        "difficulty": planned["difficulty"], "vocabulary_domain": f"generator-owned domain {index + 1}",
         "stem": "The researcher ____ the documented pattern in the archive.",
         "options": {"A": "is", "B": "are", "C": "be", "D": "being"}, "correct_answer": "A",
         "answer_explanation": "The singular subject requires the finite form is.",
@@ -36,7 +36,7 @@ def generator_fixture(plan: dict[str, Any]) -> dict[str, Any]:
             "A": "Correct singular finite completion.", "B": "Plural agreement is incorrect.",
             "C": "The base form cannot fill this finite slot.", "D": "The participle cannot fill this finite slot.",
         },
-    } for planned in plan["items"]]}
+    } for index, planned in enumerate(plan["items"])]}
 
 
 def reviewer_fixture(blind: dict[str, Any], *, first_best: str | None = None, natural: bool = True, serious: bool = False) -> dict[str, Any]:
@@ -103,15 +103,37 @@ class StructurePlannerTests(unittest.TestCase):
         plan = build_plan(91)
         self.assertEqual(len(plan["items"]), 15)
         self.assertEqual(validate_plan(plan), [])
+        self.assertNotIn("vocabulary_domains", load_profile())
+        self.assertTrue(all("vocabulary_domain" not in item for item in plan["items"]))
         self.assertTrue(all(item["primary_target"] in PRIMARY_TARGET_WEIGHTS for item in plan["items"]))
         self.assertNotIn("WORD_CLASS_FORM", {item["primary_target"] for item in plan["items"]})
-        self.assertTrue(all(item["vocabulary_domain"] in VOCABULARY_DOMAINS for item in plan["items"]))
         self.assertTrue(all(item["clause_count"] in CLAUSE_COUNT_WEIGHTS for item in plan["items"]))
         self.assertEqual(CLAUSE_COUNT_WEIGHTS, {1: 27, 2: 37, 3: 10, 4: 1})
         for item in plan["items"]:
             self.assertGreaterEqual(item["target_word_count"], item["sentence_length_bin"]["minimum"])
             self.assertLessEqual(item["target_word_count"], item["sentence_length_bin"]["maximum"])
         self.assertEqual([(entry["minimum"], entry["maximum"]) for entry in LENGTH_BINS], [(10, 14), (15, 19), (20, 24), (25, 27)])
+
+    def test_plan_schema_does_not_own_vocabulary_domain(self) -> None:
+        schema = json.loads(Path("structure/schemas/plan.schema.json").read_text(encoding="utf-8"))
+        item_schema = schema["properties"]["items"]["items"]
+        self.assertNotIn("vocabulary_domain", item_schema["required"])
+        self.assertNotIn("vocabulary_domain", item_schema["properties"])
+
+
+class StructurePromptTests(unittest.TestCase):
+    def test_generator_prompt_uses_all_planner_construction_targets(self) -> None:
+        prompt = Path("structure/prompts/generator.md").read_text(encoding="utf-8")
+        for field in ("primary_target", "difficulty", "clause_count", "sentence_length_bin", "target_word_count"):
+            with self.subTest(field=field):
+                self.assertIn(f"`{field}`", prompt)
+        self.assertIn("choose `vocabulary_domain` while authoring", prompt)
+        self.assertIn("not a\n  value selected from a closed Structure domain enum or pool", prompt)
+        self.assertIn("missing_required_element", prompt)
+        self.assertIn("extraneous_element", prompt)
+        self.assertIn("wrong_word_order", prompt)
+        self.assertIn("fragment", prompt)
+        self.assertIn("Do not review, score, self-review,", prompt)
 
 
 class StructurePermutationTests(unittest.TestCase):
@@ -135,6 +157,20 @@ class StructurePermutationTests(unittest.TestCase):
 
 
 class StructureContractTests(unittest.TestCase):
+    def test_generator_owns_nonempty_free_form_vocabulary_domain(self) -> None:
+        plan = build_plan(40)
+        output = generator_fixture(plan)
+        output["items"][0]["vocabulary_domain"] = "quantum textile conservation and civic data"
+        self.assertEqual(validate_generator_contract(output, plan), [])
+
+        missing = copy.deepcopy(output)
+        del missing["items"][0]["vocabulary_domain"]
+        self.assertTrue(any("vocabulary_domain" in error for error in validate_generator_contract(missing, plan)))
+
+        blank = copy.deepcopy(output)
+        blank["items"][0]["vocabulary_domain"] = ""
+        self.assertTrue(any("vocabulary_domain" in error for error in validate_generator_contract(blank, plan)))
+
     def test_duplicate_option_and_unicode_surface_detection(self) -> None:
         self.assertEqual(normalized_option_surface("  Cafe" + chr(0x301) + "  "), normalized_option_surface("cafe" + chr(0x301)))
         output = generator_fixture(build_plan(41))

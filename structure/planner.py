@@ -44,7 +44,6 @@ def _mapping(name: str) -> dict[str, int]:
 PRIMARY_TARGET_WEIGHTS = _mapping("primary_target_weights")
 DIFFICULTY_WEIGHTS = _mapping("difficulty_weights")
 CLAUSE_COUNT_WEIGHTS = {int(key): value for key, value in _mapping("clause_count_weights").items()}
-VOCABULARY_DOMAINS = tuple(load_profile().get("vocabulary_domains", ()))
 TARGET_SUBTYPES = load_profile().get("target_subtypes", {})
 LENGTH_BINS = tuple(load_profile().get("sentence_length_bins", ()))
 
@@ -56,8 +55,6 @@ def _validate_profile() -> None:
         raise ValueError("Structure difficulty weights must sum to 75")
     if sum(CLAUSE_COUNT_WEIGHTS.values()) != 75:
         raise ValueError("Structure clause-count weights must sum to 75")
-    if not VOCABULARY_DOMAINS or any(not isinstance(domain, str) or not domain.strip() for domain in VOCABULARY_DOMAINS):
-        raise ValueError("Structure profile must contain a usable vocabulary-domain pool")
     if len(LENGTH_BINS) != 4:
         raise ValueError("Structure profile must contain four sentence-length bins")
     for length_bin in LENGTH_BINS:
@@ -108,7 +105,6 @@ def _plan_item(rng: random.Random, seed: int, order: int) -> dict[str, Any]:
     clause_count = weighted_choice(rng, CLAUSE_COUNT_WEIGHTS)
     length_bin, target_word_count = _sample_length(rng)
     subtype_pool = TARGET_SUBTYPES[primary_target]
-    domain = rng.choice(VOCABULARY_DOMAINS)
     return {
         "item_id": f"structure-v01-{seed:016x}-{order:02d}",
         "order": order,
@@ -116,7 +112,6 @@ def _plan_item(rng: random.Random, seed: int, order: int) -> dict[str, Any]:
         "primary_target": primary_target,
         "subtype": rng.choice(subtype_pool),
         "difficulty": difficulty,
-        "vocabulary_domain": domain,
         "clause_count": clause_count,
         "sentence_length_bin": length_bin,
         "target_word_count": target_word_count,
