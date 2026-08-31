@@ -181,6 +181,22 @@ class StructurePromptTests(unittest.TestCase):
         self.assertIn("fragment", prompt)
         self.assertIn("Do not review, score, self-review,", prompt)
 
+    def test_generator_prompt_requires_whole_completion_coherence(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "Before authoring each item, ensure that literal insertion of the intended correct option into the blank produces one coherent complete sentence.",
+            "must not duplicate or substantially repeat material already present elsewhere in the stem",
+            "Do not repeat the same list, phrase, complement, subject, predicate, or modifier both inside the option and after/before the blank.",
+            "Account for punctuation and continuation after the blank",
+            "colons, semicolons, commas, appositives, lists, relative clauses, complements",
+            "locally grammatical is not sufficient if its insertion creates redundancy",
+            "structural collision, duplicated content, or an unnatural complete sentence",
+            "Evaluate distractors likewise as insertions into the entire stem, not as isolated strings.",
+            "This is an authoring rule only, not a self-review stage.",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
     def test_generator_prompt_distinguishes_invalidity_from_rescuable_variation(self) -> None:
         prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
         for phrase in (
@@ -284,16 +300,48 @@ class StructurePromptTests(unittest.TestCase):
             "serious_defect=true",
             "substantial semantic/naturalness defect",
             "do not rewrite the item",
+            "including all text before AND after the blank",
+            "duplicated or repeated material",
+            "repeated lists or complements",
+            "redundantly reproduces material already present later or earlier in the stem",
+            "structural collisions caused by punctuation or continuation after the blank",
+            "locally grammatical option that makes the full completed sentence materially unnatural or redundant",
+            "`natural_wording=false` and `serious_defect=true`",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
 
-    def test_solver_prompt_and_contract_remain_unchanged(self) -> None:
-        solver_prompt = Path("structure/prompts/solver.md").read_bytes()
-        self.assertEqual(
-            hashlib.sha256(solver_prompt).hexdigest(),
-            "c3a67804621efef18fa706845959921afd95725f12157d6bfed249c273e54593",
-        )
+    def test_solver_prompt_has_only_narrow_whole_sentence_clarification(self) -> None:
+        solver_prompt = " ".join(Path("structure/prompts/solver.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "literally insert it into the `____` blank",
+            "judge the resulting complete sentence, including all text before AND after the blank",
+            "Do not select an option merely because the option itself or the local phrase around the blank is grammatical.",
+            "Reject an interpretation when insertion creates an obvious structural collision, duplicated required material, or a completion that is not a coherent complete sentence.",
+            "Return `AMBIGUOUS` for two or more acceptable completions",
+            "and `NONE` when no acceptable completion exists",
+            "Report `HIGH`, `MEDIUM`, or `LOW` confidence",
+            "Do not force a guess.",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, solver_prompt)
+        for forbidden in (
+            "noun clause",
+            "That-clause",
+            "finite-predicate",
+            "finite predicate",
+            "complementizer",
+            "target-specific",
+            "adjacent or competing finite predicates",
+            "missing complementizer or coordinator",
+            "Before concluding that an inserted phrase or clause functions as",
+            "nominalized finite clause",
+            "bare independent clause followed immediately by another finite predicate",
+        ):
+            with self.subTest(forbidden=forbidden):
+                self.assertNotIn(forbidden, solver_prompt)
+
+    def test_solver_contract_remains_unchanged(self) -> None:
         for schema_name, expected_hash in {
             "solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
             "solver_output.schema.json": "1e791bb296e808bff2fe25d6d94db22602aa3f68211b3691b967b26be43f4937",

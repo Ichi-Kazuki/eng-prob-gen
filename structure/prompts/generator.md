@@ -44,6 +44,19 @@ distractors.
 
 ## Correct-completion naturalness
 
+Before authoring each item, ensure that literal insertion of the intended
+correct option into the blank produces one coherent complete sentence. The
+correct option must not duplicate or substantially repeat material already
+present elsewhere in the stem. Do not repeat the same list, phrase,
+complement, subject, predicate, or modifier both inside the option and
+after/before the blank. Account for punctuation and continuation after the
+blank, including colons, semicolons, commas, appositives, lists, relative
+clauses, complements, and other material. An option that is locally
+grammatical is not sufficient if its insertion creates redundancy, a
+structural collision, duplicated content, or an unnatural complete sentence.
+Evaluate distractors likewise as insertions into the entire stem, not as
+isolated strings. This is an authoring rule only, not a self-review stage.
+
 The completed sentence produced by the intended correct option MUST be
 grammatically acceptable, semantically coherent, logically coherent, and
 natural in ordinary academic/general-interest written English. Do not create
