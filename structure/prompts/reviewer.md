@@ -37,6 +37,18 @@ threat to uniqueness. In particular, do not reject object-position `who` solely
 because traditional prescriptive grammar prefers `whom`; if both are
 acceptable in the actual construction, uniqueness is threatened.
 
+For connector/preposition versus conjunction items, explicitly verify the full
+syntactic complement after insertion through the end of the relevant
+clause/phrase. Distinguish a subordinating conjunction plus a complete finite
+clause from a preposition or prepositional connector plus an appropriate
+nominal or gerund complement. Do not mark `because of + NP` VALID merely because
+the immediate words after `of` initially look like a noun phrase if a following
+finite predicate makes the completed construction invalid; for example,
+`because of heavy snowfall blocked the pass` is not valid. Do not stop the
+analysis at the initial noun phrase when later finite syntax changes the full
+complement. Judge the COMPLETE inserted sentence through the end of the
+relevant clause or phrase.
+
 Apply the who/whom distinction by structural position, not as a general style
 preference:
 

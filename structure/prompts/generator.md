@@ -68,6 +68,17 @@ that naturally take propositions, facts, judgments, consequences, beliefs,
 findings, or similar abstract subjects; do not force an awkward physical-agent
 interpretation.
 
+## Position-agnostic explanations and rationales
+
+All natural-language explanation and rationale prose must be answer-position
+agnostic. `answer_explanation` MUST never identify an option by A/B/C/D. Do not
+write phrases such as "A is correct", "option B", "choice C", or "answer D".
+Explain the grammatical construction by referring to the actual word, phrase,
+form, or grammatical role instead. Apply the same rule to the prose values of
+`distractor_rationales`. The rationale object keys remain the schema-required
+A-D option labels; only their prose values must avoid embedded answer-position
+references.
+
 ## Distractor uniqueness standard
 
 For Structure Part A, each distractor must make the completed sentence clearly
@@ -129,6 +140,15 @@ revisions; do not add regeneration.
   `whose` is intended, require the possessive relationship syntactically,
   normally with a following noun. Do not enforce a purely prescriptive
   who/whom distinction where ordinary modern standard English accepts both.
+  When constructing a fronted `preposition + whom/which` sequence, the
+  preposition must be lexically and syntactically licensed by the governing
+  predicate, adjective, noun, or other construction inside the relative clause.
+  For example, `collaborate with` requires `with whom`, `rely on` requires `on
+  whom`, and `refer to` requires `to which` or `to whom` where appropriate. Do
+  not choose a preposition merely to create a `preposition + whom` surface form.
+  Verify that the completed relative clause is grammatical independently of
+  the pronoun-case contrast. When the planned target is relative-pronoun
+  selection, do not introduce a separate fixed-preposition defect in the stem.
 - **NONFINITE_VERB_PHRASES: ordinal/superlative noun + infinitive:** When the
   intended construction is an infinitive modifying an ordinal, superlative,
   `only`, or similar noun phrase (for example, `the first/second/only/best ...
@@ -149,12 +169,60 @@ revisions; do not add regeneration.
   predicate-argument combinations that require treating an abstract proposition
   as an implausible physical agent.
 
+- **CONNECTORS_CONJUNCTIONS: connector complement type:** When selecting a
+  connector, inspect the syntactic category of ALL material governed by it,
+  especially in contrasts such as `because` / `because of`, `although` /
+  `despite` / `in spite of`, and conjunction versus preposition. A subordinating
+  conjunction must introduce a complete finite clause when that construction
+  requires one. A preposition or prepositional connector must take an
+  appropriate nominal or gerund-type complement and must not leave a following
+  finite predicate stranded inside the same supposed complement. Do not stop at
+  the first noun phrase if later text changes the constituent into a finite
+  clause: `because of heavy snowfall blocked the pass` is invalid because the
+  full remainder after `of` is a finite clause, not a nominal complement. The
+  correct insertion must make the entire sentence grammatical through the end
+  of the connector's complement. Do not create a connector item by splitting a
+  multiword expression across stem and option unless the complete remainder is
+  structurally compatible with the resulting expression.
+
+## Difficulty fidelity
+
+Planned `difficulty` is a genuine construction target, not metadata only. Use
+these operational principles without creating a new taxonomy:
+
+- **EASY:** Use one relatively local, direct grammatical cue. Distractors may
+  reflect common basic form or order errors, and little structural dependency
+  should be needed.
+- **MEDIUM:** Require analysis across a larger phrase or clause, or interaction
+  of more than one grammatical cue. Distractors should remain plausible enough
+  that simple surface matching is insufficient.
+- **HARD:** Require a genuinely longer-distance or structurally richer
+  dependency, interaction between grammatical features, or highly plausible
+  structurally motivated distractors. The item must require more than a basic
+  local subject-verb agreement check, a single-form check, or an obvious
+  word-order check.
+
+Do not make HARD difficult through rare vocabulary, obscure world knowledge,
+ambiguity, unnatural wording, or trick semantics. Difficulty must never
+override answer uniqueness, grammaticality, or naturalness.
+
 Each distractor must represent a real grammatical or structural confusion, be
 explainable in relation to the correct answer, use real English rather than
 nonsense, and not create a second defensible correct answer. Distractors should
 be realizable through the existing grammar-specification `tested_error_type`
 mechanisms, favoring (without using exclusively) `missing_required_element`,
 `extraneous_element`, `wrong_word_order`, and `fragment`.
+
+For every option, including the intended answer and each distractor, compare
+its lexical and structural content with the material immediately before and
+after the blank. Before emitting any distractor, do not include a phrase when
+the same phrase is already supplied by the stem and insertion would merely
+duplicate it. In particular, avoid `[X available] + X`, `[list X] + list X`,
+`[prepositional phrase X] + X`, and repeated
+complements or modifiers that remain grammatically rescuable despite
+redundancy. Every distractor must represent a definite grammar or structure
+defect, not merely awkward or redundant wording. This is a Generator
+authorship rule only; do not add deterministic text-overlap checking.
 
 Do not make a distractor eliminable only through rare vocabulary or outside
 knowledge. Avoid answer-length or style giveaways, including making the

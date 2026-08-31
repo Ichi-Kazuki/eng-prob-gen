@@ -197,6 +197,102 @@ class StructurePromptTests(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
 
+    def test_generator_prompt_requires_position_agnostic_explanations_and_rationales(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "All natural-language explanation and rationale prose must be answer-position agnostic.",
+            "`answer_explanation` MUST never identify an option by A/B/C/D.",
+            '"A is correct", "option B", "choice C", or "answer D"',
+            "actual word, phrase, form, or grammatical role",
+            "prose values of `distractor_rationales`",
+            "rationale object keys remain the schema-required A-D option labels",
+            "only their prose values must avoid embedded answer-position references",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+        item_schema = load_schema(STRUCTURE_ITEM_SCHEMA)
+        rationale_schema = item_schema["properties"]["distractor_rationales"]
+        self.assertEqual(set(rationale_schema["required"]), set(LETTERS))
+        self.assertEqual(set(rationale_schema["properties"]), set(LETTERS))
+
+    def test_generator_prompt_requires_relative_preposition_licensing(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "fronted `preposition + whom/which` sequence",
+            "lexically and syntactically licensed",
+            "governing predicate, adjective, noun, or other construction",
+            "`collaborate with` requires `with whom`",
+            "`rely on` requires `on whom`",
+            "`refer to` requires `to which` or `to whom`",
+            "not choose a preposition merely to create a `preposition + whom` surface form",
+            "completed relative clause is grammatical independently of the pronoun-case contrast",
+            "do not introduce a separate fixed-preposition defect in the stem",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_generator_prompt_requires_connector_whole_complement_compatibility(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "CONNECTORS_CONJUNCTIONS: connector complement type",
+            "`because` / `because of`",
+            "`although` / `despite` / `in spite of`",
+            "syntactic category of ALL material governed by it",
+            "complete finite clause",
+            "nominal or gerund-type complement",
+            "must not leave a following finite predicate stranded",
+            "Do not stop at the first noun phrase",
+            "full remainder after `of` is a finite clause, not a nominal complement",
+            "splitting a multiword expression across stem and option",
+            "complete remainder is structurally compatible",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_generator_prompt_requires_distractor_stem_duplication_avoidance(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "For every option, including the intended answer and each distractor",
+            "Before emitting any distractor",
+            "lexical and structural content",
+            "material immediately before and after the blank",
+            "same phrase is already supplied by the stem",
+            "`[X available] + X`",
+            "`[list X] + list X`",
+            "`[prepositional phrase X] + X`",
+            "repeated complements or modifiers that remain grammatically rescuable",
+            "definite grammar or structure defect, not merely awkward or redundant wording",
+            "deterministic text-overlap checking",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_generator_prompt_requires_difficulty_fidelity(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "Planned `difficulty` is a genuine construction target, not metadata only.",
+            "**EASY:**",
+            "one relatively local, direct grammatical cue",
+            "**MEDIUM:**",
+            "analysis across a larger phrase or clause",
+            "interaction of more than one grammatical cue",
+            "**HARD:**",
+            "genuinely longer-distance or structurally richer dependency",
+            "highly plausible structurally motivated distractors",
+            "more than a basic local subject-verb agreement check",
+            "a single-form check",
+            "an obvious word-order check",
+            "rare vocabulary",
+            "obscure world knowledge",
+            "ambiguity",
+            "unnatural wording",
+            "trick semantics",
+            "answer uniqueness, grammaticality, or naturalness",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
     def test_generator_prompt_distinguishes_invalidity_from_rescuable_variation(self) -> None:
         prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
         for phrase in (
@@ -307,6 +403,13 @@ class StructurePromptTests(unittest.TestCase):
             "structural collisions caused by punctuation or continuation after the blank",
             "locally grammatical option that makes the full completed sentence materially unnatural or redundant",
             "`natural_wording=false` and `serious_defect=true`",
+            "full syntactic complement after insertion",
+            "`because of + NP` VALID merely because",
+            "following finite predicate makes the completed construction invalid",
+            "subordinating conjunction plus a complete finite clause",
+            "preposition or prepositional connector plus an appropriate nominal or gerund complement",
+            "Do not stop the analysis at the initial noun phrase",
+            "Judge the COMPLETE inserted sentence through the end",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
@@ -342,6 +445,8 @@ class StructurePromptTests(unittest.TestCase):
                 self.assertNotIn(forbidden, solver_prompt)
 
     def test_solver_contract_remains_unchanged(self) -> None:
+        solver_prompt_hash = hashlib.sha256(Path("structure/prompts/solver.md").read_bytes()).hexdigest()
+        self.assertEqual(solver_prompt_hash, "112925abe56c70b7d8016a8554fa285ac4c633b80c508bafe2a493dc30f5a49f")
         for schema_name, expected_hash in {
             "solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
             "solver_output.schema.json": "1e791bb296e808bff2fe25d6d94db22602aa3f68211b3691b967b26be43f4937",
@@ -362,6 +467,23 @@ class StructurePromptTests(unittest.TestCase):
         for relative_path, expected_hash in expected_hashes.items():
             with self.subTest(path=relative_path):
                 actual_hash = hashlib.sha256(Path(relative_path).read_bytes()).hexdigest()
+                self.assertEqual(actual_hash, expected_hash)
+
+    def test_all_structure_schemas_remain_unchanged(self) -> None:
+        expected_hashes = {
+            "generator_item.schema.json": "229a8c39ca0daa2e79e516b0cc362eb740204fd5369252c478c79facaf857fff",
+            "generator_output.schema.json": "78ad5e758052928bf51f973cdc009ab103c4f535e243e6bd17b0631fb361b2dd",
+            "plan.schema.json": "6cd16610ec2f4f4b912f8700ff3a13e15faaa01a6dd25b07c85748cb081df4b5",
+            "provenance.schema.json": "b40718298ea487fb10ae4136f687b210e3b7b9aef5cd8413aa0ff9862273d2cf",
+            "result.schema.json": "819e373e730fbdc8c98d0557cf3c28cea99593830ee468c166afa17ee166f1cd",
+            "reviewer_input.schema.json": "8e5181664253967064a4c415377f5bc9f75a55e69984e54c01148d413d9e8b19",
+            "reviewer_output.schema.json": "10fc549d094f0bdbefba1a86095723855968da413192a9119a4059308704b69a",
+            "solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
+            "solver_output.schema.json": "1e791bb296e808bff2fe25d6d94db22602aa3f68211b3691b967b26be43f4937",
+        }
+        for schema_name, expected_hash in expected_hashes.items():
+            with self.subTest(schema=schema_name):
+                actual_hash = hashlib.sha256((Path("structure/schemas") / schema_name).read_bytes()).hexdigest()
                 self.assertEqual(actual_hash, expected_hash)
 
 
