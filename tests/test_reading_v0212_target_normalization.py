@@ -88,6 +88,43 @@ class ReadingV0212TargetNormalizationTests(unittest.TestCase):
                 self.assertEqual(question["target_line"], 3)
                 self.assertEqual(self._record(audit)["target_line_resolution"], "EVIDENCE_ANCHOR_SURFACE_MATCH")
 
+    def test_watersheds_style_anchor_offset_maps_target_from_full_paragraph(self) -> None:
+        output = self._output(target_text="that", target_line=15, paragraph=4)
+        output["passage"] = "\n\n".join(
+            (
+                "The first watershed paragraph establishes background conditions for the region and describes how seasonal rainfall changes the landscape over time. Researchers compare these patterns across many seasons to understand the basin. Long records help separate unusual events from ordinary variation in local weather.",
+                "The second watershed paragraph explains how soil texture, vegetation cover, and slope influence how quickly rainfall moves across the ground surface. These interacting features also affect the amount of water stored below ground. Their effects vary between neighboring parts of the same watershed.",
+                "The third watershed paragraph compares natural drainage with engineered channels and notes why connected waterways can carry runoff beyond the local basin. The comparison helps explain downstream changes after storms. It also shows why small land changes can alter a larger water system.",
+                "That nearby example matters. In densely developed watersheds, roads and roofs create surfaces that water cannot readily enter, increasing runoff and changing stream responses. These effects are especially visible after heavy rain, when the paved network sends water quickly toward channels.",
+            )
+        )
+        output["questions"][0]["stem"] = "The word 'that' in line 15 refers to"
+        output["questions"][0]["evidence"] = {
+            "paragraph": 4,
+            "anchor": "surfaces that water cannot readily enter",
+            "rationale": "The anchor supplies the local evidence.",
+        }
+        before = copy.deepcopy(output["questions"][0])
+
+        normalized, audit = normalize_target_line_metadata(output)
+
+        question = normalized["questions"][0]
+        self.assertEqual(question["target_line"], 17)
+        self.assertEqual(question["stem"], "The word 'that' in line 17 refers to")
+        self.assertEqual(self._record(audit)["target_line_resolution"], "EVIDENCE_ANCHOR_SURFACE_MATCH")
+        self.assertTrue(self._record(audit)["stem_line_normalized"])
+        self.assertEqual(self._record(audit)["matched_display_lines"], [16, 17])
+        for field in (
+            "target_text",
+            "choices",
+            "correct_answer",
+            "distractor_metadata",
+            "evidence",
+            "question_type",
+            "subtype",
+        ):
+            self.assertEqual(question[field], before[field], field)
+
     def test_anchor_derived_line_rewrites_only_the_existing_safe_stem_number(self) -> None:
         output = self._output(question_type="VOCABULARY_IN_CONTEXT")
         normalized, audit = normalize_target_line_metadata(output)

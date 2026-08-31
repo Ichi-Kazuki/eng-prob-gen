@@ -781,6 +781,36 @@ def _surface_text_with_source_offsets(value: str) -> tuple[str, list[tuple[int, 
     return "".join(surface_chars), surface_offsets
 
 
+def _normalized_text_with_source_offsets(value: str) -> tuple[str, list[tuple[int, int]]]:
+    """Return ``_normalized_text(value)`` plus source spans for each character."""
+
+    collapsed_chars: list[str] = []
+    collapsed_offsets: list[tuple[int, int]] = []
+    for match in re.finditer(r"\s+|[^\s]+", value, flags=re.UNICODE):
+        if match.group(0).isspace():
+            collapsed_chars.append(" ")
+            collapsed_offsets.append((match.start(), match.end()))
+            continue
+        for source_index in range(match.start(), match.end()):
+            collapsed_chars.append(value[source_index])
+            collapsed_offsets.append((source_index, source_index + 1))
+
+    left = 0
+    right = len(collapsed_chars)
+    while left < right and collapsed_chars[left].isspace():
+        left += 1
+    while right > left and collapsed_chars[right - 1].isspace():
+        right -= 1
+
+    normalized_chars: list[str] = []
+    normalized_offsets: list[tuple[int, int]] = []
+    for char, source_span in zip(collapsed_chars[left:right], collapsed_offsets[left:right]):
+        folded = char.casefold()
+        normalized_chars.extend(folded)
+        normalized_offsets.extend(source_span for _ in folded)
+    return "".join(normalized_chars), normalized_offsets
+
+
 def _substring_spans(text: str, substring: str) -> list[tuple[int, int]]:
     """Return all exact, including overlapping, substring spans."""
 
@@ -855,15 +885,29 @@ def _target_line_from_evidence_anchor(
 
     paragraph = paragraphs[paragraph_number - 1]
     normalized_anchor = _normalized_text(anchor)
-    anchor_spans = _substring_spans(_normalized_text(paragraph), normalized_anchor)
+    normalized_paragraph, normalized_offsets = _normalized_text_with_source_offsets(paragraph)
+    anchor_spans = _substring_spans(normalized_paragraph, normalized_anchor)
     if len(anchor_spans) != 1:
         return None
-    anchor_start, anchor_end = anchor_spans[0]
-    anchor_occurrence = paragraph[anchor_start:anchor_end]
-    target_spans = _surface_expression_source_spans(anchor_occurrence, target_text)
-    if len(target_spans) != 1:
+    normalized_anchor_start, normalized_anchor_end = anchor_spans[0]
+    if (
+        normalized_anchor_start >= len(normalized_offsets)
+        or normalized_anchor_end > len(normalized_offsets)
+        or normalized_anchor_start >= normalized_anchor_end
+    ):
         return None
-    target_start, target_end = target_spans[0]
+    anchor_start = normalized_offsets[normalized_anchor_start][0]
+    anchor_end = normalized_offsets[normalized_anchor_end - 1][1]
+
+    target_spans = _surface_expression_source_spans(paragraph, target_text)
+    contained_target_spans = [
+        (target_start, target_end)
+        for target_start, target_end in target_spans
+        if anchor_start <= target_start and target_end <= anchor_end
+    ]
+    if len(contained_target_spans) != 1:
+        return None
+    target_start, target_end = contained_target_spans[0]
 
     line_ranges = _display_line_ranges(paragraph)
     local_lines = [
