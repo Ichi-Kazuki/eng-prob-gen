@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import tempfile
 import unittest
@@ -179,6 +180,99 @@ class StructurePromptTests(unittest.TestCase):
         self.assertIn("wrong_word_order", prompt)
         self.assertIn("fragment", prompt)
         self.assertIn("Do not review, score, self-review,", prompt)
+
+    def test_generator_prompt_distinguishes_invalidity_from_rescuable_variation(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "clearly unacceptable in the",
+            "less likely",
+            "less idiomatic",
+            "less formal",
+            "more informal",
+            "semantically different",
+            "contextually less expected",
+            "tense or temporal reference",
+            "definiteness",
+            "attachment",
+            "possession",
+            "modern standard usage",
+            "concrete grammatical or structural defect",
+            '"less natural", "different meaning", "less common", or "more formal"',
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_generator_prompt_has_target_specific_semantic_guardrails(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "Conditionals / tense",
+            "another reasonable timeline",
+            "structurally decisive",
+            "**Inversion:**",
+            "`if`, `unless`, or",
+            "independently grammatical conditional clause",
+            "**Articles / determiners:**",
+            "unspecified prior context",
+            "`a` versus `an`",
+            "**Relative pronoun case:**",
+            "bare object position",
+            "fronted-preposition environment",
+            "clear subject-relative position",
+            "following noun",
+            "**Appositive / word order:**",
+            "structurally defective",
+            "**Noun-clause subjects:**",
+            "semantically natural for a fact",
+            "implausible physical agent",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_reviewer_prompt_is_blind_and_covers_ambiguity_and_naturalness(self) -> None:
+        prompt = " ".join(Path("structure/prompts/reviewer.md").read_text(encoding="utf-8").split())
+        self.assertIn(
+            "The input contains only `item_id`, `section`, `stem`, and `options`.",
+            prompt,
+        )
+        self.assertIn("ordinary modern standard written English", prompt)
+        for phrase in (
+            "reasonable alternative reading",
+            "do NOT mark it `INVALID`",
+            "more textbook-like",
+            "more formal",
+            "different plausible tense interpretation",
+            "definiteness",
+            "attachment or possession",
+            "Treat any such defensible alternative reading as a threat to uniqueness",
+            "object-position `who`",
+            "traditional prescriptive grammar prefers `whom`",
+            "semantically and logically coherent",
+            "implausible or incoherent cause/effect relationship",
+            "incompatible subject-predicate semantic roles",
+            "unnatural proposition/fact predicate",
+            "contradictory or incoherent temporal relations",
+            "high-quality TOEFL-style item",
+            "Do not fail merely for stylistic preference",
+            "serious_defect=true",
+            "substantial semantic/naturalness defect",
+            "do not rewrite the item",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_solver_prompt_and_contract_remain_unchanged(self) -> None:
+        solver_prompt = Path("structure/prompts/solver.md").read_bytes()
+        self.assertEqual(
+            hashlib.sha256(solver_prompt).hexdigest(),
+            "c3a67804621efef18fa706845959921afd95725f12157d6bfed249c273e54593",
+        )
+        for schema_name, expected_hash in {
+            "solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
+            "solver_output.schema.json": "1e791bb296e808bff2fe25d6d94db22602aa3f68211b3691b967b26be43f4937",
+        }.items():
+            with self.subTest(schema=schema_name):
+                actual_hash = hashlib.sha256((Path("structure/schemas") / schema_name).read_bytes()).hexdigest()
+                self.assertEqual(actual_hash, expected_hash)
 
 
 class StructurePermutationTests(unittest.TestCase):

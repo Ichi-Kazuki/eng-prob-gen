@@ -40,12 +40,96 @@ marker `____` exactly once. Leave the grammatical target unresolved at that
 marker; never silently fill the blank and emit the resulting complete sentence
 as `stem`. Provide exactly four non-empty A-D options, exactly one
 grammatically acceptable intended completion, and three superficially plausible
-distractors. Each distractor
-must represent a real grammatical or structural confusion, be explainable in
-relation to the correct answer, use real English rather than nonsense, and not
-create a second defensible correct answer. Distractors should be realizable
-through the existing grammar-specification `tested_error_type` mechanisms,
-favoring (without using exclusively) `missing_required_element`,
+distractors.
+
+## Correct-completion naturalness
+
+The completed sentence produced by the intended correct option MUST be
+grammatically acceptable, semantically coherent, logically coherent, and
+natural in ordinary academic/general-interest written English. Do not create
+causal, temporal, concessive, conditional, referential, or predicate-argument
+relationships that are technically interpretable but pragmatically strange.
+Subject and predicate meanings must be semantically compatible. When a
+that-clause or other noun clause denotes a proposition or fact, use predicates
+that naturally take propositions, facts, judgments, consequences, beliefs,
+findings, or similar abstract subjects; do not force an awkward physical-agent
+interpretation.
+
+## Distractor uniqueness standard
+
+For Structure Part A, each distractor must make the completed sentence clearly
+unacceptable in the intended standalone standard-written-English reading, or
+instantiate a definite structural/grammatical defect. A distractor is NOT
+acceptable merely because it is:
+
+- less likely;
+- less idiomatic;
+- less formal;
+- more informal;
+- semantically different;
+- contextually less expected; or
+- inconsistent with the intended textbook label.
+
+Do not use a distractor if an ordinary reader can rescue it through a reasonable
+alternative interpretation of:
+
+- tense or temporal reference;
+- definiteness;
+- attachment;
+- possession;
+- lexical meaning;
+- clause relation;
+- register; or
+- modern standard usage.
+
+Do not rely on missing external discourse context to make a distractor wrong.
+
+Construct distractors through controlled local grammatical/structural
+transformations of the intended construction. The distractor rationale must
+identify the concrete grammatical or structural defect. Do not use "less
+natural", "different meaning", "less common", or "more formal" as the sole
+reason a distractor is wrong. This is a Generator construction rule, NOT a
+self-review stage. Do not add PASS/FAIL, scoring, quality verdicts, retries, or
+revisions; do not add regeneration.
+
+## Target-specific guardrails
+
+- **Conditionals / tense:** When testing a conditional tense/form, do not use a
+  tense distractor that remains grammatical under another reasonable timeline.
+  Make the contrast structurally decisive; a non-canonical tense pairing is not
+  automatically ungrammatical.
+- **Inversion:** When inversion is the target, do not use `if`, `unless`, or
+  another conjunction as a distractor when it can create an independently
+  grammatical conditional clause. Prefer a genuinely incorrect auxiliary,
+  inversion structure, or word order.
+- **Articles / determiners:** Do not contrast indefinite and definite articles
+  when both can be supported by an ordinary discourse interpretation. Do not
+  depend on unspecified prior context to make `the` invalid. When testing `a`
+  versus `an`, avoid introducing a different definiteness reading as a
+  competing valid option. Construct the sentence and choices so article or
+  determiner choice is genuinely unique in the standalone item.
+- **Relative pronoun case:** For `who` / `whom` / `whose`, do not use `who` as
+  an allegedly invalid distractor against `whom` in bare object position. If
+  `whom` is intended, prefer a fronted-preposition environment where formal
+  standard written English makes the case contrast substantially more
+  decisive. If `who` is intended, use a clear subject-relative position. If
+  `whose` is intended, require the possessive relationship syntactically,
+  normally with a following noun. Do not enforce a purely prescriptive
+  who/whom distinction where ordinary modern standard English accepts both.
+- **Appositive / word order:** A wrong-order distractor must actually be
+  structurally defective. Do not use a different but grammatical possessive
+  noun phrase or attachment merely because its meaning is odd.
+- **Noun-clause subjects:** When a that-clause or other noun clause is the
+  sentence subject, use a main predicate semantically natural for a fact,
+  proposition, event, belief, finding, or other clause-denoted entity. Avoid
+  predicate-argument combinations that require treating an abstract proposition
+  as an implausible physical agent.
+
+Each distractor must represent a real grammatical or structural confusion, be
+explainable in relation to the correct answer, use real English rather than
+nonsense, and not create a second defensible correct answer. Distractors should
+be realizable through the existing grammar-specification `tested_error_type`
+mechanisms, favoring (without using exclusively) `missing_required_element`,
 `extraneous_element`, `wrong_word_order`, and `fragment`.
 
 Do not make a distractor eliminable only through rare vocabulary or outside
