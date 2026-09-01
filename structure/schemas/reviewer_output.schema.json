@@ -13,21 +13,24 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["item_id", "option_judgments", "best_answer", "natural_wording", "serious_defect", "comment", "observed_difficulty", "difficulty_confidence"],
+        "required": ["item_id", "option_judgments", "best_answer_text", "natural_wording", "serious_defect", "comment", "observed_difficulty", "difficulty_confidence"],
         "properties": {
           "item_id": {"type": "string", "minLength": 1},
           "option_judgments": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["A", "B", "C", "D"],
-            "properties": {
-              "A": {"enum": ["VALID", "INVALID", "MARGINAL"]},
-              "B": {"enum": ["VALID", "INVALID", "MARGINAL"]},
-              "C": {"enum": ["VALID", "INVALID", "MARGINAL"]},
-              "D": {"enum": ["VALID", "INVALID", "MARGINAL"]}
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["option_text", "judgment"],
+              "properties": {
+                "option_text": {"type": "string", "minLength": 1},
+                "judgment": {"enum": ["VALID", "INVALID", "MARGINAL"]}
+              }
             }
           },
-          "best_answer": {"enum": ["A", "B", "C", "D", "AMBIGUOUS", "NONE"]},
+          "best_answer_text": {"type": "string", "minLength": 1},
           "natural_wording": {"type": "boolean"},
           "serious_defect": {"type": "boolean"},
           "comment": {"type": "string"},

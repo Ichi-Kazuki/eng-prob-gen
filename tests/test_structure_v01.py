@@ -16,7 +16,9 @@ from runtime.adapters import InvocationRequest, InvocationResult
 from structure.blinding import blind_input_errors, build_blind_input
 from structure.contracts import (
     LETTERS,
+    canonicalize_reviewer_output,
     normalized_option_surface,
+    post_blind_comparison,
     reviewer_difficulty_rejection_reasons,
     reviewer_difficulty_summary,
     validate_generator_contract,
@@ -83,10 +85,18 @@ def reviewer_fixture(
     items = []
     for index, item in enumerate(blind["items"]):
         correct = next(letter for letter in LETTERS if item["options"][letter] == "is")
+        best_answer = first_best if index == 0 and first_best is not None else correct
+        if best_answer in LETTERS:
+            best_answer_text = item["options"][best_answer]
+        else:
+            best_answer_text = best_answer
         items.append({
             "item_id": item["item_id"],
-            "option_judgments": {letter: ("VALID" if letter == correct else "INVALID") for letter in LETTERS},
-            "best_answer": first_best if index == 0 and first_best is not None else correct,
+            "option_judgments": [
+                {"option_text": item["options"][letter], "judgment": "VALID" if letter == correct else "INVALID"}
+                for letter in LETTERS
+            ],
+            "best_answer_text": best_answer_text,
             "natural_wording": natural, "serious_defect": serious,
             "comment": "Only one option forms the intended sentence.",
             "observed_difficulty": observed_difficulty or planned_difficulties.get(item["item_id"], "EASY"),
@@ -669,19 +679,23 @@ class StructurePromptTests(unittest.TestCase):
     def test_reviewer_prompt_requires_option_text_letter_alignment_and_consistency(self) -> None:
         prompt = " ".join(Path("structure/prompts/reviewer.md").read_text(encoding="utf-8").split())
         for phrase in (
-            "Final output consistency within this blind invocation",
-            "Before returning JSON",
-            "every `option_judgments` label refers to the actual text of that same A/B/C/D option",
-            "never shift a judgment to a different letter",
-            "comment identifies an option by its text",
-            "text-to-letter mapping matches the current item",
+            "Final output format and text identity",
+            "ordered list of exactly four objects",
+            "Copy each visible option string exactly as provided in the input",
+            "including case, punctuation, and whitespace",
+            "Include every visible option text exactly once",
+            "do not omit, duplicate, invent, rewrite, normalize, or fuzzy-match an option",
+            "option text itself is the identity used for every judgment",
+            "`best_answer_text`",
+            "exact text of the best visible option",
+            "Do not return A/B/C/D letters",
+            "comment remains natural-language and position-agnostic",
             "alternative is grammatically defensible enough to threaten uniqueness",
             "represent that same option as `VALID` or `MARGINAL`, never `INVALID`",
-            "If `best_answer` is an A-D letter, it must be the letter of the option text you actually judge best",
-            "use `AMBIGUOUS` or `NONE` when the judgments require those outcomes",
+            "exact sentinel `AMBIGUOUS` or `NONE`",
             "same blind invocation",
             "not a new model call, revision loop, or metadata lookup",
-            "comment and `option_judgments` must be semantically consistent",
+            "comment and judgments must be semantically consistent",
             "described as grammatical, acceptable, valid, or defensible cannot be labeled `INVALID`",
             "described as clearly unacceptable cannot be labeled `VALID`",
         ):
@@ -741,12 +755,12 @@ class StructurePromptTests(unittest.TestCase):
                 actual_hash = hashlib.sha256(Path(relative_path).read_bytes()).hexdigest()
                 self.assertEqual(actual_hash, expected_hash)
 
-    def test_difficulty_gate_boundaries_and_frozen_prompts_are_hash_protected(self) -> None:
+    def test_structure_reviewer_surface_hash_regressions(self) -> None:
         expected_hashes = {
-            "structure/contracts.py": "7bbe6811f301f2065945ec1ae6706dfe80b7f5224ca3b34824b45886f18100cb",
-            "structure/pipeline.py": "cb2d14688184faa0a74ea4d735119317db183735d0ae53aee3586001fcc457a9",
+            "structure/contracts.py": "de5fec50469171011dfb1f820df30b8e242fa63f75c6470bef6da12e9d16bc3f",
+            "structure/pipeline.py": "5d33ae08ee7bc4c15b2d2afe90820d8c1e3ac318e7ec40da9746581ef1e3d764",
             "structure/prompts/generator.md": "da9499d13fff7b90a8f43f9c26c49a939c7db792d030e0f11feae218a23d422b",
-            "structure/prompts/reviewer.md": "2a58821bffaf307d2d196bec3617bb3e70237b27bf28731585863d416405c362",
+            "structure/prompts/reviewer.md": "aed0804ea739c5d9226b69b2c8a632b8f192f08bb62f25e31adfc705ea600f40",
             "structure/prompts/solver.md": "112925abe56c70b7d8016a8554fa285ac4c633b80c508bafe2a493dc30f5a49f",
         }
         for relative_path, expected_hash in expected_hashes.items():
@@ -754,15 +768,15 @@ class StructurePromptTests(unittest.TestCase):
                 actual_hash = hashlib.sha256(Path(relative_path).read_bytes()).hexdigest()
                 self.assertEqual(actual_hash, expected_hash)
 
-    def test_all_structure_schemas_remain_unchanged(self) -> None:
+    def test_structure_schema_hash_regressions(self) -> None:
         expected_hashes = {
             "generator_item.schema.json": "229a8c39ca0daa2e79e516b0cc362eb740204fd5369252c478c79facaf857fff",
             "generator_output.schema.json": "78ad5e758052928bf51f973cdc009ab103c4f535e243e6bd17b0631fb361b2dd",
             "plan.schema.json": "6cd16610ec2f4f4b912f8700ff3a13e15faaa01a6dd25b07c85748cb081df4b5",
-            "provenance.schema.json": "b40718298ea487fb10ae4136f687b210e3b7b9aef5cd8413aa0ff9862273d2cf",
+            "provenance.schema.json": "3b4a8e8a07ab6607f555b77afaf76201201d8832bd27548ed129bcf846c04bc3",
             "result.schema.json": "9f049f94ec8a819bf228bd59845eb64deddd6f974f523a64abccbaae69bfb5c5",
             "reviewer_input.schema.json": "8e5181664253967064a4c415377f5bc9f75a55e69984e54c01148d413d9e8b19",
-            "reviewer_output.schema.json": "c8dc2c992e32451b489d6d0e5d37035bace90b8e0b73eb54f5b1210b33220907",
+            "reviewer_output.schema.json": "4c2cf716b7c7229778a4869e176e119309b705b7b8917fbf1ba90387cd29b9df",
             "solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
             "solver_output.schema.json": "1e791bb296e808bff2fe25d6d94db22602aa3f68211b3691b967b26be43f4937",
         }
@@ -890,7 +904,22 @@ class StructureContractTests(unittest.TestCase):
             set(input_schema["properties"]["items"]["items"]["properties"]),
             {"item_id", "section", "stem", "options"},
         )
+        self.assertFalse(input_schema["properties"]["items"]["items"]["additionalProperties"])
         required = set(output_schema["properties"]["items"]["items"]["required"])
+        self.assertIn("best_answer_text", required)
+        self.assertNotIn("best_answer", required)
+        option_judgments = output_schema["properties"]["items"]["items"]["properties"]["option_judgments"]
+        self.assertEqual(option_judgments["type"], "array")
+        self.assertEqual((option_judgments["minItems"], option_judgments["maxItems"]), (4, 4))
+        self.assertFalse(option_judgments["items"]["additionalProperties"])
+        self.assertEqual(
+            set(option_judgments["items"]["required"]),
+            {"option_text", "judgment"},
+        )
+        self.assertEqual(
+            option_judgments["items"]["properties"]["judgment"]["enum"],
+            ["VALID", "INVALID", "MARGINAL"],
+        )
         self.assertIn("observed_difficulty", required)
         self.assertIn("difficulty_confidence", required)
         self.assertEqual(
@@ -902,6 +931,12 @@ class StructureContractTests(unittest.TestCase):
             ["HIGH", "MEDIUM", "LOW"],
         )
         valid = reviewer_fixture(build_blind_input(generator_fixture(build_plan(52))))
+        short = copy.deepcopy(valid)
+        short["items"][0]["option_judgments"] = short["items"][0]["option_judgments"][:3]
+        long = copy.deepcopy(valid)
+        long["items"][0]["option_judgments"].append(copy.deepcopy(long["items"][0]["option_judgments"][0]))
+        self.assertTrue(schema_errors(short, output_schema))
+        self.assertTrue(schema_errors(long, output_schema))
         missing_observed = copy.deepcopy(valid)
         del missing_observed["items"][0]["observed_difficulty"]
         self.assertTrue(
@@ -911,6 +946,94 @@ class StructureContractTests(unittest.TestCase):
                 build_plan(52),
             )
         )
+
+
+class StructureReviewerCanonicalizationTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.plan = build_plan(52)
+        self.blind = build_blind_input(generator_fixture(self.plan))
+
+    def test_raw_reviewer_schema_and_contract_use_exact_option_text(self) -> None:
+        schema = load_schema(Path("structure/schemas/reviewer_output.schema.json"))
+        item_schema = schema["properties"]["items"]["items"]
+        self.assertIn("best_answer_text", item_schema["required"])
+        self.assertNotIn("best_answer", item_schema["required"])
+        self.assertEqual(item_schema["properties"]["option_judgments"]["type"], "array")
+        self.assertEqual(
+            set(item_schema["properties"]["option_judgments"]["items"]["properties"]),
+            {"option_text", "judgment"},
+        )
+        raw = reviewer_fixture(self.blind)
+        self.assertEqual(schema_errors(raw, schema), [])
+        self.assertEqual(validate_reviewer_contract(raw, self.blind, self.plan), [])
+        for entry in raw["items"][0]["option_judgments"]:
+            self.assertEqual(set(entry), {"option_text", "judgment"})
+
+        for best_answer_text in (self.blind["items"][0]["options"]["A"], "AMBIGUOUS", "NONE"):
+            candidate = copy.deepcopy(raw)
+            candidate["items"][0]["best_answer_text"] = best_answer_text
+            self.assertEqual(validate_reviewer_contract(candidate, self.blind, self.plan), [])
+
+    def test_exact_option_multiset_failures_fail_closed_without_fuzzy_matching(self) -> None:
+        cases = {
+            "missing": lambda judgments: judgments.pop(),
+            "duplicate": lambda judgments: judgments.__setitem__(1, copy.deepcopy(judgments[0])),
+            "invented": lambda judgments: judgments.__setitem__(0, {"option_text": "invented", "judgment": "VALID"}),
+            "modified": lambda judgments: judgments.__setitem__(0, {"option_text": "is ", "judgment": "VALID"}),
+            "case_changed": lambda judgments: judgments.__setitem__(0, {"option_text": "IS", "judgment": "VALID"}),
+        }
+        for name, mutate in cases.items():
+            with self.subTest(case=name):
+                candidate = copy.deepcopy(reviewer_fixture(self.blind))
+                mutate(candidate["items"][0]["option_judgments"])
+                self.assertTrue(validate_reviewer_contract(candidate, self.blind, self.plan))
+
+        invalid_best = copy.deepcopy(reviewer_fixture(self.blind))
+        invalid_best["items"][0]["best_answer_text"] = " is"
+        self.assertTrue(validate_reviewer_contract(invalid_best, self.blind, self.plan))
+
+    def test_canonicalization_restores_existing_letter_keyed_shape_and_preserves_fields(self) -> None:
+        raw = reviewer_fixture(self.blind)
+        raw["items"][0]["comment"] = "The visible option text identifies the grammatical completion."
+        canonical = canonicalize_reviewer_output(raw, self.blind)
+        item = canonical["items"][0]
+        self.assertEqual(set(item["option_judgments"]), set(LETTERS))
+        self.assertEqual(item["best_answer"], "A")
+        for field in ("natural_wording", "serious_defect", "comment", "observed_difficulty", "difficulty_confidence"):
+            self.assertEqual(item[field], raw["items"][0][field])
+
+    def test_canonical_answers_feed_existing_blind_agreement_comparison(self) -> None:
+        generator = generator_fixture(self.plan)
+        blind = build_blind_input(generator)
+        canonical = canonicalize_reviewer_output(reviewer_fixture(blind), blind)
+        agreements, count = post_blind_comparison(generator, canonical, solver_fixture(blind))
+        self.assertEqual(count, 15)
+        self.assertTrue(all(agreement["agree"] for agreement in agreements))
+
+    def test_live_regression_text_binding_maps_to_current_letter(self) -> None:
+        cases = (
+            ({"A": "useful representing", "B": "representing useful", "C": "usefully representing", "D": "a useful representation"}, "a useful representation", "D"),
+            ({"A": "online available", "B": "availablely online", "C": "available online", "D": "online availability"}, "available online", "C"),
+        )
+        for options, best_answer_text, expected_letter in cases:
+            with self.subTest(expected_letter=expected_letter):
+                blind = copy.deepcopy(self.blind)
+                blind["items"][0]["options"] = options
+                raw = reviewer_fixture(self.blind)
+                raw["items"][0]["option_judgments"] = [
+                    {"option_text": options[letter], "judgment": "VALID" if options[letter] == best_answer_text else "INVALID"}
+                    for letter in LETTERS
+                ]
+                raw["items"][0]["best_answer_text"] = best_answer_text
+                canonical = canonicalize_reviewer_output(raw, blind)
+                self.assertEqual(canonical["items"][0]["best_answer"], expected_letter)
+                self.assertEqual(canonical["items"][0]["option_judgments"][expected_letter], "VALID")
+
+    def test_sentinels_survive_canonicalization(self) -> None:
+        for sentinel in ("AMBIGUOUS", "NONE"):
+            with self.subTest(sentinel=sentinel):
+                raw = reviewer_fixture(self.blind, first_best=sentinel)
+                self.assertEqual(canonicalize_reviewer_output(raw, self.blind)["items"][0]["best_answer"], sentinel)
 
     def test_reviewer_difficulty_gate_is_independent_and_fail_closed(self) -> None:
         self.assertEqual(
@@ -1012,9 +1135,23 @@ class StructurePipelineTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             StructurePipeline(runtime).run(51, output_dir=Path(directory))
             reviewer = json.loads((Path(directory) / "reviewer.json").read_text(encoding="utf-8"))
+            provenance = json.loads(
+                (Path(directory) / "provenance" / "provenance.json").read_text(encoding="utf-8")
+            )
         self.assertEqual(len(reviewer["items"]), 15)
         self.assertTrue(all("observed_difficulty" in item for item in reviewer["items"]))
         self.assertTrue(all("difficulty_confidence" in item for item in reviewer["items"]))
+        self.assertTrue(all("best_answer_text" in item for item in reviewer["items"]))
+        self.assertTrue(all("best_answer" not in item for item in reviewer["items"]))
+        self.assertEqual(
+            provenance["reviewer_canonicalization"],
+            {
+                "applied": True,
+                "strategy": "exact_option_text_identity",
+                "raw_artifact": "reviewer.json",
+                "canonical_internal_shape": "option_judgments keyed A-D; best_answer letter or sentinel",
+            },
+        )
 
     def test_one_defective_item_quarantines_the_whole_set(self) -> None:
         plan = build_plan(51)
@@ -1027,6 +1164,19 @@ class StructurePipelineTests(unittest.TestCase):
         self.assertEqual(sum(item["accepted"] for item in result["item_results"]), 14)
         self.assertTrue(result["item_results"][0]["rejection_reasons"])
 
+    def test_invalid_raw_option_text_quarantines_the_whole_set_without_extra_calls(self) -> None:
+        plan = build_plan(51)
+        blind = build_blind_input(permute_generator_output(generator_fixture(plan), 51)[0])
+        reviewer = reviewer_fixture(blind)
+        reviewer["items"][0]["option_judgments"][0]["option_text"] = "is "
+        runtime = FixtureRuntime(reviewer=reviewer)
+        result = self.run_fixture(runtime)
+        self.assertEqual(result["decision"], "QUARANTINE")
+        self.assertEqual(result["live_invocation_count"], 3)
+        self.assertEqual([request.stage for request in runtime.requests], [
+            "structure_generator", "structure_reviewer", "structure_solver"
+        ])
+
     def test_each_final_gate_blocks_accept(self) -> None:
         plan = build_plan(51)
         permuted, _ = permute_generator_output(generator_fixture(plan), 51)
@@ -1034,7 +1184,10 @@ class StructurePipelineTests(unittest.TestCase):
         correct = next(letter for letter in LETTERS if blind["items"][0]["options"][letter] == "is")
         wrong = next(letter for letter in LETTERS if letter != correct)
         marginal = reviewer_fixture(blind)
-        marginal["items"][0]["option_judgments"][wrong] = "MARGINAL"
+        next(
+            judgment for judgment in marginal["items"][0]["option_judgments"]
+            if judgment["option_text"] == blind["items"][0]["options"][wrong]
+        )["judgment"] = "MARGINAL"
         cases = {
             "reviewer_ambiguous": (reviewer_fixture(blind, first_best="AMBIGUOUS"), None),
             "reviewer_none": (reviewer_fixture(blind, first_best="NONE"), None),

@@ -49,24 +49,27 @@ analysis at the initial noun phrase when later finite syntax changes the full
 complement. Judge the COMPLETE inserted sentence through the end of the
 relevant clause or phrase.
 
-## Final output consistency within this blind invocation
+## Final output format and text identity
 
-Before returning JSON, perform an output-consistency pass using only the
-visible input. For each item, ensure every `option_judgments` label refers to
-the actual text of that same A/B/C/D option; never shift a judgment to a
-different letter while writing the result or comment. If a comment identifies
-an option by its text, ensure the text-to-letter mapping matches the current
-item. If the comment says an alternative is grammatically defensible enough to
-threaten uniqueness, represent that same option as `VALID` or `MARGINAL`, never
-`INVALID`. If `best_answer` is an A-D letter, it must be the letter of the
-option text you actually judge best. Do not return a letter for an option you
-describe as inferior, and use `AMBIGUOUS` or `NONE` when the judgments require
-those outcomes. This is a consistency check inside the same blind invocation,
-not a new model call, revision loop, or metadata lookup. More generally, the
-comment and `option_judgments` must be semantically consistent: an option
-described as grammatical, acceptable, valid, or defensible cannot be labeled
-`INVALID`, and an option described as clearly unacceptable cannot be labeled
-`VALID`.
+For each item, return `option_judgments` as an ordered list of exactly four
+objects. Each object must contain only `option_text` and `judgment`. Copy each
+visible option string exactly as provided in the input, including case,
+punctuation, and whitespace. Include every visible option text exactly once;
+do not omit, duplicate, invent, rewrite, normalize, or fuzzy-match an option.
+The order of the list may follow the visible A/B/C/D option order, but the
+option text itself is the identity used for every judgment.
+
+Return `best_answer_text` as the exact text of the best visible option, or the
+exact sentinel `AMBIGUOUS` or `NONE`. Do not return A/B/C/D letters for the
+best answer or for option judgments. The comment remains natural-language and
+position-agnostic; do not add A/B/C/D references merely to satisfy the output
+format. If the comment says an alternative is grammatically defensible enough
+to threaten uniqueness, represent that same option as `VALID` or `MARGINAL`,
+never `INVALID`. More generally, the comment and judgments must be semantically
+consistent: an option described as grammatical, acceptable, valid, or
+defensible cannot be labeled `INVALID`, and an option described as clearly
+unacceptable cannot be labeled `VALID`. This is a consistency check inside the
+same blind invocation, not a new model call, revision loop, or metadata lookup.
 
 Apply the who/whom distinction by structural position, not as a general style
 preference:

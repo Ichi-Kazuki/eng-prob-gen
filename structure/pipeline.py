@@ -19,6 +19,7 @@ from .blinding import blind_input_errors, blind_input_sha256, build_blind_input
 from .contracts import (
     SCHEMA_PATHS,
     post_blind_comparison,
+    canonicalize_reviewer_output,
     reviewer_difficulty_rejection_reasons,
     reviewer_difficulty_summary,
     validate_generator_contract,
@@ -191,6 +192,7 @@ class StructurePipeline:
         generator: dict[str, Any] | None = None
         permutation: dict[str, Any] | None = None
         blind: dict[str, Any] | None = None
+        reviewer_raw: dict[str, Any] | None = None
         reviewer: dict[str, Any] | None = None
         solver: dict[str, Any] | None = None
         generator_errors: list[str] = []
@@ -225,8 +227,13 @@ class StructurePipeline:
                         output_dir=run_dir,
                         isolate_workspace=True,
                     )
-                    reviewer = reviewer_result.parsed
-                    reviewer_errors = validate_reviewer_contract(reviewer, blind, plan)
+                    reviewer_raw = reviewer_result.parsed
+                    reviewer_errors = validate_reviewer_contract(reviewer_raw, blind, plan)
+                    if not reviewer_errors:
+                        try:
+                            reviewer = canonicalize_reviewer_output(reviewer_raw, blind)
+                        except ValueError as exc:
+                            reviewer_errors = [f"reviewer: canonicalization failed: {exc}"]
                     solver_result = self._invoke(
                         stage="structure_solver",
                         agent=SOLVER_AGENT,
@@ -273,7 +280,7 @@ class StructurePipeline:
             "generator.json": generator,
             "permutation.json": permutation,
             "reviewer_input.json": blind,
-            "reviewer.json": reviewer,
+            "reviewer.json": reviewer_raw,
             "solver_input.json": blind,
             "solver.json": solver,
         }
@@ -283,7 +290,7 @@ class StructurePipeline:
         atomic_write_json(run_dir / "generator.json", generator)
         atomic_write_json(run_dir / "permutation.json", permutation)
         atomic_write_json(run_dir / "reviewer_input.json", blind)
-        atomic_write_json(run_dir / "reviewer.json", reviewer)
+        atomic_write_json(run_dir / "reviewer.json", reviewer_raw)
         atomic_write_json(run_dir / "solver_input.json", blind)
         atomic_write_json(run_dir / "solver.json", solver)
 
@@ -311,6 +318,11 @@ class StructurePipeline:
                 "blind_errors": blind_errors,
                 "reviewer_contract": not reviewer_errors and reviewer is not None,
                 "reviewer_errors": reviewer_errors,
+                "reviewer_canonicalization": {
+                    "applied": reviewer is not None and not reviewer_errors,
+                    "strategy": "exact_option_text_identity",
+                    "raw_artifact": "reviewer.json",
+                },
                 "solver_contract": not solver_errors and solver is not None,
                 "solver_errors": solver_errors,
                 "reviewer_solver_agreement": agreements,
@@ -355,6 +367,12 @@ class StructurePipeline:
                 "reviewer_input_sha256": blind_input_sha256(blind) if isinstance(blind, dict) else None,
                 "solver_input_sha256": blind_input_sha256(blind) if isinstance(blind, dict) else None,
                 "reviewer_solver_inputs_identical": isinstance(blind, dict),
+            },
+            "reviewer_canonicalization": {
+                "applied": reviewer is not None and not reviewer_errors,
+                "strategy": "exact_option_text_identity",
+                "raw_artifact": "reviewer.json",
+                "canonical_internal_shape": "option_judgments keyed A-D; best_answer letter or sentinel",
             },
             "reviewer_solver_agreement": {
                 "count": agreement_count,

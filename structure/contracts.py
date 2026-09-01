@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import unicodedata
+from collections import Counter
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
@@ -16,6 +17,7 @@ ROOT = Path(__file__).resolve().parent
 BLANK_MARKER = "____"
 LETTERS = ("A", "B", "C", "D")
 REVIEWER_DIFFICULTY_CONFIDENCES = frozenset({"HIGH", "MEDIUM", "LOW"})
+REVIEWER_ANSWER_SENTINELS = frozenset({"AMBIGUOUS", "NONE"})
 SCHEMA_PATHS = {
     "plan": PLAN_SCHEMA_PATH,
     "generator_item": ROOT / "schemas" / "generator_item.schema.json",
@@ -166,6 +168,51 @@ def validate_generator_blind_input(payload: Any, plan: Mapping[str, Any] | None 
     return validate_blind_input(payload, plan)
 
 
+def _reviewer_option_text_errors(
+    output_item: Mapping[str, Any], blind_item: Mapping[str, Any], item_label: str
+) -> list[str]:
+    """Validate raw Reviewer option text identity without normalizing strings."""
+
+    errors: list[str] = []
+    options = blind_item.get("options")
+    judgments = output_item.get("option_judgments")
+    if not isinstance(options, dict) or set(options) != set(LETTERS):
+        return [f"reviewer[{item_label}]: blind options must contain exactly A/B/C/D"]
+    expected_texts = [options[letter] for letter in LETTERS]
+    if not all(isinstance(text, str) for text in expected_texts):
+        return [f"reviewer[{item_label}]: blind option texts must be strings"]
+    if len(set(expected_texts)) != len(expected_texts):
+        return [f"reviewer[{item_label}]: blind option texts are not one-to-one"]
+    if not isinstance(judgments, list):
+        return errors
+
+    observed_texts = [entry.get("option_text") for entry in judgments if isinstance(entry, dict)]
+    if len(judgments) != 4 or len(observed_texts) != 4:
+        errors.append(f"reviewer[{item_label}]: option_judgments must contain exactly four option objects")
+        return errors
+    if not all(isinstance(text, str) and bool(text.strip()) for text in observed_texts):
+        errors.append(f"reviewer[{item_label}]: option_text must be non-empty strings")
+        return errors
+
+    expected_counts = Counter(expected_texts)
+    observed_counts = Counter(observed_texts)
+    if observed_counts != expected_counts:
+        missing = sorted(text for text, count in (expected_counts - observed_counts).items() for _ in range(count))
+        duplicates = sorted(text for text, count in (observed_counts - expected_counts).items() for _ in range(count) if text in expected_counts)
+        extras = sorted(text for text, count in (observed_counts - expected_counts).items() for _ in range(count) if text not in expected_counts)
+        errors.append(
+            f"reviewer[{item_label}]: option_text values must match the four blind options exactly once "
+            f"(missing={missing}, duplicates={duplicates}, extras={extras})"
+        )
+
+    best_answer_text = output_item.get("best_answer_text")
+    if not isinstance(best_answer_text, str) or (
+        best_answer_text not in expected_texts and best_answer_text not in REVIEWER_ANSWER_SENTINELS
+    ):
+        errors.append(f"reviewer[{item_label}]: best_answer_text is not an exact visible option or allowed sentinel")
+    return errors
+
+
 def validate_reviewer_contract(output: Any, blind: Mapping[str, Any], plan: Mapping[str, Any] | None = None) -> list[str]:
     errors = _schema(output, "reviewer")
     if not isinstance(output, dict):
@@ -179,8 +226,53 @@ def validate_reviewer_contract(output: Any, blind: Mapping[str, Any], plan: Mapp
         errors.append(f"reviewer: duplicate item_id(s): {duplicates}")
     if actual != expected:
         errors.append("reviewer: item IDs/order do not match blind input")
+    blind_items = blind.get("items", []) if isinstance(blind, dict) else []
+    if isinstance(blind_items, list):
+        for output_item, blind_item in zip(items, blind_items):
+            if isinstance(output_item, dict) and isinstance(blind_item, dict):
+                item_label = str(output_item.get("item_id", "unknown"))
+                errors.extend(_reviewer_option_text_errors(output_item, blind_item, item_label))
     errors.extend(f"reviewer: forbidden field {path}" for path in find_leakage(output))
     return _deduplicate(errors)
+
+
+def canonicalize_reviewer_output(output: Any, blind: Mapping[str, Any]) -> dict[str, Any]:
+    """Map a validated raw text-based Reviewer response to the legacy internal shape."""
+
+    errors = validate_reviewer_contract(output, blind)
+    if errors:
+        raise ValueError("reviewer raw output cannot be canonicalized: " + "; ".join(errors))
+    if not isinstance(output, dict):  # pragma: no cover - guarded by validate_reviewer_contract
+        raise ValueError("reviewer raw output must be an object")
+    blind_items = blind.get("items")
+    output_items = output.get("items")
+    if not isinstance(blind_items, list) or not isinstance(output_items, list):  # pragma: no cover
+        raise ValueError("reviewer raw output and blind input must contain items arrays")
+
+    canonical_items: list[dict[str, Any]] = []
+    for output_item, blind_item in zip(output_items, blind_items):
+        if not isinstance(output_item, dict) or not isinstance(blind_item, dict):  # pragma: no cover
+            raise ValueError("reviewer raw output and blind input items must be objects")
+        options = blind_item["options"]
+        text_to_judgment = {
+            entry["option_text"]: entry["judgment"] for entry in output_item["option_judgments"]
+        }
+        option_to_letter = {options[letter]: letter for letter in LETTERS}
+        best_answer_text = output_item["best_answer_text"]
+        best_answer = option_to_letter.get(best_answer_text, best_answer_text)
+        canonical_items.append({
+            "item_id": output_item["item_id"],
+            "option_judgments": {
+                letter: text_to_judgment[options[letter]] for letter in LETTERS
+            },
+            "best_answer": best_answer,
+            "natural_wording": output_item["natural_wording"],
+            "serious_defect": output_item["serious_defect"],
+            "comment": output_item["comment"],
+            "observed_difficulty": output_item["observed_difficulty"],
+            "difficulty_confidence": output_item["difficulty_confidence"],
+        })
+    return {"items": canonical_items}
 
 
 def reviewer_difficulty_rejection_reasons(
