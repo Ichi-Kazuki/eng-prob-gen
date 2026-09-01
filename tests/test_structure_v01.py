@@ -5,10 +5,12 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import random
 import tempfile
 import unittest
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
+from unittest.mock import patch
 
 from runtime.adapters import InvocationRequest, InvocationResult
 from structure.blinding import blind_input_errors, build_blind_input
@@ -24,7 +26,17 @@ from structure.contracts import (
 )
 from structure.permutation import PERMUTATION_VERSION, permute_generator_output
 from structure.pipeline import AGENT_PATHS, GENERATOR_AGENT, REVIEWER_AGENT, SOLVER_AGENT, StructurePipeline
-from structure.planner import CLAUSE_COUNT_WEIGHTS, LENGTH_BINS, PRIMARY_TARGET_WEIGHTS, build_plan, load_profile
+from structure.planner import (
+    CLAUSE_COUNT_WEIGHTS,
+    DIFFICULTY_WEIGHTS,
+    JOINT_STRUCTURAL_WEIGHTS,
+    LENGTH_BINS,
+    PRIMARY_TARGET_WEIGHTS,
+    SENTENCE_LENGTH_WEIGHTS_BY_DIFFICULTY,
+    build_plan,
+    load_profile,
+    _sample_length,
+)
 from runtime.codex_schema import build_codex_transport_schema
 from shared.schema_validation import load_schema, schema_errors
 
@@ -129,6 +141,122 @@ class StructurePlannerTests(unittest.TestCase):
         self.assertEqual(build_plan(17), build_plan(17))
         self.assertNotEqual(build_plan(17), build_plan(18))
 
+    def test_joint_structural_profile_has_exact_total_and_marginals(self) -> None:
+        profile = load_profile()
+        self.assertEqual(sum(JOINT_STRUCTURAL_WEIGHTS.values()), 75)
+
+        target_marginal = {
+            target: sum(
+                weight for (item_target, _difficulty, _clause_count), weight in JOINT_STRUCTURAL_WEIGHTS.items()
+                if item_target == target
+            )
+            for target in profile["primary_target_weights"]
+        }
+        self.assertEqual(target_marginal, profile["primary_target_weights"])
+
+        difficulty_marginal = {
+            difficulty: sum(
+                weight for (_target, item_difficulty, _clause_count), weight in JOINT_STRUCTURAL_WEIGHTS.items()
+                if item_difficulty == difficulty
+            )
+            for difficulty in DIFFICULTY_WEIGHTS
+        }
+        self.assertEqual(difficulty_marginal, {"EASY": 18, "MEDIUM": 42, "HARD": 15})
+
+        clause_marginal = {
+            clause_count: sum(
+                weight for (_target, _difficulty, item_clause_count), weight in JOINT_STRUCTURAL_WEIGHTS.items()
+                if item_clause_count == clause_count
+            )
+            for clause_count in CLAUSE_COUNT_WEIGHTS
+        }
+        self.assertEqual(clause_marginal, {1: 27, 2: 37, 3: 10, 4: 1})
+
+    def test_joint_structural_sampling_uses_only_empirical_support(self) -> None:
+        unsupported = (
+            ("VERB_COMPLEMENTATION", "HARD"),
+            ("CONNECTORS_CONJUNCTIONS", "HARD"),
+            ("EXISTENTIAL_EXPLETIVE", "HARD"),
+            ("REFERENCE_AND_DETERMINERS", "MEDIUM"),
+            ("REFERENCE_AND_DETERMINERS", "HARD"),
+        )
+        for target, difficulty in unsupported:
+            with self.subTest(target=target, difficulty=difficulty):
+                self.assertEqual(
+                    sum(
+                        weight
+                        for (item_target, item_difficulty, _clause_count), weight in JOINT_STRUCTURAL_WEIGHTS.items()
+                        if item_target == target and item_difficulty == difficulty
+                    ),
+                    0,
+                )
+
+        inversion_support = {
+            difficulty: sum(
+                weight for (target, item_difficulty, _clause_count), weight in JOINT_STRUCTURAL_WEIGHTS.items()
+                if target == "INVERSION" and item_difficulty == difficulty
+            )
+            for difficulty in ("EASY", "MEDIUM", "HARD")
+        }
+        self.assertEqual(inversion_support, {"EASY": 0, "MEDIUM": 0, "HARD": 4})
+
+        supported = {key for key, weight in JOINT_STRUCTURAL_WEIGHTS.items() if weight > 0}
+        for seed in range(20):
+            with self.subTest(seed=seed):
+                self.assertTrue(
+                    all(
+                        (item["primary_target"], item["difficulty"], item["clause_count"]) in supported
+                        for item in build_plan(seed)["items"]
+                    )
+                )
+
+    def test_structural_fields_use_one_joint_draw_per_item(self) -> None:
+        calls: list[object] = []
+        from structure.planner import weighted_choice as real_weighted_choice
+
+        def record_call(rng: random.Random, weighted_values: Mapping[Any, int]) -> Any:
+            calls.append(weighted_values)
+            return real_weighted_choice(rng, weighted_values)
+
+        with patch("structure.planner.weighted_choice", side_effect=record_call):
+            build_plan(2026)
+
+        self.assertEqual(len(calls), 30)
+        self.assertTrue(all(calls[index] is JOINT_STRUCTURAL_WEIGHTS for index in range(0, 30, 2)))
+        self.assertTrue(all(calls[index] is SENTENCE_LENGTH_WEIGHTS_BY_DIFFICULTY["EASY"] or
+                            calls[index] is SENTENCE_LENGTH_WEIGHTS_BY_DIFFICULTY["MEDIUM"] or
+                            calls[index] is SENTENCE_LENGTH_WEIGHTS_BY_DIFFICULTY["HARD"]
+                            for index in range(1, 30, 2)))
+
+    def test_difficulty_conditional_length_profile_preserves_marginals(self) -> None:
+        self.assertEqual(
+            {difficulty: sum(weights.values()) for difficulty, weights in SENTENCE_LENGTH_WEIGHTS_BY_DIFFICULTY.items()},
+            {"EASY": 18, "MEDIUM": 42, "HARD": 15},
+        )
+        self.assertEqual(
+            {
+                label: sum(weights[label] for weights in SENTENCE_LENGTH_WEIGHTS_BY_DIFFICULTY.values())
+                for label in (entry["label"] for entry in LENGTH_BINS)
+            },
+            {"10-14": 11, "15-19": 22, "20-24": 27, "25-27": 15},
+        )
+        self.assertEqual(SENTENCE_LENGTH_WEIGHTS_BY_DIFFICULTY["EASY"]["25-27"], 0)
+
+    def test_target_word_count_varies_uniformly_within_selected_bin(self) -> None:
+        for difficulty in ("EASY", "MEDIUM", "HARD"):
+            observed: dict[str, set[int]] = {}
+            rng = random.Random(2026)
+            for _ in range(5000):
+                length_bin, word_count = _sample_length(rng, difficulty)
+                observed.setdefault(length_bin["label"], set()).add(word_count)
+            for entry in LENGTH_BINS:
+                if SENTENCE_LENGTH_WEIGHTS_BY_DIFFICULTY[difficulty][entry["label"]] > 0:
+                    with self.subTest(difficulty=difficulty, length_bin=entry["label"]):
+                        self.assertEqual(
+                            observed[entry["label"]],
+                            set(range(entry["minimum"], entry["maximum"] + 1)),
+                        )
+
     def test_plan_size_profile_and_boundaries(self) -> None:
         plan = build_plan(91)
         self.assertEqual(len(plan["items"]), 15)
@@ -139,9 +267,14 @@ class StructurePlannerTests(unittest.TestCase):
         self.assertNotIn("WORD_CLASS_FORM", {item["primary_target"] for item in plan["items"]})
         self.assertTrue(all(item["clause_count"] in CLAUSE_COUNT_WEIGHTS for item in plan["items"]))
         self.assertEqual(CLAUSE_COUNT_WEIGHTS, {1: 27, 2: 37, 3: 10, 4: 1})
+        self.assertTrue(all(set(item) == {
+            "item_id", "order", "section", "primary_target", "subtype", "difficulty", "clause_count",
+            "sentence_length_bin", "target_word_count",
+        } for item in plan["items"]))
         for item in plan["items"]:
             self.assertGreaterEqual(item["target_word_count"], item["sentence_length_bin"]["minimum"])
             self.assertLessEqual(item["target_word_count"], item["sentence_length_bin"]["maximum"])
+            self.assertIn(item["subtype"], load_profile()["target_subtypes"][item["primary_target"]])
         self.assertEqual([(entry["minimum"], entry["maximum"]) for entry in LENGTH_BINS], [(10, 14), (15, 19), (20, 24), (25, 27)])
 
     def test_plan_schema_does_not_own_vocabulary_domain(self) -> None:
@@ -598,8 +731,8 @@ class StructurePromptTests(unittest.TestCase):
 
     def test_planner_validation_and_pipeline_boundaries_are_protected(self) -> None:
         expected_hashes = {
-            "structure/planner.py": "14dfb5e994df7cd1396710d543f0397eef9bd8c67e00a282e891be50ca7003ca",
-            "structure/profile.json": "f72612c4aa64b22d1910b812d598839f069cb50c43805354448e4d8af1fb8671",
+            "structure/planner.py": "5af2dca77cb85b011b904769def2ac50de79588248d005c3533a319972f3f36f",
+            "structure/profile.json": "bc6e495271d8c1c9a6c9aa34158b19cfdecf3cb02aaf7ce7c57aa2e2e9c5ea7e",
             "structure/blinding.py": "b39dcdad846adda25d46784c5d75b75e49f5b01d44df75a011bfe2c96546b351",
             "structure/permutation.py": "1efdba8054a14540ba838e31c2b57401faf97770c6da3ea14ea9850cc8c31b42",
         }
