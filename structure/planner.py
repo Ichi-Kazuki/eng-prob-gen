@@ -96,7 +96,6 @@ def _conditional_length_mapping() -> dict[str, dict[str, int]]:
 PRIMARY_TARGET_WEIGHTS = _mapping("primary_target_weights")
 DIFFICULTY_WEIGHTS = _mapping("difficulty_weights")
 CLAUSE_COUNT_WEIGHTS = {int(key): value for key, value in _mapping("clause_count_weights").items()}
-TARGET_SUBTYPES = load_profile().get("target_subtypes", {})
 LENGTH_BINS = tuple(load_profile().get("sentence_length_bins", ()))
 JOINT_STRUCTURAL_WEIGHTS = _joint_mapping()
 SENTENCE_LENGTH_WEIGHTS_BY_DIFFICULTY = _conditional_length_mapping()
@@ -177,8 +176,6 @@ def _validate_profile() -> None:
     }
     if actual_length_weights != overall_length_weights:
         raise ValueError("Structure conditional sentence-length weights do not reproduce overall length weights")
-    if any(target not in TARGET_SUBTYPES or not TARGET_SUBTYPES[target] for target in PRIMARY_TARGET_WEIGHTS):
-        raise ValueError("Structure profile is missing a subtype pool for a sampled primary target")
 
 
 _validate_profile()
@@ -214,13 +211,11 @@ def _sample_length(rng: random.Random, difficulty: str) -> tuple[dict[str, Any],
 def _plan_item(rng: random.Random, seed: int, order: int) -> dict[str, Any]:
     primary_target, difficulty, clause_count = weighted_choice(rng, JOINT_STRUCTURAL_WEIGHTS)
     length_bin, target_word_count = _sample_length(rng, difficulty)
-    subtype_pool = TARGET_SUBTYPES[primary_target]
     return {
         "item_id": f"structure-v01-{seed:016x}-{order:02d}",
         "order": order,
         "section": "Structure",
         "primary_target": primary_target,
-        "subtype": rng.choice(subtype_pool),
         "difficulty": difficulty,
         "clause_count": clause_count,
         "sentence_length_bin": length_bin,

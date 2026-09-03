@@ -52,7 +52,8 @@ STRUCTURE_OUTPUT_SCHEMA = ROOT / "structure" / "schemas" / "generator_output.sch
 def generator_fixture(plan: dict[str, Any]) -> dict[str, Any]:
     return {"items": [{
         "item_id": planned["item_id"], "section": "Structure", "primary_target": planned["primary_target"],
-        "subtype": planned["subtype"], "secondary_features": ["academic register"],
+        "subtype": f"{planned['primary_target']} generator-authored construction {index + 1}",
+        "secondary_features": ["academic register"],
         "difficulty": planned["difficulty"], "vocabulary_domain": f"generator-owned domain {index + 1}",
         "stem": "The researcher ____ the documented pattern in the archive.",
         "options": {"A": "is", "B": "are", "C": "be", "D": "being"}, "correct_answer": "A",
@@ -149,7 +150,17 @@ class FixtureRuntime:
 
 class StructurePlannerTests(unittest.TestCase):
     def test_replay_and_different_seed(self) -> None:
-        self.assertEqual(build_plan(17), build_plan(17))
+        first = build_plan(17)
+        second = build_plan(17)
+        self.assertEqual(first, second)
+        owned_fields = (
+            "item_id", "order", "section", "primary_target", "difficulty", "clause_count",
+            "sentence_length_bin", "target_word_count",
+        )
+        self.assertEqual(
+            [{field: item[field] for field in owned_fields} for item in first["items"]],
+            [{field: item[field] for field in owned_fields} for item in second["items"]],
+        )
         self.assertNotEqual(build_plan(17), build_plan(18))
 
     def test_joint_structural_profile_has_exact_total_and_marginals(self) -> None:
@@ -270,22 +281,24 @@ class StructurePlannerTests(unittest.TestCase):
 
     def test_plan_size_profile_and_boundaries(self) -> None:
         plan = build_plan(91)
+        expected_fields = {
+            "item_id", "order", "section", "primary_target", "difficulty", "clause_count",
+            "sentence_length_bin", "target_word_count",
+        }
         self.assertEqual(len(plan["items"]), 15)
         self.assertEqual(validate_plan(plan), [])
         self.assertNotIn("vocabulary_domains", load_profile())
+        self.assertNotIn("target_subtypes", load_profile())
         self.assertTrue(all("vocabulary_domain" not in item for item in plan["items"]))
+        self.assertTrue(all("subtype" not in item for item in plan["items"]))
         self.assertTrue(all(item["primary_target"] in PRIMARY_TARGET_WEIGHTS for item in plan["items"]))
         self.assertNotIn("WORD_CLASS_FORM", {item["primary_target"] for item in plan["items"]})
         self.assertTrue(all(item["clause_count"] in CLAUSE_COUNT_WEIGHTS for item in plan["items"]))
         self.assertEqual(CLAUSE_COUNT_WEIGHTS, {1: 27, 2: 37, 3: 10, 4: 1})
-        self.assertTrue(all(set(item) == {
-            "item_id", "order", "section", "primary_target", "subtype", "difficulty", "clause_count",
-            "sentence_length_bin", "target_word_count",
-        } for item in plan["items"]))
+        self.assertTrue(all(set(item) == expected_fields for item in plan["items"]))
         for item in plan["items"]:
             self.assertGreaterEqual(item["target_word_count"], item["sentence_length_bin"]["minimum"])
             self.assertLessEqual(item["target_word_count"], item["sentence_length_bin"]["maximum"])
-            self.assertIn(item["subtype"], load_profile()["target_subtypes"][item["primary_target"]])
         self.assertEqual([(entry["minimum"], entry["maximum"]) for entry in LENGTH_BINS], [(10, 14), (15, 19), (20, 24), (25, 27)])
 
     def test_plan_schema_does_not_own_vocabulary_domain(self) -> None:
@@ -293,6 +306,23 @@ class StructurePlannerTests(unittest.TestCase):
         item_schema = schema["properties"]["items"]["items"]
         self.assertNotIn("vocabulary_domain", item_schema["required"])
         self.assertNotIn("vocabulary_domain", item_schema["properties"])
+
+    def test_plan_schema_does_not_own_subtype(self) -> None:
+        schema = json.loads(Path("structure/schemas/plan.schema.json").read_text(encoding="utf-8"))
+        item_schema = schema["properties"]["items"]["items"]
+        self.assertNotIn("subtype", item_schema["required"])
+        self.assertNotIn("subtype", item_schema["properties"])
+        self.assertFalse(item_schema["additionalProperties"])
+
+        invalid = copy.deepcopy(build_plan(91))
+        invalid["items"][0]["subtype"] = "legacy planner subtype"
+        self.assertTrue(schema_errors(invalid, schema))
+
+    def test_planner_has_no_runtime_subtype_pool(self) -> None:
+        import structure.planner as planner
+
+        self.assertNotIn("target_subtypes", load_profile())
+        self.assertFalse(hasattr(planner, "TARGET_SUBTYPES"))
 
 
 class StructurePromptTests(unittest.TestCase):
@@ -786,8 +816,10 @@ class StructurePromptTests(unittest.TestCase):
 
     def test_planner_validation_and_pipeline_boundaries_are_protected(self) -> None:
         expected_hashes = {
-            "structure/planner.py": "5af2dca77cb85b011b904769def2ac50de79588248d005c3533a319972f3f36f",
-            "structure/profile.json": "bc6e495271d8c1c9a6c9aa34158b19cfdecf3cb02aaf7ce7c57aa2e2e9c5ea7e",
+            "structure/contracts.py": "539c23d23452ad7968610cf520efd0aa6c8fa2e5f65e73babe6658cde18127c6",
+            "structure/pipeline.py": "7df4d42dcc0c7e18140a6d8f884797c0313edfd9258c4a5d4676efba8a353a51",
+            "structure/planner.py": "d50e130a7c05fb79ba399c552322130aa4b5833eb6aff39144c3f6449748a7ee",
+            "structure/profile.json": "66f9ad0cc2a7323ae396ab8c5f9766204327b0ecb4f5b275ec6a5b2e6295c6c5",
             "structure/blinding.py": "b39dcdad846adda25d46784c5d75b75e49f5b01d44df75a011bfe2c96546b351",
             "structure/permutation.py": "1efdba8054a14540ba838e31c2b57401faf97770c6da3ea14ea9850cc8c31b42",
         }
@@ -811,7 +843,7 @@ class StructurePromptTests(unittest.TestCase):
         expected_hashes = {
             "generator_item.schema.json": "229a8c39ca0daa2e79e516b0cc362eb740204fd5369252c478c79facaf857fff",
             "generator_output.schema.json": "78ad5e758052928bf51f973cdc009ab103c4f535e243e6bd17b0631fb361b2dd",
-            "plan.schema.json": "6cd16610ec2f4f4b912f8700ff3a13e15faaa01a6dd25b07c85748cb081df4b5",
+            "plan.schema.json": "ecfe3f6714e72fd6ac7282c8adb6356eb0678e77bcc039290e728b3908840807",
             "provenance.schema.json": "3b4a8e8a07ab6607f555b77afaf76201201d8832bd27548ed129bcf846c04bc3",
             "result.schema.json": "9f049f94ec8a819bf228bd59845eb64deddd6f974f523a64abccbaae69bfb5c5",
             "reviewer_input.schema.json": "8e5181664253967064a4c415377f5bc9f75a55e69984e54c01148d413d9e8b19",
@@ -885,6 +917,36 @@ class StructureContractTests(unittest.TestCase):
         blank = copy.deepcopy(output)
         blank["items"][0]["vocabulary_domain"] = ""
         self.assertTrue(any("vocabulary_domain" in error for error in validate_generator_contract(blank, plan)))
+
+    def test_generator_owns_nonempty_subtype_without_plan_comparison(self) -> None:
+        plan = build_plan(40)
+        output = generator_fixture(plan)
+        self.assertEqual(validate_generator_contract(output, plan), [])
+
+        changed = copy.deepcopy(output)
+        changed["items"][0]["subtype"] = "different generator-authored construction"
+        self.assertEqual(validate_generator_contract(changed, plan), [])
+
+        missing = copy.deepcopy(output)
+        del missing["items"][0]["subtype"]
+        self.assertTrue(any("subtype" in error for error in validate_generator_contract(missing, plan)))
+
+        blank = copy.deepcopy(output)
+        blank["items"][0]["subtype"] = ""
+        self.assertTrue(any("subtype" in error for error in validate_generator_contract(blank, plan)))
+
+    def test_generator_primary_target_and_difficulty_match_plan(self) -> None:
+        plan = build_plan(40)
+        output = generator_fixture(plan)
+
+        output["items"][0]["primary_target"] = "WORD_CLASS_FORM"
+        output["items"][1]["difficulty"] = next(
+            difficulty for difficulty in ("EASY", "MEDIUM", "HARD")
+            if difficulty != plan["items"][1]["difficulty"]
+        )
+        errors = validate_generator_contract(output, plan)
+        self.assertTrue(any("primary_target does not match" in error for error in errors))
+        self.assertTrue(any("difficulty does not match" in error for error in errors))
 
     def test_duplicate_option_and_unicode_surface_detection(self) -> None:
         self.assertEqual(normalized_option_surface("  Cafe" + chr(0x301) + "  "), normalized_option_surface("cafe" + chr(0x301)))
