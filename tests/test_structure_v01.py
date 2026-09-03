@@ -652,21 +652,52 @@ class StructurePromptTests(unittest.TestCase):
 
         for phrase in (
             "classify the ACTUAL presented question independently",
-            "minimum grammatical reasoning burden required for a competent TOEFL ITP Structure test taker",
-            "one local/direct grammatical cue",
-            "analysis across a larger phrase or clause",
-            "integration of more than one grammatical cue",
-            "at least two interacting grammatical/structural cues",
-            "at least one important cue depends on non-local sentence structure",
-            "multiple distractors remain locally plausible",
+            "RELATIVE TO THE DISTRIBUTION OF TOEFL ITP STRUCTURE PART A ITEMS",
+            "Do NOT interpret EASY / MEDIUM / HARD as absolute labels",
+            "fully competent test taker",
+            "complete visible item's structural difficulty",
+            "not merely the minimum local cue needed to identify the answer",
+            "overall syntactic complexity",
+            "clause embedding and organization",
+            "marked/noncanonical word order",
+            "distance between grammatical dependencies",
+            "interaction between the blank and the rest of the sentence",
+            "structural similarity and plausibility of distractors",
+            "amount of whole-sentence parsing needed",
+            "Vocabulary difficulty or world knowledge must NOT make an item grammatically HARD",
+            "lower end of normal TOEFL ITP Structure Part A difficulty",
+            "A short/simple local item is normally EASY",
+            "broad central/typical band of TOEFL ITP Structure Part A",
+            "MEDIUM does NOT require two interacting grammar rules",
+            "one primary construction determines the answer",
+            "COMPLETE item requires meaningful structural parsing",
+            "Do NOT downgrade an otherwise typical official-style Structure item to EASY",
+            "upper end of TOEFL ITP Structure Part A relative difficulty",
+            "HARD does NOT require two separate grammar rules",
+            "two interacting cues",
+            "a minimum number of clauses",
+            "a mandatory non-local cue",
+            "multiple locally plausible distractors",
+            "A single construction can be HARD",
+            "marked or noncanonical inversion",
+            "complex or nested noun, relative, or adverbial clauses",
+            "free-relative structures",
+            "cleft structures",
+            "correlative comparative structures",
+            "long-distance dependencies",
+            "One-clause items CAN be HARD",
+            "underlying grammar rule can be named locally",
+            "EASY 18/75 (24%), MEDIUM 42/75 (56%), and HARD 15/75 (20%)",
+            "calibration guidance only, not deterministic rules, quotas, or targets",
+            "do not force any 15-item batch to match these proportions",
+            "middle band is intentionally broad",
+            "Clause count alone must not determine difficulty",
+            "one-clause HARD items are possible",
+            "judge the actual visible realization",
             "Sentence length alone does not make an item HARD",
-            "A rare subtype name alone does not make an item HARD",
-            "basic `avoid + gerund`",
-            "simple subject-verb agreement",
-            "ordinary `who/whom`",
-            "simple linking-verb adjective selection",
-            "genuine interacting non-local structure",
-            "not rare vocabulary, world knowledge, unnatural wording, or ambiguity",
+            "Academic vocabulary or world knowledge alone does not make an item HARD",
+            "Ambiguity or unnaturalness is a quality defect",
+            "Confidence refers to certainty about the item's RELATIVE TOEFL ITP Structure difficulty band",
             "HIGH",
             "MEDIUM",
             "LOW",
@@ -675,6 +706,15 @@ class StructurePromptTests(unittest.TestCase):
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
+
+    def test_reviewer_prompt_recalibration_removes_absolute_hard_requirements(self) -> None:
+        prompt = " ".join(Path("structure/prompts/reviewer.md").read_text(encoding="utf-8").split())
+        self.assertNotIn("minimum grammatical reasoning burden required", prompt)
+        self.assertNotIn("at least two interacting grammatical/structural cues", prompt)
+        self.assertNotIn("at least one important cue depends on non-local sentence structure", prompt)
+        self.assertNotIn("multiple distractors remain locally plausible and require whole-sentence analysis", prompt)
+        self.assertNotIn("basic `avoid + gerund`", prompt)
+        self.assertNotIn("ordinary `who/whom`", prompt)
 
     def test_reviewer_prompt_requires_option_text_letter_alignment_and_consistency(self) -> None:
         prompt = " ".join(Path("structure/prompts/reviewer.md").read_text(encoding="utf-8").split())
@@ -760,7 +800,7 @@ class StructurePromptTests(unittest.TestCase):
             "structure/contracts.py": "de5fec50469171011dfb1f820df30b8e242fa63f75c6470bef6da12e9d16bc3f",
             "structure/pipeline.py": "5d33ae08ee7bc4c15b2d2afe90820d8c1e3ac318e7ec40da9746581ef1e3d764",
             "structure/prompts/generator.md": "da9499d13fff7b90a8f43f9c26c49a939c7db792d030e0f11feae218a23d422b",
-            "structure/prompts/reviewer.md": "aed0804ea739c5d9226b69b2c8a632b8f192f08bb62f25e31adfc705ea600f40",
+            "structure/prompts/reviewer.md": "998abfb2ad276d5ed3b762a89593b5b91a8cfa7ac6390a3f4d450f4214730d5b",
             "structure/prompts/solver.md": "112925abe56c70b7d8016a8554fa285ac4c633b80c508bafe2a493dc30f5a49f",
         }
         for relative_path, expected_hash in expected_hashes.items():

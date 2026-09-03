@@ -94,34 +94,88 @@ preference:
 ## Independent actual difficulty classification
 
 For every visible item, classify the ACTUAL presented question independently.
+Judge difficulty RELATIVE TO THE DISTRIBUTION OF TOEFL ITP STRUCTURE PART A
+ITEMS. Do NOT interpret EASY / MEDIUM / HARD as absolute labels for how hard
+the grammar rule would be for a fully competent test taker. Assess the complete
+visible item's structural difficulty, not merely the minimum local cue needed to
+identify the answer.
+
 Do not receive, request, or infer the planned difficulty, subtype, primary
-target, answer key, Generator explanation, or any other private metadata. Judge
-difficulty based on the minimum grammatical reasoning burden required for a
-competent TOEFL ITP Structure test taker.
+target, answer key, Generator explanation, or any other private metadata.
 
-- **EASY:** The item primarily uses one local/direct grammatical cue. One
-  familiar form, agreement, complement, or obvious order distinction is
-  sufficient, and distractors are readily eliminated locally.
-- **MEDIUM:** The item requires analysis across a larger phrase or clause, or
-  integration of more than one grammatical cue. Distractors are locally
-  plausible enough that simple surface matching is insufficient.
-- **HARD:** The item requires at least two interacting grammatical/structural
-  cues, at least one important cue depends on non-local sentence structure,
-  and multiple distractors remain locally plausible and require whole-sentence
-  analysis to eliminate. The difficulty must come from grammatical structure,
-  not rare vocabulary, world knowledge, unnatural wording, or ambiguity.
+Consider the following together:
 
-Sentence length alone does not make an item HARD. A rare subtype name alone
-does not make an item HARD. A basic `avoid + gerund`, simple subject-verb
-agreement, ordinary `who/whom`, or simple linking-verb adjective selection
-remains EASY/MEDIUM unless the actual complete item adds genuine interacting
-non-local structure. Do not inflate difficulty because topic vocabulary sounds
-academic. Classify the item that is actually presented, not what an author may
-have intended.
+- overall syntactic complexity;
+- clause embedding and organization;
+- marked/noncanonical word order;
+- distance between grammatical dependencies;
+- interaction between the blank and the rest of the sentence;
+- structural similarity and plausibility of distractors;
+- the amount of whole-sentence parsing needed.
 
-Also report `difficulty_confidence` for the classification:
+Vocabulary difficulty or world knowledge must NOT make an item grammatically
+HARD.
 
-- **HIGH:** the difficulty band is clear.
+### Calibrated bands
+
+- **EASY:** The lower end of normal TOEFL ITP Structure Part A difficulty.
+  Typical characteristics may include comparatively simple sentence
+  structure, a local/direct grammatical relation, low syntactic embedding, and
+  distractors readily distinguished after a straightforward structural check.
+  A short/simple local item is normally EASY.
+- **MEDIUM:** The broad central/typical band of TOEFL ITP Structure Part A.
+  MEDIUM does NOT require two interacting grammar rules. An item may be
+  MEDIUM even when one primary construction determines the answer if the
+  COMPLETE item requires meaningful structural parsing, such as identifying a
+  larger phrase or clause, tracking sentence structure beyond the immediate
+  blank, distinguishing a reduced clause/modifier from a finite clause,
+  parsing relative/clausal relationships, or distinguishing structurally
+  similar distractors. Sentence organization that increases structural
+  processing also supports MEDIUM. Do NOT downgrade an otherwise typical
+  official-style Structure item to EASY merely because a knowledgeable test
+  taker can state the governing grammar rule succinctly.
+- **HARD:** The upper end of TOEFL ITP Structure Part A relative difficulty.
+  HARD does NOT require two separate grammar rules, two interacting cues, a
+  minimum number of clauses, a mandatory non-local cue, or multiple locally
+  plausible distractors. A single construction can be HARD if its structural
+  realization is sufficiently demanding. HARD may arise from marked or
+  noncanonical inversion; complex or nested noun, relative, or adverbial
+  clauses; free-relative structures; cleft structures; correlative comparative
+  structures; long-distance dependencies; structurally demanding coordination;
+  difficult attachment or modifier placement; highly similar structurally
+  plausible distractors; or another upper-tail structural pattern requiring
+  substantial sentence-level analysis. One-clause items CAN be HARD. Do not
+  automatically classify a construction as EASY solely because the underlying
+  grammar rule can be named locally.
+
+Historical calibration guidance for this scale is EASY 18/75 (24%), MEDIUM
+42/75 (56%), and HARD 15/75 (20%) across the 75-item reference distribution.
+These proportions are calibration guidance only, not deterministic rules,
+quotas, or targets for an individual batch. Classify each item independently;
+do not force any 15-item batch to match these proportions. The middle band is
+intentionally broad.
+
+Historical structural evidence is context, not a per-item rule: syntactic
+complexity 2 occurred as EASY 16, MEDIUM 14, HARD 0; syntactic complexity 3
+as EASY 2, MEDIUM 23, HARD 7; and syntactic complexity 4 as EASY 0, MEDIUM 5,
+HARD 8. The Reviewer is not given a `syntactic_complexity` field and must
+assess the visible item's structural complexity itself. Historical HARD items
+included clause counts 1 (3), 2 (7), 3 (4), and 4 (1). Clause count alone must
+not determine difficulty: one-clause HARD items are possible, and multi-clause
+items are not automatically HARD. All four historical INVERSION items were
+HARD, but do NOT make every generated inversion automatically HARD; judge the
+actual visible realization.
+
+Sentence length alone does not make an item HARD. Academic vocabulary or world
+knowledge alone does not make an item HARD. Ambiguity or unnaturalness is a
+quality defect, not a legitimate way to increase difficulty. Classify the
+complete item that is actually presented, not what an author may have intended.
+
+Also report `difficulty_confidence` for the classification. Confidence refers
+to certainty about the item's RELATIVE TOEFL ITP Structure difficulty band
+under this recalibrated construct:
+
+- **HIGH:** the relative difficulty band is clear.
 - **MEDIUM:** the item is near a boundary, but one band is still the better
   classification.
 - **LOW:** the band cannot be assigned reliably. Do not force HIGH confidence.
