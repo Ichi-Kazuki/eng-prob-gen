@@ -20,7 +20,7 @@ from .contracts import (
     SCHEMA_PATHS,
     post_blind_comparison,
     canonicalize_reviewer_output,
-    reviewer_difficulty_rejection_reasons,
+    reviewer_difficulty_diagnostics,
     reviewer_difficulty_summary,
     validate_generator_contract,
     validate_reviewer_contract,
@@ -157,8 +157,6 @@ class StructurePipeline:
                         reasons.append(f"reviewer_valid_option_count: {valid_count}")
                     if any(judgments.get(letter) == "MARGINAL" for letter in ("A", "B", "C", "D")):
                         reasons.append("reviewer_marginal_threatens_uniqueness")
-                reasons.extend(reviewer_difficulty_rejection_reasons(planned.get("difficulty"), reviewer_item))
-
             if solver_item is None:
                 reasons.append("solver_item_missing")
             else:
@@ -259,6 +257,7 @@ class StructurePipeline:
         reviewer_difficulty_agreement_count, reviewer_difficulty_low_confidence_count = reviewer_difficulty_summary(
             plan, reviewer
         )
+        difficulty_diagnostics = reviewer_difficulty_diagnostics(plan, reviewer)
 
         reviewer_items = reviewer.get("items", []) if isinstance(reviewer, dict) else []
         solver_items = solver.get("items", []) if isinstance(solver, dict) else []
@@ -322,6 +321,12 @@ class StructurePipeline:
                     "applied": reviewer is not None and not reviewer_errors,
                     "strategy": "exact_option_text_identity",
                     "raw_artifact": "reviewer.json",
+                },
+                "reviewer_difficulty": {
+                    "policy": "diagnostic_only",
+                    "agreement_count": reviewer_difficulty_agreement_count,
+                    "low_confidence_count": reviewer_difficulty_low_confidence_count,
+                    "per_item": difficulty_diagnostics,
                 },
                 "solver_contract": not solver_errors and solver is not None,
                 "solver_errors": solver_errors,

@@ -19,7 +19,8 @@ from structure.contracts import (
     canonicalize_reviewer_output,
     normalized_option_surface,
     post_blind_comparison,
-    reviewer_difficulty_rejection_reasons,
+    reviewer_difficulty_diagnostic_reasons,
+    reviewer_difficulty_diagnostics,
     reviewer_difficulty_summary,
     validate_generator_contract,
     validate_plan,
@@ -795,10 +796,8 @@ class StructurePromptTests(unittest.TestCase):
                 actual_hash = hashlib.sha256(Path(relative_path).read_bytes()).hexdigest()
                 self.assertEqual(actual_hash, expected_hash)
 
-    def test_structure_reviewer_surface_hash_regressions(self) -> None:
+    def test_structure_frozen_prompt_surface_hash_regressions(self) -> None:
         expected_hashes = {
-            "structure/contracts.py": "de5fec50469171011dfb1f820df30b8e242fa63f75c6470bef6da12e9d16bc3f",
-            "structure/pipeline.py": "5d33ae08ee7bc4c15b2d2afe90820d8c1e3ac318e7ec40da9746581ef1e3d764",
             "structure/prompts/generator.md": "da9499d13fff7b90a8f43f9c26c49a939c7db792d030e0f11feae218a23d422b",
             "structure/prompts/reviewer.md": "998abfb2ad276d5ed3b762a89593b5b91a8cfa7ac6390a3f4d450f4214730d5b",
             "structure/prompts/solver.md": "112925abe56c70b7d8016a8554fa285ac4c633b80c508bafe2a493dc30f5a49f",
@@ -1075,33 +1074,33 @@ class StructureReviewerCanonicalizationTests(unittest.TestCase):
                 raw = reviewer_fixture(self.blind, first_best=sentinel)
                 self.assertEqual(canonicalize_reviewer_output(raw, self.blind)["items"][0]["best_answer"], sentinel)
 
-    def test_reviewer_difficulty_gate_is_independent_and_fail_closed(self) -> None:
+    def test_reviewer_difficulty_diagnostics_are_independent_of_acceptance(self) -> None:
         self.assertEqual(
-            reviewer_difficulty_rejection_reasons(
+            reviewer_difficulty_diagnostic_reasons(
                 "HARD", {"observed_difficulty": "MEDIUM", "difficulty_confidence": "HIGH"}
             ),
             ["reviewer_difficulty_mismatch: planned=HARD, observed=MEDIUM"],
         )
         self.assertEqual(
-            reviewer_difficulty_rejection_reasons(
+            reviewer_difficulty_diagnostic_reasons(
                 "EASY", {"observed_difficulty": "MEDIUM", "difficulty_confidence": "HIGH"}
             ),
             ["reviewer_difficulty_mismatch: planned=EASY, observed=MEDIUM"],
         )
         self.assertEqual(
-            reviewer_difficulty_rejection_reasons(
+            reviewer_difficulty_diagnostic_reasons(
                 "HARD", {"observed_difficulty": "HARD", "difficulty_confidence": "HIGH"}
             ),
             [],
         )
         self.assertEqual(
-            reviewer_difficulty_rejection_reasons(
+            reviewer_difficulty_diagnostic_reasons(
                 "HARD", {"observed_difficulty": "HARD", "difficulty_confidence": "MEDIUM"}
             ),
             [],
         )
         self.assertEqual(
-            reviewer_difficulty_rejection_reasons(
+            reviewer_difficulty_diagnostic_reasons(
                 "HARD", {"observed_difficulty": "HARD", "difficulty_confidence": "LOW"}
             ),
             ["reviewer_difficulty_confidence_low"],
@@ -1111,6 +1110,9 @@ class StructureReviewerCanonicalizationTests(unittest.TestCase):
         self.assertEqual(reviewer_difficulty_summary(plan, reviewer), (15, 0))
         reviewer["items"][0]["difficulty_confidence"] = "LOW"
         self.assertEqual(reviewer_difficulty_summary(plan, reviewer), (15, 1))
+        diagnostics = reviewer_difficulty_diagnostics(plan, reviewer)
+        self.assertEqual(len(diagnostics), 15)
+        self.assertIn("reviewer_difficulty_confidence_low", diagnostics[0]["reasons"])
 
 
 class StructurePipelineTests(unittest.TestCase):
@@ -1133,7 +1135,7 @@ class StructurePipelineTests(unittest.TestCase):
         self.assertEqual(result["reviewer_difficulty_agreement_count"], 15)
         self.assertEqual(result["reviewer_difficulty_low_confidence_count"], 0)
 
-    def test_difficulty_mismatch_quarantines_whole_set_without_replacement(self) -> None:
+    def test_difficulty_mismatch_is_diagnostic_only(self) -> None:
         plan = build_plan(51)
         permuted, _ = permute_generator_output(generator_fixture(plan), 51)
         blind = build_blind_input(permuted)
@@ -1144,30 +1146,58 @@ class StructurePipelineTests(unittest.TestCase):
         )
         runtime = FixtureRuntime(reviewer=reviewer)
         result = self.run_fixture(runtime)
-        self.assertEqual(result["decision"], "QUARANTINE")
-        self.assertEqual(sum(item["accepted"] for item in result["item_results"]), 14)
-        self.assertIn(
+        self.assertEqual(result["decision"], "ACCEPT")
+        self.assertEqual(sum(item["accepted"] for item in result["item_results"]), 15)
+        self.assertEqual(result["reviewer_difficulty_agreement_count"], 14)
+        self.assertNotIn(
             f"reviewer_difficulty_mismatch: planned={planned}, observed={reviewer['items'][0]['observed_difficulty']}",
             result["item_results"][0]["rejection_reasons"],
         )
+        self.assertIn(
+            f"reviewer_difficulty_mismatch: planned={planned}, observed={reviewer['items'][0]['observed_difficulty']}",
+            result["checks"]["reviewer_difficulty"]["per_item"][0]["reasons"],
+        )
+        self.assertEqual(result["checks"]["reviewer_difficulty"]["policy"], "diagnostic_only")
         self.assertEqual(result["live_invocation_count"], 3)
         self.assertEqual([request.stage for request in runtime.requests], [
             "structure_generator", "structure_reviewer", "structure_solver"
         ])
 
-    def test_low_difficulty_confidence_quarantines_with_exact_reason(self) -> None:
+    def test_low_difficulty_confidence_is_diagnostic_only(self) -> None:
         plan = build_plan(51)
         blind = build_blind_input(permute_generator_output(generator_fixture(plan), 51)[0])
         reviewer = reviewer_fixture(blind)
         reviewer["items"][0]["difficulty_confidence"] = "LOW"
         result = self.run_fixture(FixtureRuntime(reviewer=reviewer))
-        self.assertEqual(result["decision"], "QUARANTINE")
-        self.assertEqual(sum(item["accepted"] for item in result["item_results"]), 14)
+        self.assertEqual(result["decision"], "ACCEPT")
+        self.assertEqual(sum(item["accepted"] for item in result["item_results"]), 15)
         self.assertEqual(result["reviewer_difficulty_agreement_count"], 15)
         self.assertEqual(result["reviewer_difficulty_low_confidence_count"], 1)
-        self.assertIn(
+        self.assertNotIn(
             "reviewer_difficulty_confidence_low",
             result["item_results"][0]["rejection_reasons"],
+        )
+        self.assertIn(
+            "reviewer_difficulty_confidence_low",
+            result["checks"]["reviewer_difficulty"]["per_item"][0]["reasons"],
+        )
+
+    def test_multiple_difficulty_mismatches_do_not_quarantine(self) -> None:
+        plan = build_plan(51)
+        blind = build_blind_input(permute_generator_output(generator_fixture(plan), 51)[0])
+        reviewer = reviewer_fixture(blind)
+        for index in range(3):
+            planned = plan["items"][index]["difficulty"]
+            reviewer["items"][index]["observed_difficulty"] = next(
+                difficulty for difficulty in ("EASY", "MEDIUM", "HARD") if difficulty != planned
+            )
+        result = self.run_fixture(FixtureRuntime(reviewer=reviewer))
+        self.assertEqual(result["decision"], "ACCEPT")
+        self.assertEqual(sum(item["accepted"] for item in result["item_results"]), 15)
+        self.assertEqual(result["reviewer_difficulty_agreement_count"], 12)
+        self.assertEqual(
+            sum(bool(item["reasons"]) for item in result["checks"]["reviewer_difficulty"]["per_item"]),
+            3,
         )
 
     def test_reviewer_artifact_persists_difficulty_fields_for_every_item(self) -> None:

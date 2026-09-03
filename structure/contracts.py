@@ -275,10 +275,10 @@ def canonicalize_reviewer_output(output: Any, blind: Mapping[str, Any]) -> dict[
     return {"items": canonical_items}
 
 
-def reviewer_difficulty_rejection_reasons(
+def reviewer_difficulty_diagnostic_reasons(
     planned_difficulty: Any, reviewer_item: Mapping[str, Any]
 ) -> list[str]:
-    """Apply the fail-closed post-review difficulty gate to one item."""
+    """Return difficulty diagnostics that are never used as acceptance reasons."""
 
     observed_difficulty = reviewer_item.get("observed_difficulty")
     confidence = reviewer_item.get("difficulty_confidence")
@@ -292,6 +292,32 @@ def reviewer_difficulty_rejection_reasons(
     elif confidence not in REVIEWER_DIFFICULTY_CONFIDENCES - {"LOW"}:
         reasons.append(f"reviewer_difficulty_confidence_not_accepted: {confidence}")
     return reasons
+
+
+def reviewer_difficulty_diagnostics(
+    plan: Mapping[str, Any], reviewer: Mapping[str, Any] | None
+) -> list[dict[str, Any]]:
+    """Return auditable per-item difficulty diagnostics for a completed review."""
+
+    reviewer_by_id = {
+        item.get("item_id"): item
+        for item in (reviewer or {}).get("items", [])
+        if isinstance(item, dict)
+    }
+    diagnostics: list[dict[str, Any]] = []
+    for planned_item in _expected_items(plan):
+        item_id = planned_item.get("item_id")
+        reviewer_item = reviewer_by_id.get(item_id)
+        if not isinstance(reviewer_item, dict):
+            continue
+        diagnostics.append({
+            "item_id": item_id,
+            "planned_difficulty": planned_item.get("difficulty"),
+            "observed_difficulty": reviewer_item.get("observed_difficulty"),
+            "difficulty_confidence": reviewer_item.get("difficulty_confidence"),
+            "reasons": reviewer_difficulty_diagnostic_reasons(planned_item.get("difficulty"), reviewer_item),
+        })
+    return diagnostics
 
 
 def reviewer_difficulty_summary(
