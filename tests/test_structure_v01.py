@@ -377,6 +377,31 @@ class StructurePromptTests(unittest.TestCase):
         self.assertIn("fragment", prompt)
         self.assertIn("Do not review, score, self-review,", prompt)
 
+    def test_generator_prompt_owns_subtype_and_selects_it_for_target_and_difficulty(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "Because the Planner no longer supplies `subtype`",
+            "choose the concrete grammatical construction as part of satisfying BOTH the planned `primary_target` and planned `difficulty`",
+            "Before writing the stem/options, choose a construction within the planned `primary_target` that can naturally realize the planned difficulty",
+            "The `subtype` in Generator output must describe the actual construction authored",
+            "If a broad `primary_target` contains both simpler and more structurally demanding constructions",
+            "Do not introduce a closed subtype enum or historical subtype list",
+            "Keep the planned `primary_target` fixed",
+            "MUST NOT switch to a different primary target to increase difficulty",
+            "The chosen subtype must be a genuine member/instance of the planned `primary_target`",
+            "planned primary target must remain the construction principally tested by the blank/options",
+            "Do not choose a trivially local subtype for HARD and then artificially lengthen the sentence",
+            "If the chosen subtype cannot naturally support HARD while maintaining uniqueness and naturalness, choose a different subtype/construction within the SAME `primary_target`",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+        for forbidden in (
+            "preserve the planned `subtype` when it is supplied",
+            "Planner-owned subtype",
+        ):
+            with self.subTest(forbidden=forbidden):
+                self.assertNotIn(forbidden, prompt)
+
     def test_generator_prompt_requires_whole_completion_coherence(self) -> None:
         prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
         for phrase in (
@@ -467,24 +492,82 @@ class StructurePromptTests(unittest.TestCase):
     def test_generator_prompt_requires_difficulty_fidelity(self) -> None:
         prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
         for phrase in (
-            "Planned `difficulty` is a genuine construction target, not metadata only.",
+            "Planned `difficulty` is a genuine Generator construction target, not metadata only.",
+            "Interpret EASY / MEDIUM / HARD RELATIVE TO THE DISTRIBUTION OF TOEFL ITP Structure Part A items",
+            "absolute judgments of whether a fully competent test taker knows the underlying grammar rule",
+            "complete authored item's structural demand",
+            "overall syntactic complexity",
+            "clause embedding and organization",
+            "marked/noncanonical word order",
+            "distance between grammatical dependencies",
+            "interaction between the blank and surrounding sentence structure",
+            "structural similarity/plausibility of distractors",
+            "amount of whole-sentence parsing required",
+            "Vocabulary difficulty and world knowledge must not create grammatical difficulty",
             "**EASY:**",
-            "one relatively local, direct grammatical cue",
+            "The lower end of normal TOEFL ITP Structure Part A difficulty",
+            "comparatively simple sentence structure",
+            "local/direct grammatical relation",
+            "low embedding",
+            "straightforward structural distinction",
+            "distractors distinguishable with a relatively local structural check",
+            "EASY may use one clear grammar point",
+            "Do not unnecessarily increase complexity merely because the sentence-length target is longer",
             "**MEDIUM:**",
-            "analysis across a larger phrase or clause",
-            "interaction of more than one grammatical cue",
+            "The broad central/typical band of TOEFL ITP Structure Part A",
+            "MEDIUM does NOT require two grammar rules",
+            "A single primary construction may yield MEDIUM",
+            "meaningful sentence-level structural processing",
+            "distinguishing reduced/nonfinite structure from finite structure",
+            "parsing relative or subordinate-clause relationships",
+            "tracking the grammatical relationship beyond the immediate blank",
+            "resolving structurally similar alternatives",
+            "meaningful but not upper-tail embedding or organization",
+            "Do NOT automatically downgrade an otherwise typical Structure item to EASY",
+            "governing grammar rule can be stated succinctly",
+            "purely trivial local form-selection item as MEDIUM solely because the stem is long",
             "**HARD:**",
-            "genuinely longer-distance or structurally richer dependency",
-            "highly plausible structurally motivated distractors",
-            "more than a basic local subject-verb agreement check",
-            "a single-form check",
-            "an obvious word-order check",
-            "rare vocabulary",
-            "obscure world knowledge",
+            "The upper end of TOEFL ITP Structure Part A relative structural difficulty",
+            "HARD does NOT require two separate grammar rules",
+            "two interacting cues",
+            "a mandatory non-local cue",
+            "a minimum clause count",
+            "a fixed number of locally plausible distractors",
+            "A single sufficiently demanding construction can be HARD",
+            "marked or noncanonical inversion",
+            "complex/nested noun, relative, or adverbial clauses",
+            "free-relative or similarly demanding clause structures",
+            "cleft-like structural organization",
+            "structurally demanding comparative/correlative constructions",
+            "long-distance grammatical dependency",
+            "demanding coordination",
+            "difficult modifier/attachment structure",
+            "highly similar but structurally distinct distractors",
+            "another upper-tail construction within the planned `primary_target`",
+            "One-clause HARD items are possible",
+            "adding unrelated clauses",
+            "using rare vocabulary",
+            "relying on world knowledge",
+            "adding semantic tricks",
             "ambiguity",
             "unnatural wording",
-            "trick semantics",
-            "answer uniqueness, grammaticality, or naturalness",
+            "Historical 75-item difficulty distribution",
+            "EASY 18/75 = 24%",
+            "MEDIUM 42/75 = 56%",
+            "HARD 15/75 = 20%",
+            "calibration guidance only, not deterministic rules, quotas, or targets",
+            "do not force a 15-item batch to match these percentages",
+            "syntactic complexity 2: EASY 16, MEDIUM 14, HARD 0",
+            "syntactic complexity 3: EASY 2, MEDIUM 23, HARD 7",
+            "syntactic complexity 4: EASY 0, MEDIUM 5, HARD 8",
+            "historical HARD clause counts",
+            "Do not add `syntactic_complexity` to the plan or output schema",
+            "turn `clause_count` into a difficulty rule",
+            "exactly one grammatical answer",
+            "planned difficulty fidelity",
+            "Difficulty must NEVER override answer uniqueness, grammaticality, or naturalness",
+            "HARD does not require exactly two or any fixed number of locally plausible distractors",
+            "Every distractor must still be definitely invalid in the complete sentence",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
@@ -510,24 +593,17 @@ class StructurePromptTests(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
 
-    def test_generator_prompt_operationalizes_hard_difficulty(self) -> None:
+    def test_generator_prompt_removes_obsolete_absolute_hard_requirements(self) -> None:
         prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
-        for phrase in (
+        for forbidden in (
             "stronger operational gate",
             "at least two interacting structural or grammatical cues",
             "at least one required cue must depend on non-local sentence structure",
             "outside the immediate blank-local phrase",
-            "sentence length",
-            "rare subtype label",
-            "three obviously malformed distractors around one trivial local cue",
             "At least two distractors should be locally plausible English forms",
-            "definitely wrong when the larger complete-sentence structure is considered",
-            "definite structural defect in the complete sentence",
-            "one clearly correct answer, natural wording",
-            "no dependence on rare vocabulary or world knowledge",
         ):
-            with self.subTest(phrase=phrase):
-                self.assertIn(phrase, prompt)
+            with self.subTest(forbidden=forbidden):
+                self.assertNotIn(forbidden, prompt)
 
     def test_generator_prompt_has_target_specific_semantic_guardrails(self) -> None:
         prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
@@ -830,7 +906,7 @@ class StructurePromptTests(unittest.TestCase):
 
     def test_structure_frozen_prompt_surface_hash_regressions(self) -> None:
         expected_hashes = {
-            "structure/prompts/generator.md": "da9499d13fff7b90a8f43f9c26c49a939c7db792d030e0f11feae218a23d422b",
+            "structure/prompts/generator.md": "7a9043b0feae0fdcabe5da7537b06c1e0894b6e5e5f6f7e8b4deb497e79ebda6",
             "structure/prompts/reviewer.md": "998abfb2ad276d5ed3b762a89593b5b91a8cfa7ac6390a3f4d450f4214730d5b",
             "structure/prompts/solver.md": "112925abe56c70b7d8016a8554fa285ac4c633b80c508bafe2a493dc30f5a49f",
         }

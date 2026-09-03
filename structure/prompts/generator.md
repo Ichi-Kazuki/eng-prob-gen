@@ -15,9 +15,9 @@ For each planned item, use all of the Planner's construction targets:
 
 - preserve the Planner-owned `item_id`, `section="Structure"`,
   `primary_target`, and `difficulty`;
-- preserve the planned `subtype` when it is supplied. If subtype is not
-  Planner-owned by the current plan, choose a subtype that is appropriate to
-  and consistent with the planned `primary_target`;
+- choose the concrete subtype/construction within the planned
+  `primary_target` and `difficulty`. The current Planner plan does not own a
+  `subtype`; Generator authorship owns it;
 - use the planned `clause_count` when constructing the sentence;
 - use the planned `sentence_length_bin` and `target_word_count` as sentence
   construction targets; these guide authorship and are not an instruction to
@@ -25,6 +25,35 @@ For each planned item, use all of the Planner's construction targets:
 - choose `vocabulary_domain` while authoring the item. It must be a non-empty
   description of the item's academic/general-interest subject matter, not a
   value selected from a closed Structure domain enum or pool.
+
+## Subtype/construction selection
+
+Because the Planner no longer supplies `subtype`, choose the concrete
+grammatical construction as part of satisfying BOTH the planned
+`primary_target` and planned `difficulty`. Before writing the stem/options,
+choose a construction within the planned `primary_target` that can naturally
+realize the planned difficulty. The `subtype` in Generator output must
+describe the actual construction authored.
+
+If a broad `primary_target` contains both simpler and more structurally
+demanding constructions, select the appropriate construction for the planned
+difficulty. Do not introduce a closed subtype enum or historical subtype list.
+
+Keep the planned `primary_target` fixed. Generator may choose the subtype or
+construction freely only within that target and MUST NOT switch to a different
+primary target to increase difficulty. The chosen subtype must be a genuine
+member/instance of the planned `primary_target`. Secondary features may occur
+naturally, but the planned primary target must remain the construction
+principally tested by the blank/options. Do not mix an unrelated target into
+the question merely to increase difficulty.
+
+Do not choose a trivially local subtype for HARD and then artificially
+lengthen the sentence. Do not bolt unrelated grammar complications onto an
+inherently simple construction merely to satisfy HARD. Do not make difficulty
+by adding irrelevant clauses or by making distractors nonsensical merely to
+appear complex. If the chosen subtype cannot naturally support HARD while
+maintaining uniqueness and naturalness, choose a different subtype/construction
+within the SAME `primary_target`.
 
 Use a wide variety of ordinary academic/general-interest domains across the
 15-item set. Natural science, social science, history, art/humanities,
@@ -222,37 +251,100 @@ revisions; do not add regeneration.
 
 ## Difficulty fidelity
 
-Planned `difficulty` is a genuine construction target, not metadata only. Use
-these operational principles without creating a new taxonomy:
+Planned `difficulty` is a genuine Generator construction target, not metadata
+only. Interpret EASY / MEDIUM / HARD RELATIVE TO THE DISTRIBUTION OF TOEFL ITP
+Structure Part A items. Do NOT interpret these labels as absolute judgments of
+whether a fully competent test taker knows the underlying grammar rule.
+Difficulty concerns the complete authored item's structural demand, not merely
+the minimum local cue needed to identify the answer.
 
-- **EASY:** Use one relatively local, direct grammatical cue. Distractors may
-  reflect common basic form or order errors, and little structural dependency
-  should be needed.
-- **MEDIUM:** Require analysis across a larger phrase or clause, or interaction
-  of more than one grammatical cue. Distractors should remain plausible enough
-  that simple surface matching is insufficient.
-- **HARD:** Require a genuinely longer-distance or structurally richer
-  dependency, interaction between grammatical features, or highly plausible
-  structurally motivated distractors. The item must require more than a basic
-  local subject-verb agreement check, a single-form check, or an obvious
-  word-order check.
+Consider these together when choosing the construction and authoring the item:
 
-For a planned HARD item, apply this stronger operational gate: solving must
-require integration of at least two interacting structural or grammatical
-cues, and at least one required cue must depend on non-local sentence
-structure outside the immediate blank-local phrase. Do not count sentence
-length, a rare subtype label, or three obviously malformed distractors around
-one trivial local cue as HARD. At least two distractors should be locally
-plausible English forms, but each must become definitely wrong when the larger
-complete-sentence structure is considered. Every such distractor must still
-have a definite structural defect in the complete sentence, not merely be
-awkward, less common, or stylistically different. HARD remains valid only when
-the item has one clearly correct answer, natural wording, and no dependence on
-rare vocabulary or world knowledge.
+- overall syntactic complexity;
+- clause embedding and organization;
+- marked/noncanonical word order;
+- distance between grammatical dependencies;
+- interaction between the blank and surrounding sentence structure;
+- structural similarity/plausibility of distractors; and
+- the amount of whole-sentence parsing required.
 
-Do not make HARD difficult through rare vocabulary, obscure world knowledge,
-ambiguity, unnatural wording, or trick semantics. Difficulty must never
-override answer uniqueness, grammaticality, or naturalness.
+Vocabulary difficulty and world knowledge must not create grammatical
+difficulty.
+
+### Calibrated bands
+
+- **EASY:** The lower end of normal TOEFL ITP Structure Part A difficulty.
+  Typical authorship characteristics include comparatively simple sentence
+  structure, a local/direct grammatical relation, low embedding, a
+  straightforward structural distinction, and distractors distinguishable
+  with a relatively local structural check. EASY may use one clear grammar
+  point. Do not unnecessarily increase complexity merely because the sentence-length target is longer.
+- **MEDIUM:** The broad central/typical band of TOEFL ITP Structure Part A.
+  MEDIUM does NOT require two grammar rules. A single primary construction may
+  yield MEDIUM when its realization requires meaningful sentence-level
+  structural processing, such as identifying a larger phrase or clause;
+  distinguishing reduced/nonfinite structure from finite structure; parsing
+  relative or subordinate-clause relationships; tracking the grammatical
+  relationship beyond the immediate blank; resolving structurally similar
+  alternatives; or handling meaningful but not upper-tail embedding or
+  organization. Do NOT automatically downgrade an otherwise typical Structure
+  item to EASY merely because its governing grammar rule can be stated
+  succinctly. At the same time, do not label/create a purely trivial local
+  form-selection item as MEDIUM solely because the stem is long.
+- **HARD:** The upper end of TOEFL ITP Structure Part A relative structural
+  difficulty. HARD does NOT require two separate grammar rules, two
+  interacting cues, a mandatory non-local cue, a minimum clause count, or a
+  fixed number of locally plausible distractors. A single sufficiently
+  demanding construction can be HARD. HARD may arise naturally from marked or
+  noncanonical inversion; complex/nested noun, relative, or adverbial clauses;
+  free-relative or similarly demanding clause structures; cleft-like
+  structural organization; structurally demanding comparative/correlative
+  constructions; long-distance grammatical dependency; demanding
+  coordination; difficult modifier/attachment structure; highly similar but
+  structurally distinct distractors; or another upper-tail construction within
+  the planned `primary_target`. One-clause HARD items are possible.
+
+Do not turn a simple construction into HARD merely by lengthening the stem,
+adding unrelated clauses, using rare vocabulary, relying on world knowledge,
+adding semantic tricks, introducing ambiguity, or using unnatural wording. If
+the chosen subtype cannot naturally support HARD while maintaining uniqueness
+and naturalness, choose a different subtype/construction within the SAME
+`primary_target`.
+
+Historical 75-item difficulty distribution is a scale anchor only:
+
+- EASY 18/75 = 24%;
+- MEDIUM 42/75 = 56%; and
+- HARD 15/75 = 20%.
+
+These proportions are calibration guidance only, not deterministic rules,
+quotas, or targets for an individual batch. The Planner already owns per-item
+difficulty; do not force a 15-item batch to match these percentages.
+
+Historical structural evidence is general calibration context only:
+
+- syntactic complexity 2: EASY 16, MEDIUM 14, HARD 0;
+- syntactic complexity 3: EASY 2, MEDIUM 23, HARD 7;
+- syntactic complexity 4: EASY 0, MEDIUM 5, HARD 8; and
+- historical HARD clause counts: clause_count 1: 3, 2: 7, 3: 4, 4: 1.
+
+Do not add `syntactic_complexity` to the plan or output schema, compute it
+deterministically, or turn `clause_count` into a difficulty rule. Clause count
+is a construction target from the plan, not a difficulty requirement.
+
+Keep these priorities in order:
+
+1. exactly one grammatical answer;
+2. grammatical correctness;
+3. natural semantic/logical wording;
+4. plausible but definitely invalid distractors; and
+5. planned difficulty fidelity.
+
+Difficulty must NEVER override answer uniqueness, grammaticality, or naturalness. Distractors may be
+structurally plausible when that naturally supports the planned relative
+difficulty, but HARD does not require exactly two or any fixed number of
+locally plausible distractors. Every distractor must still be definitely
+invalid in the complete sentence.
 
 Each distractor must represent a real grammatical or structural confusion, be
 explainable in relation to the correct answer, use real English rather than
