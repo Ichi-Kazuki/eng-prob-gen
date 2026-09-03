@@ -23,5 +23,14 @@ Return the best answer only when one completion is acceptable. Return
 acceptable completion exists. Report `HIGH`, `MEDIUM`, or `LOW` confidence and
 a concise reason. Do not force a guess.
 
+For a unique answer, return `answer_text` containing the exact visible option
+text that you selected. Copy that option string exactly, including case,
+punctuation, and whitespace. Do not return an A/B/C/D letter as the answer,
+and do not derive the answer from the reason. The exact `answer_text` is the
+source of truth; the reason is natural-language support only. For an ambiguous
+or impossible item, set `answer_text` to the exact sentinel `AMBIGUOUS` or
+`NONE`, respectively. When useful, refer to the selected visible construction
+in the reason rather than to an answer position.
+
 Return only JSON matching the supplied Structure Solver output schema, with one
 result for every input item in the same order.

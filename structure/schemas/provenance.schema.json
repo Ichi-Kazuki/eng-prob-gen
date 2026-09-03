@@ -4,7 +4,7 @@
   "title": "Structure v0.1 provenance",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "version", "run_id", "seed", "provider", "model", "invocations", "invocation_ids", "invocation_count", "deterministic_validation", "answer_position_permutation", "blind_inputs", "reviewer_solver_agreement", "reviewer_canonicalization", "leakage", "fallback", "runtime_failures", "artifact_hashes"],
+  "required": ["schema_version", "version", "run_id", "seed", "provider", "model", "invocations", "invocation_ids", "invocation_count", "deterministic_validation", "answer_position_permutation", "blind_inputs", "reviewer_solver_agreement", "reviewer_canonicalization", "solver_canonicalization", "leakage", "fallback", "runtime_failures", "artifact_hashes"],
   "properties": {
     "schema_version": {"const": "structure-provenance-v0.1"},
     "version": {"const": "v0.1"},
@@ -21,6 +21,7 @@
     "blind_inputs": {"type": "object"},
     "reviewer_solver_agreement": {"type": "object"},
     "reviewer_canonicalization": {"type": "object"},
+    "solver_canonicalization": {"type": "object"},
     "leakage": {"type": "object"},
     "fallback": {"type": "object"},
     "runtime_failures": {"type": "array"},

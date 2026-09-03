@@ -343,6 +343,31 @@ def reviewer_difficulty_summary(
     return agreement_count, low_confidence_count
 
 
+SOLVER_ANSWER_SENTINELS = frozenset({"AMBIGUOUS", "NONE"})
+
+
+def _solver_answer_text_errors(
+    output_item: Mapping[str, Any], blind_item: Mapping[str, Any], item_label: str
+) -> list[str]:
+    """Validate raw Solver answer_text against the visible options by exact identity."""
+
+    options = blind_item.get("options")
+    if not isinstance(options, dict) or set(options) != set(LETTERS):
+        return [f"solver[{item_label}]: blind options must contain exactly A/B/C/D"]
+    expected_texts = [options[letter] for letter in LETTERS]
+    if not all(isinstance(text, str) for text in expected_texts):
+        return [f"solver[{item_label}]: blind option texts must be strings"]
+    if len(set(expected_texts)) != len(expected_texts):
+        return [f"solver[{item_label}]: blind option texts are not one-to-one"]
+
+    answer_text = output_item.get("answer_text")
+    if not isinstance(answer_text, str) or (
+        answer_text not in expected_texts and answer_text not in SOLVER_ANSWER_SENTINELS
+    ):
+        return [f"solver[{item_label}]: answer_text is not an exact visible option or allowed sentinel"]
+    return []
+
+
 def validate_solver_contract(output: Any, blind: Mapping[str, Any], plan: Mapping[str, Any] | None = None) -> list[str]:
     errors = _schema(output, "solver")
     if not isinstance(output, dict):
@@ -356,8 +381,44 @@ def validate_solver_contract(output: Any, blind: Mapping[str, Any], plan: Mappin
         errors.append(f"solver: duplicate item_id(s): {duplicates}")
     if actual != expected:
         errors.append("solver: item IDs/order do not match blind input")
+    blind_items = blind.get("items", []) if isinstance(blind, dict) else []
+    if isinstance(blind_items, list):
+        for output_item, blind_item in zip(items, blind_items):
+            if isinstance(output_item, dict) and isinstance(blind_item, dict):
+                item_label = str(output_item.get("item_id", "unknown"))
+                errors.extend(_solver_answer_text_errors(output_item, blind_item, item_label))
     errors.extend(f"solver: forbidden field {path}" for path in find_leakage(output))
     return _deduplicate(errors)
+
+
+def canonicalize_solver_output(output: Any, blind: Mapping[str, Any]) -> dict[str, Any]:
+    """Map a validated raw text-based Solver response to the legacy internal shape."""
+
+    errors = validate_solver_contract(output, blind)
+    if errors:
+        raise ValueError("solver raw output cannot be canonicalized: " + "; ".join(errors))
+    if not isinstance(output, dict):  # pragma: no cover - guarded by validate_solver_contract
+        raise ValueError("solver raw output must be an object")
+    blind_items = blind.get("items")
+    output_items = output.get("items")
+    if not isinstance(blind_items, list) or not isinstance(output_items, list):  # pragma: no cover
+        raise ValueError("solver raw output and blind input must contain items arrays")
+
+    canonical_items: list[dict[str, Any]] = []
+    for output_item, blind_item in zip(output_items, blind_items):
+        if not isinstance(output_item, dict) or not isinstance(blind_item, dict):  # pragma: no cover
+            raise ValueError("solver raw output and blind input items must be objects")
+        options = blind_item["options"]
+        answer_text = output_item["answer_text"]
+        option_to_letter = {options[letter]: letter for letter in LETTERS}
+        answer = option_to_letter.get(answer_text, answer_text)
+        canonical_items.append({
+            "item_id": output_item["item_id"],
+            "answer": answer,
+            "confidence": output_item["confidence"],
+            "reason": output_item["reason"],
+        })
+    return {"items": canonical_items}
 
 
 validate_generator = validate_generator_contract

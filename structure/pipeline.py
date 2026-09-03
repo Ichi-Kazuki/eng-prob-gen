@@ -20,6 +20,7 @@ from .contracts import (
     SCHEMA_PATHS,
     post_blind_comparison,
     canonicalize_reviewer_output,
+    canonicalize_solver_output,
     reviewer_difficulty_diagnostics,
     reviewer_difficulty_summary,
     validate_generator_contract,
@@ -192,6 +193,7 @@ class StructurePipeline:
         blind: dict[str, Any] | None = None
         reviewer_raw: dict[str, Any] | None = None
         reviewer: dict[str, Any] | None = None
+        solver_raw: Any = None
         solver: dict[str, Any] | None = None
         generator_errors: list[str] = []
         blind_errors: list[str] = []
@@ -241,8 +243,13 @@ class StructurePipeline:
                         output_dir=run_dir,
                         isolate_workspace=True,
                     )
-                    solver = solver_result.parsed
-                    solver_errors = validate_solver_contract(solver, blind, plan)
+                    solver_raw = solver_result.parsed
+                    solver_errors = validate_solver_contract(solver_raw, blind, plan)
+                    if not solver_errors:
+                        try:
+                            solver = canonicalize_solver_output(solver_raw, blind)
+                        except ValueError as exc:
+                            solver_errors = [f"solver: canonicalization failed: {exc}"]
         except RuntimeInvocationError:
             # Runtime failures are persisted and quarantine the whole set. No
             # semantic retry, repair, revision, or item replacement is made.
@@ -281,7 +288,7 @@ class StructurePipeline:
             "reviewer_input.json": blind,
             "reviewer.json": reviewer_raw,
             "solver_input.json": blind,
-            "solver.json": solver,
+            "solver.json": solver_raw,
         }
         hashes = artifact_hashes(values)
         atomic_write_json(run_dir / "generator_raw.json", raw_generator)
@@ -291,7 +298,7 @@ class StructurePipeline:
         atomic_write_json(run_dir / "reviewer_input.json", blind)
         atomic_write_json(run_dir / "reviewer.json", reviewer_raw)
         atomic_write_json(run_dir / "solver_input.json", blind)
-        atomic_write_json(run_dir / "solver.json", solver)
+        atomic_write_json(run_dir / "solver.json", solver_raw)
 
         provider = _safe_runtime_value(getattr(self.runtime, "provider", "unknown"))
         model = _safe_runtime_value(self.invocations[0].model if self.invocations else getattr(self.runtime, "model", "unknown"))
@@ -330,6 +337,11 @@ class StructurePipeline:
                 },
                 "solver_contract": not solver_errors and solver is not None,
                 "solver_errors": solver_errors,
+                "solver_canonicalization": {
+                    "applied": solver is not None and not solver_errors,
+                    "strategy": "exact_option_text_identity",
+                    "raw_artifact": "solver.json",
+                },
                 "reviewer_solver_agreement": agreements,
                 "all_15_items_pass": len(item_results) == 15 and all(item["accepted"] for item in item_results),
                 "no_repair_or_revision_stage": all(item.stage in {"structure_generator", "structure_reviewer", "structure_solver"} for item in self.invocations),
@@ -378,6 +390,12 @@ class StructurePipeline:
                 "strategy": "exact_option_text_identity",
                 "raw_artifact": "reviewer.json",
                 "canonical_internal_shape": "option_judgments keyed A-D; best_answer letter or sentinel",
+            },
+            "solver_canonicalization": {
+                "applied": solver is not None and not solver_errors,
+                "strategy": "exact_option_text_identity",
+                "raw_artifact": "solver.json",
+                "canonical_internal_shape": "answer letter or sentinel; item_id, confidence, reason",
             },
             "reviewer_solver_agreement": {
                 "count": agreement_count,

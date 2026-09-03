@@ -13,10 +13,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["item_id", "answer", "confidence", "reason"],
+        "required": ["item_id", "answer_text", "confidence", "reason"],
         "properties": {
           "item_id": {"type": "string", "minLength": 1},
-          "answer": {"enum": ["A", "B", "C", "D", "AMBIGUOUS", "NONE"]},
+          "answer_text": {"type": "string", "minLength": 1},
           "confidence": {"enum": ["HIGH", "MEDIUM", "LOW"]},
           "reason": {"type": "string", "minLength": 1}
         }

@@ -17,6 +17,7 @@ from structure.blinding import blind_input_errors, build_blind_input
 from structure.contracts import (
     LETTERS,
     canonicalize_reviewer_output,
+    canonicalize_solver_output,
     normalized_option_surface,
     post_blind_comparison,
     reviewer_difficulty_diagnostic_reasons,
@@ -107,13 +108,17 @@ def reviewer_fixture(
     return {"items": items}
 
 
-def solver_fixture(blind: dict[str, Any], *, first_answer: str | None = None, confidence: str = "HIGH") -> dict[str, Any]:
+def solver_fixture(
+    blind: dict[str, Any], *, first_answer_text: str | None = None, confidence: str = "HIGH"
+) -> dict[str, Any]:
     items = []
     for index, item in enumerate(blind["items"]):
         correct = next(letter for letter in LETTERS if item["options"][letter] == "is")
         items.append({
             "item_id": item["item_id"],
-            "answer": first_answer if index == 0 and first_answer is not None else correct,
+            "answer_text": (
+                first_answer_text if index == 0 and first_answer_text is not None else item["options"][correct]
+            ),
             "confidence": confidence, "reason": "The singular finite completion is the only acceptable choice.",
         })
     return {"items": items}
@@ -860,6 +865,11 @@ class StructurePromptTests(unittest.TestCase):
             "and `NONE` when no acceptable completion exists",
             "Report `HIGH`, `MEDIUM`, or `LOW` confidence",
             "Do not force a guess.",
+            "`answer_text` containing the exact visible option",
+            "Copy that option string exactly, including case, punctuation, and whitespace.",
+            "Do not return an A/B/C/D letter as the answer",
+            "do not derive the answer from the reason",
+            "refer to the selected visible construction in the reason rather than to an answer position",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, solver_prompt)
@@ -879,12 +889,12 @@ class StructurePromptTests(unittest.TestCase):
             with self.subTest(forbidden=forbidden):
                 self.assertNotIn(forbidden, solver_prompt)
 
-    def test_solver_contract_remains_unchanged(self) -> None:
+    def test_solver_contract_hash_regression(self) -> None:
         solver_prompt_hash = hashlib.sha256(Path("structure/prompts/solver.md").read_bytes()).hexdigest()
-        self.assertEqual(solver_prompt_hash, "112925abe56c70b7d8016a8554fa285ac4c633b80c508bafe2a493dc30f5a49f")
+        self.assertEqual(solver_prompt_hash, "e83c1a95cf4a098f43733101a63751ac151993cfbd02e25b9f9af0e238b862f3")
         for schema_name, expected_hash in {
             "solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
-            "solver_output.schema.json": "1e791bb296e808bff2fe25d6d94db22602aa3f68211b3691b967b26be43f4937",
+            "solver_output.schema.json": "90588686793f16f5ff2aefd6c19a834eb444e1bda9a0c1aff73de74e3506d031",
         }.items():
             with self.subTest(schema=schema_name):
                 actual_hash = hashlib.sha256((Path("structure/schemas") / schema_name).read_bytes()).hexdigest()
@@ -892,8 +902,8 @@ class StructurePromptTests(unittest.TestCase):
 
     def test_planner_validation_and_pipeline_boundaries_are_protected(self) -> None:
         expected_hashes = {
-            "structure/contracts.py": "539c23d23452ad7968610cf520efd0aa6c8fa2e5f65e73babe6658cde18127c6",
-            "structure/pipeline.py": "7df4d42dcc0c7e18140a6d8f884797c0313edfd9258c4a5d4676efba8a353a51",
+            "structure/contracts.py": "6bc58c1f0f8729b34eaba694e62d08af278d582f7df95708186024483cbb03f6",
+            "structure/pipeline.py": "bfa2775767c86d9bc0b5c7777a6edfdce449827c1f2ed161b3976a27b7634eaf",
             "structure/planner.py": "d50e130a7c05fb79ba399c552322130aa4b5833eb6aff39144c3f6449748a7ee",
             "structure/profile.json": "66f9ad0cc2a7323ae396ab8c5f9766204327b0ecb4f5b275ec6a5b2e6295c6c5",
             "structure/blinding.py": "b39dcdad846adda25d46784c5d75b75e49f5b01d44df75a011bfe2c96546b351",
@@ -908,7 +918,7 @@ class StructurePromptTests(unittest.TestCase):
         expected_hashes = {
             "structure/prompts/generator.md": "7a9043b0feae0fdcabe5da7537b06c1e0894b6e5e5f6f7e8b4deb497e79ebda6",
             "structure/prompts/reviewer.md": "998abfb2ad276d5ed3b762a89593b5b91a8cfa7ac6390a3f4d450f4214730d5b",
-            "structure/prompts/solver.md": "112925abe56c70b7d8016a8554fa285ac4c633b80c508bafe2a493dc30f5a49f",
+            "structure/prompts/solver.md": "e83c1a95cf4a098f43733101a63751ac151993cfbd02e25b9f9af0e238b862f3",
         }
         for relative_path, expected_hash in expected_hashes.items():
             with self.subTest(path=relative_path):
@@ -920,12 +930,12 @@ class StructurePromptTests(unittest.TestCase):
             "generator_item.schema.json": "229a8c39ca0daa2e79e516b0cc362eb740204fd5369252c478c79facaf857fff",
             "generator_output.schema.json": "78ad5e758052928bf51f973cdc009ab103c4f535e243e6bd17b0631fb361b2dd",
             "plan.schema.json": "ecfe3f6714e72fd6ac7282c8adb6356eb0678e77bcc039290e728b3908840807",
-            "provenance.schema.json": "3b4a8e8a07ab6607f555b77afaf76201201d8832bd27548ed129bcf846c04bc3",
+            "provenance.schema.json": "2979c3520cb79c5bdc96933f812f751be2c62db47cd2fea6c7294b30159904f2",
             "result.schema.json": "9f049f94ec8a819bf228bd59845eb64deddd6f974f523a64abccbaae69bfb5c5",
             "reviewer_input.schema.json": "8e5181664253967064a4c415377f5bc9f75a55e69984e54c01148d413d9e8b19",
             "reviewer_output.schema.json": "4c2cf716b7c7229778a4869e176e119309b705b7b8917fbf1ba90387cd29b9df",
             "solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
-            "solver_output.schema.json": "1e791bb296e808bff2fe25d6d94db22602aa3f68211b3691b967b26be43f4937",
+            "solver_output.schema.json": "90588686793f16f5ff2aefd6c19a834eb444e1bda9a0c1aff73de74e3506d031",
         }
         for schema_name, expected_hash in expected_hashes.items():
             with self.subTest(schema=schema_name):
@@ -1183,7 +1193,8 @@ class StructureReviewerCanonicalizationTests(unittest.TestCase):
         generator = generator_fixture(self.plan)
         blind = build_blind_input(generator)
         canonical = canonicalize_reviewer_output(reviewer_fixture(blind), blind)
-        agreements, count = post_blind_comparison(generator, canonical, solver_fixture(blind))
+        canonical_solver = canonicalize_solver_output(solver_fixture(blind), blind)
+        agreements, count = post_blind_comparison(generator, canonical, canonical_solver)
         self.assertEqual(count, 15)
         self.assertTrue(all(agreement["agree"] for agreement in agreements))
 
@@ -1251,6 +1262,116 @@ class StructureReviewerCanonicalizationTests(unittest.TestCase):
         diagnostics = reviewer_difficulty_diagnostics(plan, reviewer)
         self.assertEqual(len(diagnostics), 15)
         self.assertIn("reviewer_difficulty_confidence_low", diagnostics[0]["reasons"])
+
+
+class StructureSolverCanonicalizationTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.plan = build_plan(52)
+        self.blind = build_blind_input(generator_fixture(self.plan))
+
+    def test_solver_input_allowlist_and_raw_schema_use_answer_text(self) -> None:
+        input_schema = load_schema(Path("structure/schemas/solver_input.schema.json"))
+        output_schema = load_schema(Path("structure/schemas/solver_output.schema.json"))
+        item_input_schema = input_schema["$defs"]["item"]
+        self.assertEqual(
+            set(item_input_schema["required"]),
+            {"item_id", "section", "stem", "options"},
+        )
+        self.assertEqual(set(item_input_schema["properties"]), {"item_id", "section", "stem", "options"})
+        self.assertFalse(item_input_schema["additionalProperties"])
+
+        item_output_schema = output_schema["properties"]["items"]["items"]
+        self.assertIn("answer_text", item_output_schema["required"])
+        self.assertNotIn("answer", item_output_schema["required"])
+        self.assertEqual(set(item_output_schema["properties"]), {"item_id", "answer_text", "confidence", "reason"})
+        raw = solver_fixture(self.blind)
+        self.assertEqual(schema_errors(raw, output_schema), [])
+        self.assertEqual(validate_solver_contract(raw, self.blind, self.plan), [])
+        self.assertTrue(all("answer_text" in item and "answer" not in item for item in raw["items"]))
+        legacy = copy.deepcopy(raw)
+        del legacy["items"][0]["answer_text"]
+        legacy["items"][0]["answer"] = "A"
+        self.assertTrue(schema_errors(legacy, output_schema))
+        self.assertTrue(validate_solver_contract(legacy, self.blind, self.plan))
+
+    def test_exact_visible_option_text_maps_to_current_position(self) -> None:
+        options = {
+            "A": "a significant disparity regional",
+            "B": "a disparity significant regional",
+            "C": "a regional significant disparity",
+            "D": "a significant regional disparity",
+        }
+        raw = solver_fixture(self.blind)
+        blind = copy.deepcopy(self.blind)
+        blind["items"][0]["options"] = options
+        for answer_text, expected_answer in ((options[letter], letter) for letter in LETTERS):
+            with self.subTest(expected_answer=expected_answer):
+                candidate = copy.deepcopy(raw)
+                candidate["items"][0]["answer_text"] = answer_text
+                canonical = canonicalize_solver_output(candidate, blind)
+                self.assertEqual(canonical["items"][0]["answer"], expected_answer)
+
+    def test_sentinels_remain_sentinels(self) -> None:
+        raw = solver_fixture(self.blind)
+        for sentinel in ("AMBIGUOUS", "NONE"):
+            with self.subTest(sentinel=sentinel):
+                candidate = copy.deepcopy(raw)
+                candidate["items"][0]["answer_text"] = sentinel
+                canonical = canonicalize_solver_output(candidate, self.blind)
+                self.assertEqual(canonical["items"][0]["answer"], sentinel)
+
+    def test_canonical_solver_shape_preserves_only_existing_downstream_fields(self) -> None:
+        raw = solver_fixture(self.blind, confidence="MEDIUM")
+        raw["items"][0]["reason"] = "The visible completion fits the full sentence."
+        canonical_item = canonicalize_solver_output(raw, self.blind)["items"][0]
+        self.assertEqual(set(canonical_item), {"item_id", "answer", "confidence", "reason"})
+        self.assertEqual(canonical_item["item_id"], raw["items"][0]["item_id"])
+        self.assertEqual(canonical_item["confidence"], "MEDIUM")
+        self.assertEqual(canonical_item["reason"], raw["items"][0]["reason"])
+
+    def test_non_exact_answer_text_fails_closed_without_reason_parsing(self) -> None:
+        invalid_cases = (
+            ("modified", self.blind, "i"),
+            ("typo", self.blind, "izz"),
+            ("case_changed", self.blind, "IS"),
+            ("added_whitespace", self.blind, "is "),
+            ("non_option", self.blind, "was"),
+        )
+        removed_whitespace_blind = copy.deepcopy(self.blind)
+        removed_whitespace_blind["items"][0]["options"] = {
+            "A": " is", "B": "are", "C": "be", "D": "being"
+        }
+        invalid_cases += (("removed_whitespace", removed_whitespace_blind, "is"),)
+        for name, blind, answer_text in invalid_cases:
+            with self.subTest(case=name):
+                candidate = solver_fixture(self.blind)
+                candidate["items"][0]["answer_text"] = answer_text
+                candidate["items"][0]["reason"] = "'The singular finite completion is the only acceptable choice.'"
+                self.assertTrue(validate_solver_contract(candidate, blind, self.plan))
+                with self.assertRaises(ValueError):
+                    canonicalize_solver_output(candidate, blind)
+
+        regression_options = {
+            "A": "a significant disparity regional",
+            "B": "a disparity significant regional",
+            "C": "a regional significant disparity",
+            "D": "a significant regional disparity",
+        }
+        blind = copy.deepcopy(self.blind)
+        blind["items"][0]["options"] = regression_options
+        candidate = solver_fixture(self.blind)
+        candidate["items"][0]["answer_text"] = regression_options["D"]
+        candidate["items"][0]["reason"] = f"'{regression_options['C']}' has the correct noun phrase structure."
+        canonical = canonicalize_solver_output(candidate, blind)
+        self.assertEqual(canonical["items"][0]["answer"], "D")
+
+    def test_canonical_solver_answers_feed_existing_reviewer_solver_agreement(self) -> None:
+        generator = generator_fixture(self.plan)
+        canonical_solver = canonicalize_solver_output(solver_fixture(self.blind), self.blind)
+        canonical_reviewer = canonicalize_reviewer_output(reviewer_fixture(self.blind), self.blind)
+        agreements, count = post_blind_comparison(generator, canonical_reviewer, canonical_solver)
+        self.assertEqual(count, 15)
+        self.assertTrue(all(agreement["agree"] for agreement in agreements))
 
 
 class StructurePipelineTests(unittest.TestCase):
@@ -1361,6 +1482,27 @@ class StructurePipelineTests(unittest.TestCase):
             },
         )
 
+    def test_solver_artifact_persists_raw_text_and_provenance_records_canonicalization(self) -> None:
+        runtime = FixtureRuntime()
+        with tempfile.TemporaryDirectory() as directory:
+            StructurePipeline(runtime).run(51, output_dir=Path(directory))
+            solver = json.loads((Path(directory) / "solver.json").read_text(encoding="utf-8"))
+            provenance = json.loads(
+                (Path(directory) / "provenance" / "provenance.json").read_text(encoding="utf-8")
+            )
+        self.assertEqual(len(solver["items"]), 15)
+        self.assertTrue(all("answer_text" in item for item in solver["items"]))
+        self.assertTrue(all("answer" not in item for item in solver["items"]))
+        self.assertEqual(
+            provenance["solver_canonicalization"],
+            {
+                "applied": True,
+                "strategy": "exact_option_text_identity",
+                "raw_artifact": "solver.json",
+                "canonical_internal_shape": "answer letter or sentinel; item_id, confidence, reason",
+            },
+        )
+
     def test_one_defective_item_quarantines_the_whole_set(self) -> None:
         plan = build_plan(51)
         permuted, _ = permute_generator_output(generator_fixture(plan), 51)
@@ -1385,6 +1527,20 @@ class StructurePipelineTests(unittest.TestCase):
             "structure_generator", "structure_reviewer", "structure_solver"
         ])
 
+    def test_invalid_solver_answer_text_quarantines_the_whole_set_without_extra_calls(self) -> None:
+        plan = build_plan(51)
+        blind = build_blind_input(permute_generator_output(generator_fixture(plan), 51)[0])
+        solver = solver_fixture(blind)
+        solver["items"][0]["answer_text"] = "is "
+        runtime = FixtureRuntime(solver=solver)
+        result = self.run_fixture(runtime)
+        self.assertEqual(result["decision"], "QUARANTINE")
+        self.assertEqual(result["live_invocation_count"], 3)
+        self.assertTrue(result["checks"]["solver_errors"])
+        self.assertEqual([request.stage for request in runtime.requests], [
+            "structure_generator", "structure_reviewer", "structure_solver"
+        ])
+
     def test_each_final_gate_blocks_accept(self) -> None:
         plan = build_plan(51)
         permuted, _ = permute_generator_output(generator_fixture(plan), 51)
@@ -1399,10 +1555,10 @@ class StructurePipelineTests(unittest.TestCase):
         cases = {
             "reviewer_ambiguous": (reviewer_fixture(blind, first_best="AMBIGUOUS"), None),
             "reviewer_none": (reviewer_fixture(blind, first_best="NONE"), None),
-            "solver_ambiguous": (None, solver_fixture(blind, first_answer="AMBIGUOUS")),
-            "solver_none": (None, solver_fixture(blind, first_answer="NONE")),
+            "solver_ambiguous": (None, solver_fixture(blind, first_answer_text="AMBIGUOUS")),
+            "solver_none": (None, solver_fixture(blind, first_answer_text="NONE")),
             "reviewer_key_disagreement": (reviewer_fixture(blind, first_best=wrong), None),
-            "solver_key_disagreement": (None, solver_fixture(blind, first_answer=wrong)),
+            "solver_key_disagreement": (None, solver_fixture(blind, first_answer_text=blind["items"][0]["options"][wrong])),
             "low_confidence": (None, solver_fixture(blind, confidence="LOW")),
             "serious_defect": (reviewer_fixture(blind, serious=True), None),
             "unnatural_wording": (reviewer_fixture(blind, natural=False), None),
