@@ -9,11 +9,14 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import json
 import unittest
 from pathlib import Path
 from typing import Any
 
 from shared.schema_validation import load_schema, schema_errors
+from structure.v02 import blinding as v02_blinding
+from structure.v02 import contracts as v02_contracts
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -378,6 +381,390 @@ class V01FreezeTests(unittest.TestCase):
                     expected_hash,
                     f"frozen v0.1 file changed: {relative_path}",
                 )
+
+
+SEED = 7
+
+
+def _raw_reviewer_output_fixture(reviewer_input: dict[str, Any]) -> dict[str, Any]:
+    """Build a schema-valid, contract-valid raw Reviewer response for a projection."""
+
+    correct_text = "confirmed"
+    items = []
+    for item in reviewer_input["items"]:
+        options = item["candidate_options"]
+        judgments = [
+            {"option_text": text, "judgment": "VALID" if text == correct_text else "INVALID"}
+            for text in options
+        ]
+        diagnostics = [
+            {
+                "option_text": correct_text,
+                "natural_wording": True,
+                "serious_defect": False,
+                "observed_clause_count": 2,
+                "candidate_pool_observed_difficulty": "MEDIUM",
+                "difficulty_confidence": "HIGH",
+            }
+        ]
+        items.append({
+            "item_id": item["item_id"],
+            "option_judgments": judgments,
+            "candidate_diagnostics": diagnostics,
+            "comment": "Only the finite past-tense form completes the main clause naturally.",
+        })
+    return {"items": items}
+
+
+class CandidateIdentityTests(unittest.TestCase):
+    def test_internal_candidate_ids_are_exact(self) -> None:
+        self.assertEqual(v02_blinding.CANDIDATE_IDS, ("correct", "d1", "d2", "d3", "d4", "d5", "d6"))
+
+    def test_extract_candidate_entries_private_correct_identity(self) -> None:
+        item = generator_output_fixture()["items"][0]
+        entries = v02_blinding.extract_candidate_entries(item)
+        self.assertEqual([candidate_id for candidate_id, _ in entries], list(v02_blinding.CANDIDATE_IDS))
+        self.assertEqual(entries[0], ("correct", "confirmed"))
+
+
+class ReviewerCandidateProjectionTests(unittest.TestCase):
+    def test_projection_contains_exactly_expected_keys(self) -> None:
+        payload = v02_blinding.build_reviewer_candidate_input(generator_output_fixture(), SEED)
+        for item in payload["items"]:
+            self.assertEqual(set(item), {"item_id", "section", "stem", "candidate_options"})
+
+    def test_reviewer_sees_exactly_seven_strings(self) -> None:
+        payload = v02_blinding.build_reviewer_candidate_input(generator_output_fixture(), SEED)
+        for item in payload["items"]:
+            self.assertEqual(7, len(item["candidate_options"]))
+            self.assertTrue(all(isinstance(text, str) for text in item["candidate_options"]))
+
+    def test_no_candidate_ids_leak(self) -> None:
+        payload = v02_blinding.build_reviewer_candidate_input(generator_output_fixture(), SEED)
+        serialized = json.dumps(payload)
+        for candidate_id in v02_blinding.CANDIDATE_IDS:
+            self.assertNotIn(f'"{candidate_id}"', serialized)
+
+    def test_no_private_generator_metadata_leaks(self) -> None:
+        payload = v02_blinding.build_reviewer_candidate_input(generator_output_fixture(), SEED)
+        serialized = json.dumps(payload)
+        for forbidden in (
+            "correct_option", "distractor_candidates", "primary_target", "subtype",
+            "difficulty", "vocabulary_domain", "answer_explanation", "rationale",
+            "secondary_features", "clause_count", "sentence_length_bin", "target_word_count",
+        ):
+            self.assertNotIn(forbidden, serialized)
+
+    def test_same_seed_produces_identical_projection(self) -> None:
+        generator = generator_output_fixture()
+        first = v02_blinding.build_reviewer_candidate_input(generator, SEED)
+        second = v02_blinding.build_reviewer_candidate_input(generator, SEED)
+        self.assertEqual(first, second)
+
+    def test_preserves_generator_item_order(self) -> None:
+        generator = generator_output_fixture()
+        payload = v02_blinding.build_reviewer_candidate_input(generator, SEED)
+        self.assertEqual(
+            [item["item_id"] for item in payload["items"]],
+            [item["item_id"] for item in generator["items"]],
+        )
+
+    def test_validates_against_reviewer_input_schema(self) -> None:
+        payload = v02_blinding.build_reviewer_candidate_input(generator_output_fixture(), SEED)
+        self.assertEqual([], schema_errors(payload, load_schema(REVIEWER_INPUT_SCHEMA)))
+
+    def test_exact_duplicate_candidate_texts_fail_closed(self) -> None:
+        generator = generator_output_fixture()
+        generator["items"][0]["distractor_candidates"]["d2"]["text"] = (
+            generator["items"][0]["correct_option"]["text"]
+        )
+        with self.assertRaises(ValueError):
+            v02_blinding.build_reviewer_candidate_input(generator, SEED)
+
+
+class SeedValidationTests(unittest.TestCase):
+    def test_negative_seed_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            v02_blinding.build_reviewer_candidate_input(generator_output_fixture(), -1)
+
+    def test_bool_seed_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            v02_blinding.build_reviewer_candidate_input(generator_output_fixture(), True)
+
+    def test_validate_seed_accepts_zero(self) -> None:
+        self.assertEqual(0, v02_blinding.validate_seed(0))
+
+
+class PriorityDeterminismTests(unittest.TestCase):
+    def test_same_seed_item_candidate_gives_same_priority(self) -> None:
+        first = v02_blinding.reviewer_order_priority(SEED, "item-1", "d3")
+        second = v02_blinding.reviewer_order_priority(SEED, "item-1", "d3")
+        self.assertEqual(first, second)
+
+    def test_priority_is_sha256_hex(self) -> None:
+        digest = v02_blinding.reviewer_order_priority(SEED, "item-1", "d3")
+        self.assertEqual(64, len(digest))
+        int(digest, 16)
+
+    def test_reviewer_order_and_selection_domains_differ(self) -> None:
+        reviewer_digest = v02_blinding.reviewer_order_priority(SEED, "item-1", "d3")
+        selection_digest = v02_blinding.selection_priority(SEED, "item-1", "d3")
+        self.assertNotEqual(reviewer_digest, selection_digest)
+
+    def test_ordering_independent_of_dict_iteration(self) -> None:
+        generator_a = generator_output_fixture()
+        generator_b = generator_output_fixture()
+        generator_b["items"][0]["distractor_candidates"] = dict(
+            reversed(list(generator_b["items"][0]["distractor_candidates"].items()))
+        )
+        payload_a = v02_blinding.build_reviewer_candidate_input(generator_a, SEED)
+        payload_b = v02_blinding.build_reviewer_candidate_input(generator_b, SEED)
+        self.assertEqual(payload_a, payload_b)
+
+    def test_different_seeds_can_produce_different_order(self) -> None:
+        generator = generator_output_fixture()
+        orders = {
+            seed: tuple(
+                v02_blinding.build_reviewer_candidate_input(generator, seed)["items"][0]["candidate_options"]
+            )
+            for seed in range(6)
+        }
+        self.assertGreater(len(set(orders.values())), 1)
+
+
+class ReviewerCandidateProjectionValidationTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.generator = generator_output_fixture()
+        self.seed = SEED
+        self.payload = v02_blinding.build_reviewer_candidate_input(self.generator, self.seed)
+
+    def test_valid_payload_has_no_errors(self) -> None:
+        self.assertEqual(
+            [], v02_blinding.reviewer_candidate_input_errors(self.generator, self.payload, self.seed)
+        )
+
+    def test_modified_order_fails(self) -> None:
+        payload = copy.deepcopy(self.payload)
+        options = payload["items"][0]["candidate_options"]
+        options[0], options[1] = options[1], options[0]
+        self.assertTrue(v02_blinding.reviewer_candidate_input_errors(self.generator, payload, self.seed))
+
+    def test_modified_text_fails(self) -> None:
+        payload = copy.deepcopy(self.payload)
+        payload["items"][0]["candidate_options"][0] = "modified text"
+        self.assertTrue(v02_blinding.reviewer_candidate_input_errors(self.generator, payload, self.seed))
+
+    def test_added_private_field_fails(self) -> None:
+        payload = copy.deepcopy(self.payload)
+        payload["items"][0]["correct_option"] = {"text": "leak"}
+        self.assertTrue(v02_blinding.reviewer_candidate_input_errors(self.generator, payload, self.seed))
+
+
+class ReviewerOutputContractTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.generator = generator_output_fixture()
+        self.seed = SEED
+        self.reviewer_input = v02_blinding.build_reviewer_candidate_input(self.generator, self.seed)
+        self.raw_reviewer = _raw_reviewer_output_fixture(self.reviewer_input)
+
+    def test_valid_reviewer_output_passes(self) -> None:
+        self.assertEqual(
+            [], v02_contracts.validate_reviewer_contract(self.raw_reviewer, self.reviewer_input)
+        )
+
+    def test_schema_invalid_output_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        raw["items"][0]["option_judgments"][0]["judgment"] = "MAYBE"
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_item_id_mismatch_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        raw["items"][0]["item_id"] = "wrong-id"
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_item_order_mismatch_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        raw["items"][0], raw["items"][1] = raw["items"][1], raw["items"][0]
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_option_judgments_missing_one_visible_text_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        raw["items"][0]["option_judgments"][1]["option_text"] = raw["items"][0]["option_judgments"][0]["option_text"]
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_option_judgments_duplicates_one_visible_text_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        raw["items"][0]["option_judgments"][2]["option_text"] = raw["items"][0]["option_judgments"][0]["option_text"]
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_option_judgments_invents_or_changes_text_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        raw["items"][0]["option_judgments"][0]["option_text"] = "an entirely invented option"
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_exact_case_difference_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        original = raw["items"][0]["option_judgments"][0]["option_text"]
+        raw["items"][0]["option_judgments"][0]["option_text"] = original.upper()
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_exact_whitespace_difference_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        original = raw["items"][0]["option_judgments"][0]["option_text"]
+        raw["items"][0]["option_judgments"][0]["option_text"] = original + " "
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_exact_punctuation_difference_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        original = raw["items"][0]["option_judgments"][0]["option_text"]
+        raw["items"][0]["option_judgments"][0]["option_text"] = original + "."
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_valid_candidate_missing_diagnostic_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        raw["items"][0]["candidate_diagnostics"] = []
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_marginal_candidate_missing_diagnostic_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        target_entry = next(
+            entry for entry in raw["items"][0]["option_judgments"] if entry["option_text"] != "confirmed"
+        )
+        target_entry["judgment"] = "MARGINAL"
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_invalid_candidate_with_diagnostic_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        invalid_text = next(
+            entry["option_text"] for entry in raw["items"][0]["option_judgments"] if entry["judgment"] == "INVALID"
+        )
+        raw["items"][0]["candidate_diagnostics"].append({
+            "option_text": invalid_text,
+            "natural_wording": False,
+            "serious_defect": True,
+            "observed_clause_count": 2,
+            "candidate_pool_observed_difficulty": "MEDIUM",
+            "difficulty_confidence": "HIGH",
+        })
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_duplicate_diagnostic_text_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        raw["items"][0]["candidate_diagnostics"].append(copy.deepcopy(raw["items"][0]["candidate_diagnostics"][0]))
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_invented_diagnostic_text_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        raw["items"][0]["candidate_diagnostics"][0]["option_text"] = "an entirely invented option"
+        self.assertTrue(v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_all_valid_marginal_diagnostics_exactly_present_passes(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        options = self.reviewer_input["items"][0]["candidate_options"]
+        second_text = next(text for text in options if text != "confirmed")
+        raw["items"][0]["option_judgments"] = [
+            {"option_text": text, "judgment": "MARGINAL" if text == second_text else entry["judgment"]}
+            for text, entry in zip(options, raw["items"][0]["option_judgments"])
+        ]
+        raw["items"][0]["candidate_diagnostics"].append({
+            "option_text": second_text,
+            "natural_wording": False,
+            "serious_defect": False,
+            "observed_clause_count": 2,
+            "candidate_pool_observed_difficulty": "MEDIUM",
+            "difficulty_confidence": "MEDIUM",
+        })
+        self.assertEqual([], v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_multiple_valid_candidates_are_allowed(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        options = self.reviewer_input["items"][0]["candidate_options"]
+        second_text = next(text for text in options if text != "confirmed")
+        for entry in raw["items"][0]["option_judgments"]:
+            if entry["option_text"] == second_text:
+                entry["judgment"] = "VALID"
+        raw["items"][0]["candidate_diagnostics"].append({
+            "option_text": second_text,
+            "natural_wording": True,
+            "serious_defect": False,
+            "observed_clause_count": 2,
+            "candidate_pool_observed_difficulty": "MEDIUM",
+            "difficulty_confidence": "HIGH",
+        })
+        self.assertEqual([], v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_multiple_marginal_candidates_are_allowed(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        options = self.reviewer_input["items"][0]["candidate_options"]
+        marginal_texts = [text for text in options if text != "confirmed"][:2]
+        for entry in raw["items"][0]["option_judgments"]:
+            if entry["option_text"] in marginal_texts:
+                entry["judgment"] = "MARGINAL"
+        for text in marginal_texts:
+            raw["items"][0]["candidate_diagnostics"].append({
+                "option_text": text,
+                "natural_wording": False,
+                "serious_defect": False,
+                "observed_clause_count": 2,
+                "candidate_pool_observed_difficulty": "MEDIUM",
+                "difficulty_confidence": "MEDIUM",
+            })
+        self.assertEqual([], v02_contracts.validate_reviewer_contract(raw, self.reviewer_input))
+
+    def test_no_global_best_answer_is_introduced(self) -> None:
+        schema_text = REVIEWER_OUTPUT_SCHEMA.read_text(encoding="utf-8")
+        self.assertNotIn("best_answer_text", schema_text)
+        self.assertNotIn("reference_candidate_text", schema_text)
+
+
+class ReviewerCanonicalizationTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.generator = generator_output_fixture()
+        self.seed = SEED
+        self.reviewer_input = v02_blinding.build_reviewer_candidate_input(self.generator, self.seed)
+        self.raw_reviewer = _raw_reviewer_output_fixture(self.reviewer_input)
+        self.canonical = v02_contracts.canonicalize_reviewer_output(self.raw_reviewer, self.reviewer_input)
+
+    def test_canonicalization_rejects_malformed_input(self) -> None:
+        raw = copy.deepcopy(self.raw_reviewer)
+        raw["items"][0]["item_id"] = "wrong-id"
+        with self.assertRaises(ValueError):
+            v02_contracts.canonicalize_reviewer_output(raw, self.reviewer_input)
+
+    def test_canonical_judgments_keyed_by_exact_visible_text(self) -> None:
+        canonical_item = self.canonical["items"][0]
+        options = self.reviewer_input["items"][0]["candidate_options"]
+        self.assertEqual(set(canonical_item["option_judgments"]), set(options))
+        self.assertEqual(canonical_item["option_judgments"]["confirmed"], "VALID")
+
+    def test_canonical_diagnostics_keyed_by_exact_visible_text(self) -> None:
+        canonical_item = self.canonical["items"][0]
+        self.assertEqual(set(canonical_item["candidate_diagnostics"]), {"confirmed"})
+        self.assertEqual(
+            canonical_item["candidate_diagnostics"]["confirmed"]["candidate_pool_observed_difficulty"], "MEDIUM"
+        )
+
+    def test_canonicalization_does_not_expose_a_d_letters(self) -> None:
+        canonical_item = self.canonical["items"][0]
+        self.assertEqual(set(), set(canonical_item["option_judgments"]) & {"A", "B", "C", "D"})
+
+    def test_canonicalization_does_not_expose_private_candidate_ids(self) -> None:
+        canonical_item = self.canonical["items"][0]
+        self.assertEqual(set(), set(canonical_item["option_judgments"]) & set(v02_blinding.CANDIDATE_IDS))
+        self.assertEqual(set(), set(canonical_item["candidate_diagnostics"]) & set(v02_blinding.CANDIDATE_IDS))
+
+    def test_observed_difficulty_does_not_trigger_planned_comparison(self) -> None:
+        diagnostic = self.canonical["items"][0]["candidate_diagnostics"]["confirmed"]
+        self.assertEqual(set(diagnostic), {
+            "natural_wording", "serious_defect", "observed_clause_count",
+            "candidate_pool_observed_difficulty", "difficulty_confidence",
+        })
+
+    def test_observed_clause_count_does_not_trigger_planner_comparison(self) -> None:
+        diagnostic = self.canonical["items"][0]["candidate_diagnostics"]["confirmed"]
+        self.assertEqual(2, diagnostic["observed_clause_count"])
+        self.assertNotIn("planned_clause_count", diagnostic)
+        self.assertNotIn("clause_count_match", diagnostic)
 
 
 if __name__ == "__main__":
