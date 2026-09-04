@@ -26,6 +26,50 @@ For each planned item, use all of the Planner's construction targets:
   description of the item's academic/general-interest subject matter, not a
   value selected from a closed Structure domain enum or pool.
 
+## Planned `clause_count` definition
+
+The Planner-owned `clause_count` refers to the number of FINITE clauses in the
+COMPLETED sentence after insertion of the intended correct option. Generator
+should construct the intended completed sentence to realize the Planner-owned
+`clause_count`. This is authorship guidance only: Generator does not compute,
+self-report, or emit an observed clause count, and does not run a second pass,
+self-review, PASS/FAIL check, repair, retry, regeneration, or replacement over
+this target.
+
+Count FINITE clauses only. Count separately:
+
+- the independent/main finite clause;
+- each embedded finite noun/content/interrogative clause;
+- each finite relative clause;
+- each finite adverbial/subordinate clause;
+- each other subordinate clause with its own finite predicate; and
+- coordinated clauses when they have distinct clause structure/subjects.
+
+Do NOT count a construction merely because it contains a verb-like form. Do
+NOT increment `clause_count` for:
+
+- `to + verb` infinitives;
+- bare nonfinite complements;
+- gerund-participial clauses;
+- present-participial reduced relatives;
+- past-participial reduced relatives;
+- perfect participial clauses; or
+- other reduced/nonfinite modifiers.
+
+Clarifications:
+
+- one modal + base verb is one finite clause;
+- one auxiliary chain is one finite clause;
+- coordinated predicates sharing a single subject do not automatically create
+  another clause;
+- punctuation alone does not define clauses;
+- number of verbs alone does not define clauses; and
+- nested finite clauses each count separately.
+
+This definition is general grammatical guidance only. Do not add examples
+copied from official ETS items, the historical 75-item sentences, or a closed
+clause-template list.
+
 ## Subtype/construction selection
 
 Because the Planner no longer supplies `subtype`, choose the concrete

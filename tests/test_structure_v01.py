@@ -422,6 +422,59 @@ class StructurePromptTests(unittest.TestCase):
         self.assertIn("fragment", prompt)
         self.assertIn("Do not review, score, self-review,", prompt)
 
+    def test_generator_prompt_defines_planned_clause_count(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            # 1. refers to completed correct sentence
+            "refers to the number of FINITE clauses in the COMPLETED sentence after insertion of the intended correct option",
+            # 2. finite clauses only
+            "Count FINITE clauses only.",
+            # 3. main finite clause counts
+            "the independent/main finite clause;",
+            # 4. embedded finite noun/content/interrogative clauses count
+            "each embedded finite noun/content/interrogative clause;",
+            # 5. finite relative clauses count
+            "each finite relative clause;",
+            # 6. finite adverbial clauses count
+            "each finite adverbial/subordinate clause;",
+            "each other subordinate clause with its own finite predicate;",
+            # 7. distinct-subject coordinated clauses may count separately
+            "coordinated clauses when they have distinct clause structure/subjects.",
+            "Do NOT count a construction merely because it contains a verb-like form.",
+            # 8. infinitives do not increment clause_count
+            "`to + verb` infinitives;",
+            "bare nonfinite complements;",
+            # 9. gerund-participials do not increment clause_count
+            "gerund-participial clauses;",
+            # 10. reduced present participles do not increment clause_count
+            "present-participial reduced relatives;",
+            # 11. reduced past participles do not increment clause_count
+            "past-participial reduced relatives;",
+            # 12. perfect participials do not increment clause_count
+            "perfect participial clauses; or",
+            "other reduced/nonfinite modifiers.",
+            # 13. modal + base verb is one clause
+            "one modal + base verb is one finite clause;",
+            # 14. auxiliary chain is one clause
+            "one auxiliary chain is one finite clause;",
+            # 15. coordinated predicates sharing one subject do not automatically add a clause
+            "coordinated predicates sharing a single subject do not automatically create another clause;",
+            # 16. punctuation alone is insufficient
+            "punctuation alone does not define clauses;",
+            # 17. verb count alone is insufficient
+            "number of verbs alone does not define clauses; and",
+            # 18. nested finite clauses count separately
+            "nested finite clauses each count separately.",
+            # 19. Generator should realize the Planner-owned clause_count
+            "Generator should construct the intended completed sentence to realize the Planner-owned `clause_count`.",
+            # 20. no self-report/PASS/second call/repair introduced
+            "Generator does not compute, self-report, or emit an observed clause count, and does not run a second pass, self-review, PASS/FAIL check, repair, retry, regeneration, or replacement over this target.",
+            "This definition is general grammatical guidance only.",
+            "Do not add examples copied from official ETS items, the historical 75-item sentences, or a closed clause-template list.",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
     def test_generator_prompt_owns_subtype_and_selects_it_for_target_and_difficulty(self) -> None:
         prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
         for phrase in (
@@ -1191,7 +1244,7 @@ class StructurePromptTests(unittest.TestCase):
 
     def test_structure_frozen_prompt_surface_hash_regressions(self) -> None:
         expected_hashes = {
-            "structure/prompts/generator.md": "1415612033d0408eff52bf7c243003680d795601dfbb6eda3e0f67f089847727",
+            "structure/prompts/generator.md": "44e5c13c9df592511a75a2bdeb51bd20f84a00025b7f65936fca6974d3554ba8",
             "structure/prompts/reviewer.md": "0359e7f5dc3103a05082163bfb225b049923cffc72e2e5b373c6c8c5e88e70ae",
             "structure/prompts/solver.md": "e83c1a95cf4a098f43733101a63751ac151993cfbd02e25b9f9af0e238b862f3",
         }
