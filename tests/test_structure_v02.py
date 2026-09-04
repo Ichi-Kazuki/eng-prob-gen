@@ -10,19 +10,23 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import tempfile
 import unittest
 from collections import Counter
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from structure.permutation import permute_generator_output
 
 import structure.planner as v01_planner
 from structure import blinding as v01_blinding
 from structure import contracts as v01_contracts
+from shared.json_io import canonical_json_sha256
 from shared.schema_validation import load_schema, schema_errors
+from runtime.adapters import InvocationRequest, InvocationResult, RuntimeInvocationError
 from structure.v02 import blinding as v02_blinding
 from structure.v02 import contracts as v02_contracts
+from structure.v02 import pipeline as v02_pipeline
 from structure.v02 import planner as v02_planner
 from structure.v02 import selection as v02_selection
 from structure.v02 import solver as v02_solver
@@ -2581,6 +2585,776 @@ class CrossSchemaArtifactHashTests(unittest.TestCase):
     def test_provenance_json_not_in_artifact_hashes(self) -> None:
         self.assertNotIn("provenance.json", self.result_schema["properties"]["artifact_hashes"]["properties"])
         self.assertNotIn("provenance.json", self.provenance_schema["properties"]["artifact_hashes"]["properties"])
+
+
+PIPELINE_STEM_FILLER_WORDS = (
+    "in", "the", "archive", "during", "the", "extended", "review", "process",
+    "for", "the", "ongoing", "study", "across", "multiple", "sessions", "before",
+    "the", "final", "report", "was", "submitted", "to", "the", "committee",
+)
+
+
+def _pipeline_stem_for_word_count(word_count: int) -> str:
+    """Build a fixture stem whose completed ('confirmed') word count is exact."""
+
+    words = ["The", "researcher", v01_contracts.BLANK_MARKER, "the", "documented", "pattern"]
+    index = 0
+    while len(words) < word_count:
+        words.append(PIPELINE_STEM_FILLER_WORDS[index % len(PIPELINE_STEM_FILLER_WORDS)])
+        index += 1
+    words = words[:word_count]
+    words[-1] = f"{words[-1]}."
+    return " ".join(words)
+
+
+def _pipeline_fake_generator_output(plan: dict[str, Any]) -> dict[str, Any]:
+    """Dynamic Generator response built from the actual Planner-owned plan payload."""
+
+    items = []
+    for planned in plan["items"]:
+        items.append({
+            "item_id": planned["item_id"],
+            "section": "Structure",
+            "primary_target": planned["primary_target"],
+            "subtype": f"{planned['primary_target']} generator-authored construction",
+            "secondary_features": ["academic register"],
+            "difficulty": planned["difficulty"],
+            "vocabulary_domain": "generator-owned domain",
+            "stem": _pipeline_stem_for_word_count(planned["target_word_count"]),
+            "correct_option": {"text": "confirmed"},
+            "answer_explanation": "The finite past-tense verb is required in this main clause.",
+            "distractor_candidates": {
+                "d1": {"text": "confirming", "rationale": "A participle cannot stand as the finite main verb."},
+                "d2": {"text": "confirm", "rationale": "The base form does not carry the required tense."},
+                "d3": {"text": "confirms", "rationale": "The present tense does not match the past-tense context."},
+                "d4": {"text": "to confirm", "rationale": "The infinitive cannot stand as the finite main verb."},
+                "d5": {
+                    "text": "having confirmed",
+                    "rationale": "The perfect participle cannot stand as the finite main verb.",
+                },
+                "d6": {
+                    "text": "be confirmed",
+                    "rationale": "The passive base form cannot stand as the finite main verb here.",
+                },
+            },
+        })
+    return {"items": items}
+
+
+def _pipeline_fake_reviewer_output(reviewer_input: dict[str, Any]) -> dict[str, Any]:
+    """Dynamic Reviewer response: copies exact shuffled candidate_options texts."""
+
+    correct_text = "confirmed"
+    items = []
+    for item in reviewer_input["items"]:
+        options = item["candidate_options"]
+        judgments = [
+            {"option_text": text, "judgment": "VALID" if text == correct_text else "INVALID"}
+            for text in options
+        ]
+        diagnostics = [{
+            "option_text": correct_text,
+            "natural_wording": True,
+            "serious_defect": False,
+            "observed_clause_count": 2,
+            "candidate_pool_observed_difficulty": "MEDIUM",
+            "difficulty_confidence": "HIGH",
+        }]
+        items.append({
+            "item_id": item["item_id"],
+            "option_judgments": judgments,
+            "candidate_diagnostics": diagnostics,
+            "comment": "Only the finite past-tense form completes the main clause naturally.",
+        })
+    return {"items": items}
+
+
+def _pipeline_fake_solver_output(solver_input: dict[str, Any]) -> dict[str, Any]:
+    """Dynamic Solver response: copies exact final visible option text."""
+
+    items = []
+    for item in solver_input["items"]:
+        options = item["options"]
+        correct_letter = next(letter for letter in v01_contracts.LETTERS if options[letter] == "confirmed")
+        items.append({
+            "item_id": item["item_id"],
+            "answer_text": options[correct_letter],
+            "confidence": "HIGH",
+            "reason": "The finite past-tense completion is the only acceptable choice.",
+        })
+    return {"items": items}
+
+
+class FakePipelineRuntime:
+    """Deterministic offline scripted runtime. No subprocess, no network."""
+
+    provider = "offline-fixture"
+    cli_version = "offline-fixture"
+    model = "offline-fixture"
+
+    def __init__(
+        self,
+        *,
+        generator: Any = None,
+        reviewer: Any = None,
+        solver: Any = None,
+        generator_error: tuple[str, str] | None = None,
+        reviewer_error: tuple[str, str] | None = None,
+        solver_error: tuple[str, str] | None = None,
+    ) -> None:
+        self.generator_override = generator
+        self.reviewer_override = reviewer
+        self.solver_override = solver
+        self.generator_error = generator_error
+        self.reviewer_error = reviewer_error
+        self.solver_error = solver_error
+        self.requests: list[InvocationRequest] = []
+
+    def invoke(self, request: InvocationRequest) -> InvocationResult:
+        self.requests.append(request)
+        payload = json.loads(request.prompt.split("INPUT_JSON:\n", 1)[1])
+        stage_key = request.stage.rsplit("_", 1)[-1]
+        result = InvocationResult(
+            stage=request.stage,
+            agent_name=request.agent_name,
+            invocation_id=f"offline-{len(self.requests)}",
+            started_at="2026-01-01T00:00:00+00:00",
+            completed_at="2026-01-01T00:00:01+00:00",
+            provider=self.provider,
+            model=self.model,
+            cli_version=self.cli_version,
+            input_keys=list(request.input_keys),
+        )
+        error = getattr(self, f"{stage_key}_error")
+        if error is not None:
+            category, detail = error
+            result.error_category = category
+            result.error_detail = detail
+            raise RuntimeInvocationError(category, detail, result)
+
+        override = getattr(self, f"{stage_key}_override")
+        if callable(override):
+            parsed = override(payload)
+        elif override is not None:
+            parsed = override
+        elif stage_key == "generator":
+            parsed = _pipeline_fake_generator_output(payload)
+        elif stage_key == "reviewer":
+            parsed = _pipeline_fake_reviewer_output(payload)
+        elif stage_key == "solver":
+            parsed = _pipeline_fake_solver_output(payload)
+        else:  # pragma: no cover
+            raise AssertionError(f"unexpected stage: {request.stage}")
+        result.parsed = parsed
+        return result
+
+
+def _run_pipeline(runtime: FakePipelineRuntime, seed: int = SEED, tmp_dir: Path | None = None) -> dict[str, Any]:
+    pipeline = v02_pipeline.StructureV02Pipeline(runtime=runtime)
+    return pipeline.run(seed=seed, output_dir=tmp_dir)
+
+
+def _reviewer_override_with_correct_judgment(judgment: str) -> Callable[[dict[str, Any]], dict[str, Any]]:
+    def _build(reviewer_input: dict[str, Any]) -> dict[str, Any]:
+        items = []
+        for item in reviewer_input["items"]:
+            options = item["candidate_options"]
+            judgments = []
+            diagnostics = []
+            for text in options:
+                if text == "confirmed":
+                    judgments.append({"option_text": text, "judgment": judgment})
+                    if judgment in ("VALID", "MARGINAL"):
+                        diagnostics.append({
+                            "option_text": text,
+                            "natural_wording": True,
+                            "serious_defect": False,
+                            "observed_clause_count": 2,
+                            "candidate_pool_observed_difficulty": "MEDIUM",
+                            "difficulty_confidence": "HIGH",
+                        })
+                else:
+                    judgments.append({"option_text": text, "judgment": "INVALID"})
+            items.append({
+                "item_id": item["item_id"],
+                "option_judgments": judgments,
+                "candidate_diagnostics": diagnostics,
+                "comment": "Reviewer judgment override for the intended correct candidate.",
+            })
+        return {"items": items}
+
+    return _build
+
+
+def _reviewer_override_two_valid(reviewer_input: dict[str, Any]) -> dict[str, Any]:
+    """Marks both 'confirmed' (intended correct) and 'confirming' (a distractor) VALID."""
+
+    items = []
+    for item in reviewer_input["items"]:
+        options = item["candidate_options"]
+        judgments = []
+        diagnostics = []
+        for text in options:
+            if text in ("confirmed", "confirming"):
+                judgments.append({"option_text": text, "judgment": "VALID"})
+                diagnostics.append({
+                    "option_text": text,
+                    "natural_wording": True,
+                    "serious_defect": False,
+                    "observed_clause_count": 2,
+                    "candidate_pool_observed_difficulty": "MEDIUM",
+                    "difficulty_confidence": "HIGH",
+                })
+            else:
+                judgments.append({"option_text": text, "judgment": "INVALID"})
+        items.append({
+            "item_id": item["item_id"],
+            "option_judgments": judgments,
+            "candidate_diagnostics": diagnostics,
+            "comment": "Two grammatically valid options; only one is generator-intended.",
+        })
+    return {"items": items}
+
+
+def _solver_override_first_item_wrong(solver_input: dict[str, Any]) -> dict[str, Any]:
+    items = []
+    for index, item in enumerate(solver_input["items"]):
+        options = item["options"]
+        correct_letter = next(letter for letter in v01_contracts.LETTERS if options[letter] == "confirmed")
+        if index == 0:
+            wrong_letter = next(letter for letter in v01_contracts.LETTERS if letter != correct_letter)
+            answer_text = options[wrong_letter]
+        else:
+            answer_text = options[correct_letter]
+        items.append({
+            "item_id": item["item_id"],
+            "answer_text": answer_text,
+            "confidence": "HIGH",
+            "reason": "The finite past-tense completion is the only acceptable choice.",
+        })
+    return {"items": items}
+
+
+def _solver_override_first_item_sentinel(sentinel: str) -> Callable[[dict[str, Any]], dict[str, Any]]:
+    def _build(solver_input: dict[str, Any]) -> dict[str, Any]:
+        items = []
+        for index, item in enumerate(solver_input["items"]):
+            options = item["options"]
+            correct_letter = next(letter for letter in v01_contracts.LETTERS if options[letter] == "confirmed")
+            if index == 0:
+                answer_text = sentinel
+            else:
+                answer_text = options[correct_letter]
+            items.append({
+                "item_id": item["item_id"],
+                "answer_text": answer_text,
+                "confidence": "HIGH",
+                "reason": "The finite past-tense completion is the only acceptable choice.",
+            })
+        return {"items": items}
+
+    return _build
+
+
+def _solver_override_first_item_low_confidence(solver_input: dict[str, Any]) -> dict[str, Any]:
+    items = []
+    for index, item in enumerate(solver_input["items"]):
+        options = item["options"]
+        correct_letter = next(letter for letter in v01_contracts.LETTERS if options[letter] == "confirmed")
+        confidence = "LOW" if index == 0 else "HIGH"
+        items.append({
+            "item_id": item["item_id"],
+            "answer_text": options[correct_letter],
+            "confidence": confidence,
+            "reason": "The finite past-tense completion is the only acceptable choice.",
+        })
+    return {"items": items}
+
+
+class PipelineCleanRunTests(unittest.TestCase):
+    """Commit 7 Section 50: one clean offline run proves the whole approved orchestration."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.tmp_dir = Path(self._tmp.name)
+        self.runtime = FakePipelineRuntime()
+        self.result = _run_pipeline(self.runtime, tmp_dir=self.tmp_dir)
+
+    def test_exactly_three_logical_calls(self) -> None:
+        self.assertEqual(len(self.runtime.requests), 3)
+        self.assertEqual(
+            [request.stage for request in self.runtime.requests],
+            [v02_pipeline.GENERATOR_STAGE, v02_pipeline.REVIEWER_STAGE, v02_pipeline.SOLVER_STAGE],
+        )
+        self.assertEqual(self.result["live_invocation_count"], 3)
+
+    def test_logical_invocation_counts(self) -> None:
+        provenance = json.loads((self.tmp_dir / "provenance.json").read_text(encoding="utf-8"))
+        self.assertEqual(
+            provenance["logical_invocation_counts"], {"generator": 1, "reviewer": 1, "solver": 1}
+        )
+
+    def test_candidate_selection_all_pass(self) -> None:
+        self.assertEqual(self.result["candidate_selection_pass_count"], 15)
+        self.assertEqual(self.result["candidate_selection_failure_count"], 0)
+
+    def test_permutation_distribution(self) -> None:
+        self.assertEqual(
+            sorted(self.result["final_answer_position_distribution"].values()), [3, 4, 4, 4]
+        )
+
+    def test_solver_counters(self) -> None:
+        self.assertEqual(self.result["solver_key_agreement_count"], 15)
+        self.assertEqual(self.result["solver_ambiguous_none_count"], 0)
+
+    def test_all_items_accepted_and_accept_decision(self) -> None:
+        self.assertEqual(len(self.result["item_results"]), 15)
+        self.assertTrue(all(item["accepted"] for item in self.result["item_results"]))
+        self.assertEqual(self.result["decision"], "ACCEPT")
+
+    def test_eleven_artifacts_non_null(self) -> None:
+        for name in (
+            "plan.json", "generator_raw.json", "generator_candidates.json", "reviewer_input.json",
+            "reviewer.json", "candidate_selection.json", "generator_final.json", "permutation.json",
+            "generator.json", "solver_input.json", "solver.json",
+        ):
+            with self.subTest(name=name):
+                value = json.loads((self.tmp_dir / name).read_text(encoding="utf-8"))
+                self.assertIsNotNone(value)
+
+    def test_result_and_provenance_schema_valid(self) -> None:
+        self.assertEqual(
+            [], schema_errors(self.result, load_schema(v02_pipeline.RESULT_SCHEMA_PATH))
+        )
+        provenance = json.loads((self.tmp_dir / "provenance.json").read_text(encoding="utf-8"))
+        self.assertEqual([], schema_errors(provenance, load_schema(v02_pipeline.PROVENANCE_SCHEMA_PATH)))
+
+    def test_result_and_provenance_artifact_hashes_identical(self) -> None:
+        provenance = json.loads((self.tmp_dir / "provenance.json").read_text(encoding="utf-8"))
+        self.assertEqual(self.result["artifact_hashes"], provenance["artifact_hashes"])
+
+    def test_all_thirteen_json_files_exist(self) -> None:
+        for name in (
+            "plan.json", "generator_raw.json", "generator_candidates.json", "reviewer_input.json",
+            "reviewer.json", "candidate_selection.json", "generator_final.json", "permutation.json",
+            "generator.json", "solver_input.json", "solver.json", "result.json", "provenance.json",
+        ):
+            with self.subTest(name=name):
+                self.assertTrue((self.tmp_dir / name).is_file())
+
+
+class PipelineGeneratorStopTests(unittest.TestCase):
+    """Section 51: Generator contract failure stops the pipeline after one call."""
+
+    def test_generator_contract_failure_quarantines(self) -> None:
+        bad_generator = _pipeline_fake_generator_output(v02_planner.build_plan(SEED))
+        bad_generator["items"][0]["stem"] = bad_generator["items"][0]["stem"].replace(
+            v01_contracts.BLANK_MARKER, ""
+        )
+        runtime = FakePipelineRuntime(generator=bad_generator)
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+            self.assertEqual(len(runtime.requests), 1)
+            self.assertEqual(result["decision"], "QUARANTINE")
+            self.assertIsNotNone(json.loads((Path(directory) / "generator_raw.json").read_text(encoding="utf-8")))
+            for name in (
+                "generator_candidates.json", "reviewer_input.json", "reviewer.json", "candidate_selection.json",
+                "generator_final.json", "permutation.json", "generator.json", "solver_input.json", "solver.json",
+            ):
+                self.assertIsNone(json.loads((Path(directory) / name).read_text(encoding="utf-8")))
+        self.assertTrue(all(not item["accepted"] for item in result["item_results"]))
+        self.assertEqual(result["candidate_selection_pass_count"], 0)
+        self.assertEqual(result["candidate_selection_failure_count"], 0)
+        for item in result["item_results"]:
+            self.assertEqual(item["rejection_reasons"], ["generator_contract_failed"])
+
+
+class PipelineReviewerContractStopTests(unittest.TestCase):
+    """Section 52: a schema-valid but exact-text-contract-invalid Reviewer response stops before Solver."""
+
+    def test_reviewer_contract_failure_quarantines(self) -> None:
+        def _bad_reviewer(reviewer_input: dict[str, Any]) -> dict[str, Any]:
+            output = _pipeline_fake_reviewer_output(reviewer_input)
+            output["items"][0]["option_judgments"][0]["option_text"] = "an invented option text"
+            return output
+
+        runtime = FakePipelineRuntime(reviewer=_bad_reviewer)
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+            self.assertEqual(len(runtime.requests), 2)
+            self.assertIsNotNone(json.loads((Path(directory) / "reviewer.json").read_text(encoding="utf-8")))
+            for name in (
+                "candidate_selection.json", "generator_final.json", "permutation.json",
+                "generator.json", "solver_input.json", "solver.json",
+            ):
+                self.assertIsNone(json.loads((Path(directory) / name).read_text(encoding="utf-8")))
+        self.assertEqual(result["decision"], "QUARANTINE")
+        for item in result["item_results"]:
+            self.assertEqual(item["rejection_reasons"], ["reviewer_contract_failed"])
+
+
+class PipelineCandidateSelectionStopTests(unittest.TestCase):
+    """Section 53: exactly one selection slot fails -> whole-set QUARANTINE, Solver never called."""
+
+    def test_selection_failure_quarantines_whole_set(self) -> None:
+        runtime = FakePipelineRuntime(reviewer=_reviewer_override_with_correct_judgment("MARGINAL"))
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+            self.assertEqual(len(runtime.requests), 2)
+            candidate_selection = json.loads(
+                (Path(directory) / "candidate_selection.json").read_text(encoding="utf-8")
+            )
+            self.assertIsNotNone(candidate_selection)
+            for name in ("generator_final.json", "permutation.json", "generator.json", "solver_input.json", "solver.json"):
+                self.assertIsNone(json.loads((Path(directory) / name).read_text(encoding="utf-8")))
+        self.assertEqual(result["decision"], "QUARANTINE")
+        self.assertEqual(result["candidate_selection_pass_count"], 0)
+        self.assertEqual(result["candidate_selection_failure_count"], 15)
+        self.assertTrue(all(not item["accepted"] for item in result["item_results"]))
+        for item in result["item_results"]:
+            self.assertIn("solver_not_run_due_to_candidate_selection_failure", item["rejection_reasons"])
+            self.assertTrue(any(reason.startswith("candidate_selection:") for reason in item["rejection_reasons"]))
+
+
+class PipelineMultipleValidFilterTests(unittest.TestCase):
+    """Section 54: multiple VALID candidates in the seven-pool is not itself a failure."""
+
+    def test_valid_distractor_is_filtered_and_run_still_accepts(self) -> None:
+        runtime = FakePipelineRuntime(reviewer=_reviewer_override_two_valid)
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+            candidate_selection = json.loads(
+                (Path(directory) / "candidate_selection.json").read_text(encoding="utf-8")
+            )
+        self.assertEqual(result["decision"], "ACCEPT")
+        self.assertEqual(result["candidate_selection_pass_count"], 15)
+        for item in candidate_selection["items"]:
+            self.assertIn("d1", item["rejected_valid_candidate_ids"])
+            self.assertNotIn("d1", item["selected_candidate_ids"])
+            self.assertEqual(3, len(item["selected_candidate_ids"]))
+
+
+class PipelineIntendedCorrectInvalidMarginalTests(unittest.TestCase):
+    """Section 55: intended correct judged INVALID or MARGINAL fails selection, no Solver."""
+
+    def test_intended_correct_invalid(self) -> None:
+        runtime = FakePipelineRuntime(reviewer=_reviewer_override_with_correct_judgment("INVALID"))
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+        self.assertEqual(len(runtime.requests), 2)
+        self.assertEqual(result["decision"], "QUARANTINE")
+
+    def test_intended_correct_marginal(self) -> None:
+        runtime = FakePipelineRuntime(reviewer=_reviewer_override_with_correct_judgment("MARGINAL"))
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+        self.assertEqual(len(runtime.requests), 2)
+        self.assertEqual(result["decision"], "QUARANTINE")
+
+
+class PipelineReviewerRuntimeFailureTests(unittest.TestCase):
+    """Section 56: a Reviewer runtime failure persists and quarantines without a Solver call."""
+
+    def test_reviewer_runtime_failure(self) -> None:
+        runtime = FakePipelineRuntime(reviewer_error=("infrastructure", "simulated Reviewer runtime failure"))
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+            self.assertIsNone(json.loads((Path(directory) / "reviewer.json").read_text(encoding="utf-8")))
+        self.assertEqual(len(runtime.requests), 2)
+        self.assertEqual(result["live_invocation_count"], 2)
+        self.assertEqual(len(result["infrastructure"]["runtime_failures"]), 1)
+        self.assertEqual(result["decision"], "QUARANTINE")
+        for item in result["item_results"]:
+            self.assertEqual(
+                item["rejection_reasons"],
+                [f"runtime_failure:{v02_pipeline.REVIEWER_STAGE}:infrastructure"],
+            )
+
+
+class PipelineSolverRuntimeFailureTests(unittest.TestCase):
+    """Section 57: a Solver runtime failure persists and quarantines after Generator/Reviewer succeed."""
+
+    def test_solver_runtime_failure(self) -> None:
+        runtime = FakePipelineRuntime(solver_error=("infrastructure", "simulated Solver runtime failure"))
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+            self.assertIsNotNone(json.loads((Path(directory) / "generator.json").read_text(encoding="utf-8")))
+            self.assertIsNotNone(json.loads((Path(directory) / "solver_input.json").read_text(encoding="utf-8")))
+            self.assertIsNone(json.loads((Path(directory) / "solver.json").read_text(encoding="utf-8")))
+        self.assertEqual(result["live_invocation_count"], 3)
+        self.assertEqual(len(result["infrastructure"]["runtime_failures"]), 1)
+        self.assertEqual(result["decision"], "QUARANTINE")
+
+
+class PipelineSolverDisagreementTests(unittest.TestCase):
+    """Section 58: exact-text-valid but key-disagreeing Solver answer rejects only that item."""
+
+    def test_solver_disagreement(self) -> None:
+        runtime = FakePipelineRuntime(solver=_solver_override_first_item_wrong)
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+        self.assertEqual(len(runtime.requests), 3)
+        self.assertEqual(result["solver_key_agreement_count"], 14)
+        self.assertFalse(result["item_results"][0]["accepted"])
+        self.assertTrue(all(item["accepted"] for item in result["item_results"][1:]))
+        self.assertEqual(result["decision"], "QUARANTINE")
+
+
+class PipelineSolverAmbiguousTests(unittest.TestCase):
+    """Section 59: Solver AMBIGUOUS rejects that item and quarantines the set."""
+
+    def test_solver_ambiguous(self) -> None:
+        runtime = FakePipelineRuntime(solver=_solver_override_first_item_sentinel("AMBIGUOUS"))
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+        self.assertEqual(len(runtime.requests), 3)
+        self.assertEqual(result["solver_ambiguous_none_count"], 1)
+        self.assertFalse(result["item_results"][0]["accepted"])
+        self.assertEqual(result["decision"], "QUARANTINE")
+
+
+class PipelineSolverNoneTests(unittest.TestCase):
+    """Section 60: Solver NONE rejects that item and quarantines the set."""
+
+    def test_solver_none(self) -> None:
+        runtime = FakePipelineRuntime(solver=_solver_override_first_item_sentinel("NONE"))
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+        self.assertEqual(len(runtime.requests), 3)
+        self.assertEqual(result["solver_ambiguous_none_count"], 1)
+        self.assertFalse(result["item_results"][0]["accepted"])
+        self.assertEqual(result["decision"], "QUARANTINE")
+
+
+class PipelineSolverLowConfidenceTests(unittest.TestCase):
+    """Section 61: correct answer but LOW confidence still rejects that item."""
+
+    def test_solver_low_confidence(self) -> None:
+        runtime = FakePipelineRuntime(solver=_solver_override_first_item_low_confidence)
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+        self.assertEqual(result["solver_key_agreement_count"], 15)
+        self.assertFalse(result["item_results"][0]["accepted"])
+        self.assertIn(
+            "solver_confidence_not_accepted:LOW", result["item_results"][0]["rejection_reasons"]
+        )
+        self.assertEqual(result["decision"], "QUARANTINE")
+
+
+class PipelineReviewerDiagnosticsTests(unittest.TestCase):
+    """Section 62: reviewer diagnostics are diagnostic-only and never gate acceptance."""
+
+    def test_diagnostic_variation_does_not_change_decision_or_selection(self) -> None:
+        def _reviewer_with_diagnostics(clause_count: int, difficulty: str, confidence: str):
+            def _build(reviewer_input: dict[str, Any]) -> dict[str, Any]:
+                output = _pipeline_fake_reviewer_output(reviewer_input)
+                for item in output["items"]:
+                    item["candidate_diagnostics"][0]["observed_clause_count"] = clause_count
+                    item["candidate_diagnostics"][0]["candidate_pool_observed_difficulty"] = difficulty
+                    item["candidate_diagnostics"][0]["difficulty_confidence"] = confidence
+                return output
+
+            return _build
+
+        with tempfile.TemporaryDirectory() as directory_a:
+            result_a = _run_pipeline(
+                FakePipelineRuntime(reviewer=_reviewer_with_diagnostics(2, "MEDIUM", "HIGH")),
+                tmp_dir=Path(directory_a),
+            )
+        with tempfile.TemporaryDirectory() as directory_b:
+            result_b = _run_pipeline(
+                FakePipelineRuntime(reviewer=_reviewer_with_diagnostics(5, "HARD", "LOW")),
+                tmp_dir=Path(directory_b),
+            )
+
+        self.assertEqual(result_a["decision"], result_b["decision"])
+        self.assertEqual(result_a["candidate_selection_pass_count"], result_b["candidate_selection_pass_count"])
+        self.assertEqual(
+            [item["accepted"] for item in result_a["item_results"]],
+            [item["accepted"] for item in result_b["item_results"]],
+        )
+        self.assertNotEqual(
+            result_a["checks"]["reviewer_clause_count"], result_b["checks"]["reviewer_clause_count"]
+        )
+        self.assertNotEqual(
+            result_a["checks"]["candidate_pool_difficulty"], result_b["checks"]["candidate_pool_difficulty"]
+        )
+        self.assertEqual(result_a["checks"]["reviewer_clause_count"]["policy"], "diagnostic_only")
+        self.assertEqual(result_a["checks"]["candidate_pool_difficulty"]["planner_comparison"], "disabled")
+
+
+class PipelineArtifactNullHashTests(unittest.TestCase):
+    """Section 63: eleven artifact files always exist; unreachable ones are JSON null."""
+
+    def test_early_stop_artifacts_and_hashes(self) -> None:
+        runtime = FakePipelineRuntime(reviewer_error=("infrastructure", "simulated failure"))
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+            names = (
+                "plan.json", "generator_raw.json", "generator_candidates.json", "reviewer_input.json",
+                "reviewer.json", "candidate_selection.json", "generator_final.json", "permutation.json",
+                "generator.json", "solver_input.json", "solver.json",
+            )
+            for name in names:
+                path = Path(directory) / name
+                self.assertTrue(path.is_file())
+            self.assertEqual(11, len(result["artifact_hashes"]))
+            for name in names:
+                path = Path(directory) / name
+                value = json.loads(path.read_text(encoding="utf-8"))
+                self.assertEqual(canonical_json_sha256(value), result["artifact_hashes"][name])
+            self.assertIsNone(
+                json.loads((Path(directory) / "candidate_selection.json").read_text(encoding="utf-8"))
+            )
+
+
+class PipelineBlindnessTests(unittest.TestCase):
+    """Section 64: Reviewer/Solver requests carry only their allowlisted fields."""
+
+    def test_reviewer_request_is_blind(self) -> None:
+        runtime = FakePipelineRuntime()
+        with tempfile.TemporaryDirectory() as directory:
+            _run_pipeline(runtime, tmp_dir=Path(directory))
+        reviewer_request = next(r for r in runtime.requests if r.stage == v02_pipeline.REVIEWER_STAGE)
+        payload = json.loads(reviewer_request.prompt.split("INPUT_JSON:\n", 1)[1])
+        for item in payload["items"]:
+            self.assertEqual({"item_id", "section", "stem", "candidate_options"}, set(item))
+
+    def test_solver_request_is_blind(self) -> None:
+        runtime = FakePipelineRuntime()
+        with tempfile.TemporaryDirectory() as directory:
+            _run_pipeline(runtime, tmp_dir=Path(directory))
+        solver_request = next(r for r in runtime.requests if r.stage == v02_pipeline.SOLVER_STAGE)
+        payload = json.loads(solver_request.prompt.split("INPUT_JSON:\n", 1)[1])
+        for item in payload["items"]:
+            self.assertEqual({"item_id", "section", "stem", "options"}, set(item))
+
+
+class PipelineFormalOutputSchemaTests(unittest.TestCase):
+    """Section 65: no schema swapping across stages."""
+
+    def test_schema_paths_per_stage(self) -> None:
+        runtime = FakePipelineRuntime()
+        with tempfile.TemporaryDirectory() as directory:
+            _run_pipeline(runtime, tmp_dir=Path(directory))
+        by_stage = {request.stage: request for request in runtime.requests}
+        self.assertEqual(
+            by_stage[v02_pipeline.GENERATOR_STAGE].formal_output_schema, v02_pipeline.SCHEMA_PATHS["generator"]
+        )
+        self.assertEqual(
+            by_stage[v02_pipeline.REVIEWER_STAGE].formal_output_schema, v02_pipeline.SCHEMA_PATHS["reviewer"]
+        )
+        self.assertEqual(
+            by_stage[v02_pipeline.SOLVER_STAGE].formal_output_schema, v01_contracts.SCHEMA_PATHS["solver"]
+        )
+
+
+class PipelineAgentPromptTests(unittest.TestCase):
+    """Section 66: agent_definition paths are the v0.2 prompts."""
+
+    def test_agent_definition_paths(self) -> None:
+        runtime = FakePipelineRuntime()
+        with tempfile.TemporaryDirectory() as directory:
+            _run_pipeline(runtime, tmp_dir=Path(directory))
+        by_stage = {request.stage: request for request in runtime.requests}
+        self.assertEqual(
+            by_stage[v02_pipeline.GENERATOR_STAGE].agent_definition,
+            v02_pipeline.AGENT_PATHS[v02_pipeline.GENERATOR_AGENT],
+        )
+        self.assertEqual(
+            by_stage[v02_pipeline.REVIEWER_STAGE].agent_definition,
+            v02_pipeline.AGENT_PATHS[v02_pipeline.REVIEWER_AGENT],
+        )
+        self.assertEqual(
+            by_stage[v02_pipeline.SOLVER_STAGE].agent_definition,
+            v02_pipeline.AGENT_PATHS[v02_pipeline.SOLVER_AGENT],
+        )
+
+
+class PipelineIsolationTests(unittest.TestCase):
+    """Section 67: every successful request isolates its workspace with no tools."""
+
+    def test_all_requests_isolated_with_no_tools(self) -> None:
+        runtime = FakePipelineRuntime()
+        with tempfile.TemporaryDirectory() as directory:
+            _run_pipeline(runtime, tmp_dir=Path(directory))
+        self.assertEqual(len(runtime.requests), 3)
+        for request in runtime.requests:
+            self.assertTrue(request.isolate_workspace)
+            self.assertEqual(request.tools, "")
+
+
+class PipelineDecisionInvariantTests(unittest.TestCase):
+    """Section 68: ACCEPT requires the final canonical Solver check to have run."""
+
+    def test_selection_stop_never_marks_items_accepted(self) -> None:
+        runtime = FakePipelineRuntime(reviewer=_reviewer_override_with_correct_judgment("INVALID"))
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+        self.assertEqual(result["candidate_selection_failure_count"], 15)
+        self.assertTrue(all(not item["accepted"] for item in result["item_results"]))
+        self.assertNotEqual(result["decision"], "ACCEPT")
+
+    def test_generator_stop_never_marks_items_accepted(self) -> None:
+        bad_generator = _pipeline_fake_generator_output(v02_planner.build_plan(SEED))
+        bad_generator["items"][0]["stem"] = bad_generator["items"][0]["stem"].replace(
+            v01_contracts.BLANK_MARKER, ""
+        )
+        runtime = FakePipelineRuntime(generator=bad_generator)
+        with tempfile.TemporaryDirectory() as directory:
+            result = _run_pipeline(runtime, tmp_dir=Path(directory))
+        self.assertTrue(all(not item["accepted"] for item in result["item_results"]))
+
+
+class PipelineNoGlobalReviewerAnswerTests(unittest.TestCase):
+    """Section 69: the v0.2 pipeline never uses a Reviewer global-answer field."""
+
+    def test_source_does_not_reference_reviewer_global_answer_fields(self) -> None:
+        source = (ROOT / "structure" / "v02" / "pipeline.py").read_text(encoding="utf-8")
+        for forbidden in ("best_answer_text", "best_answer", "reviewer_solver_agreement"):
+            self.assertNotIn(forbidden, source)
+
+
+class PipelineNoDifficultyAcceptanceTests(unittest.TestCase):
+    """Section 70: diagnostics never become acceptance/rejection gates."""
+
+    def test_source_does_not_gate_on_diagnostic_fields(self) -> None:
+        source = (ROOT / "structure" / "v02" / "pipeline.py").read_text(encoding="utf-8")
+        for forbidden in (
+            "reviewer_difficulty_mismatch",
+            "reviewer_difficulty_confidence_low",
+            "clause_count_mismatch",
+        ):
+            self.assertNotIn(forbidden, source)
+
+
+class PipelineNoRetryRepairTests(unittest.TestCase):
+    """Section 71: no repair, revision, regeneration, or retry stage exists."""
+
+    def test_no_repair_revision_regeneration_stage_or_agent_defined(self) -> None:
+        source = (ROOT / "structure" / "v02" / "pipeline.py").read_text(encoding="utf-8")
+        for forbidden in (
+            "REPAIR_AGENT", "REVISION_AGENT", "REGENERATION_AGENT", "RETRY_AGENT",
+            "_repair_stage", "_revision_stage", "_regeneration_stage", "_retry_stage",
+            "repair_agent", "revision_agent",
+        ):
+            self.assertNotIn(forbidden, source)
+
+    def test_invoke_called_exactly_three_times_in_source(self) -> None:
+        # Structural guarantee that no loop/branch can call runtime.invoke a
+        # fourth time for the same or a new stage: self._invoke(...) is only
+        # ever written three times in the module source.
+        source = (ROOT / "structure" / "v02" / "pipeline.py").read_text(encoding="utf-8")
+        self.assertEqual(source.count("self._invoke("), 3)
+
+    def test_each_logical_stage_invoked_at_most_once_on_a_clean_run(self) -> None:
+        runtime = FakePipelineRuntime()
+        with tempfile.TemporaryDirectory() as directory:
+            _run_pipeline(runtime, tmp_dir=Path(directory))
+        stages = [request.stage for request in runtime.requests]
+        self.assertEqual(sorted(stages), sorted(set(stages)))
+        self.assertEqual(len(stages), 3)
 
 
 if __name__ == "__main__":
