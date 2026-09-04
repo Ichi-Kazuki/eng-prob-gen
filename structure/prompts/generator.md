@@ -382,6 +382,34 @@ Consider these together when choosing the construction and authoring the item:
 Vocabulary difficulty and world knowledge must not create grammatical
 difficulty.
 
+### Local-sufficiency check
+
+For each planned item, consider the smallest visible span a competent test
+taker actually needs in order to eliminate the distractors and identify the
+correct answer. If the answer can be determined confidently from: the
+governing word immediately before the blank; the noun immediately after the
+blank; one obvious agreement feature; one obvious complement-type contrast;
+one memorized local lexical frame; or one elementary morphology distinction,
+while most of the remaining sentence can be ignored, then the realized item
+is generally at the EASY end of Structure Part A difficulty. Do NOT call such
+an item MEDIUM or HARD merely because: the full sentence is long; clause_count
+is 2, 3, or 4; the vocabulary domain sounds academic; a relative/adverbial
+clause appears elsewhere; or the primary_target label can sometimes be
+difficult. This is an authorship calibration rule, NOT deterministic
+post-generation classification.
+
+### Surrounding-material relevance
+
+For planned MEDIUM or HARD, the surrounding sentence structure must
+materially contribute to distinguishing the answer. Do not add clauses or
+modifiers that are grammatically irrelevant to the tested decision merely to
+satisfy sentence_length_bin, target_word_count, or clause_count. Planner-owned
+length and clause-count targets must still be followed, but those targets do
+NOT by themselves satisfy planned difficulty. When the plan requires a longer
+sentence, integrate the tested construction naturally into that larger
+structure so the larger structure actually matters to the grammatical
+analysis when appropriate. Do not create ornamental complexity.
+
 ### Calibrated bands
 
 - **EASY:** The lower end of normal TOEFL ITP Structure Part A difficulty.
@@ -390,6 +418,10 @@ difficulty.
   straightforward structural distinction, and distractors distinguishable
   with a relatively local structural check. EASY may use one clear grammar
   point. Do not unnecessarily increase complexity merely because the sentence-length target is longer.
+  Typical EASY realization may be solvable through one direct local relationship such as obvious
+  singular/plural agreement, a straightforward pronoun form, an elementary article/determiner form, a
+  clear connector complement type, direct lexical complementation, simple comparative morphology, or
+  other immediate form selection. Do NOT artificially complicate EASY items.
 - **MEDIUM:** The broad central/typical band of TOEFL ITP Structure Part A.
   MEDIUM does NOT require two grammar rules. A single primary construction may
   yield MEDIUM when its realization requires meaningful sentence-level
@@ -401,7 +433,18 @@ difficulty.
   organization. Do NOT automatically downgrade an otherwise typical Structure
   item to EASY merely because its governing grammar rule can be stated
   succinctly. At the same time, do not label/create a purely trivial local
-  form-selection item as MEDIUM solely because the stem is long.
+  form-selection item as MEDIUM solely because the stem is long. A single
+  construction can absolutely be MEDIUM. The requirement is NOT "two rules".
+  The requirement is that the visible item realization has typical
+  sentence-level Structure burden rather than collapsing into a one-step
+  local lexical/morphological choice. A planned MEDIUM realization should
+  normally require meaningful structural processing beyond a trivial
+  immediate lookup, such as the boundary of a larger phrase or clause;
+  whether a sequence is finite or nonfinite; embedded-clause organization;
+  relative-clause role/case/licensing; subject versus complement structure;
+  attachment/modification extending beyond the immediate blank; or
+  structurally similar alternatives whose difference becomes clear from a
+  larger phrase/clause.
 - **HARD:** The upper end of TOEFL ITP Structure Part A relative structural
   difficulty. HARD does NOT require two separate grammar rules, two
   interacting cues, a mandatory non-local cue, a minimum clause count, or a
@@ -413,7 +456,88 @@ difficulty.
   constructions; long-distance grammatical dependency; demanding
   coordination; difficult modifier/attachment structure; highly similar but
   structurally distinct distractors; or another upper-tail construction within
-  the planned `primary_target`. One-clause HARD items are possible.
+  the planned `primary_target`. One-clause HARD items are possible. During
+  subtype/construction selection, prefer realizations in which difficulty
+  arises intrinsically from the chosen structure, such as genuinely
+  marked/noncanonical organization; demanding inversion whose form cannot be
+  resolved by one obvious local agreement check; nested or structurally
+  competing clause organization; free-relative or similar multifunctional
+  wh-structure; demanding comparative/correlative organization; difficult
+  attachment/modifier structure; long-distance grammatical relationship;
+  structurally close alternatives requiring broader parsing; or another
+  naturally upper-tail realization within the same primary_target. A
+  one-clause item whose answer is determined immediately by a simple local
+  agreement or lexical-form check is NOT made HARD merely because its
+  subtype is called inversion or another advanced label.
+
+### Explicit easy-realization warning
+
+These patterns, WHEN REALIZED IN A DIRECT LOCAL WAY, are usually EASY rather
+than MEDIUM/HARD: `because` versus `because of` when a complete finite clause
+immediately follows; `less` versus `fewer` directly before an obviously
+uncountable/countable noun; a familiar verb followed immediately by its
+standard `to-infinitive` or gerund complement when all distractors are
+plainly malformed; basic existential-there agreement; simple subject-pronoun
+case/number; or elementary auxiliary agreement in otherwise straightforward
+inversion. These are examples of REALIZATION, not permanent subtype labels.
+Do NOT declare these constructions always EASY. The same broad grammatical
+family may support MEDIUM/HARD in a structurally richer realization.
+
+### Inversion-specific calibration
+
+Do NOT treat `INVERSION` automatically as HARD merely because all historical
+sampled inversion items happened to receive historical HARD labels. Judge the
+concrete realization. For example, a direct item equivalent to `Rarely ____
+the singular noun receive ...` where `does` is selected mainly by immediate
+singular agreement and base-verb form may be relatively straightforward. For
+planned HARD inversion, choose a realization where the marked word order and
+larger structural relationship are genuinely relevant to solving. Do not add
+tense ambiguity to make inversion harder. All existing tense-rescue
+guardrails remain.
+
+### Option-set decision burden
+
+Difficulty depends partly on the option set as well as the stem. For planned
+MEDIUM/HARD, do not create an option set where every distractor is
+immediately eliminated by the same obvious local defect. Do not make all
+wrong choices: wrong part of speech in an obvious way; impossible morphology;
+obvious singular/plural mismatch; bare/to/-ing forms that a basic lexical
+frame instantly resolves; or prepositions versus conjunctions when the
+complement type is immediately obvious, unless the resulting item is intended
+EASY. This does NOT require a fixed number of locally plausible distractors.
+Do NOT reintroduce the old "at least two plausible distractors" HARD gate.
+Instead, ensure the option set actually preserves the intended relative
+solving burden. Every distractor must still be definitely invalid. Never
+introduce ambiguity to raise difficulty.
+
+### Construction selection before surface authorship
+
+Because subtype is Generator-owned, before settling on the concrete
+subtype/construction, ask whether that construction can NATURALLY realize the
+planned difficulty under the planned primary_target, clause_count, and
+sentence-length targets. If a candidate subtype would almost inevitably
+produce a trivial local item for a planned MEDIUM/HARD case, choose a
+different subtype/construction within the SAME primary_target. Do NOT choose
+the easy subtype first and then attempt to manufacture difficulty by: making
+the sentence longer; adding irrelevant clauses; adding rare words; adding
+tricky semantics; or making distractors ambiguous. This is the key purpose of
+Generator-owned subtype.
+
+### Target length and clause count remain construction targets, not difficulty proof
+
+Planner targets remain mandatory construction targets. Do NOT ignore or
+change clause_count, sentence_length_bin, or target_word_count. But these
+dimensions shape the item; they do not certify its difficulty. A 27-word /
+3-clause item can still be EASY if the correct answer is determined by a
+two-word local pattern. A shorter or one-clause item can still be HARD if the
+tested structure itself creates upper-tail processing demand.
+
+### No new self-review stage
+
+All of the above is Generator authorship guidance. Do NOT add: an emitted
+difficulty self-score; PASS/FAIL; a second pass; a second Generator
+invocation; hidden repair; regeneration; or revision. The Generator still
+authors all 15 items in one invocation.
 
 Do not turn a simple construction into HARD merely by lengthening the stem,
 adding unrelated clauses, using rare vocabulary, relying on world knowledge,

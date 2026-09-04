@@ -577,6 +577,53 @@ class StructurePromptTests(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
 
+    def test_generator_prompt_requires_difficulty_realization_fidelity(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "smallest visible span a competent test taker actually needs",
+            "generally at the EASY end of Structure Part A difficulty",
+            "Do NOT call such an item MEDIUM or HARD merely because",
+            "the full sentence is long; clause_count",
+            "This is an authorship calibration rule, NOT deterministic post-generation classification",
+            "the surrounding sentence structure must materially contribute to distinguishing the answer",
+            "Do not add clauses or modifiers that are grammatically irrelevant to the tested decision",
+            "those targets do NOT by themselves satisfy planned difficulty",
+            "Do not create ornamental complexity",
+            "The broad central/typical band of TOEFL ITP Structure Part A",
+            "MEDIUM does NOT require two grammar rules",
+            'The requirement is NOT "two rules"',
+            "rather than collapsing into a one-step local lexical/morphological choice",
+            "trivial immediate lookup",
+            "usually EASY rather than MEDIUM/HARD",
+            "`because` versus `because of` when a complete finite clause immediately follows",
+            "`less` versus `fewer` directly before an obviously uncountable/countable noun",
+            "a familiar verb followed immediately by its standard `to-infinitive` or gerund complement",
+            "These are examples of REALIZATION, not permanent subtype labels",
+            "Do NOT declare these constructions always EASY",
+            "The upper end of TOEFL ITP Structure Part A relative structural difficulty",
+            "HARD does NOT require two separate grammar rules",
+            "One-clause HARD items are possible",
+            "A one-clause item whose answer is determined immediately by a simple local agreement or lexical-form check is NOT made HARD merely because its subtype is called inversion or another advanced label",
+            "Do NOT treat `INVERSION` automatically as HARD merely because all historical sampled inversion items happened to receive historical HARD labels",
+            "Rarely ____ the singular noun receive",
+            "Do not add tense ambiguity to make inversion harder",
+            "Difficulty depends partly on the option set as well as the stem",
+            "do not create an option set where every distractor is immediately eliminated by the same obvious local defect",
+            'Do NOT reintroduce the old "at least two plausible distractors" HARD gate',
+            "Never introduce ambiguity to raise difficulty",
+            "ask whether that construction can NATURALLY realize the planned difficulty",
+            "choose a different subtype/construction within the SAME primary_target",
+            "Do NOT choose the easy subtype first and then attempt to manufacture difficulty",
+            "Do NOT ignore or change clause_count, sentence_length_bin, or target_word_count",
+            "they do not certify its difficulty",
+            "A 27-word / 3-clause item can still be EASY if the correct answer is determined by a two-word local pattern",
+            "A shorter or one-clause item can still be HARD if the tested structure itself creates upper-tail processing demand",
+            "an emitted difficulty self-score; PASS/FAIL; a second pass; a second Generator invocation; hidden repair; regeneration; or revision",
+            "The Generator still authors all 15 items in one invocation",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
     def test_generator_prompt_distinguishes_invalidity_from_rescuable_variation(self) -> None:
         prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
         for phrase in (
@@ -1104,7 +1151,7 @@ class StructurePromptTests(unittest.TestCase):
 
     def test_structure_frozen_prompt_surface_hash_regressions(self) -> None:
         expected_hashes = {
-            "structure/prompts/generator.md": "a85930fd9b323dc0dca67acde8803ffe7e2239969b095c259022fde09dc44b54",
+            "structure/prompts/generator.md": "1415612033d0408eff52bf7c243003680d795601dfbb6eda3e0f67f089847727",
             "structure/prompts/reviewer.md": "a4dfd5927e45086f8fa882dea9b957cd30d65c98fc6d99a9336cc83f71457dae",
             "structure/prompts/solver.md": "e83c1a95cf4a098f43733101a63751ac151993cfbd02e25b9f9af0e238b862f3",
         }
