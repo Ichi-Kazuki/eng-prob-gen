@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "structure-generator-output-v0.2.schema.json",
+  "title": "Structure v0.2 Generator batch output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items"],
+  "$defs": {
+    "distractor_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "rationale"],
+      "properties": {
+        "text": {"type": "string", "minLength": 1},
+        "rationale": {"type": "string", "minLength": 1}
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["item_id", "section", "primary_target", "subtype", "secondary_features", "difficulty", "vocabulary_domain", "stem", "correct_option", "answer_explanation", "distractor_candidates"],
+      "properties": {
+        "item_id": {"type": "string", "minLength": 1},
+        "section": {"const": "Structure"},
+        "primary_target": {"enum": ["CLAUSE_STRUCTURE", "NOUN_CLAUSES", "RELATIVE_CLAUSES", "ADVERBIAL_CLAUSES", "CONNECTORS_CONJUNCTIONS", "VERB_FORM_VOICE", "VERB_COMPLEMENTATION", "NONFINITE_VERB_PHRASES", "COMPARATIVES_DEGREE", "PARALLEL_STRUCTURE", "WORD_ORDER_MODIFICATION", "INVERSION", "EXISTENTIAL_EXPLETIVE", "REFERENCE_AND_DETERMINERS", "WORD_CLASS_FORM"]},
+        "subtype": {"type": "string", "minLength": 1},
+        "secondary_features": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "difficulty": {"enum": ["EASY", "MEDIUM", "HARD"]},
+        "vocabulary_domain": {"type": "string", "minLength": 1},
+        "stem": {"type": "string", "minLength": 1, "pattern": "____"},
+        "correct_option": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["text"],
+          "properties": {
+            "text": {"type": "string", "minLength": 1}
+          }
+        },
+        "answer_explanation": {"type": "string", "minLength": 1},
+        "distractor_candidates": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["d1", "d2", "d3", "d4", "d5", "d6"],
+          "properties": {
+            "d1": {"$ref": "#/$defs/distractor_candidate"},
+            "d2": {"$ref": "#/$defs/distractor_candidate"},
+            "d3": {"$ref": "#/$defs/distractor_candidate"},
+            "d4": {"$ref": "#/$defs/distractor_candidate"},
+            "d5": {"$ref": "#/$defs/distractor_candidate"},
+            "d6": {"$ref": "#/$defs/distractor_candidate"}
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {"$ref": "#/$defs/item"}
+    }
+  }
+}

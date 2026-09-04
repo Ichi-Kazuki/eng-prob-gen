@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "structure-reviewer-output-v0.2.schema.json",
+  "title": "Structure v0.2 blind Reviewer output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items"],
+  "$defs": {
+    "option_judgment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["option_text", "judgment"],
+      "properties": {
+        "option_text": {"type": "string", "minLength": 1},
+        "judgment": {"enum": ["VALID", "INVALID", "MARGINAL"]}
+      }
+    },
+    "candidate_diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["option_text", "natural_wording", "serious_defect", "observed_clause_count", "candidate_pool_observed_difficulty", "difficulty_confidence"],
+      "properties": {
+        "option_text": {"type": "string", "minLength": 1},
+        "natural_wording": {"type": "boolean"},
+        "serious_defect": {"type": "boolean"},
+        "observed_clause_count": {"type": "integer", "minimum": 1},
+        "candidate_pool_observed_difficulty": {"enum": ["EASY", "MEDIUM", "HARD"]},
+        "difficulty_confidence": {"enum": ["HIGH", "MEDIUM", "LOW"]}
+      }
+    }
+  },
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item_id", "option_judgments", "candidate_diagnostics", "comment"],
+        "properties": {
+          "item_id": {"type": "string", "minLength": 1},
+          "option_judgments": {
+            "type": "array",
+            "minItems": 7,
+            "maxItems": 7,
+            "items": {"$ref": "#/$defs/option_judgment"}
+          },
+          "candidate_diagnostics": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 7,
+            "items": {"$ref": "#/$defs/candidate_diagnostic"}
+          },
+          "comment": {"type": "string"}
+        }
+      }
+    }
+  }
+}

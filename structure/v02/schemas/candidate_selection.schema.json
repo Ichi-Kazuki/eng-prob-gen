@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "structure-candidate-selection-v0.2.schema.json",
+  "title": "Structure v0.2 deterministic candidate selection artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "version", "seed", "items"],
+  "$defs": {
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item_id",
+        "intended_correct_text",
+        "intended_correct_judgment",
+        "intended_correct_natural_wording",
+        "intended_correct_serious_defect",
+        "eligible_invalid_candidate_ids",
+        "rejected_valid_candidate_ids",
+        "rejected_marginal_candidate_ids",
+        "deterministic_priority_order",
+        "selected_candidate_ids",
+        "selected_candidate_texts",
+        "passed",
+        "failure_reasons"
+      ],
+      "properties": {
+        "item_id": {"type": "string", "minLength": 1},
+        "intended_correct_text": {"type": "string", "minLength": 1},
+        "intended_correct_judgment": {"enum": ["VALID", "INVALID", "MARGINAL"]},
+        "intended_correct_natural_wording": {"type": "boolean"},
+        "intended_correct_serious_defect": {"type": "boolean"},
+        "eligible_invalid_candidate_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "rejected_valid_candidate_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "rejected_marginal_candidate_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "deterministic_priority_order": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "selected_candidate_ids": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "selected_candidate_texts": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "passed": {"type": "boolean"},
+        "failure_reasons": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  },
+  "properties": {
+    "schema_version": {"const": "structure-candidate-selection-v0.2"},
+    "version": {"const": "v0.2"},
+    "seed": {"type": "integer", "minimum": 0},
+    "items": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {"$ref": "#/$defs/item"}
+    }
+  }
+}
