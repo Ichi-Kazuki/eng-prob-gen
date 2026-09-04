@@ -17,9 +17,11 @@ from typing import Any
 
 from structure.permutation import permute_generator_output
 
+import structure.planner as v01_planner
 from shared.schema_validation import load_schema, schema_errors
 from structure.v02 import blinding as v02_blinding
 from structure.v02 import contracts as v02_contracts
+from structure.v02 import planner as v02_planner
 from structure.v02 import selection as v02_selection
 
 
@@ -67,6 +69,13 @@ V02_PROTECTED_SCHEMA_HASHES: dict[str, str] = {
     "structure/v02/schemas/candidate_selection.schema.json": "f8ca2ab1e5dd60c7db37f4d49bff4cfe50c370a79f2e8043d6a7b326e109038d",
     "structure/v02/schemas/generator_final.schema.json": "3c34b631f881fd1966730f6b5d2b93fad730885d5ca93ca1f808b3244efad385",
     "structure/v02/schemas/plan.schema.json": "39e8dcded26947556123a00218bddb6a605063bdc9be97cb9e36caf22245738b",
+}
+
+# Protected v0.2 authoring prompts. Do not update these hashes unless a
+# future explicitly approved prompt revision occurs.
+V02_PROTECTED_PROMPT_HASHES: dict[str, str] = {
+    "structure/v02/prompts/generator.md": "da539121f3ea8cae9711484fe63b8930bf1f42cfa80b4ca6bd2fc82ac6389ea5",
+    "structure/v02/prompts/reviewer.md": "0e42b778a5c4f7ae009375acbd28106755fb755bf83ac62d663a6233d003fbb5",
 }
 
 
@@ -442,6 +451,21 @@ class V02SchemaFreezeTests(unittest.TestCase):
                     _sha256(path),
                     expected_hash,
                     f"frozen v0.2 schema changed: {relative_path}",
+                )
+
+
+class V02PromptFreezeTests(unittest.TestCase):
+    """Protect the approved v0.2 authoring prompts against accidental drift."""
+
+    def test_v02_protected_prompts_unchanged(self) -> None:
+        for relative_path, expected_hash in V02_PROTECTED_PROMPT_HASHES.items():
+            path = ROOT / relative_path
+            with self.subTest(path=relative_path):
+                self.assertTrue(path.is_file(), f"missing protected v0.2 prompt: {relative_path}")
+                self.assertEqual(
+                    _sha256(path),
+                    expected_hash,
+                    f"frozen v0.2 prompt changed: {relative_path}",
                 )
 
 
@@ -1513,6 +1537,342 @@ class FinalAssemblyIntegrityTests(unittest.TestCase):
             self.generator, self.reviewer, self.selection, self.seed
         )
         self.assertEqual([], errors)
+
+
+class PlannerAdapterTests(unittest.TestCase):
+    """Offline tests for the v0.2 Planner adapter (structure/v02/planner.py)."""
+
+    def test_same_seed_produces_identical_plan(self) -> None:
+        self.assertEqual(v02_planner.build_plan(7), v02_planner.build_plan(7))
+
+    def test_different_seeds_can_differ(self) -> None:
+        self.assertNotEqual(v02_planner.build_plan(1), v02_planner.build_plan(2))
+
+    def test_exactly_fifteen_items(self) -> None:
+        plan = v02_planner.build_plan(7)
+        self.assertEqual(15, len(plan["items"]))
+
+    def test_version_is_v02(self) -> None:
+        plan = v02_planner.build_plan(7)
+        self.assertEqual("v0.2", plan["version"])
+
+    def test_schema_version_is_structure_plan_v02(self) -> None:
+        plan = v02_planner.build_plan(7)
+        self.assertEqual("structure-plan-v0.2", plan["schema_version"])
+
+    def test_exact_plan_id(self) -> None:
+        plan = v02_planner.build_plan(7)
+        self.assertEqual(f"structure-plan-v0.2-{7:016x}", plan["plan_id"])
+
+    def test_exact_v02_item_ids(self) -> None:
+        plan = v02_planner.build_plan(7)
+        expected = [f"structure-v02-{7:016x}-{order:02d}" for order in range(1, 16)]
+        self.assertEqual(expected, [item["item_id"] for item in plan["items"]])
+
+    def test_order_is_1_through_15(self) -> None:
+        plan = v02_planner.build_plan(7)
+        self.assertEqual(list(range(1, 16)), [item["order"] for item in plan["items"]])
+
+    def test_bool_seed_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            v02_planner.build_plan(True)
+
+    def test_negative_seed_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            v02_planner.build_plan(-1)
+
+    def test_plan_validates_against_v02_schema(self) -> None:
+        plan = v02_planner.build_plan(7)
+        self.assertEqual([], schema_errors(plan, load_schema(PLAN_SCHEMA)))
+
+    def test_sampled_fields_match_frozen_v01_planner_slot_by_slot(self) -> None:
+        preserved_fields = (
+            "primary_target",
+            "difficulty",
+            "clause_count",
+            "sentence_length_bin",
+            "target_word_count",
+        )
+        for seed in (0, 1, 7, 42, 12345):
+            with self.subTest(seed=seed):
+                v01_plan = v01_planner.build_plan(seed)
+                v02_plan = v02_planner.build_plan(seed)
+                for v01_item, v02_item in zip(v01_plan["items"], v02_plan["items"]):
+                    for field in preserved_fields:
+                        self.assertEqual(
+                            v01_item[field],
+                            v02_item[field],
+                            f"seed={seed} field={field} diverges from frozen v0.1 sampling",
+                        )
+
+    def test_adapter_does_not_mutate_v01_plan(self) -> None:
+        before = v01_planner.build_plan(7)
+        v02_planner.build_plan(7)
+        after = v01_planner.build_plan(7)
+        self.assertEqual(before, after)
+
+    def test_no_subtype_in_plan(self) -> None:
+        plan = v02_planner.build_plan(7)
+        for item in plan["items"]:
+            self.assertNotIn("subtype", item)
+
+    def test_no_vocabulary_domain_in_plan(self) -> None:
+        plan = v02_planner.build_plan(7)
+        for item in plan["items"]:
+            self.assertNotIn("vocabulary_domain", item)
+
+    def test_no_candidate_data_in_plan(self) -> None:
+        plan = v02_planner.build_plan(7)
+        for item in plan["items"]:
+            self.assertNotIn("correct_option", item)
+            self.assertNotIn("distractor_candidates", item)
+            self.assertNotIn("candidate_options", item)
+
+    def test_no_random_random_usage_in_v02_planner_source(self) -> None:
+        source = (ROOT / "structure" / "v02" / "planner.py").read_text(encoding="utf-8")
+        self.assertNotIn("random.Random", source)
+        self.assertNotIn("import random", source)
+
+    def test_no_copied_empirical_weight_or_profile_tables_in_v02_planner_source(self) -> None:
+        source = (ROOT / "structure" / "v02" / "planner.py").read_text(encoding="utf-8")
+        for forbidden in (
+            "profile.json",
+            "JOINT_STRUCTURAL_WEIGHTS",
+            "PRIMARY_TARGET_WEIGHTS",
+            "DIFFICULTY_WEIGHTS",
+            "CLAUSE_COUNT_WEIGHTS",
+            "SENTENCE_LENGTH_WEIGHTS_BY_DIFFICULTY",
+            "weighted_choice",
+        ):
+            self.assertNotIn(forbidden, source)
+
+
+GENERATOR_PROMPT_PATH = ROOT / "structure" / "v02" / "prompts" / "generator.md"
+REVIEWER_PROMPT_PATH = ROOT / "structure" / "v02" / "prompts" / "reviewer.md"
+
+
+def _generator_prompt_text() -> str:
+    return GENERATOR_PROMPT_PATH.read_text(encoding="utf-8")
+
+
+def _reviewer_prompt_text() -> str:
+    return REVIEWER_PROMPT_PATH.read_text(encoding="utf-8")
+
+
+class GeneratorPromptContentTests(unittest.TestCase):
+    """Assert the v0.2 Generator prompt encodes the candidate-pool architecture."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.text = _generator_prompt_text()
+
+    def test_exactly_15_items(self) -> None:
+        self.assertIn("15-item", self.text)
+        self.assertIn("Exactly 15 items", self.text)
+
+    def test_one_correct_option(self) -> None:
+        self.assertIn("correct_option", self.text)
+        self.assertIn("single intended grammatically\ncorrect completion", self.text)
+
+    def test_six_distractor_candidates(self) -> None:
+        self.assertIn("six `distractor_candidates`", self.text)
+        self.assertIn("SIX distractor candidates", self.text)
+
+    def test_d1_d6_schema_shape(self) -> None:
+        self.assertIn("`d1`..`d6`", self.text)
+        self.assertIn('"rationale"', self.text)
+        self.assertIn("`{\"text\": ..., \"rationale\": ...}`", self.text)
+
+    def test_no_a_d_generation_instruction(self) -> None:
+        self.assertNotIn("exactly four non-empty A-D options", self.text)
+
+    def test_no_correct_answer_field(self) -> None:
+        self.assertIn("Do NOT emit any of the following", self.text)
+        self.assertIn("a `correct_answer` field", self.text)
+
+    def test_no_four_option_output_instruction(self) -> None:
+        self.assertNotIn("Provide exactly four non-empty A-D options", self.text)
+
+    def test_completed_sentence_first(self) -> None:
+        self.assertIn("Completed-sentence-first length authoring procedure", self.text)
+
+    def test_unicode_whitespace_word_counting(self) -> None:
+        self.assertIn("splitting\non Unicode whitespace", self.text)
+
+    def test_sentence_length_bin_hard_boundary(self) -> None:
+        self.assertIn("deterministic hard gate remains the Planner-owned `sentence_length_bin`", self.text)
+
+    def test_target_word_count_aim_only(self) -> None:
+        self.assertIn("Exact `target_word_count` equality is\nnot required", self.text)
+
+    def test_finite_clause_count_definition_preserved(self) -> None:
+        self.assertIn("Count FINITE clauses only", self.text)
+        self.assertIn("one modal + base verb is one finite clause", self.text)
+
+    def test_generator_owned_subtype_preserved(self) -> None:
+        self.assertIn("the Planner does not supply `subtype`", self.text)
+
+    def test_free_form_vocabulary_domain_preserved(self) -> None:
+        self.assertIn("value selected from a closed Structure domain enum or pool", self.text)
+
+    def test_all_six_are_intended_invalid_distractors(self) -> None:
+        self.assertIn("All six are still INTENDED DISTRACTORS", self.text)
+
+    def test_later_filtering_is_not_permission_for_weak_distractors(self) -> None:
+        self.assertIn("NOT permission to deliberately emit a weak", self.text)
+        self.assertIn("not to replace careful", self.text)
+        self.assertIn("Generator authorship", self.text)
+
+    def test_complete_sentence_rescue_preserved(self) -> None:
+        self.assertIn("Complete-sentence rescue test", self.text)
+
+    def test_alternative_parse_rescue_preserved(self) -> None:
+        self.assertIn("evaluate the complete sentence under\nthe candidate's own best ordinary parse".lower(), self.text.lower())
+
+    def test_six_rationales_required(self) -> None:
+        self.assertIn("one rationale for each of the six\n`distractor_candidates` (`d1`..`d6`)", self.text)
+
+    def test_no_self_review_retry_repair_regeneration(self) -> None:
+        self.assertIn(
+            "Do not self-review, do not emit a\nPASS/FAIL or quality verdict, and do not perform a second call, repair, retry,\n"
+            "regeneration, revision, or replacement over any item.",
+            self.text,
+        )
+
+    def test_no_official_ets_copying_instruction_preserved(self) -> None:
+        self.assertIn("Never copy or lightly\nparaphrase any ETS item", self.text)
+
+    def test_no_exactly_four_non_empty_a_d_options_phrase(self) -> None:
+        self.assertNotIn("exactly four non-empty A-D options", self.text)
+
+    def test_no_correct_answer_output_contract(self) -> None:
+        self.assertNotIn("`correct_answer`:", self.text)
+
+    def test_no_a_d_options_output_contract(self) -> None:
+        self.assertNotIn("Provide exactly four non-empty A-D options", self.text)
+        self.assertIn("an `options` object", self.text)
+
+    def test_no_a_d_distractor_rationales_output_contract(self) -> None:
+        self.assertNotIn("A-D option.", self.text)
+
+
+class ReviewerPromptContentTests(unittest.TestCase):
+    """Assert the v0.2 Reviewer prompt encodes blind seven-candidate review semantics."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.text = _reviewer_prompt_text()
+
+    def test_input_allowlist(self) -> None:
+        self.assertIn(
+            "The input contains only `item_id`, `section`, `stem`, and", self.text
+        )
+        self.assertIn("`candidate_options`", self.text)
+
+    def test_exactly_seven_visible_candidates(self) -> None:
+        self.assertIn("exactly seven visible strings", self.text)
+        self.assertIn("a list of exactly seven objects", self.text)
+
+    def test_candidate_ids_private(self) -> None:
+        self.assertIn("internal candidate IDs", self.text)
+
+    def test_every_candidate_judged_independently(self) -> None:
+        self.assertIn(
+            "For every one of the seven visible candidate texts, independently insert it", self.text
+        )
+
+    def test_valid_invalid_marginal_meanings(self) -> None:
+        for label in ("**VALID:**", "**INVALID:**", "**MARGINAL:**"):
+            self.assertIn(label, self.text)
+
+    def test_multiple_valid_explicitly_allowed(self) -> None:
+        self.assertIn("two VALID candidates are allowed", self.text)
+
+    def test_multiple_marginal_explicitly_allowed(self) -> None:
+        self.assertIn("multiple MARGINAL candidates are allowed", self.text)
+
+    def test_multiple_valid_does_not_imply_serious_defect(self) -> None:
+        self.assertIn(
+            "NOT set `serious_defect=true` on a candidate merely because more than one",
+            self.text,
+        )
+        self.assertIn("visible candidate is VALID or MARGINAL.", self.text)
+
+    def test_no_global_best_answer(self) -> None:
+        self.assertIn("Do NOT return `best_answer_text` or any global best-answer field", self.text)
+
+    def test_no_ambiguous_none(self) -> None:
+        self.assertIn("Do NOT return `AMBIGUOUS`. Do NOT return `NONE`.", self.text)
+
+    def test_exact_option_text_identity(self) -> None:
+        self.assertIn("Do not trim, rewrite, normalize, casefold, or\nfuzzy-match a candidate.", self.text)
+
+    def test_candidate_diagnostics_only_valid_marginal(self) -> None:
+        self.assertIn(
+            "return `candidate_diagnostics` ONLY for candidates you judged\n`VALID` or `MARGINAL`", self.text
+        )
+
+    def test_invalid_has_no_diagnostic(self) -> None:
+        self.assertIn("`INVALID` candidates\nget NO diagnostic entry", self.text)
+
+    def test_natural_wording_candidate_specific(self) -> None:
+        self.assertIn("`natural_wording` is candidate-specific", self.text)
+
+    def test_serious_defect_candidate_specific(self) -> None:
+        self.assertIn("`serious_defect` is candidate-specific", self.text)
+
+    def test_observed_clause_count_candidate_specific(self) -> None:
+        self.assertIn(
+            "report\n`observed_clause_count`: the number of FINITE clauses you observe in the\n"
+            "completed sentence formed by inserting THAT candidate.",
+            self.text,
+        )
+
+    def test_finite_clause_definition_preserved(self) -> None:
+        self.assertIn("A modal + base verb belongs to ONE finite clause", self.text)
+
+    def test_candidate_pool_difficulty_diagnostic_only(self) -> None:
+        self.assertIn("This is a DIAGNOSTIC of the visible seven-candidate review context", self.text)
+
+    def test_difficulty_not_equivalent_to_final_four_option(self) -> None:
+        self.assertIn(
+            "It is NOT\nequivalent to a final four-option item's difficulty classification", self.text
+        )
+
+    def test_no_planner_difficulty_comparison(self) -> None:
+        self.assertIn("will NOT be compared against Planner difficulty for acceptance", self.text)
+
+    def test_no_historical_quota_forcing(self) -> None:
+        self.assertIn(
+            "Do NOT\nattempt to force the historical 18/42/15 distribution or any historical\nquota.",
+            self.text,
+        )
+
+    def test_reviewer_comment_not_acceptance_input(self) -> None:
+        self.assertIn("not itself an acceptance input", self.text)
+
+    def test_alternative_parse_protection_preserved(self) -> None:
+        self.assertIn("own best ordinary parse", self.text)
+
+    def test_tense_rescue_protection_preserved(self) -> None:
+        self.assertIn("different plausible tense interpretation", self.text)
+
+    def test_connector_complement_protection_preserved(self) -> None:
+        self.assertIn("full syntactic complement after insertion through the end of the", self.text)
+
+    def test_who_whom_structural_rule_preserved(self) -> None:
+        self.assertIn("Bare object position (bare object relative position)", self.text)
+        self.assertIn("Immediately after a fronted preposition", self.text)
+
+    def test_no_a_b_c_d(self) -> None:
+        self.assertNotIn("A/B/C/D references", self.text)
+
+    def test_no_best_answer_text_field(self) -> None:
+        self.assertNotIn("Return `best_answer_text` as", self.text)
+
+    def test_no_unique_answer_requirement_across_seven_option_pool(self) -> None:
+        self.assertIn("enforce final-answer", self.text)
+        self.assertIn("uniqueness across the seven-candidate pool", self.text)
 
 
 if __name__ == "__main__":
