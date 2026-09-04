@@ -28,8 +28,8 @@
         "item_id": {"type": "string", "minLength": 1},
         "intended_correct_text": {"type": "string", "minLength": 1},
         "intended_correct_judgment": {"enum": ["VALID", "INVALID", "MARGINAL"]},
-        "intended_correct_natural_wording": {"type": "boolean"},
-        "intended_correct_serious_defect": {"type": "boolean"},
+        "intended_correct_natural_wording": {"type": ["boolean", "null"]},
+        "intended_correct_serious_defect": {"type": ["boolean", "null"]},
         "eligible_invalid_candidate_ids": {
           "type": "array",
           "items": {"type": "string", "minLength": 1}

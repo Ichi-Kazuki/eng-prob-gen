@@ -330,6 +330,33 @@ class CandidateSelectionSchemaTests(unittest.TestCase):
         payload["items"][0]["selected_candidate_texts"] = ["a", "b", "c", "d"]
         self.assertTrue(schema_errors(payload, load_schema(CANDIDATE_SELECTION_SCHEMA)))
 
+    def test_intended_correct_invalid_with_null_diagnostics_validates(self) -> None:
+        payload = candidate_selection_fixture()
+        payload["items"][0]["intended_correct_judgment"] = "INVALID"
+        payload["items"][0]["intended_correct_natural_wording"] = None
+        payload["items"][0]["intended_correct_serious_defect"] = None
+        self.assertEqual([], schema_errors(payload, load_schema(CANDIDATE_SELECTION_SCHEMA)))
+
+    def test_intended_correct_natural_wording_rejects_non_boolean_non_null(self) -> None:
+        payload = candidate_selection_fixture()
+        payload["items"][0]["intended_correct_natural_wording"] = "true"
+        self.assertTrue(schema_errors(payload, load_schema(CANDIDATE_SELECTION_SCHEMA)))
+
+    def test_intended_correct_serious_defect_rejects_non_boolean_non_null(self) -> None:
+        payload = candidate_selection_fixture()
+        payload["items"][0]["intended_correct_serious_defect"] = "false"
+        self.assertTrue(schema_errors(payload, load_schema(CANDIDATE_SELECTION_SCHEMA)))
+
+    def test_intended_correct_natural_wording_still_required(self) -> None:
+        payload = candidate_selection_fixture()
+        del payload["items"][0]["intended_correct_natural_wording"]
+        self.assertTrue(schema_errors(payload, load_schema(CANDIDATE_SELECTION_SCHEMA)))
+
+    def test_intended_correct_serious_defect_still_required(self) -> None:
+        payload = candidate_selection_fixture()
+        del payload["items"][0]["intended_correct_serious_defect"]
+        self.assertTrue(schema_errors(payload, load_schema(CANDIDATE_SELECTION_SCHEMA)))
+
 
 class GeneratorFinalSchemaTests(unittest.TestCase):
     def test_valid_fixture(self) -> None:
