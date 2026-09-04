@@ -258,35 +258,53 @@ def candidate_selection_errors(
 def assemble_final_generator_output(generator: Any, selection: Any) -> dict[str, Any]:
     """Assemble the pre-permutation four-option final batch.
 
-    Requires all 15 candidate selection items to have passed; fails
-    closed (raises ValueError) rather than assembling a partial batch.
-    A = the intended correct option, B/C/D = the three selected
-    distractors in deterministic-priority order. correct_answer == "A"
-    always, since this is the internal layout before
-    structure/permutation.py runs (not called here).
+    This is a deterministic artifact-integrity boundary: every mutable
+    field the selection artifact carries (semantic pass invariants, the
+    seed-derived deterministic priority order, and the three-way
+    classification partition) is independently re-verified against the
+    already-existing SHA-256 selection_priority helper before any option
+    is assembled. Fails closed (raises ValueError) rather than repairing
+    or assembling a partial batch. A = the intended correct option,
+    B/C/D = the three selected distractors in deterministic-priority
+    order. correct_answer == "A" always, since this is the internal
+    layout before structure/permutation.py runs (not called here).
     """
 
     generator_items = _generator_items(generator)
 
     if not isinstance(selection, dict):
         raise ValueError("candidate selection must be an object")
-    selection_items = selection.get("items")
-    if not isinstance(selection_items, list) or len(selection_items) != 15:
-        raise ValueError("candidate selection must contain exactly 15 items")
+
+    selection_schema_errors = schema_errors(selection, load_schema(CANDIDATE_SELECTION_SCHEMA_PATH))
+    if selection_schema_errors:
+        raise ValueError(
+            "candidate selection failed schema validation: " + "; ".join(selection_schema_errors)
+        )
+
+    selection_seed = validate_seed(selection["seed"])
+    selection_items = selection["items"]
 
     generator_ids = [item["item_id"] for item in generator_items]
-    selection_ids = [item.get("item_id") if isinstance(item, dict) else None for item in selection_items]
+    selection_ids = [item["item_id"] for item in selection_items]
     if generator_ids != selection_ids:
         raise ValueError("candidate selection item IDs/order do not match Generator")
-
-    if not all(isinstance(item, dict) and item.get("passed") is True for item in selection_items):
-        raise ValueError("all 15 candidate selection items must have passed=True for final assembly")
 
     final_items: list[dict[str, Any]] = []
     for item, sel in zip(generator_items, selection_items):
         item_id = item["item_id"]
         entries = extract_candidate_entries(item)
         text_by_id = dict(entries)
+
+        if sel["passed"] is not True:
+            raise ValueError(f"item {item_id}: candidate selection item must have passed exactly True")
+        if sel["failure_reasons"] != []:
+            raise ValueError(f"item {item_id}: candidate selection item must have empty failure_reasons")
+        if sel["intended_correct_judgment"] != VALID:
+            raise ValueError(f"item {item_id}: intended_correct_judgment must be exactly VALID")
+        if sel["intended_correct_natural_wording"] is not True:
+            raise ValueError(f"item {item_id}: intended_correct_natural_wording must be exactly True")
+        if sel["intended_correct_serious_defect"] is not False:
+            raise ValueError(f"item {item_id}: intended_correct_serious_defect must be exactly False")
 
         distractor_candidates = item.get("distractor_candidates")
         if not isinstance(distractor_candidates, dict):
@@ -298,32 +316,79 @@ def assemble_final_generator_output(generator: Any, selection: Any) -> dict[str,
                 raise ValueError(f"item {item_id}: distractor_candidates.{candidate_id} is missing or invalid")
             rationale_by_id[candidate_id] = candidate.get("rationale")
 
-        intended_text = sel.get("intended_correct_text")
+        intended_text = sel["intended_correct_text"]
         if text_by_id["correct"] != intended_text:
             raise ValueError(f"item {item_id}: candidate selection intended_correct_text does not match Generator")
 
-        selected_ids = sel.get("selected_candidate_ids")
-        selected_texts = sel.get("selected_candidate_texts")
+        expected_priority_order = sorted(
+            DISTRACTOR_IDS,
+            key=lambda candidate_id: (selection_priority(selection_seed, item_id, candidate_id), candidate_id),
+        )
+        if sel["deterministic_priority_order"] != expected_priority_order:
+            raise ValueError(
+                f"item {item_id}: deterministic_priority_order does not match the recomputed seed-derived "
+                "selection priority"
+            )
+
+        eligible = sel["eligible_invalid_candidate_ids"]
+        rejected_valid = sel["rejected_valid_candidate_ids"]
+        rejected_marginal = sel["rejected_marginal_candidate_ids"]
+        classification_lists = {
+            "eligible_invalid_candidate_ids": eligible,
+            "rejected_valid_candidate_ids": rejected_valid,
+            "rejected_marginal_candidate_ids": rejected_marginal,
+        }
+        for name, class_list in classification_lists.items():
+            if (
+                not isinstance(class_list, list)
+                or any(candidate_id not in DISTRACTOR_IDS for candidate_id in class_list)
+                or len(set(class_list)) != len(class_list)
+            ):
+                raise ValueError(f"item {item_id}: {name} must be a list of unique d1..d6 IDs with no duplicates")
+
+        eligible_set = set(eligible)
+        rejected_valid_set = set(rejected_valid)
+        rejected_marginal_set = set(rejected_marginal)
+        if (
+            eligible_set & rejected_valid_set
+            or eligible_set & rejected_marginal_set
+            or rejected_valid_set & rejected_marginal_set
+        ):
+            raise ValueError(f"item {item_id}: classification lists must not overlap")
+        if eligible_set | rejected_valid_set | rejected_marginal_set != set(DISTRACTOR_IDS):
+            raise ValueError(
+                f"item {item_id}: eligible/rejected_valid/rejected_marginal lists must together partition d1..d6"
+            )
+
+        class_sets = {
+            "eligible_invalid_candidate_ids": eligible_set,
+            "rejected_valid_candidate_ids": rejected_valid_set,
+            "rejected_marginal_candidate_ids": rejected_marginal_set,
+        }
+        for name, class_list in classification_lists.items():
+            expected_class_order = [
+                candidate_id for candidate_id in expected_priority_order if candidate_id in class_sets[name]
+            ]
+            if class_list != expected_class_order:
+                raise ValueError(
+                    f"item {item_id}: {name} order does not follow the recomputed deterministic priority order"
+                )
+
+        selected_ids = sel["selected_candidate_ids"]
+        selected_texts = sel["selected_candidate_texts"]
         if not isinstance(selected_ids, list) or len(selected_ids) != 3 or len(set(selected_ids)) != 3:
             raise ValueError(f"item {item_id}: candidate selection must have exactly 3 unique selected IDs")
         if any(candidate_id not in DISTRACTOR_IDS for candidate_id in selected_ids):
             raise ValueError(f"item {item_id}: selected candidate IDs must belong to d1..d6")
         if not isinstance(selected_texts, list) or [text_by_id[cid] for cid in selected_ids] != selected_texts:
             raise ValueError(f"item {item_id}: selected candidate texts do not match selected IDs")
-
-        priority_order = sel.get("deterministic_priority_order")
-        if not isinstance(priority_order, list) or sorted(priority_order) != sorted(DISTRACTOR_IDS):
-            raise ValueError(
-                f"item {item_id}: deterministic_priority_order must contain all six distractor IDs exactly once"
-            )
-        eligible = sel.get("eligible_invalid_candidate_ids")
-        if not isinstance(eligible, list) or any(candidate_id not in eligible for candidate_id in selected_ids):
+        if any(candidate_id not in eligible_set for candidate_id in selected_ids):
             raise ValueError(f"item {item_id}: selected candidate IDs must be eligible_invalid_candidate_ids")
-        expected_first_three = [candidate_id for candidate_id in priority_order if candidate_id in eligible][:3]
+        expected_first_three = [candidate_id for candidate_id in expected_priority_order if candidate_id in eligible_set][:3]
         if selected_ids != expected_first_three:
             raise ValueError(
                 f"item {item_id}: selected candidate IDs are not the first 3 eligible IDs under "
-                "deterministic priority order"
+                "the recomputed deterministic priority order"
             )
 
         options = {

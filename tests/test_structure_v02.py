@@ -1356,5 +1356,164 @@ class FinalAssemblyTests(unittest.TestCase):
         self.assertEqual([3, 4, 4, 4], sorted(distribution.values()))
 
 
+class FinalAssemblyIntegrityTests(unittest.TestCase):
+    """Fail-closed artifact-integrity boundary checks in final assembly.
+
+    These deliberately construct schema-plausible but semantically or
+    cross-field tampered selection artifacts that build_candidate_selection
+    would never itself produce, and assert assemble_final_generator_output
+    still rejects them rather than trusting the mutable fields.
+    """
+
+    def setUp(self) -> None:
+        self.generator = generator_output_fixture()
+        self.seed = SEED
+        self.reviewer = _canonical_reviewer_fixture(self.generator)
+        self.selection = v02_selection.build_candidate_selection(self.generator, self.reviewer, self.seed)
+
+        # A selection with a non-trivial rejected_valid/rejected_marginal split
+        # for classification-order and partition tests.
+        self.mixed_reviewer = _canonical_reviewer_fixture(
+            self.generator, distractor_judgment_by_id={"d1": "VALID", "d2": "MARGINAL"}
+        )
+        self.mixed_selection = v02_selection.build_candidate_selection(
+            self.generator, self.mixed_reviewer, self.seed
+        )
+
+    def test_existing_valid_assembly_still_passes(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        self.assertEqual(15, len(final["items"]))
+
+    def test_schema_invalid_selection_fails_assembly(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        del selection["seed"]
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_passed_true_but_intended_correct_marginal_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        selection["items"][0]["intended_correct_judgment"] = "MARGINAL"
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_passed_true_but_intended_correct_invalid_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        selection["items"][0]["intended_correct_judgment"] = "INVALID"
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_passed_true_but_natural_wording_false_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        selection["items"][0]["intended_correct_natural_wording"] = False
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_passed_true_but_serious_defect_true_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        selection["items"][0]["intended_correct_serious_defect"] = True
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_passed_true_but_nonempty_failure_reasons_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        selection["items"][0]["failure_reasons"] = ["some_reason"]
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_tampered_priority_order_still_a_valid_permutation_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        order = selection["items"][0]["deterministic_priority_order"]
+        order[0], order[1] = order[1], order[0]
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_changed_seed_without_recomputing_priority_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        selection["seed"] = self.seed + 1
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_eligible_list_with_duplicate_id_fails(self) -> None:
+        selection = copy.deepcopy(self.mixed_selection)
+        eligible = selection["items"][0]["eligible_invalid_candidate_ids"]
+        eligible.append(eligible[0])
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_classification_lists_overlap_fails(self) -> None:
+        selection = copy.deepcopy(self.mixed_selection)
+        item = selection["items"][0]
+        self.assertTrue(item["rejected_valid_candidate_ids"])
+        item["eligible_invalid_candidate_ids"].append(item["rejected_valid_candidate_ids"][0])
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_classification_lists_fail_to_cover_all_six_fails(self) -> None:
+        selection = copy.deepcopy(self.mixed_selection)
+        item = selection["items"][0]
+        item["eligible_invalid_candidate_ids"].pop()
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_classification_list_with_non_distractor_id_fails(self) -> None:
+        selection = copy.deepcopy(self.mixed_selection)
+        selection["items"][0]["eligible_invalid_candidate_ids"].append("bogus")
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_eligible_list_order_inconsistent_with_priority_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        eligible = selection["items"][0]["eligible_invalid_candidate_ids"]
+        self.assertGreaterEqual(len(eligible), 2)
+        eligible[0], eligible[1] = eligible[1], eligible[0]
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_rejected_valid_list_order_inconsistent_with_priority_fails(self) -> None:
+        reviewer = _canonical_reviewer_fixture(
+            self.generator, distractor_judgment_by_id={"d1": "VALID", "d2": "VALID"}
+        )
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        rejected_valid = selection["items"][0]["rejected_valid_candidate_ids"]
+        self.assertEqual(2, len(rejected_valid))
+        rejected_valid[0], rejected_valid[1] = rejected_valid[1], rejected_valid[0]
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_rejected_marginal_list_order_inconsistent_with_priority_fails(self) -> None:
+        reviewer = _canonical_reviewer_fixture(
+            self.generator, distractor_judgment_by_id={"d1": "MARGINAL", "d2": "MARGINAL"}
+        )
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        rejected_marginal = selection["items"][0]["rejected_marginal_candidate_ids"]
+        self.assertEqual(2, len(rejected_marginal))
+        rejected_marginal[0], rejected_marginal[1] = rejected_marginal[1], rejected_marginal[0]
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_selected_ids_not_first_three_eligible_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        item = selection["items"][0]
+        eligible = item["eligible_invalid_candidate_ids"]
+        entries = dict(v02_blinding.extract_candidate_entries(self.generator["items"][0]))
+        reordered = [eligible[1], eligible[0], eligible[2]] + eligible[3:]
+        item["selected_candidate_ids"] = reordered[:3]
+        item["selected_candidate_texts"] = [entries[cid] for cid in reordered[:3]]
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_valid_artifact_still_passes_frozen_permutation_compatibility(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        permuted, _permutation = permute_generator_output(final, self.seed)
+        distribution = Counter(item["correct_answer"] for item in permuted["items"])
+        self.assertEqual([3, 4, 4, 4], sorted(distribution.values()))
+
+    def test_candidate_selection_errors_behavior_unchanged(self) -> None:
+        errors = v02_selection.candidate_selection_errors(
+            self.generator, self.reviewer, self.selection, self.seed
+        )
+        self.assertEqual([], errors)
+
+
 if __name__ == "__main__":
     unittest.main()
