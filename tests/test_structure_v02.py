@@ -35,7 +35,7 @@ V01_PROTECTED_HASHES: dict[str, str] = {
     "structure/contracts.py": "c6fae71840a4d4a840f2c455ef97c39181ea8d7d4320b054f5d6face0eea313a",
     "structure/blinding.py": "b39dcdad846adda25d46784c5d75b75e49f5b01d44df75a011bfe2c96546b351",
     "structure/permutation.py": "1efdba8054a14540ba838e31c2b57401faf97770c6da3ea14ea9850cc8c31b42",
-    "structure/prompts/generator.md": "ed5cd4f4a26ce5de97648e668df0ef44dac47521ec229d1103ad955692f99332",
+    "structure/prompts/generator.md": "dc723c8ca5054fbc7baffddb0dcadded24c11bcfefb1ea1e9b662fc8d991838f",
     "structure/prompts/reviewer.md": "0359e7f5dc3103a05082163bfb225b049923cffc72e2e5b373c6c8c5e88e70ae",
     "structure/prompts/solver.md": "e83c1a95cf4a098f43733101a63751ac151993cfbd02e25b9f9af0e238b862f3",
     "structure/schemas/generator_item.schema.json": "229a8c39ca0daa2e79e516b0cc362eb740204fd5369252c478c79facaf857fff",
@@ -47,12 +47,24 @@ V01_PROTECTED_HASHES: dict[str, str] = {
     "structure/schemas/reviewer_output.schema.json": "9f47df07f99acfc34a6da22c6bdaa0f383246d2c090c2841598a7e8de0aa599e",
     "structure/schemas/solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
     "structure/schemas/solver_output.schema.json": "90588686793f16f5ff2aefd6c19a834eb444e1bda9a0c1aff73de74e3506d031",
-    "tests/test_structure_v01.py": "399ac40b912db8c8f1f28efa9e7d5a5fd5bdbffb1294a9aaf920869347c21e1b",
+    "tests/test_structure_v01.py": "f98faf0d216ca62e8a96667b4f1714618876cc4c7443bea47ef8b078dd238b40",
 }
 
 
+def _canonical_text_sha256(text: str) -> str:
+    """Hash text content after normalizing CRLF/CR line endings to LF.
+
+    This protects the canonical committed text content rather than
+    checkout-specific bytes (e.g. Windows CRLF checkouts of LF blobs).
+    No whitespace stripping, newline trimming, or Unicode normalization
+    is performed beyond the CRLF/CR -> LF substitution.
+    """
+    canonical = text.replace("\r\n", "\n").replace("\r", "\n")
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
 def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return _canonical_text_sha256(path.read_text(encoding="utf-8"))
 
 
 def _generator_item(index: int) -> dict[str, Any]:
@@ -344,6 +356,13 @@ class PlanSchemaTests(unittest.TestCase):
         payload = plan_fixture()
         payload["question_count"] = 14
         self.assertTrue(schema_errors(payload, load_schema(PLAN_SCHEMA)))
+
+
+class CanonicalTextHashTests(unittest.TestCase):
+    def test_lf_and_crlf_content_hash_equal(self) -> None:
+        lf_text = "alpha\nbeta\n"
+        crlf_text = "alpha\r\nbeta\r\n"
+        self.assertEqual(_canonical_text_sha256(lf_text), _canonical_text_sha256(crlf_text))
 
 
 class V01FreezeTests(unittest.TestCase):
