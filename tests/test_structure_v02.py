@@ -18,11 +18,14 @@ from typing import Any
 from structure.permutation import permute_generator_output
 
 import structure.planner as v01_planner
+from structure import blinding as v01_blinding
+from structure import contracts as v01_contracts
 from shared.schema_validation import load_schema, schema_errors
 from structure.v02 import blinding as v02_blinding
 from structure.v02 import contracts as v02_contracts
 from structure.v02 import planner as v02_planner
 from structure.v02 import selection as v02_selection
+from structure.v02 import solver as v02_solver
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -76,6 +79,7 @@ V02_PROTECTED_SCHEMA_HASHES: dict[str, str] = {
 V02_PROTECTED_PROMPT_HASHES: dict[str, str] = {
     "structure/v02/prompts/generator.md": "da539121f3ea8cae9711484fe63b8930bf1f42cfa80b4ca6bd2fc82ac6389ea5",
     "structure/v02/prompts/reviewer.md": "0e42b778a5c4f7ae009375acbd28106755fb755bf83ac62d663a6233d003fbb5",
+    "structure/v02/prompts/solver.md": "40d9588db09d8d1478b520ed44472d7914129b17bc2f2481d8329c370779aeb1",
 }
 
 
@@ -1659,6 +1663,13 @@ def _reviewer_prompt_text() -> str:
     return REVIEWER_PROMPT_PATH.read_text(encoding="utf-8")
 
 
+SOLVER_PROMPT_PATH = ROOT / "structure" / "v02" / "prompts" / "solver.md"
+
+
+def _solver_prompt_text() -> str:
+    return SOLVER_PROMPT_PATH.read_text(encoding="utf-8")
+
+
 class GeneratorPromptContentTests(unittest.TestCase):
     """Assert the v0.2 Generator prompt encodes the candidate-pool architecture."""
 
@@ -1873,6 +1884,381 @@ class ReviewerPromptContentTests(unittest.TestCase):
     def test_no_unique_answer_requirement_across_seven_option_pool(self) -> None:
         self.assertIn("enforce final-answer", self.text)
         self.assertIn("uniqueness across the seven-candidate pool", self.text)
+
+
+def _final_permuted_fixture(seed: int = SEED) -> dict[str, Any]:
+    """Build the complete v0.2 pre-Solver artifact: Generator -> Reviewer ->
+    candidate selection -> four-option assembly -> frozen permutation."""
+
+    generator = generator_output_fixture()
+    reviewer = _canonical_reviewer_fixture(generator)
+    selection = v02_selection.build_candidate_selection(generator, reviewer, seed)
+    final = v02_selection.assemble_final_generator_output(generator, selection)
+    permuted, _permutation = permute_generator_output(final, seed)
+    return permuted
+
+
+def _raw_solver_output_fixture(solver_input: dict[str, Any]) -> dict[str, Any]:
+    """Build a schema-valid, contract-valid raw Solver response for a projection.
+
+    Always answers with the exact visible text of option "A", which is a
+    faithful raw Solver-style response shape (it need not be semantically
+    "correct" for these offline compatibility tests).
+    """
+
+    return {
+        "items": [
+            {
+                "item_id": item["item_id"],
+                "answer_text": item["options"]["A"],
+                "confidence": "HIGH",
+                "reason": "The option completes the sentence naturally.",
+            }
+            for item in solver_input["items"]
+        ]
+    }
+
+
+class SolverProjectionTests(unittest.TestCase):
+    """Structure v0.2 Solver compatibility layer: blind final-four projection."""
+
+    def setUp(self) -> None:
+        self.final_permuted = _final_permuted_fixture()
+        self.solver_input = v02_solver.build_solver_input(self.final_permuted)
+
+    def test_projection_succeeds(self) -> None:
+        self.assertIsInstance(self.solver_input, dict)
+
+    def test_exactly_fifteen_items(self) -> None:
+        self.assertEqual(15, len(self.solver_input["items"]))
+
+    def test_per_item_keys_are_exactly_allowlisted(self) -> None:
+        for item in self.solver_input["items"]:
+            self.assertEqual({"item_id", "section", "stem", "options"}, set(item))
+
+    def test_options_exactly_a_through_d(self) -> None:
+        for item in self.solver_input["items"]:
+            self.assertEqual({"A", "B", "C", "D"}, set(item["options"]))
+
+    def test_final_permuted_option_texts_preserved_exactly(self) -> None:
+        for expected_item, projected_item in zip(self.final_permuted["items"], self.solver_input["items"]):
+            self.assertEqual(expected_item["options"], projected_item["options"])
+
+    def test_item_id_and_order_preserved(self) -> None:
+        self.assertEqual(
+            [item["item_id"] for item in self.final_permuted["items"]],
+            [item["item_id"] for item in self.solver_input["items"]],
+        )
+
+    def test_validates_against_frozen_solver_input_schema(self) -> None:
+        self.assertEqual(
+            [], schema_errors(self.solver_input, load_schema(v02_solver.SOLVER_INPUT_SCHEMA_PATH))
+        )
+
+    def test_matches_frozen_v01_blind_projection_directly(self) -> None:
+        self.assertEqual(v01_blinding.build_solver_input(self.final_permuted), self.solver_input)
+
+    def test_same_final_permuted_gives_identical_projection(self) -> None:
+        first = v02_solver.build_solver_input(self.final_permuted)
+        second = v02_solver.build_solver_input(self.final_permuted)
+        self.assertEqual(first, second)
+
+    def test_no_correct_answer_leak(self) -> None:
+        serialized = json.dumps(self.solver_input)
+        self.assertNotIn("correct_answer", serialized)
+
+    def test_no_answer_explanation_leak(self) -> None:
+        serialized = json.dumps(self.solver_input)
+        self.assertNotIn("answer_explanation", serialized)
+
+    def test_no_distractor_rationale_leak(self) -> None:
+        serialized = json.dumps(self.solver_input)
+        self.assertNotIn("distractor_rationales", serialized)
+        self.assertNotIn("rationale", serialized)
+
+    def test_no_planner_generator_metadata_leak(self) -> None:
+        serialized = json.dumps(self.solver_input)
+        for forbidden in ("primary_target", "subtype", "difficulty", "vocabulary_domain", "secondary_features"):
+            self.assertNotIn(forbidden, serialized)
+
+    def test_no_seven_candidate_pool_leak(self) -> None:
+        serialized = json.dumps(self.solver_input)
+        for forbidden in ("candidate_options", "distractor_candidates", "correct_option"):
+            self.assertNotIn(forbidden, serialized)
+
+    def test_no_candidate_ids_leak(self) -> None:
+        serialized = json.dumps(self.solver_input)
+        for candidate_id in v02_blinding.CANDIDATE_IDS:
+            self.assertNotIn(f'"{candidate_id}"', serialized)
+
+    def test_no_reviewer_fields_leak(self) -> None:
+        serialized = json.dumps(self.solver_input)
+        for forbidden in (
+            "option_judgments", "candidate_diagnostics", "natural_wording", "serious_defect",
+            "observed_clause_count", "candidate_pool_observed_difficulty", "difficulty_confidence", "comment",
+        ):
+            self.assertNotIn(forbidden, serialized)
+
+    def test_no_candidate_selection_fields_leak(self) -> None:
+        serialized = json.dumps(self.solver_input)
+        for forbidden in (
+            "eligible_invalid_candidate_ids", "rejected_valid_candidate_ids", "rejected_marginal_candidate_ids",
+            "deterministic_priority_order", "selected_candidate_ids", "selected_candidate_texts",
+            "intended_correct_text", "intended_correct_judgment", "failure_reasons", "passed",
+        ):
+            self.assertNotIn(forbidden, serialized)
+
+    def test_no_permutation_provenance_leak(self) -> None:
+        serialized = json.dumps(self.solver_input)
+        for forbidden in ("permutation", "original_to_canonical", "canonical_to_original"):
+            self.assertNotIn(forbidden, serialized)
+
+
+class SolverInputReplayValidationTests(unittest.TestCase):
+    """solver_input_errors: deterministic rebuild, schema check, exact equality."""
+
+    def setUp(self) -> None:
+        self.final_permuted = _final_permuted_fixture()
+        self.solver_input = v02_solver.build_solver_input(self.final_permuted)
+
+    def test_matching_payload_has_no_errors(self) -> None:
+        self.assertEqual([], v02_solver.solver_input_errors(self.final_permuted, self.solver_input))
+
+    def test_modified_option_text_fails(self) -> None:
+        payload = copy.deepcopy(self.solver_input)
+        payload["items"][0]["options"]["A"] = payload["items"][0]["options"]["A"] + " extra"
+        self.assertTrue(v02_solver.solver_input_errors(self.final_permuted, payload))
+
+    def test_modified_option_letter_mapping_fails(self) -> None:
+        payload = copy.deepcopy(self.solver_input)
+        options = payload["items"][0]["options"]
+        options["A"], options["B"] = options["B"], options["A"]
+        self.assertTrue(v02_solver.solver_input_errors(self.final_permuted, payload))
+
+    def test_modified_item_order_fails(self) -> None:
+        payload = copy.deepcopy(self.solver_input)
+        payload["items"][0], payload["items"][1] = payload["items"][1], payload["items"][0]
+        self.assertTrue(v02_solver.solver_input_errors(self.final_permuted, payload))
+
+    def test_modified_item_id_fails(self) -> None:
+        payload = copy.deepcopy(self.solver_input)
+        payload["items"][0]["item_id"] = payload["items"][0]["item_id"] + "-tampered"
+        self.assertTrue(v02_solver.solver_input_errors(self.final_permuted, payload))
+
+    def test_modified_stem_fails(self) -> None:
+        payload = copy.deepcopy(self.solver_input)
+        payload["items"][0]["stem"] = payload["items"][0]["stem"] + " Extra sentence."
+        self.assertTrue(v02_solver.solver_input_errors(self.final_permuted, payload))
+
+    def test_added_private_field_fails(self) -> None:
+        payload = copy.deepcopy(self.solver_input)
+        payload["items"][0]["primary_target"] = "VERB_FORM_VOICE"
+        self.assertTrue(v02_solver.solver_input_errors(self.final_permuted, payload))
+
+    def test_removed_field_fails(self) -> None:
+        payload = copy.deepcopy(self.solver_input)
+        del payload["items"][0]["stem"]
+        self.assertTrue(v02_solver.solver_input_errors(self.final_permuted, payload))
+
+
+class SolverInputFrozenSchemaCompatibilityTests(unittest.TestCase):
+    def test_frozen_solver_input_schema_accepts_v02_projected_input(self) -> None:
+        solver_input = v02_solver.build_solver_input(_final_permuted_fixture())
+        self.assertEqual(
+            [], schema_errors(solver_input, load_schema(v01_contracts.SCHEMA_PATHS["solver_input"]))
+        )
+
+
+class SolverOutputContractReuseTests(unittest.TestCase):
+    """v0.2 Solver output validation/canonicalization delegates to the frozen v0.1 contract."""
+
+    def setUp(self) -> None:
+        self.final_permuted = _final_permuted_fixture()
+        self.solver_input = v02_solver.build_solver_input(self.final_permuted)
+        self.raw_solver = _raw_solver_output_fixture(self.solver_input)
+
+    def test_valid_v01_style_raw_response_validates(self) -> None:
+        self.assertEqual([], v02_solver.validate_solver_contract(self.raw_solver, self.solver_input))
+
+    def test_canonicalizes_unique_answer_to_current_letter(self) -> None:
+        canonical = v02_solver.canonicalize_solver_output(self.raw_solver, self.solver_input)
+        for output_item in canonical["items"]:
+            self.assertEqual("A", output_item["answer"])
+
+    def test_ambiguous_sentinel_allowed(self) -> None:
+        raw = copy.deepcopy(self.raw_solver)
+        raw["items"][0]["answer_text"] = "AMBIGUOUS"
+        self.assertEqual([], v02_solver.validate_solver_contract(raw, self.solver_input))
+        canonical = v02_solver.canonicalize_solver_output(raw, self.solver_input)
+        self.assertEqual("AMBIGUOUS", canonical["items"][0]["answer"])
+
+    def test_none_sentinel_allowed(self) -> None:
+        raw = copy.deepcopy(self.raw_solver)
+        raw["items"][0]["answer_text"] = "NONE"
+        self.assertEqual([], v02_solver.validate_solver_contract(raw, self.solver_input))
+        canonical = v02_solver.canonicalize_solver_output(raw, self.solver_input)
+        self.assertEqual("NONE", canonical["items"][0]["answer"])
+
+    def test_case_drift_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_solver)
+        raw["items"][0]["answer_text"] = raw["items"][0]["answer_text"].upper()
+        self.assertTrue(v02_solver.validate_solver_contract(raw, self.solver_input))
+
+    def test_whitespace_drift_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_solver)
+        raw["items"][0]["answer_text"] = raw["items"][0]["answer_text"] + " "
+        self.assertTrue(v02_solver.validate_solver_contract(raw, self.solver_input))
+
+    def test_punctuation_drift_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_solver)
+        raw["items"][0]["answer_text"] = raw["items"][0]["answer_text"] + "."
+        self.assertTrue(v02_solver.validate_solver_contract(raw, self.solver_input))
+
+    def test_invented_option_text_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_solver)
+        raw["items"][0]["answer_text"] = "an invented completion nobody offered"
+        self.assertTrue(v02_solver.validate_solver_contract(raw, self.solver_input))
+
+    def test_letter_used_as_answer_text_fails_unless_it_is_itself_a_visible_option(self) -> None:
+        raw = copy.deepcopy(self.raw_solver)
+        options = self.solver_input["items"][0]["options"]
+        raw["items"][0]["answer_text"] = "A"
+        self.assertNotEqual("A", options["A"])
+        self.assertTrue(v02_solver.validate_solver_contract(raw, self.solver_input))
+
+    def test_malformed_item_id_order_fails(self) -> None:
+        raw = copy.deepcopy(self.raw_solver)
+        raw["items"][0], raw["items"][1] = raw["items"][1], raw["items"][0]
+        self.assertTrue(v02_solver.validate_solver_contract(raw, self.solver_input))
+
+    def test_malformed_confidence_fails_through_frozen_contract(self) -> None:
+        raw = copy.deepcopy(self.raw_solver)
+        raw["items"][0]["confidence"] = "CERTAIN"
+        self.assertTrue(v02_solver.validate_solver_contract(raw, self.solver_input))
+
+    def test_reason_does_not_determine_answer_identity(self) -> None:
+        raw = copy.deepcopy(self.raw_solver)
+        raw["items"][0]["reason"] = "I actually think option D is correct, not A."
+        canonical = v02_solver.canonicalize_solver_output(raw, self.solver_input)
+        self.assertEqual("A", canonical["items"][0]["answer"])
+
+    def test_wrapper_equivalent_to_calling_frozen_contract_directly(self) -> None:
+        self.assertEqual(
+            v01_contracts.validate_solver_contract(self.raw_solver, self.solver_input),
+            v02_solver.validate_solver_contract(self.raw_solver, self.solver_input),
+        )
+        self.assertEqual(
+            v01_contracts.canonicalize_solver_output(self.raw_solver, self.solver_input),
+            v02_solver.canonicalize_solver_output(self.raw_solver, self.solver_input),
+        )
+
+
+class SolverModuleScopeTests(unittest.TestCase):
+    """The v0.2 Solver module must not perform Generator/Reviewer reconciliation."""
+
+    def test_no_generator_reviewer_reconciliation_in_solver_module_source(self) -> None:
+        source = (ROOT / "structure" / "v02" / "solver.py").read_text(encoding="utf-8")
+        self.assertNotIn("import structure.v02.selection", source)
+        self.assertNotIn("from structure.v02 import selection", source)
+        self.assertNotIn("from structure.v02.selection", source)
+        self.assertNotIn("import structure.v02.contracts", source)
+        self.assertNotIn("from structure.v02 import contracts", source)
+        self.assertNotIn("from structure.v02.contracts", source)
+        for forbidden in (
+            "option_judgments", "candidate_diagnostics",
+            "best_answer", "extract_candidate_entries", "correct_answer",
+        ):
+            self.assertNotIn(forbidden, source)
+
+    def test_no_new_solver_schemas_created(self) -> None:
+        self.assertFalse((ROOT / "structure" / "v02" / "schemas" / "solver_input.schema.json").exists())
+        self.assertFalse((ROOT / "structure" / "v02" / "schemas" / "solver_output.schema.json").exists())
+
+    def test_v02_protected_schema_hashes_unchanged(self) -> None:
+        self.assertNotIn(
+            "structure/v02/schemas/solver_input.schema.json", V02_PROTECTED_SCHEMA_HASHES
+        )
+        self.assertNotIn(
+            "structure/v02/schemas/solver_output.schema.json", V02_PROTECTED_SCHEMA_HASHES
+        )
+
+
+class SolverPromptFreezeTests(unittest.TestCase):
+    def test_solver_prompt_hash_matches_protected_value(self) -> None:
+        path = ROOT / "structure" / "v02" / "prompts" / "solver.md"
+        self.assertEqual(
+            _sha256(path), V02_PROTECTED_PROMPT_HASHES["structure/v02/prompts/solver.md"]
+        )
+
+
+class SolverPromptContentTests(unittest.TestCase):
+    """Assert the v0.2 Solver prompt encodes the frozen blind final-four semantics."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.text = _solver_prompt_text()
+
+    def test_v02_identity(self) -> None:
+        self.assertIn("name: structure-solver-v0.2", self.text)
+        self.assertIn("# Structure v0.2 Blind Solver", self.text)
+
+    def test_final_four_option_independent_test_taker_role(self) -> None:
+        self.assertIn("independent test-taker solving\nthe FINAL four-option item", self.text)
+
+    def test_input_allowlist_exactly_item_id_section_stem_options(self) -> None:
+        self.assertIn(
+            "The input contains only `item_id`, `section`,\n`stem`, and `options`",
+            self.text,
+        )
+
+    def test_candidate_pool_forbidden(self) -> None:
+        self.assertIn("the seven-candidate pool", self.text)
+
+    def test_reviewer_output_forbidden(self) -> None:
+        self.assertIn("Reviewer output or diagnostics", self.text)
+
+    def test_candidate_selection_forbidden(self) -> None:
+        self.assertIn("candidate selection", self.text)
+
+    def test_literal_full_sentence_insertion_rule(self) -> None:
+        self.assertIn(
+            "literally insert it into the `____` blank and judge the\nresulting complete sentence, "
+            "including all text before AND after the blank",
+            self.text,
+        )
+
+    def test_ambiguous_rule(self) -> None:
+        self.assertIn("Return\n`AMBIGUOUS` for two or more acceptable completions", self.text)
+
+    def test_none_rule(self) -> None:
+        self.assertIn("`NONE` when no\nacceptable completion exists", self.text)
+
+    def test_exact_answer_text_identity(self) -> None:
+        self.assertIn(
+            "Copy that option string exactly, including case,\npunctuation, and whitespace", self.text
+        )
+
+    def test_answer_text_is_not_a_letter(self) -> None:
+        self.assertIn("Do not return an A/B/C/D letter as the answer", self.text)
+
+    def test_reason_not_source_of_truth(self) -> None:
+        self.assertIn("The exact `answer_text` is the\nsource of truth; the reason is natural-language support only", self.text)
+
+    def test_confidence_bands(self) -> None:
+        self.assertIn("`HIGH`, `MEDIUM`, or `LOW` confidence", self.text)
+
+    def test_no_forced_guess(self) -> None:
+        self.assertIn("Do not force a guess", self.text)
+
+    def test_exactly_fifteen_output_items(self) -> None:
+        self.assertIn("Exactly 15 items", self.text)
+
+    def test_output_json_only(self) -> None:
+        self.assertIn("No\nmarkdown. No prose outside the JSON", self.text)
+
+    def test_no_assumption_that_prior_filtering_guarantees_uniqueness(self) -> None:
+        self.assertIn("you do not see that pool or its filtering, and you\nmust not assume", self.text)
+        self.assertIn("hard production safeguard", self.text)
 
 
 if __name__ == "__main__":
