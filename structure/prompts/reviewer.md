@@ -37,6 +37,20 @@ threat to uniqueness. In particular, do not reject object-position `who` solely
 because traditional prescriptive grammar prefers `whom`; if both are
 acceptable in the actual construction, uniqueness is threatened.
 
+Do not test only whether an option fills the grammatical role apparently
+intended by the blank. For every option, inspect its own best ordinary parse in
+the exact complete sentence. Check whether it can combine with material
+immediately following the blank, combine with material immediately preceding
+the blank, change constituent boundaries or attachment, take another ordinary
+part-of-speech role, or create another grammatical phrase or clause structure.
+For example, an adjective may modify a following noun even when the intended
+answer is an adverb, or an option may become grammatical by changing the
+boundary between a modifier and an argument/complement. An option that is
+grammatical under such an ordinary alternative constituent or category parse
+must be `VALID` or `MARGINAL` as appropriate; do not mark it `INVALID` merely
+because it does not fill the apparently intended role. Treat that alternative
+parse as a threat to uniqueness.
+
 For connector/preposition versus conjunction items, explicitly verify the full
 syntactic complement after insertion through the end of the relevant
 clause/phrase. Distinguish a subordinating conjunction plus a complete finite

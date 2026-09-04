@@ -674,6 +674,95 @@ class StructurePromptTests(unittest.TestCase):
             with self.subTest(forbidden=forbidden):
                 self.assertNotIn(forbidden, prompt)
 
+    def test_generator_prompt_checks_alternative_constituent_roles(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "Do not judge a distractor only by whether it can perform the grammatical role apparently intended by the blank",
+            "differ in grammatical category or internal structure",
+            "form a different grammatical constituent with material immediately before or after the blank",
+            "combine with following material",
+            "combine with preceding material",
+            "change constituent boundaries or attachment",
+            "take another ordinary part-of-speech role",
+            "intended adverb being read as an adjective modifying a following noun",
+            "intended adjective being read as an adverb attaching to a verb or adjective",
+            "intended complement being read as a noun-phrase modifier",
+            "intended modifier being read as an argument/complement",
+            "intended clause marker creating another constituent boundary",
+            "distractor's own best ordinary parse",
+            "If that parse is grammatical or defensible, do not use the distractor",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_generator_prompt_licenses_content_clause_alternatives(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "Content-clause lexical licensing",
+            "content clause after a noun, adjective, or predicate",
+            "alternative complementizer or wh-form",
+            "declarative versus interrogative content",
+            "proposition versus question interpretation",
+            "`that`, `whether`, `if`, a wh-word",
+            "governing noun, adjective, or verb can license that alternative clause type",
+            "ordinary or defensible formal English",
+            "less idiomatic, less common, semantically different",
+            "not the intended content type",
+            "missing preposition or other definite structure",
+            "decisive in the exact sentence",
+            "closed lexical-complementation dictionary or deterministic lexicon",
+            "Generator authorship guidance only",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_generator_prompt_requires_visible_tense_forcing(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "tense or an auxiliary is the contrast",
+            "`do` / `does` / `did`",
+            "present versus past",
+            "present perfect versus past",
+            "Generator-authored intended timeline is not sufficient",
+            "visible sentence material must grammatically or temporally force the tested tense",
+            "different tense auxiliaries independently create grammatical inverted sentences",
+            "inconsistent with the intended general statement",
+            "the intended timeline is present",
+            "past is not intended",
+            "exact sentence allows that timeline",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+    def test_generator_prompt_preserves_primary_target_fidelity(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "Primary-target fidelity and giveaway avoidance",
+            "multiple defects naturally",
+            "same unrelated surface error that bypasses the planned `primary_target`",
+            "planned primary target must remain materially relevant",
+            "article error",
+            "obvious agreement error",
+            "spelling-like form error",
+            "obviously impossible morphology",
+            "duplicated token",
+            "other trivial surface defect",
+            "Do not require every distractor to instantiate exactly the same target-specific error type",
+            "do not impose a fixed number of target-specific distractors",
+            "do not add a deterministic target classifier",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+        for forbidden in (
+            "prohibit adjective/adverb alternations generally",
+            "prohibit content-clause contrasts generally",
+            "prohibit tense alternatives generally",
+            "prohibit article errors generally",
+        ):
+            with self.subTest(forbidden=forbidden):
+                self.assertNotIn(forbidden, prompt)
+
     def test_generator_prompt_removes_obsolete_absolute_hard_requirements(self) -> None:
         prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
         for forbidden in (
@@ -895,6 +984,29 @@ class StructurePromptTests(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
 
+    def test_reviewer_prompt_checks_alternative_constituent_roles_without_metadata(self) -> None:
+        prompt = " ".join(Path("structure/prompts/reviewer.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "Do not test only whether an option fills the grammatical role apparently intended by the blank",
+            "its own best ordinary parse in the exact complete sentence",
+            "combine with material immediately following the blank",
+            "combine with material immediately preceding the blank",
+            "change constituent boundaries or attachment",
+            "take another ordinary part-of-speech role",
+            "create another grammatical phrase or clause structure",
+            "an adjective may modify a following noun even when the intended answer is an adverb",
+            "changing the boundary between a modifier and an argument/complement",
+            "must be `VALID` or `MARGINAL` as appropriate",
+            "do not mark it `INVALID` merely because it does not fill the apparently intended role",
+            "Treat that alternative parse as a threat to uniqueness",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+        self.assertIn("The input contains only `item_id`, `section`, `stem`, and `options`.", prompt)
+        self.assertIn("Do not ask for or infer Generator metadata", prompt)
+        self.assertNotIn("primary_target", prompt)
+
     def test_reviewer_prompt_recalibration_removes_absolute_hard_requirements(self) -> None:
         prompt = " ".join(Path("structure/prompts/reviewer.md").read_text(encoding="utf-8").split())
         self.assertNotIn("minimum grammatical reasoning burden required", prompt)
@@ -992,8 +1104,8 @@ class StructurePromptTests(unittest.TestCase):
 
     def test_structure_frozen_prompt_surface_hash_regressions(self) -> None:
         expected_hashes = {
-            "structure/prompts/generator.md": "4d50f58429f41c9dd3f595b8802fb1b320365f3e4d6f56ce73bef46f8391f655",
-            "structure/prompts/reviewer.md": "998abfb2ad276d5ed3b762a89593b5b91a8cfa7ac6390a3f4d450f4214730d5b",
+            "structure/prompts/generator.md": "a85930fd9b323dc0dca67acde8803ffe7e2239969b095c259022fde09dc44b54",
+            "structure/prompts/reviewer.md": "a4dfd5927e45086f8fa882dea9b957cd30d65c98fc6d99a9336cc83f71457dae",
             "structure/prompts/solver.md": "e83c1a95cf4a098f43733101a63751ac151993cfbd02e25b9f9af0e238b862f3",
         }
         for relative_path, expected_hash in expected_hashes.items():

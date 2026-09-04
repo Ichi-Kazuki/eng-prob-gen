@@ -145,6 +145,20 @@ completed sentence through an alternative analysis. Consider whether the
 sentence can be rescued by changing or reanalyzing its lexical valency, voice
 interpretation, semantic-role assignment, clause boundary,
 omitted-complementizer analysis, attachment, or nonfinite modifier analysis.
+Do not judge a distractor only by whether it can perform the grammatical role
+apparently intended by the blank. When options differ in grammatical category
+or internal structure, inspect whether the distractor can form a different
+grammatical constituent with material immediately before or after the blank.
+Check whether it can combine with following material, combine with preceding
+material, change constituent boundaries or attachment, or take another ordinary
+part-of-speech role. Examples include an intended adverb being read as an
+adjective modifying a following noun, an intended adjective being read as an
+adverb attaching to a verb or adjective, an intended complement being read as
+a noun-phrase modifier, an intended modifier being read as an
+argument/complement, or an intended clause marker creating another constituent
+boundary. Evaluate the complete sentence under the distractor's own best
+ordinary parse. If that parse is grammatical or defensible, do not use the
+distractor.
 If YES, do not use that distractor. The distractor must have a definite
 grammatical or structural failure in the complete sentence. These are
 authorship rules only, not a self-review stage: do not add PASS/FAIL output,
@@ -163,8 +177,19 @@ revisions; do not add regeneration.
 
 - **Conditionals / tense:** When testing a conditional tense/form, do not use a
   tense distractor that remains grammatical under another reasonable timeline.
-  Make the contrast structurally decisive; a non-canonical tense pairing is not
-  automatically ungrammatical.
+  More generally, when tense or an auxiliary is the contrast, do not use a
+  distractor if it produces a grammatical sentence under another reasonable
+  temporal interpretation. This applies especially to `do` / `does` / `did`,
+  present versus past, present perfect versus past, and other tense
+  auxiliaries. A Generator-authored intended timeline is not sufficient: the
+  visible sentence material must grammatically or temporally force the tested
+  tense. Make the contrast structurally decisive; a non-canonical tense pairing
+  is not automatically ungrammatical. For inversion items, verify not only
+  that each auxiliary forms inversion, but also whether different tense
+  auxiliaries independently create grammatical inverted sentences. Do not
+  write a rationale such as "inconsistent with the intended general statement",
+  "the intended timeline is present", or "past is not intended" when the exact
+  sentence allows that timeline.
 - **Inversion:** When inversion is the target, do not use `if`, `unless`, or
   another conjunction as a distractor when it can create an independently
   grammatical conditional clause. Prefer a genuinely incorrect auxiliary,
@@ -294,6 +319,20 @@ revisions; do not add regeneration.
   proposition, event, belief, finding, or other clause-denoted entity. Avoid
   predicate-argument combinations that require treating an abstract proposition
   as an implausible physical agent.
+- **Content-clause lexical licensing:** When testing a content clause after a
+  noun, adjective, or predicate, do not assume that an alternative
+  complementizer or wh-form is invalid merely because it changes declarative
+  versus interrogative content, proposition versus question interpretation, or
+  the intended semantic relation. Before using `that`, `whether`, `if`, a
+  wh-word, or another clause introducer as a distractor, consider whether the
+  governing noun, adjective, or verb can license that alternative clause type
+  in ordinary or defensible formal English. Do not use a distractor if its only
+  weakness is that it is less idiomatic, less common, semantically different,
+  or not the intended content type. A missing preposition or other definite
+  structure may still make a distractor invalid, but that defect must be
+  decisive in the exact sentence. Do not build a closed lexical-complementation
+  dictionary or deterministic lexicon; this is Generator authorship guidance
+  only.
 
 These are narrow authorship guardrails. Do not prohibit passive voice
 generally. Do not prohibit reflexives generally. Do not prohibit bare forms
@@ -424,6 +463,20 @@ nonsense, and not create a second defensible correct answer. Distractors should
 be realizable through the existing grammar-specification `tested_error_type`
 mechanisms, favoring (without using exclusively) `missing_required_element`,
 `extraneous_element`, `wrong_word_order`, and `fragment`.
+
+### Primary-target fidelity and giveaway avoidance
+
+Distractors may contain multiple defects naturally, but do not construct a set
+in which all incorrect choices are primarily eliminable through the same
+unrelated surface error that bypasses the planned `primary_target`. The planned
+primary target must remain materially relevant to distinguishing the intended
+answer. Especially avoid a set where all distractors can be rejected through an
+unrelated article error, obvious agreement error, spelling-like form error,
+obviously impossible morphology, duplicated token, or other trivial surface
+defect while the planned target is a different structural phenomenon. Do not
+require every distractor to instantiate exactly the same target-specific error
+type, and do not impose a fixed number of target-specific distractors. This is
+an authorship-quality rule only; do not add a deterministic target classifier.
 
 For every option, including the intended answer and each distractor, compare
 its lexical and structural content with the material immediately before and
