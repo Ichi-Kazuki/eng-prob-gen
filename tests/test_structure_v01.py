@@ -422,6 +422,63 @@ class StructurePromptTests(unittest.TestCase):
         self.assertIn("fragment", prompt)
         self.assertIn("Do not review, score, self-review,", prompt)
 
+    def test_generator_prompt_requires_completed_sentence_first_length_authorship(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            # 1. complete correct sentence authored before stem/options
+            "before writing `stem`/options, conceptually author the complete intended correct sentence with the intended correct option already inserted",
+            "Only after that complete sentence satisfies the Planner's structural targets should Generator derive the `stem`, the correct option, and the distractors",
+            # 2. correct option reinsertion reconstructs the planned complete sentence
+            "Reinserting the exact correct option into `stem` must reconstruct the same completed sentence used for length planning",
+            # 3. counting is on completed sentence
+            "the completed sentence's word count is the number of non-empty tokens obtained by splitting on Unicode whitespace",
+            # 4. Unicode-whitespace convention
+            "splitting on Unicode whitespace",
+            # 5. punctuation does not add tokens
+            "Punctuation attached to a token does not create another word",
+            # 6. hyphenated no-whitespace form counts one
+            "A hyphenated form without whitespace counts as one word",
+            # 7. apostrophe/contraction no-whitespace form counts one
+            "An apostrophe, contraction, or possessive without whitespace counts as one word",
+            # 8. exact target_word_count is authoring aim
+            "During authorship, aim for the exact Planner-owned `target_word_count`",
+            # 9. deterministic contract remains bin-based
+            "The deterministic hard gate remains the Planner-owned `sentence_length_bin`: `minimum <= actual_completed_sentence_word_count <= maximum`",
+            # 10. exact target_word_count is not mandatory
+            "If the exact `target_word_count` cannot be achieved naturally while preserving higher-priority quality requirements, any count inside the planned bin is acceptable",
+            "Exact `target_word_count` equality is not required by deterministic validation",
+            # 11. too-short sentence should be naturally elaborated
+            "if the completed sentence is too short, naturally elaborate WITHIN the already intended structure",
+            # 12. too-long sentence should be naturally compressed
+            "if the completed sentence is too long, naturally compress lexical material",
+            # 13. length adjustment preserves primary_target
+            "preserve the planned `primary_target`, the planned finite `clause_count`, the intended difficulty, grammatical naturalness, and unique answer",
+            # 16. prepositional/locative/temporal/modifier elaboration may be used naturally
+            "Possible general mechanisms include ordinary prepositional phrases, locative/temporal adjuncts, adjective/adverb modifiers, appositival or nominal detail when grammatical, ordinary domain-specific descriptive material, and nonfinite modifiers when appropriate to the planned construction",
+            # 17. finite clauses must not be added merely for length
+            "Do NOT lengthen an item by adding an irrelevant finite clause, changing the planned `clause_count`,",
+            # 18. rare vocabulary must not be used merely for length
+            "adding rare vocabulary, adding unnecessary semantic complexity, adding another tested grammar target, adding ambiguity, making distractors longer, or duplicating content",
+            # 19. ambiguity must not be introduced for length (covered above), plus shortening rule
+            "When shortening, remove nonessential lexical detail rather than removing structure needed for the planned `primary_target`, `clause_count`, or difficulty",
+            # 20. 25-27 bin requires actual 25-27 completed-sentence words
+            "For a planned 25-27 item, the completed correct sentence itself must actually contain 25-27 whitespace-delimited words",
+            # 21. short bins must not be exceeded
+            "Likewise, short bins must not be exceeded",
+            # 22. clause-count definition remains protected
+            "Length adjustment must NOT silently change the Planner-owned `clause_count`",
+            "adding an ordinary nonfinite or prepositional modifier may add words without necessarily changing finite `clause_count`",
+            "naturalness remains mandatory, and the finite-clause definition above remains the governing standard",
+            # 23. no emitted word-count field
+            "do not emit the completed sentence as a new field, do not emit a word-count field,",
+            # 25/26. no second Generator call / no repair/retry/regeneration
+            "do not add a second Generator call, self-review stage, repair, retry, regeneration, or revision loop",
+            # quality priority preserved: do not sacrifice uniqueness/grammar for exact target
+            "do NOT sacrifice answer uniqueness or grammatical correctness to hit an exact `target_word_count`",
+            "If the exact target is awkward, stay anywhere inside the planned bin",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
     def test_generator_prompt_defines_planned_clause_count(self) -> None:
         prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
         for phrase in (
@@ -1244,7 +1301,7 @@ class StructurePromptTests(unittest.TestCase):
 
     def test_structure_frozen_prompt_surface_hash_regressions(self) -> None:
         expected_hashes = {
-            "structure/prompts/generator.md": "44e5c13c9df592511a75a2bdeb51bd20f84a00025b7f65936fca6974d3554ba8",
+            "structure/prompts/generator.md": "dc723c8ca5054fbc7baffddb0dcadded24c11bcfefb1ea1e9b662fc8d991838f",
             "structure/prompts/reviewer.md": "0359e7f5dc3103a05082163bfb225b049923cffc72e2e5b373c6c8c5e88e70ae",
             "structure/prompts/solver.md": "e83c1a95cf4a098f43733101a63751ac151993cfbd02e25b9f9af0e238b862f3",
         }

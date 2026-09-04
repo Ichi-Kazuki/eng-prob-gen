@@ -115,6 +115,87 @@ as `stem`. Provide exactly four non-empty A-D options, exactly one
 grammatically acceptable intended completion, and three superficially plausible
 distractors.
 
+## Completed-sentence-first length authoring procedure
+
+For each item, before writing `stem`/options, conceptually author the complete
+intended correct sentence with the intended correct option already inserted.
+Only after that complete sentence satisfies the Planner's structural targets
+should Generator derive the `stem`, the correct option, and the distractors.
+Produce the `stem` by replacing exactly the intended correct completion span
+with the literal `____`. Reinserting the exact correct option into `stem` must
+reconstruct the same completed sentence used for length planning. This is an
+authoring procedure only: do not emit the completed sentence as a new field,
+do not emit a word-count field, and do not add a second Generator call,
+self-review stage, repair, retry, regeneration, or revision loop.
+
+Use the same word-count convention as deterministic validation: the completed
+sentence's word count is the number of non-empty tokens obtained by splitting
+on Unicode whitespace. Punctuation attached to a token does not create another
+word. A hyphenated form without whitespace counts as one word. An apostrophe,
+contraction, or possessive without whitespace counts as one word. `____`
+itself is irrelevant because counting is performed on the completed sentence
+with the correct option inserted. Do not introduce an NLP tokenizer or a
+model-specific token count.
+
+The deterministic hard gate remains the Planner-owned `sentence_length_bin`:
+`minimum <= actual_completed_sentence_word_count <= maximum`. During
+authorship, aim for the exact Planner-owned `target_word_count`, because it is
+guaranteed to lie inside the planned bin and gives a concrete construction
+target instead of a vague range. For example, a planned bin of 20-24 with
+`target_word_count` 22 means Generator should try to author a 22-word
+completed sentence. If the exact `target_word_count` cannot be achieved
+naturally while preserving higher-priority quality requirements, any count
+inside the planned bin is acceptable. Exact `target_word_count` equality is
+not required by deterministic validation.
+
+Follow this construction sequence before settling the surface sentence:
+
+1. choose the grammatical construction consistent with the planned
+   `primary_target`, `difficulty`, and `clause_count`;
+2. compose the intended completed sentence;
+3. budget its words toward `target_word_count` using the deterministic
+   whitespace convention;
+4. if the completed sentence is too short, naturally elaborate WITHIN the
+   already intended structure;
+5. if the completed sentence is too long, naturally compress lexical
+   material;
+6. preserve the planned `primary_target`, the planned finite `clause_count`,
+   the intended difficulty, grammatical naturalness, and unique answer;
+7. only then derive the blanked `stem` and the four options.
+
+When a completed sentence is too short, prefer natural lexical elaboration
+that does NOT change the planned finite `clause_count` merely for length.
+Possible general mechanisms include ordinary prepositional phrases,
+locative/temporal adjuncts, adjective/adverb modifiers, appositival or nominal
+detail when grammatical, ordinary domain-specific descriptive material, and
+nonfinite modifiers when appropriate to the planned construction. These are
+examples, not mandatory templates. Do NOT lengthen an item by adding an
+irrelevant finite clause, changing the planned `clause_count`, adding rare
+vocabulary, adding unnecessary semantic complexity, adding another tested
+grammar target, adding ambiguity, making distractors longer, or duplicating
+content. When shortening, remove nonessential lexical detail rather than
+removing structure needed for the planned `primary_target`, `clause_count`, or
+difficulty.
+
+Planned 25-27 items require deliberate surface planning: do not write a
+naturally 13-19 word item and assume unrelated complexity or metadata makes it
+satisfy a 25-27 plan. For a planned 25-27 item, the completed correct sentence
+itself must actually contain 25-27 whitespace-delimited words. Likewise, short
+bins must not be exceeded. This is length realization, not difficulty
+realization.
+
+Length adjustment must NOT silently change the Planner-owned `clause_count`.
+Adding a finite relative, adverbial, or content clause changes `clause_count`;
+adding an ordinary nonfinite or prepositional modifier may add words without
+necessarily changing finite `clause_count`. This is not permission to
+mechanically add nonfinite phrases: naturalness remains mandatory, and the
+finite-clause definition above remains the governing standard.
+
+Sentence length is a Planner-owned structural contract that must also be
+realized, but do NOT sacrifice answer uniqueness or grammatical correctness to
+hit an exact `target_word_count`. If the exact target is awkward, stay
+anywhere inside the planned bin.
+
 ## Correct-completion naturalness
 
 Before authoring each item, ensure that literal insertion of the intended
