@@ -245,6 +245,21 @@ def _reviewer_option_text_errors(
         best_answer_text not in expected_texts and best_answer_text not in REVIEWER_ANSWER_SENTINELS
     ):
         errors.append(f"reviewer[{item_label}]: best_answer_text is not an exact visible option or allowed sentinel")
+        return errors
+
+    observed_clause_count = output_item.get("observed_clause_count")
+    if best_answer_text in REVIEWER_ANSWER_SENTINELS:
+        if observed_clause_count is not None:
+            errors.append(
+                f"reviewer[{item_label}]: observed_clause_count must be null when best_answer_text is "
+                f"{best_answer_text!r}"
+            )
+    else:
+        if not (isinstance(observed_clause_count, int) and not isinstance(observed_clause_count, bool) and observed_clause_count >= 1):
+            errors.append(
+                f"reviewer[{item_label}]: observed_clause_count must be an integer >= 1 when best_answer_text is "
+                "a unique visible option"
+            )
     return errors
 
 
@@ -306,6 +321,7 @@ def canonicalize_reviewer_output(output: Any, blind: Mapping[str, Any]) -> dict[
             "comment": output_item["comment"],
             "observed_difficulty": output_item["observed_difficulty"],
             "difficulty_confidence": output_item["difficulty_confidence"],
+            "observed_clause_count": output_item["observed_clause_count"],
         })
     return {"items": canonical_items}
 

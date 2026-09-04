@@ -63,6 +63,56 @@ analysis at the initial noun phrase when later finite syntax changes the full
 complement. Judge the COMPLETE inserted sentence through the end of the
 relevant clause or phrase.
 
+## Observed finite-clause count (diagnostic only)
+
+For every item, after determining the completed sentence formed by the best
+visible unique answer, report `observed_clause_count`: the number of FINITE
+clauses you observe in that completed sentence. This is diagnostic evidence
+only. It is never compared against any private Planner or Generator metadata,
+and it has no effect on any judgment, difficulty classification, or the
+answer you report.
+
+When there is one unique best visible answer, insert `best_answer_text` into
+the blank, judge the completed sentence as usual, and separately count the
+finite clauses actually present in that same completed sentence.
+
+Count as a separate finite clause:
+
+- the independent/main finite clause;
+- each embedded finite noun/content/interrogative clause;
+- each finite relative clause;
+- each finite adverbial/subordinate clause;
+- each other subordinate clause with its own finite predicate;
+- coordinated clauses when they have distinct clause structure/subjects.
+
+Do NOT count a nonfinite construction merely because it is clause-like:
+
+- `to + verb` infinitive;
+- bare nonfinite complement;
+- gerund-participial clause;
+- present-participial reduced relative;
+- past-participial reduced relative;
+- perfect participial clause;
+- other reduced/nonfinite modifier.
+
+A modal + base verb belongs to ONE finite clause because the modal carries
+finiteness. An auxiliary chain belongs to ONE clause, not one clause per
+auxiliary. Coordinated predicates sharing one subject within the same clause
+do NOT automatically create an additional clause merely because there are
+multiple verbs. Nested finite clauses each count separately. Do not count
+based on punctuation alone. Do not count based on number of verbs alone.
+
+`observed_clause_count` must be an integer of 1 or greater whenever
+`best_answer_text` is a unique visible option text (not `AMBIGUOUS` or
+`NONE`). Do not constrain the value to any fixed range; if the completed
+sentence visibly contains more finite clauses than any historical item, report
+the true observed count rather than capping it.
+
+If `best_answer_text` is `AMBIGUOUS` or `NONE`, set `observed_clause_count` to
+`null`. Do not choose one option only for clause counting, do not average
+counts across options, and do not infer the Generator's intended answer key
+to perform the count.
+
 ## Final output format and text identity
 
 For each item, return `option_judgments` as an ordered list of exactly four
@@ -214,4 +264,4 @@ but do not rewrite the item.
 
 Return only JSON matching the supplied Structure Reviewer output schema, with
 one result for every input item in the same order. Every result must include
-`observed_difficulty` and `difficulty_confidence`.
+`observed_difficulty`, `difficulty_confidence`, and `observed_clause_count`.

@@ -23,6 +23,7 @@ from structure.contracts import (
     count_words,
     normalized_option_surface,
     post_blind_comparison,
+    REVIEWER_ANSWER_SENTINELS,
     reviewer_difficulty_diagnostic_reasons,
     reviewer_difficulty_diagnostics,
     reviewer_difficulty_summary,
@@ -89,6 +90,9 @@ def generator_fixture(plan: dict[str, Any]) -> dict[str, Any]:
     } for index, planned in enumerate(plan["items"])]}
 
 
+_UNSET = object()
+
+
 def reviewer_fixture(
     blind: dict[str, Any],
     *,
@@ -97,6 +101,7 @@ def reviewer_fixture(
     serious: bool = False,
     observed_difficulty: str | None = None,
     difficulty_confidence: str = "HIGH",
+    first_observed_clause_count: Any = _UNSET,
 ) -> dict[str, Any]:
     planned_difficulties: dict[str, str] = {}
     if observed_difficulty is None and blind.get("items"):
@@ -116,6 +121,10 @@ def reviewer_fixture(
             best_answer_text = item["options"][best_answer]
         else:
             best_answer_text = best_answer
+        if index == 0 and first_observed_clause_count is not _UNSET:
+            observed_clause_count = first_observed_clause_count
+        else:
+            observed_clause_count = None if best_answer_text in REVIEWER_ANSWER_SENTINELS else 1
         items.append({
             "item_id": item["item_id"],
             "option_judgments": [
@@ -127,6 +136,7 @@ def reviewer_fixture(
             "comment": "Only one option forms the intended sentence.",
             "observed_difficulty": observed_difficulty or planned_difficulties.get(item["item_id"], "EASY"),
             "difficulty_confidence": difficulty_confidence,
+            "observed_clause_count": observed_clause_count,
         })
     return {"items": items}
 
@@ -1056,7 +1066,7 @@ class StructurePromptTests(unittest.TestCase):
             "MEDIUM",
             "LOW",
             "Do not force HIGH confidence",
-            "Every result must include `observed_difficulty` and `difficulty_confidence`",
+            "Every result must include `observed_difficulty`, `difficulty_confidence`, and `observed_clause_count`",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
@@ -1167,7 +1177,7 @@ class StructurePromptTests(unittest.TestCase):
 
     def test_planner_validation_and_pipeline_boundaries_are_protected(self) -> None:
         expected_hashes = {
-            "structure/contracts.py": "514a736da84c7868f6c8162c4903ca3d1b3bfea1196ab8ca4b3830da0fd310ae",
+            "structure/contracts.py": "c6fae71840a4d4a840f2c455ef97c39181ea8d7d4320b054f5d6face0eea313a",
             "structure/pipeline.py": "bfa2775767c86d9bc0b5c7777a6edfdce449827c1f2ed161b3976a27b7634eaf",
             "structure/planner.py": "d50e130a7c05fb79ba399c552322130aa4b5833eb6aff39144c3f6449748a7ee",
             "structure/profile.json": "66f9ad0cc2a7323ae396ab8c5f9766204327b0ecb4f5b275ec6a5b2e6295c6c5",
@@ -1182,7 +1192,7 @@ class StructurePromptTests(unittest.TestCase):
     def test_structure_frozen_prompt_surface_hash_regressions(self) -> None:
         expected_hashes = {
             "structure/prompts/generator.md": "1415612033d0408eff52bf7c243003680d795601dfbb6eda3e0f67f089847727",
-            "structure/prompts/reviewer.md": "a4dfd5927e45086f8fa882dea9b957cd30d65c98fc6d99a9336cc83f71457dae",
+            "structure/prompts/reviewer.md": "0359e7f5dc3103a05082163bfb225b049923cffc72e2e5b373c6c8c5e88e70ae",
             "structure/prompts/solver.md": "e83c1a95cf4a098f43733101a63751ac151993cfbd02e25b9f9af0e238b862f3",
         }
         for relative_path, expected_hash in expected_hashes.items():
@@ -1198,7 +1208,7 @@ class StructurePromptTests(unittest.TestCase):
             "provenance.schema.json": "2979c3520cb79c5bdc96933f812f751be2c62db47cd2fea6c7294b30159904f2",
             "result.schema.json": "9f049f94ec8a819bf228bd59845eb64deddd6f974f523a64abccbaae69bfb5c5",
             "reviewer_input.schema.json": "8e5181664253967064a4c415377f5bc9f75a55e69984e54c01148d413d9e8b19",
-            "reviewer_output.schema.json": "4c2cf716b7c7229778a4869e176e119309b705b7b8917fbf1ba90387cd29b9df",
+            "reviewer_output.schema.json": "9f47df07f99acfc34a6da22c6bdaa0f383246d2c090c2841598a7e8de0aa599e",
             "solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
             "solver_output.schema.json": "90588686793f16f5ff2aefd6c19a834eb444e1bda9a0c1aff73de74e3506d031",
         }
@@ -1400,6 +1410,155 @@ class StructureContractTests(unittest.TestCase):
         )
 
 
+class StructureObservedClauseCountDiagnosticTests(unittest.TestCase):
+    """Narrow diagnostic: Reviewer reports observed_clause_count with zero acceptance effect."""
+
+    def setUp(self) -> None:
+        self.plan = build_plan(60)
+        self.generator = generator_fixture(self.plan)
+        self.blind = build_blind_input(self.generator)
+
+    def test_reviewer_input_allowlist_is_unchanged(self) -> None:
+        schema = load_schema(Path("structure/schemas/reviewer_input.schema.json"))
+        item_schema = schema["properties"]["items"]["items"]
+        self.assertEqual(set(item_schema["required"]), {"item_id", "section", "stem", "options"})
+        self.assertEqual(set(item_schema["properties"]), {"item_id", "section", "stem", "options"})
+
+    def test_raw_schema_requires_observed_clause_count(self) -> None:
+        schema = load_schema(Path("structure/schemas/reviewer_output.schema.json"))
+        required = schema["properties"]["items"]["items"]["required"]
+        self.assertIn("observed_clause_count", required)
+        prop = schema["properties"]["items"]["items"]["properties"]["observed_clause_count"]
+        self.assertEqual(set(prop["type"]), {"integer", "null"})
+        self.assertEqual(prop["minimum"], 1)
+
+    def test_unique_best_answer_accepts_integer_ge_one(self) -> None:
+        raw = reviewer_fixture(self.blind, first_observed_clause_count=1)
+        self.assertEqual(validate_reviewer_contract(raw, self.blind, self.plan), [])
+
+    def test_values_above_four_remain_schema_valid(self) -> None:
+        raw = reviewer_fixture(self.blind, first_observed_clause_count=7)
+        self.assertEqual(validate_reviewer_contract(raw, self.blind, self.plan), [])
+
+    def test_zero_is_invalid(self) -> None:
+        raw = reviewer_fixture(self.blind, first_observed_clause_count=0)
+        self.assertTrue(validate_reviewer_contract(raw, self.blind, self.plan))
+
+    def test_negative_is_invalid(self) -> None:
+        raw = reviewer_fixture(self.blind, first_observed_clause_count=-1)
+        self.assertTrue(validate_reviewer_contract(raw, self.blind, self.plan))
+
+    def test_ambiguous_uses_null(self) -> None:
+        raw = reviewer_fixture(self.blind, first_best="AMBIGUOUS")
+        self.assertIsNone(raw["items"][0]["observed_clause_count"])
+        self.assertEqual(validate_reviewer_contract(raw, self.blind, self.plan), [])
+
+    def test_none_uses_null(self) -> None:
+        raw = reviewer_fixture(self.blind, first_best="NONE")
+        self.assertIsNone(raw["items"][0]["observed_clause_count"])
+        self.assertEqual(validate_reviewer_contract(raw, self.blind, self.plan), [])
+
+    def test_unique_best_answer_with_null_is_rejected(self) -> None:
+        raw = reviewer_fixture(self.blind, first_observed_clause_count=None)
+        errors = validate_reviewer_contract(raw, self.blind, self.plan)
+        self.assertTrue(errors)
+        self.assertTrue(any("observed_clause_count" in error for error in errors))
+
+    def test_ambiguous_or_none_with_integer_is_rejected(self) -> None:
+        for sentinel in ("AMBIGUOUS", "NONE"):
+            with self.subTest(sentinel=sentinel):
+                raw = reviewer_fixture(self.blind, first_best=sentinel)
+                raw["items"][0]["observed_clause_count"] = 2
+                errors = validate_reviewer_contract(raw, self.blind, self.plan)
+                self.assertTrue(errors)
+                self.assertTrue(any("observed_clause_count" in error for error in errors))
+
+    def test_canonicalization_preserves_observed_clause_count_unchanged(self) -> None:
+        raw = reviewer_fixture(self.blind, first_observed_clause_count=3)
+        canonical = canonicalize_reviewer_output(raw, self.blind)
+        self.assertEqual(canonical["items"][0]["observed_clause_count"], 3)
+        for sentinel in ("AMBIGUOUS", "NONE"):
+            with self.subTest(sentinel=sentinel):
+                sentinel_raw = reviewer_fixture(self.blind, first_best=sentinel)
+                sentinel_canonical = canonicalize_reviewer_output(sentinel_raw, self.blind)
+                self.assertIsNone(sentinel_canonical["items"][0]["observed_clause_count"])
+
+    def test_option_text_binding_unaffected(self) -> None:
+        raw = reviewer_fixture(self.blind, first_observed_clause_count=2)
+        canonical = canonicalize_reviewer_output(raw, self.blind)
+        self.assertEqual(set(canonical["items"][0]["option_judgments"]), set(LETTERS))
+        self.assertEqual(canonical["items"][0]["best_answer"], "A")
+
+    def test_difficulty_fields_unaffected(self) -> None:
+        raw = reviewer_fixture(self.blind, first_observed_clause_count=4, observed_difficulty="HARD", difficulty_confidence="MEDIUM")
+        canonical = canonicalize_reviewer_output(raw, self.blind)
+        self.assertEqual(canonical["items"][0]["observed_difficulty"], "HARD")
+        self.assertEqual(canonical["items"][0]["difficulty_confidence"], "MEDIUM")
+
+    def test_mismatched_observed_clause_count_has_zero_acceptance_effect(self) -> None:
+        planned_clause_count = self.plan["items"][0]["clause_count"]
+        mismatched_observed_clause_count = planned_clause_count + 5
+        reviewer = reviewer_fixture(self.blind, first_observed_clause_count=mismatched_observed_clause_count)
+        solver = solver_fixture(self.blind)
+        result = self.run_result(reviewer, solver)
+        self.assertEqual(result["decision"], "ACCEPT")
+        self.assertTrue(all(item["accepted"] for item in result["item_results"]))
+
+    def test_no_clause_count_rejection_reason_reference_or_reason_string(self) -> None:
+        planned_clause_count = self.plan["items"][0]["clause_count"]
+        reviewer = reviewer_fixture(self.blind, first_observed_clause_count=planned_clause_count + 5)
+        solver = solver_fixture(self.blind)
+        result = self.run_result(reviewer, solver)
+        for item in result["item_results"]:
+            for reason in item["rejection_reasons"]:
+                self.assertNotIn("clause_count", reason)
+                self.assertNotIn("clause count", reason)
+
+    def test_no_clause_count_retry_repair_or_regeneration(self) -> None:
+        reviewer = reviewer_fixture(self.blind, first_observed_clause_count=self.plan["items"][0]["clause_count"] + 5)
+        solver = solver_fixture(self.blind)
+        result = self.run_result(reviewer, solver)
+        self.assertTrue(result["checks"]["no_repair_or_revision_stage"])
+        self.assertEqual(
+            result["infrastructure"]["invocation_counts"],
+            {"generator": 1, "reviewer": 1, "solver": 1},
+        )
+
+    def test_raw_reviewer_json_contains_observed_clause_count(self) -> None:
+        reviewer = reviewer_fixture(self.blind, first_observed_clause_count=2)
+        solver = solver_fixture(self.blind)
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            pipeline = StructurePipeline(
+                runtime=FixtureRuntime(
+                    generator=self.generator, reviewer=reviewer, solver=solver
+                )
+            )
+            pipeline.run(seed=60, output_dir=Path(tmp_dir) / "run")
+            reviewer_json_path = Path(tmp_dir) / "run" / "reviewer.json"
+            persisted = json.loads(reviewer_json_path.read_text(encoding="utf-8"))
+        self.assertIn("observed_clause_count", persisted["items"][0])
+        self.assertEqual(persisted["items"][0]["observed_clause_count"], 2)
+
+    def run_result(self, reviewer: dict[str, Any], solver: dict[str, Any]) -> dict[str, Any]:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            pipeline = StructurePipeline(
+                runtime=FixtureRuntime(
+                    generator=self.generator, reviewer=reviewer, solver=solver
+                )
+            )
+            return pipeline.run(seed=60, output_dir=Path(tmp_dir) / "run")
+
+    def test_generator_solver_planner_profile_and_gates_unaffected(self) -> None:
+        # Structural confirmation that this diagnostic touches only Reviewer surfaces:
+        # Generator/Solver/Planner/profile files and the deterministic sentence-length
+        # gate are covered by the protected hash regression tests elsewhere in this
+        # module; this test only confirms clause-count diagnostics never feed the
+        # deterministic sentence-length fidelity gate's own error path.
+        plan = build_plan(61)
+        output = generator_fixture(plan)
+        self.assertEqual(validate_generator_contract(output, plan), [])
+
+
 class StructureSentenceLengthFidelityTests(unittest.TestCase):
     def test_count_words_splits_on_unicode_whitespace_deterministically(self) -> None:
         self.assertEqual(count_words("The researcher is here."), 4)
@@ -1541,6 +1700,7 @@ class StructureReviewerCanonicalizationTests(unittest.TestCase):
         for best_answer_text in (self.blind["items"][0]["options"]["A"], "AMBIGUOUS", "NONE"):
             candidate = copy.deepcopy(raw)
             candidate["items"][0]["best_answer_text"] = best_answer_text
+            candidate["items"][0]["observed_clause_count"] = None if best_answer_text in REVIEWER_ANSWER_SENTINELS else 1
             self.assertEqual(validate_reviewer_contract(candidate, self.blind, self.plan), [])
 
     def test_exact_option_multiset_failures_fail_closed_without_fuzzy_matching(self) -> None:
