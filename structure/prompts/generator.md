@@ -137,6 +137,20 @@ alternative interpretation of:
 
 Do not rely on missing external discourse context to make a distractor wrong.
 
+### Complete-sentence rescue test
+
+Before emitting every distractor, insert it into the exact visible stem and
+ask whether an ordinary standard-written-English reader can rescue the exact
+completed sentence through an alternative analysis. Consider whether the
+sentence can be rescued by changing or reanalyzing its lexical valency, voice
+interpretation, semantic-role assignment, clause boundary,
+omitted-complementizer analysis, attachment, or nonfinite modifier analysis.
+If YES, do not use that distractor. The distractor must have a definite
+grammatical or structural failure in the complete sentence. These are
+authorship rules only, not a self-review stage: do not add PASS/FAIL output,
+another Generator call, repair, retry, regeneration, revision, replacement,
+fallback, voting, or partial ACCEPT.
+
 Construct distractors through controlled local grammatical/structural
 transformations of the intended construction. The distractor rationale must
 identify the concrete grammatical or structural defect. Do not use "less
@@ -201,6 +215,54 @@ revisions; do not add regeneration.
   Verify that the completed relative clause is grammatical independently of
   the pronoun-case contrast. When the planned target is relative-pronoun
   selection, do not introduce a separate fixed-preposition defect in the stem.
+- **Lexical valency / voice alternation:** When using an active/passive or
+  transitive/intransitive contrast as a distractor, do not assume that the
+  competing form is invalid merely because the intended lexical use is more
+  frequent. Account for ordinary transitive, intransitive, and causative
+  lexical uses, including an anticausative/labile alternation or another
+  ordinary lexical valency that makes the complete sentence grammatical. If the
+  competing voice can be rescued under an ordinary lexical use, do not use it
+  as a distractor. Do not write a rationale such as `normally intransitive`,
+  `usually transitive`, or `not normally passive` as the sole basis for
+  invalidity; the distractor must have a definite structural defect in the
+  exact complete sentence. Do not create a deterministic verb-valency
+  lexicon.
+- **Active / passive / reflexive semantic roles:** When creating a distractor
+  by changing active/passive, active/reflexive, passive/reflexive, or
+  agent/patient assignment, evaluate whether the actual grammatical subject
+  could reasonably bear the resulting semantic role. Do not assume that an
+  inanimate subject cannot be an agent, that a device or system cannot perform
+  an action automatically, that an abstract or institutional subject cannot
+  cause or perform an action, or that a reflexive reading is impossible merely
+  because it is not the intended reading. If the competing assignment is
+  reasonably coherent in the complete standalone sentence, do not use that
+  distractor. Active/passive/reflexive distractors require a definite
+  morphology or syntax failure, not merely a semantic role different from the
+  intended one; consider device/system self-action or reflexive readings when
+  they are grammatically and semantically plausible, and prefer a definite
+  defect.
+- **Object-control vs. mandative clause rescue:** For constructions such as
+  verb + object + to-infinitive, do not use a bare-form distractor after the
+  apparent object if the resulting string could plausibly be reanalyzed as
+  verb + [zero/omitted complementizer] + subject + a mandative/base-form
+  clause or another recognized clause pattern. This is especially important
+  for directive complementation analogous to `urge + object + to-infinitive`
+  and `urge + that-clause`. Do not depend on rejecting a borderline
+  zero-complementizer reanalysis as the only reason an option is wrong; choose
+  a form with an independently decisive grammatical defect. Do not create a
+  broad verb-complementation taxonomy or lexicon.
+- **Abstract noun + to-infinitive vs. `-ing` modifier:** When the intended
+  answer is a to-infinitive complement or modifier after an abstract noun such
+  as `decision`, `attempt`, `plan`, `opportunity`, or `ability`, do not
+  automatically use an `-ing` form as a distractor. First check whether the
+  `-ing` phrase can independently be parsed as a participial postmodifier,
+  another grammatical nonfinite modifier, or another defensible attachment to
+  the noun phrase. In particular, test whether the modified noun can serve as
+  the understood semantic subject, cause, or source of the `-ing` clause under
+  an ordinary reading. If that parse is defensible, do not use the `-ing`
+  option; use a distractor with a definite structural defect instead. A
+  grammatical alternative attachment makes the distractor unsafe. These
+  examples are guidance, not a closed abstract-noun list.
 - **NONFINITE_VERB_PHRASES: ordinal/superlative noun + infinitive:** When the
   intended construction is an infinitive modifying an ordinal, superlative,
   `only`, or similar noun phrase (for example, `the first/second/only/best ...
@@ -232,6 +294,16 @@ revisions; do not add regeneration.
   proposition, event, belief, finding, or other clause-denoted entity. Avoid
   predicate-argument combinations that require treating an abstract proposition
   as an implausible physical agent.
+
+These are narrow authorship guardrails. Do not prohibit passive voice
+generally. Do not prohibit reflexives generally. Do not prohibit bare forms
+generally. Do not prohibit `-ing` modifiers generally. Do not prohibit
+abstract-noun infinitives generally. Only exclude one of these as a WRONG
+OPTION when the exact completed sentence leaves a defensible alternative
+grammatical analysis; otherwise keep the construction available when it is
+appropriate. Do not turn this into a grammar encyclopedia, broad
+verb-complementation taxonomy, deterministic valency lexicon, or closed
+abstract-noun list.
 
 - **CONNECTORS_CONJUNCTIONS: connector complement type:** When selecting a
   connector, inspect the syntactic category of ALL material governed by it,

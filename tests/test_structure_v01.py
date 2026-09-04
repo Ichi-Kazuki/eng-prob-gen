@@ -598,6 +598,82 @@ class StructurePromptTests(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, prompt)
 
+    def test_generator_prompt_hardens_live_distractor_rescue_classes(self) -> None:
+        prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
+        for phrase in (
+            "Complete-sentence rescue test",
+            "Before emitting every distractor",
+            "exact visible stem",
+            "ordinary standard-written-English reader",
+            "lexical valency",
+            "voice interpretation",
+            "semantic-role assignment",
+            "clause boundary",
+            "omitted-complementizer analysis",
+            "attachment",
+            "nonfinite modifier analysis",
+            "If YES, do not use that distractor",
+            "definite grammatical or structural failure in the complete sentence",
+            "These are authorship rules only, not a self-review stage",
+            "another Generator call",
+            "invalid merely because the intended lexical use is more frequent",
+            "ordinary transitive, intransitive, and causative lexical uses",
+            "anticausative/labile alternation",
+            "ordinary lexical valency",
+            "`normally intransitive`",
+            "`usually transitive`",
+            "`not normally passive`",
+            "sole basis for invalidity",
+            "definite structural defect",
+            "deterministic verb-valency lexicon",
+            "Active / passive / reflexive semantic roles",
+            "inanimate subject cannot be an agent",
+            "device or system cannot perform an action automatically",
+            "abstract or institutional subject cannot cause or perform an action",
+            "reflexive reading is impossible",
+            "device/system self-action or reflexive readings",
+            "grammatically and semantically plausible",
+            "reasonably coherent in the complete standalone sentence",
+            "Active/passive/reflexive distractors require a definite",
+            "not merely a semantic role different from the intended one",
+            "Object-control vs. mandative clause rescue",
+            "verb + object + to-infinitive",
+            "bare-form distractor after the apparent object",
+            "zero/omitted complementizer",
+            "mandative/base-form clause",
+            "`urge + object + to-infinitive`",
+            "`urge + that-clause`",
+            "borderline zero-complementizer reanalysis",
+            "independently decisive grammatical defect",
+            "broad verb-complementation taxonomy or lexicon",
+            "Abstract noun + to-infinitive vs. `-ing` modifier",
+            "to-infinitive complement or modifier after an abstract noun",
+            "`-ing` form as a distractor",
+            "participial postmodifier",
+            "another grammatical nonfinite modifier",
+            "another defensible attachment to the noun phrase",
+            "understood semantic subject, cause, or source",
+            "grammatical alternative attachment makes the distractor unsafe",
+            "`-ing` option",
+            "not a closed abstract-noun list",
+            "Do not prohibit passive voice generally",
+            "Do not prohibit reflexives generally",
+            "Do not prohibit bare forms generally",
+            "Do not prohibit `-ing` modifiers generally",
+            "Do not prohibit abstract-noun infinitives generally",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompt)
+
+        for forbidden in (
+            "self-review stage that emits a PASS/FAIL result",
+            "second Generator call for rescue",
+            "broad new verb-valency lexicon",
+            "closed abstract-noun list of allowed nouns",
+        ):
+            with self.subTest(forbidden=forbidden):
+                self.assertNotIn(forbidden, prompt)
+
     def test_generator_prompt_removes_obsolete_absolute_hard_requirements(self) -> None:
         prompt = " ".join(Path("structure/prompts/generator.md").read_text(encoding="utf-8").split())
         for forbidden in (
@@ -916,7 +992,7 @@ class StructurePromptTests(unittest.TestCase):
 
     def test_structure_frozen_prompt_surface_hash_regressions(self) -> None:
         expected_hashes = {
-            "structure/prompts/generator.md": "7a9043b0feae0fdcabe5da7537b06c1e0894b6e5e5f6f7e8b4deb497e79ebda6",
+            "structure/prompts/generator.md": "4d50f58429f41c9dd3f595b8802fb1b320365f3e4d6f56ce73bef46f8391f655",
             "structure/prompts/reviewer.md": "998abfb2ad276d5ed3b762a89593b5b91a8cfa7ac6390a3f4d450f4214730d5b",
             "structure/prompts/solver.md": "e83c1a95cf4a098f43733101a63751ac151993cfbd02e25b9f9af0e238b862f3",
         }
