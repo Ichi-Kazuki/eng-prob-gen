@@ -7,14 +7,17 @@ only exercise schema loading/validation and protect the frozen v0.1 files.
 
 from __future__ import annotations
 
+import contextlib
 import copy
 import hashlib
+import io
 import json
 import tempfile
 import unittest
 from collections import Counter
 from pathlib import Path
 from typing import Any, Callable
+from unittest.mock import patch
 
 from structure.permutation import permute_generator_output
 
@@ -25,6 +28,7 @@ from shared.json_io import canonical_json_sha256
 from shared.schema_validation import load_schema, schema_errors
 from runtime.adapters import InvocationRequest, InvocationResult, RuntimeInvocationError
 from structure.v02 import blinding as v02_blinding
+from structure.v02 import cli as v02_cli
 from structure.v02 import contracts as v02_contracts
 from structure.v02 import pipeline as v02_pipeline
 from structure.v02 import planner as v02_planner
@@ -3355,6 +3359,245 @@ class PipelineNoRetryRepairTests(unittest.TestCase):
         stages = [request.stage for request in runtime.requests]
         self.assertEqual(sorted(stages), sorted(set(stages)))
         self.assertEqual(len(stages), 3)
+
+
+def _fake_result(decision: str = "ACCEPT") -> dict[str, Any]:
+    return {
+        "run_id": "structure-v02-fake-run",
+        "version": "v0.2",
+        "seed": 7,
+        "decision": decision,
+        "question_count": 15,
+        "live_invocation_count": 3,
+        "deterministic_hard_failure_count": 0,
+        "candidate_selection_pass_count": 15,
+        "candidate_selection_failure_count": 0,
+        "solver_key_agreement_count": 15,
+        "solver_ambiguous_none_count": 0,
+        "final_answer_position_distribution": {"A": 4, "B": 4, "C": 4, "D": 3},
+        "output_dir": "/tmp/fake-run-dir",
+        "item_results": [{"item_id": "not-in-summary"}],
+        "checks": {"not": "in-summary"},
+    }
+
+
+class CliParserTests(unittest.TestCase):
+    def test_parser_description_references_v02(self) -> None:
+        parser = v02_cli._parser()
+        self.assertIn("v0.2", parser.description or "")
+
+    def test_version_reports_v02(self) -> None:
+        with contextlib.redirect_stdout(io.StringIO()):
+            with self.assertRaises(SystemExit) as ctx:
+                v02_cli._parser().parse_args(["--version"])
+        self.assertEqual(ctx.exception.code, 0)
+
+    def test_version_string_matches_pipeline_constant(self) -> None:
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), self.assertRaises(SystemExit):
+            v02_cli._parser().parse_args(["--version"])
+        self.assertEqual(out.getvalue().strip(), v02_pipeline.STRUCTURE_VERSION)
+
+    def test_provider_codex_accepted(self) -> None:
+        args = v02_cli._parser().parse_args(["--provider", "codex"])
+        self.assertEqual(args.provider, "codex")
+
+    def test_provider_claude_accepted(self) -> None:
+        args = v02_cli._parser().parse_args(["--provider", "claude"])
+        self.assertEqual(args.provider, "claude")
+
+    def test_unsupported_provider_rejected(self) -> None:
+        with contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit):
+                v02_cli._parser().parse_args(["--provider", "openai"])
+
+    def test_model_preserved_exactly(self) -> None:
+        args = v02_cli._parser().parse_args(["--model", "gpt-5.1-codex-max"])
+        self.assertEqual(args.model, "gpt-5.1-codex-max")
+
+    def test_positive_seed_accepted(self) -> None:
+        args = v02_cli._parser().parse_args(["--seed", "42"])
+        self.assertEqual(args.seed, 42)
+
+    def test_seed_zero_accepted(self) -> None:
+        args = v02_cli._parser().parse_args(["--seed", "0"])
+        self.assertEqual(args.seed, 0)
+
+    def test_negative_seed_rejected(self) -> None:
+        with contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit):
+                v02_cli._parser().parse_args(["--seed", "-1"])
+
+    def test_omitted_seed_is_none(self) -> None:
+        args = v02_cli._parser().parse_args([])
+        self.assertIsNone(args.seed)
+
+    def test_output_dir_becomes_path(self) -> None:
+        args = v02_cli._parser().parse_args(["--output-dir", "runs/whatever"])
+        self.assertIsInstance(args.output_dir, Path)
+        self.assertEqual(args.output_dir, Path("runs/whatever"))
+
+
+class CliMainCallTests(unittest.TestCase):
+    def test_main_calls_run_structure_v02_exactly_once(self) -> None:
+        with patch.object(v02_cli, "run_structure_v02", return_value=_fake_result()) as mocked:
+            with contextlib.redirect_stdout(io.StringIO()):
+                v02_cli.main([])
+        self.assertEqual(mocked.call_count, 1)
+
+    def test_arguments_passed_through_exactly(self) -> None:
+        with patch.object(v02_cli, "run_structure_v02", return_value=_fake_result()) as mocked:
+            with contextlib.redirect_stdout(io.StringIO()):
+                v02_cli.main(
+                    [
+                        "--seed", "5",
+                        "--provider", "codex",
+                        "--model", "gpt-5.1-codex-max",
+                        "--output-dir", "runs/here",
+                    ]
+                )
+        mocked.assert_called_once_with(
+            seed=5, provider="codex", model="gpt-5.1-codex-max", output_dir=Path("runs/here")
+        )
+
+    def test_omitted_arguments_pass_none(self) -> None:
+        with patch.object(v02_cli, "run_structure_v02", return_value=_fake_result()) as mocked:
+            with contextlib.redirect_stdout(io.StringIO()):
+                v02_cli.main([])
+        mocked.assert_called_once_with(seed=None, provider=None, model=None, output_dir=None)
+
+    def test_accept_result_returns_exit_code_zero(self) -> None:
+        with patch.object(v02_cli, "run_structure_v02", return_value=_fake_result("ACCEPT")):
+            with contextlib.redirect_stdout(io.StringIO()):
+                exit_code = v02_cli.main([])
+        self.assertEqual(exit_code, 0)
+
+    def test_quarantine_result_returns_exit_code_one(self) -> None:
+        with patch.object(v02_cli, "run_structure_v02", return_value=_fake_result("QUARANTINE")):
+            with contextlib.redirect_stdout(io.StringIO()):
+                exit_code = v02_cli.main([])
+        self.assertEqual(exit_code, 1)
+
+    def test_unexpected_value_error_propagates(self) -> None:
+        with patch.object(v02_cli, "run_structure_v02", side_effect=ValueError("boom")):
+            with self.assertRaises(ValueError):
+                v02_cli.main([])
+
+    def test_unexpected_runtime_error_propagates(self) -> None:
+        with patch.object(v02_cli, "run_structure_v02", side_effect=RuntimeError("boom")):
+            with self.assertRaises(RuntimeError):
+                v02_cli.main([])
+
+
+class CliSummaryOutputTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.fake_result = _fake_result()
+        with patch.object(v02_cli, "run_structure_v02", return_value=self.fake_result):
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.exit_code = v02_cli.main([])
+        self.stdout_text = out.getvalue()
+
+    def test_stdout_is_exactly_one_json_line(self) -> None:
+        lines = [line for line in self.stdout_text.splitlines() if line != ""]
+        self.assertEqual(len(lines), 1)
+        json.loads(lines[0])
+
+    def test_summary_has_exactly_thirteen_approved_fields(self) -> None:
+        summary = json.loads(self.stdout_text)
+        self.assertEqual(
+            set(summary.keys()),
+            {
+                "run_id", "version", "seed", "decision", "question_count",
+                "live_invocation_count", "deterministic_hard_failure_count",
+                "candidate_selection_pass_count", "candidate_selection_failure_count",
+                "solver_key_agreement_count", "solver_ambiguous_none_count",
+                "final_answer_position_distribution", "output_dir",
+            },
+        )
+        self.assertEqual(len(summary), 13)
+
+    def test_no_reviewer_solver_agreement(self) -> None:
+        summary = json.loads(self.stdout_text)
+        self.assertNotIn("reviewer_solver_agreement", summary)
+
+    def test_no_reviewer_difficulty_counters(self) -> None:
+        summary = json.loads(self.stdout_text)
+        self.assertNotIn("reviewer_difficulty_agreement_count", summary)
+        self.assertNotIn("reviewer_difficulty_low_confidence_count", summary)
+
+    def test_no_reviewer_ambiguous_none_count(self) -> None:
+        summary = json.loads(self.stdout_text)
+        self.assertNotIn("reviewer_ambiguous_none_count", summary)
+
+    def test_no_item_results_dumped(self) -> None:
+        self.assertNotIn("item_results", self.stdout_text)
+
+    def test_no_checks_dumped(self) -> None:
+        self.assertNotIn("checks", self.stdout_text)
+
+    def test_no_artifact_contents_dumped(self) -> None:
+        self.assertNotIn("not-in-summary", self.stdout_text)
+        self.assertNotIn("in-summary", self.stdout_text)
+
+    def test_final_answer_distribution_passed_through_exactly(self) -> None:
+        summary = json.loads(self.stdout_text)
+        self.assertEqual(
+            summary["final_answer_position_distribution"],
+            self.fake_result["final_answer_position_distribution"],
+        )
+
+    def test_candidate_selection_counters_passed_through_exactly(self) -> None:
+        summary = json.loads(self.stdout_text)
+        self.assertEqual(
+            summary["candidate_selection_pass_count"], self.fake_result["candidate_selection_pass_count"]
+        )
+        self.assertEqual(
+            summary["candidate_selection_failure_count"],
+            self.fake_result["candidate_selection_failure_count"],
+        )
+
+    def test_solver_counters_passed_through_exactly(self) -> None:
+        summary = json.loads(self.stdout_text)
+        self.assertEqual(
+            summary["solver_key_agreement_count"], self.fake_result["solver_key_agreement_count"]
+        )
+        self.assertEqual(
+            summary["solver_ambiguous_none_count"], self.fake_result["solver_ambiguous_none_count"]
+        )
+
+    def test_deterministic_hard_failure_count_passed_through_exactly(self) -> None:
+        summary = json.loads(self.stdout_text)
+        self.assertEqual(
+            summary["deterministic_hard_failure_count"],
+            self.fake_result["deterministic_hard_failure_count"],
+        )
+
+
+class CliSourceGuardTests(unittest.TestCase):
+    def test_source_does_not_import_v01_pipeline(self) -> None:
+        source = (ROOT / "structure" / "v02" / "cli.py").read_text(encoding="utf-8")
+        self.assertNotIn("structure.pipeline", source)
+        self.assertNotIn("from . import pipeline as v01", source)
+
+    def test_source_has_no_v01_fallback(self) -> None:
+        source = (ROOT / "structure" / "v02" / "cli.py").read_text(encoding="utf-8")
+        self.assertNotIn("run_structure(", source)
+        self.assertNotIn("fallback", source.lower())
+
+    def test_source_has_no_runtime_invoke(self) -> None:
+        source = (ROOT / "structure" / "v02" / "cli.py").read_text(encoding="utf-8")
+        self.assertNotIn("runtime.invoke", source)
+        self.assertNotIn(".invoke(", source)
+
+    def test_source_has_no_retry_loop(self) -> None:
+        source = (ROOT / "structure" / "v02" / "cli.py").read_text(encoding="utf-8")
+        for forbidden in ("while ", "retry", "for attempt", "range(2", "range(3"):
+            self.assertNotIn(forbidden, source)
+
+    def test_source_calls_run_structure_v02_exactly_once(self) -> None:
+        source = (ROOT / "structure" / "v02" / "cli.py").read_text(encoding="utf-8")
+        self.assertEqual(source.count("run_structure_v02("), 1)
 
 
 if __name__ == "__main__":
