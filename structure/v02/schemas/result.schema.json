@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "structure-result-v0.2.schema.json",
+  "title": "Structure v0.2 final run result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "version",
+    "run_id",
+    "seed",
+    "decision",
+    "question_count",
+    "live_invocation_count",
+    "deterministic_hard_failure_count",
+    "candidate_selection_pass_count",
+    "candidate_selection_failure_count",
+    "solver_key_agreement_count",
+    "solver_ambiguous_none_count",
+    "final_answer_position_distribution",
+    "item_results",
+    "checks",
+    "infrastructure",
+    "artifact_hashes",
+    "output_dir"
+  ],
+  "properties": {
+    "schema_version": {"const": "structure-result-v0.2"},
+    "version": {"const": "v0.2"},
+    "run_id": {"type": "string", "minLength": 1},
+    "seed": {"type": "integer", "minimum": 0},
+    "decision": {"enum": ["ACCEPT", "QUARANTINE"]},
+    "question_count": {"const": 15},
+    "live_invocation_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Not capped at 3 in the schema. The approved clean successful path is exactly 3 logical calls (Generator, Reviewer, Solver), but this field must remain able to represent an infrastructure-failure history if that policy is ever explicitly extended."
+    },
+    "deterministic_hard_failure_count": {"type": "integer", "minimum": 0},
+    "candidate_selection_pass_count": {"type": "integer", "minimum": 0, "maximum": 15},
+    "candidate_selection_failure_count": {"type": "integer", "minimum": 0, "maximum": 15},
+    "solver_key_agreement_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 15,
+      "description": "Count of final items where the blind Solver's answer agrees with the deterministically assembled answer key. The v0.2 Reviewer never chooses a global answer, so there is no reviewer-vs-solver agreement concept to carry forward from v0.1."
+    },
+    "solver_ambiguous_none_count": {"type": "integer", "minimum": 0, "maximum": 15},
+    "final_answer_position_distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B", "C", "D"],
+      "description": "Does not force a 4/4/4/3 split here because an early QUARANTINE may occur before permutation was ever constructed, leaving this at 0/0/0/0. The future pipeline enforces 4/4/4/3 whenever permutation was actually constructed.",
+      "properties": {
+        "A": {"type": "integer", "minimum": 0},
+        "B": {"type": "integer", "minimum": 0},
+        "C": {"type": "integer", "minimum": 0},
+        "D": {"type": "integer", "minimum": 0}
+      }
+    },
+    "item_results": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "description": "Final per-slot product-quality record. A per-item accepted=true does not imply whole-set ACCEPT; the decision rule remains ACCEPT only if all 15 final items pass.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item_id", "accepted", "rejection_reasons"],
+        "properties": {
+          "item_id": {"type": "string", "minLength": 1},
+          "accepted": {"type": "boolean"},
+          "rejection_reasons": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generator_contract",
+        "generator_errors",
+        "reviewer_input_contract",
+        "reviewer_input_errors",
+        "reviewer_contract",
+        "reviewer_errors",
+        "reviewer_canonicalization",
+        "candidate_selection",
+        "final_assembly",
+        "permutation",
+        "solver_input_contract",
+        "solver_input_errors",
+        "solver_contract",
+        "solver_errors",
+        "solver_canonicalization",
+        "solver_key_check",
+        "reviewer_clause_count",
+        "candidate_pool_difficulty",
+        "all_15_items_pass"
+      ],
+      "properties": {
+        "generator_contract": {"type": "boolean"},
+        "generator_errors": {"type": "array", "items": {"type": "string"}},
+        "reviewer_input_contract": {"type": "boolean"},
+        "reviewer_input_errors": {"type": "array", "items": {"type": "string"}},
+        "reviewer_contract": {"type": "boolean"},
+        "reviewer_errors": {"type": "array", "items": {"type": "string"}},
+        "reviewer_canonicalization": {"type": "object"},
+        "candidate_selection": {"type": "object"},
+        "final_assembly": {"type": "object"},
+        "permutation": {"type": "object"},
+        "solver_input_contract": {"type": "boolean"},
+        "solver_input_errors": {"type": "array", "items": {"type": "string"}},
+        "solver_contract": {"type": "boolean"},
+        "solver_errors": {"type": "array", "items": {"type": "string"}},
+        "solver_canonicalization": {"type": "object"},
+        "solver_key_check": {"type": "object"},
+        "reviewer_clause_count": {
+          "type": "object",
+          "description": "Diagnostic-only. Must never become an acceptance gate."
+        },
+        "candidate_pool_difficulty": {
+          "type": "object",
+          "description": "Diagnostic-only. Must not contain a Planner difficulty agreement decision; the seven-candidate-pool difficulty diagnostic is not equivalent to the final-four difficulty and is deliberately not compared against Planner difficulty."
+        },
+        "all_15_items_pass": {"type": "boolean"}
+      }
+    },
+    "infrastructure": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["runtime_failures"],
+      "properties": {
+        "runtime_failures": {"type": "array"}
+      }
+    },
+    "artifact_hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Exactly the eleven non-circular hashed artifacts. result.json and provenance.json are deliberately excluded to avoid circular provenance.",
+      "required": [
+        "plan.json",
+        "generator_raw.json",
+        "generator_candidates.json",
+        "reviewer_input.json",
+        "reviewer.json",
+        "candidate_selection.json",
+        "generator_final.json",
+        "permutation.json",
+        "generator.json",
+        "solver_input.json",
+        "solver.json"
+      ],
+      "properties": {
+        "plan.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "generator_raw.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "generator_candidates.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "reviewer_input.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "reviewer.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "candidate_selection.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "generator_final.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "permutation.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "generator.json": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "description": "Hash of the FINAL PERMUTED four-option Generator batch used to derive Solver input. Not the seven-candidate Generator response; that is generator_candidates.json."
+        },
+        "solver_input.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "solver.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    },
+    "output_dir": {"type": "string", "minLength": 1}
+  }
+}

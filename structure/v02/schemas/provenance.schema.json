@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "structure-provenance-v0.2.schema.json",
+  "title": "Structure v0.2 provenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "version",
+    "run_id",
+    "seed",
+    "provider",
+    "model",
+    "invocations",
+    "invocation_ids",
+    "invocation_count",
+    "logical_invocation_counts",
+    "deterministic_validation",
+    "candidate_selection",
+    "answer_position_permutation",
+    "blind_inputs",
+    "reviewer_canonicalization",
+    "solver_canonicalization",
+    "solver_key_check",
+    "leakage",
+    "fallback",
+    "runtime_failures",
+    "artifact_hashes"
+  ],
+  "properties": {
+    "schema_version": {"const": "structure-provenance-v0.2"},
+    "version": {"const": "v0.2"},
+    "run_id": {"type": "string", "minLength": 1},
+    "seed": {"type": "integer", "minimum": 0},
+    "provider": {"type": "string"},
+    "model": {"type": "string"},
+    "invocations": {"type": "array"},
+    "invocation_ids": {"type": "array", "items": {"type": "string"}},
+    "invocation_count": {"type": "integer", "minimum": 0},
+    "logical_invocation_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The clean successful path is generator=1, reviewer=1, solver=1. This schema does not force those values so early-failure runs remain representable. Deliberately no Repair/Revision/Regeneration keys.",
+      "required": ["generator", "reviewer", "solver"],
+      "properties": {
+        "generator": {"type": "integer", "minimum": 0},
+        "reviewer": {"type": "integer", "minimum": 0},
+        "solver": {"type": "integer", "minimum": 0}
+      }
+    },
+    "deterministic_validation": {"type": "object"},
+    "candidate_selection": {"type": "object"},
+    "answer_position_permutation": {"type": ["object", "null"]},
+    "blind_inputs": {"type": "object"},
+    "reviewer_canonicalization": {"type": "object"},
+    "solver_canonicalization": {"type": "object"},
+    "solver_key_check": {
+      "type": "object",
+      "description": "Records the final Solver-vs-assembled-key check. The v0.2 Reviewer does not choose a final answer, so provenance instead records candidate selection and this final Solver-vs-key check, not a reviewer-vs-solver agreement concept."
+    },
+    "leakage": {"type": "object"},
+    "fallback": {"type": "object"},
+    "runtime_failures": {"type": "array"},
+    "artifact_hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Exactly the eleven non-circular hashed artifacts. result.json and provenance.json are deliberately excluded to avoid circular provenance.",
+      "required": [
+        "plan.json",
+        "generator_raw.json",
+        "generator_candidates.json",
+        "reviewer_input.json",
+        "reviewer.json",
+        "candidate_selection.json",
+        "generator_final.json",
+        "permutation.json",
+        "generator.json",
+        "solver_input.json",
+        "solver.json"
+      ],
+      "properties": {
+        "plan.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "generator_raw.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "generator_candidates.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "reviewer_input.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "reviewer.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "candidate_selection.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "generator_final.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "permutation.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "generator.json": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "description": "Hash of the FINAL PERMUTED four-option Generator batch used to derive Solver input. Not the seven-candidate Generator response; that is generator_candidates.json."
+        },
+        "solver_input.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "solver.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

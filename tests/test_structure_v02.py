@@ -37,6 +37,8 @@ REVIEWER_OUTPUT_SCHEMA = V02_SCHEMAS / "reviewer_output.schema.json"
 CANDIDATE_SELECTION_SCHEMA = V02_SCHEMAS / "candidate_selection.schema.json"
 GENERATOR_FINAL_SCHEMA = V02_SCHEMAS / "generator_final.schema.json"
 PLAN_SCHEMA = V02_SCHEMAS / "plan.schema.json"
+RESULT_SCHEMA = V02_SCHEMAS / "result.schema.json"
+PROVENANCE_SCHEMA = V02_SCHEMAS / "provenance.schema.json"
 
 # Protected v0.1 files at the approved base commit. Do not update these hashes.
 BASE_COMMIT = "1240881af864f3eb26f9b9365d873a2165e61c7a"
@@ -72,6 +74,8 @@ V02_PROTECTED_SCHEMA_HASHES: dict[str, str] = {
     "structure/v02/schemas/candidate_selection.schema.json": "f8ca2ab1e5dd60c7db37f4d49bff4cfe50c370a79f2e8043d6a7b326e109038d",
     "structure/v02/schemas/generator_final.schema.json": "3c34b631f881fd1966730f6b5d2b93fad730885d5ca93ca1f808b3244efad385",
     "structure/v02/schemas/plan.schema.json": "39e8dcded26947556123a00218bddb6a605063bdc9be97cb9e36caf22245738b",
+    "structure/v02/schemas/result.schema.json": "7c4efd2ced496099dcc8396c915e6e8a77fafd01f3c031c9729f4e2176f450b1",
+    "structure/v02/schemas/provenance.schema.json": "94ef72769c528aa1e911c3ab690cbdc35e8b43e5e2337d3e5c26d407d0fed86f",
 }
 
 # Protected v0.2 authoring prompts. Do not update these hashes unless a
@@ -260,6 +264,8 @@ class SchemaLoadTests(unittest.TestCase):
             CANDIDATE_SELECTION_SCHEMA,
             GENERATOR_FINAL_SCHEMA,
             PLAN_SCHEMA,
+            RESULT_SCHEMA,
+            PROVENANCE_SCHEMA,
         ):
             with self.subTest(path=path):
                 load_schema(path)
@@ -2259,6 +2265,322 @@ class SolverPromptContentTests(unittest.TestCase):
     def test_no_assumption_that_prior_filtering_guarantees_uniqueness(self) -> None:
         self.assertIn("you do not see that pool or its filtering, and you\nmust not assume", self.text)
         self.assertIn("hard production safeguard", self.text)
+
+
+DUMMY_SHA256 = "0" * 64
+ARTIFACT_HASH_KEYS: tuple[str, ...] = (
+    "plan.json",
+    "generator_raw.json",
+    "generator_candidates.json",
+    "reviewer_input.json",
+    "reviewer.json",
+    "candidate_selection.json",
+    "generator_final.json",
+    "permutation.json",
+    "generator.json",
+    "solver_input.json",
+    "solver.json",
+)
+
+
+def artifact_hashes_fixture() -> dict[str, str]:
+    return {name: f"sha256:{DUMMY_SHA256}" for name in ARTIFACT_HASH_KEYS}
+
+
+def _result_item(index: int) -> dict[str, Any]:
+    return {
+        "item_id": f"structure-v02-fixture-{index:02d}",
+        "accepted": True,
+        "rejection_reasons": [],
+    }
+
+
+def result_fixture() -> dict[str, Any]:
+    return {
+        "schema_version": "structure-result-v0.2",
+        "version": "v0.2",
+        "run_id": "structure-v02-fixture-run",
+        "seed": 1,
+        "decision": "ACCEPT",
+        "question_count": 15,
+        "live_invocation_count": 3,
+        "deterministic_hard_failure_count": 0,
+        "candidate_selection_pass_count": 15,
+        "candidate_selection_failure_count": 0,
+        "solver_key_agreement_count": 15,
+        "solver_ambiguous_none_count": 0,
+        "final_answer_position_distribution": {"A": 4, "B": 4, "C": 4, "D": 3},
+        "item_results": [_result_item(index) for index in range(1, 16)],
+        "checks": {
+            "generator_contract": True,
+            "generator_errors": [],
+            "reviewer_input_contract": True,
+            "reviewer_input_errors": [],
+            "reviewer_contract": True,
+            "reviewer_errors": [],
+            "reviewer_canonicalization": {},
+            "candidate_selection": {},
+            "final_assembly": {},
+            "permutation": {},
+            "solver_input_contract": True,
+            "solver_input_errors": [],
+            "solver_contract": True,
+            "solver_errors": [],
+            "solver_canonicalization": {},
+            "solver_key_check": {},
+            "reviewer_clause_count": {},
+            "candidate_pool_difficulty": {},
+            "all_15_items_pass": True,
+        },
+        "infrastructure": {"runtime_failures": []},
+        "artifact_hashes": artifact_hashes_fixture(),
+        "output_dir": "runs/structure_v0_2/fixture-run",
+    }
+
+
+def provenance_fixture() -> dict[str, Any]:
+    return {
+        "schema_version": "structure-provenance-v0.2",
+        "version": "v0.2",
+        "run_id": "structure-v02-fixture-run",
+        "seed": 1,
+        "provider": "codex",
+        "model": "fixture-model",
+        "invocations": [],
+        "invocation_ids": [],
+        "invocation_count": 3,
+        "logical_invocation_counts": {"generator": 1, "reviewer": 1, "solver": 1},
+        "deterministic_validation": {},
+        "candidate_selection": {},
+        "answer_position_permutation": {},
+        "blind_inputs": {},
+        "reviewer_canonicalization": {},
+        "solver_canonicalization": {},
+        "solver_key_check": {},
+        "leakage": {},
+        "fallback": {},
+        "runtime_failures": [],
+        "artifact_hashes": artifact_hashes_fixture(),
+    }
+
+
+class ResultSchemaTests(unittest.TestCase):
+    def test_valid_fixture(self) -> None:
+        self.assertEqual([], schema_errors(result_fixture(), load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_v01_schema_version(self) -> None:
+        payload = result_fixture()
+        payload["schema_version"] = "structure-result-v0.1"
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_v01_version(self) -> None:
+        payload = result_fixture()
+        payload["version"] = "v0.1"
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_wrong_question_count(self) -> None:
+        payload = result_fixture()
+        payload["question_count"] = 14
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_invalid_decision(self) -> None:
+        payload = result_fixture()
+        payload["decision"] = "MAYBE"
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_candidate_selection_pass_count_over_15(self) -> None:
+        payload = result_fixture()
+        payload["candidate_selection_pass_count"] = 16
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_candidate_selection_failure_count_over_15(self) -> None:
+        payload = result_fixture()
+        payload["candidate_selection_failure_count"] = 16
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_solver_key_agreement_count_over_15(self) -> None:
+        payload = result_fixture()
+        payload["solver_key_agreement_count"] = 16
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_solver_ambiguous_none_count_over_15(self) -> None:
+        payload = result_fixture()
+        payload["solver_ambiguous_none_count"] = 16
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_item_results_not_exactly_15(self) -> None:
+        payload = result_fixture()
+        payload["item_results"] = payload["item_results"][:14]
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_malformed_item_result(self) -> None:
+        payload = result_fixture()
+        del payload["item_results"][0]["rejection_reasons"]
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_missing_checks_category(self) -> None:
+        payload = result_fixture()
+        del payload["checks"]["all_15_items_pass"]
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_extra_checks_category(self) -> None:
+        payload = result_fixture()
+        payload["checks"]["extra_category"] = {}
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_infrastructure_missing_runtime_failures(self) -> None:
+        payload = result_fixture()
+        payload["infrastructure"] = {}
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_artifact_hashes_missing_one_artifact(self) -> None:
+        payload = result_fixture()
+        del payload["artifact_hashes"]["solver.json"]
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_artifact_hashes_extra_artifact(self) -> None:
+        payload = result_fixture()
+        payload["artifact_hashes"]["result.json"] = f"sha256:{DUMMY_SHA256}"
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_rejects_malformed_sha256(self) -> None:
+        payload = result_fixture()
+        payload["artifact_hashes"]["solver.json"] = "not-a-hash"
+        self.assertTrue(schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_allows_zero_answer_distribution_for_pre_permutation_quarantine(self) -> None:
+        payload = result_fixture()
+        payload["decision"] = "QUARANTINE"
+        payload["final_answer_position_distribution"] = {"A": 0, "B": 0, "C": 0, "D": 0}
+        self.assertEqual([], schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_allows_4433_answer_distribution(self) -> None:
+        payload = result_fixture()
+        payload["final_answer_position_distribution"] = {"A": 4, "B": 4, "C": 4, "D": 3}
+        self.assertEqual([], schema_errors(payload, load_schema(RESULT_SCHEMA)))
+
+    def test_contains_no_reviewer_solver_agreement(self) -> None:
+        schema_text = RESULT_SCHEMA.read_text(encoding="utf-8")
+        self.assertNotIn("reviewer_solver_agreement", schema_text)
+
+    def test_contains_no_reviewer_difficulty_agreement_count(self) -> None:
+        schema_text = RESULT_SCHEMA.read_text(encoding="utf-8")
+        self.assertNotIn("reviewer_difficulty_agreement_count", schema_text)
+
+    def test_contains_no_reviewer_difficulty_low_confidence_count(self) -> None:
+        schema_text = RESULT_SCHEMA.read_text(encoding="utf-8")
+        self.assertNotIn("reviewer_difficulty_low_confidence_count", schema_text)
+
+    def test_contains_no_reviewer_ambiguous_none_count(self) -> None:
+        schema_text = RESULT_SCHEMA.read_text(encoding="utf-8")
+        self.assertNotIn("reviewer_ambiguous_none_count", schema_text)
+
+
+class ProvenanceSchemaTests(unittest.TestCase):
+    def test_valid_fixture(self) -> None:
+        self.assertEqual([], schema_errors(provenance_fixture(), load_schema(PROVENANCE_SCHEMA)))
+
+    def test_rejects_wrong_schema_version(self) -> None:
+        payload = provenance_fixture()
+        payload["schema_version"] = "structure-provenance-v0.1"
+        self.assertTrue(schema_errors(payload, load_schema(PROVENANCE_SCHEMA)))
+
+    def test_rejects_wrong_version(self) -> None:
+        payload = provenance_fixture()
+        payload["version"] = "v0.1"
+        self.assertTrue(schema_errors(payload, load_schema(PROVENANCE_SCHEMA)))
+
+    def test_rejects_negative_seed(self) -> None:
+        payload = provenance_fixture()
+        payload["seed"] = -1
+        self.assertTrue(schema_errors(payload, load_schema(PROVENANCE_SCHEMA)))
+
+    def test_logical_invocation_counts_requires_exactly_generator_reviewer_solver(self) -> None:
+        payload = provenance_fixture()
+        del payload["logical_invocation_counts"]["solver"]
+        self.assertTrue(schema_errors(payload, load_schema(PROVENANCE_SCHEMA)))
+
+    def test_logical_invocation_counts_rejects_repair_revision_regeneration_keys(self) -> None:
+        for key in ("repair", "revision", "regeneration"):
+            with self.subTest(key=key):
+                payload = provenance_fixture()
+                payload["logical_invocation_counts"][key] = 1
+                self.assertTrue(schema_errors(payload, load_schema(PROVENANCE_SCHEMA)))
+
+    def test_answer_position_permutation_may_be_null(self) -> None:
+        payload = provenance_fixture()
+        payload["answer_position_permutation"] = None
+        self.assertEqual([], schema_errors(payload, load_schema(PROVENANCE_SCHEMA)))
+
+    def test_answer_position_permutation_may_be_object(self) -> None:
+        payload = provenance_fixture()
+        payload["answer_position_permutation"] = {"note": "fixture"}
+        self.assertEqual([], schema_errors(payload, load_schema(PROVENANCE_SCHEMA)))
+
+    def test_runtime_failures_must_be_array(self) -> None:
+        payload = provenance_fixture()
+        payload["runtime_failures"] = {}
+        self.assertTrue(schema_errors(payload, load_schema(PROVENANCE_SCHEMA)))
+
+    def test_rejects_missing_artifact_hash(self) -> None:
+        payload = provenance_fixture()
+        del payload["artifact_hashes"]["plan.json"]
+        self.assertTrue(schema_errors(payload, load_schema(PROVENANCE_SCHEMA)))
+
+    def test_rejects_extra_artifact_hash(self) -> None:
+        payload = provenance_fixture()
+        payload["artifact_hashes"]["provenance.json"] = f"sha256:{DUMMY_SHA256}"
+        self.assertTrue(schema_errors(payload, load_schema(PROVENANCE_SCHEMA)))
+
+    def test_rejects_malformed_artifact_hash(self) -> None:
+        payload = provenance_fixture()
+        payload["artifact_hashes"]["plan.json"] = "sha256:not-hex"
+        self.assertTrue(schema_errors(payload, load_schema(PROVENANCE_SCHEMA)))
+
+    def test_contains_no_reviewer_solver_agreement(self) -> None:
+        schema_text = PROVENANCE_SCHEMA.read_text(encoding="utf-8")
+        self.assertNotIn("reviewer_solver_agreement", schema_text)
+
+    def test_contains_no_planner_reviewer_difficulty_agreement_field(self) -> None:
+        schema_text = PROVENANCE_SCHEMA.read_text(encoding="utf-8")
+        self.assertNotIn("difficulty_agreement", schema_text)
+
+
+class CrossSchemaArtifactHashTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.result_schema = load_schema(RESULT_SCHEMA)
+        self.provenance_schema = load_schema(PROVENANCE_SCHEMA)
+
+    def test_identical_required_key_sets(self) -> None:
+        self.assertEqual(
+            set(self.result_schema["properties"]["artifact_hashes"]["required"]),
+            set(self.provenance_schema["properties"]["artifact_hashes"]["required"]),
+        )
+
+    def test_identical_property_key_sets(self) -> None:
+        self.assertEqual(
+            set(self.result_schema["properties"]["artifact_hashes"]["properties"]),
+            set(self.provenance_schema["properties"]["artifact_hashes"]["properties"]),
+        )
+
+    def test_both_additional_properties_false(self) -> None:
+        self.assertFalse(self.result_schema["properties"]["artifact_hashes"]["additionalProperties"])
+        self.assertFalse(self.provenance_schema["properties"]["artifact_hashes"]["additionalProperties"])
+
+    def test_exact_set_equals_approved_eleven_artifacts(self) -> None:
+        self.assertEqual(set(ARTIFACT_HASH_KEYS), set(self.result_schema["properties"]["artifact_hashes"]["required"]))
+        self.assertEqual(
+            set(ARTIFACT_HASH_KEYS), set(self.provenance_schema["properties"]["artifact_hashes"]["required"])
+        )
+        self.assertEqual(11, len(ARTIFACT_HASH_KEYS))
+
+    def test_result_json_not_in_artifact_hashes(self) -> None:
+        self.assertNotIn("result.json", self.result_schema["properties"]["artifact_hashes"]["properties"])
+        self.assertNotIn("result.json", self.provenance_schema["properties"]["artifact_hashes"]["properties"])
+
+    def test_provenance_json_not_in_artifact_hashes(self) -> None:
+        self.assertNotIn("provenance.json", self.result_schema["properties"]["artifact_hashes"]["properties"])
+        self.assertNotIn("provenance.json", self.provenance_schema["properties"]["artifact_hashes"]["properties"])
 
 
 if __name__ == "__main__":
