@@ -11,12 +11,16 @@ import copy
 import hashlib
 import json
 import unittest
+from collections import Counter
 from pathlib import Path
 from typing import Any
+
+from structure.permutation import permute_generator_output
 
 from shared.schema_validation import load_schema, schema_errors
 from structure.v02 import blinding as v02_blinding
 from structure.v02 import contracts as v02_contracts
+from structure.v02 import selection as v02_selection
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,6 +55,18 @@ V01_PROTECTED_HASHES: dict[str, str] = {
     "structure/schemas/solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
     "structure/schemas/solver_output.schema.json": "90588686793f16f5ff2aefd6c19a834eb444e1bda9a0c1aff73de74e3506d031",
     "tests/test_structure_v01.py": "f98faf0d216ca62e8a96667b4f1714618876cc4c7443bea47ef8b078dd238b40",
+}
+
+# Protected v0.2 schemas at the approved base commit. Do not update these
+# hashes unless a future explicitly approved schema migration occurs.
+V02_BASE_COMMIT = "b7a1716b8233ffb794655fa28a71e3ed3292d0ad"
+V02_PROTECTED_SCHEMA_HASHES: dict[str, str] = {
+    "structure/v02/schemas/generator_output.schema.json": "87202d4ba025377aa06dedad14c4f3a00b9ec5d5e1a32240556ce1b0597b89ae",
+    "structure/v02/schemas/reviewer_input.schema.json": "22e1865cec69ddf10472a5bcc0d2ae0ca29dc974481743d5995872e8b9c4471c",
+    "structure/v02/schemas/reviewer_output.schema.json": "0d75f38b5d24a201f3efaac27c6bcedaa61f04b35e194a734460356e24824315",
+    "structure/v02/schemas/candidate_selection.schema.json": "f8ca2ab1e5dd60c7db37f4d49bff4cfe50c370a79f2e8043d6a7b326e109038d",
+    "structure/v02/schemas/generator_final.schema.json": "3c34b631f881fd1966730f6b5d2b93fad730885d5ca93ca1f808b3244efad385",
+    "structure/v02/schemas/plan.schema.json": "39e8dcded26947556123a00218bddb6a605063bdc9be97cb9e36caf22245738b",
 }
 
 
@@ -195,6 +211,10 @@ def generator_final_fixture() -> dict[str, Any]:
 
 
 def _plan_item(order: int) -> dict[str, Any]:
+    # The fixture's completed correct sentence ("The researcher confirmed the
+    # documented pattern before the review concluded.") is exactly 10 words,
+    # so the bin must actually contain 10 for Generator semantic tests to be
+    # internally coherent (see Commit 3 fixture-correction note).
     return {
         "item_id": f"structure-v02-fixture-{order:02d}",
         "order": order,
@@ -202,8 +222,8 @@ def _plan_item(order: int) -> dict[str, Any]:
         "primary_target": "VERB_FORM_VOICE",
         "difficulty": "MEDIUM",
         "clause_count": 2,
-        "sentence_length_bin": {"label": "medium", "minimum": 14, "maximum": 20, "weight": 1},
-        "target_word_count": 16,
+        "sentence_length_bin": {"label": "short", "minimum": 10, "maximum": 14, "weight": 1},
+        "target_word_count": 10,
     }
 
 
@@ -407,6 +427,21 @@ class V01FreezeTests(unittest.TestCase):
                     _sha256(path),
                     expected_hash,
                     f"frozen v0.1 file changed: {relative_path}",
+                )
+
+
+class V02SchemaFreezeTests(unittest.TestCase):
+    """Protect the approved v0.2 schemas at base commit {}.""".format(V02_BASE_COMMIT)
+
+    def test_v02_protected_schemas_unchanged(self) -> None:
+        for relative_path, expected_hash in V02_PROTECTED_SCHEMA_HASHES.items():
+            path = ROOT / relative_path
+            with self.subTest(path=relative_path):
+                self.assertTrue(path.is_file(), f"missing protected v0.2 schema: {relative_path}")
+                self.assertEqual(
+                    _sha256(path),
+                    expected_hash,
+                    f"frozen v0.2 schema changed: {relative_path}",
                 )
 
 
@@ -792,6 +827,533 @@ class ReviewerCanonicalizationTests(unittest.TestCase):
         self.assertEqual(2, diagnostic["observed_clause_count"])
         self.assertNotIn("planned_clause_count", diagnostic)
         self.assertNotIn("clause_count_match", diagnostic)
+
+
+def _fullwidth_variant(text: str) -> str:
+    """Return an NFKC-equivalent (but not exact-string-equal) fullwidth variant."""
+
+    return "".join(
+        chr(0xFF00 + (ord(char) - 0x20)) if 0x21 <= ord(char) <= 0x7E else char
+        for char in text
+    )
+
+
+def _canonical_reviewer_fixture(
+    generator: dict[str, Any],
+    distractor_judgment_by_id: dict[str, str] | None = None,
+    correct_judgment: str = "VALID",
+    correct_natural_wording: bool = True,
+    correct_serious_defect: bool = False,
+) -> dict[str, Any]:
+    """Build a canonical (text-keyed) Reviewer object directly, bypassing the raw contract.
+
+    Distractors default to INVALID unless overridden by `distractor_judgment_by_id`.
+    """
+
+    distractor_judgment_by_id = distractor_judgment_by_id or {}
+    items: list[dict[str, Any]] = []
+    for item in generator["items"]:
+        entries = v02_blinding.extract_candidate_entries(item)
+        text_by_id = dict(entries)
+        correct_text = text_by_id["correct"]
+
+        option_judgments: dict[str, str] = {correct_text: correct_judgment}
+        candidate_diagnostics: dict[str, dict[str, Any]] = {}
+        if correct_judgment in ("VALID", "MARGINAL"):
+            candidate_diagnostics[correct_text] = {
+                "natural_wording": correct_natural_wording,
+                "serious_defect": correct_serious_defect,
+                "observed_clause_count": 2,
+                "candidate_pool_observed_difficulty": "MEDIUM",
+                "difficulty_confidence": "HIGH",
+            }
+
+        for candidate_id in v02_blinding.DISTRACTOR_IDS:
+            judgment = distractor_judgment_by_id.get(candidate_id, "INVALID")
+            text = text_by_id[candidate_id]
+            option_judgments[text] = judgment
+            if judgment in ("VALID", "MARGINAL"):
+                candidate_diagnostics[text] = {
+                    "natural_wording": judgment == "VALID",
+                    "serious_defect": False,
+                    "observed_clause_count": 2,
+                    "candidate_pool_observed_difficulty": "MEDIUM",
+                    "difficulty_confidence": "HIGH",
+                }
+
+        items.append({
+            "item_id": item["item_id"],
+            "option_judgments": option_judgments,
+            "candidate_diagnostics": candidate_diagnostics,
+            "comment": "fixture comment",
+        })
+    return {"items": items}
+
+
+class GeneratorContractTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.plan = plan_fixture()
+        self.generator = generator_output_fixture()
+
+    def test_valid_generator_and_plan_passes(self) -> None:
+        self.assertEqual([], v02_contracts.validate_generator_contract(self.generator, self.plan))
+
+    def test_wrong_item_count_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"] = generator["items"][:14]
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_item_id_mismatch_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["item_id"] = "wrong-id"
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_order_mismatch_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0], generator["items"][1] = generator["items"][1], generator["items"][0]
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_primary_target_mismatch_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["primary_target"] = "NOUN_CLAUSES"
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_difficulty_mismatch_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["difficulty"] = "HARD"
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_wrong_section_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["section"] = "WrittenExpression"
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_subtype_whitespace_only_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["subtype"] = "   "
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_vocabulary_domain_whitespace_only_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["vocabulary_domain"] = "   "
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_explanation_whitespace_only_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["answer_explanation"] = "   "
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_candidate_rationale_whitespace_only_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["distractor_candidates"]["d1"]["rationale"] = "   "
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_zero_blanks_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["stem"] = "The researcher confirmed the documented pattern before the review concluded."
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_multiple_blanks_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["stem"] = "The researcher ____ the ____ pattern before the review concluded."
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_exact_duplicate_candidate_text_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["distractor_candidates"]["d1"]["text"] = generator["items"][0]["correct_option"]["text"]
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_normalized_case_duplicate_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        base = generator["items"][0]["correct_option"]["text"]
+        generator["items"][0]["distractor_candidates"]["d1"]["text"] = base.upper()
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_normalized_whitespace_duplicate_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        base = generator["items"][0]["correct_option"]["text"]
+        generator["items"][0]["distractor_candidates"]["d1"]["text"] = f" {base} "
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_nfkc_equivalent_duplicate_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        base = generator["items"][0]["correct_option"]["text"]
+        generator["items"][0]["distractor_candidates"]["d1"]["text"] = _fullwidth_variant(base)
+        self.assertTrue(v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_all_seven_distinct_surfaces_pass(self) -> None:
+        self.assertEqual([], v02_contracts.validate_generator_contract(self.generator, self.plan))
+
+    def test_completed_sentence_below_bin_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["stem"] = "____ done."
+        generator["items"][0]["correct_option"]["text"] = "OK"
+        errors = v02_contracts.validate_generator_contract(generator, self.plan)
+        self.assertTrue(any("word count" in error for error in errors))
+
+    def test_completed_sentence_above_bin_fails(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["correct_option"]["text"] = " ".join(["extremely"] * 20)
+        errors = v02_contracts.validate_generator_contract(generator, self.plan)
+        self.assertTrue(any("word count" in error for error in errors))
+
+    def test_completed_sentence_inside_bin_passes(self) -> None:
+        self.assertEqual([], v02_contracts.validate_generator_contract(self.generator, self.plan))
+
+    def test_actual_need_not_equal_target_word_count(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["stem"] = (
+            "The senior researcher ____ that documented pattern before the extended review finally concluded now."
+        )
+        self.assertEqual(
+            14, len(("The senior researcher confirmed that documented pattern before the extended "
+                     "review finally concluded now.").split())
+        )
+        self.assertEqual([], v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_sentence_length_uses_correct_option_only(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["distractor_candidates"]["d1"]["text"] = " ".join(["extremely"] * 20)
+        self.assertEqual([], v02_contracts.validate_generator_contract(generator, self.plan))
+
+    def test_no_deterministic_grammar_semantic_checking_introduced(self) -> None:
+        generator = copy.deepcopy(self.generator)
+        generator["items"][0]["correct_option"]["text"] = "confirming"
+        generator["items"][0]["distractor_candidates"]["d1"]["text"] = "confirmed"
+        self.assertEqual([], v02_contracts.validate_generator_contract(generator, self.plan))
+
+
+class CandidateSelectionTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.generator = generator_output_fixture()
+        self.seed = SEED
+
+    def test_intended_correct_valid_natural_true_serious_false_passes(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator)
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertTrue(item["passed"])
+        self.assertEqual([], item["failure_reasons"])
+
+    def test_intended_correct_invalid_fails_with_null_diagnostics(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator, correct_judgment="INVALID")
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertFalse(item["passed"])
+        self.assertIn("intended_correct_not_valid:INVALID", item["failure_reasons"])
+        self.assertIsNone(item["intended_correct_natural_wording"])
+        self.assertIsNone(item["intended_correct_serious_defect"])
+
+    def test_intended_correct_marginal_fails(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator, correct_judgment="MARGINAL")
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertFalse(item["passed"])
+        self.assertIn("intended_correct_not_valid:MARGINAL", item["failure_reasons"])
+        self.assertEqual(True, item["intended_correct_natural_wording"])
+        self.assertEqual(False, item["intended_correct_serious_defect"])
+
+    def test_intended_correct_valid_natural_false_fails(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator, correct_natural_wording=False)
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertFalse(item["passed"])
+        self.assertIn("intended_correct_natural_wording_false", item["failure_reasons"])
+
+    def test_intended_correct_valid_serious_true_fails(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator, correct_serious_defect=True)
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertFalse(item["passed"])
+        self.assertIn("intended_correct_serious_defect_true", item["failure_reasons"])
+
+    def test_distractor_valid_is_discarded(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator, distractor_judgment_by_id={"d1": "VALID"})
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertIn("d1", item["rejected_valid_candidate_ids"])
+        self.assertNotIn("d1", item["selected_candidate_ids"])
+
+    def test_distractor_marginal_is_discarded(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator, distractor_judgment_by_id={"d1": "MARGINAL"})
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertIn("d1", item["rejected_marginal_candidate_ids"])
+        self.assertNotIn("d1", item["selected_candidate_ids"])
+
+    def test_extra_valid_distractor_does_not_fail_item_if_three_invalid_remain(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator, distractor_judgment_by_id={"d1": "VALID"})
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertTrue(item["passed"])
+        self.assertEqual(3, len(item["selected_candidate_ids"]))
+
+    def test_extra_marginal_distractor_does_not_fail_item_if_three_invalid_remain(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator, distractor_judgment_by_id={"d1": "MARGINAL"})
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertTrue(item["passed"])
+        self.assertEqual(3, len(item["selected_candidate_ids"]))
+
+    def test_exactly_three_invalid_selects_all_three(self) -> None:
+        reviewer = _canonical_reviewer_fixture(
+            self.generator, distractor_judgment_by_id={"d1": "VALID", "d2": "VALID", "d3": "MARGINAL"}
+        )
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertTrue(item["passed"])
+        self.assertEqual(set(item["selected_candidate_ids"]), set(item["eligible_invalid_candidate_ids"]))
+        self.assertEqual(3, len(item["selected_candidate_ids"]))
+
+    def test_more_than_three_invalid_selects_deterministic_first_three(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator)
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertEqual(item["deterministic_priority_order"][:3], item["selected_candidate_ids"])
+
+    def test_fewer_than_three_invalid_fails(self) -> None:
+        reviewer = _canonical_reviewer_fixture(
+            self.generator,
+            distractor_judgment_by_id={"d1": "VALID", "d2": "VALID", "d3": "VALID", "d4": "MARGINAL"},
+        )
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertFalse(item["passed"])
+
+    def test_insufficient_count_appears_in_failure_reason(self) -> None:
+        reviewer = _canonical_reviewer_fixture(
+            self.generator,
+            distractor_judgment_by_id={"d1": "VALID", "d2": "VALID", "d3": "VALID", "d4": "MARGINAL"},
+        )
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertIn("insufficient_invalid_distractors:2", item["failure_reasons"])
+
+    def test_deterministic_priority_contains_d1_to_d6_exactly_once(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator)
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertEqual(sorted(v02_blinding.DISTRACTOR_IDS), sorted(item["deterministic_priority_order"]))
+        self.assertEqual(6, len(item["deterministic_priority_order"]))
+
+    def test_correct_never_in_priority_or_selected_ids(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator)
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        item = selection["items"][0]
+        self.assertNotIn("correct", item["deterministic_priority_order"])
+        self.assertNotIn("correct", item["selected_candidate_ids"])
+
+    def test_same_seed_gives_identical_selection(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator)
+        first = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        second = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        self.assertEqual(first, second)
+
+    def test_selection_replay_validator_accepts_exact_artifact(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator)
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        self.assertEqual(
+            [], v02_selection.candidate_selection_errors(self.generator, reviewer, selection, self.seed)
+        )
+
+    def test_tampered_selection_fails_replay_validator(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator)
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        tampered = copy.deepcopy(selection)
+        ids = tampered["items"][0]["selected_candidate_ids"]
+        texts = tampered["items"][0]["selected_candidate_texts"]
+        tampered["items"][0]["selected_candidate_ids"] = list(reversed(ids))
+        tampered["items"][0]["selected_candidate_texts"] = list(reversed(texts))
+        self.assertTrue(
+            v02_selection.candidate_selection_errors(self.generator, reviewer, tampered, self.seed)
+        )
+
+    def test_changed_reviewer_comment_does_not_change_selection(self) -> None:
+        reviewer_a = _canonical_reviewer_fixture(self.generator)
+        reviewer_b = copy.deepcopy(reviewer_a)
+        reviewer_b["items"][0]["comment"] = "a completely different comment"
+        first = v02_selection.build_candidate_selection(self.generator, reviewer_a, self.seed)
+        second = v02_selection.build_candidate_selection(self.generator, reviewer_b, self.seed)
+        self.assertEqual(first, second)
+
+    def test_changed_reviewer_difficulty_does_not_change_selection(self) -> None:
+        reviewer_a = _canonical_reviewer_fixture(self.generator)
+        reviewer_b = copy.deepcopy(reviewer_a)
+        correct_text = self.generator["items"][0]["correct_option"]["text"]
+        reviewer_b["items"][0]["candidate_diagnostics"][correct_text]["candidate_pool_observed_difficulty"] = "HARD"
+        first = v02_selection.build_candidate_selection(self.generator, reviewer_a, self.seed)
+        second = v02_selection.build_candidate_selection(self.generator, reviewer_b, self.seed)
+        self.assertEqual(first, second)
+
+    def test_changed_observed_clause_count_does_not_change_selection(self) -> None:
+        reviewer_a = _canonical_reviewer_fixture(self.generator)
+        reviewer_b = copy.deepcopy(reviewer_a)
+        correct_text = self.generator["items"][0]["correct_option"]["text"]
+        reviewer_b["items"][0]["candidate_diagnostics"][correct_text]["observed_clause_count"] = 99
+        first = v02_selection.build_candidate_selection(self.generator, reviewer_a, self.seed)
+        second = v02_selection.build_candidate_selection(self.generator, reviewer_b, self.seed)
+        self.assertEqual(first, second)
+
+    def test_malformed_canonical_reviewer_key_set_fails_closed(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator)
+        reviewer["items"][0]["option_judgments"]["an invented option text"] = "INVALID"
+        with self.assertRaises(ValueError):
+            v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+
+    def test_invalid_candidate_with_diagnostic_fails_closed(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator)
+        entries = dict(v02_blinding.extract_candidate_entries(self.generator["items"][0]))
+        invalid_text = entries["d1"]
+        reviewer["items"][0]["candidate_diagnostics"][invalid_text] = {
+            "natural_wording": False,
+            "serious_defect": True,
+            "observed_clause_count": 2,
+            "candidate_pool_observed_difficulty": "MEDIUM",
+            "difficulty_confidence": "HIGH",
+        }
+        with self.assertRaises(ValueError):
+            v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+
+    def test_valid_candidate_missing_diagnostic_fails_closed(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator, distractor_judgment_by_id={"d1": "VALID"})
+        entries = dict(v02_blinding.extract_candidate_entries(self.generator["items"][0]))
+        del reviewer["items"][0]["candidate_diagnostics"][entries["d1"]]
+        with self.assertRaises(ValueError):
+            v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+
+    def test_exact_text_reconciliation_rejects_drift_rather_than_normalizing(self) -> None:
+        reviewer = _canonical_reviewer_fixture(self.generator)
+        correct_text = self.generator["items"][0]["correct_option"]["text"]
+        judgment = reviewer["items"][0]["option_judgments"].pop(correct_text)
+        diagnostic = reviewer["items"][0]["candidate_diagnostics"].pop(correct_text)
+        reviewer["items"][0]["option_judgments"][correct_text.upper()] = judgment
+        reviewer["items"][0]["candidate_diagnostics"][correct_text.upper()] = diagnostic
+        with self.assertRaises(ValueError):
+            v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+
+
+class FinalAssemblyTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.generator = generator_output_fixture()
+        self.seed = SEED
+        self.reviewer = _canonical_reviewer_fixture(self.generator)
+        self.selection = v02_selection.build_candidate_selection(self.generator, self.reviewer, self.seed)
+
+    def test_all_fifteen_passed_gives_final_batch_of_fifteen(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        self.assertEqual(15, len(final["items"]))
+
+    def test_any_failed_selection_prevents_assembly(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        selection["items"][0]["passed"] = False
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_final_item_shape_matches_schema(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        self.assertEqual([], schema_errors(final, load_schema(GENERATOR_FINAL_SCHEMA)))
+
+    def test_pre_permutation_correct_answer_is_a(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        self.assertTrue(all(item["correct_answer"] == "A" for item in final["items"]))
+
+    def test_a_is_exact_intended_correct_text(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        self.assertEqual(self.generator["items"][0]["correct_option"]["text"], final["items"][0]["options"]["A"])
+
+    def test_b_c_d_match_selected_texts_in_order(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        sel_item = self.selection["items"][0]
+        self.assertEqual(sel_item["selected_candidate_texts"][0], final["items"][0]["options"]["B"])
+        self.assertEqual(sel_item["selected_candidate_texts"][1], final["items"][0]["options"]["C"])
+        self.assertEqual(sel_item["selected_candidate_texts"][2], final["items"][0]["options"]["D"])
+
+    def test_b_c_d_rationales_match_selected_candidate_rationales(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        sel_item = self.selection["items"][0]
+        gen_item = self.generator["items"][0]
+        for letter, candidate_id in zip(("B", "C", "D"), sel_item["selected_candidate_ids"]):
+            self.assertEqual(
+                gen_item["distractor_candidates"][candidate_id]["rationale"],
+                final["items"][0]["distractor_rationales"][letter],
+            )
+
+    def test_a_rationale_equals_answer_explanation(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        self.assertEqual(
+            self.generator["items"][0]["answer_explanation"], final["items"][0]["distractor_rationales"]["A"]
+        )
+
+    def test_no_candidate_ids_leak(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        serialized = json.dumps(final)
+        for candidate_id in v02_blinding.DISTRACTOR_IDS:
+            self.assertNotIn(f'"{candidate_id}"', serialized)
+
+    def test_no_reviewer_judgment_or_diagnostic_leaks(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        serialized = json.dumps(final)
+        for forbidden in (
+            "VALID", "INVALID", "MARGINAL", "natural_wording", "serious_defect",
+            "candidate_pool_observed_difficulty", "difficulty_confidence",
+        ):
+            self.assertNotIn(forbidden, serialized)
+
+    def test_tampered_selected_text_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        selection["items"][0]["selected_candidate_texts"][0] = "an invented distractor text"
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_tampered_selected_id_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        original = selection["items"][0]["selected_candidate_ids"]
+        replacement_id = next(cid for cid in v02_blinding.DISTRACTOR_IDS if cid not in original)
+        selection["items"][0]["selected_candidate_ids"] = [replacement_id] + original[1:]
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_duplicated_selected_ids_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        ids = selection["items"][0]["selected_candidate_ids"]
+        selection["items"][0]["selected_candidate_ids"] = [ids[0], ids[0], ids[1]]
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_selected_non_eligible_id_fails(self) -> None:
+        reviewer = _canonical_reviewer_fixture(
+            self.generator, distractor_judgment_by_id={"d4": "VALID", "d5": "VALID"}
+        )
+        selection = v02_selection.build_candidate_selection(self.generator, reviewer, self.seed)
+        eligible = set(selection["items"][0]["eligible_invalid_candidate_ids"])
+        non_eligible = next(cid for cid in v02_blinding.DISTRACTOR_IDS if cid not in eligible)
+        entries = dict(v02_blinding.extract_candidate_entries(self.generator["items"][0]))
+        selection["items"][0]["selected_candidate_ids"][0] = non_eligible
+        selection["items"][0]["selected_candidate_texts"][0] = entries[non_eligible]
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_selected_order_inconsistent_with_priority_fails(self) -> None:
+        selection = copy.deepcopy(self.selection)
+        ids = selection["items"][0]["selected_candidate_ids"]
+        texts = selection["items"][0]["selected_candidate_texts"]
+        selection["items"][0]["selected_candidate_ids"] = [ids[1], ids[0], ids[2]]
+        selection["items"][0]["selected_candidate_texts"] = [texts[1], texts[0], texts[2]]
+        with self.assertRaises(ValueError):
+            v02_selection.assemble_final_generator_output(self.generator, selection)
+
+    def test_final_generator_ids_order_preserved(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        self.assertEqual(
+            [item["item_id"] for item in self.generator["items"]],
+            [item["item_id"] for item in final["items"]],
+        )
+
+    def test_final_output_compatible_with_frozen_permutation(self) -> None:
+        final = v02_selection.assemble_final_generator_output(self.generator, self.selection)
+        permuted, _permutation = permute_generator_output(final, self.seed)
+        distribution = Counter(item["correct_answer"] for item in permuted["items"])
+        self.assertEqual([3, 4, 4, 4], sorted(distribution.values()))
 
 
 if __name__ == "__main__":

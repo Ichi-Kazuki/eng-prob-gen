@@ -1,10 +1,17 @@
-"""Structure v0.2 Reviewer output exact-text contract and canonicalization.
+"""Structure v0.2 Generator/Reviewer output contracts and canonicalization.
 
-Enforces the fail-closed rules for the blind candidate Reviewer contract:
-exact item identity, exact-text option_judgments completeness, and the
-VALID/MARGINAL-must-have-exactly-one-diagnostic / INVALID-must-have-none
-rule. No candidate selection, no intended-correct reconciliation, and no
-Planner/difficulty/clause-count comparison happen here.
+Enforces the fail-closed rules for:
+  * the v0.2 Generator candidate batch, checked against its Planner plan
+    (batch identity, Planner-owned metadata, authorship metadata, the
+    single-blank stem, the seven raw candidate surfaces, and the
+    sentence-length hard gate);
+  * the blind candidate Reviewer contract: exact item identity, exact-text
+    option_judgments completeness, and the VALID/MARGINAL-must-have-
+    exactly-one-diagnostic / INVALID-must-have-none rule.
+
+No candidate selection, no intended-correct reconciliation, and no
+deterministic grammar/clause-count/difficulty realization checking happen
+here.
 """
 
 from __future__ import annotations
@@ -15,11 +22,27 @@ from typing import Any, Mapping
 
 from shared.schema_validation import load_schema, schema_errors
 
+from structure.contracts import (
+    BLANK_MARKER,
+    build_completed_sentence,
+    count_words,
+    normalized_option_surface,
+)
+
 
 ROOT = Path(__file__).resolve().parent
 REVIEWER_OUTPUT_SCHEMA_PATH = ROOT / "schemas" / "reviewer_output.schema.json"
+GENERATOR_OUTPUT_SCHEMA_PATH = ROOT / "schemas" / "generator_output.schema.json"
+PLAN_SCHEMA_PATH = ROOT / "schemas" / "plan.schema.json"
 
 VALID_JUDGMENTS_REQUIRING_DIAGNOSTIC = frozenset({"VALID", "MARGINAL"})
+
+DISTRACTOR_CANDIDATE_IDS: tuple[str, ...] = ("d1", "d2", "d3", "d4", "d5", "d6")
+ALL_CANDIDATE_IDS: tuple[str, ...] = ("correct",) + DISTRACTOR_CANDIDATE_IDS
+
+
+def _nonempty_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
 
 
 def _deduplicate(errors: list[str]) -> list[str]:
@@ -121,6 +144,146 @@ def _item_errors(output_item: Mapping[str, Any], input_item: Mapping[str, Any], 
     return errors
 
 
+def validate_generator_contract(output: Any, plan: Any) -> list[str]:
+    """Validate one v0.2 Generator batch response against its Planner plan.
+
+    Enforces: batch identity (15/15, ID order match, no duplicates, plan
+    order 1..15); Planner-owned metadata (section, primary_target,
+    difficulty); authorship metadata (non-whitespace subtype,
+    vocabulary_domain, answer_explanation, and all six distractor
+    rationales); a single blank marker in the stem; exact-string and
+    normalized-surface uniqueness across all seven raw candidate texts;
+    and the sentence-length hard gate using the Generator-intended
+    correct_option.text. No semantic grammar/difficulty/clause_count
+    checking is performed.
+    """
+
+    errors = schema_errors(output, load_schema(GENERATOR_OUTPUT_SCHEMA_PATH))
+    errors.extend(schema_errors(plan, load_schema(PLAN_SCHEMA_PATH)))
+    if not isinstance(output, dict) or not isinstance(plan, dict):
+        return _deduplicate(errors)
+
+    generated_items = output.get("items")
+    planned_items = plan.get("items")
+    if not isinstance(generated_items, list) or not isinstance(planned_items, list):
+        return _deduplicate(errors)
+
+    if len(generated_items) != 15:
+        errors.append(f"generator: expected exactly 15 items, got {len(generated_items)}")
+    if len(planned_items) != 15:
+        errors.append(f"generator: plan must contain exactly 15 items, got {len(planned_items)}")
+
+    valid_planned = [item for item in planned_items if isinstance(item, dict)]
+    plan_orders = [item.get("order") for item in valid_planned]
+    if plan_orders != list(range(1, len(valid_planned) + 1)):
+        errors.append("generator: plan item order must be 1..15")
+
+    generated_ids = [item.get("item_id") if isinstance(item, dict) else None for item in generated_items]
+    valid_generated_ids = [value for value in generated_ids if isinstance(value, str)]
+    duplicate_generated_ids = sorted(
+        {value for value in valid_generated_ids if valid_generated_ids.count(value) > 1}
+    )
+    if duplicate_generated_ids:
+        errors.append(f"generator: duplicate item_id(s): {duplicate_generated_ids}")
+
+    planned_ids = [item.get("item_id") for item in valid_planned]
+    if generated_ids != planned_ids:
+        errors.append(
+            f"generator: item IDs/order do not match the plan sequence: expected {planned_ids}, got {generated_ids}"
+        )
+
+    plan_by_id = {item.get("item_id"): item for item in valid_planned}
+
+    for index, item in enumerate(generated_items):
+        if not isinstance(item, dict):
+            errors.append(f"generator[index-{index}]: item must be an object")
+            continue
+        item_id = item.get("item_id")
+        label = item_id if isinstance(item_id, str) and item_id else f"index-{index}"
+        prefix = f"generator[{label}]"
+        planned = plan_by_id.get(item_id)
+
+        if item.get("section") != "Structure":
+            errors.append(f"{prefix}: section must be Structure")
+
+        if planned is None:
+            errors.append(f"{prefix}: no matching planned item_id in the plan sequence")
+        else:
+            if item.get("primary_target") != planned.get("primary_target"):
+                errors.append(f"{prefix}: primary_target does not match Planner metadata")
+            if item.get("difficulty") != planned.get("difficulty"):
+                errors.append(f"{prefix}: difficulty does not match Planner metadata")
+
+        if not _nonempty_string(item.get("subtype")):
+            errors.append(f"{prefix}: subtype must be non-whitespace")
+        if not _nonempty_string(item.get("vocabulary_domain")):
+            errors.append(f"{prefix}: vocabulary_domain must be non-whitespace")
+        if not _nonempty_string(item.get("answer_explanation")):
+            errors.append(f"{prefix}: answer_explanation must be non-whitespace")
+
+        distractor_candidates = item.get("distractor_candidates")
+        if not isinstance(distractor_candidates, dict):
+            errors.append(f"{prefix}: distractor_candidates must be an object")
+            distractor_candidates = {}
+        for candidate_id in DISTRACTOR_CANDIDATE_IDS:
+            candidate = distractor_candidates.get(candidate_id)
+            if not isinstance(candidate, dict) or not _nonempty_string(candidate.get("rationale")):
+                errors.append(f"{prefix}: distractor_candidates.{candidate_id}.rationale must be non-whitespace")
+
+        stem = item.get("stem")
+        stem_has_single_blank = isinstance(stem, str) and stem.count(BLANK_MARKER) == 1
+        if not stem_has_single_blank:
+            errors.append(f"{prefix}: stem must contain exactly one {BLANK_MARKER!r} blank marker")
+
+        correct_option = item.get("correct_option")
+        correct_text = correct_option.get("text") if isinstance(correct_option, dict) else None
+
+        candidate_texts: dict[str, Any] = {"correct": correct_text}
+        for candidate_id in DISTRACTOR_CANDIDATE_IDS:
+            candidate = distractor_candidates.get(candidate_id)
+            candidate_texts[candidate_id] = candidate.get("text") if isinstance(candidate, dict) else None
+
+        exact_texts: dict[str, str] = {}
+        surfaces: dict[str, str] = {}
+        for candidate_id in ALL_CANDIDATE_IDS:
+            text = candidate_texts.get(candidate_id)
+            if not isinstance(text, str) or not text.strip():
+                errors.append(f"{prefix}: candidate {candidate_id} text must be non-whitespace")
+                continue
+            if text in exact_texts:
+                errors.append(
+                    f"{prefix}: candidate {candidate_id} duplicates exact text of candidate {exact_texts[text]}"
+                )
+            else:
+                exact_texts[text] = candidate_id
+            normalized = normalized_option_surface(text)
+            if normalized in surfaces:
+                errors.append(
+                    f"{prefix}: candidate {candidate_id} duplicates candidate {surfaces[normalized]} "
+                    "after normalization"
+                )
+            else:
+                surfaces[normalized] = candidate_id
+
+        if stem_has_single_blank and _nonempty_string(correct_text) and planned is not None:
+            bin_info = planned.get("sentence_length_bin")
+            if isinstance(bin_info, dict):
+                minimum = bin_info.get("minimum")
+                maximum = bin_info.get("maximum")
+                if isinstance(minimum, int) and isinstance(maximum, int):
+                    completed_sentence = build_completed_sentence(stem, correct_text)
+                    actual_word_count = count_words(completed_sentence)
+                    if not (minimum <= actual_word_count <= maximum):
+                        bin_label = bin_info.get("label")
+                        target_word_count = planned.get("target_word_count")
+                        errors.append(
+                            f"{prefix}: completed sentence word count {actual_word_count} is outside planned "
+                            f"{bin_label} bin ({minimum}..{maximum}); target_word_count={target_word_count}"
+                        )
+
+    return _deduplicate(errors)
+
+
 def validate_reviewer_contract(raw_reviewer: Any, reviewer_input: Mapping[str, Any]) -> list[str]:
     """Validate one raw Reviewer response against the blind candidate contract."""
 
@@ -190,6 +353,7 @@ def canonicalize_reviewer_output(raw_reviewer: Any, reviewer_input: Mapping[str,
 
 
 __all__ = [
+    "validate_generator_contract",
     "validate_reviewer_contract",
     "canonicalize_reviewer_output",
 ]
