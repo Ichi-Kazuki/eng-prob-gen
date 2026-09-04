@@ -47,6 +47,18 @@ def _ids(items: Iterable[Any]) -> tuple[list[str], list[str]]:
     return valid, duplicates
 
 
+def count_words(text: str) -> int:
+    """Count words using the deterministic Unicode-whitespace splitting convention."""
+
+    return len(text.split())
+
+
+def build_completed_sentence(stem: str, option_text: str) -> str:
+    """Replace the single blank marker in `stem` with the canonical option text."""
+
+    return stem.replace(BLANK_MARKER, option_text, 1)
+
+
 def normalized_option_surface(value: str) -> str:
     """Normalize option text for deterministic duplicate-surface detection."""
 
@@ -136,8 +148,31 @@ def validate_generator_contract(output: Any, plan: Mapping[str, Any]) -> list[st
         if not _nonempty_string(item.get("answer_explanation")):
             errors.append(f"{prefix}: answer_explanation must be non-empty")
         stem = item.get("stem")
-        if not isinstance(stem, str) or stem.count(BLANK_MARKER) != 1:
+        stem_has_single_blank = isinstance(stem, str) and stem.count(BLANK_MARKER) == 1
+        if not stem_has_single_blank:
             errors.append(f"{prefix}: stem must contain exactly one {BLANK_MARKER!r} blank marker")
+        elif (
+            isinstance(stem, str)
+            and planned is not None
+            and isinstance(options, dict)
+            and isinstance(correct, str)
+            and correct in options
+        ):
+            option_text = options[correct]
+            bin_info = planned.get("sentence_length_bin")
+            if isinstance(option_text, str) and option_text.strip() and isinstance(bin_info, dict):
+                minimum = bin_info.get("minimum")
+                maximum = bin_info.get("maximum")
+                if isinstance(minimum, int) and isinstance(maximum, int):
+                    completed_sentence = build_completed_sentence(stem, option_text)
+                    actual_word_count = count_words(completed_sentence)
+                    if not (minimum <= actual_word_count <= maximum):
+                        label = bin_info.get("label")
+                        target_word_count = planned.get("target_word_count")
+                        errors.append(
+                            f"{prefix}: completed sentence word count {actual_word_count} is outside planned "
+                            f"{label} bin ({minimum}..{maximum}); target_word_count={target_word_count}"
+                        )
     return _deduplicate(errors)
 
 

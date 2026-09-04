@@ -1,0 +1,1681 @@
+{
+  "_purpose": "Orchestrator state-machine replay over the existing 6-item smoke fixtures. Not a new content generation run.",
+  "pipeline_version": "1.0.0",
+  "items": [
+    {
+      "item_id": "gen-struct-001",
+      "concept_id": "gen-struct-001",
+      "section": "Structure",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "retry_summary": {
+        "system": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        },
+        "validation": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        }
+      },
+      "generator": {
+        "answer": "C"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "C",
+        "difficulty": "MEDIUM"
+      },
+      "solver": {
+        "answer": "C",
+        "confidence": "HIGH"
+      },
+      "consensus": true,
+      "acceptance_policy": {
+        "policy_schema_version": 1,
+        "allowed_solver_confidence": [
+          "HIGH",
+          "MEDIUM"
+        ],
+        "block_source_similarity_risk": [
+          "HIGH"
+        ],
+        "policy_sha256": "sha256:b61b87efdf8eeb7739e3c9150ea203b9d1f71b8be8abc9f9a21ef37472db8131"
+      },
+      "legacy_compatibility": false,
+      "batch_slot": {
+        "section": "Structure",
+        "primary_target": "RELATIVE_CLAUSES",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "C",
+        "vocabulary_domain": "marine biology"
+      },
+      "planned_slot": {
+        "section": "Structure",
+        "primary_target": "RELATIVE_CLAUSES",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "C",
+        "vocabulary_domain": "marine biology"
+      },
+      "final_slot": {
+        "section": "Structure",
+        "primary_target": "RELATIVE_CLAUSES",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "C",
+        "vocabulary_domain": "marine biology"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1",
+        "validator_versions": {
+          "generator": "sha256:d26c437b1249fe4051cb0047b202fb04a17e819843eddb2c53afbd2947e56c8e",
+          "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+          "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+          "we_generator_v2": "sha256:0820bfcf653d1d39e1b3b9e1d7ff92695e5a7f56589886dd249697de7c7e208b",
+          "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+        },
+        "schema_versions": {
+          "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+          "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+          "we_generator_v2": "sha256:b5416d5b2569dcbcc884f074048eeb97e7ce469b9c001a20a3dcd55c842902e9",
+          "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+          "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+          "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+          "grammar_evidence": "sha256:c3016018600d95a7b9fb917fcc2d41c9c45f1f6a18f4dcbdfd7a4aa553b41432",
+          "solver_input_batch": "sha256:4a5b91ddd3ffe38a69b328394cebe88ccceb52f1fcfe75d34cb5d13912ffe22c",
+          "config": "sha256:824e274fdced5af2e76003ffd34149afd6e1f023249b2e286c7704aebaf71930"
+        },
+        "orchestrator_version": "sha256:c24fdc888629c141c68a64b9efd93aae6af81198f30915ab04479b17af1b3848",
+        "solver_blinding_version": "sha256:ad073cf630534d15cf9231e41a5fdf1df8a8ff2b3972ad13a4a3640250e2f89c",
+        "solver_blinding_cli_version": "sha256:2c8a39a2415327aba7f4bf58e1fc0f120a7b903ba59c9d8f4aa97b12d426af3d",
+        "reviewer_blinding_version": "sha256:6547662d19d2a8f1c37a6cd2c6c2b52c7d63d5e26bc177c2c9d6d28466eeea61",
+        "we_v2_versions": {
+          "generator_prompt": "sha256:c7c551473d5629855cae81578d862a8fd8e14ae3c21e7c6f651a0428a7691d2d",
+          "reviewer_prompt": "sha256:73c976609a1322ff477054db5a906872206af690ca4adbf7c6af2c19c36d1979",
+          "mutation_safety": "sha256:f21f3b87fae79f8a485675e103f3d671538a9cc5652f7de4f1707c84ca1dcdde",
+          "format_validator": "sha256:3f7e7f4aa0289fd82792ea601f65c9ee4232bc04165b88ecf338b26dce697927",
+          "format_planner": "sha256:4a42e76296f47aa8a29aaccaf8ea921c0659f28baa32a89179f27424012a2701"
+        },
+        "config_version": "sha256:711e0dc6e2238bf2adc720b3c8aa879d5f2daa82c47bd49e609e75d5857c3f7c"
+      },
+      "accepted_item": {
+        "item_id": "gen-struct-001",
+        "section": "Structure",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "marine biology",
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "stem": "The marine biologist ____ has spent the past decade cataloguing coral species along the Pacific coast.",
+        "options": {
+          "A": "which discovered the new coral species",
+          "B": "who discover the new coral species",
+          "C": "who discovered the new coral species",
+          "D": "discovered the new coral species"
+        },
+        "correct_answer": "C",
+        "explanation": {
+          "answer_explanation": "The gap in the relative clause is the subject and refers to a person, so the clause requires the subject relative pronoun 'who' together with a finite verb that agrees with the singular antecedent and matches the past time frame of the discovery.",
+          "distractor_rationales": {
+            "A": "'which' is used for non-human antecedents; 'the marine biologist' is a person, so 'who' is required instead.",
+            "B": "'discover' does not agree with the third-person singular subject that 'who' stands for ('the marine biologist'); the clause needs 'discovered'.",
+            "C": "correct — 'who' correctly introduces a subject relative clause referring to a person, and 'discovered' matches the intended past time frame.",
+            "D": "omitting the relative pronoun 'who' is only grammatical when the clause's gap is an object, not a subject; without it the sentence collapses into two finite clauses with no connector between them."
+          }
+        },
+        "taxonomy": {
+          "primary_target": "RELATIVE_CLAUSES",
+          "subtype": "restrictive relative clause with subject gap (who + finite verb)",
+          "secondary_features": [
+            "subject relative pronoun",
+            "past-tense embedded verb"
+          ]
+        }
+      },
+      "qa_audit": {
+        "item_id": "gen-struct-001",
+        "concept_id": "gen-struct-001",
+        "state": "ACCEPTED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "ACCEPTED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "retry_summary": {
+          "system": {
+            "generator": 0,
+            "reviewer": 0,
+            "solver": 0
+          },
+          "validation": {
+            "generator": 0,
+            "reviewer": 0,
+            "solver": 0
+          }
+        },
+        "reviewer": {
+          "item_id": "gen-struct-001",
+          "section": "Structure",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "C",
+          "generator_answer": "C",
+          "answer_match": true,
+          "reviewer_difficulty": "MEDIUM",
+          "generator_difficulty": "MEDIUM",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW"
+        },
+        "solver": {
+          "item_id": "gen-struct-001",
+          "section": "Structure",
+          "solver_answer": "C",
+          "confidence": "HIGH",
+          "reason": "Only 'who discovered the new coral species' works: the gap is the subject of the relative clause and the antecedent is a person, so it needs the subject relative pronoun 'who' plus a verb agreeing with it. A uses 'which', wrong for a human antecedent. B uses 'discover', which does not agree with the implied third-person singular subject. D omits the relative pronoun, which is only possible when the gap is an object, not a subject; without it the sentence has two finite verbs ('discovered'...'has spent') with no connector.",
+          "ambiguity_detected": false
+        },
+        "solver_input_sha256": "sha256:01d8e77f5ddd42b31a41ba6ec26d6a76f341af9138db575879f7514d047fd726",
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "options",
+            "section",
+            "stem"
+          ]
+        },
+        "consensus": {
+          "auto_accept": true,
+          "routing": "ACCEPTED",
+          "failed_conditions": [],
+          "disagreement_reasons": []
+        },
+        "acceptance_policy": {
+          "policy_schema_version": 1,
+          "allowed_solver_confidence": [
+            "HIGH",
+            "MEDIUM"
+          ],
+          "block_source_similarity_risk": [
+            "HIGH"
+          ],
+          "policy_sha256": "sha256:b61b87efdf8eeb7739e3c9150ea203b9d1f71b8be8abc9f9a21ef37472db8131"
+        },
+        "legacy_compatibility": false,
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: auto_accept"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1",
+          "validator_versions": {
+            "generator": "sha256:d26c437b1249fe4051cb0047b202fb04a17e819843eddb2c53afbd2947e56c8e",
+            "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+            "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+            "we_generator_v2": "sha256:0820bfcf653d1d39e1b3b9e1d7ff92695e5a7f56589886dd249697de7c7e208b",
+            "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+          },
+          "schema_versions": {
+            "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+            "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+            "we_generator_v2": "sha256:b5416d5b2569dcbcc884f074048eeb97e7ce469b9c001a20a3dcd55c842902e9",
+            "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+            "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+            "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+            "grammar_evidence": "sha256:c3016018600d95a7b9fb917fcc2d41c9c45f1f6a18f4dcbdfd7a4aa553b41432",
+            "solver_input_batch": "sha256:4a5b91ddd3ffe38a69b328394cebe88ccceb52f1fcfe75d34cb5d13912ffe22c",
+            "config": "sha256:824e274fdced5af2e76003ffd34149afd6e1f023249b2e286c7704aebaf71930"
+          },
+          "orchestrator_version": "sha256:c24fdc888629c141c68a64b9efd93aae6af81198f30915ab04479b17af1b3848",
+          "solver_blinding_version": "sha256:ad073cf630534d15cf9231e41a5fdf1df8a8ff2b3972ad13a4a3640250e2f89c",
+          "solver_blinding_cli_version": "sha256:2c8a39a2415327aba7f4bf58e1fc0f120a7b903ba59c9d8f4aa97b12d426af3d",
+          "reviewer_blinding_version": "sha256:6547662d19d2a8f1c37a6cd2c6c2b52c7d63d5e26bc177c2c9d6d28466eeea61",
+          "we_v2_versions": {
+            "generator_prompt": "sha256:c7c551473d5629855cae81578d862a8fd8e14ae3c21e7c6f651a0428a7691d2d",
+            "reviewer_prompt": "sha256:73c976609a1322ff477054db5a906872206af690ca4adbf7c6af2c19c36d1979",
+            "mutation_safety": "sha256:f21f3b87fae79f8a485675e103f3d671538a9cc5652f7de4f1707c84ca1dcdde",
+            "format_validator": "sha256:3f7e7f4aa0289fd82792ea601f65c9ee4232bc04165b88ecf338b26dce697927",
+            "format_planner": "sha256:4a42e76296f47aa8a29aaccaf8ea921c0659f28baa32a89179f27424012a2701"
+          },
+          "config_version": "sha256:711e0dc6e2238bf2adc720b3c8aa879d5f2daa82c47bd49e609e75d5857c3f7c"
+        },
+        "timestamps": {
+          "created": "2026-09-04T03:35:30.544632+00:00",
+          "updated": "2026-09-04T03:35:31.662014+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "gen-struct-002",
+      "concept_id": "gen-struct-002",
+      "section": "Structure",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "retry_summary": {
+        "system": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        },
+        "validation": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        }
+      },
+      "generator": {
+        "answer": "A"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "A",
+        "difficulty": "EASY"
+      },
+      "solver": {
+        "answer": "A",
+        "confidence": "HIGH"
+      },
+      "consensus": true,
+      "acceptance_policy": {
+        "policy_schema_version": 1,
+        "allowed_solver_confidence": [
+          "HIGH",
+          "MEDIUM"
+        ],
+        "block_source_similarity_risk": [
+          "HIGH"
+        ],
+        "policy_sha256": "sha256:b61b87efdf8eeb7739e3c9150ea203b9d1f71b8be8abc9f9a21ef37472db8131"
+      },
+      "legacy_compatibility": false,
+      "batch_slot": {
+        "section": "Structure",
+        "primary_target": "VERB_FORM_VOICE",
+        "difficulty": "EASY",
+        "correct_answer_position": "A",
+        "vocabulary_domain": "economic history"
+      },
+      "planned_slot": {
+        "section": "Structure",
+        "primary_target": "VERB_FORM_VOICE",
+        "difficulty": "EASY",
+        "correct_answer_position": "A",
+        "vocabulary_domain": "economic history"
+      },
+      "final_slot": {
+        "section": "Structure",
+        "primary_target": "VERB_FORM_VOICE",
+        "difficulty": "EASY",
+        "correct_answer_position": "A",
+        "vocabulary_domain": "economic history"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1",
+        "validator_versions": {
+          "generator": "sha256:d26c437b1249fe4051cb0047b202fb04a17e819843eddb2c53afbd2947e56c8e",
+          "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+          "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+          "we_generator_v2": "sha256:0820bfcf653d1d39e1b3b9e1d7ff92695e5a7f56589886dd249697de7c7e208b",
+          "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+        },
+        "schema_versions": {
+          "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+          "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+          "we_generator_v2": "sha256:b5416d5b2569dcbcc884f074048eeb97e7ce469b9c001a20a3dcd55c842902e9",
+          "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+          "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+          "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+          "grammar_evidence": "sha256:c3016018600d95a7b9fb917fcc2d41c9c45f1f6a18f4dcbdfd7a4aa553b41432",
+          "solver_input_batch": "sha256:4a5b91ddd3ffe38a69b328394cebe88ccceb52f1fcfe75d34cb5d13912ffe22c",
+          "config": "sha256:824e274fdced5af2e76003ffd34149afd6e1f023249b2e286c7704aebaf71930"
+        },
+        "orchestrator_version": "sha256:c24fdc888629c141c68a64b9efd93aae6af81198f30915ab04479b17af1b3848",
+        "solver_blinding_version": "sha256:ad073cf630534d15cf9231e41a5fdf1df8a8ff2b3972ad13a4a3640250e2f89c",
+        "solver_blinding_cli_version": "sha256:2c8a39a2415327aba7f4bf58e1fc0f120a7b903ba59c9d8f4aa97b12d426af3d",
+        "reviewer_blinding_version": "sha256:6547662d19d2a8f1c37a6cd2c6c2b52c7d63d5e26bc177c2c9d6d28466eeea61",
+        "we_v2_versions": {
+          "generator_prompt": "sha256:c7c551473d5629855cae81578d862a8fd8e14ae3c21e7c6f651a0428a7691d2d",
+          "reviewer_prompt": "sha256:73c976609a1322ff477054db5a906872206af690ca4adbf7c6af2c19c36d1979",
+          "mutation_safety": "sha256:f21f3b87fae79f8a485675e103f3d671538a9cc5652f7de4f1707c84ca1dcdde",
+          "format_validator": "sha256:3f7e7f4aa0289fd82792ea601f65c9ee4232bc04165b88ecf338b26dce697927",
+          "format_planner": "sha256:4a42e76296f47aa8a29aaccaf8ea921c0659f28baa32a89179f27424012a2701"
+        },
+        "config_version": "sha256:711e0dc6e2238bf2adc720b3c8aa879d5f2daa82c47bd49e609e75d5857c3f7c"
+      },
+      "accepted_item": {
+        "item_id": "gen-struct-002",
+        "section": "Structure",
+        "difficulty": "EASY",
+        "vocabulary_domain": "economic history",
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "stem": "During the early twentieth century, tariffs on imported steel ____ by the federal government in order to protect domestic manufacturers.",
+        "options": {
+          "A": "were raised significantly",
+          "B": "raised significantly",
+          "C": "was raised significantly",
+          "D": "are raised significantly"
+        },
+        "correct_answer": "A",
+        "explanation": {
+          "answer_explanation": "The agent phrase 'by the federal government' signals passive voice, and the subject 'tariffs' is plural, so the verb must be the plural past-tense passive form 'were raised.'",
+          "distractor_rationales": {
+            "A": "correct — 'were raised' correctly forms the plural past-tense passive, matching both the plural subject 'tariffs' and the 'by' agent phrase.",
+            "B": "'raised' without an auxiliary is active voice; with the agent phrase 'by the federal government' present, the passive auxiliary 'were' is required.",
+            "C": "'was' is singular, but the subject 'tariffs' is plural; the auxiliary must be 'were'.",
+            "D": "'are' is present tense, which is inconsistent with the past time frame established by 'During the early twentieth century.'"
+          }
+        },
+        "taxonomy": {
+          "primary_target": "VERB_FORM_VOICE",
+          "subtype": "passive voice in main clause with plural subject",
+          "secondary_features": [
+            "agent phrase 'by + NP'",
+            "past-tense passive"
+          ]
+        }
+      },
+      "qa_audit": {
+        "item_id": "gen-struct-002",
+        "concept_id": "gen-struct-002",
+        "state": "ACCEPTED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "ACCEPTED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "retry_summary": {
+          "system": {
+            "generator": 0,
+            "reviewer": 0,
+            "solver": 0
+          },
+          "validation": {
+            "generator": 0,
+            "reviewer": 0,
+            "solver": 0
+          }
+        },
+        "reviewer": {
+          "item_id": "gen-struct-002",
+          "section": "Structure",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "A",
+          "generator_answer": "A",
+          "answer_match": true,
+          "reviewer_difficulty": "EASY",
+          "generator_difficulty": "EASY",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW"
+        },
+        "solver": {
+          "item_id": "gen-struct-002",
+          "section": "Structure",
+          "solver_answer": "A",
+          "confidence": "HIGH",
+          "reason": "'were raised significantly' is the only option that is both passive (matching the 'by the federal government' agent phrase) and correctly agrees with the plural subject 'tariffs' in past tense. B lacks the passive auxiliary. C uses the singular auxiliary 'was' against a plural subject. D is present tense, inconsistent with 'During the early twentieth century'.",
+          "ambiguity_detected": false
+        },
+        "solver_input_sha256": "sha256:ef8c1d0c9f1ba4b587f8c686ff044cf5d72e90db43907d1d6755f18f3b355f1d",
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "options",
+            "section",
+            "stem"
+          ]
+        },
+        "consensus": {
+          "auto_accept": true,
+          "routing": "ACCEPTED",
+          "failed_conditions": [],
+          "disagreement_reasons": []
+        },
+        "acceptance_policy": {
+          "policy_schema_version": 1,
+          "allowed_solver_confidence": [
+            "HIGH",
+            "MEDIUM"
+          ],
+          "block_source_similarity_risk": [
+            "HIGH"
+          ],
+          "policy_sha256": "sha256:b61b87efdf8eeb7739e3c9150ea203b9d1f71b8be8abc9f9a21ef37472db8131"
+        },
+        "legacy_compatibility": false,
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: auto_accept"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1",
+          "validator_versions": {
+            "generator": "sha256:d26c437b1249fe4051cb0047b202fb04a17e819843eddb2c53afbd2947e56c8e",
+            "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+            "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+            "we_generator_v2": "sha256:0820bfcf653d1d39e1b3b9e1d7ff92695e5a7f56589886dd249697de7c7e208b",
+            "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+          },
+          "schema_versions": {
+            "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+            "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+            "we_generator_v2": "sha256:b5416d5b2569dcbcc884f074048eeb97e7ce469b9c001a20a3dcd55c842902e9",
+            "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+            "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+            "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+            "grammar_evidence": "sha256:c3016018600d95a7b9fb917fcc2d41c9c45f1f6a18f4dcbdfd7a4aa553b41432",
+            "solver_input_batch": "sha256:4a5b91ddd3ffe38a69b328394cebe88ccceb52f1fcfe75d34cb5d13912ffe22c",
+            "config": "sha256:824e274fdced5af2e76003ffd34149afd6e1f023249b2e286c7704aebaf71930"
+          },
+          "orchestrator_version": "sha256:c24fdc888629c141c68a64b9efd93aae6af81198f30915ab04479b17af1b3848",
+          "solver_blinding_version": "sha256:ad073cf630534d15cf9231e41a5fdf1df8a8ff2b3972ad13a4a3640250e2f89c",
+          "solver_blinding_cli_version": "sha256:2c8a39a2415327aba7f4bf58e1fc0f120a7b903ba59c9d8f4aa97b12d426af3d",
+          "reviewer_blinding_version": "sha256:6547662d19d2a8f1c37a6cd2c6c2b52c7d63d5e26bc177c2c9d6d28466eeea61",
+          "we_v2_versions": {
+            "generator_prompt": "sha256:c7c551473d5629855cae81578d862a8fd8e14ae3c21e7c6f651a0428a7691d2d",
+            "reviewer_prompt": "sha256:73c976609a1322ff477054db5a906872206af690ca4adbf7c6af2c19c36d1979",
+            "mutation_safety": "sha256:f21f3b87fae79f8a485675e103f3d671538a9cc5652f7de4f1707c84ca1dcdde",
+            "format_validator": "sha256:3f7e7f4aa0289fd82792ea601f65c9ee4232bc04165b88ecf338b26dce697927",
+            "format_planner": "sha256:4a42e76296f47aa8a29aaccaf8ea921c0659f28baa32a89179f27424012a2701"
+          },
+          "config_version": "sha256:711e0dc6e2238bf2adc720b3c8aa879d5f2daa82c47bd49e609e75d5857c3f7c"
+        },
+        "timestamps": {
+          "created": "2026-09-04T03:35:31.662143+00:00",
+          "updated": "2026-09-04T03:35:32.604033+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "gen-struct-003",
+      "concept_id": "gen-struct-003",
+      "section": "Structure",
+      "state": "REVISE_REQUIRED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "REVISE_REQUIRED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 1,
+      "retry_summary": {
+        "system": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        },
+        "validation": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        }
+      },
+      "generator": {
+        "answer": "D"
+      },
+      "reviewer": {
+        "verdict": "REVISE",
+        "independent_answer": "D",
+        "difficulty": "HARD"
+      },
+      "solver": null,
+      "consensus": false,
+      "acceptance_policy": null,
+      "legacy_compatibility": false,
+      "batch_slot": {
+        "section": "Structure",
+        "primary_target": "PARALLEL_STRUCTURE",
+        "difficulty": "HARD",
+        "correct_answer_position": "D",
+        "vocabulary_domain": "astronomy"
+      },
+      "planned_slot": {
+        "section": "Structure",
+        "primary_target": "PARALLEL_STRUCTURE",
+        "difficulty": "HARD",
+        "correct_answer_position": "D",
+        "vocabulary_domain": "astronomy"
+      },
+      "final_slot": {
+        "section": "Structure",
+        "primary_target": "PARALLEL_STRUCTURE",
+        "difficulty": "HARD",
+        "correct_answer_position": "D",
+        "vocabulary_domain": "astronomy"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1",
+        "validator_versions": {
+          "generator": "sha256:d26c437b1249fe4051cb0047b202fb04a17e819843eddb2c53afbd2947e56c8e",
+          "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+          "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+          "we_generator_v2": "sha256:0820bfcf653d1d39e1b3b9e1d7ff92695e5a7f56589886dd249697de7c7e208b",
+          "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+        },
+        "schema_versions": {
+          "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+          "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+          "we_generator_v2": "sha256:b5416d5b2569dcbcc884f074048eeb97e7ce469b9c001a20a3dcd55c842902e9",
+          "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+          "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+          "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+          "grammar_evidence": "sha256:c3016018600d95a7b9fb917fcc2d41c9c45f1f6a18f4dcbdfd7a4aa553b41432",
+          "solver_input_batch": "sha256:4a5b91ddd3ffe38a69b328394cebe88ccceb52f1fcfe75d34cb5d13912ffe22c",
+          "config": "sha256:824e274fdced5af2e76003ffd34149afd6e1f023249b2e286c7704aebaf71930"
+        },
+        "orchestrator_version": "sha256:c24fdc888629c141c68a64b9efd93aae6af81198f30915ab04479b17af1b3848",
+        "solver_blinding_version": "sha256:ad073cf630534d15cf9231e41a5fdf1df8a8ff2b3972ad13a4a3640250e2f89c",
+        "solver_blinding_cli_version": "sha256:2c8a39a2415327aba7f4bf58e1fc0f120a7b903ba59c9d8f4aa97b12d426af3d",
+        "reviewer_blinding_version": "sha256:6547662d19d2a8f1c37a6cd2c6c2b52c7d63d5e26bc177c2c9d6d28466eeea61",
+        "we_v2_versions": {
+          "generator_prompt": "sha256:c7c551473d5629855cae81578d862a8fd8e14ae3c21e7c6f651a0428a7691d2d",
+          "reviewer_prompt": "sha256:73c976609a1322ff477054db5a906872206af690ca4adbf7c6af2c19c36d1979",
+          "mutation_safety": "sha256:f21f3b87fae79f8a485675e103f3d671538a9cc5652f7de4f1707c84ca1dcdde",
+          "format_validator": "sha256:3f7e7f4aa0289fd82792ea601f65c9ee4232bc04165b88ecf338b26dce697927",
+          "format_planner": "sha256:4a42e76296f47aa8a29aaccaf8ea921c0659f28baa32a89179f27424012a2701"
+        },
+        "config_version": "sha256:711e0dc6e2238bf2adc720b3c8aa879d5f2daa82c47bd49e609e75d5857c3f7c"
+      },
+      "accepted_item": null,
+      "qa_audit": {
+        "item_id": "gen-struct-003",
+        "concept_id": "gen-struct-003",
+        "state": "REVISE_REQUIRED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "REVISE_REQUIRED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 1,
+        "retry_summary": {
+          "system": {
+            "generator": 0,
+            "reviewer": 0,
+            "solver": 0
+          },
+          "validation": {
+            "generator": 0,
+            "reviewer": 0,
+            "solver": 0
+          }
+        },
+        "reviewer": {
+          "item_id": "gen-struct-003",
+          "section": "Structure",
+          "verdict": "REVISE",
+          "critical_failure": false,
+          "independent_answer": "D",
+          "generator_answer": "D",
+          "answer_match": true,
+          "reviewer_difficulty": "HARD",
+          "generator_difficulty": "HARD",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "REVISE",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "REVISE",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [
+            {
+              "severity": "MAJOR",
+              "category": "distractor_marginal_validity",
+              "description": "Option C ('possesses also a thin, nitrogen-rich atmosphere...') postposes 'also' after the verb and before its object. This ordering is attested in more formal/literary registers ('the general possesses also a keen sense of humor') and is not unambiguously ungrammatical in the way the other three distractors are. A careful test-taker could defend it as merely stylistically marked rather than incorrect, which threatens the 'VALID = exactly 1' requirement (option C rates MARGINAL rather than a clean INVALID under independent review).",
+              "related_check": "answer_uniqueness"
+            }
+          ],
+          "revision_requirements": [
+            "Replace distractor C with an unambiguously ungrammatical word-order error (e.g., splitting the verb from its auxiliary, or placing 'also' somewhere no register accepts, such as 'possesses a thin also nitrogen-rich atmosphere'), so that only option D is defensible as correct."
+          ],
+          "source_similarity_risk": "LOW"
+        },
+        "solver": null,
+        "solver_input_sha256": null,
+        "leakage_check": null,
+        "consensus": null,
+        "acceptance_policy": null,
+        "legacy_compatibility": false,
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer REVISE (cycle 1/2); revision_requirements handed back to Generator, independent_answer withheld"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1",
+          "validator_versions": {
+            "generator": "sha256:d26c437b1249fe4051cb0047b202fb04a17e819843eddb2c53afbd2947e56c8e",
+            "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+            "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+            "we_generator_v2": "sha256:0820bfcf653d1d39e1b3b9e1d7ff92695e5a7f56589886dd249697de7c7e208b",
+            "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+          },
+          "schema_versions": {
+            "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+            "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+            "we_generator_v2": "sha256:b5416d5b2569dcbcc884f074048eeb97e7ce469b9c001a20a3dcd55c842902e9",
+            "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+            "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+            "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+            "grammar_evidence": "sha256:c3016018600d95a7b9fb917fcc2d41c9c45f1f6a18f4dcbdfd7a4aa553b41432",
+            "solver_input_batch": "sha256:4a5b91ddd3ffe38a69b328394cebe88ccceb52f1fcfe75d34cb5d13912ffe22c",
+            "config": "sha256:824e274fdced5af2e76003ffd34149afd6e1f023249b2e286c7704aebaf71930"
+          },
+          "orchestrator_version": "sha256:c24fdc888629c141c68a64b9efd93aae6af81198f30915ab04479b17af1b3848",
+          "solver_blinding_version": "sha256:ad073cf630534d15cf9231e41a5fdf1df8a8ff2b3972ad13a4a3640250e2f89c",
+          "solver_blinding_cli_version": "sha256:2c8a39a2415327aba7f4bf58e1fc0f120a7b903ba59c9d8f4aa97b12d426af3d",
+          "reviewer_blinding_version": "sha256:6547662d19d2a8f1c37a6cd2c6c2b52c7d63d5e26bc177c2c9d6d28466eeea61",
+          "we_v2_versions": {
+            "generator_prompt": "sha256:c7c551473d5629855cae81578d862a8fd8e14ae3c21e7c6f651a0428a7691d2d",
+            "reviewer_prompt": "sha256:73c976609a1322ff477054db5a906872206af690ca4adbf7c6af2c19c36d1979",
+            "mutation_safety": "sha256:f21f3b87fae79f8a485675e103f3d671538a9cc5652f7de4f1707c84ca1dcdde",
+            "format_validator": "sha256:3f7e7f4aa0289fd82792ea601f65c9ee4232bc04165b88ecf338b26dce697927",
+            "format_planner": "sha256:4a42e76296f47aa8a29aaccaf8ea921c0659f28baa32a89179f27424012a2701"
+          },
+          "config_version": "sha256:711e0dc6e2238bf2adc720b3c8aa879d5f2daa82c47bd49e609e75d5857c3f7c"
+        },
+        "timestamps": {
+          "created": "2026-09-04T03:35:32.604154+00:00",
+          "updated": "2026-09-04T03:35:33.368829+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "gen-we-001",
+      "concept_id": "gen-we-001",
+      "section": "Written Expression",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "retry_summary": {
+        "system": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        },
+        "validation": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        }
+      },
+      "generator": {
+        "answer": "B"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "B",
+        "difficulty": "EASY"
+      },
+      "solver": {
+        "answer": "B",
+        "confidence": "HIGH"
+      },
+      "consensus": true,
+      "acceptance_policy": {
+        "policy_schema_version": 1,
+        "allowed_solver_confidence": [
+          "HIGH",
+          "MEDIUM"
+        ],
+        "block_source_similarity_risk": [
+          "HIGH"
+        ],
+        "policy_sha256": "sha256:b61b87efdf8eeb7739e3c9150ea203b9d1f71b8be8abc9f9a21ef37472db8131"
+      },
+      "legacy_compatibility": false,
+      "batch_slot": {
+        "section": "Written Expression",
+        "primary_target": "WORD_CLASS_FORM",
+        "difficulty": "EASY",
+        "correct_answer_position": "B",
+        "vocabulary_domain": "geology",
+        "tested_error_type": "incorrect_part_of_speech",
+        "error_scope": "local"
+      },
+      "planned_slot": {
+        "section": "Written Expression",
+        "primary_target": "WORD_CLASS_FORM",
+        "difficulty": "EASY",
+        "correct_answer_position": "B",
+        "vocabulary_domain": "geology",
+        "tested_error_type": "incorrect_part_of_speech",
+        "error_scope": "local"
+      },
+      "final_slot": {
+        "section": "Written Expression",
+        "primary_target": "WORD_CLASS_FORM",
+        "difficulty": "EASY",
+        "correct_answer_position": "B",
+        "vocabulary_domain": "geology",
+        "tested_error_type": "incorrect_part_of_speech",
+        "error_scope": "local"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1",
+        "validator_versions": {
+          "generator": "sha256:d26c437b1249fe4051cb0047b202fb04a17e819843eddb2c53afbd2947e56c8e",
+          "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+          "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+          "we_generator_v2": "sha256:0820bfcf653d1d39e1b3b9e1d7ff92695e5a7f56589886dd249697de7c7e208b",
+          "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+        },
+        "schema_versions": {
+          "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+          "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+          "we_generator_v2": "sha256:b5416d5b2569dcbcc884f074048eeb97e7ce469b9c001a20a3dcd55c842902e9",
+          "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+          "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+          "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+          "grammar_evidence": "sha256:c3016018600d95a7b9fb917fcc2d41c9c45f1f6a18f4dcbdfd7a4aa553b41432",
+          "solver_input_batch": "sha256:4a5b91ddd3ffe38a69b328394cebe88ccceb52f1fcfe75d34cb5d13912ffe22c",
+          "config": "sha256:824e274fdced5af2e76003ffd34149afd6e1f023249b2e286c7704aebaf71930"
+        },
+        "orchestrator_version": "sha256:c24fdc888629c141c68a64b9efd93aae6af81198f30915ab04479b17af1b3848",
+        "solver_blinding_version": "sha256:ad073cf630534d15cf9231e41a5fdf1df8a8ff2b3972ad13a4a3640250e2f89c",
+        "solver_blinding_cli_version": "sha256:2c8a39a2415327aba7f4bf58e1fc0f120a7b903ba59c9d8f4aa97b12d426af3d",
+        "reviewer_blinding_version": "sha256:6547662d19d2a8f1c37a6cd2c6c2b52c7d63d5e26bc177c2c9d6d28466eeea61",
+        "we_v2_versions": {
+          "generator_prompt": "sha256:c7c551473d5629855cae81578d862a8fd8e14ae3c21e7c6f651a0428a7691d2d",
+          "reviewer_prompt": "sha256:73c976609a1322ff477054db5a906872206af690ca4adbf7c6af2c19c36d1979",
+          "mutation_safety": "sha256:f21f3b87fae79f8a485675e103f3d671538a9cc5652f7de4f1707c84ca1dcdde",
+          "format_validator": "sha256:3f7e7f4aa0289fd82792ea601f65c9ee4232bc04165b88ecf338b26dce697927",
+          "format_planner": "sha256:4a42e76296f47aa8a29aaccaf8ea921c0659f28baa32a89179f27424012a2701"
+        },
+        "config_version": "sha256:711e0dc6e2238bf2adc720b3c8aa879d5f2daa82c47bd49e609e75d5857c3f7c"
+      },
+      "accepted_item": {
+        "item_id": "gen-we-001",
+        "section": "Written Expression",
+        "difficulty": "EASY",
+        "vocabulary_domain": "geology",
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "sentence": "The geologist carefully examined the unusually rock formation before concluding that it had formed through volcanic activity.",
+        "marked_parts": {
+          "A": "carefully",
+          "B": "unusually",
+          "C": "had formed",
+          "D": "volcanic activity"
+        },
+        "correct_answer": "B",
+        "explanation": {
+          "answer_explanation": "'Unusually' is an adverb, but here it modifies the noun 'rock formation,' which requires the adjective form 'unusual.' The other marked parts are standard: 'carefully' correctly modifies the verb 'examined,' 'had formed' is an appropriate past-perfect form for an action prior to the conclusion, and 'volcanic activity' is a correctly formed noun phrase.",
+          "minimal_correction": "unusual"
+        },
+        "taxonomy": {
+          "primary_target": "WORD_CLASS_FORM",
+          "subtype": "adjective required, adverb used to modify a following noun",
+          "secondary_features": [
+            "noun-phrase-internal modifier",
+            "past perfect tense"
+          ],
+          "tested_error_type": "incorrect_part_of_speech",
+          "error_scope": "local"
+        }
+      },
+      "qa_audit": {
+        "item_id": "gen-we-001",
+        "concept_id": "gen-we-001",
+        "state": "ACCEPTED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "ACCEPTED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "retry_summary": {
+          "system": {
+            "generator": 0,
+            "reviewer": 0,
+            "solver": 0
+          },
+          "validation": {
+            "generator": 0,
+            "reviewer": 0,
+            "solver": 0
+          }
+        },
+        "reviewer": {
+          "item_id": "gen-we-001",
+          "section": "Written Expression",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "B",
+          "generator_answer": "B",
+          "answer_match": true,
+          "reviewer_difficulty": "EASY",
+          "generator_difficulty": "EASY",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "B",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "solver": {
+          "item_id": "gen-we-001",
+          "section": "Written Expression",
+          "solver_answer": "B",
+          "confidence": "HIGH",
+          "reason": "'unusually' is an adverb, but it modifies the noun 'rock formation', which requires the adjective 'unusual'. 'carefully' correctly modifies 'examined', 'had formed' is an appropriate past-perfect form for an action prior to the conclusion, and 'volcanic activity' is a well-formed noun phrase.",
+          "suggested_correction": "unusual",
+          "ambiguity_detected": false
+        },
+        "solver_input_sha256": "sha256:b008f2e3f463c5734f39dcd5b77b44dee20ca1301f7541e5beb7714148f37163",
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "marked_parts",
+            "section",
+            "sentence"
+          ]
+        },
+        "consensus": {
+          "auto_accept": true,
+          "routing": "ACCEPTED",
+          "failed_conditions": [],
+          "disagreement_reasons": []
+        },
+        "acceptance_policy": {
+          "policy_schema_version": 1,
+          "allowed_solver_confidence": [
+            "HIGH",
+            "MEDIUM"
+          ],
+          "block_source_similarity_risk": [
+            "HIGH"
+          ],
+          "policy_sha256": "sha256:b61b87efdf8eeb7739e3c9150ea203b9d1f71b8be8abc9f9a21ef37472db8131"
+        },
+        "legacy_compatibility": false,
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: auto_accept"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1",
+          "validator_versions": {
+            "generator": "sha256:d26c437b1249fe4051cb0047b202fb04a17e819843eddb2c53afbd2947e56c8e",
+            "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+            "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+            "we_generator_v2": "sha256:0820bfcf653d1d39e1b3b9e1d7ff92695e5a7f56589886dd249697de7c7e208b",
+            "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+          },
+          "schema_versions": {
+            "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+            "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+            "we_generator_v2": "sha256:b5416d5b2569dcbcc884f074048eeb97e7ce469b9c001a20a3dcd55c842902e9",
+            "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+            "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+            "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+            "grammar_evidence": "sha256:c3016018600d95a7b9fb917fcc2d41c9c45f1f6a18f4dcbdfd7a4aa553b41432",
+            "solver_input_batch": "sha256:4a5b91ddd3ffe38a69b328394cebe88ccceb52f1fcfe75d34cb5d13912ffe22c",
+            "config": "sha256:824e274fdced5af2e76003ffd34149afd6e1f023249b2e286c7704aebaf71930"
+          },
+          "orchestrator_version": "sha256:c24fdc888629c141c68a64b9efd93aae6af81198f30915ab04479b17af1b3848",
+          "solver_blinding_version": "sha256:ad073cf630534d15cf9231e41a5fdf1df8a8ff2b3972ad13a4a3640250e2f89c",
+          "solver_blinding_cli_version": "sha256:2c8a39a2415327aba7f4bf58e1fc0f120a7b903ba59c9d8f4aa97b12d426af3d",
+          "reviewer_blinding_version": "sha256:6547662d19d2a8f1c37a6cd2c6c2b52c7d63d5e26bc177c2c9d6d28466eeea61",
+          "we_v2_versions": {
+            "generator_prompt": "sha256:c7c551473d5629855cae81578d862a8fd8e14ae3c21e7c6f651a0428a7691d2d",
+            "reviewer_prompt": "sha256:73c976609a1322ff477054db5a906872206af690ca4adbf7c6af2c19c36d1979",
+            "mutation_safety": "sha256:f21f3b87fae79f8a485675e103f3d671538a9cc5652f7de4f1707c84ca1dcdde",
+            "format_validator": "sha256:3f7e7f4aa0289fd82792ea601f65c9ee4232bc04165b88ecf338b26dce697927",
+            "format_planner": "sha256:4a42e76296f47aa8a29aaccaf8ea921c0659f28baa32a89179f27424012a2701"
+          },
+          "config_version": "sha256:711e0dc6e2238bf2adc720b3c8aa879d5f2daa82c47bd49e609e75d5857c3f7c"
+        },
+        "timestamps": {
+          "created": "2026-09-04T03:35:33.368899+00:00",
+          "updated": "2026-09-04T03:35:34.315757+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "gen-we-002",
+      "concept_id": "gen-we-002",
+      "section": "Written Expression",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "retry_summary": {
+        "system": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        },
+        "validation": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        }
+      },
+      "generator": {
+        "answer": "A"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "A",
+        "difficulty": "MEDIUM"
+      },
+      "solver": {
+        "answer": "A",
+        "confidence": "HIGH"
+      },
+      "consensus": true,
+      "acceptance_policy": {
+        "policy_schema_version": 1,
+        "allowed_solver_confidence": [
+          "HIGH",
+          "MEDIUM"
+        ],
+        "block_source_similarity_risk": [
+          "HIGH"
+        ],
+        "policy_sha256": "sha256:b61b87efdf8eeb7739e3c9150ea203b9d1f71b8be8abc9f9a21ef37472db8131"
+      },
+      "legacy_compatibility": false,
+      "batch_slot": {
+        "section": "Written Expression",
+        "primary_target": "CLAUSE_STRUCTURE",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "A",
+        "vocabulary_domain": "urban planning",
+        "tested_error_type": "agreement_error",
+        "error_scope": "clause_level"
+      },
+      "planned_slot": {
+        "section": "Written Expression",
+        "primary_target": "CLAUSE_STRUCTURE",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "A",
+        "vocabulary_domain": "urban planning",
+        "tested_error_type": "agreement_error",
+        "error_scope": "clause_level"
+      },
+      "final_slot": {
+        "section": "Written Expression",
+        "primary_target": "CLAUSE_STRUCTURE",
+        "difficulty": "MEDIUM",
+        "correct_answer_position": "A",
+        "vocabulary_domain": "urban planning",
+        "tested_error_type": "agreement_error",
+        "error_scope": "clause_level"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1",
+        "validator_versions": {
+          "generator": "sha256:d26c437b1249fe4051cb0047b202fb04a17e819843eddb2c53afbd2947e56c8e",
+          "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+          "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+          "we_generator_v2": "sha256:0820bfcf653d1d39e1b3b9e1d7ff92695e5a7f56589886dd249697de7c7e208b",
+          "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+        },
+        "schema_versions": {
+          "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+          "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+          "we_generator_v2": "sha256:b5416d5b2569dcbcc884f074048eeb97e7ce469b9c001a20a3dcd55c842902e9",
+          "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+          "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+          "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+          "grammar_evidence": "sha256:c3016018600d95a7b9fb917fcc2d41c9c45f1f6a18f4dcbdfd7a4aa553b41432",
+          "solver_input_batch": "sha256:4a5b91ddd3ffe38a69b328394cebe88ccceb52f1fcfe75d34cb5d13912ffe22c",
+          "config": "sha256:824e274fdced5af2e76003ffd34149afd6e1f023249b2e286c7704aebaf71930"
+        },
+        "orchestrator_version": "sha256:c24fdc888629c141c68a64b9efd93aae6af81198f30915ab04479b17af1b3848",
+        "solver_blinding_version": "sha256:ad073cf630534d15cf9231e41a5fdf1df8a8ff2b3972ad13a4a3640250e2f89c",
+        "solver_blinding_cli_version": "sha256:2c8a39a2415327aba7f4bf58e1fc0f120a7b903ba59c9d8f4aa97b12d426af3d",
+        "reviewer_blinding_version": "sha256:6547662d19d2a8f1c37a6cd2c6c2b52c7d63d5e26bc177c2c9d6d28466eeea61",
+        "we_v2_versions": {
+          "generator_prompt": "sha256:c7c551473d5629855cae81578d862a8fd8e14ae3c21e7c6f651a0428a7691d2d",
+          "reviewer_prompt": "sha256:73c976609a1322ff477054db5a906872206af690ca4adbf7c6af2c19c36d1979",
+          "mutation_safety": "sha256:f21f3b87fae79f8a485675e103f3d671538a9cc5652f7de4f1707c84ca1dcdde",
+          "format_validator": "sha256:3f7e7f4aa0289fd82792ea601f65c9ee4232bc04165b88ecf338b26dce697927",
+          "format_planner": "sha256:4a42e76296f47aa8a29aaccaf8ea921c0659f28baa32a89179f27424012a2701"
+        },
+        "config_version": "sha256:711e0dc6e2238bf2adc720b3c8aa879d5f2daa82c47bd49e609e75d5857c3f7c"
+      },
+      "accepted_item": {
+        "item_id": "gen-we-002",
+        "section": "Written Expression",
+        "difficulty": "MEDIUM",
+        "vocabulary_domain": "urban planning",
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "sentence": "The proposal for new bicycle lanes throughout downtown neighborhoods have generated considerable attention from residents and city planners who study traffic patterns.",
+        "marked_parts": {
+          "A": "have",
+          "B": "considerable",
+          "C": "attention from residents",
+          "D": "who"
+        },
+        "correct_answer": "A",
+        "explanation": {
+          "answer_explanation": "The subject of the clause is the singular noun 'proposal'; the intervening plural phrase 'bicycle lanes throughout downtown neighborhoods' does not change the grammatical number of the subject, so the verb must be the singular 'has,' not 'have.' The other marked parts are standard: 'considerable' correctly modifies 'attention,' 'attention from residents' is a well-formed noun phrase, and 'who' correctly introduces a relative clause referring to the plural, human antecedent 'city planners.'",
+          "minimal_correction": "has"
+        },
+        "taxonomy": {
+          "primary_target": "CLAUSE_STRUCTURE",
+          "subtype": "subject-verb agreement across intervening phrase",
+          "secondary_features": [
+            "relative clause with 'who'",
+            "plural intervening noun phrase"
+          ],
+          "tested_error_type": "agreement_error",
+          "error_scope": "clause_level"
+        }
+      },
+      "qa_audit": {
+        "item_id": "gen-we-002",
+        "concept_id": "gen-we-002",
+        "state": "ACCEPTED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "ACCEPTED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "retry_summary": {
+          "system": {
+            "generator": 0,
+            "reviewer": 0,
+            "solver": 0
+          },
+          "validation": {
+            "generator": 0,
+            "reviewer": 0,
+            "solver": 0
+          }
+        },
+        "reviewer": {
+          "item_id": "gen-we-002",
+          "section": "Written Expression",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "A",
+          "generator_answer": "A",
+          "answer_match": true,
+          "reviewer_difficulty": "MEDIUM",
+          "generator_difficulty": "MEDIUM",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "A",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "solver": {
+          "item_id": "gen-we-002",
+          "section": "Written Expression",
+          "solver_answer": "A",
+          "confidence": "HIGH",
+          "reason": "The subject of the clause is the singular noun 'proposal'; the intervening plural phrase 'bicycle lanes throughout downtown neighborhoods' does not change its number, so the verb must be 'has', not 'have'. 'considerable' correctly modifies 'attention', 'attention from residents' is a well-formed noun phrase, and 'who' correctly introduces a relative clause for the plural human antecedent 'city planners'.",
+          "suggested_correction": "has",
+          "ambiguity_detected": false
+        },
+        "solver_input_sha256": "sha256:7233c24b4104ab24c47b823a77d7a2a0aceef65481b185b8cffd19b83f56967a",
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "marked_parts",
+            "section",
+            "sentence"
+          ]
+        },
+        "consensus": {
+          "auto_accept": true,
+          "routing": "ACCEPTED",
+          "failed_conditions": [],
+          "disagreement_reasons": []
+        },
+        "acceptance_policy": {
+          "policy_schema_version": 1,
+          "allowed_solver_confidence": [
+            "HIGH",
+            "MEDIUM"
+          ],
+          "block_source_similarity_risk": [
+            "HIGH"
+          ],
+          "policy_sha256": "sha256:b61b87efdf8eeb7739e3c9150ea203b9d1f71b8be8abc9f9a21ef37472db8131"
+        },
+        "legacy_compatibility": false,
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: auto_accept"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1",
+          "validator_versions": {
+            "generator": "sha256:d26c437b1249fe4051cb0047b202fb04a17e819843eddb2c53afbd2947e56c8e",
+            "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+            "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+            "we_generator_v2": "sha256:0820bfcf653d1d39e1b3b9e1d7ff92695e5a7f56589886dd249697de7c7e208b",
+            "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+          },
+          "schema_versions": {
+            "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+            "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+            "we_generator_v2": "sha256:b5416d5b2569dcbcc884f074048eeb97e7ce469b9c001a20a3dcd55c842902e9",
+            "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+            "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+            "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+            "grammar_evidence": "sha256:c3016018600d95a7b9fb917fcc2d41c9c45f1f6a18f4dcbdfd7a4aa553b41432",
+            "solver_input_batch": "sha256:4a5b91ddd3ffe38a69b328394cebe88ccceb52f1fcfe75d34cb5d13912ffe22c",
+            "config": "sha256:824e274fdced5af2e76003ffd34149afd6e1f023249b2e286c7704aebaf71930"
+          },
+          "orchestrator_version": "sha256:c24fdc888629c141c68a64b9efd93aae6af81198f30915ab04479b17af1b3848",
+          "solver_blinding_version": "sha256:ad073cf630534d15cf9231e41a5fdf1df8a8ff2b3972ad13a4a3640250e2f89c",
+          "solver_blinding_cli_version": "sha256:2c8a39a2415327aba7f4bf58e1fc0f120a7b903ba59c9d8f4aa97b12d426af3d",
+          "reviewer_blinding_version": "sha256:6547662d19d2a8f1c37a6cd2c6c2b52c7d63d5e26bc177c2c9d6d28466eeea61",
+          "we_v2_versions": {
+            "generator_prompt": "sha256:c7c551473d5629855cae81578d862a8fd8e14ae3c21e7c6f651a0428a7691d2d",
+            "reviewer_prompt": "sha256:73c976609a1322ff477054db5a906872206af690ca4adbf7c6af2c19c36d1979",
+            "mutation_safety": "sha256:f21f3b87fae79f8a485675e103f3d671538a9cc5652f7de4f1707c84ca1dcdde",
+            "format_validator": "sha256:3f7e7f4aa0289fd82792ea601f65c9ee4232bc04165b88ecf338b26dce697927",
+            "format_planner": "sha256:4a42e76296f47aa8a29aaccaf8ea921c0659f28baa32a89179f27424012a2701"
+          },
+          "config_version": "sha256:711e0dc6e2238bf2adc720b3c8aa879d5f2daa82c47bd49e609e75d5857c3f7c"
+        },
+        "timestamps": {
+          "created": "2026-09-04T03:35:34.315861+00:00",
+          "updated": "2026-09-04T03:35:35.338333+00:00"
+        }
+      }
+    },
+    {
+      "item_id": "gen-we-003",
+      "concept_id": "gen-we-003",
+      "section": "Written Expression",
+      "state": "ACCEPTED",
+      "state_history": [
+        "GENERATED",
+        "REVIEWING",
+        "SOLVING",
+        "ACCEPTED"
+      ],
+      "generation_attempt": 1,
+      "revision_count": 0,
+      "retry_summary": {
+        "system": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        },
+        "validation": {
+          "generator": 0,
+          "reviewer": 0,
+          "solver": 0
+        }
+      },
+      "generator": {
+        "answer": "D"
+      },
+      "reviewer": {
+        "verdict": "PASS",
+        "independent_answer": "D",
+        "difficulty": "HARD"
+      },
+      "solver": {
+        "answer": "D",
+        "confidence": "MEDIUM"
+      },
+      "consensus": true,
+      "acceptance_policy": {
+        "policy_schema_version": 1,
+        "allowed_solver_confidence": [
+          "HIGH",
+          "MEDIUM"
+        ],
+        "block_source_similarity_risk": [
+          "HIGH"
+        ],
+        "policy_sha256": "sha256:b61b87efdf8eeb7739e3c9150ea203b9d1f71b8be8abc9f9a21ef37472db8131"
+      },
+      "legacy_compatibility": false,
+      "batch_slot": {
+        "section": "Written Expression",
+        "primary_target": "COMPARATIVES_DEGREE",
+        "difficulty": "HARD",
+        "correct_answer_position": "D",
+        "vocabulary_domain": "meteorology",
+        "tested_error_type": "wrong_degree_form",
+        "error_scope": "sentence_level"
+      },
+      "planned_slot": {
+        "section": "Written Expression",
+        "primary_target": "COMPARATIVES_DEGREE",
+        "difficulty": "HARD",
+        "correct_answer_position": "D",
+        "vocabulary_domain": "meteorology",
+        "tested_error_type": "wrong_degree_form",
+        "error_scope": "sentence_level"
+      },
+      "final_slot": {
+        "section": "Written Expression",
+        "primary_target": "COMPARATIVES_DEGREE",
+        "difficulty": "HARD",
+        "correct_answer_position": "D",
+        "vocabulary_domain": "meteorology",
+        "tested_error_type": "wrong_degree_form",
+        "error_scope": "sentence_level"
+      },
+      "versions": {
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "generator_version": "sha256:3567f2b6e246",
+        "reviewer_version": "sha256:e4142013a3cb",
+        "solver_version": "sha256:df1200bed2b1",
+        "validator_versions": {
+          "generator": "sha256:d26c437b1249fe4051cb0047b202fb04a17e819843eddb2c53afbd2947e56c8e",
+          "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+          "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+          "we_generator_v2": "sha256:0820bfcf653d1d39e1b3b9e1d7ff92695e5a7f56589886dd249697de7c7e208b",
+          "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+        },
+        "schema_versions": {
+          "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+          "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+          "we_generator_v2": "sha256:b5416d5b2569dcbcc884f074048eeb97e7ce469b9c001a20a3dcd55c842902e9",
+          "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+          "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+          "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+          "grammar_evidence": "sha256:c3016018600d95a7b9fb917fcc2d41c9c45f1f6a18f4dcbdfd7a4aa553b41432",
+          "solver_input_batch": "sha256:4a5b91ddd3ffe38a69b328394cebe88ccceb52f1fcfe75d34cb5d13912ffe22c",
+          "config": "sha256:824e274fdced5af2e76003ffd34149afd6e1f023249b2e286c7704aebaf71930"
+        },
+        "orchestrator_version": "sha256:c24fdc888629c141c68a64b9efd93aae6af81198f30915ab04479b17af1b3848",
+        "solver_blinding_version": "sha256:ad073cf630534d15cf9231e41a5fdf1df8a8ff2b3972ad13a4a3640250e2f89c",
+        "solver_blinding_cli_version": "sha256:2c8a39a2415327aba7f4bf58e1fc0f120a7b903ba59c9d8f4aa97b12d426af3d",
+        "reviewer_blinding_version": "sha256:6547662d19d2a8f1c37a6cd2c6c2b52c7d63d5e26bc177c2c9d6d28466eeea61",
+        "we_v2_versions": {
+          "generator_prompt": "sha256:c7c551473d5629855cae81578d862a8fd8e14ae3c21e7c6f651a0428a7691d2d",
+          "reviewer_prompt": "sha256:73c976609a1322ff477054db5a906872206af690ca4adbf7c6af2c19c36d1979",
+          "mutation_safety": "sha256:f21f3b87fae79f8a485675e103f3d671538a9cc5652f7de4f1707c84ca1dcdde",
+          "format_validator": "sha256:3f7e7f4aa0289fd82792ea601f65c9ee4232bc04165b88ecf338b26dce697927",
+          "format_planner": "sha256:4a42e76296f47aa8a29aaccaf8ea921c0659f28baa32a89179f27424012a2701"
+        },
+        "config_version": "sha256:711e0dc6e2238bf2adc720b3c8aa879d5f2daa82c47bd49e609e75d5857c3f7c"
+      },
+      "accepted_item": {
+        "item_id": "gen-we-003",
+        "section": "Written Expression",
+        "difficulty": "HARD",
+        "vocabulary_domain": "meteorology",
+        "spec_version": "1.0.0",
+        "taxonomy_version": "1.1",
+        "sentence": "Meteorologists compared two competing radar systems and concluded that, of the two, the newer model was significantly the most reliable during periods of heavy precipitation.",
+        "marked_parts": {
+          "A": "compared",
+          "B": "the newer model",
+          "C": "significantly",
+          "D": "the most"
+        },
+        "correct_answer": "D",
+        "explanation": {
+          "answer_explanation": "Only two radar systems are being compared, as established by 'of the two' earlier in the sentence, so the comparative form 'more reliable' is required; the superlative 'the most' is reserved for comparisons among three or more items. The other marked parts are standard: 'compared' is a correctly formed past-tense verb, 'the newer model' is a well-formed noun phrase, and 'significantly' correctly modifies the degree expression.",
+          "minimal_correction": "more"
+        },
+        "taxonomy": {
+          "primary_target": "COMPARATIVES_DEGREE",
+          "subtype": "superlative used for a two-item comparison (should be comparative)",
+          "secondary_features": [
+            "adverb of degree 'significantly'",
+            "two-item comparison established earlier in the sentence"
+          ],
+          "tested_error_type": "wrong_degree_form",
+          "error_scope": "sentence_level"
+        }
+      },
+      "qa_audit": {
+        "item_id": "gen-we-003",
+        "concept_id": "gen-we-003",
+        "state": "ACCEPTED",
+        "state_history": [
+          "GENERATED",
+          "REVIEWING",
+          "SOLVING",
+          "ACCEPTED"
+        ],
+        "generation_attempt": 1,
+        "revision_count": 0,
+        "retry_summary": {
+          "system": {
+            "generator": 0,
+            "reviewer": 0,
+            "solver": 0
+          },
+          "validation": {
+            "generator": 0,
+            "reviewer": 0,
+            "solver": 0
+          }
+        },
+        "reviewer": {
+          "item_id": "gen-we-003",
+          "section": "Written Expression",
+          "verdict": "PASS",
+          "critical_failure": false,
+          "independent_answer": "D",
+          "generator_answer": "D",
+          "answer_match": true,
+          "reviewer_difficulty": "HARD",
+          "generator_difficulty": "HARD",
+          "difficulty_mismatch": false,
+          "checks": {
+            "grammar_validity": "PASS",
+            "answer_uniqueness": "PASS",
+            "target_alignment": "PASS",
+            "naturalness": "PASS",
+            "toefl_style": "PASS",
+            "distractor_quality": "PASS",
+            "metadata_consistency": "PASS"
+          },
+          "issues": [],
+          "revision_requirements": [],
+          "source_similarity_risk": "LOW",
+          "detected_error_count": 1,
+          "detected_error_position": "D",
+          "non_error_parts_valid": true,
+          "minimal_correction_valid": true
+        },
+        "solver": {
+          "item_id": "gen-we-003",
+          "section": "Written Expression",
+          "solver_answer": "D",
+          "confidence": "MEDIUM",
+          "reason": "'of the two' earlier in the sentence establishes that only two radar systems are being compared, so the comparative 'more reliable' is required; the superlative 'the most' is reserved for comparisons among three or more items. 'compared', 'the newer model', and 'significantly' are all standard as written.",
+          "suggested_correction": "more",
+          "ambiguity_detected": false
+        },
+        "solver_input_sha256": "sha256:3e67fa522ae0cf3d0e351222b769705590b5d039e7ab5d45235d6238df0003c2",
+        "leakage_check": {
+          "ok": true,
+          "problems": [],
+          "blinded_keys": [
+            "item_id",
+            "marked_parts",
+            "section",
+            "sentence"
+          ]
+        },
+        "consensus": {
+          "auto_accept": true,
+          "routing": "ACCEPTED",
+          "failed_conditions": [],
+          "disagreement_reasons": []
+        },
+        "acceptance_policy": {
+          "policy_schema_version": 1,
+          "allowed_solver_confidence": [
+            "HIGH",
+            "MEDIUM"
+          ],
+          "block_source_similarity_risk": [
+            "HIGH"
+          ],
+          "policy_sha256": "sha256:b61b87efdf8eeb7739e3c9150ea203b9d1f71b8be8abc9f9a21ef37472db8131"
+        },
+        "legacy_compatibility": false,
+        "failure": null,
+        "notes": [
+          "generator output passed schema validation",
+          "reviewer PASS -> proceeding to Solver",
+          "consensus routing: auto_accept"
+        ],
+        "versions": {
+          "spec_version": "1.0.0",
+          "taxonomy_version": "1.1",
+          "generator_version": "sha256:3567f2b6e246",
+          "reviewer_version": "sha256:e4142013a3cb",
+          "solver_version": "sha256:df1200bed2b1",
+          "validator_versions": {
+            "generator": "sha256:d26c437b1249fe4051cb0047b202fb04a17e819843eddb2c53afbd2947e56c8e",
+            "reviewer": "sha256:3ffd9beea8ea8eddeccb42c6a331e4a8749551f2f5245ce41e17381c45fce319",
+            "solver": "sha256:ea0242f5e84cfa6804a23a796a10dc4367b4174b38852ac0bc1f0f9d907b7e99",
+            "we_generator_v2": "sha256:0820bfcf653d1d39e1b3b9e1d7ff92695e5a7f56589886dd249697de7c7e208b",
+            "we_reviewer_v2": "sha256:b25f1bf549ad612dd475196d4b9cc59820a97e5998780120df3c0276753619d4"
+          },
+          "schema_versions": {
+            "generator_structure": "sha256:a6780b8c3c59db0b836c3a5eb3ba8beeea4efc380d2514b62e3dd4391398108a",
+            "generator_written_expression": "sha256:82abb06e8c80f62975278620827272b24a6eaae4b7f42c406c94fa1ac7285410",
+            "we_generator_v2": "sha256:b5416d5b2569dcbcc884f074048eeb97e7ce469b9c001a20a3dcd55c842902e9",
+            "reviewer": "sha256:b5c44b822ca73d9088cf3d89692d3d8bfba649ce1dd5317a0a39019c433332b7",
+            "we_reviewer_v2": "sha256:ee1ef0a7c0ac0a668be8561cc9888cac51b07357137c53d4f16bab1f1063693f",
+            "solver": "sha256:8f7b159d5f26cce43688799caf64168eee8a6316e7b4ef35a560999cc7034d99",
+            "grammar_evidence": "sha256:c3016018600d95a7b9fb917fcc2d41c9c45f1f6a18f4dcbdfd7a4aa553b41432",
+            "solver_input_batch": "sha256:4a5b91ddd3ffe38a69b328394cebe88ccceb52f1fcfe75d34cb5d13912ffe22c",
+            "config": "sha256:824e274fdced5af2e76003ffd34149afd6e1f023249b2e286c7704aebaf71930"
+          },
+          "orchestrator_version": "sha256:c24fdc888629c141c68a64b9efd93aae6af81198f30915ab04479b17af1b3848",
+          "solver_blinding_version": "sha256:ad073cf630534d15cf9231e41a5fdf1df8a8ff2b3972ad13a4a3640250e2f89c",
+          "solver_blinding_cli_version": "sha256:2c8a39a2415327aba7f4bf58e1fc0f120a7b903ba59c9d8f4aa97b12d426af3d",
+          "reviewer_blinding_version": "sha256:6547662d19d2a8f1c37a6cd2c6c2b52c7d63d5e26bc177c2c9d6d28466eeea61",
+          "we_v2_versions": {
+            "generator_prompt": "sha256:c7c551473d5629855cae81578d862a8fd8e14ae3c21e7c6f651a0428a7691d2d",
+            "reviewer_prompt": "sha256:73c976609a1322ff477054db5a906872206af690ca4adbf7c6af2c19c36d1979",
+            "mutation_safety": "sha256:f21f3b87fae79f8a485675e103f3d671538a9cc5652f7de4f1707c84ca1dcdde",
+            "format_validator": "sha256:3f7e7f4aa0289fd82792ea601f65c9ee4232bc04165b88ecf338b26dce697927",
+            "format_planner": "sha256:4a42e76296f47aa8a29aaccaf8ea921c0659f28baa32a89179f27424012a2701"
+          },
+          "config_version": "sha256:711e0dc6e2238bf2adc720b3c8aa879d5f2daa82c47bd49e609e75d5857c3f7c"
+        },
+        "timestamps": {
+          "created": "2026-09-04T03:35:35.338441+00:00",
+          "updated": "2026-09-04T03:35:36.582728+00:00"
+        }
+      }
+    }
+  ],
+  "batch_summary": {
+    "planned": {
+      "primary_target": {
+        "RELATIVE_CLAUSES": 1,
+        "VERB_FORM_VOICE": 1,
+        "PARALLEL_STRUCTURE": 1,
+        "WORD_CLASS_FORM": 1,
+        "CLAUSE_STRUCTURE": 1,
+        "COMPARATIVES_DEGREE": 1
+      },
+      "difficulty": {
+        "MEDIUM": 2,
+        "EASY": 2,
+        "HARD": 2
+      },
+      "correct_answer_position": {
+        "C": 1,
+        "A": 2,
+        "D": 2,
+        "B": 1
+      },
+      "vocabulary_domain": {
+        "marine biology": 1,
+        "economic history": 1,
+        "astronomy": 1,
+        "geology": 1,
+        "urban planning": 1,
+        "meteorology": 1
+      },
+      "tested_error_type": {
+        "incorrect_part_of_speech": 1,
+        "agreement_error": 1,
+        "wrong_degree_form": 1
+      }
+    },
+    "actual_accepted": {
+      "primary_target": {
+        "RELATIVE_CLAUSES": 1,
+        "VERB_FORM_VOICE": 1,
+        "WORD_CLASS_FORM": 1,
+        "CLAUSE_STRUCTURE": 1,
+        "COMPARATIVES_DEGREE": 1
+      },
+      "difficulty": {
+        "MEDIUM": 2,
+        "EASY": 2,
+        "HARD": 1
+      },
+      "correct_answer_position": {
+        "C": 1,
+        "A": 2,
+        "B": 1,
+        "D": 1
+      },
+      "vocabulary_domain": {
+        "marine biology": 1,
+        "economic history": 1,
+        "geology": 1,
+        "urban planning": 1,
+        "meteorology": 1
+      },
+      "tested_error_type": {
+        "incorrect_part_of_speech": 1,
+        "agreement_error": 1,
+        "wrong_degree_form": 1
+      }
+    }
+  },
+  "solver_skip_log": [
+    "gen-struct-003: solver fixture data exists but was NOT sent to Solver (reviewer verdict != PASS; candidate state=REVISE_REQUIRED)"
+  ]
+}

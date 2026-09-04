@@ -15,9 +15,12 @@ from unittest.mock import patch
 from runtime.adapters import InvocationRequest, InvocationResult
 from structure.blinding import blind_input_errors, build_blind_input
 from structure.contracts import (
+    BLANK_MARKER,
     LETTERS,
+    build_completed_sentence,
     canonicalize_reviewer_output,
     canonicalize_solver_output,
+    count_words,
     normalized_option_surface,
     post_blind_comparison,
     reviewer_difficulty_diagnostic_reasons,
@@ -50,13 +53,33 @@ STRUCTURE_ITEM_SCHEMA = ROOT / "structure" / "schemas" / "generator_item.schema.
 STRUCTURE_OUTPUT_SCHEMA = ROOT / "structure" / "schemas" / "generator_output.schema.json"
 
 
+_STEM_FILLER_WORDS = (
+    "in", "the", "archive", "during", "the", "extended", "review", "process",
+    "for", "the", "ongoing", "study", "across", "multiple", "sessions", "before",
+    "the", "final", "report", "was", "submitted", "to", "the", "committee",
+)
+
+
+def stem_for_word_count(word_count: int) -> str:
+    """Build a fixture stem whose completed (blank -> 'is') word count is exact."""
+
+    words = ["The", "researcher", BLANK_MARKER, "the", "documented", "pattern"]
+    index = 0
+    while len(words) < word_count:
+        words.append(_STEM_FILLER_WORDS[index % len(_STEM_FILLER_WORDS)])
+        index += 1
+    words = words[:word_count]
+    words[-1] = f"{words[-1]}."
+    return " ".join(words)
+
+
 def generator_fixture(plan: dict[str, Any]) -> dict[str, Any]:
     return {"items": [{
         "item_id": planned["item_id"], "section": "Structure", "primary_target": planned["primary_target"],
         "subtype": f"{planned['primary_target']} generator-authored construction {index + 1}",
         "secondary_features": ["academic register"],
         "difficulty": planned["difficulty"], "vocabulary_domain": f"generator-owned domain {index + 1}",
-        "stem": "The researcher ____ the documented pattern in the archive.",
+        "stem": stem_for_word_count(planned["target_word_count"]),
         "options": {"A": "is", "B": "are", "C": "be", "D": "being"}, "correct_answer": "A",
         "answer_explanation": "The singular subject requires the finite form is.",
         "distractor_rationales": {
@@ -129,7 +152,14 @@ class FixtureRuntime:
     cli_version = "offline-fixture"
     model = "offline-fixture"
 
-    def __init__(self, *, reviewer: dict[str, Any] | None = None, solver: dict[str, Any] | None = None) -> None:
+    def __init__(
+        self,
+        *,
+        generator: dict[str, Any] | None = None,
+        reviewer: dict[str, Any] | None = None,
+        solver: dict[str, Any] | None = None,
+    ) -> None:
+        self.generator_override = generator
         self.reviewer_override = reviewer
         self.solver_override = solver
         self.requests: list[InvocationRequest] = []
@@ -138,7 +168,7 @@ class FixtureRuntime:
         self.requests.append(request)
         payload = json.loads(request.prompt.split("INPUT_JSON:\n", 1)[1])
         if request.stage == "structure_generator":
-            parsed = generator_fixture(payload)
+            parsed = self.generator_override or generator_fixture(payload)
         elif request.stage == "structure_reviewer":
             parsed = self.reviewer_override or reviewer_fixture(payload)
         elif request.stage == "structure_solver":
@@ -1137,7 +1167,7 @@ class StructurePromptTests(unittest.TestCase):
 
     def test_planner_validation_and_pipeline_boundaries_are_protected(self) -> None:
         expected_hashes = {
-            "structure/contracts.py": "6bc58c1f0f8729b34eaba694e62d08af278d582f7df95708186024483cbb03f6",
+            "structure/contracts.py": "514a736da84c7868f6c8162c4903ca3d1b3bfea1196ab8ca4b3830da0fd310ae",
             "structure/pipeline.py": "bfa2775767c86d9bc0b5c7777a6edfdce449827c1f2ed161b3976a27b7634eaf",
             "structure/planner.py": "d50e130a7c05fb79ba399c552322130aa4b5833eb6aff39144c3f6449748a7ee",
             "structure/profile.json": "66f9ad0cc2a7323ae396ab8c5f9766204327b0ecb4f5b275ec6a5b2e6295c6c5",
@@ -1214,7 +1244,7 @@ class StructureContractTests(unittest.TestCase):
         cases = (
             ("The researcher examined the documented pattern.", False),
             ("The researcher ____ examined the ____ pattern.", False),
-            ("The researcher ____ examined the documented pattern.", True),
+            (stem_for_word_count(plan["items"][0]["target_word_count"]), True),
         )
         for stem, valid in cases:
             with self.subTest(stem=stem):
@@ -1368,6 +1398,123 @@ class StructureContractTests(unittest.TestCase):
                 build_plan(52),
             )
         )
+
+
+class StructureSentenceLengthFidelityTests(unittest.TestCase):
+    def test_count_words_splits_on_unicode_whitespace_deterministically(self) -> None:
+        self.assertEqual(count_words("The researcher is here."), 4)
+        self.assertEqual(count_words("The\tresearcher\nis   here."), 4)
+
+    def test_count_words_treats_punctuation_as_part_of_the_word(self) -> None:
+        self.assertEqual(count_words("The pattern, however, held."), 4)
+
+    def test_count_words_treats_hyphenated_form_as_one_token(self) -> None:
+        self.assertEqual(count_words("The well-documented pattern held."), 4)
+
+    def test_count_words_treats_possessive_apostrophe_as_one_token(self) -> None:
+        self.assertEqual(count_words("The team's pattern held."), 4)
+
+    def test_build_completed_sentence_replaces_the_single_blank_exactly_once(self) -> None:
+        stem = "The researcher ____ the documented pattern."
+        self.assertEqual(
+            build_completed_sentence(stem, "is"),
+            "The researcher is the documented pattern.",
+        )
+
+    def test_completed_sentence_uses_canonical_pre_permutation_correct_option(self) -> None:
+        plan = build_plan(60)
+        output = generator_fixture(plan)
+        target = plan["items"][0]["target_word_count"]
+        output["items"][0]["stem"] = stem_for_word_count(target)
+        output["items"][0]["options"]["A"] = "is"
+        output["items"][0]["options"]["B"] = "are indeed a well documented and thoroughly cross referenced pattern"
+        output["items"][0]["correct_answer"] = "A"
+        self.assertEqual(validate_generator_contract(output, plan), [])
+
+        wrong_key = copy.deepcopy(output)
+        wrong_key["items"][0]["correct_answer"] = "B"
+        errors = validate_generator_contract(wrong_key, plan)
+        self.assertTrue(any("completed sentence word count" in error for error in errors))
+
+    def test_word_count_equal_to_bin_minimum_passes(self) -> None:
+        plan = build_plan(61)
+        minimum = plan["items"][0]["sentence_length_bin"]["minimum"]
+        output = generator_fixture(plan)
+        output["items"][0]["stem"] = stem_for_word_count(minimum)
+        self.assertEqual(validate_generator_contract(output, plan), [])
+
+    def test_word_count_equal_to_bin_maximum_passes(self) -> None:
+        plan = build_plan(61)
+        maximum = plan["items"][0]["sentence_length_bin"]["maximum"]
+        output = generator_fixture(plan)
+        output["items"][0]["stem"] = stem_for_word_count(maximum)
+        self.assertEqual(validate_generator_contract(output, plan), [])
+
+    def test_word_count_below_bin_minimum_fails(self) -> None:
+        plan = build_plan(61)
+        minimum = plan["items"][0]["sentence_length_bin"]["minimum"]
+        output = generator_fixture(plan)
+        output["items"][0]["stem"] = stem_for_word_count(minimum - 1)
+        errors = validate_generator_contract(output, plan)
+        self.assertTrue(any("completed sentence word count" in error for error in errors))
+
+    def test_word_count_above_bin_maximum_fails(self) -> None:
+        plan = build_plan(61)
+        maximum = plan["items"][0]["sentence_length_bin"]["maximum"]
+        output = generator_fixture(plan)
+        output["items"][0]["stem"] = stem_for_word_count(maximum + 1)
+        errors = validate_generator_contract(output, plan)
+        self.assertTrue(any("completed sentence word count" in error for error in errors))
+
+    def test_length_failure_message_identifies_all_required_fields(self) -> None:
+        plan = build_plan(61)
+        item = plan["items"][0]
+        bin_info = item["sentence_length_bin"]
+        output = generator_fixture(plan)
+        output["items"][0]["stem"] = stem_for_word_count(bin_info["minimum"] - 1)
+        errors = validate_generator_contract(output, plan)
+        message = next(error for error in errors if "completed sentence word count" in error)
+        self.assertIn(item["item_id"], message)
+        self.assertIn(str(bin_info["minimum"] - 1), message)
+        self.assertIn(bin_info["label"], message)
+        self.assertIn(str(bin_info["minimum"]), message)
+        self.assertIn(str(bin_info["maximum"]), message)
+        self.assertIn(f"target_word_count={item['target_word_count']}", message)
+
+    def test_target_word_count_exact_equality_is_not_required(self) -> None:
+        plan = build_plan(62)
+        item = plan["items"][0]
+        bin_info = item["sentence_length_bin"]
+        alternate = next(
+            count for count in range(bin_info["minimum"], bin_info["maximum"] + 1)
+            if count != item["target_word_count"]
+        )
+        output = generator_fixture(plan)
+        output["items"][0]["stem"] = stem_for_word_count(alternate)
+        self.assertEqual(validate_generator_contract(output, plan), [])
+
+    def test_stem_with_wrong_blank_count_skips_length_check(self) -> None:
+        plan = build_plan(61)
+        minimum = plan["items"][0]["sentence_length_bin"]["minimum"]
+        output = generator_fixture(plan)
+        short_no_blank = stem_for_word_count(minimum - 1).replace(BLANK_MARKER, "is")
+        output["items"][0]["stem"] = short_no_blank
+        errors = validate_generator_contract(output, plan)
+        self.assertTrue(any("blank marker" in error for error in errors))
+        self.assertFalse(any("completed sentence word count" in error for error in errors))
+
+    def test_length_failure_prevents_downstream_invocation_and_quarantines(self) -> None:
+        plan = build_plan(61)
+        minimum = plan["items"][0]["sentence_length_bin"]["minimum"]
+        bad_generator = generator_fixture(plan)
+        bad_generator["items"][0]["stem"] = stem_for_word_count(minimum - 1)
+        runtime = FixtureRuntime(generator=bad_generator)
+        with tempfile.TemporaryDirectory() as directory:
+            result = StructurePipeline(runtime).run(61, output_dir=Path(directory))
+        self.assertEqual(result["decision"], "QUARANTINE")
+        self.assertTrue(any("completed sentence word count" in error for error in result["checks"]["generator_errors"]))
+        self.assertEqual([request.stage for request in runtime.requests], ["structure_generator"])
+        self.assertEqual(result["live_invocation_count"], 1)
 
 
 class StructureReviewerCanonicalizationTests(unittest.TestCase):
