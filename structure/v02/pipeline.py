@@ -81,7 +81,11 @@ DEFAULT_MAX_BUDGET_USD = os.environ.get("STRUCTURE_MAX_BUDGET_USD", "0.60")
 
 GENERATOR_INSTRUCTION = (
     "Generate the complete Structure v0.2 candidate pool exactly from this "
-    "Planner-owned plan. Return JSON only. Do not self-review or self-PASS."
+    "Planner-owned plan. sentence_length_bin is a hard pre-output condition: "
+    "for every item, silently count the completed correct sentence by Unicode "
+    "whitespace and do not emit the item until it is inside the bin. This "
+    "local check is part of authorship, not a separate review stage or second "
+    "call. Return JSON only."
 )
 REVIEWER_INSTRUCTION = (
     "Review all 15 Structure candidate pools independently and blindly using "

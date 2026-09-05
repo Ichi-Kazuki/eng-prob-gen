@@ -89,7 +89,7 @@ V02_PROTECTED_SCHEMA_HASHES: dict[str, str] = {
 # Protected v0.2 authoring prompts. Do not update these hashes unless a
 # future explicitly approved prompt revision occurs.
 V02_PROTECTED_PROMPT_HASHES: dict[str, str] = {
-    "structure/v02/prompts/generator.md": "da539121f3ea8cae9711484fe63b8930bf1f42cfa80b4ca6bd2fc82ac6389ea5",
+    "structure/v02/prompts/generator.md": "59b3869db0a7b0602c21b2dff5f252a990bd53b6d62e9550c6b06839a507ec38",
     "structure/v02/prompts/reviewer.md": "0e42b778a5c4f7ae009375acbd28106755fb755bf83ac62d663a6233d003fbb5",
     "structure/v02/prompts/solver.md": "40d9588db09d8d1478b520ed44472d7914129b17bc2f2481d8329c370779aeb1",
 }
@@ -1759,10 +1759,85 @@ class GeneratorPromptContentTests(unittest.TestCase):
 
     def test_no_self_review_retry_repair_regeneration(self) -> None:
         self.assertIn(
+            "No separate self-review stage or second\nmodel call is allowed: do not perform a second call, repair, retry,\n"
+            "regeneration, revision, or replacement over any item, and do not emit a\n"
+            "PASS/FAIL or quality verdict.",
+            self.text,
+        )
+
+    def test_distinguishes_separate_self_review_from_mandatory_local_check(self) -> None:
+        self.assertIn(
+            "local checks performed while authoring\neach item", self.text
+        )
+        self.assertIn(
+            "are mandatory and are part of this single Generator authorship operation, not\n"
+            "a separate review stage.",
+            self.text,
+        )
+
+    def test_no_unqualified_blanket_self_review_prohibition(self) -> None:
+        self.assertNotIn(
             "Do not self-review, do not emit a\nPASS/FAIL or quality verdict, and do not perform a second call, repair, retry,\n"
             "regeneration, revision, or replacement over any item.",
             self.text,
         )
+
+    def test_sentence_length_bin_is_hard_pre_output_condition(self) -> None:
+        self.assertIn(
+            "HARD PRE-OUTPUT CONDITION: `sentence_length_bin`. SOFT AIM: `target_word_count`.",
+            self.text,
+        )
+
+    def test_mandatory_per_item_length_invariant_present(self) -> None:
+        self.assertIn("Mandatory per-item length invariant", self.text)
+        self.assertIn(
+            "The Generator MUST NOT consider an item ready to emit until the completed\n"
+            "sentence formed by inserting `correct_option` into `stem` is inside the\n"
+            "planned `sentence_length_bin`.",
+            self.text,
+        )
+
+    def test_every_item_locally_counted_before_emission(self) -> None:
+        self.assertIn("count its words using Unicode-whitespace splitting", self.text)
+
+    def test_out_of_bin_item_adjusted_before_emission(self) -> None:
+        self.assertIn(
+            "if the count is outside the bin, revise ordinary lexical material",
+            self.text,
+        )
+
+    def test_recount_required_after_stem_or_correct_option_change(self) -> None:
+        self.assertIn(
+            "If any\nlexical material in the stem or `correct_option` changes while building\n"
+            "distractors or explanations, recount the completed sentence locally before\n"
+            "the item is emitted.",
+            self.text,
+        )
+
+    def test_distractor_authorship_must_not_silently_invalidate_length(self) -> None:
+        self.assertIn(
+            "Once the completed sentence has been length-checked, later distractor\n"
+            "authorship must not silently alter the stem or `correct_option`.",
+            self.text,
+        )
+
+    def test_no_word_count_output_field_instruction(self) -> None:
+        self.assertIn("Do NOT emit the word count.", self.text)
+
+    def test_no_pass_fail_field_instruction(self) -> None:
+        self.assertIn("Do NOT emit a PASS/FAIL field.", self.text)
+
+    def test_no_second_model_call_instruction_for_length_invariant(self) -> None:
+        self.assertIn("Do NOT add a second\nmodel call.", self.text)
+
+    def test_extreme_deviation_guard_present(self) -> None:
+        self.assertIn(
+            "A completed sentence that is obviously far outside the planned bin is an\n"
+            "unfinished item and must not be emitted.",
+            self.text,
+        )
+        self.assertNotIn("89 words", self.text)
+        self.assertNotIn("2026090", self.text)
 
     def test_no_official_ets_copying_instruction_preserved(self) -> None:
         self.assertIn("Never copy or lightly\nparaphrase any ETS item", self.text)
@@ -3598,6 +3673,57 @@ class CliSourceGuardTests(unittest.TestCase):
     def test_source_calls_run_structure_v02_exactly_once(self) -> None:
         source = (ROOT / "structure" / "v02" / "cli.py").read_text(encoding="utf-8")
         self.assertEqual(source.count("run_structure_v02("), 1)
+
+
+PIPELINE_PATH = ROOT / "structure" / "v02" / "pipeline.py"
+
+
+class GeneratorInstructionContentTests(unittest.TestCase):
+    """Proximal GENERATOR_INSTRUCTION reinforces the length authoring invariant."""
+
+    def test_contains_sentence_length_bin_hard_condition(self) -> None:
+        self.assertIn("sentence_length_bin", v02_pipeline.GENERATOR_INSTRUCTION)
+        self.assertIn("hard pre-output condition", v02_pipeline.GENERATOR_INSTRUCTION)
+
+    def test_contains_per_item_local_count_semantics(self) -> None:
+        self.assertIn("silently count", v02_pipeline.GENERATOR_INSTRUCTION)
+        self.assertIn("Unicode", v02_pipeline.GENERATOR_INSTRUCTION)
+        self.assertIn(
+            "not a separate review stage or second", v02_pipeline.GENERATOR_INSTRUCTION
+        )
+
+    def test_does_not_request_emitted_word_counts(self) -> None:
+        self.assertNotIn("emit the word count", v02_pipeline.GENERATOR_INSTRUCTION)
+        self.assertNotIn("word_count", v02_pipeline.GENERATOR_INSTRUCTION)
+        self.assertNotIn("word-count field", v02_pipeline.GENERATOR_INSTRUCTION)
+
+    def test_reviewer_instruction_unchanged(self) -> None:
+        self.assertEqual(
+            v02_pipeline.REVIEWER_INSTRUCTION,
+            "Review all 15 Structure candidate pools independently and blindly using "
+            "only the visible input. Return JSON only.",
+        )
+
+    def test_solver_instruction_unchanged(self) -> None:
+        self.assertEqual(
+            v02_pipeline.SOLVER_INSTRUCTION,
+            "Solve all 15 final Structure items independently and blindly using only "
+            "the visible input. Return JSON only.",
+        )
+
+
+class PipelineGeneratorInvocationSiteTests(unittest.TestCase):
+    """Exactly one Generator invocation site and no added retry loop."""
+
+    def test_exactly_one_generator_invocation_site(self) -> None:
+        source = PIPELINE_PATH.read_text(encoding="utf-8")
+        self.assertEqual(source.count("agent=GENERATOR_AGENT"), 1)
+        self.assertEqual(source.count("self._invoke("), 3)
+
+    def test_no_retry_loop_added(self) -> None:
+        source = PIPELINE_PATH.read_text(encoding="utf-8")
+        for forbidden in ("for attempt", "range(2", "range(3", "while True"):
+            self.assertNotIn(forbidden, source)
 
 
 if __name__ == "__main__":

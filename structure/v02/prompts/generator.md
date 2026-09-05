@@ -15,9 +15,13 @@ later blind Reviewer and deterministic private candidate selection stage
 filter this seven-candidate pool down to a final four-option item and assign
 answer position; Generator does not see or perform any of that.
 
-One invocation authors all 15 items. Do not self-review, do not emit a
-PASS/FAIL or quality verdict, and do not perform a second call, repair, retry,
-regeneration, revision, or replacement over any item.
+One invocation authors all 15 items. No separate self-review stage or second
+model call is allowed: do not perform a second call, repair, retry,
+regeneration, revision, or replacement over any item, and do not emit a
+PASS/FAIL or quality verdict. However, local checks performed while authoring
+each item — composing, counting, and adjusting before that item is emitted —
+are mandatory and are part of this single Generator authorship operation, not
+a separate review stage.
 
 For each planned item, use all of the Planner's construction targets:
 
@@ -54,6 +58,50 @@ a `correct_answer` field; an A-D-keyed `distractor_rationales` object; a final
 answer position; the completed sentence as its own field; a word-count field;
 a Reviewer-style judgment; a candidate-selection decision; or a PASS/FAIL
 verdict.
+
+## Mandatory per-item length invariant
+
+The Generator MUST NOT consider an item ready to emit until the completed
+sentence formed by inserting `correct_option` into `stem` is inside the
+planned `sentence_length_bin`.
+
+HARD PRE-OUTPUT CONDITION: `sentence_length_bin`. SOFT AIM: `target_word_count`.
+The hard bin always takes priority over the soft aim. Never knowingly emit an
+item outside the planned bin merely because the exact `target_word_count` was
+difficult, distractor generation became complex, or difficulty/clause
+construction consumed attention. If the exact target is awkward, choose any
+natural word count inside the bin.
+
+For EACH item, during the single original authorship process:
+
+1. compose the intended completed correct sentence;
+2. count its words using Unicode-whitespace splitting;
+3. compare that count to the planned `sentence_length_bin`;
+4. if the count is outside the bin, revise ordinary lexical material while
+   preserving `primary_target`, the planned finite `clause_count`,
+   `difficulty`, the intended correct construction, and naturalness;
+5. recount after every material change to the sentence;
+6. only after the completed sentence is inside the bin, derive/finalize
+   `stem`, `correct_option`, and `d1`..`d6`;
+7. immediately before emitting the item, confirm that reinserting
+   `correct_option` into the final `stem` still reconstructs a completed
+   sentence inside the planned bin.
+
+Do NOT emit the word count. Do NOT emit a PASS/FAIL field. Do NOT add a second
+model call. This is an internal authoring invariant realized entirely inside
+the single Generator authorship operation for that item, not an external
+review stage.
+
+A completed sentence that is obviously far outside the planned bin is an
+unfinished item and must not be emitted. For example, a sentence planned for a
+short bin must not become a multi-sentence or run-on-length completion merely
+because explanations or candidate material influenced generation.
+
+Once the completed sentence has been length-checked, later distractor
+authorship must not silently alter the stem or `correct_option`. If any
+lexical material in the stem or `correct_option` changes while building
+distractors or explanations, recount the completed sentence locally before
+the item is emitted.
 
 ## Planned `clause_count` definition
 
