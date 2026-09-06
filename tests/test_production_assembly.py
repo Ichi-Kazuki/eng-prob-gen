@@ -475,8 +475,17 @@ class WrittenExpressionAdapterTests(unittest.TestCase):
         for forbidden in ("format_metadata", "qa_metadata", "provenance"):
             self.assertNotIn(forbidden, serialized)
 
+    def test_valid_single_item_source_normalizes_with_mocked_validator(self) -> None:
+        run_dir = _build_we_run(self.tmp, item_ids=[self.item_ids[0]])
+        evidence_path = _we_evidence_path(self.tmp)
+        with patch.object(adapters.subprocess, "run") as mocked_run:
+            mocked_run.return_value.returncode = 0
+            loaded = adapters.load_written_expression_source(run_dir, evidence_path)
+        mocked_run.assert_called_once()
+        self.assertEqual([item["item_id"] for item in loaded["items"]], [self.item_ids[0]])
+
     def test_tampered_manifest_file_rejected(self) -> None:
-        run_dir = _build_we_run(self.tmp, item_ids=self.item_ids, tamper_after_manifest=True)
+        run_dir = _build_we_run(self.tmp, item_ids=[self.item_ids[0]], tamper_after_manifest=True)
         evidence_path = _we_evidence_path(self.tmp)
         with self.assertRaises(ProductionSourceError):
             adapters.load_written_expression_source(run_dir, evidence_path)
@@ -496,7 +505,18 @@ class WrittenExpressionAdapterTests(unittest.TestCase):
             adapters.load_written_expression_source(run_dir, evidence_path)
 
     def test_non_accepted_outcome_rejected(self) -> None:
-        run_dir = _build_we_run(self.tmp, item_ids=self.item_ids, outcome_state="MANUAL_REVIEW")
+        run_dir = _build_we_run(self.tmp, item_ids=[self.item_ids[0]], outcome_state="MANUAL_REVIEW")
+        evidence_path = _we_evidence_path(self.tmp)
+        with self.assertRaises(ProductionSourceError):
+            adapters.load_written_expression_source(run_dir, evidence_path)
+
+    def test_single_item_generator_outcome_id_mismatch_rejected(self) -> None:
+        run_dir = _build_we_run(self.tmp, item_ids=[self.item_ids[0]])
+        outcomes_path = run_dir / "runtime" / "outcomes.json"
+        outcomes = json.loads(outcomes_path.read_text(encoding="utf-8"))
+        outcomes["outcomes"][0]["item_id"] = "we-fixture-mismatch"
+        atomic_write_json(outcomes_path, outcomes)
+        _rehash_we_manifest(run_dir)
         evidence_path = _we_evidence_path(self.tmp)
         with self.assertRaises(ProductionSourceError):
             adapters.load_written_expression_source(run_dir, evidence_path)

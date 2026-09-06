@@ -129,6 +129,38 @@ also publish `runtime/artifact_manifest_v1.json`, a deterministic SHA-256
 sidecar for the formal outputs, provenance, outcomes, test result, and freeze
 manifest used by report-only mode.
 
+### Written Expression live cohort sizes
+
+Run the validation cohort without a count argument; it defaults to 10 items:
+
+```bash
+python scripts/run_live_e2e.py
+```
+
+Run one independent production candidate with:
+
+```bash
+WE_E2E_OUTPUT_DIR=/absolute/path/to/a/unique-attempt python scripts/run_live_e2e.py --count 1
+```
+
+Use a unique `WE_E2E_OUTPUT_DIR` for every independent attempt. A rejected
+one-item run is retained as a failed independent attempt and is never repaired,
+reused, or supplied as a production source.
+
+After the single outcome is `ACCEPTED`, run the existing independent Grammar
+Evidence Producer against that run's Generator artifact:
+
+```bash
+python -m we_evidence.cli \
+  --generator-output /absolute/path/to/a/unique-attempt/runtime/formal/generator_outputs.json \
+  --output-dir /absolute/path/to/a/unique-evidence-attempt \
+  --provider claude \
+  --model MODEL_NAME
+```
+
+`--provider` and `--model` are optional. The Grammar Auditor remains an
+independent invocation and does not consume Reviewer or Solver judgments.
+
 The final quality pilot must be prepared with
 `scripts/prepare_final_pilot_worktree.py --commit <exact-commit> --worktree
 <external-path>`. Run the live harness from that detached worktree with

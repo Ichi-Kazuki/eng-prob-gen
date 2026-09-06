@@ -590,6 +590,7 @@ class RuntimeAdapterTests(unittest.TestCase):
             [],
             {"passed": True},
             "metrics-test",
+            10,
         )
         self.assertEqual(
             metrics["requested_metrics"]["reviewer_error_status_counts"],
@@ -635,7 +636,13 @@ class RuntimeAdapterTests(unittest.TestCase):
                     for filename in ("generator_outputs.json", "reviewer_outputs.json", "solver_outputs.json"):
                         harness.atomic_write_json(formal / filename, {"items": []})
                     harness.atomic_write_json(provenance / "runtime_provenance.json", {"items": []})
-                    harness.atomic_write_json(runtime_dir / "outcomes.json", {"batch_id": "report-test", "outcomes": []})
+                    harness.atomic_write_json(
+                        runtime_dir / "outcomes.json",
+                        {
+                            "batch_id": "report-test",
+                            "outcomes": [{"item_id": "report-test-001", "state": "MANUAL_REVIEW"}],
+                        },
+                    )
                     harness.atomic_write_json(runtime_dir / "test_result.json", {"passed": False})
                     harness.write_artifact_manifest(freeze)
 

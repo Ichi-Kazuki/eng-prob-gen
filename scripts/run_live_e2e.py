@@ -22,6 +22,7 @@ requested.
 
 from __future__ import annotations
 
+import argparse
 import copy
 import hashlib
 import importlib.util
@@ -151,6 +152,7 @@ EVIDENCE_ARTIFACTS = (
     "runtime/freeze/freeze_manifest.json",
 )
 OFFLINE_TEST_TIMEOUT_SECONDS = 300
+DEFAULT_COHORT_SIZE = 10
 
 
 def now_iso() -> str:
@@ -1138,7 +1140,7 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
                 )
             provenance_records.append(sidecar(generator_invocation, input_payload={}, contract_validated=False, formal_output_exists=False, leakage=[], error=exc))
             if exc.category == "schema" and attempt <= GENERATOR_VALIDATION_RETRIES:
-                print(f"generator validation retry {order}/10 attempt {attempt + 1}", flush=True)
+                print(f"generator validation retry for item {order} attempt {attempt + 1}", flush=True)
                 continue
             outcomes.append({"item_id": item_id, "state": "GENERATION_FAILED", "failure": {"stage": "generator", "category": exc.category, "detail": exc.detail}, "generator_attempts": attempt})
             return
@@ -1319,7 +1321,18 @@ def reviewer_error_status(item: dict) -> str:
     return "one_genuine_error"
 
 
-def build_metrics(generator_items: list, reviewer_items: list, solver_items: list, provenance_records: list, outcomes: list, tests: dict, batch_id: str) -> dict:
+def build_metrics(
+    generator_items: list,
+    reviewer_items: list,
+    solver_items: list,
+    provenance_records: list,
+    outcomes: list,
+    tests: dict,
+    batch_id: str,
+    cohort_size: int = DEFAULT_COHORT_SIZE,
+) -> dict:
+    if cohort_size <= 0:
+        raise ValueError("cohort_size must be a positive integer")
     by_gen = {item.get("item_id"): item for item in generator_items if isinstance(item, dict)}
     by_review = {item.get("item_id"): item for item in reviewer_items if isinstance(item, dict)}
     by_solver = {item.get("item_id"): item for item in solver_items if isinstance(item, dict)}
@@ -1429,9 +1442,18 @@ def build_metrics(generator_items: list, reviewer_items: list, solver_items: lis
     providers = sorted({record.get("provider") for record in provenance_records if record.get("provider")})
     provider = providers[0] if len(providers) == 1 else ("mixed" if providers else "unknown")
     models = sorted({record.get("model") for record in provenance_records if record.get("model")})
+    allowed = cohort_size // 10
+    required_consensus = cohort_size - allowed
+    reviewer_live_invocations = sum(x.get("live_invocation") is True for x in reviewer_sidecars)
+    solver_live_invocations = sum(x.get("live_invocation") is True for x in solver_sidecars)
+    single_item_accepted = (
+        len(outcomes) == 1
+        and outcomes[0].get("state") == orch.State.ACCEPTED
+        and not acceptance_invariant_failures
+    )
     return {
         "batch_id": batch_id,
-        "cohort_size": 10,
+        "cohort_size": cohort_size,
         "microbatch_size": 1,
         "runtime": {
             "provider": provider,
@@ -1447,21 +1469,29 @@ def build_metrics(generator_items: list, reviewer_items: list, solver_items: lis
             "reason": "WE v2 live E2E is a compatibility harness; use the production contract pipeline for accepted items.",
         },
         "gates": {
-            "generator_schema": {"passed": len(by_gen), "required": 10, "ok": len(by_gen) == 10},
-            "reviewer_contract": {"passed": len(by_review), "required": 10, "ok": len(by_review) == 10},
-            "solver_contract": {"passed": len(by_solver), "required": 10, "ok": len(by_solver) == 10},
-            "reviewer_live_invocation": {"passed": sum(x.get("live_invocation") is True for x in reviewer_sidecars), "required": 10, "ok": sum(x.get("live_invocation") is True for x in reviewer_sidecars) == 10},
-            "solver_live_invocation": {"passed": sum(x.get("live_invocation") is True for x in solver_sidecars), "required": 10, "ok": sum(x.get("live_invocation") is True for x in solver_sidecars) == 10},
+            "generator_schema": {"passed": len(by_gen), "required": cohort_size, "ok": len(by_gen) == cohort_size},
+            "reviewer_contract": {"passed": len(by_review), "required": cohort_size, "ok": len(by_review) == cohort_size},
+            "solver_contract": {"passed": len(by_solver), "required": cohort_size, "ok": len(by_solver) == cohort_size},
+            "reviewer_live_invocation": {"passed": reviewer_live_invocations, "required": cohort_size, "ok": reviewer_live_invocations == cohort_size},
+            "solver_live_invocation": {"passed": solver_live_invocations, "required": cohort_size, "ok": solver_live_invocations == cohort_size},
             "answer_leakage": {"count": leakage_count, "required": 0, "ok": leakage_count == 0},
             "reviewer_genuine_error_failure": {"count": reviewer_genuine_failure, "required": 0, "ok": reviewer_genuine_failure == 0},
             "reviewer_zero_genuine_errors": {"count": reviewer_zero_genuine_errors, "required": 0, "ok": reviewer_zero_genuine_errors == 0},
             "reviewer_multiple_error": {"count": reviewer_multiple_error, "required": 0, "ok": reviewer_multiple_error == 0},
             "reviewer_ambiguous_one_error": {"count": reviewer_ambiguous_one_error, "required": 0, "ok": reviewer_ambiguous_one_error == 0},
             "solver_none": {"count": solver_none, "required": 0, "ok": solver_none == 0},
-            "solver_ambiguous": {"count": solver_ambiguous, "maximum": 1, "ok": solver_ambiguous <= 1},
-            "generator_solver_agreement": {"passed": agreement, "required": 9, "denominator": 10, "ok": agreement >= 9},
-            "reviewer_solver_structural_conflict": {"count": structural_conflict, "maximum": 1, "ok": structural_conflict <= 1},
+            "solver_ambiguous": {"count": solver_ambiguous, "maximum": allowed, "ok": solver_ambiguous <= allowed},
+            "generator_solver_agreement": {"passed": agreement, "required": required_consensus, "denominator": cohort_size, "ok": agreement >= required_consensus},
+            "reviewer_solver_structural_conflict": {"count": structural_conflict, "maximum": allowed, "ok": structural_conflict <= allowed},
             "orchestrator_acceptance_logic": {"invariant_failures": acceptance_invariant_failures, "grammar_judgment_added": False, "ok": not acceptance_invariant_failures},
+            **({
+                "single_item_production_acceptance": {
+                    "passed": sum(outcome.get("state") == orch.State.ACCEPTED for outcome in outcomes),
+                    "required": 1,
+                    "outcome_count": len(outcomes),
+                    "ok": single_item_accepted,
+                },
+            } if cohort_size == 1 else {}),
         },
         "outcomes": outcomes,
         "failure_classification": failure_classification,
@@ -1478,8 +1508,9 @@ def build_metrics(generator_items: list, reviewer_items: list, solver_items: lis
             },
             "generator_solver_agreement": {
                 "passed": agreement,
-                "denominator": len(by_solver),
-                "ok": agreement >= 9 if len(by_solver) == 10 else False,
+                "required": required_consensus,
+                "denominator": cohort_size,
+                "ok": agreement >= required_consensus if len(by_solver) == cohort_size else False,
             },
             "reviewer_findings": reviewer_findings,
             "reviewer_error_status_counts": reviewer_status_counts,
@@ -1544,7 +1575,10 @@ def final_decision(metrics: dict) -> tuple[str, str]:
     solver_keys = {"solver_contract", "solver_live_invocation", "solver_none", "solver_ambiguous", "generator_solver_agreement", "reviewer_solver_structural_conflict"}
     if any(not gates[key]["ok"] for key in solver_keys):
         return "C", "Solver contract, blinded invocation, or solver agreement gates failed."
-    if not gates["orchestrator_acceptance_logic"]["ok"]:
+    if (
+        not gates["orchestrator_acceptance_logic"]["ok"]
+        or not gates.get("single_item_production_acceptance", {"ok": True})["ok"]
+    ):
         return "D", "Orchestrator acceptance invariants failed."
     return "E", "The complete acceptance pipeline was not demonstrated; see gate and failure details."
 
@@ -1558,11 +1592,13 @@ def e2e_succeeded(metrics: dict) -> bool:
 
 def write_report(metrics: dict, decision: str, decision_reason: str) -> None:
     gates = metrics["gates"]
+    cohort_size = metrics["cohort_size"]
+    item_label = "item" if cohort_size == 1 else "items"
     lines = [
         "# WE v2.1.3 Live E2E Report",
         "",
         f"- Batch: `{metrics['batch_id']}`",
-        f"- Scope: 10 requested fresh items, one item per microbatch; recorded outcomes: {len(metrics.get('outcomes', []))}",
+        f"- Scope: {cohort_size} requested fresh {item_label}, one item per microbatch; recorded outcomes: {len(metrics.get('outcomes', []))}",
         "- Pipeline: Generator -> live Reviewer v2 -> live Grammar Solver -> existing Orchestrator",
         "- The 75-item Validation was not re-run.",
         "- Generator/Format/Mutation safety/Schema/Specification/Taxonomy source files: unchanged",
@@ -1631,7 +1667,15 @@ def write_report(metrics: dict, decision: str, decision_reason: str) -> None:
     (OUT / "WE_V2_1_3_LIVE_E2E_REPORT.md").write_text("\n".join(lines), encoding="utf-8")
 
 
-def report_existing_run() -> int:
+def _cohort_size_from_outcomes(outcomes: list) -> int:
+    if not outcomes:
+        raise ValueError("completed run outcomes must contain at least one item")
+    if not all(isinstance(outcome, dict) for outcome in outcomes):
+        raise ValueError("completed run outcomes must contain only objects")
+    return len(outcomes)
+
+
+def report_existing_run(expected_cohort_size: int | None = None) -> int:
     """Rebuild derived reports only after revalidating immutable evidence."""
 
     global _RUN_FREEZE
@@ -1647,6 +1691,11 @@ def report_existing_run() -> int:
         verify_artifact_manifest(freeze)
 
         batch_id, tests, outcomes = validate_frozen_run_contract(freeze)
+        cohort_size = _cohort_size_from_outcomes(outcomes)
+        if expected_cohort_size is not None and expected_cohort_size != cohort_size:
+            raise ValueError(
+                f"explicit --count {expected_cohort_size} does not match immutable completed cohort {cohort_size}"
+            )
         provenance_document = _read_json_file(PROVENANCE / "runtime_provenance.json", "runtime provenance")
         if not isinstance(provenance_document, dict):
             raise ValueError("runtime provenance must be an object")
@@ -1674,6 +1723,7 @@ def report_existing_run() -> int:
             outcomes,
             tests,
             batch_id,
+            cohort_size,
         )
         verify_artifact_manifest(freeze)
         freeze.verify("report-only", "after_metrics")
@@ -1820,9 +1870,34 @@ def run_generator_probe() -> int:
     return 0 if result["status"] == "SUCCESS" else 1
 
 
+def _positive_integer(value: str) -> int:
+    try:
+        parsed = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("must be a positive integer") from exc
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError("must be a positive integer")
+    return parsed
+
+
+def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    raw_argv = list(sys.argv[1:] if argv is None else argv)
+    parser = argparse.ArgumentParser(description="Run the Written Expression live E2E harness.")
+    parser.add_argument("--count", type=_positive_integer, default=DEFAULT_COHORT_SIZE, metavar="N")
+    parser.add_argument("--generator-probe", action="store_true")
+    args = parser.parse_args(raw_argv)
+    args.count_explicit = any(arg == "--count" or arg.startswith("--count=") for arg in raw_argv)
+    if args.generator_probe and args.count_explicit:
+        parser.error("--count cannot be combined with --generator-probe")
+    return args
+
+
 def main(argv: list[str] | None = None) -> int:
-    argv = sys.argv[1:] if argv is None else argv
-    if "--generator-probe" in argv:
+    try:
+        args = _parse_args(argv)
+    except SystemExit as exc:
+        return int(exc.code) if isinstance(exc.code, int) else 2
+    if args.generator_probe:
         try:
             return run_generator_probe()
         except FreezeDriftError as exc:
@@ -1830,7 +1905,8 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps({"status": exc.category, "detail": str(exc)}, ensure_ascii=False, indent=2))
             return 2
     if os.environ.get("WE_E2E_REPORT_ONLY") == "1":
-        return report_existing_run()
+        return report_existing_run(args.count if args.count_explicit else None)
+    cohort_size = args.count
     _final_quality_pilot_preflight()
     for directory in (FORMAL, PROVENANCE, INPUTS, LOGS):
         directory.mkdir(parents=True, exist_ok=True)
@@ -1852,7 +1928,7 @@ def main(argv: list[str] | None = None) -> int:
     provenance_records: list = []
     outcomes: list = []
     try:
-        for order in range(1, 11):
+        for order in range(1, cohort_size + 1):
             process_one(order, batch_id, config, generator_items, reviewer_items, solver_items, provenance_records, outcomes)
             atomic_write_json(FORMAL / "generator_outputs.json", {"items": generator_items})
             atomic_write_json(FORMAL / "reviewer_outputs.json", {"items": reviewer_items})
@@ -1860,7 +1936,7 @@ def main(argv: list[str] | None = None) -> int:
             atomic_write_json(PROVENANCE / "runtime_provenance.json", {"items": provenance_records})
             atomic_write_json(_outcomes_path(), {"batch_id": batch_id, "outcomes": outcomes})
             latest = outcomes[-1] if outcomes else {"state": "UNKNOWN"}
-            print(f"completed microbatch {order}/10: {latest.get('item_id')} -> {latest.get('state')}", flush=True)
+            print(f"completed microbatch {order}/{cohort_size}: {latest.get('item_id')} -> {latest.get('state')}", flush=True)
     except FreezeDriftError as exc:
         _write_freeze_drift_artifact(exc)
         print(json.dumps({"status": exc.category, "detail": str(exc)}, ensure_ascii=False, indent=2))
@@ -1869,7 +1945,16 @@ def main(argv: list[str] | None = None) -> int:
     atomic_write_json(_outcomes_path(), {"batch_id": batch_id, "outcomes": outcomes})
     atomic_write_json(_test_result_path(), tests)
     _verify_freeze("before", "final_metrics")
-    metrics = build_metrics(generator_items, reviewer_items, solver_items, provenance_records, outcomes, tests, batch_id)
+    metrics = build_metrics(
+        generator_items,
+        reviewer_items,
+        solver_items,
+        provenance_records,
+        outcomes,
+        tests,
+        batch_id,
+        cohort_size,
+    )
     _verify_freeze("after", "final_metrics")
     decision, decision_reason = final_decision(metrics)
     metrics["final_decision"] = {"code": decision, "label": {"A": "Live Reviewer/Solver pipeline ready", "B": "Reviewer issue", "C": "Solver issue", "D": "Orchestrator issue", "E": "Runtime infrastructure unavailable"}[decision], "reason": decision_reason}
