@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "itp-production-bank-v1.schema.json",
+  "title": "ITP production problem bank v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source_count", "counts", "sources", "sections"],
+  "properties": {
+    "schema_version": {"const": "itp-production-bank-v1"},
+    "source_count": {"type": "integer", "minimum": 0},
+    "counts": {"$ref": "#/$defs/counts"},
+    "sources": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/source"}
+    },
+    "sections": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["structure", "written_expression", "reading"],
+      "properties": {
+        "structure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["items"],
+          "properties": {
+            "items": {"type": "array", "items": {"$ref": "#/$defs/structure_item"}}
+          }
+        },
+        "written_expression": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["items"],
+          "properties": {
+            "items": {"type": "array", "items": {"$ref": "#/$defs/written_expression_item"}}
+          }
+        },
+        "reading": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["passages"],
+          "properties": {
+            "passages": {"type": "array", "items": {"$ref": "#/$defs/reading_passage"}}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "answer_map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B", "C", "D"],
+      "properties": {
+        "A": {"type": "string", "minLength": 1},
+        "B": {"type": "string", "minLength": 1},
+        "C": {"type": "string", "minLength": 1},
+        "D": {"type": "string", "minLength": 1}
+      }
+    },
+    "answer_letter": {"enum": ["A", "B", "C", "D"]},
+    "difficulty": {"enum": ["EASY", "MEDIUM", "HARD"]},
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "structure_items", "written_expression_items", "reading_passages",
+        "reading_questions", "total_questions"
+      ],
+      "properties": {
+        "structure_items": {"type": "integer", "minimum": 0},
+        "written_expression_items": {"type": "integer", "minimum": 0},
+        "reading_passages": {"type": "integer", "minimum": 0},
+        "reading_questions": {"type": "integer", "minimum": 0},
+        "total_questions": {"type": "integer", "minimum": 0}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["section", "source_id", "pipeline_version", "content_sha256"],
+      "properties": {
+        "section": {"enum": ["Structure", "Written Expression", "Reading"]},
+        "source_id": {"type": "string", "minLength": 1},
+        "pipeline_version": {"type": "string", "minLength": 1},
+        "content_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    },
+    "structure_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item_id", "source_id", "section", "difficulty", "vocabulary_domain",
+        "stem", "options", "correct_answer", "explanation", "taxonomy"
+      ],
+      "properties": {
+        "item_id": {"type": "string", "minLength": 1},
+        "source_id": {"type": "string", "minLength": 1},
+        "section": {"const": "Structure"},
+        "difficulty": {"$ref": "#/$defs/difficulty"},
+        "vocabulary_domain": {"type": "string", "minLength": 1},
+        "stem": {"type": "string", "minLength": 1},
+        "options": {"$ref": "#/$defs/answer_map"},
+        "correct_answer": {"$ref": "#/$defs/answer_letter"},
+        "explanation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["answer_explanation", "distractor_rationales"],
+          "properties": {
+            "answer_explanation": {"type": "string", "minLength": 1},
+            "distractor_rationales": {"$ref": "#/$defs/answer_map"}
+          }
+        },
+        "taxonomy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["primary_target", "subtype", "secondary_features"],
+          "properties": {
+            "primary_target": {"type": "string", "minLength": 1},
+            "subtype": {"type": "string", "minLength": 1},
+            "secondary_features": {"type": "array", "items": {"type": "string", "minLength": 1}}
+          }
+        }
+      }
+    },
+    "written_expression_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item_id", "source_id", "section", "difficulty", "vocabulary_domain",
+        "sentence", "marked_parts", "correct_answer", "explanation", "taxonomy"
+      ],
+      "properties": {
+        "item_id": {"type": "string", "minLength": 1},
+        "source_id": {"type": "string", "minLength": 1},
+        "section": {"const": "Written Expression"},
+        "difficulty": {"$ref": "#/$defs/difficulty"},
+        "vocabulary_domain": {"type": "string", "minLength": 1},
+        "sentence": {"type": "string", "minLength": 1},
+        "marked_parts": {"$ref": "#/$defs/answer_map"},
+        "correct_answer": {"$ref": "#/$defs/answer_letter"},
+        "explanation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["error_explanation", "minimal_correction"],
+          "properties": {
+            "error_explanation": {"type": "string", "minLength": 1},
+            "minimal_correction": {"type": "string", "minLength": 1}
+          }
+        },
+        "taxonomy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["primary_target", "subtype", "secondary_features", "tested_error_type", "error_scope"],
+          "properties": {
+            "primary_target": {"type": "string", "minLength": 1},
+            "subtype": {"type": "string", "minLength": 1},
+            "secondary_features": {"type": "array", "items": {"type": "string", "minLength": 1}},
+            "tested_error_type": {"type": "string", "minLength": 1},
+            "error_scope": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "reading_question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item_id", "question_type", "subtype", "stem", "choices", "correct_answer", "explanation"
+      ],
+      "properties": {
+        "item_id": {"type": "string", "minLength": 1},
+        "question_type": {"type": "string", "minLength": 1},
+        "subtype": {"type": "string", "minLength": 1},
+        "stem": {"type": "string", "minLength": 1},
+        "choices": {"$ref": "#/$defs/answer_map"},
+        "correct_answer": {"$ref": "#/$defs/answer_letter"},
+        "target_text": {"type": "string", "minLength": 1},
+        "target_line": {"type": "integer", "minimum": 1},
+        "explanation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["evidence_paragraph", "evidence_anchor", "answer_rationale", "choice_rationales"],
+          "properties": {
+            "evidence_paragraph": {"type": "integer", "minimum": 1},
+            "evidence_anchor": {"type": "string", "minLength": 1},
+            "answer_rationale": {"type": "string", "minLength": 1},
+            "choice_rationales": {"$ref": "#/$defs/answer_map"}
+          }
+        }
+      }
+    },
+    "reading_passage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passage_id", "source_id", "section", "title", "passage", "questions"],
+      "properties": {
+        "passage_id": {"type": "string", "minLength": 1},
+        "source_id": {"type": "string", "minLength": 1},
+        "section": {"const": "Reading"},
+        "title": {"type": "string", "minLength": 1},
+        "passage": {"type": "string", "minLength": 1},
+        "questions": {"type": "array", "items": {"$ref": "#/$defs/reading_question"}}
+      }
+    }
+  }
+}
