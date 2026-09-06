@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "grammar_audit_output.schema.json",
+  "title": "Raw grammar-auditor model output contract",
+  "description": "The strict transport shape returned by one independent grammar-auditor invocation. This is not the final grammar_evidence.schema.json record: provenance and content_hash are attached deterministically by the producer wrapper, never supplied by the model.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["item_id", "evidence", "rationale"],
+  "properties": {
+    "item_id": {"type": "string", "minLength": 1},
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clean_sentence_grammatical",
+        "mutated_sentence_ungrammatical",
+        "exactly_one_grammatical_defect",
+        "declared_marked_span_contains_defect",
+        "minimal_repair_restores_grammaticality",
+        "no_plausible_alternate_parse",
+        "defect_is_grammatical_not_semantic"
+      ],
+      "properties": {
+        "clean_sentence_grammatical": {"type": "boolean"},
+        "mutated_sentence_ungrammatical": {"type": "boolean"},
+        "exactly_one_grammatical_defect": {"type": "boolean"},
+        "declared_marked_span_contains_defect": {"type": "boolean"},
+        "minimal_repair_restores_grammaticality": {"type": "boolean"},
+        "no_plausible_alternate_parse": {"type": "boolean"},
+        "defect_is_grammatical_not_semantic": {"type": "boolean"}
+      }
+    },
+    "rationale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clean_sentence_grammatical",
+        "mutated_sentence_ungrammatical",
+        "exactly_one_grammatical_defect",
+        "declared_marked_span_contains_defect",
+        "minimal_repair_restores_grammaticality",
+        "no_plausible_alternate_parse",
+        "defect_is_grammatical_not_semantic"
+      ],
+      "properties": {
+        "clean_sentence_grammatical": {"type": "string", "minLength": 1},
+        "mutated_sentence_ungrammatical": {"type": "string", "minLength": 1},
+        "exactly_one_grammatical_defect": {"type": "string", "minLength": 1},
+        "declared_marked_span_contains_defect": {"type": "string", "minLength": 1},
+        "minimal_repair_restores_grammaticality": {"type": "string", "minLength": 1},
+        "no_plausible_alternate_parse": {"type": "string", "minLength": 1},
+        "defect_is_grammatical_not_semantic": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
