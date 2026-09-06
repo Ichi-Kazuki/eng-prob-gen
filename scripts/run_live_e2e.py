@@ -36,10 +36,10 @@ from typing import Any, cast
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-OUT = ROOT / "runs" / "we_v2_1_3_live_e2e"
+OUT = (ROOT / "runs" / "we_v2_1_3_live_e2e").resolve()
 if os.environ.get("WE_E2E_OUTPUT_DIR"):
     configured_out = Path(os.environ["WE_E2E_OUTPUT_DIR"])
-    OUT = configured_out if configured_out.is_absolute() else ROOT / configured_out
+    OUT = (configured_out if configured_out.is_absolute() else ROOT / configured_out).resolve()
 RUNTIME = OUT / "runtime"
 FORMAL = RUNTIME / "formal"
 PROVENANCE = RUNTIME / "provenance"

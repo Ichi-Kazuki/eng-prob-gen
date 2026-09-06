@@ -1,0 +1,27 @@
+{
+  "schema_version": "reading-plan-v0.2",
+  "plan_id": "rp-v02-2d3293a2",
+  "passage_id": "rc-2d3293a2",
+  "seed": 758289314,
+  "domain": "biology",
+  "target_words": 180,
+  "target_paragraphs": 4,
+  "question_count": 8,
+  "question_plan": [
+    "DETAIL",
+    "VOCABULARY_IN_CONTEXT",
+    "VOCABULARY_IN_CONTEXT",
+    "REFERENCE",
+    "VOCABULARY_IN_CONTEXT",
+    "DETAIL",
+    "REFERENCE",
+    "DETAIL"
+  ],
+  "question_type_counts": {
+    "DETAIL": 3,
+    "VOCABULARY_IN_CONTEXT": 3,
+    "INFERENCE": 0,
+    "MAIN_IDEA": 0,
+    "REFERENCE": 2
+  }
+}

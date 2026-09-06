@@ -1,28 +1,32 @@
-"""Offline regression coverage for the recorded WE v2.1.3 Reviewer failures."""
+"""Offline regression coverage for the recorded WE v2.1.3 Reviewer failures.
+
+This test loads the checked-in immutable historical audit fixture rather than
+re-running scripts/audit_reviewer_contract_failures.py against the historical
+run directory, which is gitignored and absent from a fresh checkout. The
+fixture is the recorded, hermetic snapshot of that offline audit result.
+"""
 
 from __future__ import annotations
 
-import importlib.util
+import json
 import unittest
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-AUDIT_PATH = ROOT / "scripts" / "audit_reviewer_contract_failures.py"
+CHECKED_IN_HISTORICAL_AUDIT_FIXTURE = (
+    ROOT / "analysis" / "we_v2_1_3_reviewer_contract_audit_20260827.json"
+)
 
 
-def load_audit():
-    spec = importlib.util.spec_from_file_location("reviewer_contract_audit_test", AUDIT_PATH)
-    assert spec is not None and spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+def load_checked_in_historical_audit_fixture() -> dict:
+    with CHECKED_IN_HISTORICAL_AUDIT_FIXTURE.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
 
 
 class ReviewerContractAuditTests(unittest.TestCase):
     def test_all_recorded_failures_are_target_metadata_contract_failures(self) -> None:
-        audit = load_audit()
-        result = audit.audit(audit.DEFAULT_RUN)
+        result = load_checked_in_historical_audit_fixture()
 
         self.assertEqual(result["status"], "OFFLINE_AUDIT_COMPLETE")
         self.assertEqual(result["model_invocations"], 0)

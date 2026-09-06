@@ -22,15 +22,9 @@ from runtime.adapters import InvocationResult
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MALFORMED_V024_GENERATOR = (
-    ROOT
-    / "runs"
-    / "reading_v0_2"
-    / "reading-v02-batch-20260828T103121Z-9cbb1bade1"
-    / "passage-001"
-    / "generator.json"
-)
-MALFORMED_V024_PLAN = MALFORMED_V024_GENERATOR.with_name("plan.json")
+MALFORMED_V024_FIXTURE_DIR = ROOT / "tests" / "fixtures" / "reading_v024_malformed_target_pattern"
+MALFORMED_V024_GENERATOR = MALFORMED_V024_FIXTURE_DIR / "generator.json"
+MALFORMED_V024_PLAN = MALFORMED_V024_FIXTURE_DIR / "plan.json"
 
 
 def target_generator(question_type: str, stem: str) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:

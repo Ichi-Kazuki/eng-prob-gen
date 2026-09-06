@@ -1,0 +1,145 @@
+{
+  "schema_version": "reading-generator-v0.2",
+  "section": "READING_COMPREHENSION",
+  "title": "How Desert Mosses Use Brief Rainfall",
+  "passage": "In dry regions, some mosses survive by treating rainfall as a brief opportunity rather than a lasting supply. Their leaves absorb water rapidly, and shallow colonies spread across soil and rock, allowing many plants to benefit from a small shower. When the surface dries, the mosses enter dormancy, and growth nearly stops. This strategy keeps them alive through long intervals without the continuous water required by larger plants.\n\nA moss colony also changes the ground around it. Its tangled stems slow moving water, while spaces among them hold moisture against evaporation. The colony can keep upper soil damp briefly after rain ends. Its stems also trap dust and organic particles that later become nutrients. These effects do not create a permanent wet habitat, but they make the surface more favorable for mosses and nearby small organisms.\n\nTiming is especially important. During a shower, moss tissues swell and begin photosynthesis soon afterward. If sunlight returns quickly, the colony can produce energy before stored water disappears. Several brief showers may make a colony more productive than one long event containing the same total water, because repeated wetting allows photosynthesis to resume multiple times.\n\nThis pattern shows why survival and growth differ. Dormancy protects mosses during harsh conditions, while rapid activity helps them use temporary improvements. They do not overcome desert dryness; instead, they combine water-saving structures with quick responses to change. Their success depends on matching each phase of activity to limited opportunities in the environment.",
+  "questions": [
+    {
+      "question_type": "REFERENCE",
+      "stem": "The word “it” in paragraph 2 refers to",
+      "choices": {
+        "A": "the ground",
+        "B": "the moss colony",
+        "C": "moving water",
+        "D": "evaporation"
+      },
+      "correct_answer": "B",
+      "evidence": {
+        "paragraph": 2,
+        "anchor": "A moss colony also changes the ground around it",
+        "rationale": "The pronoun it refers to the moss colony mentioned immediately before it."
+      },
+      "item_id": "rc-2d3293a2-q1"
+    },
+    {
+      "question_type": "VOCABULARY_IN_CONTEXT",
+      "stem": "The word “dormancy” in paragraph 1 is closest in meaning to",
+      "choices": {
+        "A": "inactivity",
+        "B": "movement",
+        "C": "illness",
+        "D": "expansion"
+      },
+      "correct_answer": "A",
+      "evidence": {
+        "paragraph": 1,
+        "anchor": "enter dormancy, and growth nearly stops",
+        "rationale": "Dormancy means a period of greatly reduced activity, as shown by the statement that growth nearly stops."
+      },
+      "item_id": "rc-2d3293a2-q2"
+    },
+    {
+      "question_type": "DETAIL",
+      "stem": "What happens when the surface dries?",
+      "choices": {
+        "A": "The mosses enter dormancy.",
+        "B": "The mosses absorb more water.",
+        "C": "The colonies grow deeper roots.",
+        "D": "The stems release stored nutrients."
+      },
+      "correct_answer": "A",
+      "evidence": {
+        "paragraph": 1,
+        "anchor": "the mosses enter dormancy",
+        "rationale": "Paragraph 1 directly states that drying causes the mosses to enter dormancy."
+      },
+      "item_id": "rc-2d3293a2-q3"
+    },
+    {
+      "question_type": "REFERENCE",
+      "stem": "The word “They” in paragraph 4 refers to",
+      "choices": {
+        "A": "larger plants",
+        "B": "nearby organisms",
+        "C": "the mosses",
+        "D": "environmental changes"
+      },
+      "correct_answer": "C",
+      "evidence": {
+        "paragraph": 4,
+        "anchor": "They do not overcome desert dryness",
+        "rationale": "They refers to the mosses, the subject discussed in the preceding sentences."
+      },
+      "item_id": "rc-2d3293a2-q4"
+    },
+    {
+      "question_type": "VOCABULARY_IN_CONTEXT",
+      "stem": "The word “favorable” in paragraph 2 is closest in meaning to",
+      "choices": {
+        "A": "suitable",
+        "B": "visible",
+        "C": "temporary",
+        "D": "unusual"
+      },
+      "correct_answer": "A",
+      "evidence": {
+        "paragraph": 2,
+        "anchor": "make the surface more favorable for mosses",
+        "rationale": "The colony makes the surface more suitable for mosses and nearby organisms."
+      },
+      "item_id": "rc-2d3293a2-q5"
+    },
+    {
+      "question_type": "DETAIL",
+      "stem": "What do the stems trap?",
+      "choices": {
+        "A": "Sunlight and warm air",
+        "B": "Dust and organic particles",
+        "C": "Seeds and animal fibers",
+        "D": "Salt and mineral crystals"
+      },
+      "correct_answer": "B",
+      "evidence": {
+        "paragraph": 2,
+        "anchor": "trap dust and organic particles",
+        "rationale": "Paragraph 2 identifies dust and organic particles as materials trapped by the stems."
+      },
+      "item_id": "rc-2d3293a2-q6"
+    },
+    {
+      "question_type": "VOCABULARY_IN_CONTEXT",
+      "stem": "The word “harsh” in paragraph 4 is closest in meaning to",
+      "choices": {
+        "A": "severe",
+        "B": "bright",
+        "C": "distant",
+        "D": "changeable"
+      },
+      "correct_answer": "A",
+      "evidence": {
+        "paragraph": 4,
+        "anchor": "during harsh conditions",
+        "rationale": "Harsh describes the severe environmental conditions that make growth difficult."
+      },
+      "item_id": "rc-2d3293a2-q7"
+    },
+    {
+      "question_type": "DETAIL",
+      "stem": "Why can several brief showers increase productivity?",
+      "choices": {
+        "A": "They prevent all evaporation.",
+        "B": "They carry nutrients into deep soil.",
+        "C": "They allow photosynthesis to resume repeatedly.",
+        "D": "They keep sunlight away from the colony."
+      },
+      "correct_answer": "C",
+      "evidence": {
+        "paragraph": 3,
+        "anchor": "repeated wetting allows photosynthesis to resume multiple times",
+        "rationale": "Repeated wetting gives the moss several opportunities to restart photosynthesis."
+      },
+      "item_id": "rc-2d3293a2-q8"
+    }
+  ],
+  "passage_id": "rc-2d3293a2"
+}
