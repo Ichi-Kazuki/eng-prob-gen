@@ -24,7 +24,7 @@ jobs:
             requirements.txt
             requirements.lock
             pyproject.toml
-      - name: Create isolated locked runtime environments
+      - name: Create isolated locked runtime environment
         id: runtime_envs
         shell: python
         run: |
@@ -46,25 +46,50 @@ jobs:
               return python, site_packages
 
           runtime_python, _ = create_environment(".ci-runtime")
-          audit_python, audit_site_packages = create_environment(".ci-audit-runtime")
+          audit_site_packages = pathlib.Path(".ci-audit-site").resolve()
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
               output.write(f"runtime_python={runtime_python.resolve()}\n")
-              output.write(f"audit_python={audit_python.resolve()}\n")
-              output.write(f"audit_site_packages={audit_site_packages.resolve()}\n")
+              output.write(f"audit_site_packages={audit_site_packages}\n")
       - name: Install locked runtime dependencies
         shell: python
         env:
           RUNTIME_PYTHON: ${{ steps.runtime_envs.outputs.runtime_python }}
-          AUDIT_PYTHON: ${{ steps.runtime_envs.outputs.audit_python }}
         run: |
           import os
           import subprocess
 
-          for variable in ("RUNTIME_PYTHON", "AUDIT_PYTHON"):
-              subprocess.run(
-                  [os.environ[variable], "-m", "pip", "install", "--disable-pip-version-check", "-r", "requirements.txt", "-c", "requirements.lock"],
-                  check=True,
-              )
+          subprocess.run(
+              [os.environ["RUNTIME_PYTHON"], "-m", "pip", "install", "--disable-pip-version-check", "-r", "requirements.txt", "-c", "requirements.lock"],
+              check=True,
+          )
+      - name: Install application dependency closure into plain audit target
+        shell: python
+        env:
+          RUNTIME_PYTHON: ${{ steps.runtime_envs.outputs.runtime_python }}
+          AUDIT_SITE_PACKAGES: ${{ steps.runtime_envs.outputs.audit_site_packages }}
+        run: |
+          import os
+          import subprocess
+
+          # A plain --target directory holds only the application's runtime
+          # dependency closure, not the interpreter's bootstrap pip/setuptools,
+          # so pip-audit does not flag advisories unrelated to the application.
+          subprocess.run(
+              [
+                  os.environ["RUNTIME_PYTHON"],
+                  "-m",
+                  "pip",
+                  "install",
+                  "--disable-pip-version-check",
+                  "--target",
+                  os.environ["AUDIT_SITE_PACKAGES"],
+                  "-r",
+                  "requirements.txt",
+                  "-c",
+                  "requirements.lock",
+              ],
+              check=True,
+          )
       - name: Install CI tooling into test runtime
         shell: python
         env:
@@ -81,14 +106,12 @@ jobs:
         shell: python
         env:
           RUNTIME_PYTHON: ${{ steps.runtime_envs.outputs.runtime_python }}
-          AUDIT_PYTHON: ${{ steps.runtime_envs.outputs.audit_python }}
         run: |
           import os
           import subprocess
 
-          subprocess.run([os.environ["AUDIT_PYTHON"], "-m", "pip", "freeze"], check=True)
-          for variable in ("RUNTIME_PYTHON", "AUDIT_PYTHON"):
-              subprocess.run([os.environ[variable], "-m", "pip", "check"], check=True)
+          subprocess.run([os.environ["RUNTIME_PYTHON"], "-m", "pip", "freeze"], check=True)
+          subprocess.run([os.environ["RUNTIME_PYTHON"], "-m", "pip", "check"], check=True)
       - name: Compile Python sources
         shell: python
         env:

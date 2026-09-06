@@ -54,6 +54,17 @@ STRUCTURE_ITEM_SCHEMA = ROOT / "structure" / "schemas" / "generator_item.schema.
 STRUCTURE_OUTPUT_SCHEMA = ROOT / "structure" / "schemas" / "generator_output.schema.json"
 
 
+def _canonical_text_sha256(relative_path: str) -> str:
+    """Hash frozen text content after normalizing CRLF/CR to LF.
+
+    Protects the canonical committed text content rather than
+    checkout-specific bytes (e.g. Windows CRLF checkouts of LF blobs).
+    """
+    text = Path(relative_path).read_text(encoding="utf-8")
+    canonical = text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest()
+
+
 _STEM_FILLER_WORDS = (
     "in", "the", "archive", "during", "the", "extended", "review", "process",
     "for", "the", "ongoing", "study", "across", "multiple", "sessions", "before",
@@ -1275,14 +1286,14 @@ class StructurePromptTests(unittest.TestCase):
                 self.assertNotIn(forbidden, solver_prompt)
 
     def test_solver_contract_hash_regression(self) -> None:
-        solver_prompt_hash = hashlib.sha256(Path("structure/prompts/solver.md").read_bytes()).hexdigest()
+        solver_prompt_hash = _canonical_text_sha256("structure/prompts/solver.md")
         self.assertEqual(solver_prompt_hash, "e83c1a95cf4a098f43733101a63751ac151993cfbd02e25b9f9af0e238b862f3")
         for schema_name, expected_hash in {
             "solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
             "solver_output.schema.json": "90588686793f16f5ff2aefd6c19a834eb444e1bda9a0c1aff73de74e3506d031",
         }.items():
             with self.subTest(schema=schema_name):
-                actual_hash = hashlib.sha256((Path("structure/schemas") / schema_name).read_bytes()).hexdigest()
+                actual_hash = _canonical_text_sha256(str(Path("structure/schemas") / schema_name))
                 self.assertEqual(actual_hash, expected_hash)
 
     def test_planner_validation_and_pipeline_boundaries_are_protected(self) -> None:
@@ -1296,7 +1307,7 @@ class StructurePromptTests(unittest.TestCase):
         }
         for relative_path, expected_hash in expected_hashes.items():
             with self.subTest(path=relative_path):
-                actual_hash = hashlib.sha256(Path(relative_path).read_bytes()).hexdigest()
+                actual_hash = _canonical_text_sha256(relative_path)
                 self.assertEqual(actual_hash, expected_hash)
 
     def test_structure_frozen_prompt_surface_hash_regressions(self) -> None:
@@ -1307,7 +1318,7 @@ class StructurePromptTests(unittest.TestCase):
         }
         for relative_path, expected_hash in expected_hashes.items():
             with self.subTest(path=relative_path):
-                actual_hash = hashlib.sha256(Path(relative_path).read_bytes()).hexdigest()
+                actual_hash = _canonical_text_sha256(relative_path)
                 self.assertEqual(actual_hash, expected_hash)
 
     def test_structure_schema_hash_regressions(self) -> None:
@@ -1324,7 +1335,7 @@ class StructurePromptTests(unittest.TestCase):
         }
         for schema_name, expected_hash in expected_hashes.items():
             with self.subTest(schema=schema_name):
-                actual_hash = hashlib.sha256((Path("structure/schemas") / schema_name).read_bytes()).hexdigest()
+                actual_hash = _canonical_text_sha256(str(Path("structure/schemas") / schema_name))
                 self.assertEqual(actual_hash, expected_hash)
 
 

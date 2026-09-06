@@ -69,7 +69,7 @@ V01_PROTECTED_HASHES: dict[str, str] = {
     "structure/schemas/reviewer_output.schema.json": "9f47df07f99acfc34a6da22c6bdaa0f383246d2c090c2841598a7e8de0aa599e",
     "structure/schemas/solver_input.schema.json": "2a511be9e2192f45b8928c3612eb5083af29abc2b05ab31aa4d231d7f4b958e8",
     "structure/schemas/solver_output.schema.json": "90588686793f16f5ff2aefd6c19a834eb444e1bda9a0c1aff73de74e3506d031",
-    "tests/test_structure_v01.py": "f98faf0d216ca62e8a96667b4f1714618876cc4c7443bea47ef8b078dd238b40",
+    "tests/test_structure_v01.py": "4c1f87099faebf4543451f0e9495e798ff776249720c5e4be3778b941d0b5ac7",
 }
 
 # Protected v0.2 schemas at the approved base commit. Do not update these

@@ -486,12 +486,30 @@ class _SubprocessRuntime:
         return "process-group SIGKILL" if force else "process-group SIGTERM"
 
     @staticmethod
-    def _create_windows_job() -> int | None:
-        """Create a Job Object used as a bounded tree-kill fallback."""
+    def _load_windows_kernel32() -> Any | None:
+        """Load kernel32 without a statically direct ``ctypes.WinDLL`` reference.
+
+        ``ctypes.WinDLL`` only exists on Windows builds of ``ctypes``, so a
+        direct attribute reference fails mypy on non-Windows runners even
+        though the call is already guarded by ``os.name``.
+        """
         if os.name != "nt":
             return None
+        win_dll = getattr(ctypes, "WinDLL", None)
+        if win_dll is None:
+            return None
         try:
-            kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+            return win_dll("kernel32", use_last_error=True)
+        except (AttributeError, OSError):
+            return None
+
+    @classmethod
+    def _create_windows_job(cls) -> int | None:
+        """Create a Job Object used as a bounded tree-kill fallback."""
+        kernel32 = cls._load_windows_kernel32()
+        if kernel32 is None:
+            return None
+        try:
             kernel32.CreateJobObjectW.argtypes = [ctypes.c_void_p, ctypes.c_wchar_p]
             kernel32.CreateJobObjectW.restype = ctypes.c_void_p
             handle = kernel32.CreateJobObjectW(None, None)
@@ -499,36 +517,42 @@ class _SubprocessRuntime:
         except (AttributeError, OSError):
             return None
 
-    @staticmethod
-    def _assign_windows_job(job_handle: int | None, process_handle: int) -> bool:
-        if job_handle is None or os.name != "nt":
+    @classmethod
+    def _assign_windows_job(cls, job_handle: int | None, process_handle: int) -> bool:
+        if job_handle is None:
+            return False
+        kernel32 = cls._load_windows_kernel32()
+        if kernel32 is None:
             return False
         try:
-            kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
             kernel32.AssignProcessToJobObject.argtypes = [ctypes.c_void_p, ctypes.c_void_p]
             kernel32.AssignProcessToJobObject.restype = ctypes.c_int
             return bool(kernel32.AssignProcessToJobObject(job_handle, process_handle))
         except (AttributeError, OSError):
             return False
 
-    @staticmethod
-    def _terminate_windows_job(job_handle: int | None) -> bool:
-        if job_handle is None or os.name != "nt":
+    @classmethod
+    def _terminate_windows_job(cls, job_handle: int | None) -> bool:
+        if job_handle is None:
+            return False
+        kernel32 = cls._load_windows_kernel32()
+        if kernel32 is None:
             return False
         try:
-            kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
             kernel32.TerminateJobObject.argtypes = [ctypes.c_void_p, ctypes.c_uint]
             kernel32.TerminateJobObject.restype = ctypes.c_int
             return bool(kernel32.TerminateJobObject(job_handle, 1))
         except (AttributeError, OSError):
             return False
 
-    @staticmethod
-    def _close_windows_job(job_handle: int | None) -> None:
-        if job_handle is None or os.name != "nt":
+    @classmethod
+    def _close_windows_job(cls, job_handle: int | None) -> None:
+        if job_handle is None:
+            return
+        kernel32 = cls._load_windows_kernel32()
+        if kernel32 is None:
             return
         try:
-            kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
             kernel32.CloseHandle.argtypes = [ctypes.c_void_p]
             kernel32.CloseHandle(job_handle)
         except (AttributeError, OSError):
