@@ -90,6 +90,7 @@ class LiveE2EStateRoutingTests(unittest.TestCase):
                  mock.patch.object(harness, "invoke", side_effect=invoke), \
                  mock.patch.object(harness, "validate_schema_only", return_value=(True, [])), \
                  mock.patch.object(harness, "validate_generator_finalization", return_value=(True, [])), \
+                 mock.patch.object(harness, "validate_generator_precheck", return_value=(True, [])), \
                  mock.patch.object(harness, "formal_reviewer", return_value=reviewer), \
                  mock.patch.object(harness, "validate_existing_contract", return_value=(True, [])), \
                  mock.patch.object(harness.orch, "run_schema_validator", return_value=(True, "")), \
@@ -202,6 +203,7 @@ class LiveE2ECohortTests(unittest.TestCase):
             solver_formal,
             provenance_records,
             outcomes,
+            _cohort_size=None,
         ):
             orders.append(order)
             generator = copy.deepcopy(self.generator_items[order - 1])

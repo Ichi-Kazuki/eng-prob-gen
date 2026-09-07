@@ -48,6 +48,13 @@ Official item本文を模倣・軽い言い換えするために使ってはい�
 - sampled gap targets, distractor length profile, and answer-position preference
 - expected span profile / coverage profile / approximate context profile
 
+`primary_target` は `analysis/grammar_taxonomy.json` の `primary_targets[].id` のいずれか一つと
+文字列として完全一致させる。`tested_error_type` は `specs/toefl_itp_grammar_spec.json` の
+`tested_error_types[].id`（`fragment` と `wrong_complementation` を除く）のいずれか一つと
+完全一致させる。説明文・言い換え・独自ラベルをこの2フィールドに使わない。デターミニスティックな
+Production validatorはこの2フィールドをtaxonomy IDの集合に対して照合するので、一致しないitemは
+Reviewer呼び出し前に機械的に reject される。
+
 sentence length と correct-span type は固定値・hand-tuned probabilityではなく、
 `analysis/we_format/written_expression_format_official.json` の observed item/count を
 sourceにした empirical draw とする。小さなbatchへofficial quotaを機械的コピーしない。
@@ -79,6 +86,12 @@ clean formからerror formへ、標準英語の明確なviolationを一つだけ
 - `error_form`
 - `minimal_correction`
 - `mutation_type`
+
+`mutation_type` は必ず `source -> target` の矢印構文（ASCII `->`、末尾に補足説明の括弧書きは可）
+で書く。例: `whom -> who (relative pronoun case after preposition)`。矢印を含まない自由記述の
+ラベル（例: `singular_subject_head_to_plural_verb`）は不可。`mutation_safety.py` はこの構文を
+機械的にparseしてclean_form/error_formの実差分と照合するので、矢印を欠く・source/targetが
+実差分と一致しない`mutation_type`はReviewer呼び出し前に reject される。
 
 ### PHASE 5 — Error uniqueness audit
 
@@ -122,6 +135,12 @@ surface word countとsyntactic span typeは別metadataとして保存する。`S
 `sentence_word_count`, `span_word_counts.A-D`, `mean_span_length`, `max_span_length`, `marked_coverage_ratio`, `unmarked_word_count`, `gap_A_B`, `gap_B_C`, `gap_C_D`, `correct_span_word_count`, `correct_span_type`, `correction_locality`, `decision_granularity`, `format_distribution_distance`, `format_percentile_profile`, `format_band_status`。
 
 公式分位bandは `agents/toefl_itp_we_generator_v2/config/we_v2_format_config.json` にある。PREFERRED/WARNING/EXTREMEはformat diagnosticsであり、grammar correctnessを上書きしない。100% coverageとunmarked context=0はnormal patternとして禁止するが、coverage 60%以上を絶対grammar rejection thresholdにはしない。
+
+`format_metadata.diagnostics`配下の全フィールド（`format_percentile_profile`, `format_band_status`,
+`metric_band_status`を含む）は`validate_format.py`の計算結果と bit-for-bit 一致させる。推定・
+概算・記憶からの再構成をしない。デターミニスティックなProduction validatorはこのフィールド集合を
+最終sentence/marked_partsから独立に再計算し、宣言値と厳密比較するので、値が一致しないitemは
+Reviewer呼び出し前に機械的に reject される。
 
 emission前に `format_planner.py` の pre-emission checks を通す。sentence length、4 spanの
 word count、coverage、unmarked context、3 gaps、correct span typeを再計算する。

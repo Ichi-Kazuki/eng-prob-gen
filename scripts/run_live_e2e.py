@@ -702,8 +702,25 @@ def validate_existing_contract(item: dict, validator_path: str, stage: str) -> t
 def validate_generator_finalization(item: dict) -> tuple[bool, list[str]]:
     """Check the parsed formal Generator item before any Reviewer call."""
 
-    validator_path = GENERATOR_VALIDATOR
     _verify_freeze("before", "generator_finalization_validator_load")
+    module = _generator_validator_module()
+    _verify_freeze("after", "generator_finalization_validator_load")
+    _verify_freeze("before", "generator_finalization_validation")
+    errors = module.validate_finalization_integrity(item)
+    _verify_freeze("after", "generator_finalization_validation")
+    return not errors, [f"generator: {error}" for error in errors]
+
+
+def _generator_validator_module() -> Any:
+    """Load (and cache) the checked-in Generator validator module.
+
+    Shared by ``validate_generator_finalization`` and the deterministic
+    pre-Reviewer precheck below so both reuse the exact same taxonomy/format
+    (``validate_format.validate_item``) and mutation-safety
+    (``mutation_safety.validate_item``) implementations rather than a second
+    copy of their logic.
+    """
+    validator_path = GENERATOR_VALIDATOR
     cache_key = (validator_path, _RUN_FREEZE.manifest_sha256 if _RUN_FREEZE is not None else None)
     module = _VALIDATOR_MODULES.get(cache_key)
     if module is None:
@@ -711,18 +728,53 @@ def validate_generator_finalization(item: dict) -> tuple[bool, list[str]]:
         module_name = "we_live_generator_finalization_validator"
         spec = importlib.util.spec_from_file_location(module_name, path)
         if spec is None or spec.loader is None:
-            return False, [f"generator: cannot load finalization validator {path}"]
+            raise LiveInvocationError("infrastructure", f"generator: cannot load validator {path}")
         scripts_path = str(path.parent)
         if scripts_path not in sys.path:
             sys.path.insert(0, scripts_path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         _VALIDATOR_MODULES[cache_key] = module
-    _verify_freeze("after", "generator_finalization_validator_load")
-    _verify_freeze("before", "generator_finalization_validation")
-    errors = module.validate_finalization_integrity(item)
-    _verify_freeze("after", "generator_finalization_validation")
-    return not errors, [f"generator: {error}" for error in errors]
+    return module
+
+
+def validate_generator_precheck(item: dict) -> tuple[bool, list[str]]:
+    """Deterministic Production-contract precheck, run before the live Reviewer.
+
+    This reuses the exact checked-in deterministic checks the frozen WE
+    v2.1.3 Production validator (``validate_output.validate_contract``) also
+    runs for taxonomy membership and format diagnostics
+    (``validate_format.validate_item``) and for mutation-direction
+    parseability / local mutation-safety metadata
+    (``mutation_safety.validate_item``).  It deliberately does not require
+    the out-of-band grammar evidence artifact ``validate_contract`` demands
+    for ``grammar_evidence_status``: that evidence is intentionally
+    unavailable before the live Reviewer/Solver stages, and
+    ``mutation_safety.validate_item`` without external evidence reports
+    ``REQUIRES_EXTERNAL_REVIEW`` for that dimension rather than rejecting on
+    it.  A Generator artifact that would fail the frozen validator on
+    taxonomy, format diagnostics, or mutation-direction parseability grounds
+    is therefore rejected here, before any Reviewer/Solver call is made.
+    """
+    if not isinstance(item, dict):
+        return False, ["generator: item must be an object"]
+    module = _generator_validator_module()
+    _verify_freeze("before", "generator_precheck_validation")
+    config = module.load_json(module.CONFIG_PATH)
+    grammar = module.load_json(module.GRAMMAR_SPEC_PATH)
+    taxonomy = module.load_json(module.TAXONOMY_PATH)
+    targets = {entry["id"] for entry in taxonomy["primary_targets"]}
+    error_types = {
+        entry["id"]
+        for entry in grammar["tested_error_types"]
+        if entry["id"] not in {"fragment", "wrong_complementation"}
+    }
+    format_result = module.validate_item(item, config, targets, error_types)
+    errors = [f"generator: {error}" for error in format_result["errors"]]
+    mutation_result = module.validate_mutation_item(item)
+    errors.extend(f"generator: mutation_safety: {reason}" for reason in mutation_result.reasons)
+    _verify_freeze("after", "generator_precheck_validation")
+    return not errors, errors
 
 
 def _resolve_recorded_path(value: object) -> Path | None:
@@ -1111,7 +1163,7 @@ def candidate_from_generator(item: dict) -> orch.Candidate:
     return candidate
 
 
-def process_one(order: int, batch_id: str, config: dict, generator_formal: list, reviewer_formal: list, solver_formal: list, provenance_records: list, outcomes: list) -> None:
+def process_one(order: int, batch_id: str, config: dict, generator_formal: list, reviewer_formal: list, solver_formal: list, provenance_records: list, outcomes: list, cohort_size: int = DEFAULT_COHORT_SIZE) -> None:
     item_id = f"we-v2.1.3-live-{batch_id[-8:]}-{order:03d}"
     reviewer_invocation: InvocationResult | None = None
     solver_invocation: InvocationResult | None = None
@@ -1139,6 +1191,13 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
             generator_ok, generator_errors = validate_generator_finalization(candidate_item)
             if not generator_ok:
                 raise LiveInvocationError("schema", "; ".join(generator_errors))
+            # Deterministic Production-contract precheck: reject an artifact
+            # the frozen validator would reject on taxonomy, format-diagnostic,
+            # or mutation-direction grounds before any live Reviewer/Solver
+            # call is made for it.
+            generator_ok, generator_errors = validate_generator_precheck(candidate_item)
+            if not generator_ok:
+                raise LiveInvocationError("schema", "; ".join(generator_errors))
             generated = candidate_item
             generator_formal.append(generated)
             provenance_records.append(sidecar(generator_invocation, input_payload={}, contract_validated=True, formal_output_exists=True, leakage=[]))
@@ -1154,7 +1213,11 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
                     cli_version=runtime.cli_version,
                 )
             provenance_records.append(sidecar(generator_invocation, input_payload={}, contract_validated=False, formal_output_exists=False, leakage=[], error=exc))
-            if exc.category == "schema" and attempt <= GENERATOR_VALIDATION_RETRIES:
+            # A production-style single-item (--count 1) attempt must reject a
+            # deterministic Generator validation failure outright rather than
+            # trigger hidden semantic regeneration. The default cohort_size=10
+            # validation-harness semantics keep the existing retry behavior.
+            if exc.category == "schema" and attempt <= GENERATOR_VALIDATION_RETRIES and cohort_size != 1:
                 print(f"generator validation retry for item {order} attempt {attempt + 1}", flush=True)
                 continue
             outcomes.append({"item_id": item_id, "state": "GENERATION_FAILED", "failure": {"stage": "generator", "category": exc.category, "detail": exc.detail}, "generator_attempts": attempt})
@@ -1960,7 +2023,7 @@ def main(argv: list[str] | None = None) -> int:
     outcomes: list = []
     try:
         for order in range(1, cohort_size + 1):
-            process_one(order, batch_id, config, generator_items, reviewer_items, solver_items, provenance_records, outcomes)
+            process_one(order, batch_id, config, generator_items, reviewer_items, solver_items, provenance_records, outcomes, cohort_size)
             atomic_write_json(FORMAL / "generator_outputs.json", {"items": generator_items})
             atomic_write_json(FORMAL / "reviewer_outputs.json", {"items": reviewer_items})
             atomic_write_json(FORMAL / "solver_outputs.json", {"items": solver_items})
