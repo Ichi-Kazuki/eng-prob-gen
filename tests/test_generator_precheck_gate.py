@@ -19,13 +19,17 @@ from types import SimpleNamespace
 from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
+# Checked-in fixture derived from the historical valid WE v2.1.3 live-one
+# Generator artifact's public shape (see runs/we_v2_1_3_live_one_20260827T132728/
+# runtime/formal/generator_outputs.json on the developer machine that produced
+# it). That runs/ directory is a local, non-repository artifact and is absent
+# in a clean checkout, so the tests must not read it at runtime.
 HISTORICAL_VALID_ITEM_PATH = (
     ROOT
-    / "runs"
-    / "we_v2_1_3_live_one_20260827T132728"
-    / "runtime"
-    / "formal"
-    / "generator_outputs.json"
+    / "tests"
+    / "fixtures"
+    / "we_v2_1_3_generator_precheck"
+    / "valid_generator_item.json"
 )
 
 
