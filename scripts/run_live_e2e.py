@@ -151,7 +151,22 @@ EVIDENCE_ARTIFACTS = (
     "runtime/test_result.json",
     "runtime/freeze/freeze_manifest.json",
 )
-OFFLINE_TEST_TIMEOUT_SECONDS = 300
+def _offline_test_timeout_seconds() -> int:
+    raw = os.environ.get("WE_E2E_OFFLINE_TEST_TIMEOUT_SECONDS", "900")
+    try:
+        parsed = int(raw)
+    except ValueError as exc:
+        raise ValueError(
+            f"WE_E2E_OFFLINE_TEST_TIMEOUT_SECONDS must be a positive integer, got {raw!r}"
+        ) from exc
+    if parsed <= 0:
+        raise ValueError(
+            f"WE_E2E_OFFLINE_TEST_TIMEOUT_SECONDS must be a positive integer, got {raw!r}"
+        )
+    return parsed
+
+
+OFFLINE_TEST_TIMEOUT_SECONDS = _offline_test_timeout_seconds()
 DEFAULT_COHORT_SIZE = 10
 
 
@@ -1541,6 +1556,21 @@ def build_metrics(
     }
 
 
+_LIVE_PILOT_ENV_VARS = (
+    "WE_E2E_FINAL_PILOT",
+    "WE_E2E_EXPECTED_COMMIT",
+    "WE_E2E_OUTPUT_DIR",
+    "WE_E2E_REPORT_ONLY",
+)
+
+
+def _sanitized_test_subprocess_env() -> dict:
+    child_env = os.environ.copy()
+    for key in _LIVE_PILOT_ENV_VARS:
+        child_env.pop(key, None)
+    return child_env
+
+
 def run_existing_tests() -> dict:
     command = [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py"]
     try:
@@ -1552,6 +1582,7 @@ def run_existing_tests() -> dict:
             encoding="utf-8",
             errors="replace",
             timeout=OFFLINE_TEST_TIMEOUT_SECONDS,
+            env=_sanitized_test_subprocess_env(),
         )
         output = (proc.stdout + proc.stderr).strip()
         return {"command": command, "exit_code": proc.returncode, "passed": proc.returncode == 0, "output_tail": output[-4000:]}

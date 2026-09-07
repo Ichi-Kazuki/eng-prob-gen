@@ -147,6 +147,12 @@ Use a unique `WE_E2E_OUTPUT_DIR` for every independent attempt. A rejected
 one-item run is retained as a failed independent attempt and is never repaired,
 reused, or supplied as a production source.
 
+This command runs one independent consensus-stage attempt only. An `ACCEPTED`
+outcome here means consensus-stage acceptance, not production eligibility: the
+item must still pass independent Grammar Evidence (below) and
+`production.adapters.load_written_expression_source(...)` before it can enter
+Production Assembly.
+
 After the single outcome is `ACCEPTED`, run the existing independent Grammar
 Evidence Producer against that run's Generator artifact:
 
