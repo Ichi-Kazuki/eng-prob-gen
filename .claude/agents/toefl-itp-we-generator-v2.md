@@ -93,6 +93,12 @@ clean formからerror formへ、標準英語の明確なviolationを一つだけ
 機械的にparseしてclean_form/error_formの実差分と照合するので、矢印を欠く・source/targetが
 実差分と一致しない`mutation_type`はReviewer呼び出し前に reject される。
 
+トップレベルの `minimal_correction` と `qa_metadata.minimal_correction` も同様に、必ず
+`source -> target` の矢印構文（ASCII `->`）で書く。例: `who -> whom`。修正後の語だけを書いた
+自由記述（例: `whom`のみ、矢印なし）は不可。この2フィールドは文字列として完全一致させる。
+`mutation_safety.py` の `_extract_correction_direction` はこの矢印構文を機械的にparseするので、
+矢印を欠く`minimal_correction`はReviewer呼び出し前に reject される。
+
 ### PHASE 5 — Error uniqueness audit
 
 次をすべて確認する。
@@ -141,6 +147,16 @@ surface word countとsyntactic span typeは別metadataとして保存する。`S
 概算・記憶からの再構成をしない。デターミニスティックなProduction validatorはこのフィールド集合を
 最終sentence/marked_partsから独立に再計算し、宣言値と厳密比較するので、値が一致しないitemは
 Reviewer呼び出し前に機械的に reject される。
+
+live E2E harness（`scripts/run_live_e2e.py`）経由の実行では、この応答が返った直後に
+`format_metadata.diagnostics`はこのagentの出力ではなく`validate_format.format_diagnostics`の
+計算結果で機械的に上書きされる。これは`sentence`, `marked_parts`, `correct_answer`,
+`grammar_metadata`という4つのmodel-owned fieldから完全に導出可能な値だからであり、
+sentence/marked_parts/correct_answer/grammar_metadata/qa_metadata/taxonomy選択自体は
+一切書き換えられない。この上書きにより採否が変わることはなく、既にコード側で
+決定論的に計算できる値をmodelに正確な算術で再現させる必要がなくなるだけである。
+それでも本フィールドはschema上required・型付きなので、shapeが正しいbest-effort値を
+必ず出力する。
 
 emission前に `format_planner.py` の pre-emission checks を通す。sentence length、4 spanの
 word count、coverage、unmarked context、3 gaps、correct span typeを再計算する。

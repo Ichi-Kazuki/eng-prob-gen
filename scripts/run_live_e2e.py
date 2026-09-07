@@ -738,6 +738,83 @@ def _generator_validator_module() -> Any:
     return module
 
 
+def _format_validator_module() -> Any:
+    """Load (and cache) the checked-in deterministic format-diagnostics module.
+
+    This is the exact ``validate_format.format_diagnostics`` calculator that
+    ``validate_format.validate_item`` (and therefore
+    ``validate_generator_precheck`` below) uses to detect a stale/incorrect
+    ``format_metadata.diagnostics`` declaration. It is loaded separately from
+    ``_generator_validator_module`` (which loads ``validate_output.py``)
+    because that module only imports ``validate_item`` by name, not the
+    lower-level ``format_diagnostics`` function that
+    ``enrich_generator_format_diagnostics`` needs to become the sole owner of
+    the diagnostics sub-object.
+    """
+    validator_path = "agents/toefl_itp_we_generator_v2/scripts/validate_format.py"
+    cache_key = (validator_path, _RUN_FREEZE.manifest_sha256 if _RUN_FREEZE is not None else None)
+    module = _VALIDATOR_MODULES.get(cache_key)
+    if module is None:
+        path = ROOT / validator_path
+        module_name = "we_live_generator_format_diagnostics_module"
+        spec = importlib.util.spec_from_file_location(module_name, path)
+        if spec is None or spec.loader is None:
+            raise LiveInvocationError("infrastructure", f"generator: cannot load validator {path}")
+        scripts_path = str(path.parent)
+        if scripts_path not in sys.path:
+            sys.path.insert(0, scripts_path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _VALIDATOR_MODULES[cache_key] = module
+    return module
+
+
+def enrich_generator_format_diagnostics(item: dict) -> dict:
+    """Make deterministic code, not the model, the owner of format diagnostics.
+
+    ``format_metadata.diagnostics`` (word counts, span geometry, percentile
+    profile, band status, token indices, ...) is entirely derivable from the
+    model-owned ``sentence``, ``marked_parts``, ``correct_answer``, and
+    ``grammar_metadata`` fields. Requiring the model to also reproduce that
+    arithmetic bit-for-bit is why almost every live Generator attempt failed
+    the deterministic precheck on ``format_metadata.diagnostics.*`` fields
+    alone. This finalization step replaces whatever the model declared for
+    ``diagnostics`` with the exact value computed by
+    ``validate_format.format_diagnostics`` -- the same authoritative
+    calculator ``validate_format.validate_item`` (and therefore
+    ``validate_generator_precheck`` and the frozen Production validator)
+    independently recomputes and compares against. No other field is
+    touched: sentence, marked_parts, correct_answer, taxonomy choices,
+    grammar_metadata, qa_metadata, and format_metadata.span_types remain
+    exactly as the model authored them.
+
+    When the underlying sentence/span shape is not sound enough to compute
+    diagnostics at all (for example, an unaligned span), this function makes
+    no change; the existing deterministic validators report the same
+    structural error they always have, because they recompute diagnostics
+    from scratch and see the same defect.
+    """
+    format_metadata = item.get("format_metadata")
+    if not isinstance(format_metadata, dict):
+        return item
+    module = _format_validator_module()
+    _verify_freeze("before", "generator_format_enrichment")
+    config = module.load_json(module.CONFIG_PATH)
+    diagnostics, errors = module.format_diagnostics(item, config)
+    _verify_freeze("after", "generator_format_enrichment")
+    if not diagnostics or errors:
+        # A structural defect (unaligned span, invalid span_types, ...) means
+        # the computed numbers rest on a broken assumption. Leave the item
+        # untouched so the existing deterministic validators report the same
+        # underlying defect they always have, instead of laundering it
+        # through a plausible-looking but meaningless diagnostics object.
+        return item
+    enriched = copy.deepcopy(item)
+    enriched["format_metadata"] = dict(enriched["format_metadata"])
+    enriched["format_metadata"]["diagnostics"] = diagnostics
+    return enriched
+
+
 def validate_generator_precheck(item: dict) -> tuple[bool, list[str]]:
     """Deterministic Production-contract precheck, run before the live Reviewer.
 
@@ -909,6 +986,38 @@ def reviewer_runtime_schema(canonical_schema_path: Path | dict[str, Any] = REVIE
     return schema
 
 
+def canonical_taxonomy_prompt_block() -> str:
+    """Render the exact taxonomy IDs the live Generator prompt must use.
+
+    Loaded at prompt-build time from the same checked-in authoritative
+    sources (``analysis/grammar_taxonomy.json``,
+    ``specs/toefl_itp_grammar_spec.json``) that
+    ``validate_generator_precheck`` validates against, so the model-facing
+    contract is concrete about the accepted identifiers without maintaining
+    a second, handwritten taxonomy list that could drift from the source.
+    """
+    module = _generator_validator_module()
+    grammar = module.load_json(module.GRAMMAR_SPEC_PATH)
+    taxonomy = module.load_json(module.TAXONOMY_PATH)
+    targets = sorted(entry["id"] for entry in taxonomy["primary_targets"])
+    error_types = sorted(
+        entry["id"]
+        for entry in grammar["tested_error_types"]
+        if entry["id"] not in {"fragment", "wrong_complementation"}
+    )
+    return (
+        "Allowed primary_target IDs (analysis/grammar_taxonomy.json "
+        "primary_targets[].id), verbatim, no paraphrase: " + ", ".join(targets) + ".\n"
+        "Allowed tested_error_type IDs (specs/toefl_itp_grammar_spec.json "
+        "tested_error_types[].id, excluding fragment and wrong_complementation), "
+        "verbatim, no paraphrase: " + ", ".join(error_types) + ".\n"
+        "primary_target and tested_error_type MUST each be exactly one of the IDs "
+        "above. Do not invent a label such as subject_verb_agreement: subject-verb "
+        "and noun-quantifier number mismatches are tested_error_type=agreement_error "
+        "under primary_target=CLAUSE_STRUCTURE, not a separate taxonomy entry."
+    )
+
+
 def generator_prompt(item_id: str, order: int, batch_id: str) -> str:
     return f"""LIVE GENERATOR INVOCATION.
 
@@ -920,6 +1029,22 @@ must be exactly {json.dumps(item_id)}; this is microbatch item {order} in batch
 canonical Generator schema; do not use markdown or an items wrapper. Keep all
 field names, enum values, nested shapes, sentence-first phases, format rules,
 and mutation-safety rules from the authoritative instruction and schema.
+
+{canonical_taxonomy_prompt_block()}
+
+Both `minimal_correction` (top-level) and `qa_metadata.minimal_correction` MUST
+contain a parseable `source -> target` arrow direction (ASCII `->`), matching
+the actual error_form -> clean_form repair, for example `who -> whom`. A bare
+corrected word or phrase alone (for example just `whom`, with no arrow) is
+rejected before Reviewer. `qa_metadata.minimal_correction` and top-level
+`minimal_correction` must be identical strings.
+
+`format_metadata.diagnostics` is deterministically recomputed by the runtime
+from `sentence`, `marked_parts`, `correct_answer`, and `grammar_metadata`
+after this response is returned, using the exact same calculator the
+Production validator uses. Populate it with your best estimate in the correct
+shape; exact bit-for-bit arithmetic precision is not required because the
+declared values are replaced, not graded.
 """
 
 
@@ -1186,6 +1311,10 @@ def process_one(order: int, batch_id: str, config: dict, generator_formal: list,
                 raise LiveInvocationError("schema", "; ".join(generator_errors))
             if candidate_item.get("item_id") != item_id:
                 raise LiveInvocationError("schema", f"generator: item_id mismatch; expected {item_id!r}, got {candidate_item.get('item_id')!r}")
+            # Deterministic code, not the model, owns format_metadata.diagnostics:
+            # replace whatever the model declared with the authoritative
+            # calculation before any downstream validation inspects it.
+            candidate_item = enrich_generator_format_diagnostics(candidate_item)
             # Finalization must inspect the formal object returned by the
             # runtime. An intermediate mutation object is not authoritative.
             generator_ok, generator_errors = validate_generator_finalization(candidate_item)
@@ -1901,6 +2030,7 @@ def run_generator_probe() -> int:
             "generator",
         )
         if schema_ok:
+            generated = enrich_generator_format_diagnostics(generated)
             final_ok, finalization_errors = validate_generator_finalization(generated)
             if not final_ok:
                 canonical_errors.extend(finalization_errors)
