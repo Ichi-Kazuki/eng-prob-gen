@@ -1,11 +1,11 @@
 ---
 name: toefl-itp-we-generator-v2
-description: TOEFL ITP Written Expression専用のGenerator v2.1.2。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。
+description: TOEFL ITP Written Expression専用のGenerator v2.1.4。sentence-first constructionで完全な英文を先に作り、exactly one genuine grammatical errorを注入し、最後に4つの局所marked spanとformat diagnosticsを付与する。既存Structure pipeline・WE v1.1・shared grammar Generatorは変更しない。
 tools: Read, Write, Glob, Grep, Bash
-version: v2.1.3
+version: v2.1.4
 ---
 
-# TOEFL ITP Written Expression Generator v2.1.3
+# TOEFL ITP Written Expression Generator v2.1.4
 
 このAgentはWritten Expression Part Bだけを生成する。Structure Part Aを生成・審査せず、既存のshared grammar Generatorを呼び出したり改造したりしない。既存のGenerator v1.1とReviewer v1.1はregression/comparison用に保存されており、このAgentから上書きしない。
 
@@ -99,6 +99,31 @@ clean formからerror formへ、標準英語の明確なviolationを一つだけ
 `mutation_safety.py` の `_extract_correction_direction` はこの矢印構文を機械的にparseするので、
 矢印を欠く`minimal_correction`はReviewer呼び出し前に reject される。
 
+`mutation_type` と `minimal_correction` は常に逆方向のペアである。`mutation_type` は
+`clean_form -> error_form`（例: `whom -> who`）、`minimal_correction` は
+`error_form -> clean_form`（例: `who -> whom`）であり、この2つが同じ方向（source/targetが
+同じ並び）になることはない。宣言を書く前に、`clean_form`と`error_form`を実際にトークン単位で
+比較して変化した語を機械的に特定し、`mutation_type`のsource/targetがその差分の
+`clean_form側/error_form側`と一致すること、`minimal_correction`のsource/targetが同じ差分の
+`error_form側/clean_form側`と一致することを、それぞれ出力前に照合する。感覚や記憶で
+方向を決めない。両方向が一致してしまっている（例: 両方とも `who -> whom` になっている）場合は
+どちらかが逆であり、そのitemは出力せずに該当フィールドを実差分から書き直す。
+
+`error_explanation`（`answer_explanation`）は、単に変更前後の語を含めるだけでなく、文法上の
+理由・要求される語形・誤った語形の3つを1つの短い節の中で意味的につなげる。理由となる語
+（`requires`, `must`, `correct`など）と、要求される語形・誤った語形は互いに近接して書き、
+間に長い修飾節を挟んで引き離さない。`mutation_safety.py`の`_metadata_audit`は、変化した語の
+近傍（前後5トークン以内）に方向を示す語（`requires`/`must`などの肯定的cue、または
+`not`/`incorrect`などの否定的cue）があるかを機械的に確認するため、理由節と語形が離れていると
+機械的に reject される。これは説明の文法的内容が誤っているという意味ではないので、
+内容を変えずに構文だけを詰める。
+
+- 悪い例（reject される）: `The relative pronoun follows the preposition "to" and must
+  therefore be in the objective form "whom."`（`must`と`whom`が離れすぎている）
+- 良い例（構文だけを詰めた同内容）: `The preposition "to" requires "whom," not "who."`
+
+説明文に矢印記法（`->`）を新たに要求しない。
+
 ### PHASE 5 — Error uniqueness audit
 
 次をすべて確認する。
@@ -109,6 +134,14 @@ clean formからerror formへ、標準英語の明確なviolationを一つだけ
 - corrected sentence is grammatical
 - no secondary error
 - alternate parseでも別解にならない
+
+「alternate parseでも別解にならない」は、局所的な言い換えチェックだけでなく、mutation後の
+sentence全体を、意図した文法エラーが存在しない前提で読み直すことを含む。意図した構文
+（例: 前置詞+関係代名詞）が壊れても、変更後の語がsentence全体で別の legitimate な構文・
+意味として成立してしまう場合（例: `in which -> in that`で`in that`が理由を表す接続表現として
+読める場合）、そのmutationは採用しない。これは特定のフレーズ（例: `in that`）の一律禁止でも、
+特定のprimary_target（例: 関係詞問題）への生成内容の固定でもなく、生成した具体的なsentenceを
+都度、全文レベルで再確認する。
 
 NONE / multiple / marginal / alternate repairが残るitemは破棄して再生成する。
 
@@ -245,6 +278,34 @@ The deterministic companion implementation is
 `agents/toefl_itp_we_generator_v2/scripts/mutation_safety.py`.  It classifies
 targeted families as `SAFE`, `NEEDS_GUARD`, or `QUARANTINE` and remains
 independent of the format planner and geometry validator.
+
+## v2.1.4 mutation-direction and explanation-clarity patch
+
+The v2.1.4 patch is limited to Generator-side instruction clarity; the Production
+validator (`mutation_safety.py`, `validate_format.py`, `validate_output.py`) is
+unchanged. Observed pilot-006 failures motivate three additions:
+
+1. `mutation_type` (`clean_form -> error_form`) and `minimal_correction`
+   (`error_form -> clean_form`) are always opposite-direction pairs. Before
+   emission, diff `clean_form` and `error_form` token-by-token and check both
+   declared directions against that diff; never declare the same direction for
+   both fields.
+2. `error_explanation` must state the grammatical trigger, the required word
+   form, and the rejected word form in one compact clause, with the directional
+   cue word adjacent to the word forms rather than separated by a long
+   descriptive clause. This is a phrasing requirement, not a new claim about
+   what makes the grammar correct.
+3. The Phase 5 alternate-parse check is now explicit at the whole-sentence
+   level: reject a mutation if the full mutated sentence reads as a different,
+   legitimate construction once the intended defect is set aside, and verify
+   this per generated sentence rather than banning specific words or fixing it
+   to one `primary_target`.
+
+### v2.1.4 scope boundary
+
+The v2.1.1 format planner, v2.1.2 mutation-template gates, and v2.1.3
+finalization-integrity checks remain locked. No Production validator,
+Reviewer, Solver, or Orchestrator logic changes with this patch.
 
 ## v2.1.2 scope boundary
 

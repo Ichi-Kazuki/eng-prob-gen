@@ -1,5 +1,30 @@
 # WE Generator v2 changelog
 
+## v2.1.4 — 2026-09-08
+
+Generator-instruction clarity patch driven by pilot-006 findings; Production
+validator, Reviewer, Solver, and Orchestrator unchanged.
+
+### Changed
+
+- required `mutation_type` (`clean_form -> error_form`) and
+  `minimal_correction` (`error_form -> clean_form`) to be declared as
+  opposite-direction pairs, checked against the actual clean/error token diff
+  before emission;
+- required `error_explanation` to keep the grammatical trigger, required word
+  form, and rejected word form close together in one clause, matching
+  `mutation_safety.py`'s existing local-window metadata audit without
+  changing that audit or the underlying grammar judgment;
+- made the Phase 5 alternate-parse check explicit at the whole mutated
+  sentence level, evaluated per item rather than by banning a fixed phrase or
+  locking it to one `primary_target`.
+
+### Scope boundary
+
+`mutation_safety.py`, `validate_format.py`, `validate_output.py`, the format
+planner, Reviewer, Solver, Orchestrator, and the JSON Schema/output-field
+contract are unchanged.
+
 ## v2.1.3 — 2026-08-26
 
 Finalization/serialization integrity patch; grammar mutation and format logic

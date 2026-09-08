@@ -1,8 +1,9 @@
-# TOEFL ITP Written Expression Generator v2.1.3
+# TOEFL ITP Written Expression Generator v2.1.4
 
-v2.1.3 is the current runtime implementation label. The JSON Schema and
+v2.1.4 is the current runtime implementation label. The JSON Schema and
 output-field contract remain the v2.1 contract because this release is a
-finalization-integrity patch; it does not introduce a schema-version bump.
+Generator-instruction clarity patch; it does not introduce a schema-version
+bump.
 
 このディレクトリは、既存の `agents/toefl_itp_grammar_generator/` と完全に分離されたWE専用v2実装である。
 
@@ -79,3 +80,31 @@ passed to Reviewer.
 The format planner and all v2.1.1 geometry policy remain unchanged.  The only
 new runtime surface is the grammar mutation safety guard and its deterministic
 metadata audit; the JSON Schema/output-field contract remains unchanged.
+
+## v2.1.4 mutation-direction and explanation-clarity patch
+
+Pilot-006 review surfaced three Generator-side failure modes that the
+deterministic Production validator already rejects, but that the Generator
+instructions did not explicitly guard against before emission:
+
+- `mutation_type` (`clean_form -> error_form`) and `minimal_correction`
+  (`error_form -> clean_form`) must be declared as opposite-direction pairs,
+  checked against the actual clean/error token diff before emission (not
+  both written in the same direction).
+- `error_explanation` must keep the grammatical trigger, required word form,
+  and rejected word form close together in one clause, so the same, correct
+  grammatical reasoning also satisfies the existing local-window metadata
+  audit in `mutation_safety.py`. No new keyword-stuffing requirement, and no
+  claim that the underlying grammar judgment was previously wrong.
+- Phase 5's alternate-parse check is now explicit at the whole mutated
+  sentence level, evaluated per item rather than by banning a fixed phrase or
+  locking it to one `primary_target`.
+
+`mutation_safety.py`, `validate_format.py`, and `validate_output.py` are
+unchanged by this patch.
+
+## v2.1.4 scope boundary
+
+The v2.1.1 format planner, v2.1.2 mutation-template gates, and v2.1.3
+finalization-integrity checks remain unchanged.  Reviewer, Solver, and
+Orchestrator logic are unchanged.
